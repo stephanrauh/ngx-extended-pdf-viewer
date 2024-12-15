@@ -1,10 +1,12 @@
 import { Component, inject, signal } from '@angular/core';
 import { NgxExtendedPdfViewerModule, NgxExtendedPdfViewerService, PdfLayer } from 'ngx-extended-pdf-viewer';
-import { SplitViewComponent } from '../../../../shared/components/split-view.component';
+import { FormsModule } from '@angular/forms';
 import { SetMinifiedLibraryUsageDirective } from '../../../../shared/directives/set-minified-library-usage.directive';
+import { SetDefaultViewerHeightDirective } from '../../../../shared/directives/set-default-viewer-height.directive';
+import { SetDefaultZoomLevelDirective } from '../../../../shared/directives/set-default-zoom-level.directive';
 import { ContentPageComponent } from '../../../../shared/components/content-page/content-page.component';
 import { MarkdownContentComponent } from '../../../../shared/components/markdown-content.component';
-import { FormsModule } from '@angular/forms';
+import { SplitViewComponent } from '../../../../shared/components/split-view.component';
 import { NgClass } from '@angular/common';
 import { ButtonDirective } from '../../../../core/directives/button.directive';
 
@@ -12,12 +14,14 @@ import { ButtonDirective } from '../../../../core/directives/button.directive';
   selector: 'pvs-layers-page',
   standalone: true,
   imports: [
+    NgxExtendedPdfViewerModule,
+    FormsModule,
+    SetMinifiedLibraryUsageDirective,
+    SetDefaultViewerHeightDirective,
+    SetDefaultZoomLevelDirective,
     ContentPageComponent,
     MarkdownContentComponent,
-    NgxExtendedPdfViewerModule,
     SplitViewComponent,
-    SetMinifiedLibraryUsageDirective,
-    FormsModule,
     NgClass,
     ButtonDirective,
   ],
@@ -42,9 +46,10 @@ import { ButtonDirective } from '../../../../core/directives/button.directive';
         <ngx-extended-pdf-viewer
           slot="end"
           src="/assets/pdfs/themes_de_la_Science-fiction.pdf"
-          zoom="auto"
           [textLayer]="true"
           pvsSetMinifiedLibraryUsage
+          pvsSetDefaultViewerHeight
+          pvsSetDefaultZoomLevel
           (pagesLoaded)="listLayers()"
         />
       </pvs-split-view>

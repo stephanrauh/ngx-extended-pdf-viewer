@@ -6,6 +6,8 @@ import { ContentPageComponent } from '../../../shared/components/content-page/co
 import { MarkdownContentComponent } from '../../../shared/components/markdown-content.component';
 import { ButtonDirective } from '../../../core/directives/button.directive';
 import { JsonPipe } from '@angular/common';
+import { SetDefaultViewerHeightDirective } from '../../../shared/directives/set-default-viewer-height.directive';
+import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-default-zoom-level.directive';
 
 @Component({
   selector: 'pvs-accessing-raw-data-page',
@@ -18,6 +20,8 @@ import { JsonPipe } from '@angular/common';
     SetMinifiedLibraryUsageDirective,
     ButtonDirective,
     JsonPipe,
+    SetDefaultViewerHeightDirective,
+    SetDefaultZoomLevelDirective,
   ],
   template: `<pvs-content-page [demoTemplate]="demo">
     <pvs-markdown src="/assets/pages/forms/accessing-raw-data/text.md" />
@@ -52,6 +56,8 @@ import { JsonPipe } from '@angular/common';
           [textLayer]="true"
           [showPresentationModeButton]="true"
           pvsSetMinifiedLibraryUsage
+          pvsSetDefaultViewerHeight
+          pvsSetDefaultZoomLevel
         />
       </pvs-split-view>
     </ng-template>

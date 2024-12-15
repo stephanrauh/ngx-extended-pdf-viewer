@@ -5,6 +5,8 @@ import { SetMinifiedLibraryUsageDirective } from '../../../shared/directives/set
 import { ContentPageComponent } from '../../../shared/components/content-page/content-page.component';
 import { MarkdownContentComponent } from '../../../shared/components/markdown-content.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SetDefaultViewerHeightDirective } from '../../../shared/directives/set-default-viewer-height.directive';
+import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-default-zoom-level.directive';
 
 @Component({
   selector: 'pvs-toolbar-page',
@@ -17,6 +19,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     SetMinifiedLibraryUsageDirective,
     ReactiveFormsModule,
     FormsModule,
+    SetDefaultViewerHeightDirective,
+    SetDefaultZoomLevelDirective,
   ],
   template: ` <pvs-content-page [demoTemplate]="demo">
     <pvs-markdown src="/assets/pages/customization/toolbar/text.md" />
@@ -45,7 +49,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
         <ngx-extended-pdf-viewer
           slot="end"
           src="/assets/pdfs/dachstein.pdf"
-          [zoom]="zoom"
           [textLayer]="true"
           [showPresentationModeButton]="true"
           [customFindbarInputArea]="layout === 'findbar' ? customFindbarInputArea : undefined"
@@ -54,6 +57,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
           [customFreeFloatingBar]="layout === 'floating' ? floatingZoombar : undefined"
           [showFreeFloatingBar]="showFreeFloatingBar"
           pvsSetMinifiedLibraryUsage
+          pvsSetDefaultViewerHeight
+          pvsSetDefaultZoomLevel
         />
         <ng-template #customFindbarInputArea>
           <div id="findbarInputContainer">

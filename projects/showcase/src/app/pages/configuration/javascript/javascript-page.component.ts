@@ -7,11 +7,22 @@ import { MarkdownContentComponent } from '../../../shared/components/markdown-co
 import { FormsModule } from '@angular/forms';
 import { BROWSER_STORAGE } from '../../../shared/helper/browser-storage.token';
 import { WINDOW } from '../../../shared/helper/window.token';
+import { SetDefaultViewerHeightDirective } from '../../../shared/directives/set-default-viewer-height.directive';
+import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-default-zoom-level.directive';
 
 @Component({
   selector: 'pvs-javascript-page',
   standalone: true,
-  imports: [ContentPageComponent, MarkdownContentComponent, NgxExtendedPdfViewerModule, SplitViewComponent, SetMinifiedLibraryUsageDirective, FormsModule],
+  imports: [
+    ContentPageComponent,
+    MarkdownContentComponent,
+    NgxExtendedPdfViewerModule,
+    SplitViewComponent,
+    SetMinifiedLibraryUsageDirective,
+    FormsModule,
+    SetDefaultViewerHeightDirective,
+    SetDefaultZoomLevelDirective,
+  ],
   template: `<pvs-content-page [demoTemplate]="demo">
     <pvs-markdown src="/assets/pages/configuration/javascript/text.md" />
     <ng-template #demo>
@@ -29,10 +40,11 @@ import { WINDOW } from '../../../shared/helper/window.token';
         <ngx-extended-pdf-viewer
           slot="end"
           src="/assets/pdfs/160F-2019.pdf"
-          zoom="auto"
           [textLayer]="true"
           [showPresentationModeButton]="true"
           pvsSetMinifiedLibraryUsage
+          pvsSetDefaultViewerHeight
+          pvsSetDefaultZoomLevel
         />
       </pvs-split-view>
     </ng-template>

@@ -7,6 +7,7 @@ import { SplitViewComponent } from '../../../shared/components/split-view.compon
 import { BROWSER_STORAGE } from '../../../shared/helper/browser-storage.token';
 import { FormsModule } from '@angular/forms';
 import { DecimalPipe } from '@angular/common';
+import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-default-zoom-level.directive';
 
 @Component({
   selector: 'pvs-basic-page',
@@ -19,6 +20,7 @@ import { DecimalPipe } from '@angular/common';
     SplitViewComponent,
     FormsModule,
     DecimalPipe,
+    SetDefaultZoomLevelDirective,
   ],
   template: `
     <pvs-content-page [demoTemplate]="demo">
@@ -93,7 +95,6 @@ import { DecimalPipe } from '@angular/common';
         <ngx-extended-pdf-viewer
           slot="end"
           src="./assets/pdfs/The Public Domain - Enclosing the Commons of the Mind.pdf"
-          zoom="auto"
           [height]="height"
           [textLayer]="true"
           [showPresentationModeButton]="true"
@@ -106,6 +107,7 @@ import { DecimalPipe } from '@angular/common';
           (pagesLoaded)="onPagesLoaded($event)"
           filenameForDownload="The Public Domain - Enclosing the Commons of the Mind.pdf"
           pvsSetMinifiedLibraryUsage
+          pvsSetDefaultZoomLevel
         />
       </pvs-split-view>
     </ng-template>

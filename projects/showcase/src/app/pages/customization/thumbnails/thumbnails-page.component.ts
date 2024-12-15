@@ -4,11 +4,21 @@ import { SplitViewComponent } from '../../../shared/components/split-view.compon
 import { SetMinifiedLibraryUsageDirective } from '../../../shared/directives/set-minified-library-usage.directive';
 import { ContentPageComponent } from '../../../shared/components/content-page/content-page.component';
 import { MarkdownContentComponent } from '../../../shared/components/markdown-content.component';
+import { SetDefaultViewerHeightDirective } from '../../../shared/directives/set-default-viewer-height.directive';
+import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-default-zoom-level.directive';
 
 @Component({
   selector: 'pvs-thumbnails-page',
   standalone: true,
-  imports: [ContentPageComponent, MarkdownContentComponent, NgxExtendedPdfViewerModule, SplitViewComponent, SetMinifiedLibraryUsageDirective],
+  imports: [
+    ContentPageComponent,
+    MarkdownContentComponent,
+    NgxExtendedPdfViewerModule,
+    SplitViewComponent,
+    SetMinifiedLibraryUsageDirective,
+    SetDefaultViewerHeightDirective,
+    SetDefaultZoomLevelDirective,
+  ],
   template: `<pvs-content-page [demoTemplate]="demo">
     <pvs-markdown src="/assets/pages/customization/thumbnails/text.md" />
     <ng-template #demo>
@@ -16,7 +26,6 @@ import { MarkdownContentComponent } from '../../../shared/components/markdown-co
         <ngx-extended-pdf-viewer
           slot="end"
           src="/assets/pdfs/stluciadance.com.pdf"
-          zoom="auto"
           (pageChange)="onPageChange($event)"
           (thumbnailDrawn)="onThumbnailDrawn($event)"
           [textLayer]="true"
@@ -27,6 +36,8 @@ import { MarkdownContentComponent } from '../../../shared/components/markdown-co
           [activeSidebarView]="1"
           [sidebarVisible]="false"
           pvsSetMinifiedLibraryUsage
+          pvsSetDefaultViewerHeight
+          pvsSetDefaultZoomLevel
         />
       </pvs-split-view>
 

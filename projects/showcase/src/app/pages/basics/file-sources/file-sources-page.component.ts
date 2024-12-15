@@ -1,12 +1,14 @@
 import { Component, inject } from '@angular/core';
 import { ContentPageComponent } from '../../../shared/components/content-page/content-page.component';
 import { MarkdownContentComponent } from '../../../shared/components/markdown-content.component';
-import { DecimalPipe, DOCUMENT } from '@angular/common';
+import { DOCUMENT } from '@angular/common';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SetMinifiedLibraryUsageDirective } from '../../../shared/directives/set-minified-library-usage.directive';
 import { SplitViewComponent } from '../../../shared/components/split-view.component';
 import { isBrowser } from '../../../shared/helper/utilities';
+import { SetDefaultViewerHeightDirective } from '../../../shared/directives/set-default-viewer-height.directive';
+import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-default-zoom-level.directive';
 
 @Component({
   selector: 'pvs-file-sources-page',
@@ -14,12 +16,13 @@ import { isBrowser } from '../../../shared/helper/utilities';
   imports: [
     ContentPageComponent,
     MarkdownContentComponent,
-    DecimalPipe,
     NgxExtendedPdfViewerModule,
     ReactiveFormsModule,
     SetMinifiedLibraryUsageDirective,
     SplitViewComponent,
     FormsModule,
+    SetDefaultViewerHeightDirective,
+    SetDefaultZoomLevelDirective,
   ],
   template: `<pvs-content-page [demoTemplate]="demo">
     <pvs-markdown src="/assets/pages/basics/file-sources/text.md" />
@@ -58,9 +61,10 @@ import { isBrowser } from '../../../shared/helper/utilities';
           slot="end"
           [(src)]="source"
           [enableDragAndDrop]="dragAndDrop"
-          zoom="auto"
           [pageViewMode]="bookMode ? 'book' : 'multiple'"
           pvsSetMinifiedLibraryUsage
+          pvsSetDefaultViewerHeight
+          pvsSetDefaultZoomLevel
         />
       </pvs-split-view>
     </ng-template>

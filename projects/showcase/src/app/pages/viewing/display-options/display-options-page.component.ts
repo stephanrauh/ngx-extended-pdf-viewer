@@ -5,11 +5,22 @@ import { SetMinifiedLibraryUsageDirective } from '../../../shared/directives/set
 import { ContentPageComponent } from '../../../shared/components/content-page/content-page.component';
 import { MarkdownContentComponent } from '../../../shared/components/markdown-content.component';
 import { FormsModule } from '@angular/forms';
+import { SetDefaultViewerHeightDirective } from '../../../shared/directives/set-default-viewer-height.directive';
+import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-default-zoom-level.directive';
 
 @Component({
   selector: 'pvs-display-options-page',
   standalone: true,
-  imports: [ContentPageComponent, MarkdownContentComponent, NgxExtendedPdfViewerModule, SplitViewComponent, SetMinifiedLibraryUsageDirective, FormsModule],
+  imports: [
+    ContentPageComponent,
+    MarkdownContentComponent,
+    NgxExtendedPdfViewerModule,
+    SplitViewComponent,
+    SetMinifiedLibraryUsageDirective,
+    FormsModule,
+    SetDefaultViewerHeightDirective,
+    SetDefaultZoomLevelDirective,
+  ],
   template: `<pvs-content-page [demoTemplate]="demo">
     <pvs-markdown src="/assets/pages/viewing/display-options/text.md" />
     <ng-template #demo>
@@ -123,7 +134,6 @@ import { FormsModule } from '@angular/forms';
           [(scrollMode)]="scrollMode"
           [(pageViewMode)]="pageViewMode"
           [(spread)]="spread"
-          zoom="30%"
           showVerticalScrollButton="always-visible"
           showHorizontalScrollButton="always-visible"
           showWrappedScrollButton="always-visible"
@@ -132,6 +142,8 @@ import { FormsModule } from '@angular/forms';
           showBookModeButton="always-visible"
           showSinglePageModeButton="always-visible"
           pvsSetMinifiedLibraryUsage
+          pvsSetDefaultViewerHeight
+          pvsSetDefaultZoomLevel
         />
       </pvs-split-view>
     </ng-template>

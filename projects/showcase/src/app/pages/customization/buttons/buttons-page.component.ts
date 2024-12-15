@@ -5,6 +5,8 @@ import { SetMinifiedLibraryUsageDirective } from '../../../shared/directives/set
 import { ContentPageComponent } from '../../../shared/components/content-page/content-page.component';
 import { MarkdownContentComponent } from '../../../shared/components/markdown-content.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SetDefaultViewerHeightDirective } from '../../../shared/directives/set-default-viewer-height.directive';
+import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-default-zoom-level.directive';
 
 @Component({
   selector: 'pvs-buttons-page',
@@ -17,6 +19,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     SetMinifiedLibraryUsageDirective,
     ReactiveFormsModule,
     FormsModule,
+    SetDefaultViewerHeightDirective,
+    SetDefaultZoomLevelDirective,
   ],
   template: ` <pvs-content-page [demoTemplate]="demo">
     <pvs-markdown src="/assets/pages/customization/buttons/text.md" />
@@ -101,7 +105,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
         <ngx-extended-pdf-viewer
           slot="end"
           src="/assets/pdfs/user-experience.pdf"
-          zoom="auto"
           [showToolbar]="showToolbar"
           [showSidebarButton]="showSidebarButton"
           [showFindButton]="showFindButton"
@@ -126,6 +129,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
           [(findbarVisible)]="findbarVisible"
           [(propertiesDialogVisible)]="propertiesDialogVisible"
           pvsSetMinifiedLibraryUsage
+          pvsSetDefaultViewerHeight
+          pvsSetDefaultZoomLevel
         />
       </pvs-split-view>
     </ng-template>

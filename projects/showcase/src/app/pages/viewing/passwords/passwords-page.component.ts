@@ -6,11 +6,22 @@ import { ContentPageComponent } from '../../../shared/components/content-page/co
 import { MarkdownContentComponent } from '../../../shared/components/markdown-content.component';
 import { CustomPasswordPrompt } from './custom-password-prompt';
 import { FormsModule } from '@angular/forms';
+import { SetDefaultViewerHeightDirective } from '../../../shared/directives/set-default-viewer-height.directive';
+import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-default-zoom-level.directive';
 
 @Component({
   selector: 'pvs-passwords-page',
   standalone: true,
-  imports: [ContentPageComponent, MarkdownContentComponent, NgxExtendedPdfViewerModule, SplitViewComponent, SetMinifiedLibraryUsageDirective, FormsModule],
+  imports: [
+    ContentPageComponent,
+    MarkdownContentComponent,
+    NgxExtendedPdfViewerModule,
+    SplitViewComponent,
+    SetMinifiedLibraryUsageDirective,
+    FormsModule,
+    SetDefaultViewerHeightDirective,
+    SetDefaultZoomLevelDirective,
+  ],
   template: `<pvs-content-page [demoTemplate]="demo">
     <pvs-markdown src="/assets/pages/viewing/passwords/text.md" />
     <ng-template #demo>
@@ -37,10 +48,11 @@ import { FormsModule } from '@angular/forms';
               <ngx-extended-pdf-viewer
                 [src]="src!"
                 [password]="password"
-                zoom="auto"
                 [textLayer]="true"
                 [showPresentationModeButton]="true"
                 pvsSetMinifiedLibraryUsage
+                pvsSetDefaultViewerHeight
+                pvsSetDefaultZoomLevel
               />
             }
           } @placeholder {

@@ -8,6 +8,8 @@ import { countries } from './countries';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { startWith } from 'rxjs';
+import { SetDefaultViewerHeightDirective } from '../../../shared/directives/set-default-viewer-height.directive';
+import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-default-zoom-level.directive';
 
 @Component({
   selector: 'pvs-displaying-forms-page',
@@ -20,6 +22,8 @@ import { startWith } from 'rxjs';
     SetMinifiedLibraryUsageDirective,
     FormsModule,
     ReactiveFormsModule,
+    SetDefaultViewerHeightDirective,
+    SetDefaultZoomLevelDirective,
   ],
   template: `<pvs-content-page [demoTemplate]="demo">
     <pvs-markdown src="/assets/pages/forms/displaying-forms/text.md" />
@@ -105,12 +109,13 @@ import { startWith } from 'rxjs';
         <ngx-extended-pdf-viewer
           slot="end"
           src="/assets/pdfs/OoPdfFormExample.pdf"
-          zoom="auto"
           [textLayer]="true"
           [formData]="formData"
           (formDataChange)="setFormData($event)"
           [showPresentationModeButton]="true"
           pvsSetMinifiedLibraryUsage
+          pvsSetDefaultViewerHeight
+          pvsSetDefaultZoomLevel
         />
       </pvs-split-view>
     </ng-template>

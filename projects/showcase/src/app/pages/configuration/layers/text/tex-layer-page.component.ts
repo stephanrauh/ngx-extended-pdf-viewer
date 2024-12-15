@@ -1,17 +1,28 @@
 import { Component } from '@angular/core';
 import { NgxExtendedPdfViewerModule, TextLayerRenderedEvent } from 'ngx-extended-pdf-viewer';
-import { SplitViewComponent } from '../../../../shared/components/split-view.component';
-import { SetMinifiedLibraryUsageDirective } from '../../../../shared/directives/set-minified-library-usage.directive';
-import { ContentPageComponent } from '../../../../shared/components/content-page/content-page.component';
-import { MarkdownContentComponent } from '../../../../shared/components/markdown-content.component';
 import { FormsModule } from '@angular/forms';
 import { BehaviorSubject, combineLatest, tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ContentPageComponent } from '../../../../shared/components/content-page/content-page.component';
+import { MarkdownContentComponent } from '../../../../shared/components/markdown-content.component';
+import { SplitViewComponent } from '../../../../shared/components/split-view.component';
+import { SetMinifiedLibraryUsageDirective } from '../../../../shared/directives/set-minified-library-usage.directive';
+import { SetDefaultViewerHeightDirective } from '../../../../shared/directives/set-default-viewer-height.directive';
+import { SetDefaultZoomLevelDirective } from '../../../../shared/directives/set-default-zoom-level.directive';
 
 @Component({
   selector: 'pvs-layers-page',
   standalone: true,
-  imports: [ContentPageComponent, MarkdownContentComponent, NgxExtendedPdfViewerModule, SplitViewComponent, SetMinifiedLibraryUsageDirective, FormsModule],
+  imports: [
+    NgxExtendedPdfViewerModule,
+    FormsModule,
+    ContentPageComponent,
+    MarkdownContentComponent,
+    SplitViewComponent,
+    SetMinifiedLibraryUsageDirective,
+    SetDefaultViewerHeightDirective,
+    SetDefaultZoomLevelDirective,
+  ],
   template: ` <pvs-content-page [demoTemplate]="demo">
     <pvs-markdown src="/assets/pages/configuration/layers/text/text.md" />
     <ng-template #demo>
@@ -45,9 +56,10 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
         <ngx-extended-pdf-viewer
           slot="end"
           src="/assets/pdfs/Portugues-para-principiantes-1538054164.pdf"
-          zoom="auto"
           [textLayer]="true"
           pvsSetMinifiedLibraryUsage
+          pvsSetDefaultViewerHeight
+          pvsSetDefaultZoomLevel
           (textLayerRendered)="setRenderedLayers($event)"
         />
       </pvs-split-view>

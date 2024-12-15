@@ -1,14 +1,24 @@
 import { Component } from '@angular/core';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
-import { SplitViewComponent } from '../../../shared/components/split-view.component';
-import { SetMinifiedLibraryUsageDirective } from '../../../shared/directives/set-minified-library-usage.directive';
 import { ContentPageComponent } from '../../../shared/components/content-page/content-page.component';
 import { MarkdownContentComponent } from '../../../shared/components/markdown-content.component';
+import { SplitViewComponent } from '../../../shared/components/split-view.component';
+import { SetMinifiedLibraryUsageDirective } from '../../../shared/directives/set-minified-library-usage.directive';
+import { SetDefaultViewerHeightDirective } from '../../../shared/directives/set-default-viewer-height.directive';
+import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-default-zoom-level.directive';
 
 @Component({
   selector: 'pvs-mobile-devices-page',
   standalone: true,
-  imports: [ContentPageComponent, MarkdownContentComponent, NgxExtendedPdfViewerModule, SplitViewComponent, SetMinifiedLibraryUsageDirective],
+  imports: [
+    NgxExtendedPdfViewerModule,
+    ContentPageComponent,
+    MarkdownContentComponent,
+    SplitViewComponent,
+    SetMinifiedLibraryUsageDirective,
+    SetDefaultViewerHeightDirective,
+    SetDefaultZoomLevelDirective,
+  ],
   template: `<pvs-content-page [demoTemplate]="demo">
     <pvs-markdown src="/assets/pages/viewing/mobile-devices/text.md" />
     <ng-template #demo>
@@ -29,6 +39,8 @@ import { MarkdownContentComponent } from '../../../shared/components/markdown-co
               [mobileFriendlyZoom]="'150%'"
               [showSecondaryToolbarButton]="false"
               pvsSetMinifiedLibraryUsage
+              pvsSetDefaultViewerHeight
+              pvsSetDefaultZoomLevel
             >
             </ngx-extended-pdf-viewer>
           </div>

@@ -1,23 +1,27 @@
 import { Component, inject } from '@angular/core';
 import { FindOptions, FindResultMatchesCount, FindState, NgxExtendedPdfViewerModule, NgxExtendedPdfViewerService } from 'ngx-extended-pdf-viewer';
-import { SplitViewComponent } from '../../../shared/components/split-view.component';
-import { SetMinifiedLibraryUsageDirective } from '../../../shared/directives/set-minified-library-usage.directive';
+import { FormsModule } from '@angular/forms';
 import { ContentPageComponent } from '../../../shared/components/content-page/content-page.component';
 import { MarkdownContentComponent } from '../../../shared/components/markdown-content.component';
-import { FormsModule } from '@angular/forms';
+import { SplitViewComponent } from '../../../shared/components/split-view.component';
 import { ButtonDirective } from '../../../core/directives/button.directive';
+import { SetDefaultViewerHeightDirective } from '../../../shared/directives/set-default-viewer-height.directive';
+import { SetMinifiedLibraryUsageDirective } from '../../../shared/directives/set-minified-library-usage.directive';
+import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-default-zoom-level.directive';
 
 @Component({
   selector: 'pvs-find-programmatically-page',
   standalone: true,
   imports: [
+    NgxExtendedPdfViewerModule,
+    FormsModule,
     ContentPageComponent,
     MarkdownContentComponent,
-    NgxExtendedPdfViewerModule,
     SplitViewComponent,
-    SetMinifiedLibraryUsageDirective,
-    FormsModule,
     ButtonDirective,
+    SetDefaultViewerHeightDirective,
+    SetMinifiedLibraryUsageDirective,
+    SetDefaultZoomLevelDirective,
   ],
   template: `<pvs-content-page [demoTemplate]="demo">
     <pvs-markdown src="/assets/pages/finding/find-programmatically/text.md" />
@@ -207,7 +211,6 @@ import { ButtonDirective } from '../../../core/directives/button.directive';
         <ngx-extended-pdf-viewer
           slot="end"
           src="/assets/pdfs/Portugues-para-principiantes-1538054164.pdf"
-          zoom="auto"
           [textLayer]="true"
           [showPresentationModeButton]="true"
           (updateFindMatchesCount)="updateFindMatchesCount($event)"
@@ -216,6 +219,8 @@ import { ButtonDirective } from '../../../core/directives/button.directive';
           [showHandToolButton]="true"
           [showFindRegexp]="true"
           pvsSetMinifiedLibraryUsage
+          pvsSetDefaultViewerHeight
+          pvsSetDefaultZoomLevel
         />
       </pvs-split-view>
     </ng-template>
