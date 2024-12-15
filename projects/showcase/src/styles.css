@@ -33,6 +33,10 @@
     @apply inline-grid;
   }
 
+  markdown, markdown > * {
+    @apply min-w-0;
+  }
+
   markdown > p,
   markdown > ul,
   markdown > pre[class*="language-"] {
