@@ -15,7 +15,7 @@ export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'about/about',
+    redirectTo: 'about/introduction',
   },
   ...aboutRoutes,
   ...basicsRoutes,

@@ -15,7 +15,7 @@ export const aboutRoutes: Route[] = [
     },
     children: [
       {
-        path: 'about',
+        path: 'introduction',
         component: IntroductionPageComponent,
         data: <RouteData>{
           pageTitle: 'Introduction',
