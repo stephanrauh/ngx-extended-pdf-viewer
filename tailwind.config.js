@@ -33,18 +33,24 @@ module.exports = {
         error: {
           light: 'hsl(0,83%,35%)',
         },
+        highlight: {
+          grey: 'hsl(193,30%,90%)',
+        },
         on: {
           primary: {
             light: 'hsl(0,0%,99%)',
             hover: 'hsl(0,0%,0%)',
           },
           secondary: {
-            light: 'hsl(0,0%,12%)',
-            hover: 'hsl(0,0%,0%)',
+            light: 'hsl(0,0%,99%)',
+            hover: 'hsl(0,0%,99%)',
           },
           background: 'hsl(0,0%,0%)',
           surface: 'hsl(0,0%,0%)',
           error: 'hsl(0,0%,99%)',
+          highlight: {
+            grey: 'hsl(0,0%,0%)',
+          },
         },
       },
     },

@@ -101,6 +101,15 @@
       @apply text-secondary-light;
     }
   }
+
+  code {
+    @apply bg-highlight-grey;
+    @apply text-on-highlight-grey;
+    @apply rounded-sm;
+    padding-inline: 3px;
+    padding-block: 1px;
+
+  }
 }
 
 @layer utilities {
