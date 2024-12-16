@@ -16,7 +16,7 @@
       @if (isNavigationGroup(entry)) {
         <li pvs-navigation-group [group]="entry"></li>
       } @else if (isNavigationTarget(entry)) {
-        <li pvs-navigation-target [target]="entry"></li>
+        <li pvs-navigation-target [target]="entry" [isTopLevelTarget]="true"></li>
       }
     }
   </ol>
