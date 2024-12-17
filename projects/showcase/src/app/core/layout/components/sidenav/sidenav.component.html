@@ -2,13 +2,14 @@
   id="sidenav"
   role="navigation"
   class="max-lg:p-4 lg:pt-4 h-full max-lg:grid max-lg:grid-rows-[minmax(0,_auto)_1fr] max-lg:bg-surface dark:max-lg:bg-surface-dark dark:max-lg:text-on-surface-dark"
+  aria-label="Main Menu"
   [cdkTrapFocus]="sidenavIsOpen()"
 >
   <button [attr.aria-expanded]="sidenavIsOpen()" aria-controls="sidenav" pvsCloseSidebar class="place-self-end lg:hidden">
     <span class="material-symbols-outlined"> close </span>
   </button>
 
-  <ol class="pr-2 overflow-y-scroll h-[calc(100vh-theme(spacing.header-height)-3rem)]">
+  <ul class="pr-2 overflow-y-scroll h-[calc(100vh-theme(spacing.header-height)-3rem)]">
     <li class="font-semibold mb-2">
       <button (click)="toggleSearchDialog($event)">Search Documentation</button>
     </li>
@@ -19,5 +20,5 @@
         <li pvs-navigation-target [target]="entry" [isTopLevelTarget]="true"></li>
       }
     }
-  </ol>
+  </ul>
 </nav>
