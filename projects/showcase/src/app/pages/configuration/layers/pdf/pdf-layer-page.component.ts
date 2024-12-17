@@ -34,8 +34,8 @@ import { ButtonDirective } from '../../../../core/directives/button.directive';
             <button
               pvsButton
               [ngClass]="{
-                'bg-primary-variant-light': !layer.visible,
-                'text-on-primary-variant-light': !layer.visible,
+                'bg-primary-variant-light dark:bg-primary-variant-dark': !layer.visible,
+                'text-on-primary-variant-light dark:text-on-primary-variant-dark': !layer.visible,
               }"
               (click)="toggleLayer(layer.layerId)"
             >

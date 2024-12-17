@@ -14,42 +14,84 @@ module.exports = {
       colors: {
         primary: {
           light: 'hsl(193,100%,25%)',
-          hover: 'hsla(193,100%,25%, 30%)',
+          dark: 'hsl(193,50%,60%)',
+          hover: {
+            DEFAULT: 'hsla(193,100%,25%, 30%)',
+            dark: 'hsla(193,100%,20%, 90%)',
+          },
           variant: {
             light: 'hsl(183,100%,18%)',
-            hover: 'hsla(183,100%,18%, 30%)',
+            dark: 'hsl(183,100%,36%)',
+            hover: {
+              DEFAULT: 'hsla(183,100%,18%, 30%)',
+              dark: 'hsla(183,100%,18%, 90%)',
+            },
           },
         },
         secondary: {
           light: 'hsl(163,100%,25%)',
-          hover: 'hsla(163,100%,25%, 30%)',
+          dark: 'hsl(163,100%,50%)',
+          hover: {
+            DEFAULT: 'hsla(163,100%,25%, 30%)',
+            dark: 'hsla(163,100%,15%, 90%)',
+          },
           variant: {
             light: 'hsl(153,100%,18%)',
-            hover: 'hsla(153,100%,18%, 30%)',
+            dark: 'hsl(153,100%,36%)',
+            hover: {
+              DEFAULT: 'hsla(153,100%,18%, 30%)',
+              dark: 'hsla(153,100%,14%, 90%)',
+            },
           },
         },
-        background: 'hsl(183,40%,98%)',
-        surface: 'hsl(0,0%,100%)',
+        background: {
+          DEFAULT: 'hsl(183,40%,98%)',
+          dark: 'hsl(183,5%,10%)',
+        },
+        surface: {
+          DEFAULT: 'hsl(0,0%,100%)',
+          dark: 'hsl(0,0%,12%)',
+        },
         error: {
           light: 'hsl(0,83%,35%)',
         },
         highlight: {
-          grey: 'hsl(193,30%,90%)',
+          grey: {
+            DEFAULT: 'hsl(193,30%,90%)',
+            dark: 'hsl(193,5%,20%)',
+          },
         },
         on: {
           primary: {
             light: 'hsl(0,0%,99%)',
-            hover: 'hsl(0,0%,0%)',
+            dark: 'hsl(0,0%,0%)',
+            hover: {
+              DEFAULT: 'hsl(0,0%,0%)',
+              dark: 'hsl(0,0%,100%)',
+            },
           },
           secondary: {
             light: 'hsl(0,0%,99%)',
-            hover: 'hsl(0,0%,99%)',
+            dark: 'hsl(0,0%,0%)',
+            hover: {
+              DEFAULT: 'hsl(0,0%,99%)',
+              dark: 'hsl(0,0%,100%)',
+            },
           },
-          background: 'hsl(0,0%,0%)',
-          surface: 'hsl(0,0%,0%)',
+          background: {
+            DEFAULT: 'hsl(0,0%,0%)',
+            dark: 'hsl(0,0%,100%)',
+          },
+          surface: {
+            DEFAULT: 'hsl(0,0%,0%)',
+            dark: 'hsl(0,0,100%)',
+          },
           error: 'hsl(0,0%,99%)',
           highlight: {
-            grey: 'hsl(0,0%,0%)',
+            grey: {
+              DEFAULT: 'hsl(0,0%,0%)',
+              dark: 'hsl(0,0%,100%)',
+            },
           },
         },
       },

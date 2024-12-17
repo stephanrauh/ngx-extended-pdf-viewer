@@ -14,7 +14,7 @@ import { NgClass } from '@angular/common';
     <a
       [ngClass]="{ 'ps-2': !isTopLevelTarget(), 'cursor-pointer font-semibold': isTopLevelTarget() }"
       [routerLink]="target().link"
-      [routerLinkActive]="['text-primary-light', 'border-s-2', 'border-primary-light']"
+      [routerLinkActive]="['text-primary-light', 'dark:text-primary-dark', 'border-s-2', 'border-primary-light', 'dark:border-primary-dark']"
       >{{ target().displayName }}</a
     >
   `,

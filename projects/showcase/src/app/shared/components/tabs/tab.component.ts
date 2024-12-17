@@ -18,7 +18,7 @@ import { TabService } from './services/tab.service';
     [attr.aria-controls]="tabKey()"
     [attr.aria-selected]="isActive()"
     (click)="onChangeTab()"
-    class="aria-selected:text-primary-light font-semibold p aria-selected:border-b aria-selected:border-b-primary-variant-light pb-2 pt-2 ps-4 pe-4"
+    class="aria-selected:text-primary-light dark:aria-selected:text-primary-dark font-semibold p aria-selected:border-b aria-selected:border-b-primary-variant-light dark:aria-selected:border-b-primary-variant-dark pb-2 pt-2 ps-4 pe-4"
   >
     <span>{{ header() }}</span>
   </button>`,

@@ -15,12 +15,16 @@ import { WINDOW } from '../../shared/helper/window.token';
   imports: [ReactiveFormsModule, RouterLink, SearchResultDirective],
   template: `
     <dialog #searchDialog class="bg-transparent">
-      <div class="w-[750px] max-w-[90vw] bg-surface border-solid border-[1px] rounded p-2" (document:click)="onClickOutside($event)" #searchWrapper>
+      <div
+        class="w-[750px] max-w-[90vw] bg-surface text-on-surface dark:bg-surface-dark dark:text-on-surface-dark border-solid border-[1px] rounded p-2"
+        (document:click)="onClickOutside($event)"
+        #searchWrapper
+      >
         <input
           [formControl]="searchControl"
           type="text"
           placeholder="Search documentation..."
-          class="w-full px-3 py-2 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-variant-light focus:border-transparent relative"
+          class="w-full px-3 py-2 text-sm border rounded-md focus:outline-none focus:ring-2 bg-surface text-on-background dark:bg-surface-dark dark:text-on-surface-dark focus:ring-primary-variant-light dark:focus:ring-primary-variant-dark focus:border-transparent relative"
         />
 
         @if (hasResults()) {
@@ -30,12 +34,16 @@ import { WINDOW } from '../../shared/helper/window.token';
                 <li pvsSearchResult [result]="result" class="group [&.active]:font-bold">
                   <a
                     [routerLink]="result.route"
-                    class="block px-4 py-2 hover:bg-gray-50 border-b last:border-b-0 no-underline group-[&.active:not(:hover)]:bg-secondary-hover group-[&.active:not(:hover)]:text-on-secondary-hover hover:bg-secondary-variant-hover [&.active]:text-on-secondary-variant-hover"
+                    class="block border-b px-4 py-2 bg-surface text-on-background dark:bg-surface-dark dark:text-on-surface-dark last:border-b-0 no-underline group-[&.active:not(:hover)]:bg-secondary-hover dark:group-[&.active:not(:hover)]:bg-secondary-hover-dark dark:group-[&.active:not(:hover)]:text-on-secondary-hover-dark  hover:bg-secondary-variant-hover dark:hover:bg-secondary-variant-hover-dark  dark:[&.active]:text-on-secondary-hover-dark"
                     (click)="clearSearch()"
                   >
-                    <h4 class="text-sm font-medium group-[.active]:font-bold text-gray-900">{{ result.title }}</h4>
+                    <h4
+                      class="text-sm font-medium group-[.active]:font-bold text-primary-variant-light dark:text-primary-variant-dark dark:group-[.active]:text-on-primary-hover-dark dark:group-[:hover]:text-on-primary-hover-dark group-[.active]:underline group-[:hover]:underline"
+                    >
+                      {{ result.title }}
+                    </h4>
                     @if (result.snippet) {
-                      <p [innerHTML]="result.snippet" class="mt-1 text-xs text-gray-600"></p>
+                      <p [innerHTML]="result.snippet" class="mt-1 text-xs"></p>
                     }
                   </a>
                 </li>

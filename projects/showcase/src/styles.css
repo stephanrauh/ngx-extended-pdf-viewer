@@ -79,15 +79,23 @@
   }
 
   tr:nth-child(even){
-    background-color: #f2f2f2;
+    @apply bg-surface;
+    @apply text-on-surface;
+    @apply dark:bg-surface-dark;
+    @apply dark:text-on-surface-dark;
+
   }
 
   tr:hover {
-    background-color: #ddd;
+    @apply bg-primary-hover;
+    @apply text-on-primary-hover;
+    @apply dark:bg-primary-hover-dark;
+    @apply dark:text-on-primary-hover-dark;
   }
 
   :not(nav li) > a:not(.github-corner):not(.no-underline){
     @apply text-primary-light;
+    @apply dark:text-primary-dark;
     @apply underline;
 
     &:hover,
@@ -95,21 +103,26 @@
     &:focus-visible,
     &:active {
       @apply text-primary-light;
+      @apply dark:text-primary-dark;
     }
 
     &:visited {
       @apply text-secondary-light;
+      @apply dark:text-secondary-dark;
     }
   }
 
   code {
     @apply bg-highlight-grey;
+    @apply dark:bg-highlight-grey-dark;
     @apply text-on-highlight-grey;
+    @apply dark:text-on-highlight-grey-dark;
     @apply rounded-sm;
     padding-inline: 3px;
     padding-block: 1px;
-
   }
+
+
 }
 
 @layer utilities {
@@ -120,9 +133,14 @@
   }
 
   .frosted {
-    background-color: rgba(255, 255, 255, 0.7);
+    --frosted-bg: hsla(0, 0%, 100%, 0.7);
+    background-color: var(--frosted-bg);
     -webkit-backdrop-filter: blur(8px);
     backdrop-filter: blur(8px);
+  }
+
+  .frosted-dark {
+    --frosted-bg: hsla(0, 0%, 10%, 0.7);
   }
 }
 
@@ -138,6 +156,7 @@
     @apply pt-2;
     @apply pb-2;
     @apply accent-secondary-light;
+    @apply dark:accent-secondary-dark;
   }
 
   .fieldset legend {
@@ -150,11 +169,16 @@
     @apply grid-cols-[1fr_2fr];
     @apply items-center;
     @apply accent-secondary-light;
+    @apply dark:accent-secondary-dark;
   }
 
-  .input-group input {
+  .input-group input,
+  input-filter input {
     @apply p-2;
-    @apply bg-gray-100;
+    @apply bg-surface;
+    @apply text-on-surface;
+    @apply dark:bg-surface-dark;
+    @apply dark:text-on-surface-dark;
   }
 
   .radio-group,
@@ -162,12 +186,18 @@
     @apply grid;
     @apply gap-2;
     @apply grid-cols-[minmax(0,auto)_1fr] gap-2;
+    @apply accent-secondary-light;
+    @apply dark:accent-secondary-dark;
   }
 
   .input-group select,
   .input-wrapper select {
     @apply min-w-0;
     @apply p-2;
+    @apply bg-surface;
+    @apply text-on-surface;
+    @apply dark:bg-surface-dark;
+    @apply dark:text-on-surface-dark;
   }
 
   .box {
