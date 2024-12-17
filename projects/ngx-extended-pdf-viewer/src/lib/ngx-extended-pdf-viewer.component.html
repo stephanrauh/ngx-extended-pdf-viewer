@@ -114,8 +114,14 @@
                 <div class="editorParamsSetter">
                   <label for="editorInkOpacity" class="editorParamsLabel"
                     data-l10n-id="pdfjs-editor-ink-opacity-input">Opacity</label>
+                  @if(pdfJsVersion.startsWith('4.7')) {
                   <input type="range" id="editorInkOpacity" class="editorParamsSlider" value="100" min="1" max="100"
                     step="1" />
+                  }
+                  @else {
+                  <input type="range" id="editorInkOpacity" class="editorParamsSlider" value="1" min="0.05" max="1"
+                    step="0.05" />
+                  }
                 </div>
               </div>
             </div>
@@ -164,6 +170,24 @@
           </div>
           <!-- dialogContainer -->
         </div>
+        @if(!pdfJsVersion.startsWith('4.7')) {
+        <div id="editorUndoBar" class="messageBar" role="status" aria-labelledby="editorUndoBarMessage" tabindex="-1"
+          hidden>
+          <div>
+            <div>
+              <span id="editorUndoBarMessage" class="description"></span>
+            </div>
+            <button id="editorUndoBarUndoButton" class="undoButton" type="button" tabindex="0" title="Undo"
+              data-l10n-id="pdfjs-editor-undo-bar-undo-button">
+              <span data-l10n-id="pdfjs-editor-undo-bar-undo-button-label">Undo</span>
+            </button>
+            <button id="editorUndoBarCloseButton" class="closeButton" type="button" tabindex="0" title="Close"
+              data-l10n-id="pdfjs-editor-undo-bar-close-button">
+              <span data-l10n-id="pdfjs-editor-undo-bar-close-button-label">Close</span>
+            </button>
+          </div>
+        </div> <!-- editorUndoBar -->
+        }
         <!-- outerContainer -->
       </div>
     </div>
