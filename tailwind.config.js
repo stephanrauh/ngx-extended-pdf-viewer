@@ -2,6 +2,7 @@
 
 module.exports = {
   content: ['./projects/showcase/src/**/*.{html,ts}'],
+  darkMode: 'selector',
   theme: {
     extend: {
       spacing: {
