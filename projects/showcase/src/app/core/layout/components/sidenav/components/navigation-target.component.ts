@@ -16,11 +16,13 @@ import { NgClass } from '@angular/common';
       [routerLink]="target().link"
       [routerLinkActive]="['text-primary-light', 'dark:text-primary-dark', 'border-s-2', 'border-primary-light', 'dark:border-primary-dark']"
       ariaCurrentWhenActive="page"
+      tabindex="0"
       >{{ target().displayName }}</a
     >
   `,
   host: {
     class: 'pt-1 ',
+    '(keydown.enter)': 'onEnter($event)',
   },
 })
 export class NavigationTargetComponent {
@@ -39,5 +41,8 @@ export class NavigationTargetComponent {
       .subscribe((event) => {
         this.sidebarService.close();
       });
+  }
+  onEnter(event: KeyboardEvent) {
+    event.stopPropagation();
   }
 }

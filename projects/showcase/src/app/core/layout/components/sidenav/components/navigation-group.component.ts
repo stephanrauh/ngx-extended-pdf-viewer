@@ -16,7 +16,7 @@ import { FormsModule } from '@angular/forms';
     <ul class="ps-2 hidden peer-checked:block">
       @for (child of group().children; track child) {
         @if (isNavigationGroup(child)) {
-          <li pvs-navigation-group [group]="child"></li>
+          <li pvs-navigation-group [group]="child" tabindex="0"></li>
         } @else if (isNavigationTarget(child)) {
           <li pvs-navigation-target [target]="child"></li>
         }
@@ -25,6 +25,7 @@ import { FormsModule } from '@angular/forms';
   `,
   host: {
     class: '[&:not(:last-child)]:pb-4',
+    '(keydown.enter)': 'onEnter($event)',
   },
 })
 export class NavigationGroupComponent {
@@ -33,4 +34,9 @@ export class NavigationGroupComponent {
   isOpen = true;
   protected readonly isNavigationGroup = isNavigationGroup;
   protected readonly isNavigationTarget = isNavigationTarget;
+
+  onEnter(event: KeyboardEvent) {
+    event.stopPropagation();
+    this.isOpen = !this.isOpen;
+  }
 }
