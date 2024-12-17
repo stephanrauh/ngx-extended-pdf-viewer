@@ -616,4 +616,5 @@
 - 22.0.1 #2657 fix the missing border around pages in Safari; #2677 addEditorAnnotation() now converts serialized string to Json objects before wrapping them into an array (the old behavior prevented developers from using serialized strings)
 - 22.1.0-alpha.0 #2362 fixed the Content Security Policy support
 - 22.1.0-alpha.1 #2362 fixed the Content Security Policy support (printing was broken); #2687 unified bundle: merged pdf.js and viewer.js into a single file; fixed "gulp server" of the pdf.js project
-- 22.1.0-alpha.2 #2655 fixed the erratic behavior of the ink editor in touch mode; improved the type definitions in the `types` folder
+- 22.1.0-alpha.2 #2655 (tried to) fix the erratic behavior of the ink editor in touch mode; improved the type definitions in the `types` folder
+- 22.1.0-alpha.3 #2655 fixed the erratic behavior of the ink editor in touch mode
