@@ -46,7 +46,7 @@ export class TextLayerBuilder {
      * @param {PageViewport} viewport
      * @param {Object} [textContentParams]
      */
-    render(viewport: PageViewport, textContentParams?: Object): Promise<void>;
+    render(viewport: PageViewport, textContentParams?: Object | undefined): Promise<void>;
     hide(): void;
     show(): void;
     /**

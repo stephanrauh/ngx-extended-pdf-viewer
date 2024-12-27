@@ -46,6 +46,7 @@ export * from './lib/options/rendered-textlayer-highlights';
 export * from './lib/options/text-layer-builder';
 export * from './lib/options/verbosity-level';
 export * from './lib/pdf-dialog/pdf-alt-text-dialog/pdf-alt-text-dialog.component';
+export * from './lib/pdf-dialog/pdf-alt-text-settings-dialog/pdf-alt-text-settings-dialog.component';
 export * from './lib/pdf-dialog/pdf-document-properties-dialog/pdf-document-properties-dialog.component';
 export * from './lib/pdf-dialog/pdf-error-message/pdf-error-message.component';
 export * from './lib/pdf-dialog/pdf-password-dialog/pdf-password-dialog.component';

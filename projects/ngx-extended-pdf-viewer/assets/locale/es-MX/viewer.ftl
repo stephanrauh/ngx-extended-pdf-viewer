@@ -436,3 +436,30 @@ pdfjs-editor-alt-text-settings-editor-title = Alt text editor
 pdfjs-editor-alt-text-settings-show-dialog-button-label = Show alt text editor right away when adding an image
 pdfjs-editor-alt-text-settings-show-dialog-description = Helps you make sure all your images have alt text.
 pdfjs-editor-alt-text-settings-close-button = Close
+pdfjs-free-text2 =
+    .aria-label = Text Editor
+    .default-content = Start typing…
+pdfjs-editor-undo-bar-message-highlight = Highlight removed
+pdfjs-editor-undo-bar-message-freetext = Text removed
+pdfjs-editor-undo-bar-message-ink = Drawing removed
+pdfjs-editor-undo-bar-message-stamp = Image removed
+pdfjs-editor-undo-bar-message-multiple =
+    { $count ->
+        [one] { $count } annotation removed
+       *[other] { $count } annotations removed
+    }
+pdfjs-editor-undo-bar-undo-button =
+    .title = Undo
+pdfjs-editor-undo-bar-undo-button-label = Undo
+pdfjs-editor-undo-bar-close-button =
+    .title = Close
+pdfjs-editor-undo-bar-close-button-label = Close
+# Additional translations for ngx-extended-pdf-viewer from the es-mx bleeding edge branch
+pdfjs-editor-resizer-label-top-left = Esquina superior izquierda: cambiar el tamaño
+pdfjs-editor-resizer-label-top-middle = Arriba en el medio: cambiar el tamaño
+pdfjs-editor-resizer-label-top-right = Esquina superior derecha: cambiar el tamaño
+pdfjs-editor-resizer-label-middle-right = Centro derecha: cambiar el tamaño
+pdfjs-editor-resizer-label-bottom-right = Esquina inferior derecha: cambiar el tamaño
+pdfjs-editor-resizer-label-bottom-middle = Abajo en el medio: cambiar el tamaño
+pdfjs-editor-resizer-label-bottom-left = Esquina inferior izquierda: cambiar el tamaño
+pdfjs-editor-resizer-label-middle-left = Centro izquierda: cambiar el tamaño

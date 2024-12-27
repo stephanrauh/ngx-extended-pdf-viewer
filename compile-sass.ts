@@ -8,14 +8,16 @@ const light = sass.compile('./projects/ngx-extended-pdf-viewer/src/lib/theme/pdf
 const print = sass.compile('./projects/ngx-extended-pdf-viewer/src/lib/theme/common/print.scss', options);
 const toggleButton = sass.compile('./projects/ngx-extended-pdf-viewer/src/lib/theme/common/toggle_button.css', options);
 const bookMode = sass.compile('./projects/ngx-extended-pdf-viewer/src/lib/theme/common/book-mode.scss', options);
+const dialog = sass.compile('./projects/ngx-extended-pdf-viewer/src/lib/theme/common/dialog.scss', options);
+const messageBar = sass.compile('./projects/ngx-extended-pdf-viewer/src/lib/theme/common/message_bar.scss', options);
 
 fs.writeFileSync(
   './projects/ngx-extended-pdf-viewer/src/lib/theme/pdf-dark-theme/colors.css',
-  dark.css + ' ' + print.css + ' ' + toggleButton.css + bookMode.css //
+  dark.css + ' ' + print.css + ' ' + toggleButton.css + bookMode.css + dialog.css + messageBar.css //
 );
 fs.writeFileSync(
   './projects/ngx-extended-pdf-viewer/src/lib/theme/pdf-light-theme/colors.css',
-  light.css + ' ' + print.css + ' ' + toggleButton.css + bookMode.css //
+  light.css + ' ' + print.css + ' ' + toggleButton.css + bookMode.css + dialog.css + messageBar.css //
 );
 
 const annotationLayerBuilder = sass.compile('./projects/ngx-extended-pdf-viewer/src/lib/theme/common/annotation-layer-builder.scss', options);

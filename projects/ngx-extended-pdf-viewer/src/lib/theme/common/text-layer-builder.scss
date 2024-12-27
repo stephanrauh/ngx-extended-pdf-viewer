@@ -18,14 +18,14 @@ ngx-extended-pdf-viewer {
     position: absolute;
     text-align: initial;
     inset: 0;
-    overflow: hidden;
+    overflow: clip;
     opacity: 1;
     line-height: 1;
     text-size-adjust: none;
     forced-color-adjust: none;
     transform-origin: 0 0;
-    z-index: 2;
     caret-color: CanvasText;
+    z-index: 0;
 
     &.highlighting {
       touch-action: none;
@@ -39,6 +39,11 @@ ngx-extended-pdf-viewer {
       transform-origin: 0% 0%;
     }
 
+    > :not(.markedContent),
+    .markedContent span:not(.markedContent) {
+      z-index: 1;
+    }
+
     /* Only necessary in Google Chrome, see issue 14205, and most unfortunately
  * the problem doesn't show up in "text" reference tests. */
     /*#if !MOZCENTRAL*/
@@ -49,8 +54,12 @@ ngx-extended-pdf-viewer {
 
     /*#endif*/
 
-    .highlight,
-    .customHighlight {
+    span[role="img"] {
+      user-select: none;
+      cursor: default;
+    }
+
+    .highlight {
       --highlight-bg-color: rgb(180 0 170 / 0.25);
       --highlight-selected-bg-color: rgb(0 100 0 / 0.25);
       --highlight-backdrop-filter: none;
@@ -68,8 +77,6 @@ ngx-extended-pdf-viewer {
       background-color: $highlight;
       backdrop-filter: var(--highlight-backdrop-filter);
       border-radius: 4px;
-      opacity: 0.5;
-
 
       &.appended {
         position: initial;
@@ -94,12 +101,25 @@ ngx-extended-pdf-viewer {
     }
 
     .customHighlight {
-      --highlight-bg-color: rgba(0, 0, 180, 0.4);
+      --highlight-bg-color: rgba(0, 0, 180, 0.3);
       --highlight-selected-bg-color: rgba(0, 0, 180, 0.6);
+      --highlight-backdrop-filter: none;
+      --highlight-selected-backdrop-filter: none;
+      background-color: var(--highlight-bg-color);
+
+      &.selected {
+        background-color: var(--highlight-selected-bg-color);
+        backdrop-filter: var(--highlight-selected-backdrop-filter);
+      }
     }
 
-    .textLayer ::selection {
-      background: $selected;
+    ::selection {
+      /* stylelint-disable declaration-block-no-duplicate-properties */
+      /*#if !MOZCENTRAL*/
+      background: rgba(0 0 255 / 0.25);
+      /*#endif*/
+      /* stylelint-enable declaration-block-no-duplicate-properties */
+      background: color-mix(in srgb, AccentColor, transparent 75%);
     }
 
     /* Avoids https://github.com/mozilla/pdf.js/issues/13840 in Chrome */
@@ -114,17 +134,13 @@ ngx-extended-pdf-viewer {
       display: block;
       position: absolute;
       inset: 100% 0 0;
-      z-index: -1;
+      z-index: 0;
       cursor: default;
       user-select: none;
+    }
 
-      &.active {
-        top: 0;
-      }
-
-      &.selecting .endOfContent {
-        top: 0;
-      }
+    &.selecting .endOfContent {
+      top: 0;
     }
   }
 }

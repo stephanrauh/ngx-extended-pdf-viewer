@@ -617,4 +617,5 @@
 - 22.1.0-alpha.0 #2362 fixed the Content Security Policy support
 - 22.1.0-alpha.1 #2362 fixed the Content Security Policy support (printing was broken); #2687 unified bundle: merged pdf.js and viewer.js into a single file; fixed "gulp server" of the pdf.js project
 - 22.1.0-alpha.2 #2655 (tried to) fix the erratic behavior of the ink editor in touch mode; improved the type definitions in the `types` folder
-- 22.1.0-alpha.3 #2655 fixed the erratic behavior of the ink editor in touch mode; updated the bleeding edge branch to pdf.js 4.9 (work in progress - the bleeding edge branch is partially broken)
+- 22.1.0-alpha.3 #2655 fixed the erratic behavior of the ink editor in touch mode; updated the bleeding edge branch to pdf.js 4.9.124 (work in progress - the bleeding edge branch is partially broken)
+- 22.1.0-alpha.3 #2655 fixed the erratic behavior of the stamp editor in touch mode; updated the bleeding edge branch to pdf.js 4.9.124

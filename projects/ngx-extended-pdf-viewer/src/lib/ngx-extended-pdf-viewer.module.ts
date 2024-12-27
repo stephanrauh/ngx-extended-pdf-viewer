@@ -6,6 +6,7 @@ import { DynamicCssComponent } from './dynamic-css/dynamic-css.component';
 import { NgxExtendedPdfViewerComponent } from './ngx-extended-pdf-viewer.component';
 import { NgxExtendedPdfViewerService } from './ngx-extended-pdf-viewer.service';
 import { PdfAltTextDialogComponent } from './pdf-dialog/pdf-alt-text-dialog/pdf-alt-text-dialog.component';
+import { PdfAltTextSettingsDialogComponent } from './pdf-dialog/pdf-alt-text-settings-dialog/pdf-alt-text-settings-dialog.component';
 import { PdfDocumentPropertiesDialogComponent } from './pdf-dialog/pdf-document-properties-dialog/pdf-document-properties-dialog.component';
 import { PdfErrorMessageComponent } from './pdf-dialog/pdf-error-message/pdf-error-message.component';
 import { PdfPasswordDialogComponent } from './pdf-dialog/pdf-password-dialog/pdf-password-dialog.component';
@@ -94,6 +95,7 @@ if (!Promise['allSettled']) {
     PdfDarkThemeComponent,
     PdfDrawEditorComponent,
     PdfAltTextDialogComponent,
+    PdfAltTextSettingsDialogComponent,
     PdfDocumentPropertiesComponent,
     PdfDocumentPropertiesDialogComponent,
     PdfDownloadComponent,
@@ -162,11 +164,12 @@ if (!Promise['allSettled']) {
     NegativeResponsiveCSSClassPipe,
     NgxExtendedPdfViewerComponent,
     PdfAcroformDefaultThemeComponent,
+    PdfAltTextDialogComponent,
+    PdfAltTextSettingsDialogComponent,
     PdfBookModeComponent,
     PdfContextMenuComponent,
     PdfDarkThemeComponent,
     PdfDrawEditorComponent,
-    PdfAltTextDialogComponent,
     PdfDocumentPropertiesDialogComponent,
     PdfDownloadComponent,
     PdfEditorComponent,

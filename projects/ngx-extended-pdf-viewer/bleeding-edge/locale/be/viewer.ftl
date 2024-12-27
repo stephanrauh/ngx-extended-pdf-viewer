@@ -345,6 +345,10 @@ pdfjs-editor-stamp-add-image-button-label = Дадаць выяву
 pdfjs-editor-free-highlight-thickness-input = Таўшчыня
 pdfjs-editor-free-highlight-thickness-title =
     .title = Змяняць таўшчыню пры вылучэнні іншых элементаў, акрамя тэксту
+# .default-content is used as a placeholder in an empty text editor.
+pdfjs-free-text2 =
+    .aria-label = Тэкставы рэдактар
+    .default-content = Пачніце ўводзіць…
 pdfjs-free-text =
     .aria-label = Тэкставы рэдактар
 pdfjs-free-text-default-content = Пачніце набор тэксту…
@@ -355,8 +359,9 @@ pdfjs-ink-canvas =
 
 ## Alt-text dialog
 
-# Alternative text (alt text) helps when people can't see the image.
 pdfjs-editor-alt-text-button-label = Альтэрнатыўны тэкст
+pdfjs-editor-alt-text-edit-button =
+    .aria-label = Змяніць альтэрнатыўны тэкст
 pdfjs-editor-alt-text-edit-button-label = Змяніць альтэрнатыўны тэкст
 pdfjs-editor-alt-text-dialog-label = Выберыце варыянт
 pdfjs-editor-alt-text-dialog-description = Альтэрнатыўны тэкст дапамагае, калі людзі не бачаць выяву або калі яна не загружаецца.
@@ -370,6 +375,9 @@ pdfjs-editor-alt-text-decorative-tooltip = Пазначаны як дэкара�
 # .placeholder: This is a placeholder for the alt text input area
 pdfjs-editor-alt-text-textarea =
     .placeholder = Напрыклад, «Малады чалавек садзіцца за стол есці»
+# Alternative text (alt text) helps when people can't see the image.
+pdfjs-editor-alt-text-button =
+    .aria-label = Альтэрнатыўны тэкст
 
 ## Editor resizers
 ## This is used in an aria label to help to understand the role of the resizer.
@@ -451,10 +459,16 @@ pdfjs-editor-new-alt-text-error-close-button = Закрыць
 pdfjs-editor-new-alt-text-ai-model-downloading-progress = Сцягванне мадэлі ШІ для тэксту для атрыбута alt ({ $downloadedSize } з { $totalSize } МБ)
     .aria-valuetext = Сцягванне мадэлі ШІ для тэксту для атрыбута alt ({ $downloadedSize } з { $totalSize } МБ)
 # This is a button that users can click to edit the alt text they have already added.
+pdfjs-editor-new-alt-text-added-button =
+    .aria-label = Тэкст для атрыбута alt дададзены
 pdfjs-editor-new-alt-text-added-button-label = Тэкст для атрыбута alt дададзены
 # This is a button that users can click to open the alt text editor and add alt text when it is not present.
+pdfjs-editor-new-alt-text-missing-button =
+    .aria-label = Адсутнічае тэкст для атрыбута alt
 pdfjs-editor-new-alt-text-missing-button-label = Адсутнічае тэкст для атрыбута alt
 # This is a button that opens up the alt text modal where users should review the alt text that was automatically generated.
+pdfjs-editor-new-alt-text-to-review-button =
+    .aria-label = Водгук на тэкст для атрыбута alt
 pdfjs-editor-new-alt-text-to-review-button-label = Водгук на тэкст для атрыбута alt
 # "Created automatically" is a prefix that will be added to the beginning of any alt text that has been automatically generated. After the colon, the user will see/hear the actual alt text description. If the alt text has been edited by a human, this prefix will not appear.
 # Variables:
@@ -483,6 +497,21 @@ pdfjs-editor-alt-text-settings-show-dialog-description = Дапамагае пе
 pdfjs-editor-alt-text-settings-close-button = Закрыць
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
+pdfjs-editor-undo-bar-message-highlight = Highlight removed
+pdfjs-editor-undo-bar-message-freetext = Text removed
+pdfjs-editor-undo-bar-message-ink = Drawing removed
+pdfjs-editor-undo-bar-message-stamp = Image removed
+pdfjs-editor-undo-bar-message-multiple =
+    { $count ->
+        [one] { $count } annotation removed
+       *[other] { $count } annotations removed
+    }
+pdfjs-editor-undo-bar-undo-button =
+    .title = Undo
+pdfjs-editor-undo-bar-undo-button-label = Undo
+pdfjs-editor-undo-bar-close-button =
+    .title = Close
+pdfjs-editor-undo-bar-close-button-label = Close
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = match each word

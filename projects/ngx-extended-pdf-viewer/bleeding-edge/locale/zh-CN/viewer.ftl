@@ -335,6 +335,10 @@ pdfjs-editor-stamp-add-image-button-label = 添加图像
 pdfjs-editor-free-highlight-thickness-input = 粗细
 pdfjs-editor-free-highlight-thickness-title =
     .title = 更改高亮粗细（用于文本以外项目）
+# .default-content is used as a placeholder in an empty text editor.
+pdfjs-free-text2 =
+    .aria-label = 文本编辑器
+    .default-content = 在此键入…
 pdfjs-free-text =
     .aria-label = 文本编辑器
 pdfjs-free-text-default-content = 开始输入…
@@ -345,13 +349,14 @@ pdfjs-ink-canvas =
 
 ## Alt-text dialog
 
-# Alternative text (alt text) helps when people can't see the image.
 pdfjs-editor-alt-text-button-label = 替换文字
+pdfjs-editor-alt-text-edit-button =
+    .aria-label = 编辑替换文字
 pdfjs-editor-alt-text-edit-button-label = 编辑替换文字
 pdfjs-editor-alt-text-dialog-label = 选择一项
 pdfjs-editor-alt-text-dialog-description = 替换文字可在用户无法看到或加载图像时，描述其内容。
 pdfjs-editor-alt-text-add-description-label = 添加描述
-pdfjs-editor-alt-text-add-description-description = 描述主题、背景或动作，长度尽量控制在两句话内。
+pdfjs-editor-alt-text-add-description-description = 用一两个句子，描述主题、背景或动作。
 pdfjs-editor-alt-text-mark-decorative-label = 标记为装饰
 pdfjs-editor-alt-text-mark-decorative-description = 用于装饰的图像，例如边框和水印。
 pdfjs-editor-alt-text-cancel-button = 取消
@@ -360,6 +365,9 @@ pdfjs-editor-alt-text-decorative-tooltip = 已标记为装饰
 # .placeholder: This is a placeholder for the alt text input area
 pdfjs-editor-alt-text-textarea =
     .placeholder = 例如：一个少年坐到桌前，准备吃饭
+# Alternative text (alt text) helps when people can't see the image.
+pdfjs-editor-alt-text-button =
+    .aria-label = 替换文字
 
 ## Editor resizers
 ## This is used in an aria label to help to understand the role of the resizer.
@@ -441,10 +449,16 @@ pdfjs-editor-new-alt-text-error-close-button = 关闭
 pdfjs-editor-new-alt-text-ai-model-downloading-progress = 正在下载提供替换文字的 AI 模型（{ $downloadedSize }/{ $totalSize } MB）
     .aria-valuetext = 正在下载提供替换文字的 AI 模型（{ $downloadedSize }/{ $totalSize } MB）
 # This is a button that users can click to edit the alt text they have already added.
+pdfjs-editor-new-alt-text-added-button =
+    .aria-label = 已添加替换文字
 pdfjs-editor-new-alt-text-added-button-label = 已添加替换文字
 # This is a button that users can click to open the alt text editor and add alt text when it is not present.
+pdfjs-editor-new-alt-text-missing-button =
+    .aria-label = 缺少替换文字
 pdfjs-editor-new-alt-text-missing-button-label = 缺少替换文字
 # This is a button that opens up the alt text modal where users should review the alt text that was automatically generated.
+pdfjs-editor-new-alt-text-to-review-button =
+    .aria-label = 检查替换文字
 pdfjs-editor-new-alt-text-to-review-button-label = 检查替换文字
 # "Created automatically" is a prefix that will be added to the beginning of any alt text that has been automatically generated. After the colon, the user will see/hear the actual alt text description. If the alt text has been edited by a human, this prefix will not appear.
 # Variables:
@@ -473,6 +487,21 @@ pdfjs-editor-alt-text-settings-show-dialog-description = 帮助确保所有图�
 pdfjs-editor-alt-text-settings-close-button = 关闭
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
+pdfjs-editor-undo-bar-message-highlight = Highlight removed
+pdfjs-editor-undo-bar-message-freetext = Text removed
+pdfjs-editor-undo-bar-message-ink = Drawing removed
+pdfjs-editor-undo-bar-message-stamp = Image removed
+pdfjs-editor-undo-bar-message-multiple =
+    { $count ->
+        [one] { $count } annotation removed
+       *[other] { $count } annotations removed
+    }
+pdfjs-editor-undo-bar-undo-button =
+    .title = Undo
+pdfjs-editor-undo-bar-undo-button-label = Undo
+pdfjs-editor-undo-bar-close-button =
+    .title = Close
+pdfjs-editor-undo-bar-close-button-label = Close
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = match each word

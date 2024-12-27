@@ -17,7 +17,7 @@ export class MessageHandler {
      * @param {JSON} data - JSON data to send.
      * @param {Array} [transfers] - List of transfers/ArrayBuffers.
      */
-    send(actionName: string, data: JSON, transfers?: any[]): void;
+    send(actionName: string, data: JSON, transfers?: any[] | undefined): void;
     /**
      * Sends a message to the comObj to invoke the action with the supplied data.
      * Expects that the other side will callback with the response.
@@ -26,7 +26,7 @@ export class MessageHandler {
      * @param {Array} [transfers] - List of transfers/ArrayBuffers.
      * @returns {Promise} Promise to be resolved with response data.
      */
-    sendWithPromise(actionName: string, data: JSON, transfers?: any[]): Promise<any>;
+    sendWithPromise(actionName: string, data: JSON, transfers?: any[] | undefined): Promise<any>;
     /**
      * Sends a message to the comObj to invoke the action with the supplied data.
      * Expect that the other side will callback to signal 'start_complete'.
@@ -37,7 +37,7 @@ export class MessageHandler {
      * @param {Array} [transfers] - List of transfers/ArrayBuffers.
      * @returns {ReadableStream} ReadableStream to read data in chunks.
      */
-    sendWithStream(actionName: string, data: JSON, queueingStrategy: Object, transfers?: any[]): ReadableStream;
+    sendWithStream(actionName: string, data: JSON, queueingStrategy: Object, transfers?: any[] | undefined): ReadableStream;
     destroy(): void;
     #private;
 }

@@ -1,0 +1,64 @@
+<dialog class="dialog" id="altTextSettingsDialog" aria-labelledby="altTextSettingsTitle">
+  <div id="altTextSettingsContainer" class="mainContainer">
+    <div class="title">
+      <span id="altTextSettingsTitle" data-l10n-id="pdfjs-editor-alt-text-settings-dialog-label" role="sectionhead"
+        tabindex="0" class="title">Image alt text settings</span>
+    </div>
+    <div id="automaticAltText">
+      <span data-l10n-id="pdfjs-editor-alt-text-settings-automatic-title">Automatic alt text</span>
+      <div id="automaticSettings">
+        <div id="createModelSetting">
+          <div class="toggler">
+            <button id="createModelButton" type="button" class="toggle-button" aria-pressed="true"
+              tabindex="0"></button>
+            <label for="createModelButton" class="togglerLabel"
+              data-l10n-id="pdfjs-editor-alt-text-settings-create-model-button-label">Create alt text
+              automatically</label>
+          </div>
+          <div id="createModelDescription" class="description">
+            <span data-l10n-id="pdfjs-editor-alt-text-settings-create-model-description">Suggests descriptions to help
+              people who can’t see the image or when the image doesn’t load.</span> <a
+              href="https://support.mozilla.org/en-US/kb/pdf-alt-text" target="_blank" rel="noopener noreferrer"
+              id="altTextSettingsLearnMore" data-l10n-id="pdfjs-editor-new-alt-text-disclaimer-learn-more-url"
+              tabindex="0">Learn more</a>
+          </div>
+        </div>
+        <div id="aiModelSettings">
+          <div>
+            <span data-l10n-id="pdfjs-editor-alt-text-settings-download-model-label"
+              data-l10n-args='{ "totalSize": 180 }'>Alt text AI model (180MB)</span>
+            <div id="aiModelDescription" class="description">
+              <span data-l10n-id="pdfjs-editor-alt-text-settings-ai-model-description">Runs locally on your device so
+                your data stays private. Required for automatic alt text.</span>
+            </div>
+          </div>
+          <button id="deleteModelButton" type="button" class="secondaryButton" tabindex="0"><span
+              data-l10n-id="pdfjs-editor-alt-text-settings-delete-model-button">Delete</span></button>
+          <button id="downloadModelButton" type="button" class="secondaryButton" tabindex="0"><span
+              data-l10n-id="pdfjs-editor-alt-text-settings-download-model-button">Download</span></button>
+        </div>
+      </div>
+    </div>
+    <div class="dialogSeparator"></div>
+    <div id="altTextEditor">
+      <span data-l10n-id="pdfjs-editor-alt-text-settings-editor-title">Alt text editor</span>
+      <div id="showAltTextEditor">
+        <div class="toggler">
+          <button id="showAltTextDialogButton" type="button" class="toggle-button" aria-pressed="true"
+            tabindex="0"></button>
+          <label for="showAltTextDialogButton" class="togglerLabel"
+            data-l10n-id="pdfjs-editor-alt-text-settings-show-dialog-button-label">Show alt text editor right away when
+            adding an image</label>
+        </div>
+        <div id="showAltTextDialogDescription" class="description">
+          <span data-l10n-id="pdfjs-editor-alt-text-settings-show-dialog-description">Helps you make sure all your
+            images have alt text.</span>
+        </div>
+      </div>
+    </div>
+    <div id="buttons" class="dialogButtonsGroup">
+      <button id="altTextSettingsCloseButton" type="button" class="primaryButton" tabindex="0"><span
+          data-l10n-id="pdfjs-editor-alt-text-settings-close-button">Close</span></button>
+    </div>
+  </div>
+</dialog>

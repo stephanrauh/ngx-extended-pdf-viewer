@@ -74,12 +74,12 @@ export class TextLayer {
      *   of the textContent input.
      *   This is output and will initially be set to an empty array.
      */
-    get textDivs(): Array<HTMLElement>;
+    get textDivs(): HTMLElement[];
     /**
      * @type {Array<string>} Strings that correspond to the `str` property of
      *   the text items of the textContent input.
      *   This is output and will initially be set to an empty array
      */
-    get textContentItemsStr(): Array<string>;
+    get textContentItemsStr(): string[];
     #private;
 }

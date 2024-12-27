@@ -203,7 +203,7 @@ export class ProgressBar {
  * @param {string} str
  * @param {boolean} [replaceInvisible]
  */
-export function removeNullCharacters(str: string, replaceInvisible?: boolean): string;
+export function removeNullCharacters(str: string, replaceInvisible?: boolean | undefined): string;
 export namespace RenderingStates {
     let INITIAL: number;
     let RUNNING: number;
@@ -225,7 +225,7 @@ export const SCROLLBAR_PADDING: 40;
 export function scrollIntoView(element: HTMLElement, spot?: {
     left?: number | undefined;
     top?: number | undefined;
-}, scrollMatches?: boolean, infiniteScroll?: boolean): void;
+} | undefined, scrollMatches?: boolean | undefined, infiniteScroll?: boolean): void;
 export namespace ScrollMode {
     let UNKNOWN_1: number;
     export { UNKNOWN_1 as UNKNOWN };

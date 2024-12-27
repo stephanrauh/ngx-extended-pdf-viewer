@@ -7,7 +7,7 @@ export class PDFDataTransportStream implements IPDFStream {
         disableRange?: boolean | undefined;
         disableStream?: boolean | undefined;
     });
-    _queuedChunks: any[];
+    _queuedChunks: ArrayBuffer[];
     _progressiveDone: any;
     _contentDispositionFilename: any;
     _pdfDataRangeTransport: any;

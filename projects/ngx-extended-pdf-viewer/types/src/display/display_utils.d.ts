@@ -72,7 +72,7 @@ export class DOMCMapReaderFactory extends BaseCMapReaderFactory {
      * @ignore
      */
     _fetchData(url: any, compressionType: any): Promise<{
-        cMapData: Uint8Array<any>;
+        cMapData: Uint8Array;
         compressionType: any;
     }>;
 }
@@ -101,7 +101,7 @@ export class DOMStandardFontDataFactory extends BaseStandardFontDataFactory {
     /**
      * @ignore
      */
-    _fetchData(url: any): Promise<Uint8Array<any>>;
+    _fetchData(url: any): Promise<Uint8Array>;
 }
 export class DOMSVGFactory extends BaseSVGFactory {
     /**
@@ -212,7 +212,7 @@ export class PageViewport {
      * @param {PageViewportCloneParameters} [params]
      * @returns {PageViewport} Cloned viewport.
      */
-    clone({ scale, rotation, offsetX, offsetY, dontFlip, }?: PageViewportCloneParameters): PageViewport;
+    clone({ scale, rotation, offsetX, offsetY, dontFlip, }?: PageViewportCloneParameters | undefined): PageViewport;
     /**
      * Converts PDF point to the viewport coordinates. For examples, useful for
      * converting PDF location into canvas pixel coordinates.

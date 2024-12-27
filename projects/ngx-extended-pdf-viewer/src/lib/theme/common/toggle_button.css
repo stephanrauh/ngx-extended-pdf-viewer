@@ -144,13 +144,20 @@ ngx-extended-pdf-viewer {
     }
 
     &[aria-pressed='true']::before {
-      translate: calc(var(--slider-direction) * var(--toggle-dot-transform-x)); /* #2279 fix rtl support */
+      translate: var(--toggle-dot-transform-x);
       background-color: var(--toggle-dot-background-color-on-pressed);
     }
 
     &[aria-pressed='true']:enabled:hover::before,
     &[aria-pressed='true']:enabled:active::before {
       background-color: var(--toggle-dot-background-color-on-pressed);
+    }
+
+    /*#if MOZCENTRAL*/
+    /*&[aria-pressed="true"]:-moz-locale-dir(rtl)::before,*/
+    /*#endif*/
+    &[aria-pressed='true']:dir(rtl)::before {
+      translate: calc(-1 * var(--toggle-dot-transform-x));
     }
 
     @media (prefers-reduced-motion: no-preference) {
@@ -215,13 +222,4 @@ ngx-extended-pdf-viewer {
       }
     }
   }
-
-  /* #2279 fix rtl support - this rule has been replaced by the one above
-  .toggle-button[dir='rtl'] {
-    &[aria-pressed='true']:-moz-locale-dir(rtl)::before,
-    &[aria-pressed='true']:dir(rtl)::before {
-      translate: calc(--var(--slider-direction) * var(--toggle-dot-transform-x));
-    }
-  }
-  */
 }
