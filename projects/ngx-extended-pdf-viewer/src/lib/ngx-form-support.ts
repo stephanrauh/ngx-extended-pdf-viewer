@@ -1,4 +1,4 @@
-import { EventEmitter, NgZone } from '@angular/core';
+import { EventEmitter } from '@angular/core';
 import { FormDataType, IPDFViewerApplication } from '../public_api';
 
 export type HtmlFormElement = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
@@ -17,8 +17,6 @@ export class NgxFormSupport {
 
   public formDataChange = new EventEmitter<FormDataType>();
 
-  private ngZone: NgZone;
-
   private PDFViewerApplication: IPDFViewerApplication | undefined;
 
   public reset() {
@@ -26,8 +24,7 @@ export class NgxFormSupport {
     this.formIdToFullFieldName = {};
   }
 
-  public registerFormSupportWithPdfjs(ngZone: NgZone, PDFViewerApplication: IPDFViewerApplication): void {
-    this.ngZone = ngZone;
+  public registerFormSupportWithPdfjs(PDFViewerApplication: IPDFViewerApplication): void {
     this.PDFViewerApplication = PDFViewerApplication;
     (globalThis as any).getFormValueFromAngular = (key: string) => this.getFormValueFromAngular(key);
     (globalThis as any).updateAngularFormValue = (key: string | HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement, value: { value: string }) =>
@@ -193,7 +190,7 @@ export class NgxFormSupport {
         const field = this.formIdToField[key];
         let change = this.doUpdateAngularFormValue(field, value, fullKey);
         if (change) {
-          this.ngZone.run(() => this.formDataChange.emit(this.formData));
+          queueMicrotask(() => this.formDataChange.emit(this.formData));
         }
       } else {
         console.error("Couldn't find the field with the name " + key);
@@ -209,7 +206,7 @@ export class NgxFormSupport {
         change ||= this.doUpdateAngularFormValue(key, value, fullFieldName);
       }
       if (change) {
-        this.ngZone.run(() => this.formDataChange.emit(this.formData));
+        queueMicrotask(() => this.formDataChange.emit(this.formData));
       }
     }
   }

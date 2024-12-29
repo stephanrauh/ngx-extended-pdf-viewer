@@ -1,4 +1,4 @@
-import { Component, effect, EventEmitter, Input, NgZone, OnDestroy, Output } from '@angular/core';
+import { Component, effect, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { ScrollMode } from '../../options/pdf-scroll-mode';
 import { PageViewModeType, ScrollModeType } from '../../options/pdf-viewer';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
@@ -27,13 +27,13 @@ export class PdfInfiniteScrollComponent implements OnDestroy {
 
   private PDFViewerApplication: IPDFViewerApplication | undefined;
 
-  constructor(private ngZone: NgZone, public notificationService: PDFNotificationService) {
+  constructor(public notificationService: PDFNotificationService) {
     effect(() => {
       this.PDFViewerApplication = notificationService.onPDFJSInitSignal();
     });
     const emitter = this.pageViewModeChange;
     this.onClick = () => {
-      this.ngZone.run(() => {
+      queueMicrotask(() => {
         if (this.pageViewMode === 'infinite-scroll') {
           emitter.emit('multiple');
         } else {

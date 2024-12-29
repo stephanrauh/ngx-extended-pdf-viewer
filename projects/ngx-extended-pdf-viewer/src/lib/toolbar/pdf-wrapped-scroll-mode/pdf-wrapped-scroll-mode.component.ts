@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, NgZone, OnDestroy, Output, effect } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, Output, effect } from '@angular/core';
 import { ScrollMode } from '../../options/pdf-scroll-mode';
 import { PageViewModeType, ScrollModeType } from '../../options/pdf-viewer';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
@@ -27,7 +27,7 @@ export class PdfWrappedScrollModeComponent implements OnDestroy {
 
   private PDFViewerApplication: IPDFViewerApplication | undefined;
 
-  constructor(private notificationService: PDFNotificationService, private ngZone: NgZone) {
+  constructor(private notificationService: PDFNotificationService) {
     effect(() => {
       this.PDFViewerApplication = notificationService.onPDFJSInitSignal();
       if (this.PDFViewerApplication) {
@@ -36,7 +36,7 @@ export class PdfWrappedScrollModeComponent implements OnDestroy {
     });
     const emitter = this.pageViewModeChange;
     this.onClick = () => {
-      this.ngZone.run(() => {
+      queueMicrotask(() => {
         if (this.pageViewMode !== 'multiple' && this.pageViewMode !== 'infinite-scroll') {
           emitter.emit('multiple');
         }
@@ -47,7 +47,7 @@ export class PdfWrappedScrollModeComponent implements OnDestroy {
 
   public onPdfJsInit(): void {
     this.PDFViewerApplication?.eventBus.on('switchscrollmode', (event) => {
-      this.ngZone.run(() => {
+      queueMicrotask(() => {
         this.scrollMode = event.mode;
       });
     });

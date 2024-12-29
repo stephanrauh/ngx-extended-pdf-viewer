@@ -1,4 +1,4 @@
-import { Component, Input, NgZone, effect } from '@angular/core';
+import { Component, Input, effect } from '@angular/core';
 import { ScrollModeType } from '../../options/pdf-viewer';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { SpreadType } from '../../options/spread-type';
@@ -21,7 +21,7 @@ export class PdfOddSpreadComponent {
 
   private PDFViewerApplication: IPDFViewerApplication | undefined;
 
-  constructor(private notificationService: PDFNotificationService, private ngZone: NgZone) {
+  constructor(private notificationService: PDFNotificationService) {
     effect(() => {
       this.PDFViewerApplication = notificationService.onPDFJSInitSignal();
       if (this.PDFViewerApplication) {
@@ -32,7 +32,7 @@ export class PdfOddSpreadComponent {
 
   public onPdfJsInit(): void {
     this.PDFViewerApplication?.eventBus.on('spreadmodechanged', (event) => {
-      this.ngZone.run(() => {
+      queueMicrotask(() => {
         const modes = ['off', 'odd', 'even'] as Array<SpreadType>;
         this.spread = modes[event.mode];
       });

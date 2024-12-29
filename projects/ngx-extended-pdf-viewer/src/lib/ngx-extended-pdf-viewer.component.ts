@@ -8,7 +8,6 @@ import {
   HostListener,
   Inject,
   Input,
-  NgZone,
   OnChanges,
   OnDestroy,
   OnInit,
@@ -1030,7 +1029,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   }
 
   constructor(
-    private readonly ngZone: NgZone,
     @Inject(PLATFORM_ID) private readonly platformId,
     private readonly notificationService: PDFNotificationService,
     private readonly elementRef: ElementRef,
@@ -1083,7 +1081,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       // (see https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/2571:
       // destroying the viewer immediately after creating used to cause error messages)
       if (this.formSupport) {
-        this.formSupport.registerFormSupportWithPdfjs(this.ngZone, this.pdfScriptLoaderService.PDFViewerApplication);
+        this.formSupport.registerFormSupportWithPdfjs(this.pdfScriptLoaderService.PDFViewerApplication);
         this.keyboardManager.registerKeyboardListener(this.pdfScriptLoaderService.PDFViewerApplication);
         this.pdfScriptLoaderService.PDFViewerApplication.cspPolicyService = this.cspPolicyService;
         this.doInitPDFViewer();
@@ -1313,7 +1311,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
   /** Notifies every widget that implements onLibraryInit() that the PDF viewer objects are available */
   private afterLibraryInit() {
-    this.notificationService.onPDFJSInitSignal.set(this.pdfScriptLoaderService.PDFViewerApplication);
+    queueMicrotask(() => this.notificationService.onPDFJSInitSignal.set(this.pdfScriptLoaderService.PDFViewerApplication));
   }
 
   public onSpreadChange(newSpread: 'off' | 'even' | 'odd'): void {
@@ -1347,7 +1345,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
         if (!this.showHandToolButton) {
           if (this.showFindButton || this.showFindButton === undefined) {
-            this.ngZone.run(() => {
+            queueMicrotask(() => {
               this.showFindButton = false;
             });
             if (this.logLevel >= VerbosityLevel.WARNINGS) {
@@ -1533,20 +1531,20 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
   private registerEventListeners(PDFViewerApplication: IPDFViewerApplication) {
     PDFViewerApplication.eventBus.on('annotation-editor-event', (x: AnnotationEditorEvent) => {
-      this.ngZone.run(() => {
+      queueMicrotask(() => {
         this.annotationEditorEvent.emit(x);
       });
     });
 
     PDFViewerApplication.eventBus.on('toggleSidebar', (x: ToggleSidebarEvent) => {
-      this.ngZone.run(() => {
+      queueMicrotask(() => {
         this.sidebarVisible = x.visible;
         this.sidebarVisibleChange.emit(x.visible);
       });
     });
 
     PDFViewerApplication.eventBus.on('textlayerrendered', (x: TextLayerRenderedEvent) => {
-      this.ngZone.run(() => this.textLayerRendered.emit(x));
+      queueMicrotask(() => this.textLayerRendered.emit(x));
     });
 
     PDFViewerApplication.eventBus.on('annotationeditormodechanged', (x: AnnotationEditorEditorModeChangedEvent) => {
@@ -1556,7 +1554,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     });
 
     PDFViewerApplication.eventBus.on('scrollmodechanged', (x: ScrollModeChangedEvent) => {
-      this.ngZone.run(() => {
+      queueMicrotask(() => {
         this._scrollMode = x.mode;
         this.scrollModeChange.emit(x.mode);
         if (x.mode === ScrollModeType.page) {
@@ -1568,17 +1566,17 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       });
     });
     PDFViewerApplication.eventBus.on('progress', (x: ProgressBarEvent) => {
-      this.ngZone.run(() => this.progress.emit(x));
+      queueMicrotask(() => this.progress.emit(x));
     });
     PDFViewerApplication.eventBus.on('findbarclose', () => {
-      this.ngZone.run(() => {
+      queueMicrotask(() => {
         this.findbarVisible = false;
         this.findbarVisibleChange.emit(false);
         this.cdr.markForCheck();
       });
     });
     PDFViewerApplication.eventBus.on('findbaropen', () => {
-      this.ngZone.run(() => {
+      queueMicrotask(() => {
         this.findbarVisible = true;
         this.findbarVisibleChange.emit(true);
         this.cdr.markForCheck();
@@ -1586,15 +1584,15 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     });
     PDFViewerApplication.eventBus.on('propertiesdialogclose', () => {
       this.propertiesDialogVisible = false;
-      this.ngZone.run(() => this.propertiesDialogVisibleChange.emit(false));
+      queueMicrotask(() => this.propertiesDialogVisibleChange.emit(false));
     });
     PDFViewerApplication.eventBus.on('propertiesdialogopen', () => {
       this.propertiesDialogVisible = true;
-      this.ngZone.run(() => this.propertiesDialogVisibleChange.emit(true));
+      queueMicrotask(() => this.propertiesDialogVisibleChange.emit(true));
     });
 
     PDFViewerApplication.eventBus.on('pagesloaded', (x: PagesLoadedEvent) => {
-      this.ngZone.run(() => this.pagesLoaded.emit(x));
+      queueMicrotask(() => this.pagesLoaded.emit(x));
       this.dynamicCSSComponent.removeScrollbarInInfiniteScrollMode(false, this.pageViewMode, this.primaryMenuVisible, this, this.logLevel);
       if (this.rotation !== undefined && this.rotation !== null) {
         const r = Number(this.rotation);
@@ -1617,19 +1615,19 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       this.setZoom();
     });
     PDFViewerApplication.eventBus.on('pagerendered', (x: PageRenderedEvent) => {
-      this.ngZone.run(() => {
+      queueMicrotask(() => {
         this.pageRendered.emit(x);
         this.dynamicCSSComponent.removeScrollbarInInfiniteScrollMode(false, this.pageViewMode, this.primaryMenuVisible, this, this.logLevel);
       });
     });
     PDFViewerApplication.eventBus.on('pagerender', (x: PageRenderEvent) => {
-      this.ngZone.run(() => {
+      queueMicrotask(() => {
         this.pageRender.emit(x);
       });
     });
 
     PDFViewerApplication.eventBus.on('download', (x: PdfDownloadedEvent) => {
-      this.ngZone.run(() => {
+      queueMicrotask(() => {
         this.pdfDownloaded.emit(x);
       });
     });
@@ -1652,12 +1650,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     });
 
     PDFViewerApplication.eventBus.on('rotationchanging', (x: PagesRotationEvent) => {
-      this.ngZone.run(() => {
+      queueMicrotask(() => {
         this.rotationChange.emit(x.pagesRotation);
       });
     });
     PDFViewerApplication.eventBus.on('fileinputchange', (x: FileInputChanged) => {
-      this.ngZone.run(() => {
+      queueMicrotask(() => {
         if (x.fileInput.files && x.fileInput.files.length >= 1) {
           // drag and drop
           this.srcChange.emit(x.fileInput.files[0].name);
@@ -1669,14 +1667,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       });
     });
     PDFViewerApplication.eventBus.on('cursortoolchanged', (x: HandtoolChanged) => {
-      this.ngZone.run(() => {
+      queueMicrotask(() => {
         this.handTool = x.tool === PdfCursorTools.HAND;
         this.handToolChange.emit(x.tool === PdfCursorTools.HAND);
       });
     });
 
     PDFViewerApplication.eventBus.on('sidebarviewchanged', (x: SidebarviewChange) => {
-      this.ngZone.run(() => {
+      queueMicrotask(() => {
         this.sidebarVisibleChange.emit(x.view > 0);
         if (x.view > 0) {
           this.activeSidebarViewChange.emit(x.view);
@@ -1688,7 +1686,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     });
 
     PDFViewerApplication.eventBus.on('documentloaded', (pdfLoadedEvent: PdfDocumentLoadedEvent) => {
-      this.ngZone.run(async () => {
+      queueMicrotask(async () => {
         const pages = pdfLoadedEvent.source.pagesCount;
         this.pageLabel = undefined;
         if (this.page && this.page >= pages) {
@@ -1707,7 +1705,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     });
 
     PDFViewerApplication.eventBus.on('spreadmodechanged', (event) => {
-      this.ngZone.run(() => {
+      queueMicrotask(() => {
         const modes = ['off', 'odd', 'even'] as Array<SpreadType>;
         this.spread = modes[event.mode];
         this.spreadChange.emit(this.spread);
@@ -1715,7 +1713,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     });
 
     const hideSidebarToolbar = () => {
-      this.ngZone.run(() => {
+      queueMicrotask(() => {
         if (this.sidebarComponent) {
           this.sidebarComponent.showToolbarWhenNecessary();
         }
@@ -1730,24 +1728,24 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
     PDFViewerApplication.eventBus.on('annotationlayerrendered', (event: AnnotationLayerRenderedEvent) => {
       const div = event.source.div;
-      this.ngZone.run(() => {
+      queueMicrotask(() => {
         event.initialFormDataStoredInThePDF = this.formSupport.initialFormDataStoredInThePDF;
         this.annotationLayerRendered.emit(event);
         this.enableOrDisableForms(div, true);
       });
     });
-    PDFViewerApplication.eventBus.on('annotationeditorlayerrendered', (event) => this.ngZone.run(() => this.annotationEditorLayerRendered.emit(event)));
-    PDFViewerApplication.eventBus.on('xfalayerrendered', (event) => this.ngZone.run(() => this.xfaLayerRendered.emit(event)));
-    PDFViewerApplication.eventBus.on('outlineloaded', (event) => this.ngZone.run(() => this.outlineLoaded.emit(event)));
-    PDFViewerApplication.eventBus.on('attachmentsloaded', (event) => this.ngZone.run(() => this.attachmentsloaded.emit(event)));
-    PDFViewerApplication.eventBus.on('layersloaded', (event) => this.ngZone.run(() => this.layersloaded.emit(event)));
+    PDFViewerApplication.eventBus.on('annotationeditorlayerrendered', (event) => queueMicrotask(() => this.annotationEditorLayerRendered.emit(event)));
+    PDFViewerApplication.eventBus.on('xfalayerrendered', (event) => queueMicrotask(() => this.xfaLayerRendered.emit(event)));
+    PDFViewerApplication.eventBus.on('outlineloaded', (event) => queueMicrotask(() => this.outlineLoaded.emit(event)));
+    PDFViewerApplication.eventBus.on('attachmentsloaded', (event) => queueMicrotask(() => this.attachmentsloaded.emit(event)));
+    PDFViewerApplication.eventBus.on('layersloaded', (event) => queueMicrotask(() => this.layersloaded.emit(event)));
     PDFViewerApplication.eventBus.on('presentationmodechanged', (event) => {
       const PDFViewerApplication: IPDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
       PDFViewerApplication?.pdfViewer?.destroyBookMode();
     });
 
     PDFViewerApplication.eventBus.on('updatefindcontrolstate', (x: FindResult) => {
-      this.ngZone.run(() => {
+      queueMicrotask(() => {
         let type = PDFViewerApplication.findController.state?.type ?? 'find';
         if (type === 'again') {
           type = 'findagain';
@@ -1777,7 +1775,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     PDFViewerApplication.eventBus.on('updatefindmatchescount', (x: FindResult) => {
       x.matchesCount.matches = PDFViewerApplication.findController._pageMatches ?? [];
       x.matchesCount.matchesLength = PDFViewerApplication.findController._pageMatchesLength ?? [];
-      this.ngZone.run(() =>
+      queueMicrotask(() =>
         this.updateFindMatchesCount.emit({
           caseSensitive: PDFViewerApplication.findController.state?.caseSensitive ?? false,
           entireWord: PDFViewerApplication.findController.state?.entireWord ?? false,
@@ -1797,7 +1795,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     PDFViewerApplication.eventBus.on('pagechanging', (x: PageNumberChange) => {
       if (!this.pdfScriptLoaderService.shuttingDown) {
         // hurried users sometimes reload the PDF before it has finished initializing
-        this.ngZone.run(() => {
+        queueMicrotask(() => {
           const currentPage = PDFViewerApplication.pdfViewer.currentPageNumber;
           const currentPageLabel = PDFViewerApplication.pdfViewer.currentPageLabel;
 
@@ -2404,7 +2402,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       }
     }
     if (this.hasSignature) {
-      this.ngZone.run(() => {
+      queueMicrotask(() => {
         // Defer scrolling to ensure it happens after any other UI updates
         setTimeout(() => {
           const viewerContainer = document.querySelector('#viewerContainer');
