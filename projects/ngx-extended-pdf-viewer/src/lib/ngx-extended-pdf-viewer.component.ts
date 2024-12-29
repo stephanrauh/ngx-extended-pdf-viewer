@@ -1658,6 +1658,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       queueMicrotask(() => {
         if (x.fileInput.files && x.fileInput.files.length >= 1) {
           // drag and drop
+          this.srcChangeTriggeredByUser = true;
           this.srcChange.emit(x.fileInput.files[0].name);
         } else {
           // regular file open dialog

@@ -619,4 +619,4 @@
 - 22.1.0-alpha.2 #2655 (tried to) fix the erratic behavior of the ink editor in touch mode; improved the type definitions in the `types` folder
 - 22.1.0-alpha.3 #2655 fixed the erratic behavior of the ink editor in touch mode; updated the bleeding edge branch to pdf.js 4.9.124 (work in progress - the bleeding edge branch is partially broken)
 - 22.1.0-alpha.4 #2655 fixed the erratic behavior of the stamp editor in touch mode; updated the bleeding edge branch to pdf.js 4.9.124
-- 22.1.0-alpha.5 #2699 replace `ngZone.run()` by `queueMicrotask()` or `setTimeout()` to allow for Zone-less Angular applications
+- 22.1.0-alpha.5 #2699 replace `ngZone.run()` by `queueMicrotask()` or `setTimeout()` to allow for Zone-less Angular applications; #2700 fix drag-and-drop
