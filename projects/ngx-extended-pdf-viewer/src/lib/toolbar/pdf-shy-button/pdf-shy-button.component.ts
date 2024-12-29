@@ -1,5 +1,5 @@
-import { AfterViewInit, Component, ElementRef, Input, OnChanges, OnInit, Renderer2, ViewChild, effect } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { AfterContentInit, AfterViewInit, Component, ContentChild, ElementRef, Input, OnChanges, OnInit, Renderer2, ViewChild, effect } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { PdfCspPolicyService } from '../../pdf-csp-policy.service';
 import { PDFNotificationService } from '../../pdf-notification-service';
@@ -10,7 +10,7 @@ import { PdfShyButtonService } from './pdf-shy-button-service';
   selector: 'pdf-shy-button',
   templateUrl: './pdf-shy-button.component.html',
 })
-export class PdfShyButtonComponent implements OnInit, OnChanges, AfterViewInit {
+export class PdfShyButtonComponent implements OnInit, OnChanges, AfterViewInit, AfterContentInit {
   @Input()
   public primaryToolbarId: string;
 
@@ -52,12 +52,19 @@ export class PdfShyButtonComponent implements OnInit, OnChanges, AfterViewInit {
 
   private PDFViewerApplication: IPDFViewerApplication | undefined;
 
+  public renderContent = false;
+
   @ViewChild('buttonRef', { static: false }) buttonRef: ElementRef;
+
+  @ContentChild('nestedContent', { static: false }) nestedContent: ElementRef | null = null;
 
   private _imageHtml: string | undefined;
 
-  public get imageHtml(): string | undefined {
-    return this._imageHtml;
+  public get imageHtml(): string | SafeHtml | undefined {
+    if (this._imageHtml) {
+      return this.sanitizer.bypassSecurityTrustHtml(this._imageHtml);
+    }
+    return undefined;
   }
 
   @Input()
@@ -140,14 +147,14 @@ export class PdfShyButtonComponent implements OnInit, OnChanges, AfterViewInit {
     if (!legal) {
       throw new Error('Illegal image for PDFShyButton. Only SVG images are allowed. Please use only the tags <svg> and <path>. ' + value);
     }
-    this._imageHtml = value;
+    this._imageHtml = this.pdfCspPolicyService.sanitizeHTML(value);
   }
 
   constructor(
     private pdfShyButtonServiceService: PdfShyButtonService,
     private sanitizer: DomSanitizer,
     private renderer: Renderer2,
-    private notificationService: PDFNotificationService,
+    notificationService: PDFNotificationService,
     private pdfCspPolicyService: PdfCspPolicyService
   ) {
     effect(() => {
@@ -194,6 +201,13 @@ export class PdfShyButtonComponent implements OnInit, OnChanges, AfterViewInit {
           this.renderer.removeChild(el, child);
         }
       }
+    }
+  }
+
+  ngAfterContentInit() {
+    if (this.primaryToolbarId === 'nestedComponent') {
+      this.renderContent = !!this.nestedContent;
+      console.log('renderContent', this.renderContent);
     }
   }
 }

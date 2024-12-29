@@ -620,3 +620,4 @@
 - 22.1.0-alpha.3 #2655 fixed the erratic behavior of the ink editor in touch mode; updated the bleeding edge branch to pdf.js 4.9.124 (work in progress - the bleeding edge branch is partially broken)
 - 22.1.0-alpha.4 #2655 fixed the erratic behavior of the stamp editor in touch mode; updated the bleeding edge branch to pdf.js 4.9.124
 - 22.1.0 #2699 replace `ngZone.run()` by `queueMicrotask()` or `setTimeout()` to allow for Zone-less Angular applications; #2700 fix drag-and-drop
+- 22.2.0-alpha.1 #2684 allow nested components in `<pdf-shy-button>` (the feature already works, I've made it an alpha version in order to be able to test and document it thoroughly); the secondary toolbar now shows the button icons again

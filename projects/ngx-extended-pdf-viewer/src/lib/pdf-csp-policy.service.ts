@@ -55,6 +55,18 @@ export class PdfCspPolicyService {
     }
   }
 
+  public sanitizeHTML(html: string): string {
+    if (typeof window === 'undefined') {
+      // server-side rendering
+      return '';
+    }
+    this.init();
+    if (this.sanitizer) {
+      return this.sanitizer.createHTML(html) as unknown as any;
+    } else {
+      return html;
+    }
+  }
   public addTrustedHTML(element: HTMLElement, html: string) {
     if (typeof window === 'undefined') {
       // server-side rendering

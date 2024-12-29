@@ -1,33 +1,25 @@
-<ng-container [ngTemplateOutlet]="customSecondaryToolbar ? customSecondaryToolbar : defaultSecondaryToolbar"> </ng-container>
+<ng-container [ngTemplateOutlet]="customSecondaryToolbar ? customSecondaryToolbar : defaultSecondaryToolbar">
+</ng-container>
 
 <ng-template #defaultSecondaryToolbar>
-  <div
-    id="secondaryToolbar"
-    class="secondaryToolbar hidden doorHangerRight"
-    [style.top]="secondaryToolbarTop"
-    [style.transform]="'scale(' + mobileFriendlyZoomScale + ')'"
-    [style.transformOrigin]="'right top'"
-    >
+  <div id="secondaryToolbar" class="secondaryToolbar hidden doorHangerRight" [style.top]="secondaryToolbarTop"
+    [style.transform]="'scale(' + mobileFriendlyZoomScale + ')'" [style.transformOrigin]="'right top'">
     <div id="secondaryToolbarButtonContainer">
       @for (button of pdfShyButtonService.buttons; track button.id) {
-        <button
-          type="button"
-          [id]="button.id"
-          [ngClass]="button.cssClass | invertForSecondaryToolbar"
-          [class.toggled]="button.toggled"
-          class="secondaryToolbarButton"
-          [title]="button.title"
-          [attr.data-l10n-id]="button.l10nId"
-          (click)="onClick($event, button.action, button.eventBusName, button.closeOnClick)"
-          [attr.aria-label]="button.title"
-          [disabled]="button.disabled"
-
-          >
-          @if (button.image) {
-            <span class="icon" role="img" aria-hidden="true" [attr.aria-label]="button.title" [innerHTML]="button.image"></span>
-          }
-          <span class="toolbar-caption" [attr.data-l10n-id]="button.l10nLabel">{{ button.title }}</span>
-        </button>
+      <button type="button" [id]="button.id" [ngClass]="button.cssClass | invertForSecondaryToolbar"
+        [class.toggled]="button.toggled" class="secondaryToolbarButton" [title]="button.title"
+        [attr.data-l10n-id]="button.l10nId"
+        (click)="onClick($event, button.action, button.eventBusName, button.closeOnClick)"
+        [attr.aria-label]="button.title" [disabled]="button.disabled">
+        @if (button.image) {
+        <span class="icon" role="img" aria-hidden="true" [attr.aria-label]="button.title"
+          [innerHTML]="button.image"></span>
+        }
+        @else {
+        <span class="icon" role="img" aria-hidden="true" [attr.aria-label]="button.title"></span>
+        }
+        <span class="toolbar-caption" [attr.data-l10n-id]="button.l10nLabel">{{ button.title }}</span>
+      </button>
       }
     </div>
   </div>
