@@ -3,9 +3,9 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.4",
   "version": 1,
-  "serialNumber": "urn:uuid:e1debe16-e893-4a2d-b9a5-b2a289061ed9",
+  "serialNumber": "urn:uuid:923d2b11-2102-4faf-9f3c-15864adb3267",
   "metadata": {
-    "timestamp": "2024-12-27T21:11:11.334Z",
+    "timestamp": "2024-12-29T14:00:04.520Z",
     "tools": [
       {
         "name": "npm",
@@ -36,7 +36,7 @@
       {
         "vendor": "@cyclonedx",
         "name": "cyclonedx-library",
-        "version": "6.13.0",
+        "version": "6.13.1",
         "externalReferences": [
           {
             "url": "git+https://github.com/CycloneDX/cyclonedx-javascript-library.git",
@@ -2318,8 +2318,8 @@
     {
       "type": "library",
       "name": "browserslist",
-      "version": "4.24.2",
-      "bom-ref": "browserslist@4.24.2",
+      "version": "4.24.3",
+      "bom-ref": "browserslist@4.24.3",
       "author": "Andrey Sitnik",
       "description": "Share target browsers between different front-end tools, like Autoprefixer, Stylelint and babel-env-preset",
       "licenses": [
@@ -2329,7 +2329,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/browserslist@4.24.2",
+      "purl": "pkg:npm/browserslist@4.24.3",
       "externalReferences": [
         {
           "url": "git+https://github.com/browserslist/browserslist.git",
@@ -2347,12 +2347,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/browserslist/-/browserslist-4.24.2.tgz",
+          "url": "https://registry.npmjs.org/browserslist/-/browserslist-4.24.3.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "64873e43adab7af74c72a0ba68286d5b88f3dcccb79259823b57c498835963ff09dc4a41839fc0fc3d002a606f79487aa60a1ec9ca0c915324a3ce2db984be1a"
+              "content": "d423e6bfc8a86c4d9fc91315f7b74070c55e82fbd62b19aaf788642e2024506c0a553c832f0df72be671885ad110a9a6a6ce2b230ea0adc0850a74cc499fd888"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -10365,8 +10365,8 @@
     {
       "type": "library",
       "name": "caniuse-lite",
-      "version": "1.0.30001687",
-      "bom-ref": "caniuse-lite@1.0.30001687",
+      "version": "1.0.30001690",
+      "bom-ref": "caniuse-lite@1.0.30001690",
       "author": "Ben Briggs",
       "description": "A smaller version of caniuse-db, with only the essentials!",
       "licenses": [
@@ -10376,7 +10376,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/caniuse-lite@1.0.30001687",
+      "purl": "pkg:npm/caniuse-lite@1.0.30001690",
       "externalReferences": [
         {
           "url": "git+https://github.com/browserslist/caniuse-lite.git",
@@ -10394,12 +10394,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001687.tgz",
+          "url": "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001690.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "d12fc50e17f8662aab4d4890dfd74a7948d846392fee53995350e089fdab22aad3cd7ff5c15da17cabbd4ce9b520791d4a28df2ecc314c5ce5fdcbe2afe48b49"
+              "content": "e44c62137a9037aa05f0295ff227c80dc31109113f74c19c1131bf5c6303f3f5e25e6e875d08104e1d726582d75e948eb04525266d57afb90650b653b86b4fff"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -12478,8 +12478,8 @@
     {
       "type": "library",
       "name": "electron-to-chromium",
-      "version": "1.5.72",
-      "bom-ref": "electron-to-chromium@1.5.72",
+      "version": "1.5.76",
+      "bom-ref": "electron-to-chromium@1.5.76",
       "author": "Kilian Valkhof",
       "description": "Provides a list of electron-to-chromium version mappings",
       "licenses": [
@@ -12489,7 +12489,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/electron-to-chromium@1.5.72",
+      "purl": "pkg:npm/electron-to-chromium@1.5.76",
       "externalReferences": [
         {
           "url": "git+https://github.com/kilian/electron-to-chromium.git",
@@ -12507,12 +12507,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.5.72.tgz",
+          "url": "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.5.76.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "66948050e6762336f2eea9d996e4ab0251a0190cee72615b3749fae1d633a1c6319f1579b9fbaba63dd58047b8714a7b8abf4b99e2f1358a3c6d59e533c6d01f"
+              "content": "0a3550c86ee7ed2afe7815c4f3a1c8ba59cbe4df31658d6c82638f1aeabf17446bd0526aeb7960d2412d3880df641938e059c32dfe85509f9db0972e8940dd0d"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -14043,8 +14043,8 @@
     {
       "type": "library",
       "name": "domutils",
-      "version": "3.1.0",
-      "bom-ref": "domutils@3.1.0",
+      "version": "3.2.1",
+      "bom-ref": "domutils@3.2.1",
       "author": "Felix Boehm",
       "description": "Utilities for working with htmlparser2's dom",
       "licenses": [
@@ -14054,7 +14054,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/domutils@3.1.0",
+      "purl": "pkg:npm/domutils@3.2.1",
       "externalReferences": [
         {
           "url": "git://github.com/fb55/domutils.git",
@@ -14072,12 +14072,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/domutils/-/domutils-3.1.0.tgz",
+          "url": "https://registry.npmjs.org/domutils/-/domutils-3.2.1.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "1fbf2e32642d23602180326359e4261f0249d9b2cf0f718c98eed98dafd9661f38c249bee2eb7e2149d47516bcb82197f3c0e2571d63e8545ed577f11208c464"
+              "content": "c565e6b919cdf4e30fea9b4f776f87d1c09b7180542dae580d36cc9bfda5be45af340dcee30716f86bf3a28a81b8d33ccb2ea997754801e2535145946df23917"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -15501,8 +15501,8 @@
     {
       "type": "library",
       "name": "fastq",
-      "version": "1.17.1",
-      "bom-ref": "fastq@1.17.1",
+      "version": "1.18.0",
+      "bom-ref": "fastq@1.18.0",
       "author": "Matteo Collina",
       "description": "Fast, in memory work queue",
       "licenses": [
@@ -15512,7 +15512,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/fastq@1.17.1",
+      "purl": "pkg:npm/fastq@1.18.0",
       "externalReferences": [
         {
           "url": "git+https://github.com/mcollina/fastq.git",
@@ -15530,12 +15530,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/fastq/-/fastq-1.17.1.tgz",
+          "url": "https://registry.npmjs.org/fastq/-/fastq-1.18.0.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "b11543de55952175a0e81cbaf1937bbe1a3d6b5a5070dfd604568002c0c31739498efa06c743fccfb575b7bda0ac525f261bb760f641baedb97fb29ac368cdd7"
+              "content": "40a1d73d6d210fc8385044f4dd274e76e9f34a8b9cf4de00b8776c5fc5cd713b2ecfec981482d53485f897dc8700132188423d0dbd094d3229bb4c01f98d5043"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -16909,8 +16909,8 @@
         {
           "type": "library",
           "name": "chalk",
-          "version": "5.3.0",
-          "bom-ref": "inquirer@9.2.15|chalk@5.3.0",
+          "version": "5.4.1",
+          "bom-ref": "inquirer@9.2.15|chalk@5.4.1",
           "description": "Terminal string styling done right",
           "licenses": [
             {
@@ -16919,7 +16919,7 @@
               }
             }
           ],
-          "purl": "pkg:npm/chalk@5.3.0",
+          "purl": "pkg:npm/chalk@5.4.1",
           "externalReferences": [
             {
               "url": "git+https://github.com/chalk/chalk.git",
@@ -16937,12 +16937,12 @@
               "comment": "as detected from PackageJson property \"bugs.url\""
             },
             {
-              "url": "https://registry.npmjs.org/chalk/-/chalk-5.3.0.tgz",
+              "url": "https://registry.npmjs.org/chalk/-/chalk-5.4.1.tgz",
               "type": "distribution",
               "hashes": [
                 {
                   "alg": "SHA-512",
-                  "content": "74b8ad1bbf5df8657535bfd561c083162bc978ad618ae92df508d13553ac52d4f2d6b475609b26a46193677a89a2cfaec3b5a6585e3053005df63c63a1c142db"
+                  "content": "ce0559ba8d9671981f5049ac9fa78ede420d7b15bc44013899a890f1036cf02b693c24b232262c50b4771d06249b7c3c14803749b7abc8c24c4a5746b16f94df"
                 }
               ],
               "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -17343,8 +17343,8 @@
     {
       "type": "library",
       "name": "dunder-proto",
-      "version": "1.0.0",
-      "bom-ref": "dunder-proto@1.0.0",
+      "version": "1.0.1",
+      "bom-ref": "dunder-proto@1.0.1",
       "author": "Jordan Harband",
       "description": "If available, the `Object.prototype.__proto__` accessor and mutator, call-bound",
       "licenses": [
@@ -17354,7 +17354,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/dunder-proto@1.0.0",
+      "purl": "pkg:npm/dunder-proto@1.0.1",
       "externalReferences": [
         {
           "url": "git+https://github.com/es-shims/dunder-proto.git",
@@ -17372,12 +17372,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/dunder-proto/-/dunder-proto-1.0.0.tgz",
+          "url": "https://registry.npmjs.org/dunder-proto/-/dunder-proto-1.0.1.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "f7e4a3df40c8bbee0abc7a8c7cb5062c560bd8f91445260c5572725def769c546f958ab98418cb1216e5281faf91dfd65655183168a0898d3b4fdd45924d3ee0"
+              "content": "28837f9c3241411717c3430b561644f62407986ebca80548060f42aa65188e64088608a3f54e4c16faea9142f915bb72cb366e39e3add3375e45ee1463b72df8"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -17613,8 +17613,8 @@
     {
       "type": "library",
       "name": "math-intrinsics",
-      "version": "1.0.0",
-      "bom-ref": "math-intrinsics@1.0.0",
+      "version": "1.1.0",
+      "bom-ref": "math-intrinsics@1.1.0",
       "author": "Jordan Harband",
       "description": "ES Math-related intrinsics and helpers, robustly cached.",
       "licenses": [
@@ -17624,7 +17624,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/math-intrinsics@1.0.0",
+      "purl": "pkg:npm/math-intrinsics@1.1.0",
       "externalReferences": [
         {
           "url": "git+https://github.com/es-shims/math-intrinsics.git",
@@ -17642,12 +17642,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/math-intrinsics/-/math-intrinsics-1.0.0.tgz",
+          "url": "https://registry.npmjs.org/math-intrinsics/-/math-intrinsics-1.1.0.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "e0ca8c88a3fdd326f2998becbadd021f68385d66df2ed9a50a45e6b6675c0c2c4d07e99072ed70ff5f8bfd50fbbe2fcf4afed7d89615ed209c47e8e23d79d0b4"
+              "content": "fc85ed6f0124e474cfc84c32297ea11a4617c4cf676e3eb807e8a55499c2fd1e81d291f91b85776f4a556cbec3063e2d921040a696d05257fa17a5e5f4b1eed6"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -23400,8 +23400,8 @@
     {
       "type": "library",
       "name": "jiti",
-      "version": "1.21.6",
-      "bom-ref": "jiti@1.21.6",
+      "version": "1.21.7",
+      "bom-ref": "jiti@1.21.7",
       "description": "Runtime typescript and ESM support for Node.js",
       "licenses": [
         {
@@ -23410,7 +23410,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/jiti@1.21.6",
+      "purl": "pkg:npm/jiti@1.21.7",
       "externalReferences": [
         {
           "url": "git+https://github.com/unjs/jiti.git",
@@ -23428,12 +23428,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/jiti/-/jiti-1.21.6.tgz",
+          "url": "https://registry.npmjs.org/jiti/-/jiti-1.21.7.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "db24e07964d6ccc5a41eee89a7d34a81e3c36981db9ed8b0bd8bae24b6db37dbe5ec30bd0ef5ca381d810b7659f760f772f57f69f947d28b037f0a477a9439df"
+              "content": "fe298a346e046d636b563a0d0bfd47e7ff46172fadaa31811c2692b0df8fd919cfaa3b0b9afe940f7123f8a8fc9c159a440c3293b90ae5951cf8e11ab674d1dc"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -24803,8 +24803,8 @@
     {
       "type": "library",
       "name": "rollup",
-      "version": "4.28.1",
-      "bom-ref": "rollup@4.28.1",
+      "version": "4.29.1",
+      "bom-ref": "rollup@4.29.1",
       "author": "Rich Harris",
       "description": "Next-generation ES module bundler",
       "licenses": [
@@ -24814,7 +24814,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/rollup@4.28.1",
+      "purl": "pkg:npm/rollup@4.29.1",
       "externalReferences": [
         {
           "url": "git+https://github.com/rollup/rollup.git",
@@ -24832,12 +24832,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/rollup/-/rollup-4.28.1.tgz",
+          "url": "https://registry.npmjs.org/rollup/-/rollup-4.29.1.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "eb57d7625fea3558a72a61924c7019e98cbc237608242febda6f5f787a3a4b054055c2d3e4c3f039415eec4b94440ff89b4351f255c6e01057ba8fc8644b2332"
+              "content": "45a278e4cfe49895334960ecd4d9dde43755e1e7ab0bdf2276d50e56be857ca720c6abe3c079b1739ba92c5f6a654f44a6c573ce195e15a86b4f7b212ee27323"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -29650,8 +29650,8 @@
     {
       "type": "library",
       "name": "call-bound",
-      "version": "1.0.2",
-      "bom-ref": "call-bound@1.0.2",
+      "version": "1.0.3",
+      "bom-ref": "call-bound@1.0.3",
       "author": "Jordan Harband",
       "description": "Robust call-bound JavaScript intrinsics, using `call-bind` and `get-intrinsic`.",
       "licenses": [
@@ -29661,7 +29661,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/call-bound@1.0.2",
+      "purl": "pkg:npm/call-bound@1.0.3",
       "externalReferences": [
         {
           "url": "git+https://github.com/ljharb/call-bound.git",
@@ -29679,12 +29679,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/call-bound/-/call-bound-1.0.2.tgz",
+          "url": "https://registry.npmjs.org/call-bound/-/call-bound-1.0.3.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "d259343c715efeecf4be5e76edf1bd0a0744f5675a7e30db097bc16ecf8b52fd34d1356dd898e1a9bb382709bc833d3bd30f315f2100c6b3ce32e965b315de1a"
+              "content": "61377eeb01a53653f14aeae2ed8e97f2d6367669b5d94307eba46928c8625faaec939c175e76206d470eb7c9224b7d7f0237e84cebc2b04fb0f276502d09f31c"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -34201,8 +34201,8 @@
     {
       "type": "library",
       "name": "enhanced-resolve",
-      "version": "5.17.1",
-      "bom-ref": "enhanced-resolve@5.17.1",
+      "version": "5.18.0",
+      "bom-ref": "enhanced-resolve@5.18.0",
       "author": "Tobias Koppers @sokra",
       "description": "Offers a async require.resolve function. It's highly configurable.",
       "licenses": [
@@ -34212,7 +34212,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/enhanced-resolve@5.17.1",
+      "purl": "pkg:npm/enhanced-resolve@5.18.0",
       "externalReferences": [
         {
           "url": "git://github.com/webpack/enhanced-resolve.git",
@@ -34230,12 +34230,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/enhanced-resolve/-/enhanced-resolve-5.17.1.tgz",
+          "url": "https://registry.npmjs.org/enhanced-resolve/-/enhanced-resolve-5.18.0.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "2cc1e5ddd5e14dc7eff20338904cc851e4d0fbb7e9740d25dad51fdf805d7573e4cf6039c49e4bfcf72177904beab75c70cf501afbb4b166732b5675b78c30ca"
+              "content": "d3faf4332486606f18aa56b2059e8cb827c40a61c5749e6ac8f87cb3cc1ae479e6e926852d22b555809b8fe34aa74f74366d5c699843f904e79b13bb7ac606c9"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -34255,8 +34255,8 @@
     {
       "type": "library",
       "name": "es-module-lexer",
-      "version": "1.5.4",
-      "bom-ref": "es-module-lexer@1.5.4",
+      "version": "1.6.0",
+      "bom-ref": "es-module-lexer@1.6.0",
       "author": "Guy Bedford",
       "description": "Lexes ES modules returning their import/export metadata",
       "licenses": [
@@ -34266,7 +34266,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/es-module-lexer@1.5.4",
+      "purl": "pkg:npm/es-module-lexer@1.6.0",
       "externalReferences": [
         {
           "url": "git+https://github.com/guybedford/es-module-lexer.git",
@@ -34284,12 +34284,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/es-module-lexer/-/es-module-lexer-1.5.4.tgz",
+          "url": "https://registry.npmjs.org/es-module-lexer/-/es-module-lexer-1.6.0.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "31534ae7a36232b3b08ad141edca83c2ad0242eb5bc3ed01bcbb21252b1ed0c50d53ecb5142ddb512fc0420ee852783eff02abae48bb25f9b0b551e455f3cb97"
+              "content": "aaa9c3d72314ead93f8e768ca2ca201b249364ff18b548007df03d9cc37e13fae3c5c7d143a20493b222a335238312a81470468d32e7ac707f602e39affe7d11"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -34739,8 +34739,8 @@
     {
       "type": "library",
       "name": "terser-webpack-plugin",
-      "version": "5.3.10",
-      "bom-ref": "terser-webpack-plugin@5.3.10",
+      "version": "5.3.11",
+      "bom-ref": "terser-webpack-plugin@5.3.11",
       "author": "webpack Contrib Team",
       "description": "Terser plugin for webpack",
       "licenses": [
@@ -34750,7 +34750,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/terser-webpack-plugin@5.3.10",
+      "purl": "pkg:npm/terser-webpack-plugin@5.3.11",
       "externalReferences": [
         {
           "url": "git+https://github.com/webpack-contrib/terser-webpack-plugin.git",
@@ -34768,12 +34768,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/terser-webpack-plugin/-/terser-webpack-plugin-5.3.10.tgz",
+          "url": "https://registry.npmjs.org/terser-webpack-plugin/-/terser-webpack-plugin-5.3.11.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "04a14f5a53c39dd3ecf8d1860abd54e7db745d270be77d7b63451178dac76b0f7f17084f10d96ae9b7e0b3ee323dfc8fe75bea0b56d0e2ba7511f5d6e59487f7"
+              "content": "4550ac31fb83d3e713b771305fc8529762ace7a11b1475a6865bb072aa0f2ad0677e3893ea895aabb3d12117e1c94f279c2d8cae70eb04b7eb0ff44613e7155d"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -34794,7 +34794,7 @@
           "type": "library",
           "name": "jest-worker",
           "version": "27.5.1",
-          "bom-ref": "terser-webpack-plugin@5.3.10|jest-worker@27.5.1",
+          "bom-ref": "terser-webpack-plugin@5.3.11|jest-worker@27.5.1",
           "licenses": [
             {
               "license": {
@@ -34846,7 +34846,7 @@
           "type": "library",
           "name": "supports-color",
           "version": "8.1.1",
-          "bom-ref": "terser-webpack-plugin@5.3.10|supports-color@8.1.1",
+          "bom-ref": "terser-webpack-plugin@5.3.11|supports-color@8.1.1",
           "author": "Sindre Sorhus",
           "description": "Detect whether a terminal supports color",
           "licenses": [
@@ -34898,42 +34898,42 @@
         },
         {
           "type": "library",
-          "name": "schema-utils",
-          "version": "3.3.0",
-          "bom-ref": "terser-webpack-plugin@5.3.10|schema-utils@3.3.0",
-          "author": "webpack Contrib",
-          "description": "webpack Validation Utils",
+          "name": "terser",
+          "version": "5.37.0",
+          "bom-ref": "terser-webpack-plugin@5.3.11|terser@5.37.0",
+          "author": "Mihai Bazon",
+          "description": "JavaScript parser, mangler/compressor and beautifier toolkit for ES6+",
           "licenses": [
             {
               "license": {
-                "id": "MIT"
+                "id": "BSD-2-Clause"
               }
             }
           ],
-          "purl": "pkg:npm/schema-utils@3.3.0",
+          "purl": "pkg:npm/terser@5.37.0",
           "externalReferences": [
             {
-              "url": "git+https://github.com/webpack/schema-utils.git",
+              "url": "git+https://github.com/terser/terser.git",
               "type": "vcs",
               "comment": "as detected from PackageJson property \"repository.url\""
             },
             {
-              "url": "https://github.com/webpack/schema-utils",
+              "url": "https://terser.org",
               "type": "website",
               "comment": "as detected from PackageJson property \"homepage\""
             },
             {
-              "url": "https://github.com/webpack/schema-utils/issues",
+              "url": "https://github.com/terser/terser/issues",
               "type": "issue-tracker",
               "comment": "as detected from PackageJson property \"bugs.url\""
             },
             {
-              "url": "https://registry.npmjs.org/schema-utils/-/schema-utils-3.3.0.tgz",
+              "url": "https://registry.npmjs.org/terser/-/terser-5.37.0.tgz",
               "type": "distribution",
               "hashes": [
                 {
                   "alg": "SHA-512",
-                  "content": "a4dff2380bdc0bee6b4399c4446bb0ae32e562f2d36c289b9d9d48ec1d4b6a2033f41441944f4632013f7aa577d0feda25051fec37629b2fd1b1b60efc6ad51a"
+                  "content": "07cc114649ab7b8111b9c2ccfee5f1e0c395e5c6e73a5540a94b2dfb5fa22ca3c8d1d3a014edbc7fce29b6842df47108e77ecf3337d86bf77e1843ca4d15e660"
                 }
               ],
               "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -34942,7 +34942,7 @@
           "properties": [
             {
               "name": "cdx:npm:package:path",
-              "value": "node_modules/terser-webpack-plugin/node_modules/schema-utils"
+              "value": "node_modules/terser-webpack-plugin/node_modules/terser"
             },
             {
               "name": "cdx:npm:package:development",
@@ -34952,11 +34952,11 @@
         },
         {
           "type": "library",
-          "name": "ajv-keywords",
-          "version": "3.5.2",
-          "bom-ref": "terser-webpack-plugin@5.3.10|ajv-keywords@3.5.2",
-          "author": "Evgeny Poberezkin",
-          "description": "Custom JSON-Schema keywords for Ajv validator",
+          "name": "commander",
+          "version": "2.20.3",
+          "bom-ref": "terser-webpack-plugin@5.3.11|commander@2.20.3",
+          "author": "TJ Holowaychuk",
+          "description": "the complete solution for node.js command-line programs",
           "licenses": [
             {
               "license": {
@@ -34964,30 +34964,30 @@
               }
             }
           ],
-          "purl": "pkg:npm/ajv-keywords@3.5.2",
+          "purl": "pkg:npm/commander@2.20.3",
           "externalReferences": [
             {
-              "url": "git+https://github.com/epoberezkin/ajv-keywords.git",
+              "url": "git+https://github.com/tj/commander.js.git",
               "type": "vcs",
               "comment": "as detected from PackageJson property \"repository.url\""
             },
             {
-              "url": "https://github.com/epoberezkin/ajv-keywords#readme",
+              "url": "https://github.com/tj/commander.js#readme",
               "type": "website",
               "comment": "as detected from PackageJson property \"homepage\""
             },
             {
-              "url": "https://github.com/epoberezkin/ajv-keywords/issues",
+              "url": "https://github.com/tj/commander.js/issues",
               "type": "issue-tracker",
               "comment": "as detected from PackageJson property \"bugs.url\""
             },
             {
-              "url": "https://registry.npmjs.org/ajv-keywords/-/ajv-keywords-3.5.2.tgz",
+              "url": "https://registry.npmjs.org/commander/-/commander-2.20.3.tgz",
               "type": "distribution",
               "hashes": [
                 {
                   "alg": "SHA-512",
-                  "content": "e69e964cdd03753195424e958dc123bb5f4881a1ee75a95c7da6c3ef284319e03a6dc42798bf82a6f78b26aff786f7f07756a87fa2f7f3a3ae824c7a45fc8c21"
+                  "content": "1a956498cf2f176bd05248f62ef6660f7e49c5e24e2c2c09f5c524ba0ca4da7ba16efdfe989be92d862dfb4f9448cc44fa88fe7b2fe52449e1670ef9c7f38c71"
                 }
               ],
               "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -34996,115 +34996,7 @@
           "properties": [
             {
               "name": "cdx:npm:package:path",
-              "value": "node_modules/terser-webpack-plugin/node_modules/ajv-keywords"
-            },
-            {
-              "name": "cdx:npm:package:development",
-              "value": "true"
-            }
-          ]
-        },
-        {
-          "type": "library",
-          "name": "ajv",
-          "version": "6.12.6",
-          "bom-ref": "terser-webpack-plugin@5.3.10|ajv@6.12.6",
-          "author": "Evgeny Poberezkin",
-          "description": "Another JSON Schema Validator",
-          "licenses": [
-            {
-              "license": {
-                "id": "MIT"
-              }
-            }
-          ],
-          "purl": "pkg:npm/ajv@6.12.6",
-          "externalReferences": [
-            {
-              "url": "git+https://github.com/ajv-validator/ajv.git",
-              "type": "vcs",
-              "comment": "as detected from PackageJson property \"repository.url\""
-            },
-            {
-              "url": "https://github.com/ajv-validator/ajv",
-              "type": "website",
-              "comment": "as detected from PackageJson property \"homepage\""
-            },
-            {
-              "url": "https://github.com/ajv-validator/ajv/issues",
-              "type": "issue-tracker",
-              "comment": "as detected from PackageJson property \"bugs.url\""
-            },
-            {
-              "url": "https://registry.npmjs.org/ajv/-/ajv-6.12.6.tgz",
-              "type": "distribution",
-              "hashes": [
-                {
-                  "alg": "SHA-512",
-                  "content": "8f77d52e0bd3a39dbb6a7c98c893864d825b1bebe79d062f1349b99a691cd532be9f1029a6408b3082f4699e1d6e55423681928619be933138654ca4068320e2"
-                }
-              ],
-              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-            }
-          ],
-          "properties": [
-            {
-              "name": "cdx:npm:package:path",
-              "value": "node_modules/terser-webpack-plugin/node_modules/ajv"
-            },
-            {
-              "name": "cdx:npm:package:development",
-              "value": "true"
-            }
-          ]
-        },
-        {
-          "type": "library",
-          "name": "json-schema-traverse",
-          "version": "0.4.1",
-          "bom-ref": "terser-webpack-plugin@5.3.10|json-schema-traverse@0.4.1",
-          "author": "Evgeny Poberezkin",
-          "description": "Traverse JSON Schema passing each schema object to callback",
-          "licenses": [
-            {
-              "license": {
-                "id": "MIT"
-              }
-            }
-          ],
-          "purl": "pkg:npm/json-schema-traverse@0.4.1",
-          "externalReferences": [
-            {
-              "url": "git+https://github.com/epoberezkin/json-schema-traverse.git",
-              "type": "vcs",
-              "comment": "as detected from PackageJson property \"repository.url\""
-            },
-            {
-              "url": "https://github.com/epoberezkin/json-schema-traverse#readme",
-              "type": "website",
-              "comment": "as detected from PackageJson property \"homepage\""
-            },
-            {
-              "url": "https://github.com/epoberezkin/json-schema-traverse/issues",
-              "type": "issue-tracker",
-              "comment": "as detected from PackageJson property \"bugs.url\""
-            },
-            {
-              "url": "https://registry.npmjs.org/json-schema-traverse/-/json-schema-traverse-0.4.1.tgz",
-              "type": "distribution",
-              "hashes": [
-                {
-                  "alg": "SHA-512",
-                  "content": "c5b6c21f9742614e53f0b704861ba1ec727cf075ee5b7aac237634cce64529f6441dca5688753f271ce4eb6f41aec69bfe63221d0b62f7030ffbce3944f7b756"
-                }
-              ],
-              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-            }
-          ],
-          "properties": [
-            {
-              "name": "cdx:npm:package:path",
-              "value": "node_modules/terser-webpack-plugin/node_modules/json-schema-traverse"
+              "value": "node_modules/terser-webpack-plugin/node_modules/commander"
             },
             {
               "name": "cdx:npm:package:development",
@@ -35531,6 +35423,62 @@
           "name": "cdx:npm:package:development",
           "value": "true"
         }
+      ],
+      "components": [
+        {
+          "type": "library",
+          "name": "proc-log",
+          "version": "3.0.0",
+          "bom-ref": "npm-package-arg@11.0.1|proc-log@3.0.0",
+          "author": "GitHub Inc.",
+          "description": "just emit 'log' events on the process object",
+          "licenses": [
+            {
+              "license": {
+                "id": "ISC"
+              }
+            }
+          ],
+          "purl": "pkg:npm/proc-log@3.0.0",
+          "externalReferences": [
+            {
+              "url": "git+https://github.com/npm/proc-log.git",
+              "type": "vcs",
+              "comment": "as detected from PackageJson property \"repository.url\""
+            },
+            {
+              "url": "https://github.com/npm/proc-log#readme",
+              "type": "website",
+              "comment": "as detected from PackageJson property \"homepage\""
+            },
+            {
+              "url": "https://github.com/npm/proc-log/issues",
+              "type": "issue-tracker",
+              "comment": "as detected from PackageJson property \"bugs.url\""
+            },
+            {
+              "url": "https://registry.npmjs.org/proc-log/-/proc-log-3.0.0.tgz",
+              "type": "distribution",
+              "hashes": [
+                {
+                  "alg": "SHA-512",
+                  "content": "fbe567ecd4b85dff4d69c694f57ab751152ea991133ec7fc2f88f9fdc92169162c7cf791cb31b0fa20e316157f26bdee3664efbdd7442455a1e51d60460507f0"
+                }
+              ],
+              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+            }
+          ],
+          "properties": [
+            {
+              "name": "cdx:npm:package:path",
+              "value": "node_modules/npm-package-arg/node_modules/proc-log"
+            },
+            {
+              "name": "cdx:npm:package:development",
+              "value": "true"
+            }
+          ]
+        }
       ]
     },
     {
@@ -35640,60 +35588,6 @@
               "value": "true"
             }
           ]
-        }
-      ]
-    },
-    {
-      "type": "library",
-      "name": "proc-log",
-      "version": "3.0.0",
-      "bom-ref": "proc-log@3.0.0",
-      "author": "GitHub Inc.",
-      "description": "just emit 'log' events on the process object",
-      "licenses": [
-        {
-          "license": {
-            "id": "ISC"
-          }
-        }
-      ],
-      "purl": "pkg:npm/proc-log@3.0.0",
-      "externalReferences": [
-        {
-          "url": "git+https://github.com/npm/proc-log.git",
-          "type": "vcs",
-          "comment": "as detected from PackageJson property \"repository.url\""
-        },
-        {
-          "url": "https://github.com/npm/proc-log#readme",
-          "type": "website",
-          "comment": "as detected from PackageJson property \"homepage\""
-        },
-        {
-          "url": "https://github.com/npm/proc-log/issues",
-          "type": "issue-tracker",
-          "comment": "as detected from PackageJson property \"bugs.url\""
-        },
-        {
-          "url": "https://registry.npmjs.org/proc-log/-/proc-log-3.0.0.tgz",
-          "type": "distribution",
-          "hashes": [
-            {
-              "alg": "SHA-512",
-              "content": "fbe567ecd4b85dff4d69c694f57ab751152ea991133ec7fc2f88f9fdc92169162c7cf791cb31b0fa20e316157f26bdee3664efbdd7442455a1e51d60460507f0"
-            }
-          ],
-          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-        }
-      ],
-      "properties": [
-        {
-          "name": "cdx:npm:package:path",
-          "value": "node_modules/proc-log"
-        },
-        {
-          "name": "cdx:npm:package:development",
-          "value": "true"
         }
       ]
     },
@@ -35965,6 +35859,62 @@
           "name": "cdx:npm:package:development",
           "value": "true"
         }
+      ],
+      "components": [
+        {
+          "type": "library",
+          "name": "proc-log",
+          "version": "3.0.0",
+          "bom-ref": "pacote@17.0.6|proc-log@3.0.0",
+          "author": "GitHub Inc.",
+          "description": "just emit 'log' events on the process object",
+          "licenses": [
+            {
+              "license": {
+                "id": "ISC"
+              }
+            }
+          ],
+          "purl": "pkg:npm/proc-log@3.0.0",
+          "externalReferences": [
+            {
+              "url": "git+https://github.com/npm/proc-log.git",
+              "type": "vcs",
+              "comment": "as detected from PackageJson property \"repository.url\""
+            },
+            {
+              "url": "https://github.com/npm/proc-log#readme",
+              "type": "website",
+              "comment": "as detected from PackageJson property \"homepage\""
+            },
+            {
+              "url": "https://github.com/npm/proc-log/issues",
+              "type": "issue-tracker",
+              "comment": "as detected from PackageJson property \"bugs.url\""
+            },
+            {
+              "url": "https://registry.npmjs.org/proc-log/-/proc-log-3.0.0.tgz",
+              "type": "distribution",
+              "hashes": [
+                {
+                  "alg": "SHA-512",
+                  "content": "fbe567ecd4b85dff4d69c694f57ab751152ea991133ec7fc2f88f9fdc92169162c7cf791cb31b0fa20e316157f26bdee3664efbdd7442455a1e51d60460507f0"
+                }
+              ],
+              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+            }
+          ],
+          "properties": [
+            {
+              "name": "cdx:npm:package:path",
+              "value": "node_modules/pacote/node_modules/proc-log"
+            },
+            {
+              "name": "cdx:npm:package:development",
+              "value": "true"
+            }
+          ]
+        }
       ]
     },
     {
@@ -36123,60 +36073,6 @@
             {
               "name": "cdx:npm:package:path",
               "value": "node_modules/@npmcli/git/node_modules/lru-cache"
-            },
-            {
-              "name": "cdx:npm:package:development",
-              "value": "true"
-            }
-          ]
-        },
-        {
-          "type": "library",
-          "name": "proc-log",
-          "version": "4.2.0",
-          "bom-ref": "@npmcli/git@5.0.8|proc-log@4.2.0",
-          "author": "GitHub Inc.",
-          "description": "just emit 'log' events on the process object",
-          "licenses": [
-            {
-              "license": {
-                "id": "ISC"
-              }
-            }
-          ],
-          "purl": "pkg:npm/proc-log@4.2.0",
-          "externalReferences": [
-            {
-              "url": "git+https://github.com/npm/proc-log.git",
-              "type": "vcs",
-              "comment": "as detected from PackageJson property \"repository.url\""
-            },
-            {
-              "url": "https://github.com/npm/proc-log#readme",
-              "type": "website",
-              "comment": "as detected from PackageJson property \"homepage\""
-            },
-            {
-              "url": "https://github.com/npm/proc-log/issues",
-              "type": "issue-tracker",
-              "comment": "as detected from PackageJson property \"bugs.url\""
-            },
-            {
-              "url": "https://registry.npmjs.org/proc-log/-/proc-log-4.2.0.tgz",
-              "type": "distribution",
-              "hashes": [
-                {
-                  "alg": "SHA-512",
-                  "content": "83cf8e9d4fcbdaffb0ca254af83e5f037e09ec41fc8d9f030e5bf085108cc66323ed4081bf188ed6619e37edfa25720a178cdebd4e2444177c955806f6f2de94"
-                }
-              ],
-              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-            }
-          ],
-          "properties": [
-            {
-              "name": "cdx:npm:package:path",
-              "value": "node_modules/@npmcli/git/node_modules/proc-log"
             },
             {
               "name": "cdx:npm:package:development",
@@ -36456,6 +36352,60 @@
               "value": "true"
             }
           ]
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "proc-log",
+      "version": "4.2.0",
+      "bom-ref": "proc-log@4.2.0",
+      "author": "GitHub Inc.",
+      "description": "just emit 'log' events on the process object",
+      "licenses": [
+        {
+          "license": {
+            "id": "ISC"
+          }
+        }
+      ],
+      "purl": "pkg:npm/proc-log@4.2.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/npm/proc-log.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/npm/proc-log#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/npm/proc-log/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/proc-log/-/proc-log-4.2.0.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "83cf8e9d4fcbdaffb0ca254af83e5f037e09ec41fc8d9f030e5bf085108cc66323ed4081bf188ed6619e37edfa25720a178cdebd4e2444177c955806f6f2de94"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/proc-log"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
         }
       ]
     },
@@ -37106,60 +37056,6 @@
             {
               "name": "cdx:npm:package:path",
               "value": "node_modules/@npmcli/package-json/node_modules/brace-expansion"
-            },
-            {
-              "name": "cdx:npm:package:development",
-              "value": "true"
-            }
-          ]
-        },
-        {
-          "type": "library",
-          "name": "proc-log",
-          "version": "4.2.0",
-          "bom-ref": "@npmcli/package-json@5.2.1|proc-log@4.2.0",
-          "author": "GitHub Inc.",
-          "description": "just emit 'log' events on the process object",
-          "licenses": [
-            {
-              "license": {
-                "id": "ISC"
-              }
-            }
-          ],
-          "purl": "pkg:npm/proc-log@4.2.0",
-          "externalReferences": [
-            {
-              "url": "git+https://github.com/npm/proc-log.git",
-              "type": "vcs",
-              "comment": "as detected from PackageJson property \"repository.url\""
-            },
-            {
-              "url": "https://github.com/npm/proc-log#readme",
-              "type": "website",
-              "comment": "as detected from PackageJson property \"homepage\""
-            },
-            {
-              "url": "https://github.com/npm/proc-log/issues",
-              "type": "issue-tracker",
-              "comment": "as detected from PackageJson property \"bugs.url\""
-            },
-            {
-              "url": "https://registry.npmjs.org/proc-log/-/proc-log-4.2.0.tgz",
-              "type": "distribution",
-              "hashes": [
-                {
-                  "alg": "SHA-512",
-                  "content": "83cf8e9d4fcbdaffb0ca254af83e5f037e09ec41fc8d9f030e5bf085108cc66323ed4081bf188ed6619e37edfa25720a178cdebd4e2444177c955806f6f2de94"
-                }
-              ],
-              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-            }
-          ],
-          "properties": [
-            {
-              "name": "cdx:npm:package:path",
-              "value": "node_modules/@npmcli/package-json/node_modules/proc-log"
             },
             {
               "name": "cdx:npm:package:development",
@@ -37931,168 +37827,6 @@
         },
         {
           "type": "library",
-          "name": "nopt",
-          "version": "7.2.1",
-          "bom-ref": "node-gyp@10.3.1|nopt@7.2.1",
-          "author": "GitHub Inc.",
-          "description": "Option parsing for Node, supporting types, shorthands, etc. Used by npm.",
-          "licenses": [
-            {
-              "license": {
-                "id": "ISC"
-              }
-            }
-          ],
-          "purl": "pkg:npm/nopt@7.2.1",
-          "externalReferences": [
-            {
-              "url": "git+https://github.com/npm/nopt.git",
-              "type": "vcs",
-              "comment": "as detected from PackageJson property \"repository.url\""
-            },
-            {
-              "url": "https://github.com/npm/nopt#readme",
-              "type": "website",
-              "comment": "as detected from PackageJson property \"homepage\""
-            },
-            {
-              "url": "https://github.com/npm/nopt/issues",
-              "type": "issue-tracker",
-              "comment": "as detected from PackageJson property \"bugs.url\""
-            },
-            {
-              "url": "https://registry.npmjs.org/nopt/-/nopt-7.2.1.tgz",
-              "type": "distribution",
-              "hashes": [
-                {
-                  "alg": "SHA-512",
-                  "content": "b5a336e158a28a64ff5e7b716cfc89433086fa9e0428ea600f79b11705b7f261a3554adf11140e798e040c78dd9e9b6db5f1ee1d05c5c7e9533f4f10fa62daff"
-                }
-              ],
-              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-            }
-          ],
-          "properties": [
-            {
-              "name": "cdx:npm:package:path",
-              "value": "node_modules/node-gyp/node_modules/nopt"
-            },
-            {
-              "name": "cdx:npm:package:development",
-              "value": "true"
-            }
-          ]
-        },
-        {
-          "type": "library",
-          "name": "abbrev",
-          "version": "2.0.0",
-          "bom-ref": "node-gyp@10.3.1|abbrev@2.0.0",
-          "author": "GitHub Inc.",
-          "description": "Like ruby's abbrev module, but in js",
-          "licenses": [
-            {
-              "license": {
-                "id": "ISC"
-              }
-            }
-          ],
-          "purl": "pkg:npm/abbrev@2.0.0",
-          "externalReferences": [
-            {
-              "url": "git+https://github.com/npm/abbrev-js.git",
-              "type": "vcs",
-              "comment": "as detected from PackageJson property \"repository.url\""
-            },
-            {
-              "url": "https://github.com/npm/abbrev-js#readme",
-              "type": "website",
-              "comment": "as detected from PackageJson property \"homepage\""
-            },
-            {
-              "url": "https://github.com/npm/abbrev-js/issues",
-              "type": "issue-tracker",
-              "comment": "as detected from PackageJson property \"bugs.url\""
-            },
-            {
-              "url": "https://registry.npmjs.org/abbrev/-/abbrev-2.0.0.tgz",
-              "type": "distribution",
-              "hashes": [
-                {
-                  "alg": "SHA-512",
-                  "content": "ebf9a1d44daed98804b021dd634631e685beeb581953ed6f5daa221c7ae929eb9134d805bd2fbf8ebc07890841e5aa407f9a01ed407b135f689764762ca1fc85"
-                }
-              ],
-              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-            }
-          ],
-          "properties": [
-            {
-              "name": "cdx:npm:package:path",
-              "value": "node_modules/node-gyp/node_modules/abbrev"
-            },
-            {
-              "name": "cdx:npm:package:development",
-              "value": "true"
-            }
-          ]
-        },
-        {
-          "type": "library",
-          "name": "proc-log",
-          "version": "4.2.0",
-          "bom-ref": "node-gyp@10.3.1|proc-log@4.2.0",
-          "author": "GitHub Inc.",
-          "description": "just emit 'log' events on the process object",
-          "licenses": [
-            {
-              "license": {
-                "id": "ISC"
-              }
-            }
-          ],
-          "purl": "pkg:npm/proc-log@4.2.0",
-          "externalReferences": [
-            {
-              "url": "git+https://github.com/npm/proc-log.git",
-              "type": "vcs",
-              "comment": "as detected from PackageJson property \"repository.url\""
-            },
-            {
-              "url": "https://github.com/npm/proc-log#readme",
-              "type": "website",
-              "comment": "as detected from PackageJson property \"homepage\""
-            },
-            {
-              "url": "https://github.com/npm/proc-log/issues",
-              "type": "issue-tracker",
-              "comment": "as detected from PackageJson property \"bugs.url\""
-            },
-            {
-              "url": "https://registry.npmjs.org/proc-log/-/proc-log-4.2.0.tgz",
-              "type": "distribution",
-              "hashes": [
-                {
-                  "alg": "SHA-512",
-                  "content": "83cf8e9d4fcbdaffb0ca254af83e5f037e09ec41fc8d9f030e5bf085108cc66323ed4081bf188ed6619e37edfa25720a178cdebd4e2444177c955806f6f2de94"
-                }
-              ],
-              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-            }
-          ],
-          "properties": [
-            {
-              "name": "cdx:npm:package:path",
-              "value": "node_modules/node-gyp/node_modules/proc-log"
-            },
-            {
-              "name": "cdx:npm:package:development",
-              "value": "true"
-            }
-          ]
-        },
-        {
-          "type": "library",
           "name": "which",
           "version": "4.0.0",
           "bom-ref": "node-gyp@10.3.1|which@4.0.0",
@@ -38307,61 +38041,113 @@
           "name": "cdx:npm:package:development",
           "value": "true"
         }
-      ],
-      "components": [
+      ]
+    },
+    {
+      "type": "library",
+      "name": "nopt",
+      "version": "7.2.1",
+      "bom-ref": "nopt@7.2.1",
+      "author": "GitHub Inc.",
+      "description": "Option parsing for Node, supporting types, shorthands, etc. Used by npm.",
+      "licenses": [
         {
-          "type": "library",
-          "name": "proc-log",
-          "version": "4.2.0",
-          "bom-ref": "make-fetch-happen@13.0.1|proc-log@4.2.0",
-          "author": "GitHub Inc.",
-          "description": "just emit 'log' events on the process object",
-          "licenses": [
+          "license": {
+            "id": "ISC"
+          }
+        }
+      ],
+      "purl": "pkg:npm/nopt@7.2.1",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/npm/nopt.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/npm/nopt#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/npm/nopt/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/nopt/-/nopt-7.2.1.tgz",
+          "type": "distribution",
+          "hashes": [
             {
-              "license": {
-                "id": "ISC"
-              }
+              "alg": "SHA-512",
+              "content": "b5a336e158a28a64ff5e7b716cfc89433086fa9e0428ea600f79b11705b7f261a3554adf11140e798e040c78dd9e9b6db5f1ee1d05c5c7e9533f4f10fa62daff"
             }
           ],
-          "purl": "pkg:npm/proc-log@4.2.0",
-          "externalReferences": [
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/nopt"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "abbrev",
+      "version": "2.0.0",
+      "bom-ref": "abbrev@2.0.0",
+      "author": "GitHub Inc.",
+      "description": "Like ruby's abbrev module, but in js",
+      "licenses": [
+        {
+          "license": {
+            "id": "ISC"
+          }
+        }
+      ],
+      "purl": "pkg:npm/abbrev@2.0.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/npm/abbrev-js.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/npm/abbrev-js#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/npm/abbrev-js/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/abbrev/-/abbrev-2.0.0.tgz",
+          "type": "distribution",
+          "hashes": [
             {
-              "url": "git+https://github.com/npm/proc-log.git",
-              "type": "vcs",
-              "comment": "as detected from PackageJson property \"repository.url\""
-            },
-            {
-              "url": "https://github.com/npm/proc-log#readme",
-              "type": "website",
-              "comment": "as detected from PackageJson property \"homepage\""
-            },
-            {
-              "url": "https://github.com/npm/proc-log/issues",
-              "type": "issue-tracker",
-              "comment": "as detected from PackageJson property \"bugs.url\""
-            },
-            {
-              "url": "https://registry.npmjs.org/proc-log/-/proc-log-4.2.0.tgz",
-              "type": "distribution",
-              "hashes": [
-                {
-                  "alg": "SHA-512",
-                  "content": "83cf8e9d4fcbdaffb0ca254af83e5f037e09ec41fc8d9f030e5bf085108cc66323ed4081bf188ed6619e37edfa25720a178cdebd4e2444177c955806f6f2de94"
-                }
-              ],
-              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+              "alg": "SHA-512",
+              "content": "ebf9a1d44daed98804b021dd634631e685beeb581953ed6f5daa221c7ae929eb9134d805bd2fbf8ebc07890841e5aa407f9a01ed407b135f689764762ca1fc85"
             }
           ],
-          "properties": [
-            {
-              "name": "cdx:npm:package:path",
-              "value": "node_modules/make-fetch-happen/node_modules/proc-log"
-            },
-            {
-              "name": "cdx:npm:package:development",
-              "value": "true"
-            }
-          ]
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/abbrev"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
         }
       ]
     },
@@ -39234,62 +39020,6 @@
         {
           "name": "cdx:npm:package:development",
           "value": "true"
-        }
-      ],
-      "components": [
-        {
-          "type": "library",
-          "name": "proc-log",
-          "version": "4.2.0",
-          "bom-ref": "npm-registry-fetch@16.2.1|proc-log@4.2.0",
-          "author": "GitHub Inc.",
-          "description": "just emit 'log' events on the process object",
-          "licenses": [
-            {
-              "license": {
-                "id": "ISC"
-              }
-            }
-          ],
-          "purl": "pkg:npm/proc-log@4.2.0",
-          "externalReferences": [
-            {
-              "url": "git+https://github.com/npm/proc-log.git",
-              "type": "vcs",
-              "comment": "as detected from PackageJson property \"repository.url\""
-            },
-            {
-              "url": "https://github.com/npm/proc-log#readme",
-              "type": "website",
-              "comment": "as detected from PackageJson property \"homepage\""
-            },
-            {
-              "url": "https://github.com/npm/proc-log/issues",
-              "type": "issue-tracker",
-              "comment": "as detected from PackageJson property \"bugs.url\""
-            },
-            {
-              "url": "https://registry.npmjs.org/proc-log/-/proc-log-4.2.0.tgz",
-              "type": "distribution",
-              "hashes": [
-                {
-                  "alg": "SHA-512",
-                  "content": "83cf8e9d4fcbdaffb0ca254af83e5f037e09ec41fc8d9f030e5bf085108cc66323ed4081bf188ed6619e37edfa25720a178cdebd4e2444177c955806f6f2de94"
-                }
-              ],
-              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-            }
-          ],
-          "properties": [
-            {
-              "name": "cdx:npm:package:path",
-              "value": "node_modules/npm-registry-fetch/node_modules/proc-log"
-            },
-            {
-              "name": "cdx:npm:package:development",
-              "value": "true"
-            }
-          ]
         }
       ]
     },
@@ -41678,62 +41408,6 @@
           "name": "cdx:npm:package:development",
           "value": "true"
         }
-      ],
-      "components": [
-        {
-          "type": "library",
-          "name": "proc-log",
-          "version": "4.2.0",
-          "bom-ref": "@sigstore/sign@2.3.2|proc-log@4.2.0",
-          "author": "GitHub Inc.",
-          "description": "just emit 'log' events on the process object",
-          "licenses": [
-            {
-              "license": {
-                "id": "ISC"
-              }
-            }
-          ],
-          "purl": "pkg:npm/proc-log@4.2.0",
-          "externalReferences": [
-            {
-              "url": "git+https://github.com/npm/proc-log.git",
-              "type": "vcs",
-              "comment": "as detected from PackageJson property \"repository.url\""
-            },
-            {
-              "url": "https://github.com/npm/proc-log#readme",
-              "type": "website",
-              "comment": "as detected from PackageJson property \"homepage\""
-            },
-            {
-              "url": "https://github.com/npm/proc-log/issues",
-              "type": "issue-tracker",
-              "comment": "as detected from PackageJson property \"bugs.url\""
-            },
-            {
-              "url": "https://registry.npmjs.org/proc-log/-/proc-log-4.2.0.tgz",
-              "type": "distribution",
-              "hashes": [
-                {
-                  "alg": "SHA-512",
-                  "content": "83cf8e9d4fcbdaffb0ca254af83e5f037e09ec41fc8d9f030e5bf085108cc66323ed4081bf188ed6619e37edfa25720a178cdebd4e2444177c955806f6f2de94"
-                }
-              ],
-              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-            }
-          ],
-          "properties": [
-            {
-              "name": "cdx:npm:package:path",
-              "value": "node_modules/@sigstore/sign/node_modules/proc-log"
-            },
-            {
-              "name": "cdx:npm:package:development",
-              "value": "true"
-            }
-          ]
-        }
       ]
     },
     {
@@ -42230,8 +41904,8 @@
     {
       "type": "library",
       "name": "is-core-module",
-      "version": "2.15.1",
-      "bom-ref": "is-core-module@2.15.1",
+      "version": "2.16.1",
+      "bom-ref": "is-core-module@2.16.1",
       "author": "Jordan Harband",
       "description": "Is this specifier a node.js core module?",
       "licenses": [
@@ -42241,7 +41915,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/is-core-module@2.15.1",
+      "purl": "pkg:npm/is-core-module@2.16.1",
       "externalReferences": [
         {
           "url": "git+https://github.com/inspect-js/is-core-module.git",
@@ -42259,12 +41933,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/is-core-module/-/is-core-module-2.15.1.tgz",
+          "url": "https://registry.npmjs.org/is-core-module/-/is-core-module-2.16.1.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "cf4bed5d2c2e71426d00d41695d85bb5bb7b0672f4bf18858c87432c06adc210d8b72d9b69deacfab8a30fa462e18b9826e6cbcc824b522742874f5ed5d8c455"
+              "content": "51fa1e300e9f209f304d81445237a59da188ebbbfaf8deea5c912f42e2066bdf65e31b02aee498395490d2e3c0367e1d0339bc96460f68a2ebae28cbabbc76df"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -43729,8 +43403,8 @@
       "type": "library",
       "name": "cyclonedx-library",
       "group": "@cyclonedx",
-      "version": "6.13.0",
-      "bom-ref": "@cyclonedx/cyclonedx-library@6.13.0",
+      "version": "6.13.1",
+      "bom-ref": "@cyclonedx/cyclonedx-library@6.13.1",
       "author": "Jan Kowalleck",
       "description": "Core functionality of CycloneDX for JavaScript (Node.js or WebBrowser).",
       "licenses": [
@@ -43740,7 +43414,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40cyclonedx/cyclonedx-library@6.13.0",
+      "purl": "pkg:npm/%40cyclonedx/cyclonedx-library@6.13.1",
       "externalReferences": [
         {
           "url": "git+https://github.com/CycloneDX/cyclonedx-javascript-library.git",
@@ -43758,12 +43432,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@cyclonedx/cyclonedx-library/-/cyclonedx-library-6.13.0.tgz",
+          "url": "https://registry.npmjs.org/@cyclonedx/cyclonedx-library/-/cyclonedx-library-6.13.1.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "fd69758f9e973c01703a77b6c5975838e7fcb452f09f081608589755b3cd7e76199dcba82e15401050c76eb24a4afbd5c0c4704c2a08ba00ef5094887cf92c88"
+              "content": "bbb434d46d8f01c8b7421f9c63fed1780f20daa24b40e9dc2d0773cddbe9208f3887a5080aa659675374cbd3cb4d5852d916b8c77925e316396e73fe966af0d9"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -43784,7 +43458,7 @@
           "type": "library",
           "name": "ajv-formats",
           "version": "3.0.1",
-          "bom-ref": "@cyclonedx/cyclonedx-library@6.13.0|ajv-formats@3.0.1",
+          "bom-ref": "@cyclonedx/cyclonedx-library@6.13.1|ajv-formats@3.0.1",
           "author": "Evgeny Poberezkin",
           "description": "Format validation for Ajv v7+",
           "scope": "optional",
@@ -44491,6 +44165,1659 @@
         {
           "name": "cdx:npm:package:path",
           "value": "node_modules/ret"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "libxmljs2",
+      "version": "0.35.0",
+      "bom-ref": "libxmljs2@0.35.0",
+      "author": "marudor",
+      "description": "libxml bindings for v8 javascript engine",
+      "scope": "optional",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/libxmljs2@0.35.0",
+      "externalReferences": [
+        {
+          "url": "git+ssh://git@github.com/marudor/libxmljs2.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/marudor/libxmljs2#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "http://github.com/marudor/libxmljs2/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/libxmljs2/-/libxmljs2-0.35.0.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "4a9568a6a9f860dc9d9cb8e419f2fac90c338e58a99849c20ac56b0ffd21426760b1059be6b566489c718d096d1c8513b68dbdbe05fe3e12e35e873e80c78005"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/libxmljs2"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "bindings",
+      "version": "1.5.0",
+      "bom-ref": "bindings@1.5.0",
+      "author": "Nathan Rajlich",
+      "description": "Helper module for loading your native module's .node file",
+      "scope": "optional",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/bindings@1.5.0",
+      "externalReferences": [
+        {
+          "url": "git://github.com/TooTallNate/node-bindings.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/TooTallNate/node-bindings",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/TooTallNate/node-bindings/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/bindings/-/bindings-1.5.0.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "a76abfb7f9a1bee3a3fd478b955eb9eba183fe0ba8c25af4847c42948d16f66ecc59890bd45d212e8fb401ec6cf4748f0ad4754974344c3dcc30aad765a8db89"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/bindings"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "file-uri-to-path",
+      "version": "1.0.0",
+      "bom-ref": "file-uri-to-path@1.0.0",
+      "author": "Nathan Rajlich",
+      "description": "Convert a file: URI to a file path",
+      "scope": "optional",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/file-uri-to-path@1.0.0",
+      "externalReferences": [
+        {
+          "url": "git://github.com/TooTallNate/file-uri-to-path.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/TooTallNate/file-uri-to-path",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/TooTallNate/file-uri-to-path/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/file-uri-to-path/-/file-uri-to-path-1.0.0.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "d19b7eb372fb55fd5b8b0599dbd6804625582f1ee23069c4525f71df77db07f8f78d1f35bbf3b62dba8af819b508348d0ca56d27f623c18ed351de5291e2d02f"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/file-uri-to-path"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "nan",
+      "version": "2.20.0",
+      "bom-ref": "nan@2.20.0",
+      "description": "Native Abstractions for Node.js: C++ header for Node 0.8 -> 22 compatibility",
+      "scope": "optional",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/nan@2.20.0",
+      "externalReferences": [
+        {
+          "url": "git://github.com/nodejs/nan.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/nodejs/nan#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/nodejs/nan/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/nan/-/nan-2.20.0.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "6e4de05c16431882eeba8ffab0ab6bd034264938581cbb4d09d49d5e4f589310ff8cae97daf982cb25c1071caa6785dc9f34f260401385f5f70c21272dfea283"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/nan"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "prebuild-install",
+      "version": "7.1.2",
+      "bom-ref": "prebuild-install@7.1.2",
+      "author": "Mathias Buus",
+      "description": "A command line tool to easily install prebuilt binaries for multiple version of node/iojs on a specific platform",
+      "scope": "optional",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/prebuild-install@7.1.2",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/prebuild/prebuild-install.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/prebuild/prebuild-install",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/prebuild/prebuild-install/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/prebuild-install/-/prebuild-install-7.1.2.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "5273647b72106fab206ab71920353781b31e4e9ffd4925350c02248a5ecfaea1b5bd9941b58e66b1871c48a4870ea6b784d838dfa2172be48d22645eb80d7011"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/prebuild-install"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "detect-libc",
+      "version": "2.0.3",
+      "bom-ref": "detect-libc@2.0.3",
+      "author": "Lovell Fuller",
+      "description": "Node.js module to detect the C standard library (libc) implementation family and version",
+      "scope": "optional",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ],
+      "purl": "pkg:npm/detect-libc@2.0.3",
+      "externalReferences": [
+        {
+          "url": "git://github.com/lovell/detect-libc.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/lovell/detect-libc#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/lovell/detect-libc/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/detect-libc/-/detect-libc-2.0.3.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "6f0cb43065b9e5b1b8d55ab1c72a4eb1d49d1aa2f05cf23f7e873081360214c6dd522040c4b83d085cc6d3cb33d9aab3927c225fb1e49746d010d8e0f222c1cb"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/detect-libc"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "expand-template",
+      "version": "2.0.3",
+      "bom-ref": "expand-template@2.0.3",
+      "author": "LM",
+      "description": "Expand placeholders in a template string",
+      "scope": "optional",
+      "licenses": [
+        {
+          "expression": "(MIT OR WTFPL)"
+        }
+      ],
+      "purl": "pkg:npm/expand-template@2.0.3",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/ralphtheninja/expand-template.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/ralphtheninja/expand-template",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/ralphtheninja/expand-template/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/expand-template/-/expand-template-2.0.3.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "5d87ee28cbe3e0edf97ffa4e5cb39b9dd211bf243effee8084e0e1f8e2968fd4bde3df291c79ff20cb331fe82dd1f04245630d7e4d594a9e71dc089f9a7236be"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/expand-template"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "github-from-package",
+      "version": "0.0.0",
+      "bom-ref": "github-from-package@0.0.0",
+      "author": "James Halliday",
+      "description": "return the github url from a package.json file",
+      "scope": "optional",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/github-from-package@0.0.0",
+      "externalReferences": [
+        {
+          "url": "git://github.com/substack/github-from-package.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/substack/github-from-package",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/substack/github-from-package/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/github-from-package/-/github-from-package-0.0.0.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "4b21f2dd3d6fd8d5179f6f4eb1677198ae91c070febe48f7bfc7a7f00381675c0143f842010e5b0104c3d36916e16f6d529ff7421e89f2bf44be7b62c8298e3b"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/github-from-package"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "minimist",
+      "version": "1.2.8",
+      "bom-ref": "minimist@1.2.8",
+      "author": "James Halliday",
+      "description": "parse argument options",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/minimist@1.2.8",
+      "externalReferences": [
+        {
+          "url": "git://github.com/minimistjs/minimist.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/minimistjs/minimist",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/minimistjs/minimist/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/minimist/-/minimist-1.2.8.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "db2c8047ca8190ddd8ba17896a7529582e54ddb6f9a2c0f2c0d07c4730d5943c031dba1c009bdeaaa8f5bbcf92543ee39164f8cafb070a95aaa96a80c5bd3308"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/minimist"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mkdirp-classic",
+      "version": "0.5.3",
+      "bom-ref": "mkdirp-classic@0.5.3",
+      "author": "Mathias Buus",
+      "description": "Mirror of mkdirp 0.5.2",
+      "scope": "optional",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/mkdirp-classic@0.5.3",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/mafintosh/mkdirp-classic.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/mafintosh/mkdirp-classic",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/mafintosh/mkdirp-classic/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/mkdirp-classic/-/mkdirp-classic-0.5.3.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "80a2dc444321b6e651c1101fa8fdd1156f932b826a029541b4e21fb55823b8006902da7184f19a0dc7ef6e136f0f407c883d6852bfedc57df936371a63a36cfc"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/mkdirp-classic"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "napi-build-utils",
+      "version": "1.0.2",
+      "bom-ref": "napi-build-utils@1.0.2",
+      "author": "Jim Schlight",
+      "description": "A set of utilities to assist developers of tools that build N-API native add-ons",
+      "scope": "optional",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/napi-build-utils@1.0.2",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/inspiredware/napi-build-utils.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/inspiredware/napi-build-utils#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/inspiredware/napi-build-utils/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/napi-build-utils/-/napi-build-utils-1.0.2.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "38d99152a2bbce3ec3597d03f400ded37c1bc0e059c4d01f176d0f9467c2590703dfefcc6a44a1207accab1f58c0f4dfc43745d732de2fe44666247d90630b76"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/napi-build-utils"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "node-abi",
+      "version": "3.71.0",
+      "bom-ref": "node-abi@3.71.0",
+      "author": "Lukas Geiger",
+      "description": "Get the Node ABI for a given target and runtime, and vice versa.",
+      "scope": "optional",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/node-abi@3.71.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/electron/node-abi.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/electron/node-abi#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/electron/node-abi/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/node-abi/-/node-abi-3.71.0.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "499e34bd18b2ffec114dfdb58719241233c9669011cd4315709a10b1ed8417caa45166db3b6cfbbdde6803f1fa6d51fa49943949319cbb42910d2edb88d45fc7"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/node-abi"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "pump",
+      "version": "3.0.2",
+      "bom-ref": "pump@3.0.2",
+      "author": "Mathias Buus Madsen",
+      "description": "pipe streams together and close all of them if one of them closes",
+      "scope": "optional",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/pump@3.0.2",
+      "externalReferences": [
+        {
+          "url": "git://github.com/mafintosh/pump.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/mafintosh/pump#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/mafintosh/pump/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/pump/-/pump-3.0.2.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "b543d7b7394633c144dcfd192fa0d5b3fdcfe7c93d9e4f3f8d97900aead327295003ca856331c57e104992eab21341627ceb10d2e2967a4899e60f30b6bdbc73"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/pump"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "end-of-stream",
+      "version": "1.4.4",
+      "bom-ref": "end-of-stream@1.4.4",
+      "author": "Mathias Buus",
+      "description": "Call a callback when a readable/writable/duplex stream has completed or failed.",
+      "scope": "optional",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/end-of-stream@1.4.4",
+      "externalReferences": [
+        {
+          "url": "git://github.com/mafintosh/end-of-stream.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/mafintosh/end-of-stream",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/mafintosh/end-of-stream/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/end-of-stream/-/end-of-stream-1.4.4.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "faec358a720754f428695b87cd1c97776d6270cf9c9ede02cc3e6b5be342d708ce5124ceb3e4deec53afec084deef4bdc7fa08ca12cfe4f4751fea614001eee5"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/end-of-stream"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "once",
+      "version": "1.4.0",
+      "bom-ref": "once@1.4.0",
+      "author": "Isaac Z. Schlueter",
+      "description": "Run a function exactly one time",
+      "licenses": [
+        {
+          "license": {
+            "id": "ISC"
+          }
+        }
+      ],
+      "purl": "pkg:npm/once@1.4.0",
+      "externalReferences": [
+        {
+          "url": "git://github.com/isaacs/once.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/isaacs/once#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/isaacs/once/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/once/-/once-1.4.0.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "94d689808fb643951140191c7042874d038f697754c67659125413658d0c15402e684a9ed44f8dcaf81dcff688c8d8ba67d3333b976fd47f27e7cfc610ba77fb"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/once"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "rc",
+      "version": "1.2.8",
+      "bom-ref": "rc@1.2.8",
+      "author": "Dominic Tarr",
+      "description": "hardwired configuration loader",
+      "scope": "optional",
+      "licenses": [
+        {
+          "expression": "(BSD-2-Clause OR MIT OR Apache-2.0)"
+        }
+      ],
+      "purl": "pkg:npm/rc@1.2.8",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/dominictarr/rc.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/dominictarr/rc#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/dominictarr/rc/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/rc/-/rc-1.2.8.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "cb76c682a2a3dd005dc4b6cb9289a5a2192fb00f207408944254812670617e7f813f18386dceb677c4dc056d79c1abc37e07b10a071c72485c66fcb0c9060f3b"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/rc"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ],
+      "components": [
+        {
+          "type": "library",
+          "name": "ini",
+          "version": "1.3.8",
+          "bom-ref": "rc@1.2.8|ini@1.3.8",
+          "author": "Isaac Z. Schlueter",
+          "description": "An ini encoder/decoder for node",
+          "scope": "optional",
+          "licenses": [
+            {
+              "license": {
+                "id": "ISC"
+              }
+            }
+          ],
+          "purl": "pkg:npm/ini@1.3.8",
+          "externalReferences": [
+            {
+              "url": "git://github.com/isaacs/ini.git",
+              "type": "vcs",
+              "comment": "as detected from PackageJson property \"repository.url\""
+            },
+            {
+              "url": "https://github.com/isaacs/ini#readme",
+              "type": "website",
+              "comment": "as detected from PackageJson property \"homepage\""
+            },
+            {
+              "url": "https://github.com/isaacs/ini/issues",
+              "type": "issue-tracker",
+              "comment": "as detected from PackageJson property \"bugs.url\""
+            },
+            {
+              "url": "https://registry.npmjs.org/ini/-/ini-1.3.8.tgz",
+              "type": "distribution",
+              "hashes": [
+                {
+                  "alg": "SHA-512",
+                  "content": "255ff2ba0576bb35b988c4528990320ed41dfa7c6d5278de2edd1a70d770f7c90a2ebbee455c81f34b6c444384ef2bc65606a5859e913570a61079142812b17b"
+                }
+              ],
+              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+            }
+          ],
+          "properties": [
+            {
+              "name": "cdx:npm:package:path",
+              "value": "node_modules/rc/node_modules/ini"
+            },
+            {
+              "name": "cdx:npm:package:development",
+              "value": "true"
+            }
+          ]
+        },
+        {
+          "type": "library",
+          "name": "strip-json-comments",
+          "version": "2.0.1",
+          "bom-ref": "rc@1.2.8|strip-json-comments@2.0.1",
+          "author": "Sindre Sorhus",
+          "description": "Strip comments from JSON. Lets you use comments in your JSON files!",
+          "scope": "optional",
+          "licenses": [
+            {
+              "license": {
+                "id": "MIT"
+              }
+            }
+          ],
+          "purl": "pkg:npm/strip-json-comments@2.0.1",
+          "externalReferences": [
+            {
+              "url": "git+https://github.com/sindresorhus/strip-json-comments.git",
+              "type": "vcs",
+              "comment": "as detected from PackageJson property \"repository.url\""
+            },
+            {
+              "url": "https://github.com/sindresorhus/strip-json-comments#readme",
+              "type": "website",
+              "comment": "as detected from PackageJson property \"homepage\""
+            },
+            {
+              "url": "https://github.com/sindresorhus/strip-json-comments/issues",
+              "type": "issue-tracker",
+              "comment": "as detected from PackageJson property \"bugs.url\""
+            },
+            {
+              "url": "https://registry.npmjs.org/strip-json-comments/-/strip-json-comments-2.0.1.tgz",
+              "type": "distribution",
+              "hashes": [
+                {
+                  "alg": "SHA-512",
+                  "content": "e2007c9dad3b7de715564388e91b387bb4fa34e4e48b91262fb4d476e4ece9bbb711d9d2c9c9ed549e2b7bc920640fb0c7d22e788d98d756df6e0c2dcee13429"
+                }
+              ],
+              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+            }
+          ],
+          "properties": [
+            {
+              "name": "cdx:npm:package:path",
+              "value": "node_modules/rc/node_modules/strip-json-comments"
+            },
+            {
+              "name": "cdx:npm:package:development",
+              "value": "true"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "deep-extend",
+      "version": "0.6.0",
+      "bom-ref": "deep-extend@0.6.0",
+      "author": "Viacheslav Lotsmanov",
+      "description": "Recursive object extending",
+      "scope": "optional",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        },
+        {
+          "license": {
+            "id": "MIT",
+            "url": "https://raw.githubusercontent.com/unclechu/node-deep-extend/master/LICENSE"
+          }
+        }
+      ],
+      "purl": "pkg:npm/deep-extend@0.6.0",
+      "externalReferences": [
+        {
+          "url": "git://github.com/unclechu/node-deep-extend.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/unclechu/node-deep-extend",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/unclechu/node-deep-extend/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/deep-extend/-/deep-extend-0.6.0.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "2ce1f120e68f61d1e5251b4241f0c8559b5fc3fb9f33cfab563eb8f51207cdc9bfbc6c1045716de8e3ea2055ac9b65c432b34812d591eb8b18d4b10a0f6bc038"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/deep-extend"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "simple-get",
+      "version": "4.0.1",
+      "bom-ref": "simple-get@4.0.1",
+      "author": "Feross Aboukhadijeh",
+      "description": "Simplest way to make http get requests. Supports HTTPS, redirects, gzip/deflate, streams in < 100 lines.",
+      "scope": "optional",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/simple-get@4.0.1",
+      "externalReferences": [
+        {
+          "url": "git://github.com/feross/simple-get.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/feross/simple-get",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/feross/simple-get/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/simple-get/-/simple-get-4.0.1.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "6ebbfba795a01f48e6409af56430df2833927965a0f8e572a46f7d03fe6f6063ea27aa7189a1cbcbc9f1b458c103ba0c6b4d5e6c0f607e1d6e30216a3ae5f1bc"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/simple-get"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "decompress-response",
+      "version": "6.0.0",
+      "bom-ref": "decompress-response@6.0.0",
+      "author": "Sindre Sorhus",
+      "description": "Decompress a HTTP response if needed",
+      "scope": "optional",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/decompress-response@6.0.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/sindresorhus/decompress-response.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/sindresorhus/decompress-response#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/sindresorhus/decompress-response/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/decompress-response/-/decompress-response-6.0.0.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "696df9c9933a05bff8a099599dc307d8b0a866d2574d1c444b5eef137868462a305369161da24a1644810e70d1f9c9bd27ef5085799113221fbf4a638bd7a309"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/decompress-response"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mimic-response",
+      "version": "3.1.0",
+      "bom-ref": "mimic-response@3.1.0",
+      "author": "Sindre Sorhus",
+      "description": "Mimic a Node.js HTTP response stream",
+      "scope": "optional",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/mimic-response@3.1.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/sindresorhus/mimic-response.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/sindresorhus/mimic-response#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/sindresorhus/mimic-response/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/mimic-response/-/mimic-response-3.1.0.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "cf4c9623ee050ebaf0792f199ade048f91dd266932d79f8bd9ee96827dfe88ae5f5b36fa4f77e1345ab6f8c79345bd3ae1ce96af837fc2fd03cd04e33731cd19"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/mimic-response"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "simple-concat",
+      "version": "1.0.1",
+      "bom-ref": "simple-concat@1.0.1",
+      "author": "Feross Aboukhadijeh",
+      "description": "Super-minimalist version of `concat-stream`. Less than 15 lines!",
+      "scope": "optional",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/simple-concat@1.0.1",
+      "externalReferences": [
+        {
+          "url": "git://github.com/feross/simple-concat.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/feross/simple-concat",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/feross/simple-concat/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/simple-concat/-/simple-concat-1.0.1.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "71216d00fb518658efebd20ad214d5650f8e7c4f6778f8bfaed266c395231de57256ba04a895cfd6c173b4a532d6a53ec6fcf7bbfb1f6092daf78edbee700dd9"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/simple-concat"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "tar-fs",
+      "version": "2.1.1",
+      "bom-ref": "tar-fs@2.1.1",
+      "author": "Mathias Buus",
+      "description": "filesystem bindings for tar-stream",
+      "scope": "optional",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/tar-fs@2.1.1",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/mafintosh/tar-fs.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/mafintosh/tar-fs",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/mafintosh/tar-fs/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/tar-fs/-/tar-fs-2.1.1.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "574af663db1c99b0d12c235ec7ffa1633be9ff3c988ef15b1cf36055329f42f56b6fa82e884fdfc4ff976e50cd474d75bada296e47b1da7338747355e860ec9e"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/tar-fs"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ],
+      "components": [
+        {
+          "type": "library",
+          "name": "chownr",
+          "version": "1.1.4",
+          "bom-ref": "tar-fs@2.1.1|chownr@1.1.4",
+          "author": "Isaac Z. Schlueter",
+          "description": "like `chown -R`",
+          "scope": "optional",
+          "licenses": [
+            {
+              "license": {
+                "id": "ISC"
+              }
+            }
+          ],
+          "purl": "pkg:npm/chownr@1.1.4",
+          "externalReferences": [
+            {
+              "url": "git://github.com/isaacs/chownr.git",
+              "type": "vcs",
+              "comment": "as detected from PackageJson property \"repository.url\""
+            },
+            {
+              "url": "https://github.com/isaacs/chownr#readme",
+              "type": "website",
+              "comment": "as detected from PackageJson property \"homepage\""
+            },
+            {
+              "url": "https://github.com/isaacs/chownr/issues",
+              "type": "issue-tracker",
+              "comment": "as detected from PackageJson property \"bugs.url\""
+            },
+            {
+              "url": "https://registry.npmjs.org/chownr/-/chownr-1.1.4.tgz",
+              "type": "distribution",
+              "hashes": [
+                {
+                  "alg": "SHA-512",
+                  "content": "8c9d1bab36b296626d567360cd37923acf033dabe96d8804aff6f460bf3fd863b7c4912122716684a3149c42508d9ba62bb297185854cbcf4faec25695a90156"
+                }
+              ],
+              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+            }
+          ],
+          "properties": [
+            {
+              "name": "cdx:npm:package:path",
+              "value": "node_modules/tar-fs/node_modules/chownr"
+            },
+            {
+              "name": "cdx:npm:package:development",
+              "value": "true"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "tar-stream",
+      "version": "2.2.0",
+      "bom-ref": "tar-stream@2.2.0",
+      "author": "Mathias Buus",
+      "description": "tar-stream is a streaming tar parser and generator and nothing else. It is streams2 and operates purely using streams which means you can easily extract/parse tarballs without ever hitting the file system.",
+      "scope": "optional",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/tar-stream@2.2.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/mafintosh/tar-stream.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/mafintosh/tar-stream",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/mafintosh/tar-stream/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/tar-stream/-/tar-stream-2.2.0.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "ba37aa6dc780060c0c6711099e4d870d8d83967519fbda0471bd4acd355f6078a8d1413a746ef59fad1df03d88e2a36f95e5abad7a668e9b7bbd9785d4b9cc65"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/tar-stream"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ],
+      "components": [
+        {
+          "type": "library",
+          "name": "readable-stream",
+          "version": "3.6.2",
+          "bom-ref": "tar-stream@2.2.0|readable-stream@3.6.2",
+          "description": "Streams3, a user-land copy of the stream library from Node.js",
+          "scope": "optional",
+          "licenses": [
+            {
+              "license": {
+                "id": "MIT"
+              }
+            }
+          ],
+          "purl": "pkg:npm/readable-stream@3.6.2",
+          "externalReferences": [
+            {
+              "url": "git://github.com/nodejs/readable-stream.git",
+              "type": "vcs",
+              "comment": "as detected from PackageJson property \"repository.url\""
+            },
+            {
+              "url": "https://github.com/nodejs/readable-stream#readme",
+              "type": "website",
+              "comment": "as detected from PackageJson property \"homepage\""
+            },
+            {
+              "url": "https://github.com/nodejs/readable-stream/issues",
+              "type": "issue-tracker",
+              "comment": "as detected from PackageJson property \"bugs.url\""
+            },
+            {
+              "url": "https://registry.npmjs.org/readable-stream/-/readable-stream-3.6.2.tgz",
+              "type": "distribution",
+              "hashes": [
+                {
+                  "alg": "SHA-512",
+                  "content": "f6efec9e20ab6370f959db04447cc71381b66025eaa06e454c7522082e1221bafa5dc2d9058d39c9af442a361e93d3b9c4e0308c6abed497460404bb43d49ca0"
+                }
+              ],
+              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+            }
+          ],
+          "properties": [
+            {
+              "name": "cdx:npm:package:path",
+              "value": "node_modules/tar-stream/node_modules/readable-stream"
+            },
+            {
+              "name": "cdx:npm:package:development",
+              "value": "true"
+            }
+          ]
+        },
+        {
+          "type": "library",
+          "name": "string_decoder",
+          "version": "1.3.0",
+          "bom-ref": "tar-stream@2.2.0|string_decoder@1.3.0",
+          "description": "The string_decoder module from Node core",
+          "scope": "optional",
+          "licenses": [
+            {
+              "license": {
+                "id": "MIT"
+              }
+            }
+          ],
+          "purl": "pkg:npm/string_decoder@1.3.0",
+          "externalReferences": [
+            {
+              "url": "git://github.com/nodejs/string_decoder.git",
+              "type": "vcs",
+              "comment": "as detected from PackageJson property \"repository.url\""
+            },
+            {
+              "url": "https://github.com/nodejs/string_decoder",
+              "type": "website",
+              "comment": "as detected from PackageJson property \"homepage\""
+            },
+            {
+              "url": "https://github.com/nodejs/string_decoder/issues",
+              "type": "issue-tracker",
+              "comment": "as detected from PackageJson property \"bugs.url\""
+            },
+            {
+              "url": "https://registry.npmjs.org/string_decoder/-/string_decoder-1.3.0.tgz",
+              "type": "distribution",
+              "hashes": [
+                {
+                  "alg": "SHA-512",
+                  "content": "864457f14d568c915df0bb03276c90ff0596c5aa2912c0015355df90cf00fa3d3ef392401a9a6dd7a72bd56860e8a21b6f8a2453a32a97a04e8febaea7fc0a78"
+                }
+              ],
+              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+            }
+          ],
+          "properties": [
+            {
+              "name": "cdx:npm:package:path",
+              "value": "node_modules/tar-stream/node_modules/string_decoder"
+            },
+            {
+              "name": "cdx:npm:package:development",
+              "value": "true"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "fs-constants",
+      "version": "1.0.0",
+      "bom-ref": "fs-constants@1.0.0",
+      "author": "Mathias Buus",
+      "description": "Require constants across node and the browser",
+      "scope": "optional",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/fs-constants@1.0.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/mafintosh/fs-constants.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/mafintosh/fs-constants",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/mafintosh/fs-constants/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/fs-constants/-/fs-constants-1.0.0.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "cba380c284887fb1728cc22ff78bbe6f9add85e6448f347adc64f26499b9aa1e018bed988302c2708fdf3c56642f93d28b13ade9934a9bec3e1dfa7f05c8b0a3"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/fs-constants"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "tunnel-agent",
+      "version": "0.6.0",
+      "bom-ref": "tunnel-agent@0.6.0",
+      "author": "Mikeal Rogers",
+      "description": "HTTP proxy tunneling agent. Formerly part of mikeal/request, now a standalone module.",
+      "scope": "optional",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ],
+      "purl": "pkg:npm/tunnel-agent@0.6.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/mikeal/tunnel-agent.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/mikeal/tunnel-agent#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/mikeal/tunnel-agent/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/tunnel-agent/-/tunnel-agent-0.6.0.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "31c9cd895d65f1161e63cb41804a6ea1d082d662d475b48df826012fb909b093489ce3fc5230c3130764e8cc3ad2f74b2ebaf934729984c00e4ab476359b90fb"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/tunnel-agent"
         },
         {
           "name": "cdx:npm:package:development",
@@ -46813,60 +48140,6 @@
         {
           "name": "cdx:npm:package:path",
           "value": "node_modules/inflight"
-        },
-        {
-          "name": "cdx:npm:package:development",
-          "value": "true"
-        }
-      ]
-    },
-    {
-      "type": "library",
-      "name": "once",
-      "version": "1.4.0",
-      "bom-ref": "once@1.4.0",
-      "author": "Isaac Z. Schlueter",
-      "description": "Run a function exactly one time",
-      "licenses": [
-        {
-          "license": {
-            "id": "ISC"
-          }
-        }
-      ],
-      "purl": "pkg:npm/once@1.4.0",
-      "externalReferences": [
-        {
-          "url": "git://github.com/isaacs/once.git",
-          "type": "vcs",
-          "comment": "as detected from PackageJson property \"repository.url\""
-        },
-        {
-          "url": "https://github.com/isaacs/once#readme",
-          "type": "website",
-          "comment": "as detected from PackageJson property \"homepage\""
-        },
-        {
-          "url": "https://github.com/isaacs/once/issues",
-          "type": "issue-tracker",
-          "comment": "as detected from PackageJson property \"bugs.url\""
-        },
-        {
-          "url": "https://registry.npmjs.org/once/-/once-1.4.0.tgz",
-          "type": "distribution",
-          "hashes": [
-            {
-              "alg": "SHA-512",
-              "content": "94d689808fb643951140191c7042874d038f697754c67659125413658d0c15402e684a9ed44f8dcaf81dcff688c8d8ba67d3333b976fd47f27e7cfc610ba77fb"
-            }
-          ],
-          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-        }
-      ],
-      "properties": [
-        {
-          "name": "cdx:npm:package:path",
-          "value": "node_modules/once"
         },
         {
           "name": "cdx:npm:package:development",
@@ -55897,8 +57170,8 @@
       "type": "library",
       "name": "pluginutils",
       "group": "@rollup",
-      "version": "5.1.3",
-      "bom-ref": "@rollup/pluginutils@5.1.3",
+      "version": "5.1.4",
+      "bom-ref": "@rollup/pluginutils@5.1.4",
       "author": "Rich Harris",
       "description": "A set of utility functions commonly used by Rollup plugins",
       "licenses": [
@@ -55908,7 +57181,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40rollup/pluginutils@5.1.3#packages/pluginutils",
+      "purl": "pkg:npm/%40rollup/pluginutils@5.1.4#packages/pluginutils",
       "externalReferences": [
         {
           "url": "git+https://github.com/rollup/plugins.git#packages/pluginutils",
@@ -55926,12 +57199,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@rollup/pluginutils/-/pluginutils-5.1.3.tgz",
+          "url": "https://registry.npmjs.org/@rollup/pluginutils/-/pluginutils-5.1.4.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "3e7b1be9fdf6083d96dee09a2d92330e6785c90d9bf1458c148ef1b7051ece97060435435bacbd5e0016225011886028e9e345e452b96904ebd0b172372aaae4"
+              "content": "5129b4e73aec17160b3dd596abe2b7493956893ff710b9f745c579849320869780221c5fb14220ea6b75d820490489d6315e159dea15ed27c6bfcc48c28daa35"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -55952,7 +57225,7 @@
           "type": "library",
           "name": "picomatch",
           "version": "4.0.2",
-          "bom-ref": "@rollup/pluginutils@5.1.3|picomatch@4.0.2",
+          "bom-ref": "@rollup/pluginutils@5.1.4|picomatch@4.0.2",
           "author": "Jon Schlinkert",
           "description": "Blazing fast and accurate glob matcher written in JavaScript, with no dependencies and full support for standard and extended Bash glob features, including braces, extglobs, POSIX brackets, and regular expressions.",
           "licenses": [
@@ -56062,8 +57335,8 @@
       "type": "library",
       "name": "plugin-node-resolve",
       "group": "@rollup",
-      "version": "15.3.0",
-      "bom-ref": "@rollup/plugin-node-resolve@15.3.0",
+      "version": "15.3.1",
+      "bom-ref": "@rollup/plugin-node-resolve@15.3.1",
       "author": "Rich Harris",
       "description": "Locate and bundle third-party dependencies in node_modules",
       "licenses": [
@@ -56073,7 +57346,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40rollup/plugin-node-resolve@15.3.0#packages/node-resolve",
+      "purl": "pkg:npm/%40rollup/plugin-node-resolve@15.3.1#packages/node-resolve",
       "externalReferences": [
         {
           "url": "git+https://github.com/rollup/plugins.git#packages/node-resolve",
@@ -56091,12 +57364,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@rollup/plugin-node-resolve/-/plugin-node-resolve-15.3.0.tgz",
+          "url": "https://registry.npmjs.org/@rollup/plugin-node-resolve/-/plugin-node-resolve-15.3.1.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "f5e3b931c1080b13332690d6f4e9cc612bf84ad6b7866b7b56d045cf9cd1f76ef7b2e34ec9d3b2abf16b19e1b2f8ab134459bcc3448b561ce283620b153eb702"
+              "content": "b6083a6fdd690326d71c940c000c16f55b9604ee93862faaec108d0112f04aa966b07cf45d8511b46be1fc0bb04800d7488e21ff6b876eceece05ce564319218"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -56225,8 +57498,8 @@
       "type": "library",
       "name": "wasm-node",
       "group": "@rollup",
-      "version": "4.28.1",
-      "bom-ref": "@rollup/wasm-node@4.28.1",
+      "version": "4.29.1",
+      "bom-ref": "@rollup/wasm-node@4.29.1",
       "author": "Rich Harris",
       "description": "Next-generation ES module bundler with Node wasm",
       "licenses": [
@@ -56236,7 +57509,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40rollup/wasm-node@4.28.1",
+      "purl": "pkg:npm/%40rollup/wasm-node@4.29.1",
       "externalReferences": [
         {
           "url": "git+https://github.com/rollup/rollup.git",
@@ -56254,12 +57527,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@rollup/wasm-node/-/wasm-node-4.28.1.tgz",
+          "url": "https://registry.npmjs.org/@rollup/wasm-node/-/wasm-node-4.29.1.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "b78724102d3d577c1b7b4afa4f87c68eaf399446ef19c1b19fb4186208c7c8a37365a414e6416aaf816c6af5d81d1895358abc9be75185d1a3a5f702f54cf33e"
+              "content": "00eb4ed98f97cc49497e626000408e81bbad98a00ae5770a1fb0a2a460d00c131f2d8d387b3128087584a66a17e4beff587de4d7bad73020a5362c036d65be9b"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -56824,7 +58097,7 @@
       "type": "library",
       "name": "string-width",
       "version": "4.2.3",
-      "bom-ref": "BomRef.f7itbn3mhe.tdnm6654r88",
+      "bom-ref": "BomRef.t7eru8m3jv8.45jmbtdrkv8",
       "author": "Sindre Sorhus",
       "description": "Get the visual width of a string - the number of columns required to display it",
       "licenses": [
@@ -56932,7 +58205,7 @@
       "type": "library",
       "name": "strip-ansi",
       "version": "6.0.1",
-      "bom-ref": "BomRef.ek85bjplajg.51fgir20s4o",
+      "bom-ref": "BomRef.javmt90bk1.jitdsjm526g",
       "author": "Sindre Sorhus",
       "description": "Strip ANSI escape codes from a string",
       "licenses": [
@@ -57689,8 +58962,8 @@
       "type": "library",
       "name": "rollup-darwin-arm64",
       "group": "@rollup",
-      "version": "4.28.1",
-      "bom-ref": "@rollup/rollup-darwin-arm64@4.28.1",
+      "version": "4.29.1",
+      "bom-ref": "@rollup/rollup-darwin-arm64@4.29.1",
       "author": "Lukas Taegert-Atkinson",
       "description": "Native bindings for Rollup",
       "scope": "optional",
@@ -57701,7 +58974,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40rollup/rollup-darwin-arm64@4.28.1",
+      "purl": "pkg:npm/%40rollup/rollup-darwin-arm64@4.29.1",
       "externalReferences": [
         {
           "url": "git+https://github.com/rollup/rollup.git",
@@ -57719,12 +58992,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@rollup/rollup-darwin-arm64/-/rollup-darwin-arm64-4.28.1.tgz",
+          "url": "https://registry.npmjs.org/@rollup/rollup-darwin-arm64/-/rollup-darwin-arm64-4.29.1.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "a6b76ebeb30a53a37332aea7c73430e38e735e068305b310be629225ac69699e51d500ccf30f9e1b1a3a63f8e14ff70ba02be7648e36a04a9ff4a40d633d5fa9"
+              "content": "d8e46bed3df563432793aa8dbb0b72366cb5e0cba74c0331d3a5403c8ebf26ee765b5d339358bb8b9537be50d15a384e239aae05caef864087c85efa6c8ee413"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -60063,60 +61336,6 @@
     },
     {
       "type": "library",
-      "name": "minimist",
-      "version": "1.2.8",
-      "bom-ref": "minimist@1.2.8",
-      "author": "James Halliday",
-      "description": "parse argument options",
-      "licenses": [
-        {
-          "license": {
-            "id": "MIT"
-          }
-        }
-      ],
-      "purl": "pkg:npm/minimist@1.2.8",
-      "externalReferences": [
-        {
-          "url": "git://github.com/minimistjs/minimist.git",
-          "type": "vcs",
-          "comment": "as detected from PackageJson property \"repository.url\""
-        },
-        {
-          "url": "https://github.com/minimistjs/minimist",
-          "type": "website",
-          "comment": "as detected from PackageJson property \"homepage\""
-        },
-        {
-          "url": "https://github.com/minimistjs/minimist/issues",
-          "type": "issue-tracker",
-          "comment": "as detected from PackageJson property \"bugs.url\""
-        },
-        {
-          "url": "https://registry.npmjs.org/minimist/-/minimist-1.2.8.tgz",
-          "type": "distribution",
-          "hashes": [
-            {
-              "alg": "SHA-512",
-              "content": "db2c8047ca8190ddd8ba17896a7529582e54ddb6f9a2c0f2c0d07c4730d5943c031dba1c009bdeaaa8f5bbcf92543ee39164f8cafb070a95aaa96a80c5bd3308"
-            }
-          ],
-          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-        }
-      ],
-      "properties": [
-        {
-          "name": "cdx:npm:package:path",
-          "value": "node_modules/minimist"
-        },
-        {
-          "name": "cdx:npm:package:development",
-          "value": "true"
-        }
-      ]
-    },
-    {
-      "type": "library",
       "name": "tsutils",
       "version": "2.29.0",
       "bom-ref": "tsutils@2.29.0",
@@ -60286,7 +61505,7 @@
         "autoprefixer@10.4.18",
         "babel-loader@9.1.3",
         "babel-plugin-istanbul@6.1.1",
-        "browserslist@4.24.2",
+        "browserslist@4.24.3",
         "copy-webpack-plugin@11.0.0",
         "critters@0.0.22",
         "css-loader@6.10.0",
@@ -60468,10 +61687,10 @@
         "@webassemblyjs/wasm-parser@1.14.1",
         "acorn-import-attributes@1.9.5",
         "acorn@8.14.0",
-        "browserslist@4.24.2",
+        "browserslist@4.24.3",
         "chrome-trace-event@1.0.4",
-        "enhanced-resolve@5.17.1",
-        "es-module-lexer@1.5.4",
+        "enhanced-resolve@5.18.0",
+        "es-module-lexer@1.6.0",
         "eslint-scope@5.1.1",
         "events@3.3.0",
         "glob-to-regexp@0.4.1",
@@ -60482,7 +61701,7 @@
         "neo-async@2.6.2",
         "webpack@5.94.0|schema-utils@3.3.0",
         "tapable@2.2.1",
-        "terser-webpack-plugin@5.3.10",
+        "terser-webpack-plugin@5.3.11",
         "webpack@5.94.0|watchpack@2.4.2",
         "webpack-sources@3.2.3"
       ]
@@ -60649,7 +61868,7 @@
       "dependsOn": [
         "@babel/compat-data@7.26.3",
         "@babel/helper-validator-option@7.25.9",
-        "browserslist@4.24.2",
+        "browserslist@4.24.3",
         "lru-cache@5.1.1",
         "@babel/helper-compilation-targets@7.25.9|semver@6.3.1"
       ]
@@ -60664,10 +61883,10 @@
       "ref": "@babel/helper-validator-option@7.25.9"
     },
     {
-      "ref": "browserslist@4.24.2",
+      "ref": "browserslist@4.24.3",
       "dependsOn": [
-        "caniuse-lite@1.0.30001687",
-        "electron-to-chromium@1.5.72",
+        "caniuse-lite@1.0.30001690",
+        "electron-to-chromium@1.5.76",
         "node-releases@2.0.19",
         "update-browserslist-db@1.1.1"
       ]
@@ -60891,7 +62110,7 @@
     {
       "ref": "resolve@1.22.8",
       "dependsOn": [
-        "is-core-module@2.15.1",
+        "is-core-module@2.16.1",
         "path-parse@1.0.7",
         "supports-preserve-symlinks-flag@1.0.0"
       ]
@@ -60918,7 +62137,7 @@
     {
       "ref": "core-js-compat@3.39.0",
       "dependsOn": [
-        "browserslist@4.24.2"
+        "browserslist@4.24.3"
       ]
     },
     {
@@ -61715,7 +62934,7 @@
         "fsevents@2.3.3",
         "less@4.2.0",
         "postcss@8.4.35",
-        "rollup@4.28.1",
+        "rollup@4.29.1",
         "sass@1.77.6",
         "terser@5.29.1"
       ]
@@ -61735,8 +62954,8 @@
     {
       "ref": "autoprefixer@10.4.18",
       "dependsOn": [
-        "browserslist@4.24.2",
-        "caniuse-lite@1.0.30001687",
+        "browserslist@4.24.3",
+        "caniuse-lite@1.0.30001690",
         "fraction.js@4.3.7",
         "normalize-range@0.1.2",
         "picocolors@1.1.1",
@@ -61745,7 +62964,7 @@
       ]
     },
     {
-      "ref": "caniuse-lite@1.0.30001687"
+      "ref": "caniuse-lite@1.0.30001690"
     },
     {
       "ref": "fraction.js@4.3.7"
@@ -61957,7 +63176,7 @@
       ]
     },
     {
-      "ref": "electron-to-chromium@1.5.72"
+      "ref": "electron-to-chromium@1.5.76"
     },
     {
       "ref": "node-releases@2.0.19"
@@ -61965,7 +63184,7 @@
     {
       "ref": "update-browserslist-db@1.1.1",
       "dependsOn": [
-        "browserslist@4.24.2",
+        "browserslist@4.24.3",
         "escalade@3.2.0",
         "picocolors@1.1.1"
       ]
@@ -62102,7 +63321,7 @@
         "boolbase@1.0.0",
         "css-what@6.1.0",
         "domhandler@5.0.3",
-        "domutils@3.1.0",
+        "domutils@3.2.1",
         "nth-check@2.1.1"
       ]
     },
@@ -62119,7 +63338,7 @@
       ]
     },
     {
-      "ref": "domutils@3.1.0",
+      "ref": "domutils@3.2.1",
       "dependsOn": [
         "dom-serializer@2.0.0",
         "domelementtype@2.3.0",
@@ -62151,7 +63370,7 @@
       "dependsOn": [
         "domelementtype@2.3.0",
         "domhandler@5.0.3",
-        "domutils@3.1.0",
+        "domutils@3.2.1",
         "entities@4.5.0"
       ]
     },
@@ -62254,7 +63473,7 @@
       "ref": "@nodelib/fs.walk@1.2.8",
       "dependsOn": [
         "@nodelib/fs.scandir@2.1.5",
-        "fastq@1.17.1"
+        "fastq@1.18.0"
       ]
     },
     {
@@ -62274,7 +63493,7 @@
       "ref": "queue-microtask@1.2.3"
     },
     {
-      "ref": "fastq@1.17.1",
+      "ref": "fastq@1.18.0",
       "dependsOn": [
         "reusify@1.0.4"
       ]
@@ -62417,7 +63636,7 @@
       "dependsOn": [
         "@ljharb/through@2.3.13",
         "ansi-escapes@4.3.2",
-        "inquirer@9.2.15|chalk@5.3.0",
+        "inquirer@9.2.15|chalk@5.4.1",
         "cli-cursor@3.1.0",
         "cli-width@4.1.0",
         "external-editor@3.1.0",
@@ -62433,7 +63652,7 @@
       ]
     },
     {
-      "ref": "inquirer@9.2.15|chalk@5.3.0"
+      "ref": "inquirer@9.2.15|chalk@5.4.1"
     },
     {
       "ref": "@ljharb/through@2.3.13",
@@ -62470,7 +63689,7 @@
       "ref": "get-intrinsic@1.2.6",
       "dependsOn": [
         "call-bind-apply-helpers@1.0.1",
-        "dunder-proto@1.0.0",
+        "dunder-proto@1.0.1",
         "es-define-property@1.0.1",
         "es-errors@1.3.0",
         "es-object-atoms@1.0.0",
@@ -62478,11 +63697,11 @@
         "gopd@1.2.0",
         "has-symbols@1.1.0",
         "hasown@2.0.2",
-        "math-intrinsics@1.0.0"
+        "math-intrinsics@1.1.0"
       ]
     },
     {
-      "ref": "dunder-proto@1.0.0",
+      "ref": "dunder-proto@1.0.1",
       "dependsOn": [
         "call-bind-apply-helpers@1.0.1",
         "es-errors@1.3.0",
@@ -62508,7 +63727,7 @@
       ]
     },
     {
-      "ref": "math-intrinsics@1.0.0"
+      "ref": "math-intrinsics@1.1.0"
     },
     {
       "ref": "set-function-length@1.2.2",
@@ -62830,11 +64049,11 @@
       "dependsOn": [
         "@angular/compiler-cli@17.3.12",
         "@rollup/plugin-json@6.1.0",
-        "@rollup/plugin-node-resolve@15.3.0",
-        "@rollup/wasm-node@4.28.1",
+        "@rollup/plugin-node-resolve@15.3.1",
+        "@rollup/wasm-node@4.29.1",
         "ajv@8.12.0",
         "ansi-colors@4.1.3",
-        "browserslist@4.24.2",
+        "browserslist@4.24.3",
         "cacache@18.0.4",
         "chokidar@3.6.0",
         "ng-packagr@17.3.0|commander@12.1.0",
@@ -62850,7 +64069,7 @@
         "ora@5.4.1",
         "piscina@4.4.0",
         "postcss@8.4.35",
-        "rollup@4.28.1",
+        "rollup@4.29.1",
         "rxjs@7.8.1",
         "sass@1.77.6",
         "tslib@2.8.1",
@@ -63018,7 +64237,7 @@
       "ref": "postcss-loader@8.1.1",
       "dependsOn": [
         "cosmiconfig@9.0.0",
-        "jiti@1.21.6",
+        "jiti@1.21.7",
         "postcss@8.4.35",
         "semver@7.6.0",
         "webpack@5.94.0"
@@ -63090,7 +64309,7 @@
       "ref": "lines-and-columns@1.2.4"
     },
     {
-      "ref": "jiti@1.21.6"
+      "ref": "jiti@1.21.7"
     },
     {
       "ref": "nanoid@3.3.8"
@@ -63217,9 +64436,9 @@
       "ref": "fsevents@2.3.3"
     },
     {
-      "ref": "rollup@4.28.1",
+      "ref": "rollup@4.29.1",
       "dependsOn": [
-        "@rollup/rollup-darwin-arm64@4.28.1",
+        "@rollup/rollup-darwin-arm64@4.29.1",
         "@types/estree@1.0.6",
         "fsevents@2.3.3"
       ]
@@ -63695,23 +64914,23 @@
     {
       "ref": "side-channel-map@1.0.1",
       "dependsOn": [
-        "call-bound@1.0.2",
+        "call-bound@1.0.3",
         "es-errors@1.3.0",
         "get-intrinsic@1.2.6",
         "object-inspect@1.13.3"
       ]
     },
     {
-      "ref": "call-bound@1.0.2",
+      "ref": "call-bound@1.0.3",
       "dependsOn": [
-        "call-bind@1.0.8",
+        "call-bind-apply-helpers@1.0.1",
         "get-intrinsic@1.2.6"
       ]
     },
     {
       "ref": "side-channel-weakmap@1.0.2",
       "dependsOn": [
-        "call-bound@1.0.2",
+        "call-bound@1.0.3",
         "es-errors@1.3.0",
         "get-intrinsic@1.2.6",
         "object-inspect@1.13.3",
@@ -64161,14 +65380,14 @@
       "ref": "chrome-trace-event@1.0.4"
     },
     {
-      "ref": "enhanced-resolve@5.17.1",
+      "ref": "enhanced-resolve@5.18.0",
       "dependsOn": [
         "graceful-fs@4.2.11",
         "tapable@2.2.1"
       ]
     },
     {
-      "ref": "es-module-lexer@1.5.4"
+      "ref": "es-module-lexer@1.6.0"
     },
     {
       "ref": "eslint-scope@5.1.1",
@@ -64205,55 +65424,41 @@
       ]
     },
     {
-      "ref": "terser-webpack-plugin@5.3.10",
+      "ref": "terser-webpack-plugin@5.3.11",
       "dependsOn": [
         "@jridgewell/trace-mapping@0.3.25",
-        "terser-webpack-plugin@5.3.10|jest-worker@27.5.1",
-        "terser-webpack-plugin@5.3.10|schema-utils@3.3.0",
+        "terser-webpack-plugin@5.3.11|jest-worker@27.5.1",
+        "schema-utils@4.3.0",
         "serialize-javascript@6.0.2",
-        "terser@5.29.1",
+        "terser-webpack-plugin@5.3.11|terser@5.37.0",
         "webpack@5.94.0"
       ]
     },
     {
-      "ref": "terser-webpack-plugin@5.3.10|jest-worker@27.5.1",
+      "ref": "terser-webpack-plugin@5.3.11|jest-worker@27.5.1",
       "dependsOn": [
         "@types/node@22.10.2",
         "merge-stream@2.0.0",
-        "terser-webpack-plugin@5.3.10|supports-color@8.1.1"
+        "terser-webpack-plugin@5.3.11|supports-color@8.1.1"
       ]
     },
     {
-      "ref": "terser-webpack-plugin@5.3.10|supports-color@8.1.1",
+      "ref": "terser-webpack-plugin@5.3.11|supports-color@8.1.1",
       "dependsOn": [
         "has-flag@4.0.0"
       ]
     },
     {
-      "ref": "terser-webpack-plugin@5.3.10|schema-utils@3.3.0",
+      "ref": "terser-webpack-plugin@5.3.11|terser@5.37.0",
       "dependsOn": [
-        "@types/json-schema@7.0.15",
-        "terser-webpack-plugin@5.3.10|ajv-keywords@3.5.2",
-        "terser-webpack-plugin@5.3.10|ajv@6.12.6"
+        "@jridgewell/source-map@0.3.6",
+        "acorn@8.14.0",
+        "terser-webpack-plugin@5.3.11|commander@2.20.3",
+        "source-map-support@0.5.21"
       ]
     },
     {
-      "ref": "terser-webpack-plugin@5.3.10|ajv-keywords@3.5.2",
-      "dependsOn": [
-        "terser-webpack-plugin@5.3.10|ajv@6.12.6"
-      ]
-    },
-    {
-      "ref": "terser-webpack-plugin@5.3.10|ajv@6.12.6",
-      "dependsOn": [
-        "fast-deep-equal@3.1.3",
-        "fast-json-stable-stringify@2.1.0",
-        "terser-webpack-plugin@5.3.10|json-schema-traverse@0.4.1",
-        "uri-js@4.4.1"
-      ]
-    },
-    {
-      "ref": "terser-webpack-plugin@5.3.10|json-schema-traverse@0.4.1"
+      "ref": "terser-webpack-plugin@5.3.11|commander@2.20.3"
     },
     {
       "ref": "@angular/animations@17.3.12",
@@ -64321,10 +65526,13 @@
       "ref": "npm-package-arg@11.0.1",
       "dependsOn": [
         "hosted-git-info@7.0.2",
-        "proc-log@3.0.0",
+        "npm-package-arg@11.0.1|proc-log@3.0.0",
         "semver@7.6.0",
         "validate-npm-package-name@5.0.1"
       ]
+    },
+    {
+      "ref": "npm-package-arg@11.0.1|proc-log@3.0.0"
     },
     {
       "ref": "hosted-git-info@7.0.2",
@@ -64334,9 +65542,6 @@
     },
     {
       "ref": "hosted-git-info@7.0.2|lru-cache@10.4.3"
-    },
-    {
-      "ref": "proc-log@3.0.0"
     },
     {
       "ref": "validate-npm-package-name@5.0.1"
@@ -64373,7 +65578,7 @@
         "npm-packlist@8.0.2",
         "npm-pick-manifest@9.0.0",
         "npm-registry-fetch@16.2.1",
-        "proc-log@3.0.0",
+        "pacote@17.0.6|proc-log@3.0.0",
         "promise-retry@2.0.1",
         "read-package-json-fast@3.0.2",
         "read-package-json@7.0.1",
@@ -64383,13 +65588,16 @@
       ]
     },
     {
+      "ref": "pacote@17.0.6|proc-log@3.0.0"
+    },
+    {
       "ref": "@npmcli/git@5.0.8",
       "dependsOn": [
         "@npmcli/promise-spawn@7.0.2",
         "@npmcli/git@5.0.8|ini@4.1.3",
         "@npmcli/git@5.0.8|lru-cache@10.4.3",
         "npm-pick-manifest@9.0.0",
-        "@npmcli/git@5.0.8|proc-log@4.2.0",
+        "proc-log@4.2.0",
         "promise-inflight@1.0.1",
         "promise-retry@2.0.1",
         "semver@7.6.0",
@@ -64401,9 +65609,6 @@
     },
     {
       "ref": "@npmcli/git@5.0.8|lru-cache@10.4.3"
-    },
-    {
-      "ref": "@npmcli/git@5.0.8|proc-log@4.2.0"
     },
     {
       "ref": "@npmcli/git@5.0.8|which@4.0.0",
@@ -64428,6 +65633,9 @@
     },
     {
       "ref": "@npmcli/promise-spawn@7.0.2|isexe@3.1.1"
+    },
+    {
+      "ref": "proc-log@4.2.0"
     },
     {
       "ref": "promise-inflight@1.0.1"
@@ -64482,7 +65690,7 @@
         "hosted-git-info@7.0.2",
         "json-parse-even-better-errors@3.0.2",
         "normalize-package-data@6.0.2",
-        "@npmcli/package-json@5.2.1|proc-log@4.2.0",
+        "proc-log@4.2.0",
         "semver@7.6.0"
       ]
     },
@@ -64508,9 +65716,6 @@
       "dependsOn": [
         "balanced-match@1.0.2"
       ]
-    },
-    {
-      "ref": "@npmcli/package-json@5.2.1|proc-log@4.2.0"
     },
     {
       "ref": "foreground-child@3.3.0",
@@ -64567,8 +65772,8 @@
         "node-gyp@10.3.1|glob@10.4.5",
         "graceful-fs@4.2.11",
         "make-fetch-happen@13.0.1",
-        "node-gyp@10.3.1|nopt@7.2.1",
-        "node-gyp@10.3.1|proc-log@4.2.0",
+        "nopt@7.2.1",
+        "proc-log@4.2.0",
         "semver@7.6.0",
         "tar@6.2.1",
         "node-gyp@10.3.1|which@4.0.0"
@@ -64598,18 +65803,6 @@
       ]
     },
     {
-      "ref": "node-gyp@10.3.1|nopt@7.2.1",
-      "dependsOn": [
-        "node-gyp@10.3.1|abbrev@2.0.0"
-      ]
-    },
-    {
-      "ref": "node-gyp@10.3.1|abbrev@2.0.0"
-    },
-    {
-      "ref": "node-gyp@10.3.1|proc-log@4.2.0"
-    },
-    {
       "ref": "node-gyp@10.3.1|which@4.0.0",
       "dependsOn": [
         "node-gyp@10.3.1|isexe@3.1.1"
@@ -64633,13 +65826,19 @@
         "minipass-pipeline@1.2.4",
         "minipass@7.1.2",
         "negotiator@0.6.4",
-        "make-fetch-happen@13.0.1|proc-log@4.2.0",
+        "proc-log@4.2.0",
         "promise-retry@2.0.1",
         "ssri@10.0.6"
       ]
     },
     {
-      "ref": "make-fetch-happen@13.0.1|proc-log@4.2.0"
+      "ref": "nopt@7.2.1",
+      "dependsOn": [
+        "abbrev@2.0.0"
+      ]
+    },
+    {
+      "ref": "abbrev@2.0.0"
     },
     {
       "ref": "tar@6.2.1",
@@ -64753,11 +65952,8 @@
         "minipass@7.1.2",
         "minizlib@2.1.2",
         "npm-package-arg@11.0.1",
-        "npm-registry-fetch@16.2.1|proc-log@4.2.0"
+        "proc-log@4.2.0"
       ]
-    },
-    {
-      "ref": "npm-registry-fetch@16.2.1|proc-log@4.2.0"
     },
     {
       "ref": "@npmcli/redact@1.1.0"
@@ -65001,12 +66197,9 @@
         "@sigstore/core@1.1.0",
         "@sigstore/protobuf-specs@0.3.2",
         "make-fetch-happen@13.0.1",
-        "@sigstore/sign@2.3.2|proc-log@4.2.0",
+        "proc-log@4.2.0",
         "promise-retry@2.0.1"
       ]
-    },
-    {
-      "ref": "@sigstore/sign@2.3.2|proc-log@4.2.0"
     },
     {
       "ref": "@sigstore/tuf@2.3.4",
@@ -65060,7 +66253,7 @@
       "ref": "mkdirp@1.0.4"
     },
     {
-      "ref": "is-core-module@2.15.1",
+      "ref": "is-core-module@2.16.1",
       "dependsOn": [
         "hasown@2.0.2"
       ]
@@ -65210,7 +66403,7 @@
     {
       "ref": "@cyclonedx/cyclonedx-npm@1.19.3",
       "dependsOn": [
-        "@cyclonedx/cyclonedx-library@6.13.0",
+        "@cyclonedx/cyclonedx-library@6.13.1",
         "commander@10.0.1",
         "normalize-package-data@6.0.2",
         "packageurl-js@1.2.1",
@@ -65218,18 +66411,19 @@
       ]
     },
     {
-      "ref": "@cyclonedx/cyclonedx-library@6.13.0",
+      "ref": "@cyclonedx/cyclonedx-library@6.13.1",
       "dependsOn": [
         "ajv-formats-draft2019@1.6.1",
-        "@cyclonedx/cyclonedx-library@6.13.0|ajv-formats@3.0.1",
+        "@cyclonedx/cyclonedx-library@6.13.1|ajv-formats@3.0.1",
         "ajv@8.12.0",
+        "libxmljs2@0.35.0",
         "packageurl-js@1.2.1",
         "spdx-expression-parse@4.0.0",
         "xmlbuilder2@3.1.1"
       ]
     },
     {
-      "ref": "@cyclonedx/cyclonedx-library@6.13.0|ajv-formats@3.0.1",
+      "ref": "@cyclonedx/cyclonedx-library@6.13.1|ajv-formats@3.0.1",
       "dependsOn": [
         "ajv@8.12.0"
       ]
@@ -65292,6 +66486,170 @@
     },
     {
       "ref": "ret@0.1.15"
+    },
+    {
+      "ref": "libxmljs2@0.35.0",
+      "dependsOn": [
+        "bindings@1.5.0",
+        "nan@2.20.0",
+        "node-gyp@10.3.1",
+        "prebuild-install@7.1.2"
+      ]
+    },
+    {
+      "ref": "bindings@1.5.0",
+      "dependsOn": [
+        "file-uri-to-path@1.0.0"
+      ]
+    },
+    {
+      "ref": "file-uri-to-path@1.0.0"
+    },
+    {
+      "ref": "nan@2.20.0"
+    },
+    {
+      "ref": "prebuild-install@7.1.2",
+      "dependsOn": [
+        "detect-libc@2.0.3",
+        "expand-template@2.0.3",
+        "github-from-package@0.0.0",
+        "minimist@1.2.8",
+        "mkdirp-classic@0.5.3",
+        "napi-build-utils@1.0.2",
+        "node-abi@3.71.0",
+        "pump@3.0.2",
+        "rc@1.2.8",
+        "simple-get@4.0.1",
+        "tar-fs@2.1.1",
+        "tunnel-agent@0.6.0"
+      ]
+    },
+    {
+      "ref": "detect-libc@2.0.3"
+    },
+    {
+      "ref": "expand-template@2.0.3"
+    },
+    {
+      "ref": "github-from-package@0.0.0"
+    },
+    {
+      "ref": "minimist@1.2.8"
+    },
+    {
+      "ref": "mkdirp-classic@0.5.3"
+    },
+    {
+      "ref": "napi-build-utils@1.0.2"
+    },
+    {
+      "ref": "node-abi@3.71.0",
+      "dependsOn": [
+        "semver@7.6.0"
+      ]
+    },
+    {
+      "ref": "pump@3.0.2",
+      "dependsOn": [
+        "end-of-stream@1.4.4",
+        "once@1.4.0"
+      ]
+    },
+    {
+      "ref": "end-of-stream@1.4.4",
+      "dependsOn": [
+        "once@1.4.0"
+      ]
+    },
+    {
+      "ref": "once@1.4.0",
+      "dependsOn": [
+        "wrappy@1.0.2"
+      ]
+    },
+    {
+      "ref": "rc@1.2.8",
+      "dependsOn": [
+        "deep-extend@0.6.0",
+        "rc@1.2.8|ini@1.3.8",
+        "minimist@1.2.8",
+        "rc@1.2.8|strip-json-comments@2.0.1"
+      ]
+    },
+    {
+      "ref": "rc@1.2.8|ini@1.3.8"
+    },
+    {
+      "ref": "rc@1.2.8|strip-json-comments@2.0.1"
+    },
+    {
+      "ref": "deep-extend@0.6.0"
+    },
+    {
+      "ref": "simple-get@4.0.1",
+      "dependsOn": [
+        "decompress-response@6.0.0",
+        "once@1.4.0",
+        "simple-concat@1.0.1"
+      ]
+    },
+    {
+      "ref": "decompress-response@6.0.0",
+      "dependsOn": [
+        "mimic-response@3.1.0"
+      ]
+    },
+    {
+      "ref": "mimic-response@3.1.0"
+    },
+    {
+      "ref": "simple-concat@1.0.1"
+    },
+    {
+      "ref": "tar-fs@2.1.1",
+      "dependsOn": [
+        "tar-fs@2.1.1|chownr@1.1.4",
+        "mkdirp-classic@0.5.3",
+        "pump@3.0.2",
+        "tar-stream@2.2.0"
+      ]
+    },
+    {
+      "ref": "tar-fs@2.1.1|chownr@1.1.4"
+    },
+    {
+      "ref": "tar-stream@2.2.0",
+      "dependsOn": [
+        "bl@4.1.0",
+        "end-of-stream@1.4.4",
+        "fs-constants@1.0.0",
+        "inherits@2.0.4",
+        "tar-stream@2.2.0|readable-stream@3.6.2"
+      ]
+    },
+    {
+      "ref": "tar-stream@2.2.0|readable-stream@3.6.2",
+      "dependsOn": [
+        "inherits@2.0.4",
+        "tar-stream@2.2.0|string_decoder@1.3.0",
+        "util-deprecate@1.0.2"
+      ]
+    },
+    {
+      "ref": "tar-stream@2.2.0|string_decoder@1.3.0",
+      "dependsOn": [
+        "safe-buffer@5.2.1"
+      ]
+    },
+    {
+      "ref": "fs-constants@1.0.0"
+    },
+    {
+      "ref": "tunnel-agent@0.6.0",
+      "dependsOn": [
+        "safe-buffer@5.2.1"
+      ]
     },
     {
       "ref": "packageurl-js@1.2.1"
@@ -65553,12 +66911,6 @@
       "ref": "inflight@1.0.6",
       "dependsOn": [
         "once@1.4.0",
-        "wrappy@1.0.2"
-      ]
-    },
-    {
-      "ref": "once@1.4.0",
-      "dependsOn": [
         "wrappy@1.0.2"
       ]
     },
@@ -66735,34 +68087,34 @@
     {
       "ref": "@rollup/plugin-json@6.1.0",
       "dependsOn": [
-        "@rollup/pluginutils@5.1.3",
-        "rollup@4.28.1"
+        "@rollup/pluginutils@5.1.4",
+        "rollup@4.29.1"
       ]
     },
     {
-      "ref": "@rollup/pluginutils@5.1.3",
+      "ref": "@rollup/pluginutils@5.1.4",
       "dependsOn": [
         "@types/estree@1.0.6",
         "estree-walker@2.0.2",
-        "@rollup/pluginutils@5.1.3|picomatch@4.0.2",
-        "rollup@4.28.1"
+        "@rollup/pluginutils@5.1.4|picomatch@4.0.2",
+        "rollup@4.29.1"
       ]
     },
     {
-      "ref": "@rollup/pluginutils@5.1.3|picomatch@4.0.2"
+      "ref": "@rollup/pluginutils@5.1.4|picomatch@4.0.2"
     },
     {
       "ref": "estree-walker@2.0.2"
     },
     {
-      "ref": "@rollup/plugin-node-resolve@15.3.0",
+      "ref": "@rollup/plugin-node-resolve@15.3.1",
       "dependsOn": [
-        "@rollup/pluginutils@5.1.3",
+        "@rollup/pluginutils@5.1.4",
         "@types/resolve@1.20.2",
         "deepmerge@4.3.1",
         "is-module@1.0.0",
         "resolve@1.22.8",
-        "rollup@4.28.1"
+        "rollup@4.29.1"
       ]
     },
     {
@@ -66772,7 +68124,7 @@
       "ref": "is-module@1.0.0"
     },
     {
-      "ref": "@rollup/wasm-node@4.28.1",
+      "ref": "@rollup/wasm-node@4.29.1",
       "dependsOn": [
         "@types/estree@1.0.6",
         "fsevents@2.3.3"
@@ -66793,9 +68145,9 @@
     {
       "ref": "@isaacs/cliui@8.0.2",
       "dependsOn": [
-        "BomRef.f7itbn3mhe.tdnm6654r88",
+        "BomRef.t7eru8m3jv8.45jmbtdrkv8",
         "@isaacs/cliui@8.0.2|string-width@5.1.2",
-        "BomRef.ek85bjplajg.51fgir20s4o",
+        "BomRef.javmt90bk1.jitdsjm526g",
         "@isaacs/cliui@8.0.2|strip-ansi@7.1.0",
         "wrap-ansi@7.0.0",
         "@isaacs/cliui@8.0.2|wrap-ansi@8.1.0"
@@ -66833,7 +68185,7 @@
       "ref": "@isaacs/cliui@8.0.2|ansi-styles@6.2.1"
     },
     {
-      "ref": "BomRef.f7itbn3mhe.tdnm6654r88",
+      "ref": "BomRef.t7eru8m3jv8.45jmbtdrkv8",
       "dependsOn": [
         "emoji-regex@8.0.0",
         "is-fullwidth-code-point@3.0.0",
@@ -66844,7 +68196,7 @@
       "ref": "eastasianwidth@0.2.0"
     },
     {
-      "ref": "BomRef.ek85bjplajg.51fgir20s4o",
+      "ref": "BomRef.javmt90bk1.jitdsjm526g",
       "dependsOn": [
         "ansi-regex@5.0.1"
       ]
@@ -66913,7 +68265,7 @@
       ]
     },
     {
-      "ref": "@rollup/rollup-darwin-arm64@4.28.1"
+      "ref": "@rollup/rollup-darwin-arm64@4.29.1"
     },
     {
       "ref": "properties-reader@2.3.0",
@@ -67139,9 +68491,6 @@
     },
     {
       "ref": "sprintf-js@1.0.3"
-    },
-    {
-      "ref": "minimist@1.2.8"
     },
     {
       "ref": "tsutils@2.29.0",
