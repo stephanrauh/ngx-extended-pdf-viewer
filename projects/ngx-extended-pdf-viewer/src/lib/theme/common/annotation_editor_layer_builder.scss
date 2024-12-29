@@ -530,9 +530,7 @@ ngx-extended-pdf-viewer {
     height: 100%;
   }
 
-  // todo: in pdf.js, the selector is "freeTextEditor" without a dot
-  .annotationEditorLayer .freeTextEditor .overlay.enabled,
-  .annotationEditorLayer freeTextEditor .overlay.enabled {
+  .annotationEditorLayer .freeTextEditor .overlay.enabled {
     display: block;
   }
 
