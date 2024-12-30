@@ -4,27 +4,9 @@ You need a current node.js and roughly 20-30 minutes of time, maybe even less. M
 
 ## Use the showcase to test your changes of ngx-extended-pdf-viewer
 
-In a nutshell: you need two projects, ngx-extended-pdf-viewer and extended-pdf-viewer, in the same parent folder. Both projects are standard Angular projects, so I hope you don't run into nasty surprises.
+In a nutshell: you need three projects: pdf.js, ngx-extended-pdf-viewer and extended-pdf-viewer, all in the same parent folder.
 
 ![Folders required to build ngx-extended-pdf-viewer](./folder-structure.png)
-
-1. Create a new folder "pdf".
-2. `cd pdf`
-3. `git clone https://github.com/stephanrauh/ngx-extended-pdf-viewer`
-4. `cd ngx-extended-pdf-viewer`
-5. `npm install`
-6. `cd ..`
-7. `git clone https://github.com/stephanrauh/extended-pdf-viewer-showcase`
-8. `cd extended-pdf-viewer-showcase`
-9. `npm install`
-10. `npm run ts`
-11. Navigate to `http://localhost:4200`
-
-If you modify the the library, you need to stop the Angular server and run step 10.
-
-The GitHub repository only contains the non-minified JavaScript files of the stable branch of my fork of pdf.js. If you need the minified files, or if you want to use the bleeding-edge branch, you'll have to compile pdf.js yourself.
-
-## Build ngx-extended-pdf-viewer with a custom version of pdf.js
 
 ### What is pdf.js?
 
@@ -32,7 +14,7 @@ ngx-extended-pdf-viewer is just a shallow wrapper arounds Mozilla's PDF viewer. 
 
 ### How to build it all from scratch
 
-In a nutshell: you need three projects:
+As mentioned before, you need three projects:
 
 - my clone of pdf.js,
 - ngx-extended-pdf-viewer,
@@ -55,8 +37,6 @@ Put all of them in the same parent folder. pdf.js needs to be built first, follo
 1. `cd ../ngx-extended-pdf-viewer`
 1. `npm run full`
 1. Navigate to `http://localhost:4200`
-
-If you don't need the minified files, you can use `npm run quick` instead of `npm run full`.
 
 ## Living on the bleeding edge
 
