@@ -64,10 +64,10 @@ export class NgxExtendedPdfViewerService {
 
   public secondaryMenuIsEmpty = false;
 
-  private renderer: Renderer2;
+  private readonly renderer: Renderer2;
   private PDFViewerApplication?: IPDFViewerApplication;
 
-  constructor(private rendererFactory: RendererFactory2, notificationService: PDFNotificationService) {
+  constructor(private readonly rendererFactory: RendererFactory2, notificationService: PDFNotificationService) {
     this.renderer = this.rendererFactory.createRenderer(null, null);
     effect(() => {
       this.PDFViewerApplication = notificationService.onPDFJSInitSignal();

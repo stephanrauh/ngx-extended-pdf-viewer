@@ -25,7 +25,6 @@ export class NgxFormSupport {
   }
 
   public registerFormSupportWithPdfjs(PDFViewerApplication: IPDFViewerApplication): void {
-    this.PDFViewerApplication = PDFViewerApplication;
     (globalThis as any).getFormValueFromAngular = (key: string) => this.getFormValueFromAngular(key);
     (globalThis as any).updateAngularFormValue = (key: string | HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement, value: { value: string }) =>
       this.updateAngularFormValueCalledByPdfjs(key, value);
@@ -227,11 +226,9 @@ export class NgxFormSupport {
             change = true;
           }
         }
-      } else {
-        if (this.formData[fullKey] !== value.value) {
-          this.formData[fullKey] = value.value;
-          change = true;
-        }
+      } else if (this.formData[fullKey] !== value.value) {
+        this.formData[fullKey] = value.value;
+        change = true;
       }
     } else if (field instanceof HTMLInputElement && field.type === 'radio') {
       const exportValue = field.getAttribute('exportvalue') ?? field.getAttribute('xfaon');
@@ -241,11 +238,9 @@ export class NgxFormSupport {
           change = true;
         }
       }
-    } else {
-      if (this.formData[fullKey] !== value.value) {
-        this.formData[fullKey] = value.value;
-        change = true;
-      }
+    } else if (this.formData[fullKey] !== value.value) {
+      this.formData[fullKey] = value.value;
+      change = true;
     }
     return change;
   }

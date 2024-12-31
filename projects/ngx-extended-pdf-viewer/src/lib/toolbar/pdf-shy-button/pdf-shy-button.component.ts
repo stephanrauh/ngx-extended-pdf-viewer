@@ -62,7 +62,8 @@ export class PdfShyButtonComponent implements OnInit, OnChanges, AfterViewInit, 
 
   public get imageHtml(): string | SafeHtml | undefined {
     if (this._imageHtml) {
-      return this.sanitizer.bypassSecurityTrustHtml(this._imageHtml);
+      // allow non-literal svg tags (sanitized in the setter)
+      return this.sanitizer.bypassSecurityTrustHtml(this._imageHtml); // NOSONAR
     }
     return undefined;
   }

@@ -1038,7 +1038,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     private readonly renderer: Renderer2,
     private readonly pdfScriptLoaderService: PDFScriptLoaderService,
     private readonly keyboardManager: NgxKeyboardManagerService,
-    private cspPolicyService: PdfCspPolicyService
+    private readonly cspPolicyService: PdfCspPolicyService
   ) {
     this.baseHref = this.platformLocation.getBaseHrefFromDOM();
     if (isPlatformBrowser(this.platformId)) {
