@@ -7,10 +7,10 @@ module.exports = {
     extend: {
       spacing: {
         'header-height': 'var(--header-height)',
-        'content-begin': 'calc(var(--header-height) + var(--content-padding-top))',
+        'content-begin': 'var(--header-height)',
       },
       height: {
-        'vh-content': 'calc(100vh - var(--header-height) - var(--content-padding-top)',
+        'vh-content': 'calc(100vh - var(--header-height))',
       },
       colors: {
         primary: {
