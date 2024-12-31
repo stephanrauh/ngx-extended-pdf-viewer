@@ -176,6 +176,10 @@ export class PdfShyButtonComponent implements OnInit, OnChanges, AfterViewInit, 
   }
 
   public onClick(htmlEvent: Event): void {
+    if (htmlEvent instanceof KeyboardEvent && htmlEvent.key !== 'Enter' && htmlEvent.key !== ' ') {
+      return;
+    }
+
     if (this.action) {
       this.action(htmlEvent, false);
       htmlEvent.preventDefault();

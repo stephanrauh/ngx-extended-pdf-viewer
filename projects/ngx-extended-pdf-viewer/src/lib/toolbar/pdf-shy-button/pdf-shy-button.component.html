@@ -1,6 +1,6 @@
 @if (!onlySecondaryMenu) {
 @if (nestedContent) {
-<span (click)="onClick($event)" [class]="cssClass">
+<span (click)="onClick($event)" onKeyDown="onClick($event)" [class]="cssClass">
   <ng-content></ng-content>
 </span>
 }
