@@ -1,13 +1,13 @@
-<div class="grid grid-cols-[minmax(0,_auto)_1fr] gap-6 items-center p-4 h-full lg:ps-8 lg:pe-8">
+<div class="grid max-lg:grid-cols-[minmax(0,_auto)_1fr] gap-6 items-center p-4 h-full lg:ps-8 lg:pe-8">
   <div class="lg:hidden">
     <button [attr.aria-expanded]="sidenavIsOpen()" aria-controls="sidenav" (click)="toggleSidebar()">
       <span role="img" class="material-symbols-outlined">menu</span>
       <span class="sr-only">Menu</span>
     </button>
   </div>
-  <div class="grid grid-rows-[1fr_minmax(0,_auto)] text-2xl">
-    <span class="text-primary-light dark:text-primary-dark">Angular PDF Viewer</span>
-    <div class="flex flex-wrap gap-4">
+  <div class="grid max-lg:grid-rows-[1fr_minmax(0,_auto)] lg:grid-cols-[minmax(0,_auto)_1fr_auto] lg:items-center">
+    <span class="text-primary-light dark:text-primary-dark text-2xl">Angular PDF Viewer</span>
+    <div class="flex flex-wrap gap-4 lg:col-start-3 lg:col-end-3 lg:mr-20">
       <img
         src="https://img.shields.io/static/v1?label=Version&message={{ extendedPdfViewerVersion }}&color=006480"
         alt="Version - {{ extendedPdfViewerVersion }}"
@@ -16,6 +16,5 @@
       <img src="https://img.shields.io/badge/Angular-{{ angularVersion }}-fa2c05" alt="Angular - {{ angularVersion }}" />
     </div>
   </div>
-
-  <pvs-octocat />
 </div>
+<pvs-octocat />
