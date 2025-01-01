@@ -490,24 +490,28 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Afficher l’éditeur 
 pdfjs-editor-alt-text-settings-show-dialog-description = Vous aide à vous assurer que toutes vos images ont du texte alternatif.
 pdfjs-editor-alt-text-settings-close-button = Fermer
 
+## "Annotations removed" bar
+
+pdfjs-editor-undo-bar-message-highlight = Surlignage supprimé
+pdfjs-editor-undo-bar-message-freetext = Texte supprimé
+pdfjs-editor-undo-bar-message-ink = Dessin supprimé
+pdfjs-editor-undo-bar-message-stamp = Image supprimée
+# Variables:
+#   $count (Number) - the number of removed annotations.
+pdfjs-editor-undo-bar-message-multiple =
+    { $count ->
+        [one] { $count } annotation supprimée
+       *[other] { $count } annotations supprimées
+    }
+pdfjs-editor-undo-bar-undo-button =
+    .title = Annuler
+pdfjs-editor-undo-bar-undo-button-label = Annuler
+pdfjs-editor-undo-bar-close-button =
+    .title = Fermer
+pdfjs-editor-undo-bar-close-button-label = Fermer
+
 # Additional translations for ngx-extended-pdf-viewer (fr)
 unverified-signature-warning = Ce fichier PDF contient une signature numérique. Le lecteur PDF ne peut pas vérifier si la signature est valide. Veuillez télécharger le fichier et l’ouvrir dans Acrobat Reader pour vérifier si la signature est valide.
 pdfjs-infinite-scroll-button-label = Défilement infini
 pdfjs-find-multiple-checkbox-label = Correspondre à chaque mot
 pdfjs-find-regexp-checkbox-label = Expression régulière
-# Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-editor-undo-bar-message-highlight = Highlight removed
-pdfjs-editor-undo-bar-message-freetext = Text removed
-pdfjs-editor-undo-bar-message-ink = Drawing removed
-pdfjs-editor-undo-bar-message-stamp = Image removed
-pdfjs-editor-undo-bar-message-multiple =
-    { $count ->
-        [one] { $count } annotation removed
-       *[other] { $count } annotations removed
-    }
-pdfjs-editor-undo-bar-undo-button =
-    .title = Undo
-pdfjs-editor-undo-bar-undo-button-label = Undo
-pdfjs-editor-undo-bar-close-button =
-    .title = Close
-pdfjs-editor-undo-bar-close-button-label = Close

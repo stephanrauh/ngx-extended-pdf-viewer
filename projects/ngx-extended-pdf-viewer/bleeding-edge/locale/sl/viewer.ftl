@@ -498,24 +498,31 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Ob dodajanju slike tak
 pdfjs-editor-alt-text-settings-show-dialog-description = Pomaga vam zagotoviti, da imajo vse vaše slike nadomestno besedilo.
 pdfjs-editor-alt-text-settings-close-button = Zapri
 
+## "Annotations removed" bar
+
+pdfjs-editor-undo-bar-message-highlight = Označba odstranjena
+pdfjs-editor-undo-bar-message-freetext = Besedilo odstranjeno
+pdfjs-editor-undo-bar-message-ink = Risba odstranjena
+pdfjs-editor-undo-bar-message-stamp = Slika odstranjena
+# Variables:
+#   $count (Number) - the number of removed annotations.
+pdfjs-editor-undo-bar-message-multiple =
+    { $count ->
+        [one] { $count } označba odstranjena
+        [two] { $count } označbi odstranjeni
+        [few] { $count } označbe odstranjene
+       *[other] { $count } označb odstranjenih
+    }
+pdfjs-editor-undo-bar-undo-button =
+    .title = Razveljavi
+pdfjs-editor-undo-bar-undo-button-label = Razveljavi
+pdfjs-editor-undo-bar-close-button =
+    .title = Zapri
+pdfjs-editor-undo-bar-close-button-label = Zapri
+
 # Additional translations for ngx-extended-pdf-viewer (sl)
 unverified-signature-warning = Dokument vsebuje digitalni podpis. PDF viewer ne more preveriti veljavnost podpisa. Prosimo prenesite dokument in veljavnost podpisa preverite v programu Acrobat Reader.
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-editor-undo-bar-message-highlight = Highlight removed
-pdfjs-editor-undo-bar-message-freetext = Text removed
-pdfjs-editor-undo-bar-message-ink = Drawing removed
-pdfjs-editor-undo-bar-message-stamp = Image removed
-pdfjs-editor-undo-bar-message-multiple =
-    { $count ->
-        [one] { $count } annotation removed
-       *[other] { $count } annotations removed
-    }
-pdfjs-editor-undo-bar-undo-button =
-    .title = Undo
-pdfjs-editor-undo-bar-undo-button-label = Undo
-pdfjs-editor-undo-bar-close-button =
-    .title = Close
-pdfjs-editor-undo-bar-close-button-label = Close
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = match each word
 pdfjs-find-regexp-checkbox-label = regular expression

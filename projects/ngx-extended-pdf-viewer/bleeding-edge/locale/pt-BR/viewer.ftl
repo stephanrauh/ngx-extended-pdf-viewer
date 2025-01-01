@@ -494,24 +494,29 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Mostrar o editor de te
 pdfjs-editor-alt-text-settings-show-dialog-description = Ajuda a assegurar que todas as suas imagens tenham texto alternativo.
 pdfjs-editor-alt-text-settings-close-button = Fechar
 
+## "Annotations removed" bar
+
+pdfjs-editor-undo-bar-message-highlight = Destaque removido
+pdfjs-editor-undo-bar-message-freetext = Texto removido
+pdfjs-editor-undo-bar-message-ink = Desenho removido
+pdfjs-editor-undo-bar-message-stamp = Imagem removida
+# Variables:
+#   $count (Number) - the number of removed annotations.
+pdfjs-editor-undo-bar-message-multiple =
+    { $count ->
+        [one] { $count } anotação removida
+       *[other] { $count } anotações removidas
+    }
+pdfjs-editor-undo-bar-undo-button =
+    .title = Desfazer
+pdfjs-editor-undo-bar-undo-button-label = Desfazer
+pdfjs-editor-undo-bar-close-button =
+    .title = Fechar
+pdfjs-editor-undo-bar-close-button-label = Fechar
+
 # Additional translations for ngx-extended-pdf-viewer (pt)
 unverified-signature-warning = Este arquivo PDF contém uma assinatura digital. O visualizador de PDF não pode verificar se a assinatura é válida. Faça download do arquivo e abra-o no Acrobat Reader para verificar se a assinatura é válida.
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-editor-undo-bar-message-highlight = Highlight removed
-pdfjs-editor-undo-bar-message-freetext = Text removed
-pdfjs-editor-undo-bar-message-ink = Drawing removed
-pdfjs-editor-undo-bar-message-stamp = Image removed
-pdfjs-editor-undo-bar-message-multiple =
-    { $count ->
-        [one] { $count } annotation removed
-       *[other] { $count } annotations removed
-    }
-pdfjs-editor-undo-bar-undo-button =
-    .title = Undo
-pdfjs-editor-undo-bar-undo-button-label = Undo
-pdfjs-editor-undo-bar-close-button =
-    .title = Close
-pdfjs-editor-undo-bar-close-button-label = Close
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = match each word
 pdfjs-find-regexp-checkbox-label = regular expression

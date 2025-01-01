@@ -498,22 +498,29 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Editor alternatiwneho 
 pdfjs-editor-alt-text-settings-show-dialog-description = Pomha, wam wšěm swojim wobrazam alternatiwny tekst přidać.
 pdfjs-editor-alt-text-settings-close-button = Začinić
 
-# Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-editor-undo-bar-message-highlight = Highlight removed
-pdfjs-editor-undo-bar-message-freetext = Text removed
-pdfjs-editor-undo-bar-message-ink = Drawing removed
-pdfjs-editor-undo-bar-message-stamp = Image removed
+## "Annotations removed" bar
+
+pdfjs-editor-undo-bar-message-highlight = Wotstronjene wuzběhnyć
+pdfjs-editor-undo-bar-message-freetext = Tekst je so wotstronił
+pdfjs-editor-undo-bar-message-ink = Rysowanka je so wotstroniła
+pdfjs-editor-undo-bar-message-stamp = Wobraz je so wotstronił
+# Variables:
+#   $count (Number) - the number of removed annotations.
 pdfjs-editor-undo-bar-message-multiple =
     { $count ->
-        [one] { $count } annotation removed
-       *[other] { $count } annotations removed
+        [one] { $count } přispomnjenka je so wotstroniła
+        [two] { $count } přispomnjence stej so wotstroniłoj
+        [few] { $count } přispomnjenki su so wotstronili
+       *[other] { $count } přispomnjenkow je so wotstroniło
     }
 pdfjs-editor-undo-bar-undo-button =
-    .title = Undo
-pdfjs-editor-undo-bar-undo-button-label = Undo
+    .title = Cofnyć
+pdfjs-editor-undo-bar-undo-button-label = Cofnyć
 pdfjs-editor-undo-bar-close-button =
-    .title = Close
-pdfjs-editor-undo-bar-close-button-label = Close
+    .title = Začinić
+pdfjs-editor-undo-bar-close-button-label = Začinić
+
+# Translations for ngx-extended-pdf-viewer additions only available in en-US
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = match each word

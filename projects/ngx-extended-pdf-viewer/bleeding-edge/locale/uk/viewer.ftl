@@ -298,7 +298,7 @@ pdfjs-password-label = Введіть пароль для відкриття ц�
 pdfjs-password-invalid = Неправильний пароль. Спробуйте ще раз.
 pdfjs-password-ok-button = OK
 pdfjs-password-cancel-button = Скасувати
-pdfjs-web-fonts-disabled = Веб-шрифти вимкнено: неможливо використати вбудовані у PDF шрифти.
+pdfjs-web-fonts-disabled = Вебшрифти вимкнено: неможливо використати вбудовані у PDF шрифти.
 
 ## Editing
 
@@ -496,22 +496,28 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Показувати �
 pdfjs-editor-alt-text-settings-show-dialog-description = Допомагає переконатися, що всі ваші зображення мають альтернативний текст.
 pdfjs-editor-alt-text-settings-close-button = Закрити
 
-# Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-editor-undo-bar-message-highlight = Highlight removed
-pdfjs-editor-undo-bar-message-freetext = Text removed
-pdfjs-editor-undo-bar-message-ink = Drawing removed
-pdfjs-editor-undo-bar-message-stamp = Image removed
+## "Annotations removed" bar
+
+pdfjs-editor-undo-bar-message-highlight = Підсвічення вилучено
+pdfjs-editor-undo-bar-message-freetext = Текст вилучено
+pdfjs-editor-undo-bar-message-ink = Малюнок вилучено
+pdfjs-editor-undo-bar-message-stamp = Зображення вилучено
+# Variables:
+#   $count (Number) - the number of removed annotations.
 pdfjs-editor-undo-bar-message-multiple =
     { $count ->
-        [one] { $count } annotation removed
-       *[other] { $count } annotations removed
+        [one] { $count } анотацію вилучено
+        [few] { $count } анотації вилучено
+       *[many] { $count } анотацій вилучено
     }
 pdfjs-editor-undo-bar-undo-button =
-    .title = Undo
-pdfjs-editor-undo-bar-undo-button-label = Undo
+    .title = Повернути
+pdfjs-editor-undo-bar-undo-button-label = Повернути
 pdfjs-editor-undo-bar-close-button =
-    .title = Close
-pdfjs-editor-undo-bar-close-button-label = Close
+    .title = Закрити
+pdfjs-editor-undo-bar-close-button-label = Закрити
+
+# Translations for ngx-extended-pdf-viewer additions only available in en-US
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = match each word

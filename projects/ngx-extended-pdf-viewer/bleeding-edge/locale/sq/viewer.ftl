@@ -485,6 +485,26 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Shfaq menjëherë për
 pdfjs-editor-alt-text-settings-show-dialog-description = Ju ndihmon të siguroheni se krejt figurat tuaja kanë tekst alternativ.
 pdfjs-editor-alt-text-settings-close-button = Mbylle
 
+## "Annotations removed" bar
+
+pdfjs-editor-undo-bar-message-highlight = U hoq theksimi
+pdfjs-editor-undo-bar-message-freetext = U hoq tekst
+pdfjs-editor-undo-bar-message-ink = U hoq vizatim
+pdfjs-editor-undo-bar-message-stamp = U hoq figurë
+# Variables:
+#   $count (Number) - the number of removed annotations.
+pdfjs-editor-undo-bar-message-multiple =
+    { $count ->
+        [one] U hoq { $count } shënim
+       *[other] U hoqën { $count } shënime
+    }
+pdfjs-editor-undo-bar-undo-button =
+    .title = Zhbëje
+pdfjs-editor-undo-bar-undo-button-label = Zhbëje
+pdfjs-editor-undo-bar-close-button =
+    .title = Mbylle
+pdfjs-editor-undo-bar-close-button-label = Mbylle
+
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-spread-none-button =
     .title = Do not join page spreads
@@ -495,21 +515,6 @@ pdfjs-spread-odd-button-label = Odd Spreads
 pdfjs-spread-even-button =
     .title = Join page spreads starting with even-numbered pages
 pdfjs-spread-even-button-label = Even Spreads
-pdfjs-editor-undo-bar-message-highlight = Highlight removed
-pdfjs-editor-undo-bar-message-freetext = Text removed
-pdfjs-editor-undo-bar-message-ink = Drawing removed
-pdfjs-editor-undo-bar-message-stamp = Image removed
-pdfjs-editor-undo-bar-message-multiple =
-    { $count ->
-        [one] { $count } annotation removed
-       *[other] { $count } annotations removed
-    }
-pdfjs-editor-undo-bar-undo-button =
-    .title = Undo
-pdfjs-editor-undo-bar-undo-button-label = Undo
-pdfjs-editor-undo-bar-close-button =
-    .title = Close
-pdfjs-editor-undo-bar-close-button-label = Close
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = match each word

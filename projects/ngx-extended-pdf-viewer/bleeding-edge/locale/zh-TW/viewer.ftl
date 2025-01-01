@@ -486,22 +486,23 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = 新增圖片後立即�
 pdfjs-editor-alt-text-settings-show-dialog-description = 幫助您確保所有圖片都有替代文字。
 pdfjs-editor-alt-text-settings-close-button = 關閉
 
-# Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-editor-undo-bar-message-highlight = Highlight removed
-pdfjs-editor-undo-bar-message-freetext = Text removed
-pdfjs-editor-undo-bar-message-ink = Drawing removed
-pdfjs-editor-undo-bar-message-stamp = Image removed
-pdfjs-editor-undo-bar-message-multiple =
-    { $count ->
-        [one] { $count } annotation removed
-       *[other] { $count } annotations removed
-    }
+## "Annotations removed" bar
+
+pdfjs-editor-undo-bar-message-highlight = 已移除強調
+pdfjs-editor-undo-bar-message-freetext = 已移除文字
+pdfjs-editor-undo-bar-message-ink = 已移除繪圖
+pdfjs-editor-undo-bar-message-stamp = 已移除圖片
+# Variables:
+#   $count (Number) - the number of removed annotations.
+pdfjs-editor-undo-bar-message-multiple = 已移除 { $count } 筆註解
 pdfjs-editor-undo-bar-undo-button =
-    .title = Undo
-pdfjs-editor-undo-bar-undo-button-label = Undo
+    .title = 還原
+pdfjs-editor-undo-bar-undo-button-label = 還原
 pdfjs-editor-undo-bar-close-button =
-    .title = Close
-pdfjs-editor-undo-bar-close-button-label = Close
+    .title = 關閉
+pdfjs-editor-undo-bar-close-button-label = 關閉
+
+# Translations for ngx-extended-pdf-viewer additions only available in en-US
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = match each word

@@ -498,22 +498,29 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Editor alternatiwnego 
 pdfjs-editor-alt-text-settings-show-dialog-description = Pomaga, wam wšym swójim wobrazam alternatiwny tekst pśidaś.
 pdfjs-editor-alt-text-settings-close-button = Zacyniś
 
-# Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-editor-undo-bar-message-highlight = Highlight removed
-pdfjs-editor-undo-bar-message-freetext = Text removed
-pdfjs-editor-undo-bar-message-ink = Drawing removed
-pdfjs-editor-undo-bar-message-stamp = Image removed
+## "Annotations removed" bar
+
+pdfjs-editor-undo-bar-message-highlight = Wótwónoźone wuzwignuś
+pdfjs-editor-undo-bar-message-freetext = Tekst jo se wótwónoźeł
+pdfjs-editor-undo-bar-message-ink = Kreslanka jo se wótwónoźeła
+pdfjs-editor-undo-bar-message-stamp = Wobraz jo se wótwónoźeł
+# Variables:
+#   $count (Number) - the number of removed annotations.
 pdfjs-editor-undo-bar-message-multiple =
     { $count ->
-        [one] { $count } annotation removed
-       *[other] { $count } annotations removed
+        [one] { $count } pśipisk jo se wótwónoźeł
+        [two] { $count } pśipiska stej se wótwónoźełej
+        [few] { $count } pśipiski su se wótwónoźeli
+       *[other] { $count } pśipiskow jo se wótwónoźeło
     }
 pdfjs-editor-undo-bar-undo-button =
-    .title = Undo
-pdfjs-editor-undo-bar-undo-button-label = Undo
+    .title = Anulěrowaś
+pdfjs-editor-undo-bar-undo-button-label = Anulěrowaś
 pdfjs-editor-undo-bar-close-button =
-    .title = Close
-pdfjs-editor-undo-bar-close-button-label = Close
+    .title = Zacyniś
+pdfjs-editor-undo-bar-close-button-label = Zacyniś
+
+# Translations for ngx-extended-pdf-viewer additions only available in en-US
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = match each word

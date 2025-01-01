@@ -326,7 +326,7 @@ pdfjs-editor-remove-freetext-button =
 pdfjs-editor-remove-stamp-button =
     .title = הסרת תמונה
 pdfjs-editor-remove-highlight-button =
-    .title = הסרת הדגשה
+    .title = הסרת סימון
 
 ##
 
@@ -342,7 +342,7 @@ pdfjs-editor-stamp-add-image-button-label = הוספת תמונה
 # This refers to the thickness of the line used for free highlighting (not bound to text)
 pdfjs-editor-free-highlight-thickness-input = עובי
 pdfjs-editor-free-highlight-thickness-title =
-    .title = שינוי עובי בעת הדגשת פריטים שאינם טקסט
+    .title = שינוי עובי בעת סימון פריטים שאינם טקסט
 # .default-content is used as a placeholder in an empty text editor.
 pdfjs-free-text2 =
     .aria-label = עורך טקסט
@@ -408,7 +408,7 @@ pdfjs-editor-resizer-middle-left =
 ## Color picker
 
 # This means "Color used to highlight text"
-pdfjs-editor-highlight-colorpicker-label = צבע הדגשה
+pdfjs-editor-highlight-colorpicker-label = צבע סימון
 pdfjs-editor-colorpicker-button =
     .title = שינוי צבע
 pdfjs-editor-colorpicker-dropdown =
@@ -494,22 +494,27 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = הצגת עורך טק
 pdfjs-editor-alt-text-settings-show-dialog-description = מסייע לך לוודא שלכל התמונות שלך יש טקסט חלופי.
 pdfjs-editor-alt-text-settings-close-button = סגירה
 
-# Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-editor-undo-bar-message-highlight = Highlight removed
-pdfjs-editor-undo-bar-message-freetext = Text removed
-pdfjs-editor-undo-bar-message-ink = Drawing removed
-pdfjs-editor-undo-bar-message-stamp = Image removed
+## "Annotations removed" bar
+
+pdfjs-editor-undo-bar-message-highlight = הסימון הוסר
+pdfjs-editor-undo-bar-message-freetext = הטקסט הוסר
+pdfjs-editor-undo-bar-message-ink = הציור הוסר
+pdfjs-editor-undo-bar-message-stamp = התמונה הוסרה
+# Variables:
+#   $count (Number) - the number of removed annotations.
 pdfjs-editor-undo-bar-message-multiple =
     { $count ->
-        [one] { $count } annotation removed
-       *[other] { $count } annotations removed
+        [one] הערה אחת הוסרה
+       *[other] { $count } הערות הוסרו
     }
 pdfjs-editor-undo-bar-undo-button =
-    .title = Undo
-pdfjs-editor-undo-bar-undo-button-label = Undo
+    .title = ביטול פעולה
+pdfjs-editor-undo-bar-undo-button-label = ביטול פעלה
 pdfjs-editor-undo-bar-close-button =
-    .title = Close
-pdfjs-editor-undo-bar-close-button-label = Close
+    .title = סגירה
+pdfjs-editor-undo-bar-close-button-label = סגירה
+
+# Translations for ngx-extended-pdf-viewer additions only available in en-US
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = match each word

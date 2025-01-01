@@ -41,7 +41,7 @@ Version 20.0.2 is a security fix. It solves CVE-2024-4367. I strongly recommend 
 
 ## Version 22: improved search UI and update to pdf.js 4.7
 
-Version 22 updates to pdf.js 4.7.
+Version 22 updates to my fork of pdf.js 4.7. You can also opt in for my fork of pdf.js 4.10.38. I'm calling it the "bleeding edge" branch, so you know that while you're invited to test it, it may be broken. Luckily, it isn't, most of the time.
 
 _Breaking changes_:
 

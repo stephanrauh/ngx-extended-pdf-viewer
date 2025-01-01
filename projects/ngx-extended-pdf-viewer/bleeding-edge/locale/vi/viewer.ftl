@@ -486,22 +486,23 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Hiển thị ngay trì
 pdfjs-editor-alt-text-settings-show-dialog-description = Giúp bạn đảm bảo tất cả hình ảnh của bạn đều có văn bản thay thế.
 pdfjs-editor-alt-text-settings-close-button = Đóng
 
-# Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-editor-undo-bar-message-highlight = Highlight removed
-pdfjs-editor-undo-bar-message-freetext = Text removed
-pdfjs-editor-undo-bar-message-ink = Drawing removed
-pdfjs-editor-undo-bar-message-stamp = Image removed
-pdfjs-editor-undo-bar-message-multiple =
-    { $count ->
-        [one] { $count } annotation removed
-       *[other] { $count } annotations removed
-    }
+## "Annotations removed" bar
+
+pdfjs-editor-undo-bar-message-highlight = Đã xóa đánh dấu
+pdfjs-editor-undo-bar-message-freetext = Đã xóa văn bản
+pdfjs-editor-undo-bar-message-ink = Đã xóa bản vẽ
+pdfjs-editor-undo-bar-message-stamp = Đã xóa hình ảnh
+# Variables:
+#   $count (Number) - the number of removed annotations.
+pdfjs-editor-undo-bar-message-multiple = { $count } chú thích đã bị xóa
 pdfjs-editor-undo-bar-undo-button =
-    .title = Undo
-pdfjs-editor-undo-bar-undo-button-label = Undo
+    .title = Hoàn tác
+pdfjs-editor-undo-bar-undo-button-label = Hoàn tác
 pdfjs-editor-undo-bar-close-button =
-    .title = Close
-pdfjs-editor-undo-bar-close-button-label = Close
+    .title = Đóng
+pdfjs-editor-undo-bar-close-button-label = Đóng
+
+# Translations for ngx-extended-pdf-viewer additions only available in en-US
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = match each word

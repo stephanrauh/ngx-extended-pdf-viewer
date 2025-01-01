@@ -349,7 +349,6 @@ pdfjs-ink-canvas =
 
 ## Alt-text dialog
 
-# Alternative text (alt text) helps when people can't see the image.
 pdfjs-editor-alt-text-button-label = 代替テキスト
 pdfjs-editor-alt-text-edit-button =
     .aria-label = 代替テキストを編集
@@ -487,22 +486,23 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = 画像の追加時に�
 pdfjs-editor-alt-text-settings-show-dialog-description = すべての画像に代替テキストを追加する助けになります。
 pdfjs-editor-alt-text-settings-close-button = 閉じる
 
-# Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-editor-undo-bar-message-highlight = Highlight removed
-pdfjs-editor-undo-bar-message-freetext = Text removed
-pdfjs-editor-undo-bar-message-ink = Drawing removed
-pdfjs-editor-undo-bar-message-stamp = Image removed
-pdfjs-editor-undo-bar-message-multiple =
-    { $count ->
-        [one] { $count } annotation removed
-       *[other] { $count } annotations removed
-    }
+## "Annotations removed" bar
+
+pdfjs-editor-undo-bar-message-highlight = 強調表示が削除されました
+pdfjs-editor-undo-bar-message-freetext = フリーテキスト注釈が削除されました
+pdfjs-editor-undo-bar-message-ink = インク注釈が削除されました
+pdfjs-editor-undo-bar-message-stamp = 画像が削除されました
+# Variables:
+#   $count (Number) - the number of removed annotations.
+pdfjs-editor-undo-bar-message-multiple = { $count } 個の注釈が削除されました
 pdfjs-editor-undo-bar-undo-button =
-    .title = Undo
-pdfjs-editor-undo-bar-undo-button-label = Undo
+    .title = 元に戻す
+pdfjs-editor-undo-bar-undo-button-label = 元に戻す
 pdfjs-editor-undo-bar-close-button =
-    .title = Close
-pdfjs-editor-undo-bar-close-button-label = Close
+    .title = 閉じる
+pdfjs-editor-undo-bar-close-button-label = 閉じる
+
+# Translations for ngx-extended-pdf-viewer additions only available in en-US
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = match each word
