@@ -9,6 +9,6 @@ export class SetDefaultViewerHeightDirective implements OnInit {
   private pdfViewer = inject(NgxExtendedPdfViewerComponent);
 
   ngOnInit() {
-    this.pdfViewer.height = '500px';
+    this.pdfViewer.height = '98vh';
   }
 }
