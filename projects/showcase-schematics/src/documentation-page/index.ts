@@ -23,6 +23,8 @@ export function documentationPage(_options: DocumentationPageSchema): Rule {
         markdownContentComponentPath: getRelativePath(targetDir, 'projects/showcase/src/app/shared/components/markdown-content.component'),
         splitViewComponentPath: getRelativePath(targetDir, 'projects/showcase/src/app/shared/components/split-view.component'),
         minifiedDirectivePath: getRelativePath(targetDir, 'projects/showcase/src/app/shared/directives/set-minified-library-usage.directive'),
+        defaultViewerHeightDirectivePath: getRelativePath(targetDir, 'projects/showcase/src/app/shared/directives/set-default-viewer-height.directive'),
+        defaultZoomLevelDirectivePath: getRelativePath(targetDir, 'projects/showcase/src/app/shared/directives/set-default-zoom-level.directive'),
       }),
       move(normalize(targetDir)),
     ]);
