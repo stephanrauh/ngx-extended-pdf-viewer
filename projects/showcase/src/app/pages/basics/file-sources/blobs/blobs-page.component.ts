@@ -8,6 +8,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { BlobService } from './blob.service';
 import { ButtonDirective } from '../../../../core/directives/button.directive';
+import { SetDefaultViewerHeightDirective } from '../../../../shared/directives/set-default-viewer-height.directive';
+import { SetDefaultZoomLevelDirective } from '../../../../shared/directives/set-default-zoom-level.directive';
 
 @Component({
   selector: 'pvs-blobs-page',
@@ -21,6 +23,8 @@ import { ButtonDirective } from '../../../../core/directives/button.directive';
     ReactiveFormsModule,
     FormsModule,
     ButtonDirective,
+    SetDefaultViewerHeightDirective,
+    SetDefaultZoomLevelDirective,
   ],
   template: `<pvs-content-page [demoTemplate]="demo">
     <pvs-markdown src="/assets/pages/basics/file-sources/blobs/text.md" />
@@ -42,7 +46,16 @@ import { ButtonDirective } from '../../../../core/directives/button.directive';
             <span>{{ downloaded() }}</span>
           </div>
         }
-        <ngx-extended-pdf-viewer slot="end" [src]="src" zoom="auto" [textLayer]="true" [showPresentationModeButton]="true" pvsSetMinifiedLibraryUsage />
+        <ngx-extended-pdf-viewer
+          slot="end"
+          [src]="src"
+          zoom="auto"
+          [textLayer]="true"
+          [showPresentationModeButton]="true"
+          pvsSetMinifiedLibraryUsage
+          pvsSetDefaultViewerHeight
+          pvsSetDefaultZoomLevel
+        />
       </pvs-split-view>
     </ng-template>
   </pvs-content-page>`,

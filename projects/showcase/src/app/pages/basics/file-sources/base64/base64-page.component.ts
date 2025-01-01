@@ -8,11 +8,22 @@ import { ButtonDirective } from '../../../../core/directives/button.directive';
 import { HttpClient } from '@angular/common/http';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { pdfData2 } from './base64.data';
+import { SetDefaultViewerHeightDirective } from '../../../../shared/directives/set-default-viewer-height.directive';
+import { SetDefaultZoomLevelDirective } from '../../../../shared/directives/set-default-zoom-level.directive';
 
 @Component({
   selector: 'pvs-base64-page',
   standalone: true,
-  imports: [ContentPageComponent, MarkdownContentComponent, NgxExtendedPdfViewerModule, SplitViewComponent, SetMinifiedLibraryUsageDirective, ButtonDirective],
+  imports: [
+    ContentPageComponent,
+    MarkdownContentComponent,
+    NgxExtendedPdfViewerModule,
+    SplitViewComponent,
+    SetMinifiedLibraryUsageDirective,
+    ButtonDirective,
+    SetDefaultViewerHeightDirective,
+    SetDefaultZoomLevelDirective,
+  ],
   template: `<pvs-content-page [demoTemplate]="demo">
     <pvs-markdown src="/assets/pages/basics/file-sources/base64/text.md" />
     <pvs-markdown src="/assets/pages/basics/file-sources/shared.md" />
@@ -27,6 +38,8 @@ import { pdfData2 } from './base64.data';
           [textLayer]="true"
           [showPresentationModeButton]="true"
           pvsSetMinifiedLibraryUsage
+          pvsSetDefaultViewerHeight
+          pvsSetDefaultZoomLevel
         />
       </pvs-split-view>
     </ng-template>
