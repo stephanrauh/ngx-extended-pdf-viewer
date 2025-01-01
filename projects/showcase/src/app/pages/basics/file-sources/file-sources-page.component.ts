@@ -71,7 +71,7 @@ import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-def
   </pvs-content-page>`,
 })
 export class FileSourcesPageComponent {
-  source = '';
+  source = '/assets/pdfs/GraalVM Dictionary Bytecode, Interpreters, C1 Compiler, C2 Compiler, CPUs, and More.pdf';
   dragAndDrop = true;
   bookMode = false;
   url = new URL(`${isBrowser() ? inject(DOCUMENT).baseURI : 'http://localhost:4200'}/assets/pdfs/GraalVM.pdf`);
