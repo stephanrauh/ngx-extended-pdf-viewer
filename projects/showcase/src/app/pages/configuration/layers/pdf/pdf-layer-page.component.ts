@@ -28,7 +28,7 @@ import { ButtonDirective } from '../../../../core/directives/button.directive';
   template: ` <pvs-content-page [demoTemplate]="demo">
     <pvs-markdown src="/assets/pages/configuration/layers/pdf/text.md" />
     <ng-template #demo>
-      <pvs-split-view [stickyEnd]="true">
+      <pvs-split-view>
         <div class="grid gap-4">
           @for (layer of layers(); track layer.layerId) {
             <button

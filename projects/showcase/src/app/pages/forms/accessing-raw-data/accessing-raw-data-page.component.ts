@@ -26,7 +26,7 @@ import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-def
   template: `<pvs-content-page [demoTemplate]="demo">
     <pvs-markdown src="/assets/pages/forms/accessing-raw-data/text.md" />
     <ng-template #demo>
-      <pvs-split-view [stickyEnd]="true">
+      <pvs-split-view>
         <div class="mb-4">
           <button pvsButton (click)="readRawFormDescription()">Read low-level Form Description</button>
         </div>

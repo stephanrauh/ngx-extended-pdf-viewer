@@ -1,20 +1,16 @@
-import { Component, input } from '@angular/core';
-import { NgClass } from '@angular/common';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'pvs-split-view',
   standalone: true,
-  imports: [NgClass],
+  imports: [],
   template: ` <div class="grid lg:grid-cols-[1fr_3fr] gap-8 h-full">
-    <div [ngClass]="{ 'sticky top-content-begin self-start': stickyStart() }">
+    <div>
       <ng-content />
     </div>
-    <div [ngClass]="{ 'sticky top-content-begin self-start': stickyEnd() }">
+    <div>
       <ng-content select="[slot='end']" />
     </div>
   </div>`,
 })
-export class SplitViewComponent {
-  stickyStart = input<boolean>(false);
-  stickyEnd = input<boolean>(false);
-}
+export class SplitViewComponent {}

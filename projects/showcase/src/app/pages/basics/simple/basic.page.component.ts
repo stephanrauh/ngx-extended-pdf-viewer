@@ -28,7 +28,7 @@ import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-def
     </pvs-content-page>
 
     <ng-template #demo>
-      <pvs-split-view [stickyEnd]="true">
+      <pvs-split-view>
         <div class="mb-12">
           <h3>Note</h3>
           <p>

@@ -26,7 +26,7 @@ import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-def
   template: `<pvs-content-page [demoTemplate]="demo">
     <pvs-markdown src="/assets/pages/configuration/javascript/text.md" />
     <ng-template #demo>
-      <pvs-split-view [stickyEnd]="true">
+      <pvs-split-view>
         <p class="mb-1">
           The demo needs JavaScript to put the cursor into the first form field, to validate your input, and to implement the "re-initialize" button.
         </p>

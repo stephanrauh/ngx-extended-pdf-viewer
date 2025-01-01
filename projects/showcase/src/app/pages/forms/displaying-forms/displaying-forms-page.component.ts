@@ -28,7 +28,7 @@ import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-def
   template: `<pvs-content-page [demoTemplate]="demo">
     <pvs-markdown src="/assets/pages/forms/displaying-forms/text.md" />
     <ng-template #demo>
-      <pvs-split-view [stickyEnd]="true">
+      <pvs-split-view>
         <p>
           <code>[(formData)]</code> links the fields in the PDF form with your Angular component. Note that <code>(formDataChange)</code> reports every filled
           input field of the PDF file, including fields you didn't send with <code>[formData]</code>.

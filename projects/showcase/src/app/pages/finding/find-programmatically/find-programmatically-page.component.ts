@@ -26,7 +26,7 @@ import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-def
   template: `<pvs-content-page [demoTemplate]="demo">
     <pvs-markdown src="/assets/pages/finding/find-programmatically/text.md" />
     <ng-template #demo>
-      <pvs-split-view [stickyEnd]="true">
+      <pvs-split-view>
         <ul class="list-disc">
           <li>
             The demo is a bit slow because the example document is huge. This, in turn, allows you to watch the find result events, demonstrating the

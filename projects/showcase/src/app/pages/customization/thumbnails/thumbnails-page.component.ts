@@ -22,7 +22,7 @@ import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-def
   template: `<pvs-content-page [demoTemplate]="demo">
     <pvs-markdown src="/assets/pages/customization/thumbnails/text.md" />
     <ng-template #demo>
-      <pvs-split-view [stickyEnd]="true">
+      <pvs-split-view>
         <ngx-extended-pdf-viewer
           slot="end"
           src="/assets/pdfs/stluciadance.com.pdf"

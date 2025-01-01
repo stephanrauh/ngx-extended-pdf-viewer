@@ -26,7 +26,7 @@ import { SetDefaultZoomLevelDirective } from '../../../../shared/directives/set-
   template: ` <pvs-content-page [demoTemplate]="demo">
     <pvs-markdown src="/assets/pages/configuration/layers/text/text.md" />
     <ng-template #demo>
-      <pvs-split-view [stickyEnd]="true">
+      <pvs-split-view>
         <div class="fieldset-group">
           <fieldset class="fieldset">
             <p>

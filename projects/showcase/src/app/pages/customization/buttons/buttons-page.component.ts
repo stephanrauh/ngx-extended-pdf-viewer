@@ -25,7 +25,7 @@ import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-def
   template: ` <pvs-content-page [demoTemplate]="demo">
     <pvs-markdown src="/assets/pages/customization/buttons/text.md" />
     <ng-template #demo>
-      <pvs-split-view [stickyEnd]="true">
+      <pvs-split-view>
         <div class="input-group">
           <label for="toolbar">showToolbar (hiding the toolbar hides every button)</label>
           <input id="toolbar" type="checkbox" [(ngModel)]="showToolbar" />

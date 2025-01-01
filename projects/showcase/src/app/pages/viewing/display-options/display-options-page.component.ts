@@ -24,7 +24,7 @@ import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-def
   template: `<pvs-content-page [demoTemplate]="demo">
     <pvs-markdown src="/assets/pages/viewing/display-options/text.md" />
     <ng-template #demo>
-      <pvs-split-view [stickyEnd]="true">
+      <pvs-split-view>
         <div>
           Book mode and single-page mode don't look too impressive with the default zoom setting of 30%. However, this zoom setting enables you to see the
           effect of <code>scrollMode="2"</code>

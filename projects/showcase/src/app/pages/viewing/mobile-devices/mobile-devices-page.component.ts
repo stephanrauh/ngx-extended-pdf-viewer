@@ -22,7 +22,7 @@ import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-def
   template: `<pvs-content-page [demoTemplate]="demo">
     <pvs-markdown src="/assets/pages/viewing/mobile-devices/text.md" />
     <ng-template #demo>
-      <pvs-split-view [stickyEnd]="true">
+      <pvs-split-view>
         <p>Smartphone mockup taken from <a href="https://github.com/marvelapp/devices.css">https://github.com/marvelapp/devices.css</a></p>
 
         <div class="marvel-device iphone8" slot="end">

@@ -14,7 +14,7 @@ import { ButtonDirective } from '../../../core/directives/button.directive';
   template: `<pvs-content-page [demoTemplate]="demo">
     <pvs-markdown src="/assets/pages/configuration/modal-dialogs/text.md" />
     <ng-template #demo>
-      <pvs-split-view [stickyEnd]="true">
+      <pvs-split-view>
         <button pvsButton (click)="openDialog()">open modal</button>
       </pvs-split-view>
     </ng-template>

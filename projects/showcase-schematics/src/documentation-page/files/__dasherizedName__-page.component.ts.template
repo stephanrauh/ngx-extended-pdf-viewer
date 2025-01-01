@@ -12,7 +12,7 @@ import { MarkdownContentComponent } from '<%= markdownContentComponentPath %>';
   template: `<pvs-content-page<% if (includeDemo) { %> [demoTemplate]="demo"<% } %>>
     <pvs-markdown src="/assets/pages/<%= path %>/<%= dasherizedName %>/text.md" /><% if (includeDemo) { %>
     <ng-template #demo>
-      <pvs-split-view [stickyEnd]="true">
+      <pvs-split-view>
         <span>Add Demo Controls here</span>
 
         <ngx-extended-pdf-viewer

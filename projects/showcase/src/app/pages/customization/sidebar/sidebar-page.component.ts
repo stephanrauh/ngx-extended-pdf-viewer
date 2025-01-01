@@ -25,7 +25,7 @@ import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-def
   template: `<pvs-content-page [demoTemplate]="demo">
     <pvs-markdown src="/assets/pages/customization/sidebar/text.md" />
     <ng-template #demo>
-      <pvs-split-view [stickyEnd]="true">
+      <pvs-split-view>
         <div class="input-group">
           <input id="standard-layout" type="radio" name="layout" [(ngModel)]="layout" value="default" />
           <label for="standard-layout">Standard layout</label>
