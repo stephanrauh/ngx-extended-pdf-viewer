@@ -1,11 +1,13 @@
 import { AttributesPageComponent } from './attributes/attributes-page.component';
 import { EventsPageComponent } from './events/events-page.component';
-import { FileSourcesPageComponent } from './file-sources/file-sources-page.component';
+import { UrlSourcePageComponent } from './file-sources/url/url-source-page.component';
 import { Route } from '@angular/router';
 import { RouteData, RouteGroupData } from '../../shared/types/route-data.types';
 import { BasicPageComponent } from './simple/basic.page.component';
 import { GettingStartedPageComponent } from './getting-started/getting-started-page.component';
 import { DefaultOptionsPageComponent } from './default-options/default-options-page.component';
+import { BLOBsPageComponent } from './file-sources/blobs/blobs-page.component';
+import { Base64PageComponent } from './file-sources/base64/base64-page.component';
 
 export const basicsRoutes: Route[] = [
   {
@@ -31,10 +33,33 @@ export const basicsRoutes: Route[] = [
       },
       {
         path: 'file-sources',
-        component: FileSourcesPageComponent,
-        data: {
-          pageTitle: 'File Sources',
+        data: <RouteGroupData>{
+          name: 'File Sources',
+          key: 'file-sources',
         },
+        children: [
+          {
+            path: 'url',
+            component: UrlSourcePageComponent,
+            data: {
+              pageTitle: 'URL',
+            },
+          },
+          {
+            path: 'blobs',
+            component: BLOBsPageComponent,
+            data: {
+              pageTitle: 'BLOBs',
+            },
+          },
+          {
+            path: 'base64',
+            component: Base64PageComponent,
+            data: {
+              pageTitle: 'Base64',
+            },
+          },
+        ],
       },
       {
         path: 'default-options',
