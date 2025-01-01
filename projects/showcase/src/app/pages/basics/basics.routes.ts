@@ -8,6 +8,7 @@ import { GettingStartedPageComponent } from './getting-started/getting-started-p
 import { DefaultOptionsPageComponent } from './default-options/default-options-page.component';
 import { BLOBsPageComponent } from './file-sources/blobs/blobs-page.component';
 import { Base64PageComponent } from './file-sources/base64/base64-page.component';
+import { preloadGuard } from './file-sources/blobs/preload.guard';
 
 export const basicsRoutes: Route[] = [
   {
@@ -51,6 +52,7 @@ export const basicsRoutes: Route[] = [
             data: {
               pageTitle: 'BLOBs',
             },
+            canActivate: [preloadGuard],
           },
           {
             path: 'base64',
