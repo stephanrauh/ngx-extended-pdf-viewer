@@ -1,8 +1,10 @@
-import { AfterViewInit, Component, contentChildren, QueryList, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, contentChildren, inject, input, QueryList, ViewChildren } from '@angular/core';
 import { TabPanelComponent } from './tab-panel.component';
 import { TabService } from './services/tab.service';
 import { TabComponent } from './tab.component';
 import { FocusKeyManager } from '@angular/cdk/a11y';
+import { TAB_GROUP } from './tab-group.token';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'pvs-tabs',
@@ -22,10 +24,19 @@ import { FocusKeyManager } from '@angular/cdk/a11y';
   host: {
     class: 'min-w-full block pt-2 pb-4',
   },
-  providers: [TabService],
+  providers: [
+    TabService,
+    {
+      provide: TAB_GROUP,
+      useFactory: (component: TabsComponent) => component.group(),
+      deps: [TabsComponent],
+    },
+  ],
 })
 export class TabsComponent implements AfterViewInit {
+  private route = inject(ActivatedRoute);
   @ViewChildren(TabComponent) tabs: QueryList<TabComponent>;
+  group = input.required<string>();
 
   keyManager: FocusKeyManager<TabComponent>;
   tabPanels = contentChildren<TabPanelComponent>(TabPanelComponent);
@@ -45,6 +56,18 @@ export class TabsComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     this.keyManager = new FocusKeyManager<TabComponent>(this.tabs).withWrap().withHomeAndEnd().withHorizontalOrientation('ltr');
-    this.keyManager.setFirstItemActive();
+
+    const queryParams = { ...this.route.snapshot.queryParams };
+    const activeTabKey: string | undefined = queryParams[`tab_${this.group()}`];
+    if (!activeTabKey) {
+      this.keyManager.setFirstItemActive();
+      return;
+    }
+    const tabIdx = this.getTabIndexByKey(activeTabKey);
+    this.keyManager.setActiveItem(tabIdx);
+  }
+
+  getTabIndexByKey(key: string): number {
+    return this.tabs.toArray().findIndex((tab) => tab.tabKey() === key);
   }
 }
