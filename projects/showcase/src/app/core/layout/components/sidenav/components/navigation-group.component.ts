@@ -11,7 +11,12 @@ import { FormsModule } from '@angular/forms';
     <input type="checkbox" [id]="groupKey()" [(ngModel)]="isOpen" class="peer hidden" />
     <div class="grid grid-cols-[1fr_minmax(0,auto)] font-semibold">
       <label [for]="groupKey()" class="cursor-pointer">{{ group().displayName }}</label>
-      <span [attr.data-open]="isOpen" role="presentation" class="after:content-['+'] data-[open='true']:after:content-['-']"></span>
+      <label
+        [for]="groupKey()"
+        [attr.data-open]="isOpen"
+        role="presentation"
+        class="after:content-['+'] data-[open='true']:after:content-['-'] cursor-pointer"
+      ></label>
     </div>
     <ul class="ps-2 hidden peer-checked:block">
       @for (child of group().children; track child) {
