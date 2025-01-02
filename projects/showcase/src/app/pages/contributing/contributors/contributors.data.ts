@@ -136,4 +136,29 @@ export const contributors: Contributor[] = [
     avatar_url: 'https://avatars.githubusercontent.com/u/148212719?v=4',
     html_url: 'https://github.com/josefranconv',
   },
+  {
+    login: 'pjasiejko',
+    avatar_url: 'https://avatars.githubusercontent.com/u/56719845?v=4',
+    html_url: 'https://github.com/pjasiejko',
+  },
+  {
+    login: 'rafparedis',
+    avatar_url: 'https://avatars.githubusercontent.com/u/25713571?v=4',
+    html_url: 'https://github.com/rafparedis',
+  },
+  {
+    login: 'ruslan10',
+    avatar_url: 'https://avatars.githubusercontent.com/u/5207636?v=4',
+    html_url: 'https://github.com/ruslan10',
+  },
+  {
+    login: 'topce',
+    avatar_url: 'https://avatars.githubusercontent.com/u/20918?v=4',
+    html_url: 'https://github.com/topce',
+  },
+  {
+    login: 'jmpspm-git',
+    avatar_url: 'https://avatars.githubusercontent.com/u/74985582?v=4',
+    html_url: 'https://github.com/jmpspm-git',
+  },
 ];
