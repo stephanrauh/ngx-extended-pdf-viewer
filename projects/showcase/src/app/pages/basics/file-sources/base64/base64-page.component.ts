@@ -4,7 +4,7 @@ import { SplitViewComponent } from '../../../../shared/components/split-view.com
 import { SetMinifiedLibraryUsageDirective } from '../../../../shared/directives/set-minified-library-usage.directive';
 import { ContentPageComponent } from '../../../../shared/components/content-page/content-page.component';
 import { MarkdownContentComponent } from '../../../../shared/components/markdown-content.component';
-import { ButtonDirective } from '../../../../core/directives/button.directive';
+import { ButtonDirective } from '../../../../shared/directives/button.directive';
 import { HttpClient } from '@angular/common/http';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { pdfData2 } from './base64.data';

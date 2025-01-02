@@ -8,7 +8,7 @@ import { ContentPageComponent } from '../../../../shared/components/content-page
 import { MarkdownContentComponent } from '../../../../shared/components/markdown-content.component';
 import { SplitViewComponent } from '../../../../shared/components/split-view.component';
 import { NgClass } from '@angular/common';
-import { ButtonDirective } from '../../../../core/directives/button.directive';
+import { ButtonDirective } from '../../../../shared/directives/button.directive';
 
 @Component({
   selector: 'pvs-layers-page',

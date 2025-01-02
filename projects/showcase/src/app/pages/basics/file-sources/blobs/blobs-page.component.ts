@@ -7,7 +7,7 @@ import { MarkdownContentComponent } from '../../../../shared/components/markdown
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { BlobService } from './blob.service';
-import { ButtonDirective } from '../../../../core/directives/button.directive';
+import { ButtonDirective } from '../../../../shared/directives/button.directive';
 import { SetDefaultViewerHeightDirective } from '../../../../shared/directives/set-default-viewer-height.directive';
 import { SetDefaultZoomLevelDirective } from '../../../../shared/directives/set-default-zoom-level.directive';
 

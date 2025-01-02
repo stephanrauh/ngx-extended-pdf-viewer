@@ -5,7 +5,7 @@ import { ContentPageComponent } from '../../../shared/components/content-page/co
 import { MarkdownContentComponent } from '../../../shared/components/markdown-content.component';
 import { Dialog } from '@angular/cdk/dialog';
 import { PdfViewerDialogComponent } from './pdf-viewer-dialog/pdf-viewer-dialog.component';
-import { ButtonDirective } from '../../../core/directives/button.directive';
+import { ButtonDirective } from '../../../shared/directives/button.directive';
 
 @Component({
   selector: 'pvs-modal-dialogs-page',

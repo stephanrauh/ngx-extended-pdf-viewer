@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ContentPageComponent } from '../../../shared/components/content-page/content-page.component';
 import { MarkdownContentComponent } from '../../../shared/components/markdown-content.component';
 import { SplitViewComponent } from '../../../shared/components/split-view.component';
-import { ButtonDirective } from '../../../core/directives/button.directive';
+import { ButtonDirective } from '../../../shared/directives/button.directive';
 import { SetDefaultViewerHeightDirective } from '../../../shared/directives/set-default-viewer-height.directive';
 import { SetMinifiedLibraryUsageDirective } from '../../../shared/directives/set-minified-library-usage.directive';
 import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-default-zoom-level.directive';

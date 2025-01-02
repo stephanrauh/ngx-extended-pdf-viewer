@@ -2,7 +2,7 @@ import { Component, inject, OnInit, viewChild } from '@angular/core';
 import { NgxExtendedPdfViewerComponent, NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { SetMinifiedLibraryUsageDirective } from '../../../../shared/directives/set-minified-library-usage.directive';
 import { DialogRef } from '@angular/cdk/dialog';
-import { ButtonDirective } from '../../../../core/directives/button.directive';
+import { ButtonDirective } from '../../../../shared/directives/button.directive';
 import { SetDefaultViewerHeightDirective } from '../../../../shared/directives/set-default-viewer-height.directive';
 import { SetDefaultZoomLevelDirective } from '../../../../shared/directives/set-default-zoom-level.directive';
 

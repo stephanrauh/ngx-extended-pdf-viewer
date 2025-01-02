@@ -4,7 +4,7 @@ import { SplitViewComponent } from '../../../shared/components/split-view.compon
 import { SetMinifiedLibraryUsageDirective } from '../../../shared/directives/set-minified-library-usage.directive';
 import { ContentPageComponent } from '../../../shared/components/content-page/content-page.component';
 import { MarkdownContentComponent } from '../../../shared/components/markdown-content.component';
-import { ButtonDirective } from '../../../core/directives/button.directive';
+import { ButtonDirective } from '../../../shared/directives/button.directive';
 import { JsonPipe } from '@angular/common';
 import { SetDefaultViewerHeightDirective } from '../../../shared/directives/set-default-viewer-height.directive';
 import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-default-zoom-level.directive';
@@ -22,6 +22,7 @@ import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-def
     JsonPipe,
     SetDefaultViewerHeightDirective,
     SetDefaultZoomLevelDirective,
+    ButtonDirective,
   ],
   template: `<pvs-content-page [demoTemplate]="demo">
     <pvs-markdown src="/assets/pages/forms/accessing-raw-data/text.md" />
