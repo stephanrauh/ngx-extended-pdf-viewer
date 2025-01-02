@@ -29,7 +29,7 @@ import { FormsModule } from '@angular/forms';
     </ul>
   `,
   host: {
-    class: '[&:not(:last-child)]:pb-4',
+    class: '[&:not(:last-child)]:pb-4 [&:not(#mainList>*)]:pb-0 [&:not(#mainList>*)]:ps-2 [&:not(#mainList>*)]:pt-1',
     '(keydown.enter)': 'onEnter($event)',
   },
 })
