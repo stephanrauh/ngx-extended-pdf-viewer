@@ -1,3 +1,3 @@
-## New Page
+# Contributors
 
-Insert new page content here
+**Thanks to all the contributors!**
