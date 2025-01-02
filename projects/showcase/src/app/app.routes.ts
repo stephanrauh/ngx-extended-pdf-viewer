@@ -10,6 +10,7 @@ import { formsRoutes } from './pages/forms/forms.routes';
 import { printingRoutes } from './pages/printing/printing.routes';
 import { findingRoutes } from './pages/finding/finding.routes';
 import { developerExperienceRoutes } from './pages/developer-experience/developer-experience.routes';
+import { contributingRoutes } from './pages/contributing/contributing.routes';
 
 export const routes: Routes = [
   {
@@ -19,6 +20,7 @@ export const routes: Routes = [
   },
   ...aboutRoutes,
   ...basicsRoutes,
+  ...contributingRoutes,
   ...configurationRoutes,
   ...viewingRoutes,
   ...findingRoutes,
