@@ -8,7 +8,7 @@ import { IS_SEARCH_DIALOG_OPEN } from './shared/helper/is-search-dialog-open.tok
 import { SearchComponent } from './core/search/search.component';
 import { filter } from 'rxjs/operators';
 import { map } from 'rxjs';
-import { isBrowser } from './shared/helper/utilities';
+import { IS_BROWSER } from './shared/helper/is-browser-token';
 
 @Component({
   selector: 'pvs-root',
@@ -20,6 +20,7 @@ import { isBrowser } from './shared/helper/utilities';
 export class AppComponent implements OnInit {
   private document = inject(DOCUMENT);
   private window = inject(WINDOW);
+  private isBrowser = inject(IS_BROWSER);
 
   private sidebarService = inject(SidebarService);
   private router = inject(Router);
@@ -53,7 +54,7 @@ export class AppComponent implements OnInit {
   }
 
   focusFirstHeading(): void {
-    if (!isBrowser()) {
+    if (!this.isBrowser) {
       return;
     }
 

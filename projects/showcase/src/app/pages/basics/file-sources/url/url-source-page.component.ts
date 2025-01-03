@@ -6,7 +6,7 @@ import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SetMinifiedLibraryUsageDirective } from '../../../../shared/directives/set-minified-library-usage.directive';
 import { SplitViewComponent } from '../../../../shared/components/split-view.component';
-import { isBrowser } from '../../../../shared/helper/utilities';
+import { IS_BROWSER } from '../../../../shared/helper/is-browser-token';
 import { SetDefaultViewerHeightDirective } from '../../../../shared/directives/set-default-viewer-height.directive';
 import { SetDefaultZoomLevelDirective } from '../../../../shared/directives/set-default-zoom-level.directive';
 
@@ -72,8 +72,10 @@ import { SetDefaultZoomLevelDirective } from '../../../../shared/directives/set-
   </pvs-content-page>`,
 })
 export class UrlSourcePageComponent {
+  private isBrowser = inject(IS_BROWSER);
+
   source = '/assets/pdfs/GraalVM Dictionary Bytecode, Interpreters, C1 Compiler, C2 Compiler, CPUs, and More.pdf';
   dragAndDrop = true;
   bookMode = false;
-  url = new URL(`${isBrowser() ? inject(DOCUMENT).baseURI : 'http://localhost:4200'}/assets/pdfs/GraalVM.pdf`);
+  url = new URL(`${this.isBrowser ? inject(DOCUMENT).baseURI : 'http://localhost:4200'}/assets/pdfs/GraalVM.pdf`);
 }

@@ -2,10 +2,12 @@ import { inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, tap } from 'rxjs/operators';
 import { BlobService } from './blob.service';
-import { isBrowser } from '../../../../shared/helper/utilities';
+import { IS_BROWSER } from '../../../../shared/helper/is-browser-token';
 
 export const preloadGuard = () => {
-  if (!isBrowser()) {
+  const isBrowser = inject(IS_BROWSER);
+
+  if (!isBrowser) {
     return false;
   }
   const http = inject(HttpClient);
