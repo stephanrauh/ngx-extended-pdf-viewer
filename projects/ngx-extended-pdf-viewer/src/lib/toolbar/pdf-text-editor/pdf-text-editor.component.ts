@@ -16,7 +16,7 @@ export class PdfTextEditorComponent {
   public isSelected = false;
   private PDFViewerApplication: IPDFViewerApplication | undefined;
 
-  constructor(private notificationService: PDFNotificationService, private cdr: ChangeDetectorRef) {
+  constructor(notificationService: PDFNotificationService, private cdr: ChangeDetectorRef) {
     effect(() => {
       this.PDFViewerApplication = notificationService.onPDFJSInitSignal();
       if (this.PDFViewerApplication) {
@@ -34,7 +34,15 @@ export class PdfTextEditorComponent {
     });
   }
 
-  public onClick(): void {
-    document.getElementById('editorFreeText')?.click();
+  public onClick(event: PointerEvent): void {
+    let button = event.target;
+    while (button && button instanceof Element && !(button instanceof HTMLButtonElement)) {
+      button = button.parentElement;
+    }
+    if (button instanceof HTMLButtonElement) {
+      if (button.id !== 'primaryEditorFreeText') {
+        document.getElementById('primaryEditorFreeText')?.click();
+      }
+    }
   }
 }

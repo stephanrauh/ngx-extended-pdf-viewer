@@ -35,7 +35,15 @@ export class PdfDrawEditorComponent {
     });
   }
 
-  public onClick(): void {
-    document.getElementById('editorInk')?.click();
+  public onClick(event: PointerEvent): void {
+    let button = event.target;
+    while (button && button instanceof Element && !(button instanceof HTMLButtonElement)) {
+      button = button.parentElement;
+    }
+    if (button instanceof HTMLButtonElement) {
+      if (button.id !== 'primaryEditorInk') {
+        document.getElementById('primaryEditorInk')?.click();
+      }
+    }
   }
 }

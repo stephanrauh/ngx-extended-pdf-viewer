@@ -622,3 +622,4 @@
 - 22.1.0 #2699 replace `ngZone.run()` by `queueMicrotask()` or `setTimeout()` to allow for Zone-less Angular applications; #2700 fix drag-and-drop
 - 22.2.0-alpha.0 #2684 allow nested components in `<pdf-shy-button>` (the feature already works, I've made it an alpha version in order to be able to test and document it thoroughly); the secondary toolbar now shows the button icons again
 - 22.2.0-alpha.1 updated the bleeding edge branch to pdf.js 4.10.38
+- 22.2.0-alpha.2 #2698 added an additional null-check to the drag-and-drop events; #2704 fixed the editor menu items in the secondary menu

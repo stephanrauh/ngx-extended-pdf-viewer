@@ -40,16 +40,15 @@ export class PdfStampEditorComponent {
     });
   }
 
-  public onClick(): void {
-    const element = document.getElementById('editorStamp');
-
-    const clickEvent = new MouseEvent('click', {
-      view: window,
-      bubbles: true,
-      cancelable: true,
-      detail: 1,
-    });
-
-    element?.dispatchEvent(clickEvent);
+  public onClick(event: PointerEvent): void {
+    let button = event.target;
+    while (button && button instanceof Element && !(button instanceof HTMLButtonElement)) {
+      button = button.parentElement;
+    }
+    if (button instanceof HTMLButtonElement) {
+      if (button.id !== 'primaryEditorStamp') {
+        document.getElementById('primaryEditorStamp')?.click();
+      }
+    }
   }
 }

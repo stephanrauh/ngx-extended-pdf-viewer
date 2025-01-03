@@ -35,7 +35,15 @@ export class PdfHighlightEditorComponent {
     });
   }
 
-  public onClick(): void {
-    document.getElementById('editorHighlight')?.click();
+  public onClick(event: PointerEvent): void {
+    let button = event.target;
+    while (button && button instanceof Element && !(button instanceof HTMLButtonElement)) {
+      button = button.parentElement;
+    }
+    if (button instanceof HTMLButtonElement) {
+      if (button.id !== 'primaryEditorHighlight') {
+        document.getElementById('primaryEditorHighlight')?.click();
+      }
+    }
   }
 }
