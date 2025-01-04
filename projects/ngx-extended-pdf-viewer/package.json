@@ -35,7 +35,6 @@
     "@angular/core": ">=17.0.0 <20.0.0"
   },
   "devDependencies": {
-    "copyfiles": "file:../../node_modules/copyfiles",
     "typescript": "file:../../node_modules/typescript"
   }
 }

@@ -10,3 +10,7 @@ if [ "$1" == "--open" ] || [ "$1" == "-o" ]; then
 else
   ng b --configuration production
 fi
+if [ $? -ne 0 ]; then
+  echo "Error 40: Building old showcase failed"
+  exit 40
+fi

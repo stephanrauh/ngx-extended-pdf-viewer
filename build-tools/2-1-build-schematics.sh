@@ -5,6 +5,10 @@ source "$(dirname "$0")/99-cd-to-root.sh"
 # compile the "ng ad ngx-extended-pdf-viewer" schematics
 cd projects/ngx-extended-pdf-viewer
 npm run build
+if [ $? -ne 0 ]; then
+  echo "Error 210: Compiling schematics failed"
+  exit 210
+fi
 # copy the schematics to the dist folder
 mkdir -p ../../dist/ngx-extended-pdf-viewer/schematics
 cp schematics/collection.json ../../dist/ngx-extended-pdf-viewer/schematics/

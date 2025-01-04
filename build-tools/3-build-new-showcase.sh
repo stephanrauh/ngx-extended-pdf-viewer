@@ -9,3 +9,7 @@ if [ "$1" == "--open" ] || [ "$1" == "-o" ]; then
 else
   ng b showcase --configuration production
 fi
+if [ $? -ne 0 ]; then
+  echo "Error 30: Building new showcase failed"
+  exit 30
+fi

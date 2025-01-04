@@ -2,8 +2,43 @@
 # navigate to the root directory, no matter where the script is called
 source "$(dirname "$0")/99-cd-to-root.sh"
 
-echo "to be continued..."
+./build-tools/release/check-commit-state.sh
+if [ $? -ne 0 ]; then
+  echo "Error 51: check-commit-state.sh failed"
+  exit 51
+fi
 
-    "generate-sbom": "cyclonedx-npm --output-file sbom.json --mc-type library",
-    "prerelease": "./check-commit-state.sh && npm run generate-sbom",
-    "release": "npm run unix-package && cd dist/ngx-extended-pdf-viewer && npm publish && cd .. && cd .. && ./createTag.sh && node ./increase-version-number.js",
+npx @cyclonedx/cyclonedx-npm --output-file sbom.json --mc-type library
+if [ $? -ne 0 ]; then
+  echo "Error 52: npm SBOM generation failed"
+  exit 52
+fi
+./build-tools/1-build-base-library.sh
+if [ $? -ne 0 ]; then
+  echo "Error 53: build-base-library.sh failed"
+  exit 53
+fi
+./build-tools/2-build-library.sh
+if [ $? -ne 0 ]; then
+  echo "Error 54: build-library.sh failed"
+  exit 54
+fi
+cd dist/ngx-extended-pdf-viewer
+npm publish
+if [ $? -ne 0 ]; then
+  echo "Error 55: npm publish failed"
+  exit 55
+fi
+cd ..
+cd ..
+./build-tools/release/createTag.sh
+if [ $? -ne 0 ]; then
+  echo "Error 56: createTag.sh failed"
+  exit 56
+fi
+node ./build-tools/release/increase-version-number.js
+if [ $? -ne 0 ]; then
+  echo "Error 57: increase-version-number.js failed"
+  exit 57
+fi
+
