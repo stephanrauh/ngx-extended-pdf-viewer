@@ -51,7 +51,11 @@ module.exports = {
         },
         surface: {
           DEFAULT: 'hsl(0,0%,100%)',
-          dark: 'hsl(0,0%,12%)',
+          hover: 'hsl(220,13%,94%)',
+          dark: {
+            DEFAULT: 'hsl(0,0%,12%)',
+            hover: 'hsl(217,19%,27%)',
+          },
         },
         error: {
           light: 'hsl(0,83%,35%)',

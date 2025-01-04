@@ -15,9 +15,9 @@
     Don't add version switcher to main content.
     For accessibility it is not great skipping to main content and still always having to deal with the version switcher
     -->
-    <div class="flex flex-wrap items-center w-full justify-between">
-      <pvs-theme-switcher />
+    <div class="flex flex-wrap items-center w-full justify-end gap-4">
       <pvs-version-switcher />
+      <pvs-theme-switcher />
     </div>
     <main tabindex="0">
       <ng-content />
