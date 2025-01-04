@@ -1,4 +1,8 @@
-version=$(node ./read-version-number.js);
+#!/bin/sh
+# navigate to the root directory, no matter where the script is called
+source "$(dirname "$0")/../99-cd-to-root.sh"
+
+version=$(node "$(dirname "$0")/read-version-number.js");
 git commit . -m "published $version"
 git push
 git tag -a $version -m "$version"
