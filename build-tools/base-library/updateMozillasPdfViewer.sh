@@ -15,21 +15,13 @@ else
   gulp generic && gulp minified && gulp generic-legacy
 fi
 
-mv build/generic-legacy/build/pdf.mjs build/generic-legacy/build/pdf-es5.mjs
 mv build/generic-legacy/build/pdf.sandbox.mjs build/generic-legacy/build/pdf.sandbox-es5.mjs
 mv build/generic-legacy/build/pdf.worker.mjs build/generic-legacy/build/pdf.worker-es5.mjs
 mv build/generic-legacy/web/viewer.mjs build/generic-legacy/web/viewer-es5.mjs
 
-mv build/minified/build/pdf.min.mjs build/minified/build/pdf.min.mjs
 mv build/minified/build/pdf.sandbox.min.mjs build/minified/build/pdf.sandbox.min.mjs
 mv build/minified/build/pdf.worker.min.mjs build/minified/build/pdf.worker.min.mjs
 mv build/minified/web/viewer.mjs build/minified/web/viewer.min.mjs
-
-# mv build/minified-legacy/build/pdf.min.mjs build/minified-legacy/build/pdf-es5.min.mjs
-# mv build/minified-legacy/build/pdf.sandbox.min.mjs build/minified-legacy/build/pdf.sandbox-es5.min.mjs
-# mv build/minified-legacy/build/pdf.worker.min.mjs build/minified-legacy/build/pdf.worker-es5.min.mjs
-# mv build/minified-legacy/web/viewer.mjs build/minified-legacy/web/viewer-es5.min.mjs
-
 
 cd ../ngx-extended-pdf-viewer
 
@@ -49,22 +41,13 @@ cp -R ../mypdf.js/build/minified/web/viewer.min* ./projects/ngx-extended-pdf-vie
 cp -R ../mypdf.js/build/generic-legacy/build/pdf* ./projects/ngx-extended-pdf-viewer/$FOLDER/
 cp -R ../mypdf.js/build/generic-legacy/web/viewer-* ./projects/ngx-extended-pdf-viewer/$FOLDER/
 
-# cp -R ../mypdf.js/build/minified-legacy/build/pdf* ./projects/ngx-extended-pdf-viewer/$FOLDER/
-# cp -R ../mypdf.js/build/minified-legacy/web/viewer-* ./projects/ngx-extended-pdf-viewer/$FOLDER/
-
-rm -R ./projects/ngx-extended-pdf-viewer/$FOLDER/*.d.mts
 rm -R ./projects/ngx-extended-pdf-viewer/$FOLDER/*.html
 rm -R ./projects/ngx-extended-pdf-viewer/$FOLDER/*.css
 
-cd addBaseLanguages
-# node index.js $FOLDER
-node add-additional-translations.js $FOLDER
-cd ..
+node build-tools/addBaseLanguages/add-additional-translations.js $FOLDER
 
-cd add-version-number-to-file-name
-node run-outside-ngzone.js
-node add-version-number.js $1
-cd ..
+node build-tools/add-version-number-to-file-name/run-outside-ngzone.js
+node build-tools/add-version-number-to-file-name/add-version-number.js $1
 
 if [ $BRANCH != "bleeding-edge" ]
 then
@@ -75,4 +58,4 @@ then
   cp -r ../mypdf.js/build/types/ ./projects/ngx-extended-pdf-viewer/types
 fi
 
-node ./update-version-number-in-viewer.js
+node ./build-tools/base-library/update-version-number-in-viewer.js

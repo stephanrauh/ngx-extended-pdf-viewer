@@ -1,9 +1,9 @@
 const fs = require('fs');
-const originalOptions = fs.readFileSync('../projects/ngx-extended-pdf-viewer/src/lib/options/pdf-default-options.ts').toString();
+const originalOptions = fs.readFileSync('./projects/ngx-extended-pdf-viewer/src/lib/options/pdf-default-options.ts').toString();
 let options = originalOptions;
 
 function fixVersionNumber(folder = 'assets', suffix = '.mjs') {
-  const f = '../projects/ngx-extended-pdf-viewer/' + folder + '/';
+  const f = './projects/ngx-extended-pdf-viewer/' + folder + '/';
   if (fs.existsSync(f + 'viewer' + suffix)) {
     const viewer = fs.readFileSync(f + 'viewer' + suffix).toString();
 
@@ -55,5 +55,5 @@ function fixVersionNumber(folder = 'assets', suffix = '.mjs') {
 fixVersionNumber('assets', '.mjs');
 fixVersionNumber('bleeding-edge', '.mjs');
 if (options != originalOptions) {
-  fs.writeFileSync('../projects/ngx-extended-pdf-viewer/src/lib/options/pdf-default-options.ts', options);
+  fs.writeFileSync('./projects/ngx-extended-pdf-viewer/src/lib/options/pdf-default-options.ts', options);
 }

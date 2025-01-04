@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 function addRunOutsideZone(folder = 'assets', file) {
-  const f = `../projects/ngx-extended-pdf-viewer/${folder}/${file}`;
+  const f = `./projects/ngx-extended-pdf-viewer/${folder}/${file}`;
   if (fs.existsSync(f)) {
     const content = fs.readFileSync(f).toString().split('//# sourceMappingURL');
     // #1427 allow for AMD modules
@@ -12,7 +12,7 @@ function addRunOutsideZone(folder = 'assets', file) {
       .replace(`exports["pdfjs-dist/build/pdf"]=`, `globalThis["pdfjs-dist/build/pdf"]=exports["pdfjs-dist/build/pdf"]=`)
       .replace(
         `define("pdfjs-dist/build/pdf", [], factory);`,
-        `{\n		define("pdfjs-dist/build/pdf", [], factory);\n	  	root["pdfjs-dist/build/pdf"] = root.pdfjsLib = factory();\n		}`
+        `{\n		define("pdfjs-dist/build/pdf", [], factory);\n	  	root["pdfjs-dist/build/pdf"] = root.pdfjsLib = factory();\n		}`,
       )
       .replace(`define("pdfjs-dist/build/pdf",[],e)`, `(globalThis["pdfjs-dist/build/pdf"]=globalThis.pdfjsLib=e()||define("pdfjs-dist/build/pdf",[],e))`);
     // end of #1427

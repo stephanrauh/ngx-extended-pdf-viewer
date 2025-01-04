@@ -11,8 +11,7 @@
     "save": "dependencies"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.schematics.json",
-    "postbuild": "copyfiles schematics/collection.json schematics/*/schema.json schematics/*/files/**/**/* ../../dist/ngx-extended-pdf-viewer/"
+    "build": "tsc -p tsconfig.schematics.json"
   },
   "author": {
     "name": "Stephan Rauh",

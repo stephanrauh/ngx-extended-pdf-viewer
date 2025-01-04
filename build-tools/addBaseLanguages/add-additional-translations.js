@@ -1,7 +1,7 @@
 const folder = process.argv[2];
 const language = process.argv[3];
 const fs = require('fs');
-const file = fs.readFileSync('../projects/ngx-extended-pdf-viewer/' + folder + '/locale/locale.json');
+const file = fs.readFileSync('./projects/ngx-extended-pdf-viewer/' + folder + '/locale/locale.json');
 const content = JSON.parse(file.toString());
 
 processOneLanguage('en-us', 'en');
@@ -17,32 +17,32 @@ if (language) {
 }
 
 function processOneLanguage(lang, shortcode) {
-  const originalFilename = '../projects/ngx-extended-pdf-viewer/' + folder + '/locale/' + content[lang];
+  const originalFilename = './projects/ngx-extended-pdf-viewer/' + folder + '/locale/' + content[lang];
   let originalLines = fs.readFileSync(originalFilename).toString();
   let targetLang = originalLines;
 
-  let additionalFilename = '../projects/ngx-extended-pdf-viewer/assets/additional-locale/' + shortcode + '.ftl';
+  let additionalFilename = './projects/ngx-extended-pdf-viewer/assets/additional-locale/' + shortcode + '.ftl';
   if (fs.existsSync(additionalFilename)) {
     const header = '\n# Additional translations for ngx-extended-pdf-viewer (' + shortcode + ')';
     targetLang = addTranslationsFromAFile(additionalFilename, targetLang, header);
   }
 
-  const englishFilename = '../projects/ngx-extended-pdf-viewer/' + folder + '/locale/en-US/viewer.ftl';
+  const englishFilename = './projects/ngx-extended-pdf-viewer/' + folder + '/locale/en-US/viewer.ftl';
   let header = '\n# Translations for ngx-extended-pdf-viewer additions only available in en-US';
   targetLang = addTranslationsFromAFile(englishFilename, targetLang, header);
 
-  let additionalEnglishFilename = '../projects/ngx-extended-pdf-viewer/assets/additional-locale/en.ftl';
+  let additionalEnglishFilename = './projects/ngx-extended-pdf-viewer/assets/additional-locale/en.ftl';
 
   header = '\n# Additional translations for ngx-extended-pdf-viewer - without ' + lang + ' translation';
   targetLang = addTranslationsFromAFile(additionalEnglishFilename, targetLang, header);
 
   if (folder === 'assets') {
-    const futureTranslations = '../projects/ngx-extended-pdf-viewer/bleeding-edge/locale/' + content[lang];
+    const futureTranslations = './projects/ngx-extended-pdf-viewer/bleeding-edge/locale/' + content[lang];
     header = '\n# Additional translations for ngx-extended-pdf-viewer from the ' + lang + ' bleeding edge branch';
     targetLang = addTranslationsFromAFile(futureTranslations, targetLang, header);
   }
   if (folder === 'assets') {
-    const futureEnglishTranslations = '../projects/ngx-extended-pdf-viewer/bleeding-edge/locale/' + content[lang];
+    const futureEnglishTranslations = './projects/ngx-extended-pdf-viewer/bleeding-edge/locale/' + content[lang];
     header = '\n# Additional translations for ngx-extended-pdf-viewer from the English bleeding edge branch';
     targetLang = addTranslationsFromAFile(futureEnglishTranslations, targetLang, header);
   }
