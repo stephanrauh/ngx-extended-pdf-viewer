@@ -457,3 +457,12 @@ pdfjs-editor-undo-bar-undo-button-label = Undo
 pdfjs-editor-undo-bar-close-button =
     .title = Close
 pdfjs-editor-undo-bar-close-button-label = Close
+# Additional translations for ngx-extended-pdf-viewer from the sr bleeding edge branch
+pdfjs-editor-resizer-label-top-left = Горњи леви угао — промени величину
+pdfjs-editor-resizer-label-top-middle = Средина горе — промени величину
+pdfjs-editor-resizer-label-top-right = Горњи десни угао — промени величину
+pdfjs-editor-resizer-label-middle-right = Средина десно — промени величину
+pdfjs-editor-resizer-label-bottom-right = Доњи десни угао — промени величину
+pdfjs-editor-resizer-label-bottom-middle = Средина доле — промени величину
+pdfjs-editor-resizer-label-bottom-left = Доњи леви угао — промени величину
+pdfjs-editor-resizer-label-middle-left = Средина лево — промени величину
