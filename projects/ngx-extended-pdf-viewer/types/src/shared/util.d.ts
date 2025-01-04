@@ -152,7 +152,7 @@ export namespace CMapCompressionType {
  * @param {Object} [options]
  * @returns Either a valid {URL}, or `null` otherwise.
  */
-export function createValidAbsoluteUrl(url: URL | string, baseUrl?: string | URL | undefined, options?: Object | undefined): URL | null;
+export function createValidAbsoluteUrl(url: URL | string, baseUrl?: URL | string, options?: Object): URL | null;
 export namespace DocumentActionEventType {
     let WC: string;
     let WS: string;
@@ -349,7 +349,7 @@ export namespace RenderingIntentFlag {
 export function setVerbosityLevel(level: any): void;
 export function shadow(obj: any, prop: any, value: any, nonSerializable?: boolean): any;
 export function string32(value: any): string;
-export function stringToBytes(str: any): Uint8Array;
+export function stringToBytes(str: any): Uint8Array<any>;
 export function stringToPDFString(str: any): string;
 export function stringToUTF8String(str: any): string;
 export namespace TextRenderingMode {

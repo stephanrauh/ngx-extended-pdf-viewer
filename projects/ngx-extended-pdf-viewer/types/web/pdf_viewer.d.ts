@@ -400,11 +400,11 @@ export class PDFViewer {
      * @param {Promise<OptionalContentConfig>} promise - A promise that is
      *   resolved with an {@link OptionalContentConfig} instance.
      */
-    set optionalContentConfigPromise(promise: Promise<import("../src/display/optional_content_config").OptionalContentConfig>);
+    set optionalContentConfigPromise(promise: Promise<OptionalContentConfig>);
     /**
      * @type {Promise<OptionalContentConfig | null>}
      */
-    get optionalContentConfigPromise(): Promise<import("../src/display/optional_content_config").OptionalContentConfig | null>;
+    get optionalContentConfigPromise(): Promise<OptionalContentConfig | null>;
     /**
      * @param {number} mode - The direction in which the document pages should be
      *   laid out within the scrolling container.
@@ -462,7 +462,7 @@ export class PDFViewer {
          *  transformation origin.
          */
         origin?: any[] | undefined;
-    } | undefined): void;
+    }): void;
     /**
      * Increase the current zoom level one, or more, times.
      * @param {ChangeScaleOptions} [options]
@@ -476,7 +476,7 @@ export class PDFViewer {
          *  transformation origin.
          */
         origin?: any[] | undefined;
-    } | undefined): void;
+    }): void;
     /**
      * Decrease the current zoom level one, or more, times.
      * @param {ChangeScaleOptions} [options]
@@ -490,7 +490,7 @@ export class PDFViewer {
          *  transformation origin.
          */
         origin?: any[] | undefined;
-    } | undefined): void;
+    }): void;
     get containerTopLeft(): number[];
     /**
      * @typedef {Object} AnnotationEditorModeOptions

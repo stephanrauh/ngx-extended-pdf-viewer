@@ -24,13 +24,13 @@ export class EventBus {
      * @param {function} listener
      * @param {Object} [options]
      */
-    on(eventName: string, listener: Function, options?: Object | undefined): void;
+    on(eventName: string, listener: Function, options?: Object): void;
     /**
      * @param {string} eventName
      * @param {function} listener
      * @param {Object} [options]
      */
-    off(eventName: string, listener: Function, options?: Object | undefined): void;
+    off(eventName: string, listener: Function, options?: Object): void;
     /**
      * @param {string} eventName
      * @param {Object} data

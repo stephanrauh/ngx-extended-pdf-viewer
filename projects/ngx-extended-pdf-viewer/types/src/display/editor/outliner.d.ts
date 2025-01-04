@@ -65,6 +65,6 @@ declare class Outline {
      */
     get box(): Object | null;
     serialize(_bbox: any, _rotation: any): void;
-    get free(): any;
+    get free(): boolean;
 }
 export {};

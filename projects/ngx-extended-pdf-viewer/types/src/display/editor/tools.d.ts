@@ -134,7 +134,7 @@ export class AnnotationEditorUIManager {
      * @param {boolean} [isFromKeyboard] - true if the mode change is due to a
      *   keyboard action.
      */
-    updateMode(mode: number, editId?: string | null, isFromKeyboard?: boolean | undefined): Promise<void>;
+    updateMode(mode: number, editId?: string | null, isFromKeyboard?: boolean): Promise<void>;
     addNewEditorFromKeyboard(): void;
     /**
      * Update the toolbar if it's required to reflect the tool currently used.
