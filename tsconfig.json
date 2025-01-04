@@ -14,6 +14,11 @@
     "typeRoots": ["node_modules/@types"],
     "lib": ["es2022", "dom"],
     "types": ["jest", "node"],
+    "paths": {
+      "ngx-extended-pdf-viewer": [
+        "./dist/ngx-extended-pdf-viewer"
+      ]
+    }
   },
   "angularCompilerOptions": {
     "strictTemplates": true

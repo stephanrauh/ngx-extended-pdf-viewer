@@ -1,0 +1,32 @@
+<nav
+  id="sidenav"
+  role="navigation"
+  class="max-lg:p-4 h-full max-lg:grid max-lg:grid-rows-[minmax(0,_auto)_1fr] max-lg:bg-surface dark:max-lg:bg-surface-dark dark:max-lg:text-on-surface-dark"
+  aria-label="Main Menu"
+  [cdkTrapFocus]="sidenavIsOpen()"
+>
+  <button [attr.aria-expanded]="sidenavIsOpen()" aria-controls="sidenav" pvsCloseSidebar class="place-self-end lg:hidden">
+    <span class="material-symbols-outlined"> close </span>
+  </button>
+  <ul id="mainList" class="pr-4 pt-2 overflow-y-scroll styled-scrollbar h-[98%]" tabindex="0">
+    <li class="font-semibold mb-2">
+      <button
+        (click)="toggleSearchDialog($event)"
+        tabindex="0"
+        type="button"
+        class="w-full flex items-center text-sm leading-6 text-primary-light dark:text-primary-dark rounded-md ring-1 ring-inset ring-slate-900/10 shadow-sm py-1.5 pl-2 pr-3 hover:ring-slate-300 dark:bg-slate-800 dark:highlight-white/5 dark:hover:bg-slate-700"
+      >
+        <span class="material-symbols-outlined mr-2">search</span>
+        <span>Search...</span>
+        <span class="ml-auto pl-3 flex-none text-xs font-semibold">{{ searchLabel }}</span>
+      </button>
+    </li>
+    @for (entry of navigationEntries; track entry) {
+      @if (isNavigationGroup(entry)) {
+        <li pvs-navigation-group [group]="entry" tabindex="0"></li>
+      } @else if (isNavigationTarget(entry)) {
+        <li pvs-navigation-target [target]="entry" [isTopLevelTarget]="true"></li>
+      }
+    }
+  </ul>
+</nav>

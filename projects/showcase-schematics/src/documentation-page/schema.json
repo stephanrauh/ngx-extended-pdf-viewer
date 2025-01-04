@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "documentationPage",
+  "title": "Documentation Page Schema",
+  "type": "object",
+  "properties": {
+    "pageTitle": {
+      "description": "The title of the page",
+      "x-prompt": "What is the title of the documentation page? It will be used as a component name and for the tab title too.",
+      "type": "string",
+      "minLength": 1,
+      "default": "New Page"
+    },
+    "path": {
+      "description": "Page location relative to the pages folder",
+      "type": "string",
+      "format": "path",
+      "x-prompt": "Where should the service be created, relative to the pages folder?",
+      "default": "basics"
+    },
+    "includeDemo": {
+      "description": "Include a demo tab",
+      "type": "boolean",
+      "x-prompt": "Do you want to include a demo?",
+      "default": "yes"
+    }
+  },
+  "required": [
+    "pageTitle",
+    "path"
+  ]
+}

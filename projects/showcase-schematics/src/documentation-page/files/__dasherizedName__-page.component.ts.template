@@ -1,0 +1,34 @@
+import { Component } from '@angular/core';<% if (includeDemo) { %>
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
+import { SplitViewComponent } from '<%= splitViewComponentPath %>';
+import { SetMinifiedLibraryUsageDirective } from '<%= minifiedDirectivePath %>';
+import { SetDefaultViewerHeightDirective } from '<%= defaultViewerHeightDirectivePath %>';
+import { SetDefaultZoomLevelDirective } from '<%= defaultZoomLevelDirectivePath %>';<% } %>
+import { ContentPageComponent } from '<%= contentPageComponentPath %>';
+import { MarkdownContentComponent } from '<%= markdownContentComponentPath %>';
+
+@Component({
+  selector: 'pvs-<%= dasherizedName %>-page',
+  standalone: true,
+  imports: [ContentPageComponent, MarkdownContentComponent, <% if (includeDemo) { %>NgxExtendedPdfViewerModule, SplitViewComponent, SetMinifiedLibraryUsageDirective, SetDefaultViewerHeightDirective, SetDefaultZoomLevelDirective <% } %>],
+  template: `<pvs-content-page<% if (includeDemo) { %> [demoTemplate]="demo"<% } %>>
+    <pvs-markdown src="/assets/pages/<%= path %>/<%= dasherizedName %>/text.md" /><% if (includeDemo) { %>
+    <ng-template #demo>
+      <pvs-split-view>
+        <span>Add Demo Controls here</span>
+
+        <ngx-extended-pdf-viewer
+          slot="end"
+          src=""
+          zoom="auto"
+          [textLayer]="true"
+          [showPresentationModeButton]="true"
+          pvsSetMinifiedLibraryUsage
+          pvsSetDefaultViewerHeight
+          pvsSetDefaultZoomLevel
+        />
+      </pvs-split-view>
+    </ng-template><% } %>
+  </pvs-content-page>`,
+})
+export class <%= componentName %> {}

@@ -1,0 +1,10 @@
+{
+  "$schema": "../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "schematics": {
+    "documentationPage": {
+      "description": "Adds a new documentation page to the showcase and registers it in the menu",
+      "factory": "./documentation-page/index#documentationPage",
+      "schema": "./documentation-page/schema.json"
+    }
+  }
+}

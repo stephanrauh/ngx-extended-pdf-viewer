@@ -1,0 +1,249 @@
+@import '@angular/cdk/overlay-prebuilt.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  font-family: 'Roboto', Calibri, sans-serif;
+  --header-height: 3.75rem;
+}
+
+@layer base {
+  h1 {
+    @apply text-3xl;
+    @apply mt-4;
+    @apply mb-4;
+  }
+
+  h2 {
+    @apply text-2xl;
+    @apply mt-2;
+    @apply mb-2;
+  }
+
+  h3 {
+    @apply font-medium;
+    @apply text-lg;
+    @apply mt-2;
+    @apply mb-2;
+  }
+
+  markdown {
+    @apply inline-grid;
+  }
+
+  markdown, markdown > * {
+    @apply min-w-0;
+  }
+
+  markdown > p,
+  markdown > ul,
+  markdown > pre[class*="language-"] {
+    &:not(:last-child):not(:has(+ h2)){
+      @apply mb-4;
+    }
+
+    &:has(+ h2) {
+      @apply mb-12;
+    }
+
+    &:not(:last-child):has(+ h3) {
+      @apply mb-6;
+    }
+  }
+
+  markdown ul {
+    @apply list-disc;
+    @apply ps-10;
+  }
+
+  table, th, td {
+    @apply border-collapse;
+  }
+
+  table {
+    @apply w-full;
+  }
+
+  th {
+    &:not(.angular2-smart-th){
+      @apply bg-primary-light;
+      @apply text-on-primary-light;
+    }
+    @apply p-1;
+  }
+
+  td {
+    @apply p-2;
+  }
+
+  tr:nth-child(even){
+    @apply bg-surface;
+    @apply text-on-surface;
+    @apply dark:bg-surface-dark;
+    @apply dark:text-on-surface-dark;
+
+  }
+
+  tr:hover {
+    @apply bg-primary-hover;
+    @apply text-on-primary-hover;
+    @apply dark:bg-primary-hover-dark;
+    @apply dark:text-on-primary-hover-dark;
+  }
+
+  :not(nav li) > a:not(.github-corner):not(.no-underline){
+    @apply text-primary-light;
+    @apply dark:text-primary-dark;
+    @apply underline;
+
+    &:hover,
+    &:focus,
+    &:focus-visible,
+    &:active {
+      @apply text-primary-light;
+      @apply dark:text-primary-dark;
+    }
+
+    &:visited {
+      @apply text-secondary-light;
+      @apply dark:text-secondary-dark;
+    }
+  }
+
+  code {
+    @apply bg-highlight-grey;
+    @apply dark:bg-highlight-grey-dark;
+    @apply text-on-highlight-grey;
+    @apply dark:text-on-highlight-grey-dark;
+    @apply rounded-sm;
+    padding-inline: 3px;
+    padding-block: 1px;
+  }
+
+
+}
+
+@layer utilities {
+  .blocked-scroll {
+    --scrollbar-width: 0;
+    overflow: hidden;
+    padding-right: var(--scrollbar-width);
+  }
+
+  .frosted {
+    --frosted-bg: hsla(0, 0%, 100%, 0.7);
+    background-color: var(--frosted-bg);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+  }
+
+  .frosted-dark {
+    --frosted-bg: hsla(0, 0%, 10%, 0.7);
+  }
+}
+
+@layer components {
+  .fieldset-group {
+    @apply grid;
+    @apply gap-4;
+  }
+
+  .fieldset {
+    @apply grid;
+    @apply gap-2;
+    @apply pt-2;
+    @apply pb-2;
+    @apply accent-secondary-light;
+    @apply dark:accent-secondary-dark;
+  }
+
+  .fieldset legend {
+    @apply text-xl;
+  }
+
+  .input-group {
+    @apply grid;
+    @apply gap-2;
+    @apply grid-cols-[1fr_2fr];
+    @apply items-center;
+    @apply accent-secondary-light;
+    @apply dark:accent-secondary-dark;
+  }
+
+  .input-group input,
+  input-filter input {
+    @apply p-2;
+    @apply bg-surface;
+    @apply text-on-surface;
+    @apply dark:bg-surface-dark;
+    @apply dark:text-on-surface-dark;
+  }
+
+  .radio-group,
+  .checkbox-group {
+    @apply grid;
+    @apply gap-2;
+    @apply grid-cols-[minmax(0,auto)_1fr] gap-2;
+    @apply accent-secondary-light;
+    @apply dark:accent-secondary-dark;
+  }
+
+  .input-group select,
+  .input-wrapper select {
+    @apply min-w-0;
+    @apply p-2;
+    @apply bg-surface;
+    @apply text-on-surface;
+    @apply dark:bg-surface-dark;
+    @apply dark:text-on-surface-dark;
+  }
+
+  .box {
+    border: 2px solid red;
+    border-radius: 8px;
+  }
+
+  .show-text-layer,
+  .show-text-layer > * {
+    color: hsla(240, 100%, 38%, 0.5) !important;
+  }
+
+  .long-word {
+    background-color: hsla(240, 100%, 50%, 0.55);
+    display: inline;
+  }
+
+  .styled-scrollbar {
+
+    &::-webkit-scrollbar-track {
+      @apply bg-transparent;
+      @apply cursor-pointer;
+    }
+
+    &::-webkit-scrollbar {
+      @apply w-1;
+      @apply h-1;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      @apply bg-primary-variant-light/80;
+      @apply dark:bg-primary-variant-dark/80;
+      @apply rounded-full;
+      transition: background-color 0.3s ease;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      @apply bg-primary-variant-hover/60;
+      @apply dark:bg-primary-variant-hover-dark/60;
+    }
+  }
+}
+
+.material-symbols-outlined {
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 0,
+    'GRAD' 0,
+    'opsz' 24;
+}
