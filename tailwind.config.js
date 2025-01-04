@@ -24,7 +24,7 @@ module.exports = {
             light: 'hsl(183,100%,18%)',
             dark: 'hsl(183,100%,36%)',
             hover: {
-              DEFAULT: 'hsla(183,100%,18%, 30%)',
+              DEFAULT: 'hsla(183,100%,18%, 80%)',
               dark: 'hsla(183,100%,18%, 90%)',
             },
           },

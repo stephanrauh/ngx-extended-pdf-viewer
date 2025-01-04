@@ -213,6 +213,31 @@
     background-color: hsla(240, 100%, 50%, 0.55);
     display: inline;
   }
+
+  .styled-scrollbar {
+
+    &::-webkit-scrollbar-track {
+      @apply bg-transparent;
+      @apply cursor-pointer;
+    }
+
+    &::-webkit-scrollbar {
+      @apply w-1;
+      @apply h-1;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      @apply bg-primary-variant-light/80;
+      @apply dark:bg-primary-variant-dark/80;
+      @apply rounded-full;
+      transition: background-color 0.3s ease;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      @apply bg-primary-variant-hover/60;
+      @apply dark:bg-primary-variant-hover-dark/60;
+    }
+  }
 }
 
 .material-symbols-outlined {
