@@ -13,7 +13,7 @@
       <button (click)="toggleSearchDialog($event)" tabindex="0" type="button" class="hidden ml-0.5 w-full lg:flex items-center text-sm leading-6 text-primary-light dark:text-primary-dark rounded-md ring-1 ring-slate-900/10 shadow-sm py-1.5 pl-2 pr-3 hover:ring-slate-300 dark:bg-slate-800 dark:highlight-white/5 dark:hover:bg-slate-700">
         <span class="material-symbols-outlined mr-2">search</span>
         <span>Search...</span>
-        <span class="ml-auto pl-3 flex-none text-xs font-semibold">{{shortCutText()}}</span>
+        <span class="ml-auto pl-3 flex-none text-xs font-semibold">{{searchLabel}}</span>
       </button>
     </li>
     @for (entry of navigationEntries; track entry) {

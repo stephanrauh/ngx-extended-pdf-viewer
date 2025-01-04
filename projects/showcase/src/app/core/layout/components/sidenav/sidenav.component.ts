@@ -1,5 +1,5 @@
 import { CdkTrapFocus } from '@angular/cdk/a11y';
-import { Component, computed, inject, WritableSignal } from '@angular/core';
+import { Component, inject, WritableSignal } from '@angular/core';
 import { IS_APPLE } from '../../../../shared/helper/is-apple.token';
 import { IS_SEARCH_DIALOG_OPEN } from '../../../../shared/helper/is-search-dialog-open.token';
 import { SidebarService } from '../../../../shared/services/sidebar.service';
@@ -15,7 +15,7 @@ import { isNavigationGroup, isNavigationTarget } from './navigation-config.types
   imports: [CloseSidebarDirective, NavigationGroupComponent, NavigationTargetComponent, CdkTrapFocus],
   templateUrl: './sidenav.component.html',
   host: {
-    '(keydown)': 'onKeydown($event)',
+    '(document:keydown)': 'onKeydown($event)',
   },
 })
 export class SidenavComponent {
@@ -23,7 +23,7 @@ export class SidenavComponent {
   isSearchDialogOpen: WritableSignal<boolean> = inject(IS_SEARCH_DIALOG_OPEN);
 
   isApple = inject(IS_APPLE);
-  shortCutText = computed(() => (this.isApple() ? '⌘K' : 'Ctrl+K'));
+  searchLabel = this.isApple ? '⌘K' : 'Ctrl+K';
 
   sidenavIsOpen = this.sidebarService.isOpen;
   navigationEntries = navigationConfig;
@@ -40,6 +40,7 @@ export class SidenavComponent {
   onKeydown(event: KeyboardEvent): void {
     if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
       event.stopPropagation();
+      event.preventDefault();
       this.toggleSearchDialog();
     }
   }
