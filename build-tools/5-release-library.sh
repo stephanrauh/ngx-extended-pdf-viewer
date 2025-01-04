@@ -42,3 +42,26 @@ if [ $? -ne 0 ]; then
   exit 57
 fi
 
+git commit . -m "bumped the version number after publishing $version"
+
+cd ../mypdf.js
+git checkout 4.7
+
+node ../ngx-extended-pdf-viewer/build-tools/base-library/extract-versions.js
+
+if [ $? -ne 0 ]; then
+  echo "Error 50: extract-versions.js failed"
+  exit 58
+fi
+
+git commit . -m "bumped the version number after publishing $version"
+
+git checkout bleeding-edge
+
+node ../ngx-extended-pdf-viewer/build-tools/base-library/extract-versions.js
+
+if [ $? -ne 0 ]; then
+  echo "Error 59: extract-versions.js failed"
+  exit 59
+fi
+git commit . -m "bumped the version number after publishing $version"

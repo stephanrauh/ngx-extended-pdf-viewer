@@ -624,3 +624,4 @@
 - 22.2.0-alpha.1 updated the bleeding edge branch to pdf.js 4.10.38
 - 22.2.0-alpha.2 #2698 added an additional null-check to the drag-and-drop events; #2704 fixed the editor menu items in the secondary menu
 - 22.2.0-alpha.3 merged a showcase relaunch into the main project (Kudos to Alex and Julian!)
+- 22.2.0-alpha.4 test deployment without changes of the library; excluded the SBOM from git because of the file size
