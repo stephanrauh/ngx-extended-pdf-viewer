@@ -6,6 +6,6 @@ export const IS_APPLE = new InjectionToken<boolean>('isApple', {
   factory: () => {
     const isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
     const isApple = typeof window !== 'undefined' && (/iPad|iPhone/.test(window.navigator.userAgent) || window.navigator.userAgent.includes('Mac'));
-    return (isBrowser && isApple) ?? '';
+    return isBrowser && isApple;
   },
 });
