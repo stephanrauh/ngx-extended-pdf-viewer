@@ -3,9 +3,9 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.4",
   "version": 1,
-  "serialNumber": "urn:uuid:c0ae3a0d-ec01-49f1-8856-1280335da698",
+  "serialNumber": "urn:uuid:ff270c91-7e2e-4456-a93f-27c8b7dbe7a9",
   "metadata": {
-    "timestamp": "2025-01-04T21:15:24.152Z",
+    "timestamp": "2025-01-04T21:18:59.452Z",
     "tools": [
       {
         "name": "npm",
@@ -66,6 +66,10 @@
         {
           "name": "cdx:npm:package:path",
           "value": ""
+        },
+        {
+          "name": "cdx:npm:package:private",
+          "value": "true"
         }
       ]
     }
@@ -55035,7 +55039,7 @@
       "type": "library",
       "name": "string-width",
       "version": "4.2.3",
-      "bom-ref": "BomRef.3nipi422umg.68s264k9v5g",
+      "bom-ref": "BomRef.cplfkr1hun8.i920s9oe72o",
       "author": "Sindre Sorhus",
       "description": "Get the visual width of a string - the number of columns required to display it",
       "licenses": [
@@ -55143,7 +55147,7 @@
       "type": "library",
       "name": "strip-ansi",
       "version": "6.0.1",
-      "bom-ref": "BomRef.phh9fhrueh.bvmmqgrf9k8",
+      "bom-ref": "BomRef.dg1jec2rea8.tofcs85j208",
       "author": "Sindre Sorhus",
       "description": "Strip ANSI escape codes from a string",
       "licenses": [
@@ -70274,9 +70278,9 @@
     {
       "ref": "@isaacs/cliui@8.0.2",
       "dependsOn": [
-        "BomRef.3nipi422umg.68s264k9v5g",
+        "BomRef.cplfkr1hun8.i920s9oe72o",
         "@isaacs/cliui@8.0.2|string-width@5.1.2",
-        "BomRef.phh9fhrueh.bvmmqgrf9k8",
+        "BomRef.dg1jec2rea8.tofcs85j208",
         "@isaacs/cliui@8.0.2|strip-ansi@7.1.0",
         "wrap-ansi@7.0.0",
         "@isaacs/cliui@8.0.2|wrap-ansi@8.1.0"
@@ -72678,7 +72682,7 @@
       "ref": "signal-exit@4.1.0"
     },
     {
-      "ref": "BomRef.3nipi422umg.68s264k9v5g",
+      "ref": "BomRef.cplfkr1hun8.i920s9oe72o",
       "dependsOn": [
         "emoji-regex@8.0.0",
         "is-fullwidth-code-point@3.0.0",
@@ -72689,7 +72693,7 @@
       "ref": "eastasianwidth@0.2.0"
     },
     {
-      "ref": "BomRef.phh9fhrueh.bvmmqgrf9k8",
+      "ref": "BomRef.dg1jec2rea8.tofcs85j208",
       "dependsOn": [
         "ansi-regex@5.0.1"
       ]
