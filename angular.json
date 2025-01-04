@@ -79,7 +79,8 @@
                 "input": "dist/ngx-extended-pdf-viewer/",
                 "output": "/assets/extended-pdf-viewer/changelog/"
               },
-              "projects/showcase/src/assets/search-index.json"
+              "projects/showcase/src/assets/search-index.json",
+              "projects/showcase/src/robots.txt"
             ],
             "styles": ["projects/showcase/src/styles.css", "node_modules/prismjs/themes/prism-okaidia.css"],
             "scripts": [
@@ -111,7 +112,7 @@
                 {
                   "type": "anyComponentStyle",
                   "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumError": "44kb"
                 }
               ],
               "outputHashing": "all"

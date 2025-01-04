@@ -1,14 +1,25 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Showcase</title>
-    <base href="/" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/x-icon" href="favicon.ico" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-  </head>
-  <body class="max-lg:has-[.sidebar-open]:blocked-scroll bg-background dark:bg-background-dark dark:text-on-background-dark">
-    <pvs-root></pvs-root>
-  </body>
+
+<head>
+  <meta charset="utf-8" />
+  <title>Showcase</title>
+  <script>
+    if (window.location.hostname === "localhost") {
+      document.write("<base href=\"/\" />");
+    } else {
+      document.write("<base href=\"/relaunch/\" />");
+    }
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+</head>
+
+<body
+  class="max-lg:has-[.sidebar-open]:blocked-scroll bg-background dark:bg-background-dark dark:text-on-background-dark">
+  <pvs-root></pvs-root>
+</body>
+
 </html>
