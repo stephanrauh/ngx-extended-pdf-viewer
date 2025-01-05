@@ -1,9 +1,9 @@
-import { Component, inject } from '@angular/core';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { BROWSER_STORAGE } from '../../../../shared/helper/browser-storage.token';
-import { pdfDefaultOptions } from 'ngx-extended-pdf-viewer';
 import { DOCUMENT } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { pdfDefaultOptions } from 'ngx-extended-pdf-viewer';
+import { BROWSER_STORAGE } from '../../../../shared/helper/browser-storage.token';
 
 @Component({
   selector: 'pvs-version-switcher',
@@ -14,7 +14,7 @@ import { DOCUMENT } from '@angular/common';
       <label for="version">PDF Viewer Version</label>
       <select id="version" [formControl]="viewer">
         <option [value]="stableVersion">Stable (based on pdf.js 4.7)</option>
-        <option [value]="bleedingEdgeVersion">Bleeding Edge (preview of pdf.js 4.7++)</option>
+        <option [value]="bleedingEdgeVersion">Bleeding Edge (preview of pdf.js 4.10++)</option>
       </select>
     </div>
   `,

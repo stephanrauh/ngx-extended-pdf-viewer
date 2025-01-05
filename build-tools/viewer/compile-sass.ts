@@ -27,10 +27,7 @@ const lightScss = removeComments(fs.readFileSync('./projects/ngx-extended-pdf-vi
 const textLayerBuildScss = removeComments(fs.readFileSync('./projects/ngx-extended-pdf-viewer/src/lib/theme/common/text-layer-builder.scss', 'utf8'));
 const viewerWithImageScss = removeComments(fs.readFileSync('./projects/ngx-extended-pdf-viewer/src/lib/theme/common/viewer-with-images.scss', 'utf8'));
 const componentScss = removeComments(fs.readFileSync('./projects/ngx-extended-pdf-viewer/src/lib/theme/common/ngx-extended-pdf-viewer.component.scss', 'utf8'));
-fs.writeFileSync(
-  './projects/ngx-extended-pdf-viewer/src/lib/theme/pdf-dark-theme/unified.scss',
-  darkScss + textLayerBuildScss + viewerWithImageScss + componentScss,
-);
+
 const dark = sass.compileString(darkScss + textLayerBuildScss + viewerWithImageScss + componentScss, options);
 const light = sass.compileString(lightScss + textLayerBuildScss + viewerWithImageScss + componentScss, options);
 const print = sass.compile('./projects/ngx-extended-pdf-viewer/src/lib/theme/common/print.scss', options);
