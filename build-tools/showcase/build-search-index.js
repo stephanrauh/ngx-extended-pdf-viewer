@@ -39,6 +39,9 @@ function buildSearchIndex() {
     };
   });
 
+  // Sort the searchIndex array by title
+  searchIndex.sort((a, b) => a.title.localeCompare(b.title));
+
   // Create assets directory if it doesn't exist
   const assetsDir = `${srcDirectory}/assets`;
   if (!fs.existsSync(assetsDir)) {
