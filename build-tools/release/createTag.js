@@ -8,7 +8,10 @@ function runCommand(command, errorMessage) {
     return execSync(command, { encoding: 'utf8', stdio: 'pipe' }).trim();
   } catch (error) {
     console.error(errorMessage, error.message);
-    process.exit(1);
+    // ignore errors on git commit because if it reports an error if there's nothing to commit
+    if (!command.includes('git commit')) {
+      process.exit(1);
+    }
   }
 }
 
@@ -21,7 +24,6 @@ const packageJson = JSON.parse(fs.readFileSync(path.join('projects', 'ngx-extend
 const version = packageJson.version;
 
 // Commit all changes
-runCommand('git add .', 'Error adding files:');
 runCommand(`git commit -m "published ${version}"`, 'Error committing changes:');
 runCommand('git push', 'Error pushing changes:');
 
@@ -36,7 +38,6 @@ process.chdir(path.join('..', 'mypdf.js'));
 runCommand('git checkout bleeding-edge', 'Error checking out bleeding-edge branch:');
 
 // Commit changes in mypdf.js
-runCommand('git add .', 'Error adding files in mypdf.js:');
 runCommand(`git commit -m "published ${version}"`, 'Error committing changes in mypdf.js:');
 runCommand('git push', 'Error pushing changes in mypdf.js:');
 
@@ -51,7 +52,6 @@ runCommand('git push origin --tags', 'Error pushing bleeding-edge tag in mypdf.j
 runCommand('git checkout 4.7', 'Error checking out 4.7 branch:');
 
 // Commit changes in 4.7 branch
-runCommand('git add .', 'Error adding files in 4.7 branch:');
 runCommand(`git commit -m "published ${version}"`, 'Error committing changes in 4.7 branch:');
 runCommand('git push', 'Error pushing changes in 4.7 branch:');
 
