@@ -14,7 +14,7 @@ function runCommand(command, errorMessage) {
 
 // Navigate to the root directory
 process.chdir(path.join(__dirname, '..', '..'));
-console.log(process.workingDirectory);
+console.log(path.join(__dirname, '..', '..'));
 
 // Read the version from package.json
 const packageJson = JSON.parse(fs.readFileSync(path.join('projects', 'ngx-extended-pdf-viewer', 'package.json'), 'utf8'));
