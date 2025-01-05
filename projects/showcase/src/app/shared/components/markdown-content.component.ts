@@ -1,22 +1,25 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, computed, inject, input, PLATFORM_ID } from '@angular/core';
 import { MarkdownComponent } from 'ngx-markdown';
-import { BaseHrefService } from '../services/base-href.service';
+import { APP_BASE_HREF, isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'pvs-markdown',
   standalone: true,
   imports: [MarkdownComponent],
-  template: ` <markdown [src]="prefix + src()" [data]="data()"></markdown> `,
+  template: ` <markdown [src]="fullSrc()" [data]="data()"></markdown> `,
 })
 export class MarkdownContentComponent {
+  private baseHref = inject(APP_BASE_HREF);
+  private platformId = inject(PLATFORM_ID);
+
   src = input<string>();
   data = input<string>();
 
-  public prefix = '';
+  fullSrc = computed(() => {
+    if (this.baseHref === '/' || !isPlatformBrowser(this.platformId)) {
+      return this.src();
+    }
 
-  private baseHrefService = inject(BaseHrefService);
-
-  public constructor() {
-    this.prefix = this.baseHrefService.getBaseHref();
-  }
+    return `${this.baseHref}${this.src()?.substring(1)}`;
+  });
 }

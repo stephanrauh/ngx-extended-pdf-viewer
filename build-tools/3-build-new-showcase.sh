@@ -7,7 +7,7 @@ node ./build-tools/showcase/build-search-index.js
 if [ "$1" == "--open" ] || [ "$1" == "-o" ]; then
   ng s showcase --host 0.0.0.0 --open
 else
-  ng b showcase --configuration production
+  ng b showcase --configuration production --base-href /relaunch/
 fi
 if [ $? -ne 0 ]; then
   echo "Error 30: Building new showcase failed"

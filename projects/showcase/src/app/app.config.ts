@@ -7,7 +7,7 @@ import { ShowcaseTitleStrategyService } from './core/services/showcase-title-str
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideMarkdown } from 'ngx-markdown';
 import { WINDOW, windowProvider } from './shared/helper/window.token';
-import { DOCUMENT } from '@angular/common';
+import { APP_BASE_HREF, DOCUMENT, PlatformLocation } from '@angular/common';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -23,6 +23,11 @@ export const appConfig: ApplicationConfig = {
       provide: WINDOW,
       useFactory: (document: Document) => windowProvider(document),
       deps: [DOCUMENT],
+    },
+    {
+      provide: APP_BASE_HREF,
+      useFactory: (platformLocation: PlatformLocation) => platformLocation.getBaseHrefFromDOM(),
+      deps: [PlatformLocation],
     },
   ],
 };
