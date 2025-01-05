@@ -72,11 +72,13 @@ ngx-extended-pdf-viewer {
         --highlight-selected-backdrop-filter: var(--hcm-highlight-selected-filter);
       }
 
-      margin: -1px;
-      padding: 1px;
-      background-color: $highlight;
-      backdrop-filter: var(--highlight-backdrop-filter);
-      border-radius: 4px;
+      & {
+        margin: -1px;
+        padding: 1px;
+        background-color: $highlight;
+        backdrop-filter: var(--highlight-backdrop-filter);
+        border-radius: 4px;
+      }
 
       &.appended {
         position: initial;

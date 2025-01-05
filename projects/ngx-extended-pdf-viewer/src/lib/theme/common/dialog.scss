@@ -106,16 +106,18 @@ ngx-extended-pdf-viewer {
       --button-primary-hover-fg-color: AccentColorText;
     }
 
-    font: message-box;
-    font-size: 13px;
-    font-weight: 400;
-    line-height: 150%;
-    border-radius: 4px;
-    padding: 12px 16px;
-    border: 1px solid var(--dialog-border-color);
-    background: var(--dialog-bg-color);
-    color: var(--text-primary-color);
-    box-shadow: var(--dialog-shadow);
+    & {
+      font: message-box;
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 150%;
+      border-radius: 4px;
+      padding: 12px 16px;
+      border: 1px solid var(--dialog-border-color);
+      background: var(--dialog-bg-color);
+      color: var(--text-primary-color);
+      box-shadow: var(--dialog-shadow);
+    }
 
     .mainContainer {
       *:focus-visible {
@@ -292,7 +294,9 @@ ngx-extended-pdf-viewer {
           --message-bar-icon-color: CanvasText;
         }
 
-        align-self: stretch;
+        & {
+          align-self: stretch;
+        }
 
         >div {
 

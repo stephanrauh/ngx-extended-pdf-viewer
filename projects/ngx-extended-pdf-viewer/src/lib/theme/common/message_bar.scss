@@ -39,20 +39,22 @@ ngx-extended-pdf-viewer {
       --message-bar-close-button-color-hover: HighlightText;
     }
 
-    display: flex;
-    position: relative;
-    padding: 8px 8px 8px 16px;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    user-select: none;
+    & {
+      display: flex;
+      position: relative;
+      padding: 8px 8px 8px 16px;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      user-select: none;
 
-    border-radius: 4px;
+      border-radius: 4px;
 
-    border: 1px solid var(--message-bar-border-color);
-    background: var(--message-bar-bg-color);
-    color: var(--message-bar-fg-color);
+      border: 1px solid var(--message-bar-border-color);
+      background: var(--message-bar-bg-color);
+      color: var(--message-bar-fg-color);
+    }
 
     >div {
       display: flex;
@@ -177,19 +179,21 @@ ngx-extended-pdf-viewer {
       --focus-ring-color: CanvasText;
     }
 
-    position: fixed;
-    top: 50px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10;
+    & {
+      position: fixed;
+      top: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
 
-    padding-block: 8px;
-    padding-inline: 16px 8px;
+      padding-block: 8px;
+      padding-inline: 16px 8px;
 
-    font: menu;
-    font-size: 15px;
+      font: menu;
+      font-size: 15px;
 
-    cursor: default;
+      cursor: default;
+    }
 
     button {
       cursor: pointer;

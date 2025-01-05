@@ -65,10 +65,6 @@ $sidebar-width: 200px;
 $sidebar-transition-duration: 200ms;
 $sidebar-transition-timing-function: ease;
 
-@import "../common/text-layer-builder.scss";
-@import "../common/viewer-with-images.scss";
-@import '../common/ngx-extended-pdf-viewer.component.scss';
-
 .hidden-by-fullscreen {
   display: none !important;
 }
@@ -77,3 +73,8 @@ $sidebar-transition-timing-function: ease;
   --scrollbar-color: auto;
   --scrollbar-bg-color: auto;
 }
+
+// These imports are simulate by the compile-sass.ts script:
+// @ import "../common/text-layer-builder.scss";
+// @ import "../common/viewer-with-images.scss";
+// @ import '../common/ngx-extended-pdf-viewer.component.scss';

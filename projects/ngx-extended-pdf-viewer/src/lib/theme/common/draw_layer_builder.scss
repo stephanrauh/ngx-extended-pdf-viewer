@@ -73,8 +73,10 @@ ngx-extended-pdf-viewer {
           --blend-mode: difference;
         }
 
-        position: absolute;
-        mix-blend-mode: var(--blend-mode);
+        & {
+          position: absolute;
+          mix-blend-mode: var(--blend-mode);
+        }
 
         &:not(.free) {
           fill-rule: evenodd;
