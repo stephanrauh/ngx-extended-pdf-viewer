@@ -1,13 +1,13 @@
-import { Component, inject } from '@angular/core';
-import { ContentPageComponent } from '../../../shared/components/content-page/content-page.component';
-import { NgxExtendedPdfViewerModule, PageRenderEvent } from 'ngx-extended-pdf-viewer';
-import { MarkdownContentComponent } from '../../../shared/components/markdown-content.component';
-import { SetMinifiedLibraryUsageDirective } from '../../../shared/directives/set-minified-library-usage.directive';
-import { SplitViewComponent } from '../../../shared/components/split-view.component';
-import { BROWSER_STORAGE } from '../../../shared/helper/browser-storage.token';
-import { FormsModule } from '@angular/forms';
 import { DecimalPipe } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgxExtendedPdfViewerModule, PageRenderEvent } from 'ngx-extended-pdf-viewer';
+import { ContentPageComponent } from '../../../shared/components/content-page/content-page.component';
+import { MarkdownContentComponent } from '../../../shared/components/markdown-content.component';
+import { SplitViewComponent } from '../../../shared/components/split-view.component';
 import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-default-zoom-level.directive';
+import { SetMinifiedLibraryUsageDirective } from '../../../shared/directives/set-minified-library-usage.directive';
+import { BROWSER_STORAGE } from '../../../shared/helper/browser-storage.token';
 
 @Component({
   selector: 'pvs-basic-page',
@@ -31,10 +31,8 @@ import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-def
       <pvs-split-view>
         <div class="mb-12">
           <h3>Note</h3>
-          <p>
-            There's a bug in the PDF file. See the annotation layer demo to see the bugfix.Copyright hint: the e-book has been published by James Boyle under a
-            CC BY-NC-SA 3.0 on www.thepublicdomain.org
-          </p>
+          <p>There's a bug in the PDF file. See the annotation layer demo to see the bugfix.</p>
+          <p>Copyright hint: the e-book has been published by James Boyle under a CC BY-NC-SA 3.0 on www.thepublicdomain.org</p>
           @if (renderTime) {
             <h3>Render Times</h3>
             <ul>
