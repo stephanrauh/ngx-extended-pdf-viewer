@@ -7,6 +7,11 @@ export const contributors: Contributor[] = [
     html_url: 'https://github.com/stephanrauh',
   },
   {
+    login: 'TheNordicOne',
+    avatar_url: 'https://avatars.githubusercontent.com/u/47663586?v=4',
+    html_url: 'https://github.com/TheNordicOne',
+  },
+  {
     login: 'Julian-B90',
     avatar_url: 'https://avatars.githubusercontent.com/u/4377396?v=4',
     html_url: 'https://github.com/Julian-B90',
