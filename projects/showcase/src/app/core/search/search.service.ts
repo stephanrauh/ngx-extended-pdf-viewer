@@ -1,12 +1,14 @@
+import { APP_BASE_HREF } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable, of, tap } from 'rxjs';
 import { SearchResult } from './search-result.type';
-import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SearchService {
+  private baseHref = inject(APP_BASE_HREF);
   private http = inject(HttpClient);
   private searchIndex = new BehaviorSubject<SearchResult[] | null>(null);
   private searchResults = new BehaviorSubject<SearchResult[]>([]);
@@ -44,6 +46,6 @@ export class SearchService {
     }
 
     // Otherwise load it
-    return this.http.get<SearchResult[]>('/assets/search-index.json').pipe(tap((index) => this.searchIndex.next(index)));
+    return this.http.get<SearchResult[]>(`${this.baseHref}assets/search-index.json`).pipe(tap((index) => this.searchIndex.next(index)));
   }
 }
