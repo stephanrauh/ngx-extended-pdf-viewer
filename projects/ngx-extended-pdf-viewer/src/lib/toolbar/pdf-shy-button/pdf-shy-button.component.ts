@@ -8,6 +8,7 @@ import { PdfShyButtonService } from './pdf-shy-button-service';
 
 @Component({
   selector: 'pdf-shy-button',
+  styleUrls: ['./pdf-shy-button.component.scss'],
   templateUrl: './pdf-shy-button.component.html',
 })
 export class PdfShyButtonComponent implements OnInit, OnChanges, AfterViewInit, AfterContentInit {
@@ -18,7 +19,7 @@ export class PdfShyButtonComponent implements OnInit, OnChanges, AfterViewInit, 
   public secondaryMenuId: string;
 
   @Input()
-  public cssClass: ResponsiveCSSClass;
+  public cssClass: ResponsiveCSSClass = 'invisible';
 
   @Input()
   public eventBusName: string | undefined = undefined;
@@ -156,7 +157,7 @@ export class PdfShyButtonComponent implements OnInit, OnChanges, AfterViewInit, 
     private sanitizer: DomSanitizer,
     private renderer: Renderer2,
     notificationService: PDFNotificationService,
-    private pdfCspPolicyService: PdfCspPolicyService
+    private pdfCspPolicyService: PdfCspPolicyService,
   ) {
     effect(() => {
       this.PDFViewerApplication = notificationService.onPDFJSInitSignal();

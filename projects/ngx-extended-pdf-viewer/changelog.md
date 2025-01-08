@@ -627,3 +627,4 @@
 - 22.2.0-alpha.4 test deployment without changes of the library; excluded the SBOM from git because of the file size
 - 22.2.0-alpha.5 #2707 updated the dompurify library that's used in the showcase to 3.2.x
 - 22.2.0-alpha.6 migrated the SCSS rules to the new syntax; re-implemented the build scripts in Node.js
+- 22.2.0-alpha.7 #2718 hide the toolbar icons during the initialization phase
