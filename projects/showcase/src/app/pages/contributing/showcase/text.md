@@ -9,13 +9,13 @@ To get the repository working, you have to first complete the setup on the [PDF 
 ## Setup local environment
 
 1. Build the ngx-extended-pdf-viewer
-   1. ``npm run build``
+   1. `npm run build:lib`
    2. This is necessary as the showcase depends on it
 2. Build the schematics
-   1. ``npm run build-schematics``
+   1. `npm run build-schematics`
 3. Done.
 
-Now you can serve the showcase by running ``npm run serve:showcase``.
+Now you can serve the showcase by running `npm run run:showcase`.
 
 ## File Structure
 
