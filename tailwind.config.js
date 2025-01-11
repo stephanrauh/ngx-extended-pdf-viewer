@@ -46,7 +46,7 @@ module.exports = {
           },
         },
         background: {
-          DEFAULT: 'hsl(183,40%,98%)',
+          DEFAULT: 'hsl(0,0%,100%)',
           dark: 'hsl(183,5%,10%)',
         },
         surface: {
