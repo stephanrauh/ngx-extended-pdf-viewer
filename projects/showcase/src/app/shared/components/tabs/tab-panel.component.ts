@@ -8,7 +8,7 @@ import { NgClass } from '@angular/common';
   standalone: true,
   imports: [TabButtonIdPipe, NgClass],
   template: `
-    <div [id]="key()" [ngClass]="{ hidden: !isActive() }" role="tabpanel" tabindex="0" [attr.aria-labelledby]="key() | tabButtonId">
+    <div [id]="key()" [ngClass]="{ hidden: !isActive() }" class="ps-1 pe-1" role="tabpanel" tabindex="0" [attr.aria-labelledby]="key() | tabButtonId">
       <ng-content />
     </div>
   `,

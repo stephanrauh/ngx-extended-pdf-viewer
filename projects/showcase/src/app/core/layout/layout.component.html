@@ -1,10 +1,10 @@
-<header pvsBlockOnOpenSidebar class="sticky top-0 frosted dark:frosted-dark lg:h-header-height z-30">
+<header pvsBlockOnOpenSidebar class="sticky top-0 frosted dark:frosted-dark lg:h-header-height z-30 border-b">
   <pvs-header />
 </header>
 
 <div class="ps-6 pe-6 lg:flex lg:gap-8 lg:ps-8 lg:pe-8">
   <aside
-    class="hidden max-lg:z-50 fixed max-lg:top-0 max-lg:left-0 min-w-[30ch] overflow-auto max-lg:h-full lg:h-vh-content lg:block lg:sticky lg:self-start lg:top-content-begin [&.sidebar-open]:block"
+    class="hidden max-lg:z-50 fixed max-lg:top-0 max-lg:left-0 min-w-[30ch] overflow-auto max-lg:h-full lg:h-vh-content lg:block lg:sticky lg:self-start lg:top-content-begin [&.sidebar-open]:block border-r"
     pvsVisibleOnOpenSidebar
   >
     <pvs-sidenav />
@@ -15,7 +15,7 @@
     Don't add version switcher to main content.
     For accessibility it is not great skipping to main content and still always having to deal with the version switcher
     -->
-    <div class="flex flex-wrap items-center w-full justify-end gap-4">
+    <div class="flex flex-wrap items-center w-full justify-end gap-4 mt-1">
       <pvs-version-switcher />
       <pvs-theme-switcher />
     </div>

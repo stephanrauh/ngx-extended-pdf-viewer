@@ -44,7 +44,7 @@
     }
 
     &:has(+ h2) {
-      @apply mb-12;
+      @apply mb-8;
     }
 
     &:not(:last-child):has(+ h3) {
@@ -120,8 +120,6 @@
     padding-inline: 3px;
     padding-block: 1px;
   }
-
-
 }
 
 @layer utilities {
@@ -132,10 +130,11 @@
   }
 
   .frosted {
-    --frosted-bg: hsla(0, 0%, 100%, 0.7);
+    --frosted-bg: hsla(200,30%,96%, 0.7);
+    --blur: 4px;
     background-color: var(--frosted-bg);
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(var(--blur));
+    backdrop-filter: blur(var(--blur));
   }
 
   .frosted-dark {
@@ -178,6 +177,9 @@
     @apply text-on-surface;
     @apply dark:bg-surface-dark;
     @apply dark:text-on-surface-dark;
+
+    @apply border;
+    @apply rounded-sm;
   }
 
   .radio-group,
@@ -197,6 +199,8 @@
     @apply text-on-surface;
     @apply dark:bg-surface-dark;
     @apply dark:text-on-surface-dark;
+    @apply border;
+    @apply rounded-sm;
   }
 
   .box {
@@ -222,8 +226,9 @@
     }
 
     &::-webkit-scrollbar {
-      @apply w-1;
-      @apply h-1;
+      --scrollbar-size: 0.35rem;
+      @apply w-[var(--scrollbar-size)];
+      @apply h-[var(--scrollbar-size)];
     }
 
     &::-webkit-scrollbar-thumb {

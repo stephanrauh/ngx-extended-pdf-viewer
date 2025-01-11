@@ -8,7 +8,7 @@ import { BROWSER_STORAGE } from '../../../../shared/helper/browser-storage.token
   imports: [],
   template: `<button
     (click)="toggleTheme()"
-    class="p-2 rounded-lg bg-surface hover:bg-surface-hover  dark:bg-surface-dark dark:hover:bg-surface-dark-hover transition-colors duration-200"
+    class="p-2 rounded-lg bg-surface hover:bg-surface-hover  dark:bg-surface-dark dark:hover:bg-surface-dark-hover transition-colors duration-200 border"
     [attr.aria-label]="useDarkTheme ? 'Switch to light theme' : 'Switch to dark theme'"
   >
     <!-- Sun icon (for dark mode) -->
