@@ -17,14 +17,17 @@ function generateTitle(filePath) {
 function generateRoute(filePath) {
   const parts = filePath.split(/pages[\\/]/);
   if (parts.length > 1) {
-    return `/${parts[1].replace(`text.md`, '').split(/[\\/]/).join('/')}`;
+    return `/${parts[1]
+      .replace(/[^/\\]*\.md$/, '')
+      .split(/[\\/]/)
+      .join('/')}`;
   }
   return filePath.startsWith('/') ? filePath : `/${filePath}`;
 }
 
 function buildSearchIndex() {
   // Update glob pattern to use srcDirectory
-  const markdownFiles = glob.sync(`${srcDirectory}/app/pages/**/text.md`);
+  const markdownFiles = glob.sync(`${srcDirectory}/app/pages/**/*.md`);
 
   const searchIndex = markdownFiles.map((filePath) => {
     const title = generateTitle(filePath);
