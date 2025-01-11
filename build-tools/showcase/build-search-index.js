@@ -1,12 +1,11 @@
 // build-search-index.js
 const fs = require('fs');
-const path = require('path');
 const glob = require('glob');
 
 const srcDirectory = 'projects/showcase/src';
 
 function generateTitle(filePath) {
-  const parts = filePath.split(path.sep);
+  const parts = filePath.split(/[\\/]/);
   const parentDir = parts[parts.length - 2];
 
   return parentDir
@@ -16,9 +15,9 @@ function generateTitle(filePath) {
 }
 
 function generateRoute(filePath) {
-  const parts = filePath.split('pages' + path.sep);
+  const parts = filePath.split(/pages[\\/]/);
   if (parts.length > 1) {
-    return `/${parts[1].replace(`text.md`, '').split(path.sep).join('/')}`;
+    return `/${parts[1].replace(`text.md`, '').split(/[\\/]/).join('/')}`;
   }
   return filePath.startsWith('/') ? filePath : `/${filePath}`;
 }
