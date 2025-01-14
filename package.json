@@ -73,7 +73,7 @@
     "jest-environment-jsdom": "^29.7.0",
     "jest-preset-angular": "^14.4.2",
     "ng-packagr": "^17.3.0",
-    "postcss": "^8.4.49",
+    "postcss": "^8.5.1",
     "prettier": "^3.4.2",
     "properties-reader": "^2.3.0",
     "sass": "^1.83.1",
