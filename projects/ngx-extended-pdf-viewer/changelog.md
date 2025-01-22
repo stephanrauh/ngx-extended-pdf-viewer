@@ -629,4 +629,4 @@
 - 22.2.0-alpha.6 migrated the SCSS rules to the new syntax; re-implemented the build scripts in Node.js
 - 22.2.0-alpha.7 #2718 hide the toolbar icons during the initialization phase
 - 22.2.0 #2736 added an additional rule resetting the `.dialog` CSS class within the ngx-extended-pdf-viewer namespace
-- 22.2.1 updated some dependencies
+- 22.2.1 updated some dependencies; #2567 close the find bar, the secondary menu, and the editor config dialogs when `[src]` changes

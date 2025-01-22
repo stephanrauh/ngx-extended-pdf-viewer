@@ -1513,6 +1513,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         }
         options.rangeChunkSize = pdfDefaultOptions.rangeChunkSize;
         options.cspPolicyService = this.cspPolicyService;
+        PDFViewerApplication.findBar?.close();
+        PDFViewerApplication.secondaryToolbar?.close();
+        PDFViewerApplication.eventBus.dispatch('annotationeditormodechanged', {mode: 0});
 
         await PDFViewerApplication.open(options);
         this.pdfLoadingStarts.emit({});
@@ -1812,8 +1815,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   }
 
   public async openPDF2(): Promise<void> {
-    this.overrideDefaultSettings();
     const PDFViewerApplication: IPDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
+
+    PDFViewerApplication.findBar?.close();
+    PDFViewerApplication.secondaryToolbar?.close();
+    PDFViewerApplication.eventBus.dispatch('switchannotationeditormode', {mode: 0});
+
+    this.overrideDefaultSettings();
     PDFViewerApplication.pdfViewer.destroyBookMode();
     PDFViewerApplication.pdfViewer.stopRendering();
     PDFViewerApplication.pdfThumbnailViewer.stopRendering();
