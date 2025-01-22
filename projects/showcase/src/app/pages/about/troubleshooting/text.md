@@ -4,10 +4,52 @@ If there's any compatibility issue with an older version of Angular, please tell
 
 Talking about bugs and feature requests: I also listen to StackOverflow, but it may take some time until I pick up bug reports from StackOverflow.
 
-## Modals
-Putting an `<ngx-extended-pdf-viewer>` into a modal often causes timing problems. If the modal doesn't initialize the PDF viewer,
-add a short timeout. The idea is to show the PDF viewer with a short delay, so the modal has enough time to render.
+## Modals and tabs
 
+Putting an `<ngx-extended-pdf-viewer>` into a modal dialog or in a tab often causes timing problems. That always happens if the pdf viewer is part of the DOM, but invisible, as in these two examples:
+
+PrimeNG modal:
+
+```html
+<p-dialog header="PDF Viewer" [modal]="true" [(visible)]="showDialog">
+  <ngx-extended-pdf-viewer [src]="'assets/Example.pdf'"> </ngx-extended-pdf-viewer
+></p-dialog>
+```
+
+Material Design tab:
+
+```html
+<mat-tab-group>
+  <mat-tab label="whatever">
+    ...
+  </mat-tab>
+  <mat-tab label="PDF">
+    <ngx-extended-pdf-viewer [src]="'assets/Example.pdf'">
+  </mat-tab>
+</mat-tab-group>
+```
+
+Add a short timeout. The idea is to show the PDF viewer with a short delay, so the modal has enough time to become visible before the PDF viewer initializes:
+
+```html
+@if (showViewer) { 
+  <ngx-extended-pdf-viewer [src]="'assets/Example.pdf'"> 
+  </ngx-extended-pdf-viewer>
+} 
+```
+
+```ts
+@Component({...})
+public class PDFTabComponent {
+  public showViewer = false;
+
+  public onActivatePdfTab() {
+    setTimeout(() => this.showViewer = true, 100);
+  }
+}
+```
+
+## Modals - Exceptions on close
 If the PDF viewer prints exceptions in the console log when closing the modal, you may want to call `ngOnDestroy()`
 manually. <a href="/modal">The demo on modals</a> demonstrates this approach.
 
@@ -16,6 +58,7 @@ manually. <a href="/modal">The demo on modals</a> demonstrates this approach.
 Please update the library `zone.js` to a current version. At the time of writing, that's 0.10.3. For some reason, the default setup of Angular locks `zone.js` to an old version. In most cases, the update shouldn't cause problems.
 
 ## Running Angular in a context path or using a non-standard assets folder
+
 The CMap files and the JavaScript files <code>pdf.min.js</code>, <code>viewer.min.js</code>, and <code>pdf.worker.min.js</code> are expected to be in the assets folder of your application.
 Sometimes the path resolution fails. In this case, you'll need to set the default option <code>assetsFolder</code> to the appropriate value.
 Maybe you'll even have to modify the derived options <code>workerSrc</code> and <code>cMapUrl</code>.
@@ -26,7 +69,7 @@ In any case, you should not load the file <code>pdf.worker.min.js</code> yoursel
 
 ## I can't find the find button
 
-First of all, I have to apologize: For some reason, I've never managed to make the  intuitive. I hope I'll manage one day or another!
+First of all, I have to apologize: For some reason, I've never managed to make the intuitive. I hope I'll manage one day or another!
 
 The PDF viewer uses two layers of information. The first layer is what you see. That's simply an image. The second layer is the text layer. You need it to select text, and without the text layer you can't find anything. The "find" function can only cope with text, not with images.
 
@@ -56,6 +99,7 @@ The text layer doesn't match the real positions of the text. It's a good approxi
 The PDF viewer is a lot faster if it doesn't have to render the text layer. That's why you have to activate the text layer manually.
 
 ## Problems with Internet Explorer 11
+
 The library is intended to be used with IE11 - but every once in a while, a new incompatibility pops up. Bear with me. I don't use Windows to develop the library, so testing IE11 isn't that easy.
 
 The latest error I've seen is caused by another library, zone.js. Version 0.11.1 of zone.js is incompatible with IE11. If I've got it correctly, this will be fixed with version 0.11.2. What I can tell for sure is downgrading to version 0.10.3 fixes the bug. More details <a target="#" href="https://github.com/angular/angular/issues/38561">in the GitHub ticket</a>.
@@ -84,16 +128,15 @@ openModal(modaltemplate: any): void {
 If you're using Bootstrap, you can also use the event `(onshown)` like so:
 
 ```html
-<div bsModal #pdfModal="bs-modal" class="modal" 
-     (onShown)="onModalShown($event)">
+<div bsModal #pdfModal="bs-modal" class="modal" (onShown)="onModalShown($event)"></div>
 ```
 
 ## Trouble with printing (aka: compatibility to Bootstrap and other CSS frameworks)
+
 Problems with printing are almost always problems of your CSS code. That doesn't necessarily mean you've done anything wrong.
 Most people run into this kind of trouble when using a CSS framework that hasn't been written with ngx-extended-pdf-viewer in mind.
 That, in turn, is probably true for every CSS framework out there. The core library assumes there's no CSS framework at all.
 It's the PDF viewer of Firefox, so that's a reasonable assumption.
-
 
 If you wonder how CSS and printing are related: the thing is that the PDF viewer doesn't really print anything. It just hides the entire page using CSS and adds high-resolution images to the HTML document. After that, the PDF viewer simply calls the print function of your browser. Basically, it's printing the entire HTML page, including your Angular application. If everything works as intended, you don't notice because your Angular application is hidden.
 
@@ -109,6 +152,7 @@ ngx-extended-pdf-viewer covers several popular CSS frameworks (such as BootsFace
   }
 }
 ```
+
 ## Empty pages when printing
 
 If you find empty pages in your print, often adding these CSS rules to your global `styles.scss` helps:
@@ -127,7 +171,6 @@ You can debug print issues yourself. I've written detailed instructions here: <a
 debugging session, you'll probably want to compare the CSS rules of your project with the reference project. You can either use the Angular schmetics
 to create a fresh project within a few minutes (see <a href="https://pdfviewer.net/extended-pdf-viewer/getting-started">https://pdfviewer.net/extended-pdf-viewer/getting-started</a>), or you can use the <a href="https://mozilla.github.io/pdf.js/web/viewer.html">showcase of Mozilla's project</a>.
 
-
 ### Possibly outdated hint: printing with Bootstrap
 
 As far as I remember, I've managed to solve this bug for you. But if you're using an older version of ngx-extended-pdf-viewer, the bug might still hit you. Bootstrap interferes with the printing algorithm of `pdf.js`. Guard it with a media query to avoid unwanted effects, such as scaling the print to 65%. For example, if you're using SCSS and Bootstrap 4, remove the import of Bootstrap.min.css from the Angular.json file. Instead, import it by including Bootstrap by adding this line to the global `styles.scss` file:
@@ -137,6 +180,7 @@ As far as I remember, I've managed to solve this bug for you. But if you're usin
   @import '../node_modules/bootstrap/scss/bootstrap';
 }
 ```
+
 Caveat: this trick only works with the SCSS version of both `styles.scss` and `bootstrap.scss`. It doesn't work with simple CSS. If you're using pure CSS, you can use the solution suggested by <a href="https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/48#issuecomment-596629621" target="#">Austin Walker</a>:
 
 ```css
@@ -150,22 +194,23 @@ Caveat: this trick only works with the SCSS version of both `styles.scss` and `b
 ### Dig deeper
 
 If you need more information, have a look at these issues:
-* https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/148
-* https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/175
-* https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/143 
 
+- https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/148
+- https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/175
+- https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/143
 
 ## Localization
 
-If the PDF viewer doesn't show in your native language (or the language you're configured with the `[language]` attribute), please check the network tab and the settings in the Angular.json file. You must copy the  folder `node_modules/ngx-extended-pdf-viewer/assets/locale` recursively to the folder `assets/locale`. If you only want to support a few language, you can reduce the size of the installation by omitting the other language files. However, that doesn't improve performance.
+If the PDF viewer doesn't show in your native language (or the language you're configured with the `[language]` attribute), please check the network tab and the settings in the Angular.json file. You must copy the folder `node_modules/ngx-extended-pdf-viewer/assets/locale` recursively to the folder `assets/locale`. If you only want to support a few language, you can reduce the size of the installation by omitting the other language files. However, that doesn't improve performance.
 
 ## Multiple PDF viewers on the same page (e.g. tabs)
 
 Unfortunately, you can't use multiple instances of `<ngx-extended-pdf-viewer>` on the same page. You're restricted to a single PDF viewer. This also applies to hidden PDF viewers. If you're using tabs containing PDF files, make sure you hide the PDF viewer before showing the next tab. You'll also need a short delay before showing the new PDF viewer. It takes some time to remove every object from memory.
+
 ## Other hints collected over time
 
 | Error message or description                                            | Solution                                                                                                                                                                                                                                                                                                                                   |
-|-------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | sticky toolbar (when scrolling, the pdf file appears above the toolbar) | This happens if you're using the z-index to position the `<ngx-extended-pdf-viewer>`. If you can't avoid to do so, add the global CSS rule `.body .toolbar { z-index: 0; }`. The PDF viewer works without the z-index of the toolbar. The only difference is that the shadow of the toolbar is hidden by the PDF document.                 |
 | Print also includes UI elements                                         | Usually, the entire screen is hidden automatically, but sometimes this fails, especially with widgets that are dynamically added, such as error messages, progress bars, and block UI overlays. Use media queries to hide the unwanted UI elements. For example, use something like `@media print { #modal-error-dialog: display none; }`. |
 
@@ -187,9 +232,9 @@ Have a look at [this discussion](https://github.com/stephanrauh/ngx-extended-pdf
 
 There's a third file - `node_modules/ngx-extended-pdf-viewer/assets/pdf.worker.js`. Earlier versions of these instructions told you to put add it in the `scripts` section, too, but that's wrong, as you'll see in the next paragraph.
 
-
 ## Fake worker
-If you see the message "Setting up fake worker", everything works fine, except you're wasting performance. To avoid that, make sure that the file `pdf.worker.js` (or `pdf.worker-es5.js` for developers supporting IE11) is *not* part of the `scripts` section of the `angular.json`.
+
+If you see the message "Setting up fake worker", everything works fine, except you're wasting performance. To avoid that, make sure that the file `pdf.worker.js` (or `pdf.worker-es5.js` for developers supporting IE11) is _not_ part of the `scripts` section of the `angular.json`.
 
 Instead, put the pdf.worker.js file into the assets folder. The path can be configured in the global constant `defaultOptions.workerSrc` (which, in turn, is defined in the file `default-options.ts`). By default, it's './assets/pdf.worker.js'. In other words, you need to add these lines to the `angular.json`:
 

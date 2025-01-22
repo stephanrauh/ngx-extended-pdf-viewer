@@ -295,11 +295,6 @@
     "content": "The text layer is an optional, invisible layer above the PDF document, which is rendered as an image. You need it to\n\n- mark and copy texts\n- find texts\n- and, to a limited extend and far from being perfect, to modify how texts are displayed.\n\nBy default, the text layer is switched off in order to render the document faster. The drawback is that both the find menu and the select tool are disabled until you activate the text layer."
   },
   {
-    "title": "Text",
-    "route": "/configuration/layers/text/",
-    "content": "The text layer is an optional, invisible layer above the PDF document, which is rendered as an image. You need it to\r\n\r\n- mark and copy texts\r\n- find texts\r\n- and, to a limited extend and far from being perfect, to modify how texts are displayed.\r\n\r\nBy default, the text layer is switched off in order to render the document faster. The drawback is that both the find menu and the select tool are disabled until you activate the text layer."
-  },
-  {
     "title": "Theming",
     "route": "/viewing/theming/",
     "content": "You can theme the PDF viewer and - to a limited extent - also how forms are displayed in a PDF files. However, most PDF documents define how the form is displayed. ngx-extended-pdf-viewer does not overwrite the CSS rules defined by the PDF author.\n\n`ngx-extended-pdf-viewer` ships with a light theme and a dark theme. Plus, you can define a custom theme.\n\nNote that there's no theming for forms. Theming only changes the appearance of the PDF viewer. It does not change the way PDF files are rendered.\n\n## HTML\n\n```html\n<ngx-extended-pdf-viewer\n  [src]=\"src\"\n  [theme]=\"theme\"\n  [backgroundColor]=\"backgroundColor\">\n</ngx-extended-pdf-viewer>\n```\n\n## TypeScript\n\n```typescript\nexport class FormsComponent {\n  theme = 'light';\n}\n```"
