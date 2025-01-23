@@ -631,3 +631,4 @@
 - 22.2.0 #2736 added an additional rule resetting the `.dialog` CSS class within the ngx-extended-pdf-viewer namespace
 - 22.2.1 updated some dependencies; #2567 close the find bar, the secondary menu, and the editor config dialogs when `[src]` changes; #2533 position the editor config dialogs correctly below the corresponding button, even if it's not at its default position because of customizing
 - 22.2.2 #2533 position the editor config dialogs correctly below the corresponding button, even if it's not at its default position because of customizing
+- 22.2.3 #2749 fixes a bug that threw an exception "The AnnotationEditor is not enabled." when `[src]` changes (follow-up of #2567)

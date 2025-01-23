@@ -1819,7 +1819,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
     PDFViewerApplication.findBar?.close();
     PDFViewerApplication.secondaryToolbar?.close();
-    PDFViewerApplication.eventBus.dispatch('switchannotationeditormode', {mode: 0});
+    try {
+      // sometimes the annotation editor UI is undefined, but it's a private variable,
+      // so we simply catch the error
+      PDFViewerApplication.eventBus.dispatch('switchannotationeditormode', {mode: 0});
+    } catch (e) {
+      // ignore this error
+    }
 
     this.overrideDefaultSettings();
     PDFViewerApplication.pdfViewer.destroyBookMode();
