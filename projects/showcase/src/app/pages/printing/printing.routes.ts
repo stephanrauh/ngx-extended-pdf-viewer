@@ -1,14 +1,14 @@
-import { CustomPrintProgressPageComponent } from './custom-print-progress/custom-print-progress-page.component';
-import { PrintAPIPageComponent } from './print-api/print-api-page.component';
 import { Route } from '@angular/router';
 import { RouteGroupData } from '../../shared/types/route-data.types';
+import { CustomPrintProgressPageComponent } from './custom-print-progress/custom-print-progress-page.component';
+import { PrintAPIPageComponent } from './print-api/print-api-page.component';
 
 export const printingRoutes: Route[] = [
   {
     path: 'printing',
     data: <RouteGroupData>{
       key: 'printing',
-      name: 'Forms',
+      name: 'Printing',
     },
     children: [{
         path: 'print-api',
