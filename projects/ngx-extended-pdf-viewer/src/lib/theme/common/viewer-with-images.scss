@@ -464,6 +464,8 @@ html[dir='rtl'] ngx-extended-pdf-viewer #sidebarContent {
 ngx-extended-pdf-viewer {
   #viewerContainer {
     overflow: auto;
+    scrollbar-gutter: stable;
+    /* fixes #2689 */
     -webkit-overflow-scrolling: auto;
     /* fixes #962 */
     position: absolute;

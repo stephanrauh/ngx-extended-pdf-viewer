@@ -632,3 +632,4 @@
 - 22.2.1 updated some dependencies; #2567 close the find bar, the secondary menu, and the editor config dialogs when `[src]` changes; #2533 position the editor config dialogs correctly below the corresponding button, even if it's not at its default position because of customizing
 - 22.2.2 #2533 position the editor config dialogs correctly below the corresponding button, even if it's not at its default position because of customizing
 - 22.2.3 #2749 fixes a bug that threw an exception "The AnnotationEditor is not enabled." when `[src]` changes (follow-up of #2567)
+- 22.2.4 #2689 on Windows, the scrollbar could oscillate into and out of existance on single-page PDFs, zoom="auto", and just the right window size. This version solves that bug.
