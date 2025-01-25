@@ -47,6 +47,7 @@ _Breaking changes_:
 
 - `NgxExtendedPdfViewerService.addEditorAnnotation` is now asynchronous
 - several buttons have new ids
+- Since version 22.3.0 the initialization of the viewer is delayed until it's in a visible container. This means it might never initialize if it's in a tab or modal the user never opens. This optimizes resource usage, but if you're relying on the precise timing or even on the internal implementation of the viewer, this might be a breaking change. However, that's an unlikely corner case.
 
 ## Please avoid version 21.4.5 and 21.4.6
 

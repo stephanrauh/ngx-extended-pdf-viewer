@@ -8,6 +8,7 @@ import {
   HostListener,
   Inject,
   Input,
+  NgZone,
   OnChanges,
   OnDestroy,
   OnInit,
@@ -941,6 +942,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   // dirty IE11 hack - temporary solution
   public findbarLeft: string | undefined = undefined;
 
+  private initializationPromise: (() => Promise<void>) | null = null;
+  private checkRootElementTimeout: any;
+  private destroyInitialization = false;
+
   public get mobileFriendlyZoom() {
     return this._mobileFriendlyZoom;
   }
@@ -1038,7 +1043,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     private readonly renderer: Renderer2,
     private readonly pdfScriptLoaderService: PDFScriptLoaderService,
     private readonly keyboardManager: NgxKeyboardManagerService,
-    private readonly cspPolicyService: PdfCspPolicyService
+    private readonly cspPolicyService: PdfCspPolicyService,
+    private readonly ngZone: NgZone
   ) {
     this.baseHref = this.platformLocation.getBaseHrefFromDOM();
     if (isPlatformBrowser(this.platformId)) {
@@ -1074,19 +1080,56 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   public async ngOnInit() {
     this.hideToolbarIfItIsEmpty();
     if (isPlatformBrowser(this.platformId)) {
-      this.addTranslationsUnlessProvidedByTheUser();
-      await this.waitUntilOldComponentIsGone();
-      await this.pdfScriptLoaderService.ensurePdfJsHasBeenLoaded(this.useInlineScripts, this.forceUsingLegacyES5);
-      // check if the PDF viewer has already been destroyed again
-      // (see https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/2571:
-      // destroying the viewer immediately after creating used to cause error messages)
-      if (this.formSupport) {
-        this.formSupport.registerFormSupportWithPdfjs(this.pdfScriptLoaderService.PDFViewerApplication);
-        this.keyboardManager.registerKeyboardListener(this.pdfScriptLoaderService.PDFViewerApplication);
-        this.pdfScriptLoaderService.PDFViewerApplication.cspPolicyService = this.cspPolicyService;
-        this.doInitPDFViewer();
-      }
+      this.ngZone.runOutsideAngular(() => {
+        this.initializationPromise = this.initialize;
+        this.initializationPromise();
+      });
+
     }
+  }
+
+  private async initialize(): Promise<void> {
+    try {
+      await this.waitForRootElement();
+
+      if (this.destroyInitialization) return;
+
+      if (isPlatformBrowser(this.platformId)) {
+        this.addTranslationsUnlessProvidedByTheUser();
+        await this.waitUntilOldComponentIsGone();
+        if (this.destroyInitialization) return;
+
+        await this.pdfScriptLoaderService.ensurePdfJsHasBeenLoaded(this.useInlineScripts, this.forceUsingLegacyES5);
+        if (this.destroyInitialization) return;
+
+        if (this.formSupport) {
+          this.formSupport.registerFormSupportWithPdfjs(this.pdfScriptLoaderService.PDFViewerApplication);
+          this.keyboardManager.registerKeyboardListener(this.pdfScriptLoaderService.PDFViewerApplication);
+          this.pdfScriptLoaderService.PDFViewerApplication.cspPolicyService = this.cspPolicyService;
+          this.ngZone.runOutsideAngular(() => this.doInitPDFViewer());
+        }
+      }
+    } catch (error) {
+      console.error('Initialization failed:', error);
+    }
+  }
+
+  private async waitForRootElement(): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      const checkRootElement = () => {
+        if (this.destroyInitialization) {
+          reject(new Error('Component destroyed'));
+          return;
+        }
+
+        if (this.root && this.root.nativeElement && this.root.nativeElement.offsetParent !== null) {
+          resolve();
+        } else {
+          this.checkRootElementTimeout = setTimeout(checkRootElement, 50);
+        }
+      };
+      checkRootElement();
+    });
   }
 
   private async waitUntilOldComponentIsGone(): Promise<void> {
@@ -1913,6 +1956,17 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   }
 
   public async ngOnDestroy(): Promise<void> {
+    this.destroyInitialization = true;
+    if (this.checkRootElementTimeout) {
+      clearTimeout(this.checkRootElementTimeout);
+    }
+    if (this.initializationPromise) {
+      try {
+        await this.initializationPromise;
+      } catch (e) {
+      }
+    }
+
     this.notificationService.onPDFJSInitSignal.set(undefined);
     if (this.resizeObserver) {
       this.resizeObserver.disconnect();
