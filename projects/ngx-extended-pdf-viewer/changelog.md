@@ -634,3 +634,11 @@
 - 22.2.3 #2749 fixes a bug that threw an exception "The AnnotationEditor is not enabled." when `[src]` changes (follow-up of #2567)
 - 22.2.4 #2689 on Windows, the scrollbar could oscillate into and out of existance on single-page PDFs, zoom="auto", and just the right window size. This version solves that bug.
 - 22.3.0 #2749 delay initialization if the PDF viewer is opened in an invisible container (e.g. a PrimeNG modal or an inactive tab); made the resize algorithm detection more efficient; both issue eliminate the message "offsetParent is not set -- cannot scroll" users occasionally saw on the console
+- 23.3.1 #2710 simplify the build scripts; fixed a layout issue of the integrated showcase
+- 23.3.2 #2710 simplify the build scripts (no change to the library, it's only a new version because it's impossible to revoke npm publications)
+- 23.3.3 #2710 simplify the build scripts (no change to the library, it's only a new version because it's impossible to revoke npm publications)
+- 23.3.4 #2710 simplify the build scripts (no change to the library, it's only a new version because it's impossible to revoke npm publications)
+- 23.3.5 #2710 simplify the build scripts (no change to the library, it's only a new version because it's impossible to revoke npm publications)
+- 23.3.6 #2710 simplify the build scripts (no change to the library, it's only a new version because it's impossible to revoke npm publications)
+- 23.3.7 #2710 simplify the build scripts (no change to the library, it's only a new version because it's impossible to revoke npm publications)
+- 23.3.8 #2710 simplify the build scripts (no change to the library, it's only a new version because it's impossible to revoke npm publications)
