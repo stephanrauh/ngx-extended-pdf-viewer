@@ -243,6 +243,13 @@
       @apply dark:bg-primary-variant-hover-dark/60;
     }
   }
+
+  ngx-extended-pdf-viewer {
+    svg {
+      display: unset;
+      vertical-align: unset;
+    }
+  }
 }
 
 .material-symbols-outlined {
