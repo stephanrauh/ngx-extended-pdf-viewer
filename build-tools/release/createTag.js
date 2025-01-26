@@ -27,7 +27,7 @@ const packageJson = JSON.parse(fs.readFileSync(path.join('projects', 'ngx-extend
 const version = packageJson.version;
 
 // Commit all changes
-runCommand(`git commit -m "published ${version}"`, 'Error committing changes:');
+runCommand(`git commit -a -m "published ${version}"`, 'Error committing changes:');
 console.log('Committed changes.')
 runCommand('git push', 'Error pushing changes:');
 console.log('Pushed changes.')
@@ -41,14 +41,13 @@ console.log('Pushed tags.')
 // Update mypdf.js repository
 process.chdir(path.join('..', 'mypdf.js'));
 
-process.exit(43);
-runCommand(`git commit -m "published ${version}"`, 'Error committing changes in mypdf.js: git commit -m "published ${version}"');
+runCommand(`git commit -a -m "published ${version}"`, 'Error committing changes in mypdf.js: git commit -a -m "published ${version}"');
 
 // Checkout bleeding-edge branch
 runCommand('git checkout bleeding-edge', 'Error checking out bleeding-edge branch:');
 console.log('Checked out bleeding-edge branch.');
 // Commit changes in mypdf.js
-runCommand(`git commit -m "published ${version}"`, 'Error committing changes in mypdf.js: git commit -m "published ${version}"');
+runCommand(`git commit -a -m "published ${version}"`, 'Error committing changes in mypdf.js: git commit -a -m "published ${version}"');
 console.log('Committed changes in mypdf.js.');
 runCommand('git push', 'Error pushing changes in mypdf.js:');
 console.log('Pushed changes in mypdf.js.');
@@ -66,7 +65,7 @@ console.log('Pushed bleeding-edge tag in mypdf.js.');
 runCommand('git checkout 4.7', 'Error checking out 4.7 branch:');
 console.log('Checked out 4.7 branch.');
 // Commit changes in 4.7 branch
-runCommand(`git commit -m "published ${version}"`, 'Error committing changes in 4.7 branch:');
+runCommand(`git commit -a -m "published ${version}"`, 'Error committing changes in 4.7 branch:');
 console.log('Committed changes in 4.7 branch.');
 runCommand('git push', 'Error pushing changes in 4.7 branch:');
 console.log('Pushed changes in 4.7 branch.');
