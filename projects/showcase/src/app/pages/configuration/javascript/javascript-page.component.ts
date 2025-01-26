@@ -1,14 +1,14 @@
 import { Component, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { NgxExtendedPdfViewerModule, pdfDefaultOptions } from 'ngx-extended-pdf-viewer';
-import { SplitViewComponent } from '../../../shared/components/split-view.component';
-import { SetMinifiedLibraryUsageDirective } from '../../../shared/directives/set-minified-library-usage.directive';
 import { ContentPageComponent } from '../../../shared/components/content-page/content-page.component';
 import { MarkdownContentComponent } from '../../../shared/components/markdown-content.component';
-import { FormsModule } from '@angular/forms';
-import { BROWSER_STORAGE } from '../../../shared/helper/browser-storage.token';
-import { WINDOW } from '../../../shared/helper/window.token';
+import { SplitViewComponent } from '../../../shared/components/split-view.component';
 import { SetDefaultViewerHeightDirective } from '../../../shared/directives/set-default-viewer-height.directive';
 import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-default-zoom-level.directive';
+import { SetMinifiedLibraryUsageDirective } from '../../../shared/directives/set-minified-library-usage.directive';
+import { BROWSER_STORAGE } from '../../../shared/helper/browser-storage.token';
+import { WINDOW } from '../../../shared/helper/window.token';
 
 @Component({
   selector: 'pvs-javascript-page',
@@ -37,6 +37,13 @@ import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-def
           </div>
           <label for="enable-js">Enable JavaScript (toggling forces reload)</label>
         </div>
+        <p>If JavaScript is activated, </p>
+        <ul class="list-disc list-inside pl-4">
+          <li>the demo puts the cursor into the first form field,</li>
+          <li>the "réinitializer" button clears your input fields,</li>
+          <li>and the top-most input field validates your input.</li>
+          <li>Without JavaScript, these features aren't available.</li>
+        </ul>
         <ngx-extended-pdf-viewer
           slot="end"
           src="/assets/pdfs/160F-2019.pdf"
