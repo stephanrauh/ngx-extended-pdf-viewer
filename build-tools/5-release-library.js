@@ -21,8 +21,8 @@ runCommand('node ./build-tools/release/check-commit-state.js', 'Error 51: check-
 
 // read the version number
 const packageJsonPath = path.join('projects', 'ngx-extended-pdf-viewer', 'package.json');
-const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
-const version = packageJson.version;
+let packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+let version = packageJson.version;
 
 // Generate SBOM
 runCommand('npx @cyclonedx/cyclonedx-npm --output-file sbom.json --mc-type library', 'Error 52: npm SBOM generation failed', 52);
