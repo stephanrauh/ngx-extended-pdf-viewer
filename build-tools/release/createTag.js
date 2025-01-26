@@ -41,6 +41,8 @@ console.log('Pushed tags.')
 // Update mypdf.js repository
 process.chdir(path.join('..', 'mypdf.js'));
 
+runCommand(`git commit -m "published ${version}"`, 'Error committing changes in mypdf.js: git commit -m "published ${version}"');
+
 // Checkout bleeding-edge branch
 runCommand('git checkout bleeding-edge', 'Error checking out bleeding-edge branch:');
 console.log('Checked out bleeding-edge branch.');
