@@ -8,8 +8,10 @@ function runCommand(command, errorMessage, exitCode) {
   try {
     execSync(command, { stdio: 'inherit', shell: true });
   } catch (error) {
-    console.error(errorMessage);
-    process.exit(exitCode);
+    if (!command.includes('git commit')) {
+      console.error(errorMessage);
+      process.exit(exitCode);
+    }
   }
 }
 
