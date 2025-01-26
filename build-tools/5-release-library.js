@@ -22,8 +22,20 @@ runCommand('node ./build-tools/release/check-commit-state.js', 'Error 51: check-
 // Generate SBOM
 runCommand('npx @cyclonedx/cyclonedx-npm --output-file sbom.json --mc-type library', 'Error 52: npm SBOM generation failed', 52);
 
-// Build base library
-runCommand('node ./build-tools/1-build-base-library.js', 'Error 53: build-base-library.js failed', 53);
+// Build base library (bleeding edge)
+runCommand('git checkout bleeding-edge', 'Error 66: Git checkout failed', 59);
+
+runCommand('node ./build-tools/1-build-base-library.js', 'Error 53: build-base-library.js failed', 53)
+
+runCommand(`git commit . -m "bumped the version number to ${version}"`, 'Error 67:Git commit failed', 58);
+
+// Build base library (stable branch)
+runCommand('git checkout 4.7', 'Error 68: Git checkout failed', 59);
+
+runCommand('node ./build-tools/1-build-base-library.js', 'Error 53: build-base-library.js failed', 53)
+
+runCommand(`git commit . -m "bumped the version number to ${version}"`, 'Error: Git commit failed', 58);
+
 
 // Build library
 runCommand('node ./build-tools/2-build-library.js', 'Error 54: build-library.js failed', 54);

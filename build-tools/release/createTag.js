@@ -10,9 +10,9 @@ function runCommand(command, errorMessage) {
     console.log(`Result: ${result}`);
     return result;
   } catch (error) {
-    console.error(errorMessage, error.message);
     // ignore errors on git commit because if it reports an error if there's nothing to commit
     if (!command.includes('git commit')) {
+      console.error(errorMessage, error.message);
       process.exit(1);
     }
   }
