@@ -19,22 +19,35 @@ process.chdir(path.join(__dirname, '..'));
 // Check commit state
 runCommand('node ./build-tools/release/check-commit-state.js', 'Error 51: check-commit-state.js failed', 51);
 
+// read the version number
+const packageJsonPath = path.join('projects', 'ngx-extended-pdf-viewer', 'package.json');
+const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+const version = packageJson.version;
+
 // Generate SBOM
 runCommand('npx @cyclonedx/cyclonedx-npm --output-file sbom.json --mc-type library', 'Error 52: npm SBOM generation failed', 52);
 
 // Build base library (bleeding edge)
+process.chdir(path.join('..', 'mypdf.js'));
 runCommand('git checkout bleeding-edge', 'Error 66: Git checkout failed', 59);
+process.chdir(path.join('..', 'ngx-extended-pdf-viewer'));
 
 runCommand('node ./build-tools/1-build-base-library.js', 'Error 53: build-base-library.js failed', 53)
 
+process.chdir(path.join('..', 'mypdf.js'));
 runCommand(`git commit . -m "bumped the version number to ${version}"`, 'Error 67:Git commit failed', 58);
+process.chdir(path.join('..', 'ngx-extended-pdf-viewer'));
 
 // Build base library (stable branch)
+process.chdir(path.join('..', 'mypdf.js'));
 runCommand('git checkout 4.7', 'Error 68: Git checkout failed', 59);
+process.chdir(path.join('..', 'ngx-extended-pdf-viewer'));
 
 runCommand('node ./build-tools/1-build-base-library.js', 'Error 53: build-base-library.js failed', 53)
 
+process.chdir(path.join('..', 'mypdf.js'));
 runCommand(`git commit . -m "bumped the version number to ${version}"`, 'Error: Git commit failed', 58);
+process.chdir(path.join('..', 'ngx-extended-pdf-viewer'));
 
 
 // Build library
@@ -52,9 +65,8 @@ runCommand('node ./build-tools/release/createTag.js', 'Error 56: createTag.js fa
 runCommand('node ./build-tools/release/increase-version-number.js', 'Error 57: increase-version-number.js failed', 57);
 
 // Read the new version number
-const packageJsonPath = path.join('projects', 'ngx-extended-pdf-viewer', 'package.json');
-const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
-const version = packageJson.version;
+packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+version = packageJson.version;
 
 // Commit changes
 runCommand(`git commit . -m "bumped the version number after publishing ${version}"`, 'Error 58: Git commit failed', 58);
