@@ -41,6 +41,7 @@ console.log('Pushed tags.')
 // Update mypdf.js repository
 process.chdir(path.join('..', 'mypdf.js'));
 
+process.exit(43);
 runCommand(`git commit -m "published ${version}"`, 'Error committing changes in mypdf.js: git commit -m "published ${version}"');
 
 // Checkout bleeding-edge branch
