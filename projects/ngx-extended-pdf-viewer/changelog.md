@@ -643,3 +643,4 @@
 - 23.3.7 #2710 simplify the build scripts (no change to the library, it's only a new version because it's impossible to revoke npm publications)
 - 23.3.8 #2205 stop rendering the initial page twice with different zoom settings; #2710 simplify the build scripts (no change to the library, it's only a new version because it's impossible to revoke npm publications)
 - 23.3.9 #2503 inform the find controller about changes of the pageViewMode
+- 23.3.10 #2773 fix the ng add schmematics for Angular 19 projects using esbuild

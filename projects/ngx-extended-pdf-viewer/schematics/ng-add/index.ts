@@ -73,7 +73,28 @@ function updateAngularJson(tree: Tree, projectName: string, stable: boolean): Tr
   if (!json['projects'][projectName]) {
     throw new SchematicsException("The project isn't listed in the angular.json.");
   }
-  const optionsJson = json['projects'][projectName]['architect']['build']['options'];
+  let optionsJson;
+  if (json['projects'][projectName]['architect']['esbuild']) {
+    optionsJson = json['projects'][projectName]['architect']['esbuild']['options'];
+    if (!optionsJson || !optionsJson['assets']) {
+      optionsJson = undefined;
+    }
+  }
+  if (!optionsJson) {
+    optionsJson = json['projects'][projectName]['architect']['build']['options'];
+  }
+  if (!optionsJson) {
+    console.log("Couldn't find assets in angular.json");
+    console.log('Please add the following to your angular.json:');
+    console.log('assets: [');
+    console.log('{');
+    console.log("  glob: '**/*',");
+    console.log("  input: 'node_modules/ngx-extended-pdf-viewer/assets/',");
+    console.log("  output: '/assets/',");
+    console.log('}');
+    return tree;
+  }
+
   if (!stable) {
     optionsJson['assets'].push({
       glob: '**/*',
@@ -136,7 +157,7 @@ function addDeclarationToNgModule(options: ModuleOptions): Rule {
       source as any,
       'ngx-extended-pdf-viewer',
       strings.classify(`NgxExtendedPdfViewerModule`),
-      'ngx-extended-pdf-viewer'
+      'ngx-extended-pdf-viewer',
     );
     const recorder = host.beginUpdate(modulePath);
     for (const change of componentChanges) {
@@ -168,7 +189,7 @@ export function findModule(host: Tree, generateDir: string, moduleExt = MODULE_E
     } else if (filteredMatches.length > 1) {
       throw new Error(
         'More than one module matches. Use the skip-import option to skip importing ' +
-          'the component into the closest module or use the module option to specify a module.'
+          'the component into the closest module or use the module option to specify a module.',
       );
     }
 
@@ -177,7 +198,7 @@ export function findModule(host: Tree, generateDir: string, moduleExt = MODULE_E
 
   console.error('');
   console.error(
-    "Error: Couldn't find a module. Assuming this is a stand-alone project. You need to add these lines to the decorator of the ExamplePdfViewerComponent:"
+    "Error: Couldn't find a module. Assuming this is a stand-alone project. You need to add these lines to the decorator of the ExamplePdfViewerComponent:",
   );
   console.error('');
   console.error('standalone: true,');
