@@ -4,8 +4,8 @@ const _isIE11 = typeof window === 'undefined' ? false : !!(<any>globalThis).MSIn
 const isEdge = typeof navigator === 'undefined' || /Edge\/\d./i.test(navigator.userAgent);
 const needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
 
-export const pdfjsVersion = '4.7.728';
-export const pdfjsBleedingEdgeVersion = '4.10.695';
+export const pdfjsVersion = '4.7.731';
+export const pdfjsBleedingEdgeVersion = '4.10.698';
 export function getVersionSuffix(folder: string): string {
   if (folder?.includes('bleeding-edge')) {
     return pdfjsBleedingEdgeVersion;
@@ -19,6 +19,52 @@ export function assetsUrl(url: string, postfixIfPathIsRelativ = ''): string {
     return url;
   }
   return `./${url + postfixIfPathIsRelativ}`;
+}
+
+export function getSafeCanvasSize(): number {
+  // Create a temporary WebGL context
+  const canvas = document.createElement('canvas');
+  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  let maxTextureSize;
+  if (gl instanceof WebGLRenderingContext) {
+    maxTextureSize = gl.getParameter(gl.MAX_TEXTURE_SIZE);
+  } else {
+    maxTextureSize = 4096;
+  }
+  // Get available device RAM (in MB)
+  function getAvailableMemoryMB(): number {
+    if ('deviceMemory' in navigator) {
+      return (navigator.deviceMemory as number) * 1024; // Convert GB to MB
+    }
+    if (window.performance && 'memory' in window.performance) {
+      return (window.performance.memory as any).jsHeapSizeLimit / 1024 / 1024; // Only works on Chrome, Firefox, and Edgewindow.performance.memory.jsHeapSizeLimit / 1024 / 1024; // Only works on Chrome
+    }
+    return 4096; // Default to 4GB if unknown
+  }
+
+  const availableMemoryMB = getAvailableMemoryMB();
+
+  // Conservative formula: Scale by square root of available memory
+  let estimatedSafeSize = Math.floor(Math.sqrt((availableMemoryMB * 1024 * 1024) / 6));
+
+  // Apply platform-specific limits
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !('MSStream' in window);
+  const isMobile = /Android|iPhone|iPad|iPod/.test(navigator.userAgent);
+  const isHighEndDesktop = availableMemoryMB > 12000; // Assume high-end desktops have >12GB RAM
+
+  if (isIOS) {
+    estimatedSafeSize = Math.min(estimatedSafeSize, 4096); // iOS Safari memory limits
+  } else if (isMobile) {
+    estimatedSafeSize = Math.min(estimatedSafeSize, 4096); // Most mobile devices
+  } else if (isHighEndDesktop) {
+    estimatedSafeSize = Math.min(estimatedSafeSize, 8192); // Allow larger sizes for desktops
+  } else {
+    estimatedSafeSize = Math.min(estimatedSafeSize, 6000); // Mid-range desktops
+  }
+
+  // Final limit based on GPU and estimated memory safety
+  const maxWidth = Math.min(maxTextureSize, estimatedSafeSize);
+  return maxWidth * maxWidth;
 }
 
 // sonar ignore next line
@@ -41,7 +87,7 @@ export const pdfDefaultOptions = {
   historyUpdateUrl: false,
   ignoreDestinationZoom: false,
   imageResourcesPath: './images/',
-  maxCanvasPixels: -1, // ngx-extended-pdf-viewer calculates this value automatically
+  maxCanvasPixels: getSafeCanvasSize(),
   forcePageColors: false,
   pageColorsBackground: 'Canvas',
   pageColorsForeground: 'CanvasText',

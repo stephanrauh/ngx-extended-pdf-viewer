@@ -39,6 +39,18 @@ This library provides an embeddable PDF viewer component. It's different from ot
 
 Version 20.0.2 is a security fix. It solves CVE-2024-4367. I strongly recommend updating to the latest version of ngx-extended-pdf-viewer as soon as possible, or to version 20.0.2 as a minimum. Older versions contain a bug allowing malicious PDF files to run arbitrary code. Kudos go to GitHub users ScratchPDX and Deepak Shakya to tell me about it, so I could provide a hotfix during my vacations.
 
+## Version 23
+
+Currently version 23 is in it's alpha stage. However, in this particular case, that doesn't mean it's a risk. I just want to get some time to introduce (minor) breaking changes. In particular, version 23.0.0-alpha.0 fixes an annoying bug of version 23.3.10: single-page mode now works again.
+
+Plans for version 23:
+
+- I intend to update to pdf.js 4.10.
+
+Breaking changes:
+
+- I've reduced the default maximum resolution of the canvas files. As it turned out, going to the limit caused many Android and iOS devices to crash. Now the algorithm is much more careful when calculating the maximum resolution. If you know what you're doing and want to go to the limit, you can still do that: just set `pdfDefaultOptions.maxCanvasPixels = -1`.
+
 ## Version 22: improved search UI and update to pdf.js 4.7
 
 Version 22 updates to my fork of pdf.js 4.7. You can also opt in for my fork of pdf.js 4.10.38. I'm calling it the "bleeding edge" branch, so you know that while you're invited to test it, it may be broken. Luckily, it isn't, most of the time.

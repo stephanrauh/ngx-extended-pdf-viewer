@@ -643,4 +643,5 @@
 - 23.3.7 #2710 simplify the build scripts (no change to the library, it's only a new version because it's impossible to revoke npm publications)
 - 23.3.8 #2205 stop rendering the initial page twice with different zoom settings; #2710 simplify the build scripts (no change to the library, it's only a new version because it's impossible to revoke npm publications)
 - 23.3.9 #2503 inform the find controller about changes of the pageViewMode
-- 23.3.10 #2773 fix the ng add schmematics for Angular 19 projects using esbuild
+- 23.3.10 #2773 fix the ng add schematics for Angular 19 projects using esbuild
+- 24.0.0-alpha.0 #2568 reduce the default maximum resolution in order to avoid crashed on Android and iOS; #2679 allow developers to add highlight annotations programmatically; #2784 make sure that the eventBus attribute is set before using it (fixed a bug that caused some documents to crash in single-page mode)

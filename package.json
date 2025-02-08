@@ -19,6 +19,7 @@
     "run:all:old": "node ./build-tools/1241-run-base-library-and-library-and-old-showcase.js",
     "release:lib": "node ./build-tools/5-release-library.js",
     "release:showcase": "node ./build-tools/6-release-showcase.js",
+    "cleanup": "ng g @schematics/angular:cleanup-unused-imports",
     "--- showcase tasks:": "",
     "build-schematics": "npm run build --prefix projects/showcase-schematics",
     "add-documentation-page": "schematics ./projects/showcase-schematics:documentationPage --dry-run=false",
