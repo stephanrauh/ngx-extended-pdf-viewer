@@ -22,6 +22,9 @@ export function assetsUrl(url: string, postfixIfPathIsRelativ = ''): string {
 }
 
 export function getSafeCanvasSize(): number {
+  if (typeof window === 'undefined' || typeof document === 'undefined') {
+    return 4096;
+  }
   // Create a temporary WebGL context
   const canvas = document.createElement('canvas');
   const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
