@@ -12,7 +12,7 @@ import { BROWSER_STORAGE } from '../../../../shared/helper/browser-storage.token
     [attr.aria-label]="useDarkTheme ? 'Switch to light theme' : 'Switch to dark theme'"
   >
     <!-- Sun icon (for dark mode) -->
-    <svg class="hidden dark:block w-5 h-5 text-yellow-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <svg aria-hidden="true" focusable="false" class="hidden dark:block w-5 h-5 text-yellow-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path
         stroke-linecap="round"
         stroke-linejoin="round"
@@ -22,7 +22,7 @@ import { BROWSER_STORAGE } from '../../../../shared/helper/browser-storage.token
     </svg>
 
     <!-- Moon icon (for light mode) -->
-    <svg class="block dark:hidden w-5 h-5 text-primary-light" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <svg aria-hidden="true" focusable="false" class="block dark:hidden w-5 h-5 text-primary-light" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path
         stroke-linecap="round"
         stroke-linejoin="round"
