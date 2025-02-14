@@ -24,7 +24,9 @@ The `<pdf-shy-button>` allows you to benefit from seamless integration into the 
   l10nLabel="pdfjs-infinite-scroll-button-label"
   [order]="3400"
   [closeOnClick]="false"
-  image="<svg xmlns='http://www.w3.org/2000/svg' 
+  image="<svg aria-hidden='true' 
+          focusable='false' 
+          xmlns='http://www.w3.org/2000/svg' 
           height= '24' viewBox= '0 -960 960 960' 
           width='24'>
            <path d= '...'/>
