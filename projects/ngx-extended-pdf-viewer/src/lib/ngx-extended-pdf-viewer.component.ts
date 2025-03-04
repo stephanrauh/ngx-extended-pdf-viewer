@@ -782,7 +782,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   public set handTool(handTool: boolean) {
     if (this.isIOS() && handTool) {
       console.log(
-        "On iOS, the handtool doesn't work reliably. Plus, you don't need it because touch gestures allow you to distinguish easily between swiping and selecting text. Therefore, the library ignores your setting."
+        "On iOS, the handtool doesn't work reliably. Plus, you don't need it because touch gestures allow you to distinguish easily between swiping and selecting text. Therefore, the library ignores your setting.",
       );
       return;
     }
@@ -1044,7 +1044,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     private readonly pdfScriptLoaderService: PDFScriptLoaderService,
     private readonly keyboardManager: NgxKeyboardManagerService,
     private readonly cspPolicyService: PdfCspPolicyService,
-    private readonly ngZone: NgZone
+    private readonly ngZone: NgZone,
   ) {
     this.baseHref = this.platformLocation.getBaseHrefFromDOM();
     if (isPlatformBrowser(this.platformId)) {
@@ -1084,7 +1084,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         this.initializationPromise = this.initialize;
         this.initializationPromise();
       });
-
     }
   }
 
@@ -1105,9 +1104,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         if (this.formSupport) {
           this.formSupport.registerFormSupportWithPdfjs(this.pdfScriptLoaderService.PDFViewerApplication);
           this.keyboardManager.registerKeyboardListener(this.pdfScriptLoaderService.PDFViewerApplication);
-          this.pdfScriptLoaderService.PDFViewerApplication.cspPolicyService = this.cspPolicyService;
-          this.ngZone.runOutsideAngular(() => this.doInitPDFViewer());
+          this.formSupport.ngZone = this.ngZone;
+          this.formSupport.cdr = this.cdr;
         }
+        this.pdfScriptLoaderService.PDFViewerApplication.cspPolicyService = this.cspPolicyService;
+        this.ngZone.runOutsideAngular(() => this.doInitPDFViewer());
       }
     } catch (error) {
       console.error('Initialization failed:', error);
@@ -1394,7 +1395,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
             if (this.logLevel >= VerbosityLevel.WARNINGS) {
               console.warn(
                 // tslint:disable-next-line:max-line-length
-                'Hiding the "find" button because the text layer of the PDF file is not rendered. Use [textLayer]="true" to enable the find button.'
+                'Hiding the "find" button because the text layer of the PDF file is not rendered. Use [textLayer]="true" to enable the find button.',
               );
             }
           }
@@ -1402,7 +1403,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
             if (this.logLevel >= VerbosityLevel.WARNINGS) {
               console.warn(
                 // tslint:disable-next-line:max-line-length
-                'Hiding the "hand tool / selection mode" menu because the text layer of the PDF file is not rendered. Use [textLayer]="true" to enable the the menu items.'
+                'Hiding the "hand tool / selection mode" menu because the text layer of the PDF file is not rendered. Use [textLayer]="true" to enable the the menu items.',
               );
               this.showHandToolButton = false;
             }
@@ -1558,7 +1559,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         options.cspPolicyService = this.cspPolicyService;
         PDFViewerApplication.findBar?.close();
         PDFViewerApplication.secondaryToolbar?.close();
-        PDFViewerApplication.eventBus.dispatch('annotationeditormodechanged', {mode: 0});
+        PDFViewerApplication.eventBus.dispatch('annotationeditormodechanged', { mode: 0 });
 
         await PDFViewerApplication.open(options);
         this.pdfLoadingStarts.emit({});
@@ -1835,7 +1836,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
           total: x.matchesCount.total,
           matches: x.matchesCount.matches,
           matchesLength: x.matchesCount.matchesLength,
-        })
+        }),
       );
     });
 
@@ -1865,7 +1866,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     try {
       // sometimes the annotation editor UI is undefined, but it's a private variable,
       // so we simply catch the error
-      PDFViewerApplication.eventBus.dispatch('switchannotationeditormode', {mode: 0});
+      PDFViewerApplication.eventBus.dispatch('switchannotationeditormode', { mode: 0 });
     } catch (e) {
       // ignore this error
     }
@@ -1963,8 +1964,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     if (this.initializationPromise) {
       try {
         await this.initializationPromise;
-      } catch (e) {
-      }
+      } catch (e) {}
     }
 
     this.notificationService.onPDFJSInitSignal.set(undefined);

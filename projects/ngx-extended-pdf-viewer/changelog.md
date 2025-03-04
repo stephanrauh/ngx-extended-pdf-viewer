@@ -646,3 +646,4 @@
 - 22.3.10 #2773 fix the ng add schematics for Angular 19 projects using esbuild
 - 23.0.0-alpha.0 #2568 reduce the default maximum resolution in order to avoid crashed on Android and iOS; #2679 allow developers to add highlight annotations programmatically; #2784 make sure that the eventBus attribute is set before using it (fixed a bug that caused some documents to crash in single-page mode)
 - 23.0.0-alpha.1 #2737 added PdfCspPolicyService to the public API; #2568 deal correctly with server-side rendering
+- 23.0.0-alpha.2 #2801 form support was entirely broken - now it works again; the version also contains some undesired source code formatting changes which shouldn't impact the library itself

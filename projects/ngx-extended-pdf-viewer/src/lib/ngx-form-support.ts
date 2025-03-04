@@ -1,4 +1,4 @@
-import { EventEmitter } from '@angular/core';
+import { ChangeDetectorRef, EventEmitter, NgZone } from '@angular/core';
 import { FormDataType, IPDFViewerApplication } from '../public_api';
 
 export type HtmlFormElement = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
@@ -19,12 +19,17 @@ export class NgxFormSupport {
 
   private PDFViewerApplication: IPDFViewerApplication | undefined;
 
+  public ngZone!: NgZone; // set during the initializaion of the PDF viewer
+
+  public cdr!: ChangeDetectorRef; // set during the initializaion of the PDF viewer
+
   public reset() {
     this.formData = {};
     this.formIdToFullFieldName = {};
   }
 
   public registerFormSupportWithPdfjs(PDFViewerApplication: IPDFViewerApplication): void {
+    this.PDFViewerApplication = PDFViewerApplication;
     (globalThis as any).getFormValueFromAngular = (key: string) => this.getFormValueFromAngular(key);
     (globalThis as any).updateAngularFormValue = (key: string | HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement, value: { value: string }) =>
       this.updateAngularFormValueCalledByPdfjs(key, value);
@@ -33,7 +38,7 @@ export class NgxFormSupport {
       element: HtmlFormElement,
       value: string | Array<string>,
       radioButtonValueName: string,
-      initialValueFromPDF: string
+      initialValueFromPDF: string,
     ) => this.registerAcroformField(id, element, value, radioButtonValueName, initialValueFromPDF);
 
     (globalThis as any).registerXFAField = (element: HtmlFormElement, value: { value: string }, initialValueFromPDF: string) =>
@@ -45,7 +50,7 @@ export class NgxFormSupport {
     element: HtmlFormElement,
     value: null | string | Array<string>,
     radioButtonValueName: string,
-    initialFormValueFromPDF: string
+    initialFormValueFromPDF: string,
   ): void {
     const fieldName = element.name;
     this.formIdToField[id] = element;
@@ -189,7 +194,10 @@ export class NgxFormSupport {
         const field = this.formIdToField[key];
         let change = this.doUpdateAngularFormValue(field, value, fullKey);
         if (change) {
-          queueMicrotask(() => this.formDataChange.emit(this.formData));
+          this.ngZone.run(() => {
+            this.formDataChange.emit(this.formData);
+            this.cdr.detectChanges();
+          });
         }
       } else {
         console.error("Couldn't find the field with the name " + key);
@@ -205,7 +213,10 @@ export class NgxFormSupport {
         change ||= this.doUpdateAngularFormValue(key, value, fullFieldName);
       }
       if (change) {
-        queueMicrotask(() => this.formDataChange.emit(this.formData));
+        this.ngZone.run(() => {
+          this.formDataChange.emit(this.formData);
+          this.cdr.detectChanges();
+        });
       }
     }
   }
@@ -341,10 +352,10 @@ export class NgxFormSupport {
     if (matchingEntries.length > 1) {
       console.log(
         `More than one field name matches the field name ${fieldName}. Please use the one of these qualified field names:`,
-        matchingEntries.map((f) => f[1])
+        matchingEntries.map((f) => f[1]),
       );
       console.log(
-        'ngx-extended-pdf-viewer uses the first matching field (which may or may not be the topmost field on your PDF form): ' + matchingEntries[0][0]
+        'ngx-extended-pdf-viewer uses the first matching field (which may or may not be the topmost field on your PDF form): ' + matchingEntries[0][0],
       );
     } else if (matchingEntries.length === 0) {
       console.log("Couldn't find the field " + fieldName);
@@ -361,7 +372,7 @@ export class NgxFormSupport {
     if (matchingEntries.length > 1) {
       console.log(
         'More than one radio button group name matches this name. Please use the qualified field name',
-        matchingEntries.map((radio) => radio[0])
+        matchingEntries.map((radio) => radio[0]),
       );
       console.log('ngx-extended-pdf-viewer uses the first matching field (which may not be the topmost field on your PDF form): ' + matchingEntries[0][0]);
     }
