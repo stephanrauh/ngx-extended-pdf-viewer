@@ -343,6 +343,10 @@ pdfjs-editor-stamp-add-image-button-label = Илова кардани тасви
 pdfjs-editor-free-highlight-thickness-input = Ғафсӣ
 pdfjs-editor-free-highlight-thickness-title =
     .title = Иваз кардани ғафсӣ ҳангоми ҷудокунии унсурҳо ба ғайр аз матн
+# .default-content is used as a placeholder in an empty text editor.
+pdfjs-free-text2 =
+    .aria-label = Муҳаррири матн
+    .default-content = Матнро ворид кунед…
 pdfjs-free-text =
     .aria-label = Муҳаррири матн
 pdfjs-free-text-default-content = Нависед…
@@ -353,8 +357,9 @@ pdfjs-ink-canvas =
 
 ## Alt-text dialog
 
-# Alternative text (alt text) helps when people can't see the image.
 pdfjs-editor-alt-text-button-label = Матни иловагӣ
+pdfjs-editor-alt-text-edit-button =
+    .aria-label = Таҳрир кардани матни ивазкунанда
 pdfjs-editor-alt-text-edit-button-label = Таҳрир кардани матни иловагӣ
 pdfjs-editor-alt-text-dialog-label = Имконеро интихоб намоед
 pdfjs-editor-alt-text-dialog-description = Вақте ки одамон тасвирро дида наметавонанд ё вақте ки тасвир бор карда намешавад, матни иловагӣ (Alt text) кумак мерасонад.
@@ -368,6 +373,9 @@ pdfjs-editor-alt-text-decorative-tooltip = Ҳамчун матни ороишӣ 
 # .placeholder: This is a placeholder for the alt text input area
 pdfjs-editor-alt-text-textarea =
     .placeholder = Барои мисол, «Ман забони тоҷикиро дӯст медорам»
+# Alternative text (alt text) helps when people can't see the image.
+pdfjs-editor-alt-text-button =
+    .aria-label = Матни ивазкунанда
 
 ## Editor resizers
 ## This is used in an aria label to help to understand the role of the resizer.
@@ -432,14 +440,33 @@ pdfjs-editor-new-alt-text-dialog-edit-label = Таҳрир кардани мат
 pdfjs-editor-new-alt-text-dialog-add-label = Илова кардани матни иловагӣ (тафсири тасвир)
 pdfjs-editor-new-alt-text-textarea =
     .placeholder = Тафсири худро дар ин ҷо нависед…
+# This text refers to the alt text box above this description. It offers a definition of alt text.
+pdfjs-editor-new-alt-text-description = Тавсифи мухтасар барои одамоне, ки аксҳоро дида наметавонанд ё вақте ки аксҳо кушода намешаванд.
+# This is a required legal disclaimer that refers to the automatically created text inside the alt text box above this text. It disappears if the text is edited by a human.
+pdfjs-editor-new-alt-text-disclaimer1 = Ин матни ивазкунанда ба таври худкор сохта шудааст ва шояд нодуруст бошад.
 pdfjs-editor-new-alt-text-disclaimer-learn-more-url = Маълумоти бештар
+pdfjs-editor-new-alt-text-create-automatically-button-label = Ба таври худкор эҷод кардани матни иловагӣ
 pdfjs-editor-new-alt-text-not-now-button = Ҳоло не
+pdfjs-editor-new-alt-text-error-title = Матни иловагӣ ба таври худкор эҷод карда нашуд
+pdfjs-editor-new-alt-text-error-description = Лутфан, матни иловагии худро ворид кунед ё баъдтар аз нав кӯшиш кунед.
 pdfjs-editor-new-alt-text-error-close-button = Пӯшидан
+# Variables:
+#   $totalSize (Number) - the total size (in MB) of the AI model.
+#   $downloadedSize (Number) - the downloaded size (in MB) of the AI model.
+#   $percent (Number) - the percentage of the downloaded size.
+pdfjs-editor-new-alt-text-ai-model-downloading-progress = Боргирии модели зеҳни сунъӣ (AI) барои матни ивазкунанда ({ $downloadedSize } аз { $totalSize } МБ)
+    .aria-valuetext = Боргирии модели зеҳни сунъӣ (AI) барои матни ивазкунанда ({ $downloadedSize } аз { $totalSize } МБ)
 # This is a button that users can click to edit the alt text they have already added.
+pdfjs-editor-new-alt-text-added-button =
+    .aria-label = Матни иловагӣ илова карда шуд
 pdfjs-editor-new-alt-text-added-button-label = Матни иловагӣ илова карда шуд
 # This is a button that users can click to open the alt text editor and add alt text when it is not present.
+pdfjs-editor-new-alt-text-missing-button =
+    .aria-label = Матни иловагӣ вуҷуд надорад
 pdfjs-editor-new-alt-text-missing-button-label = Матни иловагӣ вуҷуд надорад
 # This is a button that opens up the alt text modal where users should review the alt text that was automatically generated.
+pdfjs-editor-new-alt-text-to-review-button =
+    .aria-label = Бознигарӣ кардани матни иловагӣ
 pdfjs-editor-new-alt-text-to-review-button-label = Бознигарӣ кардани матни иловагӣ
 # "Created automatically" is a prefix that will be added to the beginning of any alt text that has been automatically generated. After the colon, the user will see/hear the actual alt text description. If the alt text has been edited by a human, this prefix will not appear.
 # Variables:
@@ -454,44 +481,41 @@ pdfjs-image-alt-text-settings-button-label = Танзимоти матни ил�
 pdfjs-editor-alt-text-settings-dialog-label = Танзимоти матни иловагии тасвир
 pdfjs-editor-alt-text-settings-automatic-title = Матни иловагии худкор
 pdfjs-editor-alt-text-settings-create-model-button-label = Ба таври худкор эҷод кардани матни иловагӣ
+pdfjs-editor-alt-text-settings-create-model-description = Ин имкон барои расонидани кумак ба одамоне, ки аксҳоро дида наметавонанд ё вақте ки аксҳо кушода намешаванд, тавсифи аксҳоро пешниҳод мекунад.
+# Variables:
+#   $totalSize (Number) - the total size (in MB) of the AI model.
+pdfjs-editor-alt-text-settings-download-model-label = Модели зеҳни сунъӣ «AI» барои матни ивазкунанда ({ $totalSize } МБ)
+pdfjs-editor-alt-text-settings-ai-model-description = Дар дастгоҳи шумо ба таври маҳаллӣ кор мекунад, бинобар ин махфияти маълумоти шахсии шумо нигоҳ дошта мешавад. Барои матни ивазкунандаи худкор лозим аст.
 pdfjs-editor-alt-text-settings-delete-model-button = Нест кардан
 pdfjs-editor-alt-text-settings-download-model-button = Боргирӣ кардан
 pdfjs-editor-alt-text-settings-downloading-model-button = Дар ҳоли боргирӣ…
 pdfjs-editor-alt-text-settings-editor-title = Муҳаррири матни иловагӣ
+pdfjs-editor-alt-text-settings-show-dialog-button-label = Дарҳол нишон додани муҳаррири матни ивазкунанда ҳангоми иловакунии тасвир
+pdfjs-editor-alt-text-settings-show-dialog-description = Ба шумо кумак мекунад, ки боварӣ ҳосил кунед, ки ҳамаи тасвирҳои шумо дорои матни ивазкунанда мебошанд.
 pdfjs-editor-alt-text-settings-close-button = Пӯшидан
 
+## "Annotations removed" bar
+
+pdfjs-editor-undo-bar-message-highlight = Ҷудосозӣ тоза карда шуд
+pdfjs-editor-undo-bar-message-freetext = Матн тоза карда шуд
+pdfjs-editor-undo-bar-message-ink = Расм тоза карда шуд
+pdfjs-editor-undo-bar-message-stamp = Тасвир тоза карда шуд
+# Variables:
+#   $count (Number) - the number of removed annotations.
+pdfjs-editor-undo-bar-message-multiple =
+    { $count ->
+        [one] { $count } ҳошиянависӣ тоза карда шуд
+       *[other] { $count } ҳошиянависӣ тоза карда шуданд
+    }
+pdfjs-editor-undo-bar-undo-button =
+    .title = Бекор кардан
+pdfjs-editor-undo-bar-undo-button-label = Бекор кардан
+pdfjs-editor-undo-bar-close-button =
+    .title = Пӯшидан
+pdfjs-editor-undo-bar-close-button-label = Пӯшидан
+
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-editor-new-alt-text-description = Short description for people who can’t see the image or when the image doesn’t load.
-pdfjs-editor-new-alt-text-disclaimer1 = This alt text was created automatically and may be inaccurate.
-pdfjs-editor-new-alt-text-create-automatically-button-label = Create alt text automatically
-pdfjs-editor-new-alt-text-error-title = Couldn’t create alt text automatically
-pdfjs-editor-new-alt-text-error-description = Please write your own alt text or try again later.
-pdfjs-editor-new-alt-text-ai-model-downloading-progress = Downloading alt text AI model ({ $downloadedSize } of { $totalSize } MB)
-    .aria-valuetext = Downloading alt text AI model ({ $downloadedSize } of { $totalSize } MB)
-pdfjs-editor-alt-text-settings-create-model-description = Suggests descriptions to help people who can’t see the image or when the image doesn’t load.
-pdfjs-editor-alt-text-settings-download-model-label = Alt text AI model ({ $totalSize } MB)
-pdfjs-editor-alt-text-settings-ai-model-description = Runs locally on your device so your data stays private. Required for automatic alt text.
-pdfjs-editor-alt-text-settings-show-dialog-button-label = Show alt text editor right away when adding an image
-pdfjs-editor-alt-text-settings-show-dialog-description = Helps you make sure all your images have alt text.
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = match each word
 pdfjs-find-regexp-checkbox-label = regular expression
-pdfjs-free-text2 =
-    .aria-label = Text Editor
-    .default-content = Start typing…
-pdfjs-editor-undo-bar-message-highlight = Highlight removed
-pdfjs-editor-undo-bar-message-freetext = Text removed
-pdfjs-editor-undo-bar-message-ink = Drawing removed
-pdfjs-editor-undo-bar-message-stamp = Image removed
-pdfjs-editor-undo-bar-message-multiple =
-    { $count ->
-        [one] { $count } annotation removed
-       *[other] { $count } annotations removed
-    }
-pdfjs-editor-undo-bar-undo-button =
-    .title = Undo
-pdfjs-editor-undo-bar-undo-button-label = Undo
-pdfjs-editor-undo-bar-close-button =
-    .title = Close
-pdfjs-editor-undo-bar-close-button-label = Close

@@ -343,6 +343,10 @@ pdfjs-editor-stamp-add-image-button-label = Lisää kuva
 pdfjs-editor-free-highlight-thickness-input = Paksuus
 pdfjs-editor-free-highlight-thickness-title =
     .title = Muuta paksuutta korostaessasi muita kohteita kuin tekstiä
+# .default-content is used as a placeholder in an empty text editor.
+pdfjs-free-text2 =
+    .aria-label = Tekstimuokkain
+    .default-content = Aloita kirjoittaminen…
 pdfjs-free-text =
     .aria-label = Tekstimuokkain
 pdfjs-free-text-default-content = Aloita kirjoittaminen…
@@ -353,8 +357,9 @@ pdfjs-ink-canvas =
 
 ## Alt-text dialog
 
-# Alternative text (alt text) helps when people can't see the image.
 pdfjs-editor-alt-text-button-label = Vaihtoehtoinen teksti
+pdfjs-editor-alt-text-edit-button =
+    .aria-label = Muokkaa vaihtoehtoista tekstiä
 pdfjs-editor-alt-text-edit-button-label = Muokkaa vaihtoehtoista tekstiä
 pdfjs-editor-alt-text-dialog-label = Valitse vaihtoehto
 pdfjs-editor-alt-text-dialog-description = Vaihtoehtoinen teksti ("alt-teksti") auttaa ihmisiä, jotka eivät näe kuvaa tai kun kuva ei lataudu.
@@ -368,6 +373,9 @@ pdfjs-editor-alt-text-decorative-tooltip = Merkitty koristeelliseksi
 # .placeholder: This is a placeholder for the alt text input area
 pdfjs-editor-alt-text-textarea =
     .placeholder = Esimerkiksi "Nuori mies istuu pöytään syömään aterian"
+# Alternative text (alt text) helps when people can't see the image.
+pdfjs-editor-alt-text-button =
+    .aria-label = Vaihtoehtoinen teksti
 
 ## Editor resizers
 ## This is used in an aria label to help to understand the role of the resizer.
@@ -449,10 +457,16 @@ pdfjs-editor-new-alt-text-error-close-button = Sulje
 pdfjs-editor-new-alt-text-ai-model-downloading-progress = Ladataan vaihtoehtoisen tekstin tekoälymallia ({ $downloadedSize } / { $totalSize } Mt)
     .aria-valuetext = Ladataan vaihtoehtoisen tekstin tekoälymallia ({ $downloadedSize } / { $totalSize } Mt)
 # This is a button that users can click to edit the alt text they have already added.
+pdfjs-editor-new-alt-text-added-button =
+    .aria-label = Vaihtoehtoinen teksti lisätty
 pdfjs-editor-new-alt-text-added-button-label = Vaihtoehtoinen teksti lisätty
 # This is a button that users can click to open the alt text editor and add alt text when it is not present.
+pdfjs-editor-new-alt-text-missing-button =
+    .aria-label = Vaihtoehtoinen teksti puuttuu
 pdfjs-editor-new-alt-text-missing-button-label = Vaihtoehtoinen teksti puuttuu
 # This is a button that opens up the alt text modal where users should review the alt text that was automatically generated.
+pdfjs-editor-new-alt-text-to-review-button =
+    .aria-label = Tarkista vaihtoehtoinen teksti
 pdfjs-editor-new-alt-text-to-review-button-label = Tarkista vaihtoehtoinen teksti
 # "Created automatically" is a prefix that will be added to the beginning of any alt text that has been automatically generated. After the colon, the user will see/hear the actual alt text description. If the alt text has been edited by a human, this prefix will not appear.
 # Variables:
@@ -480,26 +494,28 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Näytä vaihtoehtoisen
 pdfjs-editor-alt-text-settings-show-dialog-description = Auttaa varmistamaan, että kaikissa kuvissasi on vaihtoehtoinen teksti.
 pdfjs-editor-alt-text-settings-close-button = Sulje
 
+## "Annotations removed" bar
+
+pdfjs-editor-undo-bar-message-highlight = Korostus poistettu
+pdfjs-editor-undo-bar-message-freetext = Teksti poistettu
+pdfjs-editor-undo-bar-message-ink = Piirustus poistettu
+pdfjs-editor-undo-bar-message-stamp = Kuva poistettu
+# Variables:
+#   $count (Number) - the number of removed annotations.
+pdfjs-editor-undo-bar-message-multiple =
+    { $count ->
+        [one] { $count } merkintä poistettu
+       *[other] { $count } merkintää poistettu
+    }
+pdfjs-editor-undo-bar-undo-button =
+    .title = Kumoa
+pdfjs-editor-undo-bar-undo-button-label = Kumoa
+pdfjs-editor-undo-bar-close-button =
+    .title = Sulje
+pdfjs-editor-undo-bar-close-button-label = Sulje
+
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = match each word
 pdfjs-find-regexp-checkbox-label = regular expression
-pdfjs-free-text2 =
-    .aria-label = Text Editor
-    .default-content = Start typing…
-pdfjs-editor-undo-bar-message-highlight = Highlight removed
-pdfjs-editor-undo-bar-message-freetext = Text removed
-pdfjs-editor-undo-bar-message-ink = Drawing removed
-pdfjs-editor-undo-bar-message-stamp = Image removed
-pdfjs-editor-undo-bar-message-multiple =
-    { $count ->
-        [one] { $count } annotation removed
-       *[other] { $count } annotations removed
-    }
-pdfjs-editor-undo-bar-undo-button =
-    .title = Undo
-pdfjs-editor-undo-bar-undo-button-label = Undo
-pdfjs-editor-undo-bar-close-button =
-    .title = Close
-pdfjs-editor-undo-bar-close-button-label = Close

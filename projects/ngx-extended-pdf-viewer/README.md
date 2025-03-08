@@ -41,15 +41,14 @@ Version 20.0.2 is a security fix. It solves CVE-2024-4367. I strongly recommend 
 
 ## Version 23
 
-Currently version 23 is in it's alpha stage. However, in this particular case, that doesn't mean it's a risk. I just want to get some time to introduce (minor) breaking changes. In particular, version 23.0.0-alpha.0 fixes an annoying bug of version 23.3.10: single-page mode now works again.
+Currently version 23 is in it's alpha stage. However, in this particular case, that doesn't mean it's a risk. I just want to get some time to introduce (minor) breaking changes. In particular, version 23.0.0 fixes two annoying bugs of version 23.3.10: both form support and single-page mode now work again.
 
-Plans for version 23:
-
-- I intend to update to pdf.js 4.10.
+Version 23 also update to pdf.js 4.10.
 
 Breaking changes:
 
 - I've reduced the default maximum resolution of the canvas files. As it turned out, going to the limit caused many Android and iOS devices to crash. Now the algorithm is much more careful when calculating the maximum resolution. If you know what you're doing and want to go to the limit, you can still do that: just set `pdfDefaultOptions.maxCanvasPixels = -1`.
+- Adding ink editor drawings programmatically is no longer supported. More to the point, it should work if you pass the correct parameters, but the API has changed, and I haven't been able to figure out which parameters need to be passed.
 
 ## Version 22: improved search UI and update to pdf.js 4.7
 

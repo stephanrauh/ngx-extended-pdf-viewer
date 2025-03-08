@@ -1,7 +1,7 @@
 export class AltText {
-    static "__#35@#l10nNewButton": null;
-    static _l10nPromise: null;
-    static initialize(l10nPromise: any): void;
+    static "__#39@#l10nNewButton": null;
+    static _l10n: null;
+    static initialize(l10n: any): void;
     constructor(editor: any);
     render(): Promise<HTMLButtonElement>;
     finish(): void;

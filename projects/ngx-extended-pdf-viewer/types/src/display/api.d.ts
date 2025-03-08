@@ -138,6 +138,23 @@ export type DocumentInitParameters = {
      */
     isOffscreenCanvasSupported?: boolean | undefined;
     /**
+     * - Determines if we can use
+     * `ImageDecoder` in the worker. Primarily used to improve performance of
+     * image conversion/rendering.
+     * The default value is `true` in web environments and `false` in Node.js.
+     *
+     * NOTE: Also temporarily disabled in Chromium browsers, until we no longer
+     * support the affected browser versions, because of various bugs:
+     *
+     * - Crashes when using the BMP decoder with huge images, e.g. issue6741.pdf;
+     * see https://issues.chromium.org/issues/374807001
+     *
+     * - Broken images when using the JPEG decoder with images that have custom
+     * colour profiles, e.g. GitHub discussion 19030;
+     * see https://issues.chromium.org/issues/378869810
+     */
+    isImageDecoderSupported?: boolean | undefined;
+    /**
      * - The integer value is used to
      * know when an image must be resized (uses `OffscreenCanvas` in the worker).
      * If it's -1 then a possibly slow algorithm is used to guess the max value.
@@ -536,10 +553,10 @@ export type PDFWorkerParameters = {
 };
 /** @type {string} */
 export const build: string;
-export const DefaultCanvasFactory: typeof NodeCanvasFactory;
-export const DefaultCMapReaderFactory: typeof NodeCMapReaderFactory;
+export const DefaultCanvasFactory: typeof DOMCanvasFactory | typeof NodeCanvasFactory;
+export const DefaultCMapReaderFactory: typeof DOMCMapReaderFactory;
 export const DefaultFilterFactory: typeof DOMFilterFactory | typeof NodeFilterFactory;
-export const DefaultStandardFontDataFactory: typeof NodeStandardFontDataFactory;
+export const DefaultStandardFontDataFactory: typeof DOMStandardFontDataFactory;
 /**
  * @typedef { Int8Array | Uint8Array | Uint8ClampedArray |
  *            Int16Array | Uint16Array |
@@ -620,6 +637,21 @@ export const DefaultStandardFontDataFactory: typeof NodeStandardFontDataFactory;
  *   `OffscreenCanvas` in the worker. Primarily used to improve performance of
  *   image conversion/rendering.
  *   The default value is `true` in web environments and `false` in Node.js.
+ * @property {boolean} [isImageDecoderSupported] - Determines if we can use
+ *   `ImageDecoder` in the worker. Primarily used to improve performance of
+ *   image conversion/rendering.
+ *   The default value is `true` in web environments and `false` in Node.js.
+ *
+ *   NOTE: Also temporarily disabled in Chromium browsers, until we no longer
+ *   support the affected browser versions, because of various bugs:
+ *
+ *    - Crashes when using the BMP decoder with huge images, e.g. issue6741.pdf;
+ *      see https://issues.chromium.org/issues/374807001
+ *
+ *    - Broken images when using the JPEG decoder with images that have custom
+ *      colour profiles, e.g. GitHub discussion 19030;
+ *      see https://issues.chromium.org/issues/378869810
+ *
  * @property {number} [canvasMaxAreaInBytes] - The integer value is used to
  *   know when an image must be resized (uses `OffscreenCanvas` in the worker).
  *   If it's -1 then a possibly slow algorithm is used to guess the max value.
@@ -676,7 +708,7 @@ export const DefaultStandardFontDataFactory: typeof NodeStandardFontDataFactory;
 export function getDocument(src?: string | URL | TypedArray | ArrayBuffer | DocumentInitParameters): PDFDocumentLoadingTask;
 export class LoopbackPort {
     postMessage(obj: any, transfer: any): void;
-    addEventListener(name: any, listener: any): void;
+    addEventListener(name: any, listener: any, options?: null): void;
     removeEventListener(name: any, listener: any): void;
     terminate(): void;
     #private;
@@ -755,7 +787,7 @@ export class PDFDataRangeTransport {
  * after which individual pages can be rendered.
  */
 export class PDFDocumentLoadingTask {
-    static "__#47@#docId": number;
+    static "__#54@#docId": number;
     _capability: any;
     _transport: any;
     _worker: any;
@@ -819,12 +851,12 @@ export class PDFDocumentProxy {
      */
     get numPages(): number;
     /**
-     * @type {Array<string, string|null>} A (not guaranteed to be) unique ID to
-     *   identify the PDF document.
+     * @type {Array<string | null>} A (not guaranteed to be) unique ID to identify
+     *   the PDF document.
      *   NOTE: The first element will always be defined for all PDF documents,
      *   whereas the second element is only defined for *modified* PDF documents.
      */
-    get fingerprints(): Array<string, string | null>;
+    get fingerprints(): Array<string | null>;
     /**
      * @type {boolean} True if only XFA form.
      */
@@ -1393,9 +1425,9 @@ export class PDFPageProxy {
  * @param {PDFWorkerParameters} params - The worker initialization parameters.
  */
 export class PDFWorker {
-    static "__#50@#fakeWorkerId": number;
-    static "__#50@#isWorkerDisabled": boolean;
-    static "__#50@#workerPorts": any;
+    static "__#57@#fakeWorkerId": number;
+    static "__#57@#isWorkerDisabled": boolean;
+    static "__#57@#workerPorts": any;
     /**
      * @param {PDFWorkerParameters} params - The worker initialization parameters.
      */
@@ -1405,7 +1437,7 @@ export class PDFWorker {
      * @type {string}
      */
     static get workerSrc(): string;
-    static get "__#50@#mainThreadWorkerMessageHandler"(): any;
+    static get "__#57@#mainThreadWorkerMessageHandler"(): any;
     static get _setupFakeWorkerGlobal(): any;
     constructor({ name, port, verbosity, cspPolicyService, }?: {
         name?: null | undefined;
@@ -1480,11 +1512,12 @@ export const version: string;
 import { PageViewport } from "./display_utils.js";
 import { OptionalContentConfig } from "./optional_content_config.js";
 import { PrintAnnotationStorage } from "./annotation_storage.js";
+import { DOMCanvasFactory } from "./canvas_factory.js";
 import { NodeCanvasFactory } from "./node_utils";
-import { NodeCMapReaderFactory } from "./node_utils";
-import { DOMFilterFactory } from "./display_utils.js";
+import { DOMCMapReaderFactory } from "./cmap_reader_factory";
+import { DOMFilterFactory } from "./filter_factory.js";
 import { NodeFilterFactory } from "./node_utils";
-import { NodeStandardFontDataFactory } from "./node_utils";
+import { DOMStandardFontDataFactory } from "./standard_fontdata_factory";
 import { AnnotationStorage } from "./annotation_storage.js";
 import { Metadata } from "./metadata.js";
 import { StatTimer } from "./display_utils.js";
@@ -1512,6 +1545,11 @@ declare class PDFObjects {
      * @returns {boolean}
      */
     has(objId: string): boolean;
+    /**
+     * @param {string} objId
+     * @returns {boolean}
+     */
+    delete(objId: string): boolean;
     /**
      * Resolves the object `objId` with optional `data`.
      *

@@ -1,6 +1,7 @@
 /** @implements {IPDFStream} */
 export class PDFFetchStream implements IPDFStream {
     constructor(source: any);
+    _responseOrigin: null;
     source: any;
     isHttp: boolean;
     headers: Headers;

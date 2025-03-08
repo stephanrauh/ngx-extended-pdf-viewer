@@ -17,14 +17,13 @@ declare class NetworkManager {
         httpHeaders: any;
         withCredentials: any;
     });
+    _responseOrigin: null;
     url: any;
     isHttp: boolean;
     headers: Headers;
     withCredentials: any;
     currXhrId: number;
     pendingRequests: any;
-    requestRange(begin: any, end: any, listeners: any): number;
-    requestFull(listeners: any): number;
     request(args: any): number;
     onProgress(xhrId: any, evt: any): void;
     onStateChange(xhrId: any, evt: any): void;
@@ -72,9 +71,10 @@ declare class PDFNetworkStreamRangeRequestReader implements IPDFStreamRangeReade
     _requests: any[];
     _queuedChunk: any;
     _done: boolean;
-    _storedError: import("../shared/util.js").MissingPDFException | import("../shared/util.js").UnexpectedResponseException | undefined;
+    _storedError: Error | undefined;
     onProgress: any;
     onClosed: any;
+    _onHeadersReceived(): void;
     _close(): void;
     _onDone(data: any): void;
     _onError(status: any): void;

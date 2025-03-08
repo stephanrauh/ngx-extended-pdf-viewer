@@ -16,8 +16,8 @@ export class FreeTextEditor extends AnnotationEditor {
     static updateDefaultParams(type: any, value: any): void;
     /** @inheritdoc */
     static get defaultPropertiesToUpdate(): any[][];
-    static "__#19@#getNodeContent"(node: any): any;
-    static "__#19@#deserializeContent"(content: any): any;
+    static "__#18@#getNodeContent"(node: any): any;
+    static "__#18@#deserializeContent"(content: any): any;
     /** @inheritdoc */
     static deserialize(data: any, parent: any, uiManager: any): Promise<AnnotationEditor | null>;
     constructor(params: any);
@@ -31,6 +31,8 @@ export class FreeTextEditor extends AnnotationEditor {
      * @param {number} y in page units.
      */
     _translateEmpty(x: number, y: number): void;
+    /** @inheritdoc */
+    onceAdded(focus: any): void;
     /**
      * Commit the content we have in this editor.
      * @returns {undefined}

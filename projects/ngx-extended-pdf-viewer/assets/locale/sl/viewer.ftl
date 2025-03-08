@@ -347,6 +347,10 @@ pdfjs-editor-stamp-add-image-button-label = Dodaj sliko
 pdfjs-editor-free-highlight-thickness-input = Debelina
 pdfjs-editor-free-highlight-thickness-title =
     .title = Spremeni debelino pri označevanju nebesedilnih elementov
+# .default-content is used as a placeholder in an empty text editor.
+pdfjs-free-text2 =
+    .aria-label = Urejevalnik besedila
+    .default-content = Začnite tipkati …
 pdfjs-free-text =
     .aria-label = Urejevalnik besedila
 pdfjs-free-text-default-content = Začnite tipkati …
@@ -357,8 +361,9 @@ pdfjs-ink-canvas =
 
 ## Alt-text dialog
 
-# Alternative text (alt text) helps when people can't see the image.
 pdfjs-editor-alt-text-button-label = Nadomestno besedilo
+pdfjs-editor-alt-text-edit-button =
+    .aria-label = Uredi nadomestno besedilo
 pdfjs-editor-alt-text-edit-button-label = Uredi nadomestno besedilo
 pdfjs-editor-alt-text-dialog-label = Izberite možnost
 pdfjs-editor-alt-text-dialog-description = Nadomestno besedilo se prikaže tistim, ki ne vidijo slike, ali če se ta ne naloži.
@@ -372,6 +377,9 @@ pdfjs-editor-alt-text-decorative-tooltip = Označeno kot okrasno
 # .placeholder: This is a placeholder for the alt text input area
 pdfjs-editor-alt-text-textarea =
     .placeholder = Na primer: "Mladenič sedi za mizo pri jedi"
+# Alternative text (alt text) helps when people can't see the image.
+pdfjs-editor-alt-text-button =
+    .aria-label = Nadomestno besedilo
 
 ## Editor resizers
 ## This is used in an aria label to help to understand the role of the resizer.
@@ -453,10 +461,16 @@ pdfjs-editor-new-alt-text-error-close-button = Zapri
 pdfjs-editor-new-alt-text-ai-model-downloading-progress = Prenašanje modela UI za nadomestno besedilo ({ $downloadedSize } od { $totalSize } MB)
     .aria-valuetext = Prenašanje modela UI za nadomestno besedilo ({ $downloadedSize } od { $totalSize } MB)
 # This is a button that users can click to edit the alt text they have already added.
+pdfjs-editor-new-alt-text-added-button =
+    .aria-label = Nadomestno besedilo dodano
 pdfjs-editor-new-alt-text-added-button-label = Nadomestno besedilo dodano
 # This is a button that users can click to open the alt text editor and add alt text when it is not present.
+pdfjs-editor-new-alt-text-missing-button =
+    .aria-label = Nadomestno besedilo manjka
 pdfjs-editor-new-alt-text-missing-button-label = Nadomestno besedilo manjka
 # This is a button that opens up the alt text modal where users should review the alt text that was automatically generated.
+pdfjs-editor-new-alt-text-to-review-button =
+    .aria-label = Oceni nadomestno besedilo
 pdfjs-editor-new-alt-text-to-review-button-label = Oceni nadomestno besedilo
 # "Created automatically" is a prefix that will be added to the beginning of any alt text that has been automatically generated. After the colon, the user will see/hear the actual alt text description. If the alt text has been edited by a human, this prefix will not appear.
 # Variables:
@@ -484,27 +498,31 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Ob dodajanju slike tak
 pdfjs-editor-alt-text-settings-show-dialog-description = Pomaga vam zagotoviti, da imajo vse vaše slike nadomestno besedilo.
 pdfjs-editor-alt-text-settings-close-button = Zapri
 
+## "Annotations removed" bar
+
+pdfjs-editor-undo-bar-message-highlight = Označba odstranjena
+pdfjs-editor-undo-bar-message-freetext = Besedilo odstranjeno
+pdfjs-editor-undo-bar-message-ink = Risba odstranjena
+pdfjs-editor-undo-bar-message-stamp = Slika odstranjena
+# Variables:
+#   $count (Number) - the number of removed annotations.
+pdfjs-editor-undo-bar-message-multiple =
+    { $count ->
+        [one] { $count } označba odstranjena
+        [two] { $count } označbi odstranjeni
+        [few] { $count } označbe odstranjene
+       *[other] { $count } označb odstranjenih
+    }
+pdfjs-editor-undo-bar-undo-button =
+    .title = Razveljavi
+pdfjs-editor-undo-bar-undo-button-label = Razveljavi
+pdfjs-editor-undo-bar-close-button =
+    .title = Zapri
+pdfjs-editor-undo-bar-close-button-label = Zapri
+
 # Additional translations for ngx-extended-pdf-viewer (sl)
 unverified-signature-warning = Dokument vsebuje digitalni podpis. PDF viewer ne more preveriti veljavnost podpisa. Prosimo prenesite dokument in veljavnost podpisa preverite v programu Acrobat Reader.
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = match each word
 pdfjs-find-regexp-checkbox-label = regular expression
-pdfjs-free-text2 =
-    .aria-label = Text Editor
-    .default-content = Start typing…
-pdfjs-editor-undo-bar-message-highlight = Highlight removed
-pdfjs-editor-undo-bar-message-freetext = Text removed
-pdfjs-editor-undo-bar-message-ink = Drawing removed
-pdfjs-editor-undo-bar-message-stamp = Image removed
-pdfjs-editor-undo-bar-message-multiple =
-    { $count ->
-        [one] { $count } annotation removed
-       *[other] { $count } annotations removed
-    }
-pdfjs-editor-undo-bar-undo-button =
-    .title = Undo
-pdfjs-editor-undo-bar-undo-button-label = Undo
-pdfjs-editor-undo-bar-close-button =
-    .title = Close
-pdfjs-editor-undo-bar-close-button-label = Close

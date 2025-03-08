@@ -23,30 +23,11 @@ export type RenderEditorLayerOptions = {
     viewport: PageViewport;
 };
 /**
- * @typedef {Object} AnnotationEditorLayerOptions
- * @property {Object} mode
- * @property {HTMLDivElement} div
- * @property {StructTreeLayerBuilder} structTreeLayer
- * @property {AnnotationEditorUIManager} uiManager
- * @property {boolean} enabled
- * @property {TextAccessibilityManager} [accessibilityManager]
- * @property {number} pageIndex
- * @property {IL10n} l10n
- * @property {AnnotationLayer} [annotationLayer]
- * @property {HTMLDivElement} [textLayer]
- * @property {DrawLayer} drawLayer
- * @property {PageViewport} viewport
- */
-/**
- * @typedef {Object} RenderEditorLayerOptions
- * @property {PageViewport} viewport
- */
-/**
  * Manage all the different editors on a page.
  */
 export class AnnotationEditorLayer {
     static _initialized: boolean;
-    static "__#29@#editorTypes": Map<number, typeof FreeTextEditor | typeof HighlightEditor | typeof InkEditor | typeof StampEditor>;
+    static "__#33@#editorTypes": Map<number, typeof FreeTextEditor | typeof HighlightEditor | typeof InkEditor | typeof StampEditor>;
     /**
      * @param {AnnotationEditorLayerOptions} options
      */
@@ -70,7 +51,6 @@ export class AnnotationEditorLayer {
      */
     updateMode(mode?: number): void;
     hasTextLayer(textLayer: any): boolean;
-    addInkEditorIfNeeded(isCommitting: any): void;
     /**
      * Set the editing state.
      * @param {boolean} isEditing
@@ -81,6 +61,7 @@ export class AnnotationEditorLayer {
      * @param {Object} params
      */
     addCommands(params: Object): void;
+    cleanUndoStack(type: any): void;
     toggleDrawing(enabled?: boolean): void;
     togglePointerEvents(enabled?: boolean): void;
     toggleAnnotationLayerPointerEvents(enabled?: boolean): void;
@@ -174,11 +155,6 @@ export class AnnotationEditorLayer {
      */
     toggleSelected(editor: AnnotationEditor): void;
     /**
-     * Check if the editor is selected.
-     * @param {AnnotationEditor} editor
-     */
-    isSelected(editor: AnnotationEditor): boolean;
-    /**
      * Unselect an editor.
      * @param {AnnotationEditor} editor
      */
@@ -193,6 +169,9 @@ export class AnnotationEditorLayer {
      * @param {PointerEvent} event
      */
     pointerdown(event: PointerEvent): void;
+    startDrawingSession(event: any): void;
+    pause(on: any): void;
+    endDrawingSession(isAborted?: boolean): any;
     /**
      *
      * @param {AnnotationEditor} editor
@@ -201,6 +180,8 @@ export class AnnotationEditorLayer {
      * @returns
      */
     findNewParent(editor: AnnotationEditor, x: number, y: number): boolean;
+    commitOrRemove(): boolean;
+    onScaleChanging(): void;
     /**
      * Destroy the main editor.
      */
@@ -221,7 +202,6 @@ export class AnnotationEditorLayer {
      */
     get pageDimensions(): Object;
     get scale(): number;
-    setCleaningUp(isCleaningUp: any): void;
     #private;
 }
 import { AnnotationEditor } from "./editor.js";

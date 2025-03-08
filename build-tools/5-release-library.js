@@ -34,7 +34,7 @@ process.chdir(path.join('..', 'mypdf.js'));
 runCommand('git checkout bleeding-edge', 'Error 66: Git checkout failed', 59);
 process.chdir(path.join('..', 'ngx-extended-pdf-viewer'));
 
-runCommand('node ./build-tools/1-build-base-library.js', 'Error 53: build-base-library.js failed', 53)
+runCommand('node ./build-tools/1-build-base-library.js', 'Error 53: build-base-library.js failed', 53);
 
 process.chdir(path.join('..', 'mypdf.js'));
 runCommand(`git commit . -m "bumped the version number to ${version}"`, 'Error 67:Git commit failed', 58);
@@ -42,15 +42,14 @@ process.chdir(path.join('..', 'ngx-extended-pdf-viewer'));
 
 // Build base library (stable branch)
 process.chdir(path.join('..', 'mypdf.js'));
-runCommand('git checkout 4.7', 'Error 68: Git checkout failed', 59);
+runCommand('git checkout 4.10', 'Error 68: Git checkout failed', 59);
 process.chdir(path.join('..', 'ngx-extended-pdf-viewer'));
 
-runCommand('node ./build-tools/1-build-base-library.js', 'Error 53: build-base-library.js failed', 53)
+runCommand('node ./build-tools/1-build-base-library.js', 'Error 53: build-base-library.js failed', 53);
 
 process.chdir(path.join('..', 'mypdf.js'));
 runCommand(`git commit . -m "bumped the version number to ${version}"`, 'Error: Git commit failed', 58);
 process.chdir(path.join('..', 'ngx-extended-pdf-viewer'));
-
 
 // Build library
 runCommand('node ./build-tools/2-build-library.js', 'Error 54: build-library.js failed', 54);
@@ -73,12 +72,16 @@ version = packageJson.version;
 // Commit changes
 runCommand(`git commit . -m "bumped the version number to ${version}"`, 'Error 58: Git commit failed', 58);
 
-// Change directory to mypdf.js and checkout 4.7
+// Change directory to mypdf.js and checkout 4.10
 process.chdir(path.join('..', 'mypdf.js'));
-runCommand('git checkout 4.7', 'Error 59: Git checkout failed', 59);
+runCommand('git checkout 4.10', 'Error 59: Git checkout failed', 59);
 
-// Increase version number in pdf.js 4.7
-runCommand('node ../ngx-extended-pdf-viewer/build-tools/base-library/write-version-number-to-base-library.js', 'Error 62: write-version-number-to-base-library failed at version 4.7', 57);
+// Increase version number in pdf.js 4.10
+runCommand(
+  'node ../ngx-extended-pdf-viewer/build-tools/base-library/write-version-number-to-base-library.js',
+  'Error 62: write-version-number-to-base-library failed at version 4.10',
+  57,
+);
 
 // Commit changes in mypdf.js
 runCommand(`git commit . -m "bumped the version number to ${version}"`, 'Error 61: Git commit in mypdf.js failed', 61);
@@ -87,7 +90,11 @@ runCommand(`git commit . -m "bumped the version number to ${version}"`, 'Error 6
 runCommand('git checkout bleeding-edge', 'Error 63: Git checkout failed', 59);
 
 // Increase version number in the bleeding edge branch
-runCommand('node ../ngx-extended-pdf-viewer/build-tools/base-library/write-version-number-to-base-library.js', 'Error 64: write-version-number-to-base-library failed at version 4.7', 57);
+runCommand(
+  'node ../ngx-extended-pdf-viewer/build-tools/base-library/write-version-number-to-base-library.js',
+  'Error 64: write-version-number-to-base-library failed at version 4.10',
+  57,
+);
 
 // Commit changes in mypdf.js
 runCommand(`git commit . -m "bumped the version number to ${version}"`, 'Error 65: Git commit in mypdf.js failed', 61);

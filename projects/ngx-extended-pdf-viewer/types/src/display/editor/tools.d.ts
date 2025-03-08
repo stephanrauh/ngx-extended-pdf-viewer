@@ -12,7 +12,8 @@ export class AnnotationEditorUIManager {
     static TRANSLATE_SMALL: number;
     static TRANSLATE_BIG: number;
     static get _keyboardManager(): any;
-    constructor(container: any, viewer: any, altTextManager: any, eventBus: any, pdfDocument: any, pageColors: any, highlightColors: any, enableHighlightFloatingButton: any, enableUpdatedAddImage: any, enableNewAltTextWhenAddingImage: any, mlManager: any);
+    constructor(container: any, viewer: any, altTextManager: any, eventBus: any, pdfDocument: any, pageColors: any, highlightColors: any, enableHighlightFloatingButton: any, enableUpdatedAddImage: any, enableNewAltTextWhenAddingImage: any, mlManager: any, editorUndoBar: any, supportsPinchToZoom: any);
+    _editorUndoBar: null;
     _signal: AbortSignal;
     _eventBus: any;
     viewParameters: {
@@ -20,6 +21,7 @@ export class AnnotationEditorUIManager {
         rotation: number;
     };
     isShiftKeyDown: boolean;
+    _supportsPinchToZoom: boolean;
     destroy(): void;
     combinedSignal(ac: any): AbortSignal;
     get mlManager(): null;
@@ -29,6 +31,11 @@ export class AnnotationEditorUIManager {
     get direction(): any;
     get highlightColors(): any;
     get highlightColorNames(): any;
+    /**
+     * Set the current drawing session.
+     * @param {AnnotationEditorLayer} layer
+     */
+    setCurrentDrawingSession(layer: AnnotationEditorLayer): void;
     setMainHighlightColorPicker(colorPicker: any): void;
     editAltText(editor: any, firstTime?: boolean): void;
     switchToMode(mode: any, callback: any): void;
@@ -198,6 +205,7 @@ export class AnnotationEditorUIManager {
      * @param {AnnotationEditor} editor
      */
     updateUI(editor: AnnotationEditor): void;
+    updateUIForDefaultProperties(editorType: any): void;
     /**
      * Add or remove an editor the current selection.
      * @param {AnnotationEditor} editor
@@ -234,6 +242,7 @@ export class AnnotationEditorUIManager {
      * @param {Object} params
      */
     addCommands(params: Object): void;
+    cleanUndoStack(type: any): void;
     /**
      * Delete the current editor or all.
      */
@@ -376,6 +385,7 @@ export class CommandManager {
      * @returns {boolean}
      */
     hasSomethingToRedo(): boolean;
+    cleanType(type: any): void;
     destroy(): void;
     reset(): void;
     #private;

@@ -5,6 +5,10 @@ export type PageViewportParameters = {
      */
     viewBox: Array<number>;
     /**
+     * - The size of units.
+     */
+    userUnit: number;
+    /**
      * - The scale of the viewport.
      */
     scale: number;
@@ -56,59 +60,6 @@ export type PageViewportCloneParameters = {
     dontFlip?: boolean | undefined;
 };
 export function deprecated(details: any): void;
-export class DOMCanvasFactory extends BaseCanvasFactory {
-    constructor({ ownerDocument, enableHWA }: {
-        ownerDocument?: Document | undefined;
-        enableHWA?: boolean | undefined;
-    });
-    _document: Document;
-    /**
-     * @ignore
-     */
-    _createCanvas(width: any, height: any): HTMLCanvasElement;
-}
-export class DOMCMapReaderFactory extends BaseCMapReaderFactory {
-    /**
-     * @ignore
-     */
-    _fetchData(url: any, compressionType: any): Promise<{
-        cMapData: Uint8Array<any>;
-        compressionType: any;
-    }>;
-}
-/**
- * FilterFactory aims to create some SVG filters we can use when drawing an
- * image (or whatever) on a canvas.
- * Filters aren't applied with ctx.putImageData because it just overwrites the
- * underlying pixels.
- * With these filters, it's possible for example to apply some transfer maps on
- * an image without the need to apply them on the pixel arrays: the renderer
- * does the magic for us.
- */
-export class DOMFilterFactory extends BaseFilterFactory {
-    constructor({ docId, ownerDocument }: {
-        docId: any;
-        ownerDocument?: Document | undefined;
-    });
-    addFilter(maps: any): any;
-    addHCMFilter(fgColor: any, bgColor: any): any;
-    addAlphaFilter(map: any): any;
-    addLuminosityFilter(map: any): any;
-    addHighlightHCMFilter(filterName: any, fgColor: any, bgColor: any, newFgColor: any, newBgColor: any): any;
-    #private;
-}
-export class DOMStandardFontDataFactory extends BaseStandardFontDataFactory {
-    /**
-     * @ignore
-     */
-    _fetchData(url: any): Promise<Uint8Array<any>>;
-}
-export class DOMSVGFactory extends BaseSVGFactory {
-    /**
-     * @ignore
-     */
-    _createSVG(type: any): any;
-}
 export function fetchData(url: any, type?: string): Promise<any>;
 export function getColorValues(colors: any): void;
 export function getCurrentTransform(ctx: any): any[];
@@ -164,6 +115,7 @@ export class OutputScale {
  * @typedef {Object} PageViewportParameters
  * @property {Array<number>} viewBox - The xMin, yMin, xMax and
  *   yMax coordinates.
+ * @property {number} userUnit - The size of units.
  * @property {number} scale - The scale of the viewport.
  * @property {number} rotation - The rotation, in degrees, of the viewport.
  * @property {number} [offsetX] - The horizontal, i.e. x-axis, offset. The
@@ -193,8 +145,9 @@ export class PageViewport {
     /**
      * @param {PageViewportParameters}
      */
-    constructor({ viewBox, scale, rotation, offsetX, offsetY, dontFlip, }: PageViewportParameters);
+    constructor({ viewBox, userUnit, scale, rotation, offsetX, offsetY, dontFlip, }: PageViewportParameters);
     viewBox: number[];
+    userUnit: number;
     scale: number;
     rotation: number;
     offsetX: number;
@@ -244,6 +197,7 @@ export class PageViewport {
     convertToPdfPoint(x: number, y: number): any[];
 }
 export class PDFDateString {
+    static "__#2@#regex": any;
     /**
      * Convert a PDF date string to a JavaScript `Date` object.
      *
@@ -287,9 +241,6 @@ export class StatTimer {
     timeEnd(name: any): void;
     toString(): string;
 }
-import { BaseCanvasFactory } from "./base_factory.js";
-import { BaseCMapReaderFactory } from "./base_factory.js";
-import { BaseFilterFactory } from "./base_factory.js";
-import { BaseStandardFontDataFactory } from "./base_factory.js";
-import { BaseSVGFactory } from "./base_factory.js";
+export function stopEvent(e: any): void;
+export const SVG_NS: "http://www.w3.org/2000/svg";
 export {};

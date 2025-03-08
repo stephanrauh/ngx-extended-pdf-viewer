@@ -112,7 +112,6 @@ export class PDFPageView implements IRenderableView {
     annotationLayer: AnnotationLayerBuilder | null;
     annotationEditorLayer: any;
     textLayer: TextLayerBuilder | null;
-    zoomLayer: ParentNode | null;
     xfaLayer: XfaLayerBuilder | null;
     structTreeLayer: any;
     drawLayer: any;
@@ -123,16 +122,13 @@ export class PDFPageView implements IRenderableView {
     destroy(): void;
     hasEditableAnnotations(): boolean;
     get _textHighlighter(): any;
-    /**
-     * @private
-     */
-    private _resetZoomLayer;
-    reset({ keepZoomLayer, keepAnnotationLayer, keepAnnotationEditorLayer, keepXfaLayer, keepTextLayer, }?: {
-        keepZoomLayer?: boolean | undefined;
+    canvas: HTMLCanvasElement | null | undefined;
+    reset({ keepAnnotationLayer, keepAnnotationEditorLayer, keepXfaLayer, keepTextLayer, keepCanvasWrapper, }?: {
         keepAnnotationLayer?: boolean | undefined;
         keepAnnotationEditorLayer?: boolean | undefined;
         keepXfaLayer?: boolean | undefined;
         keepTextLayer?: boolean | undefined;
+        keepCanvasWrapper?: boolean | undefined;
     }): void;
     toggleEditingMode(isEditing: any): void;
     /**
@@ -174,8 +170,7 @@ export class PDFPageView implements IRenderableView {
         keepTextLayer?: boolean | undefined;
         cancelExtraDelay?: number | undefined;
     }): void;
-    cssTransform({ target, redrawAnnotationLayer, redrawAnnotationEditorLayer, redrawXfaLayer, redrawTextLayer, hideTextLayer, }: {
-        target: any;
+    cssTransform({ redrawAnnotationLayer, redrawAnnotationEditorLayer, redrawXfaLayer, redrawTextLayer, hideTextLayer, }: {
         redrawAnnotationLayer?: boolean | undefined;
         redrawAnnotationEditorLayer?: boolean | undefined;
         redrawXfaLayer?: boolean | undefined;
@@ -186,7 +181,6 @@ export class PDFPageView implements IRenderableView {
     get height(): number;
     getPagePoint(x: any, y: any): any[];
     draw(): Promise<any>;
-    canvas: HTMLCanvasElement | undefined;
     outputScale: OutputScale | undefined;
     /**
      * @param {string|null} label

@@ -298,7 +298,7 @@ pdfjs-password-label = Введіть пароль для відкриття ц�
 pdfjs-password-invalid = Неправильний пароль. Спробуйте ще раз.
 pdfjs-password-ok-button = OK
 pdfjs-password-cancel-button = Скасувати
-pdfjs-web-fonts-disabled = Веб-шрифти вимкнено: неможливо використати вбудовані у PDF шрифти.
+pdfjs-web-fonts-disabled = Вебшрифти вимкнено: неможливо використати вбудовані у PDF шрифти.
 
 ## Editing
 
@@ -345,6 +345,10 @@ pdfjs-editor-stamp-add-image-button-label = Додати зображення
 pdfjs-editor-free-highlight-thickness-input = Товщина
 pdfjs-editor-free-highlight-thickness-title =
     .title = Змінюйте товщину під час підсвічування елементів, крім тексту
+# .default-content is used as a placeholder in an empty text editor.
+pdfjs-free-text2 =
+    .aria-label = Текстовий редактор
+    .default-content = Напишіть щось…
 pdfjs-free-text =
     .aria-label = Текстовий редактор
 pdfjs-free-text-default-content = Почніть вводити…
@@ -355,8 +359,9 @@ pdfjs-ink-canvas =
 
 ## Alt-text dialog
 
-# Alternative text (alt text) helps when people can't see the image.
 pdfjs-editor-alt-text-button-label = Альтернативний текст
+pdfjs-editor-alt-text-edit-button =
+    .aria-label = Редагувати альтернативний текст
 pdfjs-editor-alt-text-edit-button-label = Змінити альтернативний текст
 pdfjs-editor-alt-text-dialog-label = Вибрати варіант
 pdfjs-editor-alt-text-dialog-description = Альтернативний текст допомагає, коли зображення не видно або коли воно не завантажується.
@@ -370,6 +375,9 @@ pdfjs-editor-alt-text-decorative-tooltip = Позначено декоратив
 # .placeholder: This is a placeholder for the alt text input area
 pdfjs-editor-alt-text-textarea =
     .placeholder = Наприклад, “Молодий чоловік сідає за стіл їсти”
+# Alternative text (alt text) helps when people can't see the image.
+pdfjs-editor-alt-text-button =
+    .aria-label = Альтернативний текст
 
 ## Editor resizers
 ## This is used in an aria label to help to understand the role of the resizer.
@@ -451,10 +459,16 @@ pdfjs-editor-new-alt-text-error-close-button = Закрити
 pdfjs-editor-new-alt-text-ai-model-downloading-progress = Завантаження моделі ШІ для альтернативного тексту ({ $downloadedSize } з { $totalSize } МБ)
     .aria-valuetext = Завантаження моделі ШІ для альтернативного тексту ({ $downloadedSize } з { $totalSize } МБ)
 # This is a button that users can click to edit the alt text they have already added.
+pdfjs-editor-new-alt-text-added-button =
+    .aria-label = Альтернативний текст додано
 pdfjs-editor-new-alt-text-added-button-label = Альтернативний текст додано
 # This is a button that users can click to open the alt text editor and add alt text when it is not present.
+pdfjs-editor-new-alt-text-missing-button =
+    .aria-label = Відсутній альтернативний текст
 pdfjs-editor-new-alt-text-missing-button-label = Відсутній альтернативний текст
 # This is a button that opens up the alt text modal where users should review the alt text that was automatically generated.
+pdfjs-editor-new-alt-text-to-review-button =
+    .aria-label = Переглянути альтернативний текст
 pdfjs-editor-new-alt-text-to-review-button-label = Переглянути альтернативний текст
 # "Created automatically" is a prefix that will be added to the beginning of any alt text that has been automatically generated. After the colon, the user will see/hear the actual alt text description. If the alt text has been edited by a human, this prefix will not appear.
 # Variables:
@@ -482,26 +496,29 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Показувати �
 pdfjs-editor-alt-text-settings-show-dialog-description = Допомагає переконатися, що всі ваші зображення мають альтернативний текст.
 pdfjs-editor-alt-text-settings-close-button = Закрити
 
+## "Annotations removed" bar
+
+pdfjs-editor-undo-bar-message-highlight = Підсвічення вилучено
+pdfjs-editor-undo-bar-message-freetext = Текст вилучено
+pdfjs-editor-undo-bar-message-ink = Малюнок вилучено
+pdfjs-editor-undo-bar-message-stamp = Зображення вилучено
+# Variables:
+#   $count (Number) - the number of removed annotations.
+pdfjs-editor-undo-bar-message-multiple =
+    { $count ->
+        [one] { $count } анотацію вилучено
+        [few] { $count } анотації вилучено
+       *[many] { $count } анотацій вилучено
+    }
+pdfjs-editor-undo-bar-undo-button =
+    .title = Повернути
+pdfjs-editor-undo-bar-undo-button-label = Повернути
+pdfjs-editor-undo-bar-close-button =
+    .title = Закрити
+pdfjs-editor-undo-bar-close-button-label = Закрити
+
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = match each word
 pdfjs-find-regexp-checkbox-label = regular expression
-pdfjs-free-text2 =
-    .aria-label = Text Editor
-    .default-content = Start typing…
-pdfjs-editor-undo-bar-message-highlight = Highlight removed
-pdfjs-editor-undo-bar-message-freetext = Text removed
-pdfjs-editor-undo-bar-message-ink = Drawing removed
-pdfjs-editor-undo-bar-message-stamp = Image removed
-pdfjs-editor-undo-bar-message-multiple =
-    { $count ->
-        [one] { $count } annotation removed
-       *[other] { $count } annotations removed
-    }
-pdfjs-editor-undo-bar-undo-button =
-    .title = Undo
-pdfjs-editor-undo-bar-undo-button-label = Undo
-pdfjs-editor-undo-bar-close-button =
-    .title = Close
-pdfjs-editor-undo-bar-close-button-label = Close

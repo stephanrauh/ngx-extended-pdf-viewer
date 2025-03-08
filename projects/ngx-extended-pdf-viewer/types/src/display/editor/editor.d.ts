@@ -33,20 +33,21 @@ export type AnnotationEditorParameters = {
  * Base class for editors.
  */
 export class AnnotationEditor {
-    static _l10nPromise: null;
+    static _l10n: null;
     static _l10nResizer: null;
     static _borderLineWidth: number;
     static _colorManager: ColorManager;
     static _zIndex: number;
     static _telemetryTimeout: number;
     static get _resizerKeyboardManager(): any;
+    static get isDrawer(): boolean;
     static get _defaultLineColor(): any;
     static deleteAnnotationElement(editor: any): void;
     /**
      * Initialize the l10n stuff for this type of editor.
      * @param {Object} l10n
      */
-    static initialize(l10n: Object, _uiManager: any, options: any): void;
+    static initialize(l10n: Object, _uiManager: any): void;
     /**
      * Update the default parameters for this type of editor.
      * @param {number} _type
@@ -72,7 +73,8 @@ export class AnnotationEditor {
      * @param {AnnotationEditorLayer} parent
      */
     static paste(item: DataTransferItem, parent: AnnotationEditorLayer): void;
-    static "__#36@#rotatePoint"(x: any, y: any, angle: any): any[];
+    static "__#41@#rotatePoint"(x: any, y: any, angle: any): any[];
+    static _round(x: any): number;
     /**
      * Deserialize the editor.
      * The result of the deserialization is a new editor.
@@ -180,7 +182,20 @@ export class AnnotationEditor {
      */
     translateInPage(x: number, y: number): void;
     drag(tx: any, ty: any): void;
+    /**
+     * Called when the editor is being translated.
+     * @param {number} x - in page coordinates.
+     * @param {number} y - in page coordinates.
+     */
+    _onTranslating(x: number, y: number): void;
+    /**
+     * Called when the editor has been translated.
+     * @param {number} x - in page coordinates.
+     * @param {number} y - in page coordinates.
+     */
+    _onTranslated(x: number, y: number): void;
     get _hasBeenMoved(): boolean;
+    get _hasBeenResized(): boolean;
     /**
      * Get the translation to take into account the editor border.
      * The CSS engine positions the element by taking the border into account so
@@ -227,6 +242,14 @@ export class AnnotationEditor {
      */
     getInitialTranslation(): Array<number>;
     /**
+     * Called when the editor has been resized.
+     */
+    _onResized(): void;
+    /**
+     * Called when the editor is being resized.
+     */
+    _onResizing(): void;
+    /**
      * Called when the alt text dialog is closed.
      */
     altTextFinish(): void;
@@ -259,6 +282,9 @@ export class AnnotationEditor {
      * @param {PointerEvent} event
      */
     pointerdown(event: PointerEvent): void;
+    get isSelected(): any;
+    _onStartDragging(): void;
+    _onStopDragging(): void;
     moveInDOM(): void;
     _setParentAndPosition(parent: any, x: any, y: any): void;
     /**
@@ -271,8 +297,9 @@ export class AnnotationEditor {
     getRectInCurrentCoords(rect: any, pageHeight: any): any[];
     /**
      * Executed once this editor has been rendered.
+     * @param {boolean} focus - true if the editor should be focused.
      */
-    onceAdded(): void;
+    onceAdded(focus: boolean): void;
     /**
      * Check if the editor contains something.
      * @returns {boolean}
@@ -302,6 +329,7 @@ export class AnnotationEditor {
      * @returns {boolean}
      */
     needsToBeRebuilt(): boolean;
+    get isOnScreen(): boolean;
     /**
      * Rebuild the editor in case it has been removed on undo.
      *
@@ -309,10 +337,14 @@ export class AnnotationEditor {
      */
     rebuild(): void;
     /**
-     * Rotate the editor.
+     * Rotate the editor when the page is rotated.
      * @param {number} angle
      */
     rotate(_angle: any): void;
+    /**
+     * Resize the editor when the page is resized.
+     */
+    resize(): void;
     /**
      * Serialize the editor when it has been deleted.
      * @returns {Object}

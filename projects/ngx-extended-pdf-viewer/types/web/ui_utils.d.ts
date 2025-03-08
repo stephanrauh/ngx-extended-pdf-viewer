@@ -168,6 +168,7 @@ export function getPageSizeInches({ view, userUnit, rotate }: GetPageSizeInchesP
  * @returns {Object} `{ first, last, views: [{ id, x, y, view, percent }] }`
  */
 export function getVisibleElements({ scrollEl, views, sortByVisibility, horizontal, rtl, }: GetVisibleElementsParameters): Object;
+export function isInsideNgxExtendedPdfViewer(element: any): boolean;
 export function isPortraitOrientation(size: any): boolean;
 export function isValidRotation(angle: any): boolean;
 export function isValidScrollMode(mode: any): boolean;

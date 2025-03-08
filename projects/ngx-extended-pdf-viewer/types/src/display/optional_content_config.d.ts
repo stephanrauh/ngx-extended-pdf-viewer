@@ -4,7 +4,7 @@ export class OptionalContentConfig {
     name: any;
     creator: any;
     isVisible(group: any): any;
-    setVisibility(id: any, visible?: boolean): void;
+    setVisibility(id: any, visible?: boolean, preserveRB?: boolean): void;
     setOCGState({ state, preserveRB }: {
         state: any;
         preserveRB: any;

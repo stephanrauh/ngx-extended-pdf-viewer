@@ -5,34 +5,20 @@
  */
 export class DrawLayer {
     static get _svgFactory(): any;
-    static "__#28@#setBox"(element: any, { x, y, width, height }?: {
-        x?: number | undefined;
-        y?: number | undefined;
-        width?: number | undefined;
-        height?: number | undefined;
-    }): void;
+    static "__#32@#setBox"(element: any, [x, y, width, height]: [any, any, any, any]): void;
     constructor({ pageIndex }: {
         pageIndex: any;
     });
     pageIndex: any;
     setParent(parent: any): void;
-    highlight(outlines: any, color: any, opacity: any, isPathUpdatable?: boolean): {
+    draw(properties: any, isPathUpdatable?: boolean, hasClip?: boolean): {
         id: number;
         clipPathId: string;
     };
-    highlightOutline(outlines: any): number;
-    finalizeLine(id: any, line: any): void;
-    updateLine(id: any, line: any): void;
-    removeFreeHighlight(id: any): void;
-    updatePath(id: any, line: any): void;
-    updateBox(id: any, box: any): void;
-    show(id: any, visible: any): void;
-    rotate(id: any, angle: any): void;
-    changeColor(id: any, color: any): void;
-    changeOpacity(id: any, opacity: any): void;
-    addClass(id: any, className: any): void;
-    removeClass(id: any, className: any): void;
-    getSVGRoot(id: any): any;
+    drawOutline(properties: any, mustRemoveSelfIntersections: any): number;
+    finalizeDraw(id: any, properties: any): void;
+    updateProperties(elementOrId: any, properties: any): void;
+    updateParent(id: any, layer: any): void;
     remove(id: any): void;
     destroy(): void;
     #private;

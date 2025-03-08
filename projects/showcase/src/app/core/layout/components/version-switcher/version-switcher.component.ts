@@ -13,7 +13,7 @@ import { BROWSER_STORAGE } from '../../../../shared/helper/browser-storage.token
     <div class="input-wrapper flex flex-wrap gap-2 items-center justify-end">
       <label for="version">PDF Viewer Version</label>
       <select id="version" [formControl]="viewer">
-        <option [value]="stableVersion">Stable (based on pdf.js 4.7)</option>
+        <option [value]="stableVersion">Stable (based on pdf.js 4.10)</option>
         <option [value]="bleedingEdgeVersion">Bleeding Edge (preview of pdf.js 4.10++)</option>
       </select>
     </div>

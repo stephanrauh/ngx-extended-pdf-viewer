@@ -335,6 +335,10 @@ pdfjs-editor-stamp-add-image-button-label = 이미지 추가
 pdfjs-editor-free-highlight-thickness-input = 두께
 pdfjs-editor-free-highlight-thickness-title =
     .title = 텍스트 이외의 항목을 강조 표시할 때 두께 변경
+# .default-content is used as a placeholder in an empty text editor.
+pdfjs-free-text2 =
+    .aria-label = 텍스트 편집기
+    .default-content = 입력을 시작하세요…
 pdfjs-free-text =
     .aria-label = 텍스트 편집기
 pdfjs-free-text-default-content = 입력하세요…
@@ -345,8 +349,9 @@ pdfjs-ink-canvas =
 
 ## Alt-text dialog
 
-# Alternative text (alt text) helps when people can't see the image.
 pdfjs-editor-alt-text-button-label = 대체 텍스트
+pdfjs-editor-alt-text-edit-button =
+    .aria-label = 대체 텍스트 편집
 pdfjs-editor-alt-text-edit-button-label = 대체 텍스트 편집
 pdfjs-editor-alt-text-dialog-label = 옵션을 선택하세요
 pdfjs-editor-alt-text-dialog-description = 대체 텍스트는 사람들이 이미지를 볼 수 없거나 이미지가 로드되지 않을 때 도움이 됩니다.
@@ -360,6 +365,9 @@ pdfjs-editor-alt-text-decorative-tooltip = 장식용으로 표시됨
 # .placeholder: This is a placeholder for the alt text input area
 pdfjs-editor-alt-text-textarea =
     .placeholder = 예를 들어, “한 청년이 식탁에 앉아 식사를 하고 있습니다.”
+# Alternative text (alt text) helps when people can't see the image.
+pdfjs-editor-alt-text-button =
+    .aria-label = 대체 텍스트
 
 ## Editor resizers
 ## This is used in an aria label to help to understand the role of the resizer.
@@ -441,10 +449,16 @@ pdfjs-editor-new-alt-text-error-close-button = 닫기
 pdfjs-editor-new-alt-text-ai-model-downloading-progress = 대체 텍스트 AI 모델 다운로드 중 ({ $downloadedSize } / { $totalSize } MB)
     .aria-valuetext = 대체 텍스트 AI 모델 다운로드 중 ({ $downloadedSize } / { $totalSize } MB)
 # This is a button that users can click to edit the alt text they have already added.
+pdfjs-editor-new-alt-text-added-button =
+    .aria-label = 대체 텍스트 추가됨
 pdfjs-editor-new-alt-text-added-button-label = 대체 텍스트 추가됨
 # This is a button that users can click to open the alt text editor and add alt text when it is not present.
+pdfjs-editor-new-alt-text-missing-button =
+    .aria-label = 대체 텍스트 누락
 pdfjs-editor-new-alt-text-missing-button-label = 대체 텍스트 누락
 # This is a button that opens up the alt text modal where users should review the alt text that was automatically generated.
+pdfjs-editor-new-alt-text-to-review-button =
+    .aria-label = 대체 텍스트 검토
 pdfjs-editor-new-alt-text-to-review-button-label = 대체 텍스트 검토
 # "Created automatically" is a prefix that will be added to the beginning of any alt text that has been automatically generated. After the colon, the user will see/hear the actual alt text description. If the alt text has been edited by a human, this prefix will not appear.
 # Variables:
@@ -472,26 +486,24 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = 이미지 추가 시 �
 pdfjs-editor-alt-text-settings-show-dialog-description = 모든 이미지에 대체 텍스트가 있는지 확인하는 데 도움이 됩니다.
 pdfjs-editor-alt-text-settings-close-button = 닫기
 
+## "Annotations removed" bar
+
+pdfjs-editor-undo-bar-message-highlight = 강조 표시 제거됨
+pdfjs-editor-undo-bar-message-freetext = 텍스트 제거됨
+pdfjs-editor-undo-bar-message-ink = 그리기 제거됨
+pdfjs-editor-undo-bar-message-stamp = 이미지 제거됨
+# Variables:
+#   $count (Number) - the number of removed annotations.
+pdfjs-editor-undo-bar-message-multiple = 주석 { $count }개 제거됨
+pdfjs-editor-undo-bar-undo-button =
+    .title = 실행 취소
+pdfjs-editor-undo-bar-undo-button-label = 실행 취소
+pdfjs-editor-undo-bar-close-button =
+    .title = 닫기
+pdfjs-editor-undo-bar-close-button-label = 닫기
+
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = match each word
 pdfjs-find-regexp-checkbox-label = regular expression
-pdfjs-free-text2 =
-    .aria-label = Text Editor
-    .default-content = Start typing…
-pdfjs-editor-undo-bar-message-highlight = Highlight removed
-pdfjs-editor-undo-bar-message-freetext = Text removed
-pdfjs-editor-undo-bar-message-ink = Drawing removed
-pdfjs-editor-undo-bar-message-stamp = Image removed
-pdfjs-editor-undo-bar-message-multiple =
-    { $count ->
-        [one] { $count } annotation removed
-       *[other] { $count } annotations removed
-    }
-pdfjs-editor-undo-bar-undo-button =
-    .title = Undo
-pdfjs-editor-undo-bar-undo-button-label = Undo
-pdfjs-editor-undo-bar-close-button =
-    .title = Close
-pdfjs-editor-undo-bar-close-button-label = Close

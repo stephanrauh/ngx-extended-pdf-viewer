@@ -110,6 +110,11 @@ export type PDFViewerOptions = {
      * rendering. The default value is `false`.
      */
     enableHWA?: boolean | undefined;
+    /**
+     * - Enable zooming on pinch gesture.
+     * The default value is `true`.
+     */
+    supportsPinchToZoom?: boolean | undefined;
 };
 export namespace PagesCountLimit {
     let FORCE_SCROLL_MODE_PAGE: number;
@@ -159,6 +164,8 @@ export namespace PagesCountLimit {
  *   mode.
  * @property {boolean} [enableHWA] - Enables hardware acceleration for
  *   rendering. The default value is `false`.
+ * @property {boolean} [supportsPinchToZoom] - Enable zooming on pinch gesture.
+ *   The default value is `true`.
  */
 export class PDFPageViewBuffer {
     constructor(size: any);

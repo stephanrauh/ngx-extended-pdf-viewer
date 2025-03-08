@@ -10,22 +10,22 @@ You can set some of the properties of the editors. The example below sets all po
 @Component({
 standalone: false,  ... })
 export class EditorApiComponent {
-  
+
   constructor(private pdfViewerService: NgxExtendedPdfViewerService) {
-    
+
     // Number between 1 and 100
     this.pdfViewerService.editorFontSize = 12;
-    
+
     // Hex Color
     this.pdfViewerService.editorFontColor = '#000000';
 
     // Hex Color
     this.pdfViewerService.editorInkColor = '#000000';
-    
+
     // Number between 0 and 100
     this.pdfViewerService.editorInkOpacity = 80;
-    
-    // Number between 1 and 20 
+
+    // Number between 1 and 20
     this.pdfViewerService.editorInkThickness = 10;
 
     // Hex Color
@@ -33,10 +33,10 @@ export class EditorApiComponent {
 
     // Hex Color
     this.pdfViewerService.editorHighlightDefaultColor = '#de3535';
-    
+
     // Boolean
     this.pdfViewerService.editorHighlightShowAll = true;
-    
+
     // Number between 1 and 24
     this.pdfViewerService.editorHighlightThickness = 10;
   }
@@ -90,13 +90,11 @@ If you omit a coordinate, it's put at the logical origin:
 
 **Caveat**: In Chrome, the calculation of the bottom coordinate appears to be off by a few pixels. This discrepancy seems to stem from a bug in the PDF rendering engine, resulting in a canvas that is larger than expected (at least in my demo documents). This issue does not occur in Firefox.
 
-
 ### Large Files
 
 The PDF viewer renders pages lazily. If they aren't going to be used soon, the page is not rendered. If you've got a large file, a major part of the pages are just placeholders.
 
 This, in turn, means you can't add an annotation. If you want to add annotations to large files reliably, catch the event `(annotationLayerRendered)` and add the annotations in the event handler. Note that this event is triggered for every page individually. The event handler should add the annotations that belong to this particular page, but not to other pages.
-
 
 ## Low Level
 
@@ -110,7 +108,6 @@ You can export text, drawings, images, and highlight you've added to a PDF file.
 
 - [Export Text](./exporting/text)
 - [Export Image](./exporting/image)
-
 
 #### TypeScript
 
@@ -147,12 +144,10 @@ export class EditorApiComponent {
       color: [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)],
       thickness: Math.random()*10,
       opacity: 1,
-      paths: [
-        {
+      paths: {
           bezier: [x+0.5, y, x+0.5, y+44, x+44, y+66, x+88, y+44],
           points: [x+0.5, y, x+0.5, y+44],
         },
-      ],
       pageIndex: 0,
       rect: [x, y, x+100, y+66],
       rotation: 0,

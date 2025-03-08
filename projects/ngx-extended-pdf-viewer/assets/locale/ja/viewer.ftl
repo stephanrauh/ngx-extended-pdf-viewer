@@ -335,6 +335,10 @@ pdfjs-editor-stamp-add-image-button-label = 画像を追加
 pdfjs-editor-free-highlight-thickness-input = 太さ
 pdfjs-editor-free-highlight-thickness-title =
     .title = テキスト以外のアイテムを強調する時の太さを変更します
+# .default-content is used as a placeholder in an empty text editor.
+pdfjs-free-text2 =
+    .aria-label = フリーテキスト注釈エディター
+    .default-content = テキストを入力してください...
 pdfjs-free-text =
     .aria-label = フリーテキスト注釈エディター
 pdfjs-free-text-default-content = テキストを入力してください...
@@ -345,8 +349,9 @@ pdfjs-ink-canvas =
 
 ## Alt-text dialog
 
-# Alternative text (alt text) helps when people can't see the image.
 pdfjs-editor-alt-text-button-label = 代替テキスト
+pdfjs-editor-alt-text-edit-button =
+    .aria-label = 代替テキストを編集
 pdfjs-editor-alt-text-edit-button-label = 代替テキストを編集
 pdfjs-editor-alt-text-dialog-label = オプションの選択
 pdfjs-editor-alt-text-dialog-description = 代替テキストは画像が表示されない場合や読み込まれない場合にユーザーの助けになります。
@@ -360,6 +365,9 @@ pdfjs-editor-alt-text-decorative-tooltip = 装飾マークが付いています
 # .placeholder: This is a placeholder for the alt text input area
 pdfjs-editor-alt-text-textarea =
     .placeholder = 例:「若い人がテーブルの席について食事をしています」
+# Alternative text (alt text) helps when people can't see the image.
+pdfjs-editor-alt-text-button =
+    .aria-label = 代替テキスト
 
 ## Editor resizers
 ## This is used in an aria label to help to understand the role of the resizer.
@@ -441,10 +449,16 @@ pdfjs-editor-new-alt-text-error-close-button = 閉じる
 pdfjs-editor-new-alt-text-ai-model-downloading-progress = 代替テキスト AI モデルをダウンロードしています ({ $downloadedSize } / { $totalSize } MB)
     .aria-valuetext = 代替テキスト AI モデルをダウンロードしています ({ $downloadedSize } / { $totalSize } MB)
 # This is a button that users can click to edit the alt text they have already added.
+pdfjs-editor-new-alt-text-added-button =
+    .aria-label = 代替テキストを追加しました
 pdfjs-editor-new-alt-text-added-button-label = 代替テキストを追加しました
 # This is a button that users can click to open the alt text editor and add alt text when it is not present.
+pdfjs-editor-new-alt-text-missing-button =
+    .aria-label = 代替テキストがありません
 pdfjs-editor-new-alt-text-missing-button-label = 代替テキストがありません
 # This is a button that opens up the alt text modal where users should review the alt text that was automatically generated.
+pdfjs-editor-new-alt-text-to-review-button =
+    .aria-label = 代替テキストをレビュー
 pdfjs-editor-new-alt-text-to-review-button-label = 代替テキストをレビュー
 # "Created automatically" is a prefix that will be added to the beginning of any alt text that has been automatically generated. After the colon, the user will see/hear the actual alt text description. If the alt text has been edited by a human, this prefix will not appear.
 # Variables:
@@ -472,26 +486,24 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = 画像の追加時に�
 pdfjs-editor-alt-text-settings-show-dialog-description = すべての画像に代替テキストを追加する助けになります。
 pdfjs-editor-alt-text-settings-close-button = 閉じる
 
+## "Annotations removed" bar
+
+pdfjs-editor-undo-bar-message-highlight = 強調表示が削除されました
+pdfjs-editor-undo-bar-message-freetext = フリーテキスト注釈が削除されました
+pdfjs-editor-undo-bar-message-ink = インク注釈が削除されました
+pdfjs-editor-undo-bar-message-stamp = 画像が削除されました
+# Variables:
+#   $count (Number) - the number of removed annotations.
+pdfjs-editor-undo-bar-message-multiple = { $count } 個の注釈が削除されました
+pdfjs-editor-undo-bar-undo-button =
+    .title = 元に戻す
+pdfjs-editor-undo-bar-undo-button-label = 元に戻す
+pdfjs-editor-undo-bar-close-button =
+    .title = 閉じる
+pdfjs-editor-undo-bar-close-button-label = 閉じる
+
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = match each word
 pdfjs-find-regexp-checkbox-label = regular expression
-pdfjs-free-text2 =
-    .aria-label = Text Editor
-    .default-content = Start typing…
-pdfjs-editor-undo-bar-message-highlight = Highlight removed
-pdfjs-editor-undo-bar-message-freetext = Text removed
-pdfjs-editor-undo-bar-message-ink = Drawing removed
-pdfjs-editor-undo-bar-message-stamp = Image removed
-pdfjs-editor-undo-bar-message-multiple =
-    { $count ->
-        [one] { $count } annotation removed
-       *[other] { $count } annotations removed
-    }
-pdfjs-editor-undo-bar-undo-button =
-    .title = Undo
-pdfjs-editor-undo-bar-undo-button-label = Undo
-pdfjs-editor-undo-bar-close-button =
-    .title = Close
-pdfjs-editor-undo-bar-close-button-label = Close

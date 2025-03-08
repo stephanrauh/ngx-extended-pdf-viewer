@@ -25,6 +25,9 @@ export class StampEditor extends AnnotationEditor {
         hasAltText: boolean;
     };
     mlGuessAltText(imageData?: null, updateAltTextData?: boolean): Promise<any>;
+    /** @inheritdoc */
+    onceAdded(focus: any): void;
+    onScaleChanging(): void;
     copyCanvas(maxDataDimension: any, maxPreviewDimension: any, createImageData?: boolean): {
         canvas: HTMLCanvasElement | null;
         width: any;

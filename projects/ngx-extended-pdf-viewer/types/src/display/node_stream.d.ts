@@ -2,29 +2,14 @@ export class PDFNodeStream {
     constructor(source: any);
     source: any;
     url: URL;
-    isHttp: boolean;
-    isFsUrl: boolean;
-    headers: Headers;
-    _fullRequestReader: PDFNodeStreamFsFullReader | PDFNodeStreamFullReader | null;
+    _fullRequestReader: PDFNodeStreamFsFullReader | null;
     _rangeRequestReaders: any[];
     get _progressiveDataLength(): number;
-    getFullReader(): PDFNodeStreamFsFullReader | PDFNodeStreamFullReader;
-    getRangeReader(start: any, end: any): PDFNodeStreamFsRangeReader | PDFNodeStreamRangeReader | null;
+    getFullReader(): PDFNodeStreamFsFullReader;
+    getRangeReader(start: any, end: any): PDFNodeStreamFsRangeReader | null;
     cancelAllRequests(reason: any): void;
 }
-declare class PDFNodeStreamFsFullReader extends BaseFullReader {
-}
-declare class PDFNodeStreamFullReader extends BaseFullReader {
-    _request: any;
-}
-declare class PDFNodeStreamFsRangeReader extends BaseRangeReader {
-    constructor(stream: any, start: any, end: any);
-}
-declare class PDFNodeStreamRangeReader extends BaseRangeReader {
-    constructor(stream: any, start: any, end: any);
-    _request: any;
-}
-declare class BaseFullReader {
+declare class PDFNodeStreamFsFullReader {
     constructor(stream: any);
     _url: any;
     _done: boolean;
@@ -50,8 +35,8 @@ declare class BaseFullReader {
     _error(reason: any): void;
     _setReadableStream(readableStream: any): void;
 }
-declare class BaseRangeReader {
-    constructor(stream: any);
+declare class PDFNodeStreamFsRangeReader {
+    constructor(stream: any, start: any, end: any);
     _url: any;
     _done: boolean;
     _storedError: any;

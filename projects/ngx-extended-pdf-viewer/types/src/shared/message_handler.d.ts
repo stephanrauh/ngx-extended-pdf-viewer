@@ -9,7 +9,6 @@ export class MessageHandler {
     streamControllers: any;
     callbackCapabilities: any;
     actionHandler: any;
-    _onComObjOnMessage: (event: any) => void;
     on(actionName: any, handler: any): void;
     /**
      * Sends a message to the comObj to invoke the action with the supplied data.
@@ -41,3 +40,10 @@ export class MessageHandler {
     destroy(): void;
     #private;
 }
+export function wrapReason(ex: any): PasswordException | UnknownErrorException | InvalidPDFException | MissingPDFException | UnexpectedResponseException | AbortException;
+import { PasswordException } from "./util.js";
+import { UnknownErrorException } from "./util.js";
+import { InvalidPDFException } from "./util.js";
+import { MissingPDFException } from "./util.js";
+import { UnexpectedResponseException } from "./util.js";
+import { AbortException } from "./util.js";

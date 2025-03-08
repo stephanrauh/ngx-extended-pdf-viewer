@@ -220,6 +220,21 @@ pdfjs-find-match-diacritics-checkbox-label = Respectar los diacritics
 pdfjs-find-entire-word-checkbox-label = Mots entièrs
 pdfjs-find-reached-top = Naut de la pagina atenh, perseguida del bas
 pdfjs-find-reached-bottom = Bas de la pagina atench, perseguida al començament
+# Variables:
+#   $current (Number) - the index of the currently active find result
+#   $total (Number) - the total number of matches in the document
+pdfjs-find-match-count =
+    { $total ->
+        [one] Ocurréncia { $current } de { $total }
+       *[other] Ocurréncia { $current } de { $total }
+    }
+# Variables:
+#   $limit (Number) - the maximum number of matches
+pdfjs-find-match-count-limit =
+    { $limit ->
+        [one] Mai de { $limit } ocurréncia
+       *[other] Mai de { $limit } ocurréncias
+    }
 pdfjs-find-not-found = Frasa pas trobada
 
 ## Predefined zoom values
@@ -260,6 +275,9 @@ pdfjs-annotation-date-string = { $date } a { $time }
 # Some common types are e.g.: "Check", "Text", "Comment", "Note"
 pdfjs-text-annotation-type =
     .alt = [Anotacion { $type }]
+# Variables:
+#   $dateObj (Date) - the modification date and time of the annotation
+pdfjs-annotation-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 
 ## Password
 
@@ -312,6 +330,10 @@ pdfjs-editor-stamp-add-image-button =
 pdfjs-editor-stamp-add-image-button-label = Apondre imatge
 # This refers to the thickness of the line used for free highlighting (not bound to text)
 pdfjs-editor-free-highlight-thickness-input = Espessor
+# .default-content is used as a placeholder in an empty text editor.
+pdfjs-free-text2 =
+    .aria-label = Editor de tèxte
+    .default-content = Començatz de picar…
 pdfjs-free-text =
     .aria-label = Editor de tèxte
 pdfjs-free-text-default-content = Començatz d’escriure…
@@ -322,7 +344,6 @@ pdfjs-ink-canvas =
 
 ## Alt-text dialog
 
-# Alternative text (alt text) helps when people can't see the image.
 pdfjs-editor-alt-text-button-label = Tèxt alternatiu
 pdfjs-editor-alt-text-edit-button-label = Modificar lo tèxt alternatiu
 pdfjs-editor-alt-text-dialog-label = Causir una opcion
@@ -360,21 +381,37 @@ pdfjs-editor-highlight-show-all-button-label = O afichar tot
 pdfjs-editor-highlight-show-all-button =
     .title = O afichar tot
 
+## New alt-text dialog
+## Group note for entire feature: Alternative text (alt text) helps when people can't see the image. This feature includes a tool to create alt text automatically using an AI model that works locally on the user's device to preserve privacy.
+
+pdfjs-editor-new-alt-text-error-close-button = Tampar
+
+## Image alt-text settings
+
+pdfjs-editor-alt-text-settings-automatic-title = Tèxte alternatiu automatic
+pdfjs-editor-alt-text-settings-create-model-button-label = Crear un tèxte alternatiu automaticament
+pdfjs-editor-alt-text-settings-delete-model-button = Suprimir
+pdfjs-editor-alt-text-settings-download-model-button = Telecargar
+pdfjs-editor-alt-text-settings-downloading-model-button = Telecargament…
+pdfjs-editor-alt-text-settings-editor-title = Editor de tèxte alternatiu
+pdfjs-editor-alt-text-settings-close-button = Tampar
+
+## "Annotations removed" bar
+
+pdfjs-editor-undo-bar-message-freetext = Tèxte suprimit
+pdfjs-editor-undo-bar-message-ink = Dessenh suprimit
+pdfjs-editor-undo-bar-message-stamp = Imatge suprimit
+pdfjs-editor-undo-bar-undo-button =
+    .title = Anullar
+pdfjs-editor-undo-bar-undo-button-label = Anullar
+pdfjs-editor-undo-bar-close-button =
+    .title = Tampar
+pdfjs-editor-undo-bar-close-button-label = Tampar
+
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } KB ({ $b } bytes)
 pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } bytes)
 pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
-pdfjs-find-match-count =
-    { $total ->
-        [one] { $current } of { $total } match
-       *[other] { $current } of { $total } matches
-    }
-pdfjs-find-match-count-limit =
-    { $limit ->
-        [one] More than { $limit } match
-       *[other] More than { $limit } matches
-    }
-pdfjs-annotation-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 pdfjs-editor-free-highlight-thickness-title =
     .title = Change thickness when highlighting items other than text
 pdfjs-editor-alt-text-dialog-description = Alt text (alternative text) helps when people can’t see the image or when it doesn’t load.
@@ -411,48 +448,34 @@ pdfjs-editor-new-alt-text-create-automatically-button-label = Create alt text au
 pdfjs-editor-new-alt-text-not-now-button = Not now
 pdfjs-editor-new-alt-text-error-title = Couldn’t create alt text automatically
 pdfjs-editor-new-alt-text-error-description = Please write your own alt text or try again later.
-pdfjs-editor-new-alt-text-error-close-button = Close
 pdfjs-editor-new-alt-text-ai-model-downloading-progress = Downloading alt text AI model ({ $downloadedSize } of { $totalSize } MB)
     .aria-valuetext = Downloading alt text AI model ({ $downloadedSize } of { $totalSize } MB)
+pdfjs-editor-new-alt-text-added-button =
+    .aria-label = Alt text added
 pdfjs-editor-new-alt-text-added-button-label = Alt text added
+pdfjs-editor-new-alt-text-missing-button =
+    .aria-label = Missing alt text
 pdfjs-editor-new-alt-text-missing-button-label = Missing alt text
+pdfjs-editor-new-alt-text-to-review-button =
+    .aria-label = Review alt text
 pdfjs-editor-new-alt-text-to-review-button-label = Review alt text
 pdfjs-editor-new-alt-text-generated-alt-text-with-disclaimer = Created automatically: { $generatedAltText }
 pdfjs-image-alt-text-settings-button =
     .title = Image alt text settings
 pdfjs-image-alt-text-settings-button-label = Image alt text settings
 pdfjs-editor-alt-text-settings-dialog-label = Image alt text settings
-pdfjs-editor-alt-text-settings-automatic-title = Automatic alt text
-pdfjs-editor-alt-text-settings-create-model-button-label = Create alt text automatically
 pdfjs-editor-alt-text-settings-create-model-description = Suggests descriptions to help people who can’t see the image or when the image doesn’t load.
 pdfjs-editor-alt-text-settings-download-model-label = Alt text AI model ({ $totalSize } MB)
 pdfjs-editor-alt-text-settings-ai-model-description = Runs locally on your device so your data stays private. Required for automatic alt text.
-pdfjs-editor-alt-text-settings-delete-model-button = Delete
-pdfjs-editor-alt-text-settings-download-model-button = Download
-pdfjs-editor-alt-text-settings-downloading-model-button = Downloading…
-pdfjs-editor-alt-text-settings-editor-title = Alt text editor
 pdfjs-editor-alt-text-settings-show-dialog-button-label = Show alt text editor right away when adding an image
 pdfjs-editor-alt-text-settings-show-dialog-description = Helps you make sure all your images have alt text.
-pdfjs-editor-alt-text-settings-close-button = Close
-unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
-pdfjs-infinite-scroll-button-label = Infinite scroll
-pdfjs-find-multiple-checkbox-label = match each word
-pdfjs-find-regexp-checkbox-label = regular expression
-pdfjs-free-text2 =
-    .aria-label = Text Editor
-    .default-content = Start typing…
 pdfjs-editor-undo-bar-message-highlight = Highlight removed
-pdfjs-editor-undo-bar-message-freetext = Text removed
-pdfjs-editor-undo-bar-message-ink = Drawing removed
-pdfjs-editor-undo-bar-message-stamp = Image removed
 pdfjs-editor-undo-bar-message-multiple =
     { $count ->
         [one] { $count } annotation removed
        *[other] { $count } annotations removed
     }
-pdfjs-editor-undo-bar-undo-button =
-    .title = Undo
-pdfjs-editor-undo-bar-undo-button-label = Undo
-pdfjs-editor-undo-bar-close-button =
-    .title = Close
-pdfjs-editor-undo-bar-close-button-label = Close
+unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
+pdfjs-infinite-scroll-button-label = Infinite scroll
+pdfjs-find-multiple-checkbox-label = match each word
+pdfjs-find-regexp-checkbox-label = regular expression

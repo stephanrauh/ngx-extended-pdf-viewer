@@ -343,6 +343,10 @@ pdfjs-editor-stamp-add-image-button-label = Kép hozzáadása
 pdfjs-editor-free-highlight-thickness-input = Vastagság
 pdfjs-editor-free-highlight-thickness-title =
     .title = Vastagság módosítása, ha nem szöveges elemeket emel ki
+# .default-content is used as a placeholder in an empty text editor.
+pdfjs-free-text2 =
+    .aria-label = Szövegszerkesztő
+    .default-content = Kezdjen gépelni…
 pdfjs-free-text =
     .aria-label = Szövegszerkesztő
 pdfjs-free-text-default-content = Kezdjen el gépelni…
@@ -353,8 +357,9 @@ pdfjs-ink-canvas =
 
 ## Alt-text dialog
 
-# Alternative text (alt text) helps when people can't see the image.
 pdfjs-editor-alt-text-button-label = Alternatív szöveg
+pdfjs-editor-alt-text-edit-button =
+    .aria-label = Alternatív szöveg szerkesztése
 pdfjs-editor-alt-text-edit-button-label = Alternatív szöveg szerkesztése
 pdfjs-editor-alt-text-dialog-label = Válasszon egy lehetőséget
 pdfjs-editor-alt-text-dialog-description = Az alternatív szöveg segít, ha az emberek nem látják a képet, vagy ha az nem töltődik be.
@@ -368,6 +373,9 @@ pdfjs-editor-alt-text-decorative-tooltip = Megjelölve dekoratívként
 # .placeholder: This is a placeholder for the alt text input area
 pdfjs-editor-alt-text-textarea =
     .placeholder = Például: „Egy fiatal férfi leül enni egy asztalhoz”
+# Alternative text (alt text) helps when people can't see the image.
+pdfjs-editor-alt-text-button =
+    .aria-label = Alternatív szöveg
 
 ## Editor resizers
 ## This is used in an aria label to help to understand the role of the resizer.
@@ -449,10 +457,16 @@ pdfjs-editor-new-alt-text-error-close-button = Bezárás
 pdfjs-editor-new-alt-text-ai-model-downloading-progress = Alternatív szöveg MI modell letöltése ({ $downloadedSize } / { $totalSize } MB)
     .aria-valuetext = Alternatív szöveg MI modell letöltése ({ $downloadedSize } / { $totalSize } MB)
 # This is a button that users can click to edit the alt text they have already added.
+pdfjs-editor-new-alt-text-added-button =
+    .aria-label = Alternatív szöveg hozzáadva
 pdfjs-editor-new-alt-text-added-button-label = Alternatív szöveg hozzáadva
 # This is a button that users can click to open the alt text editor and add alt text when it is not present.
+pdfjs-editor-new-alt-text-missing-button =
+    .aria-label = Hiányzó alternatív szöveg
 pdfjs-editor-new-alt-text-missing-button-label = Hiányzó alternatív szöveg
 # This is a button that opens up the alt text modal where users should review the alt text that was automatically generated.
+pdfjs-editor-new-alt-text-to-review-button =
+    .aria-label = Alternatív szöveg áttekintése
 pdfjs-editor-new-alt-text-to-review-button-label = Alternatív szöveg szerkesztése
 # "Created automatically" is a prefix that will be added to the beginning of any alt text that has been automatically generated. After the colon, the user will see/hear the actual alt text description. If the alt text has been edited by a human, this prefix will not appear.
 # Variables:
@@ -480,26 +494,28 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Az alternatív szöveg
 pdfjs-editor-alt-text-settings-show-dialog-description = Segít elérni, hogy az összes képén legyen alternatív szöveg.
 pdfjs-editor-alt-text-settings-close-button = Bezárás
 
+## "Annotations removed" bar
+
+pdfjs-editor-undo-bar-message-highlight = Kiemelés eltávolítva
+pdfjs-editor-undo-bar-message-freetext = Szöveg eltávolítva
+pdfjs-editor-undo-bar-message-ink = Rajz eltávolítva
+pdfjs-editor-undo-bar-message-stamp = Kép eltávolítva
+# Variables:
+#   $count (Number) - the number of removed annotations.
+pdfjs-editor-undo-bar-message-multiple =
+    { $count ->
+        [one] { $count } kommentár eltávolítva
+       *[other] { $count } kommentár eltávolítva
+    }
+pdfjs-editor-undo-bar-undo-button =
+    .title = Visszavonás
+pdfjs-editor-undo-bar-undo-button-label = Visszavonás
+pdfjs-editor-undo-bar-close-button =
+    .title = Bezárás
+pdfjs-editor-undo-bar-close-button-label = Bezárás
+
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = match each word
 pdfjs-find-regexp-checkbox-label = regular expression
-pdfjs-free-text2 =
-    .aria-label = Text Editor
-    .default-content = Start typing…
-pdfjs-editor-undo-bar-message-highlight = Highlight removed
-pdfjs-editor-undo-bar-message-freetext = Text removed
-pdfjs-editor-undo-bar-message-ink = Drawing removed
-pdfjs-editor-undo-bar-message-stamp = Image removed
-pdfjs-editor-undo-bar-message-multiple =
-    { $count ->
-        [one] { $count } annotation removed
-       *[other] { $count } annotations removed
-    }
-pdfjs-editor-undo-bar-undo-button =
-    .title = Undo
-pdfjs-editor-undo-bar-undo-button-label = Undo
-pdfjs-editor-undo-bar-close-button =
-    .title = Close
-pdfjs-editor-undo-bar-close-button-label = Close

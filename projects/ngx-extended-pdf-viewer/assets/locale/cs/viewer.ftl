@@ -347,6 +347,10 @@ pdfjs-editor-stamp-add-image-button-label = Přidat obrázek
 pdfjs-editor-free-highlight-thickness-input = Tloušťka
 pdfjs-editor-free-highlight-thickness-title =
     .title = Změna tloušťky při zvýrazňování jiných položek než textu
+# .default-content is used as a placeholder in an empty text editor.
+pdfjs-free-text2 =
+    .aria-label = Textový editor
+    .default-content = Začněte psát...
 pdfjs-free-text =
     .aria-label = Textový editor
 pdfjs-free-text-default-content = Začněte psát…
@@ -357,8 +361,9 @@ pdfjs-ink-canvas =
 
 ## Alt-text dialog
 
-# Alternative text (alt text) helps when people can't see the image.
 pdfjs-editor-alt-text-button-label = Náhradní popis
+pdfjs-editor-alt-text-edit-button =
+    .aria-label = Upravit alternativní text
 pdfjs-editor-alt-text-edit-button-label = Upravit náhradní popis
 pdfjs-editor-alt-text-dialog-label = Vyberte možnost
 pdfjs-editor-alt-text-dialog-description = Náhradní popis pomáhá, když lidé obrázek nevidí nebo když se nenačítá.
@@ -372,6 +377,9 @@ pdfjs-editor-alt-text-decorative-tooltip = Označen jako dekorativní
 # .placeholder: This is a placeholder for the alt text input area
 pdfjs-editor-alt-text-textarea =
     .placeholder = Například: “Mladý muž si sedá ke stolu, aby se najedl.”
+# Alternative text (alt text) helps when people can't see the image.
+pdfjs-editor-alt-text-button =
+    .aria-label = Alternativní text
 
 ## Editor resizers
 ## This is used in an aria label to help to understand the role of the resizer.
@@ -453,10 +461,16 @@ pdfjs-editor-new-alt-text-error-close-button = Zavřít
 pdfjs-editor-new-alt-text-ai-model-downloading-progress = Stahuje se model AI pro alternativní texty ({ $downloadedSize } z { $totalSize } MB)
     .aria-valuetext = Stahuje se model AI pro alternativní texty ({ $downloadedSize } z { $totalSize } MB)
 # This is a button that users can click to edit the alt text they have already added.
+pdfjs-editor-new-alt-text-added-button =
+    .aria-label = Alternativní text byl přidán
 pdfjs-editor-new-alt-text-added-button-label = Alternativní text byl přidán
 # This is a button that users can click to open the alt text editor and add alt text when it is not present.
+pdfjs-editor-new-alt-text-missing-button =
+    .aria-label = Chybí alternativní text
 pdfjs-editor-new-alt-text-missing-button-label = Chybí alternativní text
 # This is a button that opens up the alt text modal where users should review the alt text that was automatically generated.
+pdfjs-editor-new-alt-text-to-review-button =
+    .aria-label = Zkontrolovat alternativní text
 pdfjs-editor-new-alt-text-to-review-button-label = Zkontrolovat alternativní text
 # "Created automatically" is a prefix that will be added to the beginning of any alt text that has been automatically generated. After the colon, the user will see/hear the actual alt text description. If the alt text has been edited by a human, this prefix will not appear.
 # Variables:
@@ -484,26 +498,30 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Při přidávání obr
 pdfjs-editor-alt-text-settings-show-dialog-description = Pomůže vám zajistit, aby všechny vaše obrázky obsahovaly alternativní text.
 pdfjs-editor-alt-text-settings-close-button = Zavřít
 
+## "Annotations removed" bar
+
+pdfjs-editor-undo-bar-message-highlight = Zvýraznění odebráno
+pdfjs-editor-undo-bar-message-freetext = Text odstraněn
+pdfjs-editor-undo-bar-message-ink = Kresba odstraněna
+pdfjs-editor-undo-bar-message-stamp = Obrázek odebrán
+# Variables:
+#   $count (Number) - the number of removed annotations.
+pdfjs-editor-undo-bar-message-multiple =
+    { $count ->
+        [one] { $count } anotace odebrána
+        [few] { $count } anotace odebrány
+        [many] { $count } anotací odebráno
+       *[other] { $count } anotací odebráno
+    }
+pdfjs-editor-undo-bar-undo-button =
+    .title = Zpět
+pdfjs-editor-undo-bar-undo-button-label = Zpět
+pdfjs-editor-undo-bar-close-button =
+    .title = Zavřít
+pdfjs-editor-undo-bar-close-button-label = Zavřít
+
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = match each word
 pdfjs-find-regexp-checkbox-label = regular expression
-pdfjs-free-text2 =
-    .aria-label = Text Editor
-    .default-content = Start typing…
-pdfjs-editor-undo-bar-message-highlight = Highlight removed
-pdfjs-editor-undo-bar-message-freetext = Text removed
-pdfjs-editor-undo-bar-message-ink = Drawing removed
-pdfjs-editor-undo-bar-message-stamp = Image removed
-pdfjs-editor-undo-bar-message-multiple =
-    { $count ->
-        [one] { $count } annotation removed
-       *[other] { $count } annotations removed
-    }
-pdfjs-editor-undo-bar-undo-button =
-    .title = Undo
-pdfjs-editor-undo-bar-undo-button-label = Undo
-pdfjs-editor-undo-bar-close-button =
-    .title = Close
-pdfjs-editor-undo-bar-close-button-label = Close

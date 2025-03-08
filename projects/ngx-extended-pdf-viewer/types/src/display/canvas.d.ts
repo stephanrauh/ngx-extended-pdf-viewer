@@ -110,7 +110,7 @@ export class CanvasGraphics {
     setLeadingMoveText(x: any, y: any): void;
     setTextMatrix(a: any, b: any, c: any, d: any, e: any, f: any): void;
     nextLine(): void;
-    paintChar(character: any, x: any, y: any, patternTransform: any): void;
+    paintChar(character: any, x: any, y: any, patternFillTransform: any, patternStrokeTransform: any): void;
     get isFontSubpixelAAEnabled(): any;
     showText(glyphs: any): void;
     showType3Text(glyphs: any): void;
@@ -179,6 +179,7 @@ declare class CanvasExtraState {
     fillColor: string;
     strokeColor: string;
     patternFill: boolean;
+    patternStroke: boolean;
     fillAlpha: number;
     strokeAlpha: number;
     lineWidth: number;

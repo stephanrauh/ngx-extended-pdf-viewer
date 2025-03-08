@@ -1,28 +1,25 @@
+export function fetchData(url: any): Promise<Uint8Array<ArrayBuffer>>;
 export class NodeCanvasFactory extends BaseCanvasFactory {
     /**
      * @ignore
      */
-    _createCanvas(width: any, height: any): any;
+    _createCanvas(width: any, height: any): import("@napi-rs/canvas").Canvas;
 }
 export class NodeCMapReaderFactory extends BaseCMapReaderFactory {
     /**
      * @ignore
      */
-    _fetchData(url: any, compressionType: any): any;
+    _fetch(url: any): Promise<Uint8Array<ArrayBuffer>>;
 }
 export class NodeFilterFactory extends BaseFilterFactory {
-}
-export class NodePackages {
-    static get promise(): undefined;
-    static get(name: any): undefined;
 }
 export class NodeStandardFontDataFactory extends BaseStandardFontDataFactory {
     /**
      * @ignore
      */
-    _fetchData(url: any): any;
+    _fetch(url: any): Promise<Uint8Array<ArrayBuffer>>;
 }
-import { BaseCanvasFactory } from "./base_factory.js";
-import { BaseCMapReaderFactory } from "./base_factory.js";
-import { BaseFilterFactory } from "./base_factory.js";
-import { BaseStandardFontDataFactory } from "./base_factory.js";
+import { BaseCanvasFactory } from "./canvas_factory.js";
+import { BaseCMapReaderFactory } from "./cmap_reader_factory.js";
+import { BaseFilterFactory } from "./filter_factory.js";
+import { BaseStandardFontDataFactory } from "./standard_fontdata_factory.js";
