@@ -650,3 +650,4 @@
 - 23.0.0-alpha.3 #2801 form support was entirely broken - now it works again; the version also contains some undesired source code formatting changes which shouldn't impact the library itself
 - 23.0.0-alpha.4 updated the stable branch to pdf.js 4.10
 - 23.0.0-alpha.5 #2828 bugfix: sometimes switching from single-page mode to another page mode reset the page number to 1, and after scrolling, the pdf viewer vanished. Both bugs are fixed now; reduced the number of (silently swallowed) exceptions thrown during translation
+- 23.0.0-alpha.6 #2817 fixes a bug that prevented the annotation editor buttons from working if they were initially hidden and shown later

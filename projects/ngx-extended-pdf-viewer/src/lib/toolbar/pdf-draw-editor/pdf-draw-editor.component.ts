@@ -17,7 +17,10 @@ export class PdfDrawEditorComponent {
 
   private PDFViewerApplication: IPDFViewerApplication | undefined;
 
-  constructor(private notificationService: PDFNotificationService, private cdr: ChangeDetectorRef) {
+  constructor(
+    private notificationService: PDFNotificationService,
+    private cdr: ChangeDetectorRef,
+  ) {
     effect(() => {
       this.PDFViewerApplication = notificationService.onPDFJSInitSignal();
       if (this.PDFViewerApplication) {
@@ -40,7 +43,14 @@ export class PdfDrawEditorComponent {
     while (button && button instanceof Element && !(button instanceof HTMLButtonElement)) {
       button = button.parentElement;
     }
+
     if (button instanceof HTMLButtonElement) {
+      // #2817 this is a workaround for when the button is initially hidden.
+      // In that case, the dummy component gets the click listener.
+      // As a quick work around, let's simply call the click listener of the dummy component.
+      if (button.id === 'primaryEditorInk' && document.getElementById('primaryEditorInk') !== button) {
+        document.getElementById('primaryEditorInk')?.click();
+      }
       if (button.id !== 'primaryEditorInk') {
         document.getElementById('primaryEditorInk')?.click();
       }

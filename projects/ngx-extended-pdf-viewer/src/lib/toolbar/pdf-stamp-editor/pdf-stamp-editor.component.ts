@@ -22,7 +22,10 @@ export class PdfStampEditorComponent {
     return getVersionSuffix(pdfDefaultOptions.assetsFolder);
   }
 
-  constructor(private notificationService: PDFNotificationService, private cdr: ChangeDetectorRef) {
+  constructor(
+    private notificationService: PDFNotificationService,
+    private cdr: ChangeDetectorRef,
+  ) {
     effect(() => {
       this.PDFViewerApplication = notificationService.onPDFJSInitSignal();
       if (this.PDFViewerApplication) {
@@ -46,6 +49,12 @@ export class PdfStampEditorComponent {
       button = button.parentElement;
     }
     if (button instanceof HTMLButtonElement) {
+      // #2817 this is a workaround for when the button is initially hidden.
+      // In that case, the dummy component gets the click listener.
+      // As a quick work around, let's simply call the click listener of the dummy component.
+      if (button.id === 'primaryEditorStamp' && document.getElementById('primaryEditorStamp') !== button) {
+        document.getElementById('primaryEditorStamp')?.click();
+      }
       if (button.id !== 'primaryEditorStamp') {
         document.getElementById('primaryEditorStamp')?.click();
       }
