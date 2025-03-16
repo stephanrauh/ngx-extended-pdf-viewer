@@ -505,7 +505,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
   /**
    * The combination of height, minHeight, and autoHeight ensures the PDF height of the PDF viewer is calculated correctly when the height is a percentage.
-   * By default, many CSS frameworks make a div with 100% have a height or zero pixels. checkHeigth() fixes this.
+   * By default, many CSS frameworks make a div with 100% have a height or zero pixels. checkHeight() fixes this.
    */
   public autoHeight = false;
 

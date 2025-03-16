@@ -244,8 +244,8 @@ export class DynamicCssComponent implements OnDestroy {
               (<HTMLElement>zoom).style.height = ngxExtendedPdfViewer.height;
             }
           } else if (restoreHeight) {
-            ngxExtendedPdfViewer.autoHeight = true;
             ngxExtendedPdfViewer.height = undefined;
+            ngxExtendedPdfViewer.autoHeight = true;
             this.checkHeight(ngxExtendedPdfViewer, logLevel);
           }
         });
