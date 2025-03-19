@@ -651,3 +651,4 @@
 - 23.0.0-alpha.4 updated the stable branch to pdf.js 4.10
 - 23.0.0-alpha.5 #2828 bugfix: sometimes switching from single-page mode to another page mode reset the page number to 1, and after scrolling, the pdf viewer vanished. Both bugs are fixed now; reduced the number of (silently swallowed) exceptions thrown during translation
 - 23.0.0-alpha.6 #2817 fixes a bug that prevented the annotation editor buttons from working if they were initially hidden and shown later
+- 23.0.0-alpha.7 #2836 added the "Content-Encoding" header to the range request demo
