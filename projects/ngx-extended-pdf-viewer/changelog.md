@@ -652,3 +652,4 @@
 - 23.0.0-alpha.5 #2828 bugfix: sometimes switching from single-page mode to another page mode reset the page number to 1, and after scrolling, the pdf viewer vanished. Both bugs are fixed now; reduced the number of (silently swallowed) exceptions thrown during translation
 - 23.0.0-alpha.6 #2817 fixes a bug that prevented the annotation editor buttons from working if they were initially hidden and shown later
 - 23.0.0-alpha.7 #2836 added the "Content-Encoding" header to the range request demo
+- 23.0.0-alpha.8 #2736 added selectors to the CSS rules of dialogs to reduce interference with your own CSS rules (potentially breaking change if you've got sophisticated CSS rules)
