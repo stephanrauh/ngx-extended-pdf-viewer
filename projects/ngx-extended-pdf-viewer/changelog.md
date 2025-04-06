@@ -653,4 +653,4 @@
 - 23.0.0-alpha.6 #2817 fixes a bug that prevented the annotation editor buttons from working if they were initially hidden and shown later
 - 23.0.0-alpha.7 #2836 added the "Content-Encoding" header to the range request demo
 - 23.0.0-alpha.8 #2736 added selectors to the CSS rules of dialogs to reduce interference with your own CSS rules (potentially breaking change if you've got sophisticated CSS rules); #2852 if the cursor is in the input field of the find bar, prevent the ESC key and CMD+cursor up/down to bubble
-- 23.0.0-alpha.9 #2536 fix compatibilty to older browsers
+- 23.0.0-alpha.9 #2536 fix compatibilty to older browsers; #2510, #2737 introduce the attribute `[forceFullReloadOfJavaScriptCode]` that allows microfrontends, unit tests, and end-to-end tests to force reloading and re-executing the JavaScript code

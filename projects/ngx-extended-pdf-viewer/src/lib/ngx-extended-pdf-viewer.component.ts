@@ -364,6 +364,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     }
   }
 
+  /** Force reloading of the JavaScript code. Useful for testing and micro-frontends */
+  @Input()
+  public forceFullReloadOfJavaScriptCode = false;
+
   @Input()
   public showTextEditor: ResponsiveVisibility = 'xxl';
 
@@ -1098,7 +1102,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         await this.waitUntilOldComponentIsGone();
         if (this.destroyInitialization) return;
 
-        await this.pdfScriptLoaderService.ensurePdfJsHasBeenLoaded(this.useInlineScripts, this.forceUsingLegacyES5);
+        await this.pdfScriptLoaderService.ensurePdfJsHasBeenLoaded(this.useInlineScripts, this.forceUsingLegacyES5, this.forceFullReloadOfJavaScriptCode);
         if (this.destroyInitialization) return;
 
         if (this.formSupport) {

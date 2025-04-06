@@ -33,7 +33,10 @@ export class PDFScriptLoaderService implements OnDestroy {
 
   public ngxExtendedPdfViewerIncompletelyInitialized = true;
 
-  public constructor(private pdfCspPolicyService: PdfCspPolicyService, @Inject(CSP_NONCE) private csp_nonce: string) {
+  public constructor(
+    private pdfCspPolicyService: PdfCspPolicyService,
+    @Inject(CSP_NONCE) private csp_nonce: string,
+  ) {
     effect(() => {
       if (this.onPDFJSInitSignal()) {
         this.pdfjsVersion = getVersionSuffix(pdfDefaultOptions.assetsFolder);
@@ -148,7 +151,7 @@ new (function () {
   private createScriptElement(sourcePath: string): HTMLScriptElement {
     const script = document.createElement('script');
     script.async = true;
-    script.type = sourcePath.endsWith('.mjs') ? 'module' : 'text/javascript';
+    script.type = sourcePath.includes('.mjs') ? 'module' : 'text/javascript';
     script.className = `ngx-extended-pdf-viewer-script`;
     this.pdfCspPolicyService.addTrustedJavaScript(script, sourcePath);
     return script;
@@ -168,9 +171,12 @@ new (function () {
     return assets + artifactPath + versionSuffix + es5 + suffix;
   }
 
-  private async loadViewer(useInlineScripts: boolean): Promise<void> {
+  private async loadViewer(forceReload: boolean): Promise<void> {
     return new Promise((resolve) => {
-      const viewerPath = this.getPdfJsPath('viewer');
+      let viewerPath = this.getPdfJsPath('viewer');
+      if (forceReload) {
+        viewerPath += '?v=' + new Date().getTime();
+      }
       const listener = (event: CustomEvent) => {
         const { PDFViewerApplication, PDFViewerApplicationOptions, webViewerLoad } = event.detail;
         this.PDFViewerApplication = PDFViewerApplication;
@@ -200,7 +206,7 @@ new (function () {
     });
   }
 
-  public async ensurePdfJsHasBeenLoaded(useInlineScripts: boolean, forceUsingLegacyES5: boolean): Promise<boolean> {
+  public async ensurePdfJsHasBeenLoaded(useInlineScripts: boolean, forceUsingLegacyES5: boolean, forceReload: boolean): Promise<boolean> {
     if (this.PDFViewerApplication) {
       return true;
     }
@@ -208,7 +214,7 @@ new (function () {
     if (forceUsingLegacyES5) {
       pdfDefaultOptions.needsES5 = true;
     }
-    await this.loadViewer(useInlineScripts);
+    await this.loadViewer(forceReload);
     return this.PDFViewerApplication !== undefined;
   }
 
