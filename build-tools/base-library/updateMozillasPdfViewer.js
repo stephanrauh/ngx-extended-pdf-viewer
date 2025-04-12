@@ -95,7 +95,10 @@ htmlFiles.forEach((file) => fs.removeSync(file));
 
 // Run additional scripts
 runCommand('node build-tools/addBaseLanguages/add-additional-translations.js ' + FOLDER, 'Adding additional translations failed');
-runCommand('node build-tools/add-version-number-to-file-name/run-outside-ngzone.js', 'Running outside ngzone failed');
+runCommand(
+  'node build-tools/add-version-number-to-file-name/remove-incompatible-and-unused-export-statement-from-es5-worker.js',
+  'Export statement removal failed',
+);
 runCommand('node build-tools/add-version-number-to-file-name/add-version-number.js ' + process.argv[2], 'Adding version number failed');
 
 if (BRANCH !== 'bleeding-edge') {

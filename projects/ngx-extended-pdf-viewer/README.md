@@ -43,7 +43,7 @@ Version 20.0.2 is a security fix. It solves CVE-2024-4367. I strongly recommend 
 
 Version 23 updates to pdf.js 4.10 and contains several bug fixes, some of which are breaking changes. There's only one new feature:
 
-- The attribute `[forceFullReloadOfJavaScriptCode]="true"` forces the PDF viewer to re-execute the JavaScript libraries if it has to load them again. That should be the default, but since version 21 the PDF viewer uses JavaScript module files (\*..mjs), and the browser considers these files singleton. If you display a PDF file, navigate to another page without PDF, and see a blank page when navigating back, activate the new flag. By default it's set to `false` because I want to play it safe, but more likely than not, the default is going to be `true` soon.
+- The attribute `[forceFullReloadOfJavaScriptCode]="true"` forces the PDF viewer to re-execute the JavaScript libraries if it has to load them again. That should be the default, but since version 21 the PDF viewer uses JavaScript module files (\*.mjs), and the browser considers these files singleton. If you display a PDF file, navigate to another page without PDF, and see a blank page when navigating back, activate the new flag. By default it's set to `false` because I want to play it safe, but more likely than not, the default is going to be `true` soon.
 
 Breaking changes:
 
