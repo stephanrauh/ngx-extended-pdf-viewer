@@ -1,4 +1,5 @@
 import { ChangeDetectorRef, Component, Input, effect } from '@angular/core';
+import { PositioningService } from '../../dynamic-css/positioning.service';
 import { AnnotationEditorEditorModeChangedEvent } from '../../events/annotation-editor-mode-changed-event';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { PDFNotificationService } from '../../pdf-notification-service';
@@ -18,7 +19,7 @@ export class PdfHighlightEditorComponent {
   private PDFViewerApplication: IPDFViewerApplication | undefined;
 
   constructor(
-    private notificationService: PDFNotificationService,
+    notificationService: PDFNotificationService,
     private cdr: ChangeDetectorRef,
   ) {
     effect(() => {
@@ -53,6 +54,8 @@ export class PdfHighlightEditorComponent {
       if (button.id !== 'primaryEditorHighlight') {
         document.getElementById('primaryEditorHighlight')?.click();
       }
+      const positioningService = new PositioningService();
+      positioningService.positionPopupBelowItsButton('primaryEditorHighlight', 'editorHighlightParamsToolbar');
     }
   }
 }

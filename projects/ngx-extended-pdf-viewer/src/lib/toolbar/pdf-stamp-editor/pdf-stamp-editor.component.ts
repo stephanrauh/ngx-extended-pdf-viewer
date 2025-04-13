@@ -1,4 +1,5 @@
 import { ChangeDetectorRef, Component, Input, effect } from '@angular/core';
+import { PositioningService } from '../../dynamic-css/positioning.service';
 import { AnnotationEditorEditorModeChangedEvent } from '../../events/annotation-editor-mode-changed-event';
 import { getVersionSuffix, pdfDefaultOptions } from '../../options/pdf-default-options';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
@@ -23,8 +24,9 @@ export class PdfStampEditorComponent {
   }
 
   constructor(
-    private notificationService: PDFNotificationService,
+    notificationService: PDFNotificationService,
     private cdr: ChangeDetectorRef,
+    private positioningService: PositioningService,
   ) {
     effect(() => {
       this.PDFViewerApplication = notificationService.onPDFJSInitSignal();
@@ -58,6 +60,8 @@ export class PdfStampEditorComponent {
       if (button.id !== 'primaryEditorStamp') {
         document.getElementById('primaryEditorStamp')?.click();
       }
+      const positioningService = new PositioningService();
+      positioningService.positionPopupBelowItsButton('primaryEditorStamp', 'editorStampParamsToolbar');
     }
   }
 }

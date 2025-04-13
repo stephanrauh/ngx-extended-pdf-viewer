@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
-import { ResponsiveVisibility } from '../../responsive-visibility';
+import { PositioningService } from '../../dynamic-css/positioning.service';
 import { NgxExtendedPdfViewerService } from '../../ngx-extended-pdf-viewer.service';
+import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
   selector: 'pdf-toggle-secondary-toolbar',
@@ -15,6 +16,8 @@ export class PdfToggleSecondaryToolbarComponent {
 
   public onClick(event: Event): boolean {
     event.preventDefault();
+    const positioningService = new PositioningService();
+    positioningService.positionPopupBelowItsButton('secondaryToolbarToggle', 'secondaryToolbar');
     return false;
   }
 }

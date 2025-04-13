@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DynamicCssComponent } from './dynamic-css/dynamic-css.component';
+import { PositioningService } from './dynamic-css/positioning.service';
 import { NgxExtendedPdfViewerComponent } from './ngx-extended-pdf-viewer.component';
 import { NgxExtendedPdfViewerService } from './ngx-extended-pdf-viewer.service';
 import { PdfAltTextDialogComponent } from './pdf-dialog/pdf-alt-text-dialog/pdf-alt-text-dialog.component';
@@ -78,7 +79,7 @@ import { TranslatePipe } from './translate.pipe';
 if (!Promise['allSettled']) {
   if (!!window['Zone'] && !window['__zone_symbol__Promise.allSettled']) {
     console.error(
-      "Please update zone.js to version 0.10.3 or higher. Otherwise, you'll run the slow ECMAScript 5 version even on modern browser that can run the fast ESMAScript 2015 version."
+      "Please update zone.js to version 0.10.3 or higher. Otherwise, you'll run the slow ECMAScript 5 version even on modern browser that can run the fast ESMAScript 2015 version.",
     );
   }
 }
@@ -159,7 +160,7 @@ if (!Promise['allSettled']) {
     ResponsiveCSSClassPipe,
     TranslatePipe,
   ],
-  providers: [NgxExtendedPdfViewerService],
+  providers: [NgxExtendedPdfViewerService, PositioningService],
   exports: [
     NegativeResponsiveCSSClassPipe,
     NgxExtendedPdfViewerComponent,

@@ -1,4 +1,5 @@
 import { Component, effect, Input } from '@angular/core';
+import { PositioningService } from '../../dynamic-css/positioning.service';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { PDFNotificationService } from '../../pdf-notification-service';
 import { ResponsiveVisibility } from '../../responsive-visibility';
@@ -35,6 +36,8 @@ export class PdfFindButtonComponent {
       PDFViewerApplication.findBar.close();
     } else {
       PDFViewerApplication.findBar.open();
+      const positioningService = new PositioningService();
+      positioningService.positionPopupBelowItsButton('primaryViewFind', 'findbar');
     }
   }
 }

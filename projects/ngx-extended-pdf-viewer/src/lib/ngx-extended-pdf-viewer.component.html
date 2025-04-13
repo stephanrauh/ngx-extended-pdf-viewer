@@ -54,7 +54,8 @@
               [toolbarWidth]="toolbarWidth" [zoomLevels]="zoomLevels" [findbarVisible]="findbarVisible"
               [hasTextLayer]="hasTextLayer"></pdf-toolbar>
 
-            <div class="editorParamsToolbar hidden doorHangerRight" id="editorHighlightParamsToolbar">
+            <div class="editorParamsToolbar hidden doorHangerRight" id="editorHighlightParamsToolbar"
+              [style.transform]="'scale(' + mobileFriendlyZoomScale + ')'">
               <div id="highlightParamsToolbarContainer" class="editorParamsToolbarContainer">
                 <div id="editorHighlightColorPicker" class="colorPicker">
                   <span id="highlightColorPickerLabel" class="editorParamsLabel"
@@ -81,7 +82,8 @@
             </div>
 
             <div class="editorParamsToolbar hidden doorHangerRight" id="editorFreeTextParamsToolbar"
-              [class.server-side-rendering]="serverSideRendering">
+              [class.server-side-rendering]="serverSideRendering"
+              [style.transform]="'scale(' + mobileFriendlyZoomScale + ')'">
               <div class="editorParamsToolbarContainer">
                 <div class="editorParamsSetter">
                   <label for="editorFreeTextColor" class="editorParamsLabel"
@@ -97,7 +99,8 @@
               </div>
             </div>
 
-            <div class="editorParamsToolbar hidden doorHangerRight" id="editorStampParamsToolbar">
+            <div class="editorParamsToolbar hidden doorHangerRight" id="editorStampParamsToolbar"
+              [style.transform]="'scale(' + mobileFriendlyZoomScale + ')'">
               <div class="editorParamsToolbarContainer">
                 <button id="editorStampAddImage" class="secondaryToolbarButton" title="Add image"
                   data-l10n-id="pdfjs-editor-stamp-add-image-button">
@@ -113,6 +116,7 @@
             </div>
 
             <div class="editorParamsToolbar hidden doorHangerRight" id="editorInkParamsToolbar"
+              [style.transform]="'scale(' + mobileFriendlyZoomScale + ')'"
               [class.server-side-rendering]="serverSideRendering">
               <div class="editorParamsToolbarContainer">
                 <div class="editorParamsSetter">
