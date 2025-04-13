@@ -655,4 +655,4 @@
 - 23.0.0-alpha.8 #2736 added selectors to the CSS rules of dialogs to reduce interference with your own CSS rules (potentially breaking change if you've got sophisticated CSS rules); #2852 if the cursor is in the input field of the find bar, prevent the ESC key and CMD+cursor up/down to bubble
 - 23.0.0 #2536 fix compatibilty to older browsers; #2510, #2737 introduce the attribute `[forceFullReloadOfJavaScriptCode]` that allows microfrontends, unit tests, and end-to-end tests to force reloading and re-executing the JavaScript code
 - 23.0.1 #2536, #2868 fix compatibility to older browsers
-- 23.1.0 #2874 use JavaScript to position the toolbars correctly under all circumstances
+- 23.1.0 #2874 use JavaScript to position the toolbars correctly under all circumstances; #2866 added a test runner detection to `getSafeCanvasSize()` in order to avoid having to mock a lot of browser objects

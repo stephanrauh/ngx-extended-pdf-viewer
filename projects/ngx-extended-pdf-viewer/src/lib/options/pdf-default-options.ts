@@ -21,8 +21,18 @@ export function assetsUrl(url: string, postfixIfPathIsRelativ = ''): string {
   return `./${url + postfixIfPathIsRelativ}`;
 }
 
+declare const process: any;
+
+function isTestEnvironment(): boolean {
+  return (
+    typeof process !== 'undefined' &&
+    typeof (process as any).env !== 'undefined' &&
+    ((process as any).env.NODE_ENV === 'test' || (process as any).env.JEST_WORKER_ID !== undefined || (process as any).env.VITEST !== undefined)
+  );
+}
+
 export function getSafeCanvasSize(): number {
-  if (typeof window === 'undefined' || typeof document === 'undefined') {
+  if (typeof window === 'undefined' || typeof document === 'undefined' || isTestEnvironment()) {
     return 4096;
   }
   // Create a temporary WebGL context
