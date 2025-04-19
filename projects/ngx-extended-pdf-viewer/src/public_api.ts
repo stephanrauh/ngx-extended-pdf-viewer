@@ -66,6 +66,7 @@ export * from './lib/theme/pdf-dark-theme/pdf-dark-theme.component';
 export * from './lib/theme/pdf-light-theme/pdf-light-theme.component';
 export * from './lib/toolbar/pdf-book-mode/pdf-book-mode.component';
 export * from './lib/toolbar/pdf-context-menu/pdf-context-menu.component';
+export * from './lib/toolbar/pdf-document-properties/pdf-document-properties.component';
 export * from './lib/toolbar/pdf-download/pdf-download.component';
 export * from './lib/toolbar/pdf-draw-editor/pdf-draw-editor.component';
 export * from './lib/toolbar/pdf-editor/pdf-editor.component';

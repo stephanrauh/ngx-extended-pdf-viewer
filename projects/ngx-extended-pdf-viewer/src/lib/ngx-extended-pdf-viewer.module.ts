@@ -170,6 +170,7 @@ if (!Promise['allSettled']) {
     PdfBookModeComponent,
     PdfContextMenuComponent,
     PdfDarkThemeComponent,
+    PdfDocumentPropertiesComponent,
     PdfDrawEditorComponent,
     PdfDocumentPropertiesDialogComponent,
     PdfDownloadComponent,
