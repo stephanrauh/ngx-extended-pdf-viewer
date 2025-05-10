@@ -380,6 +380,7 @@ export class PDFViewer {
     }): void;
     _updateLocation(firstPage: any): void;
     update(noScroll?: boolean): void;
+    updateBookModeScale(evt: any): Promise<void>;
     containsElement(element: any): boolean;
     focus(): void;
     get _isContainerRtl(): boolean;
