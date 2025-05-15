@@ -518,5 +518,5 @@ pdfjs-editor-undo-bar-close-button-label = Chiudi
 unverified-signature-warning = Questo file PDF contiene una firma digitale. Questo visualizzatore PDF non può verificare se la firma è valida. Scarica il file e aprilo in Acrobat Reader per verificare che la firma sia valida.
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-infinite-scroll-button-label = Infinite scroll
-pdfjs-find-multiple-checkbox-label = match each word
+pdfjs-find-multiple-checkbox-label = Match Each Word
 pdfjs-find-regexp-checkbox-label = regular expression
