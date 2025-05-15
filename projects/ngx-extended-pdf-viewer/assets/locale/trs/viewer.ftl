@@ -419,5 +419,5 @@ pdfjs-editor-undo-bar-close-button =
 pdfjs-editor-undo-bar-close-button-label = Close
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
-pdfjs-find-multiple-checkbox-label = match each word
+pdfjs-find-multiple-checkbox-label = Match Each Word
 pdfjs-find-regexp-checkbox-label = regular expression

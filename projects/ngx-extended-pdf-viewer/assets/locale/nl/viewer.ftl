@@ -518,5 +518,5 @@ pdfjs-editor-undo-bar-close-button-label = Sluiten
 unverified-signature-warning = Deze PDF bevat een digitale handtekening. De PDF viewer kan de geldigheid niet controleren. Gelieve het bestand te downloaden en te openen in Acrobat Reader om de handtekening te controleren.
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-infinite-scroll-button-label = Infinite scroll
-pdfjs-find-multiple-checkbox-label = match each word
+pdfjs-find-multiple-checkbox-label = Match Each Word
 pdfjs-find-regexp-checkbox-label = regular expression

@@ -524,5 +524,5 @@ pdfjs-editor-undo-bar-close-button-label = Zapri
 unverified-signature-warning = Dokument vsebuje digitalni podpis. PDF viewer ne more preveriti veljavnost podpisa. Prosimo prenesite dokument in veljavnost podpisa preverite v programu Acrobat Reader.
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-infinite-scroll-button-label = Infinite scroll
-pdfjs-find-multiple-checkbox-label = match each word
+pdfjs-find-multiple-checkbox-label = Match Each Word
 pdfjs-find-regexp-checkbox-label = regular expression
