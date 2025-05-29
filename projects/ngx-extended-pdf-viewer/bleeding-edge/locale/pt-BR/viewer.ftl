@@ -519,4 +519,4 @@ unverified-signature-warning = Este arquivo PDF contém uma assinatura digital. 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = Match Each Word
-pdfjs-find-regexp-checkbox-label = regular expression
+pdfjs-find-regexp-checkbox-label = Regular Expression

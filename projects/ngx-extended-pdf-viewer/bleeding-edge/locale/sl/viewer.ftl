@@ -525,4 +525,4 @@ unverified-signature-warning = Dokument vsebuje digitalni podpis. PDF viewer ne 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = Match Each Word
-pdfjs-find-regexp-checkbox-label = regular expression
+pdfjs-find-regexp-checkbox-label = Regular Expression
