@@ -385,9 +385,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   @Input()
   public logLevel = VerbosityLevel.WARNINGS;
 
-  @Input()
-  public relativeCoordsOptions: Object = {};
-
   /** Use the minified (minifiedJSLibraries="true", which is the default) or the user-readable pdf.js library (minifiedJSLibraries="false") */
   public get minifiedJSLibraries() {
     return pdfDefaultOptions._internalFilenameSuffix === '.min';

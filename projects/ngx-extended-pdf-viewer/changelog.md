@@ -658,4 +658,4 @@
 - 23.1.0 #2874 use JavaScript to position the toolbars correctly under all circumstances; #2866 added a test runner detection to `getSafeCanvasSize()` in order to avoid having to mock a lot of browser objects
 - 23.1.1 #2687 and #2536 fix compatibility to Safari 16 + 17; #2882 export `PdfDocumentPropertiesComponent` so developers can use it
 - 23.2.0 #2247 enable zooming in book mode; stop handling the zoom click events twice
-- 23.2.1 #2894 Capitalize the "Match Each Word" label in the search bar
+- 23.3.0 #2894 Capitalize the "Match Each Word" label in the search bar; #2901 bring back the ink editor events; #2900 fix editor menu items in the secondary menu (clicking used to be ignored)

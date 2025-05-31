@@ -6,7 +6,10 @@ export class PositioningService {
       return;
     }
     setTimeout(() => {
-      const visibleButton = Array.from(document.querySelectorAll(`#${buttonId}`)).find((el: HTMLElement) => el.offsetParent !== null);
+      let visibleButton = Array.from(document.querySelectorAll(`#${buttonId}`)).find((el: HTMLElement) => el.offsetParent !== null);
+      if (!visibleButton) {
+        visibleButton = Array.from(document.querySelectorAll(`#secondaryToolbarToggle`)).find((el: HTMLElement) => el.offsetParent !== null);
+      }
       if (visibleButton) {
         const popup = document.querySelector(`#${popupId}`);
         if (popup instanceof HTMLElement) {

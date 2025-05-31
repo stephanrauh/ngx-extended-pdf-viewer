@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, Input, effect } from '@angular/core';
 import { PositioningService } from '../../dynamic-css/positioning.service';
 import { AnnotationEditorEditorModeChangedEvent } from '../../events/annotation-editor-mode-changed-event';
+import { AnnotationEditorType } from '../../options/editor-annotations';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { PDFNotificationService } from '../../pdf-notification-service';
 import { ResponsiveVisibility } from '../../responsive-visibility';
@@ -40,23 +41,13 @@ export class PdfDrawEditorComponent {
   }
 
   public onClick(event: PointerEvent): void {
-    let button = event.target;
-    while (button && button instanceof Element && !(button instanceof HTMLButtonElement)) {
-      button = button.parentElement;
-    }
-
-    if (button instanceof HTMLButtonElement) {
-      // #2817 this is a workaround for when the button is initially hidden.
-      // In that case, the dummy component gets the click listener.
-      // As a quick work around, let's simply call the click listener of the dummy component.
-      if (button.id === 'primaryEditorInk' && document.getElementById('primaryEditorInk') !== button) {
-        document.getElementById('primaryEditorInk')?.click();
-      }
-      if (button.id !== 'primaryEditorInk') {
-        document.getElementById('primaryEditorInk')?.click();
-      }
-      const positioningService = new PositioningService();
-      positioningService.positionPopupBelowItsButton('primaryEditorInk', 'editorInkParamsToolbar');
-    }
+    const currentMode = this.PDFViewerApplication?.pdfViewer.annotationEditorMode;
+    this.PDFViewerApplication?.eventBus.dispatch('switchannotationeditormode', {
+      source: this,
+      mode: currentMode === AnnotationEditorType.INK ? AnnotationEditorType.NONE : AnnotationEditorType.INK,
+      isFromKeyboard: event.detail === 0,
+    });
+    const positioningService = new PositioningService();
+    positioningService.positionPopupBelowItsButton('primaryEditorInk', 'editorInkParamsToolbar');
   }
 }

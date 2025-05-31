@@ -48,6 +48,7 @@ Version 23 updates to pdf.js 4.10 and contains several bug fixes, some of which 
 
 Breaking changes:
 
+- Version 23.0 to 23.2 lost the ink editor events. They're back with version 23.3.0, but the parameter list is slightly different than before. In particular, the `bezierPathChanged` event now doesn't contain the coordinates of the drawing.
 - I've reduced the default maximum resolution of the canvas files. As it turned out, going to the limit caused many Android and iOS devices to crash. Now the algorithm is much more careful when calculating the maximum resolution. If you know what you're doing and want to go to the limit, you can still do that: just set `pdfDefaultOptions.maxCanvasPixels = -1`.
 - Adding ink editor drawings programmatically is no longer supported. More to the point, it should work if you pass the correct parameters, but the API has changed, and I haven't been able to figure out which parameters need to be passed.
 - I've added a selector to the CSS rules of the dialogs. That should improve compatibility to CSS frameworks and to your custom CSS. However, if you're using CSS to modify the dialogs of ngx-extended-pdf-viewer, this might be a breaking change. If you run into this problem, add a ".html" selector. The original selector was `ngx-extended-pdf-viewer .dialog`, and the new selector is `ngx-extended-pdf-viewer .html .dialog`.
