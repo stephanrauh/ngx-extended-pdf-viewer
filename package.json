@@ -57,7 +57,7 @@
   "devDependencies": {
     "@angular-devkit/build-angular": "^17.3.17",
     "@angular/cli": "^17.3.17",
-    "@angular/compiler-cli": "^17.3.12",
+    "@angular/compiler-cli": "^20.0.0",
     "@schematics/angular": "^17.3.9",
     "@types/estree": "^1.0.5",
     "@types/jest": "^29.5.14",
