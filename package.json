@@ -43,7 +43,7 @@
     "@angular/core": "^17.1.1",
     "@angular/forms": "^17.3.12",
     "@angular/platform-browser": "^17.1.1",
-    "@angular/platform-browser-dynamic": "^17.3.12",
+    "@angular/platform-browser-dynamic": "^18.2.13",
     "@angular/platform-server": "^17.3.12",
     "@angular/router": "^17.3.12",
     "@angular/ssr": "^17.3.17",
