@@ -659,3 +659,4 @@
 - 23.1.1 #2687 and #2536 fix compatibility to Safari 16 + 17; #2882 export `PdfDocumentPropertiesComponent` so developers can use it
 - 23.2.0 #2247 enable zooming in book mode; stop handling the zoom click events twice
 - 23.3.0 #2894 Capitalize the "Match Each Word" label in the search bar; #2901 bring back the ink editor events; #2900 fix editor menu items in the secondary menu (clicking used to be ignored)
+- 23.3.1 #2890 delay opening the print dialog to increase compatibility with slower browsers, especially on iOS smartphones
