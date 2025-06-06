@@ -59,7 +59,7 @@
     "@angular/cli": "^17.3.17",
     "@angular/compiler-cli": "^17.3.12",
     "@schematics/angular": "^17.3.9",
-    "@types/estree": "^1.0.5",
+    "@types/estree": "^1.0.8",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.15.24",
     "@types/trusted-types": "^2.0.7",
