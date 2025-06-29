@@ -308,6 +308,25 @@ pdfjs-highlight-floating-button1 =
     .title = Đánh dấu
     .aria-label = Đánh dấu
 pdfjs-highlight-floating-button-label = Đánh dấu
+pdfjs-editor-signature-button =
+    .title = Thêm chữ ký
+pdfjs-editor-signature-button-label = Thêm chữ ký
+
+## Default editor aria labels
+
+# “Highlight” is a noun, the string is used on the editor for highlights.
+pdfjs-editor-highlight-editor =
+    .aria-label = Trình chỉnh sửa đánh dấu
+# “Drawing” is a noun, the string is used on the editor for drawings.
+pdfjs-editor-ink-editor =
+    .aria-label = Trình chỉnh sửa bản vẽ
+# Used when a signature editor is selected/hovered.
+# Variables:
+#   $description (String) - a string describing/labeling the signature.
+pdfjs-editor-signature-editor1 =
+    .aria-description = Trình chỉnh sửa chữ ký: { $description }
+pdfjs-editor-stamp-editor =
+    .aria-label = Trình chỉnh sửa hình ảnh
 
 ## Remove button for the various kind of editor.
 
@@ -319,6 +338,8 @@ pdfjs-editor-remove-stamp-button =
     .title = Xóa ảnh
 pdfjs-editor-remove-highlight-button =
     .title = Xóa phần đánh dấu
+pdfjs-editor-remove-signature-button =
+    .title = Xoá chữ ký
 
 ##
 
@@ -335,6 +356,16 @@ pdfjs-editor-stamp-add-image-button-label = Thêm hình ảnh
 pdfjs-editor-free-highlight-thickness-input = Độ dày
 pdfjs-editor-free-highlight-thickness-title =
     .title = Thay đổi độ dày khi đánh dấu các mục không phải là văn bản
+pdfjs-editor-add-signature-container =
+    .aria-label = Kiểm soát chữ ký và chữ ký đã lưu
+pdfjs-editor-signature-add-signature-button =
+    .title = Thêm chữ ký mới
+pdfjs-editor-signature-add-signature-button-label = Thêm chữ ký mới
+# Used on the button to use an already saved signature.
+# Variables:
+#   $description (String) - a string describing/labeling the signature.
+pdfjs-editor-add-saved-signature-button =
+    .title = Đã lưu chữ ký: { $description }
 # .default-content is used as a placeholder in an empty text editor.
 pdfjs-free-text2 =
     .aria-label = Trình chỉnh sửa văn bản
@@ -445,9 +476,8 @@ pdfjs-editor-new-alt-text-error-close-button = Đóng
 # Variables:
 #   $totalSize (Number) - the total size (in MB) of the AI model.
 #   $downloadedSize (Number) - the downloaded size (in MB) of the AI model.
-#   $percent (Number) - the percentage of the downloaded size.
-pdfjs-editor-new-alt-text-ai-model-downloading-progress = Đang tải xuống mô hình AI văn bản thay thế ({ $downloadedSize } trong số { $totalSize } MB)
-    .aria-valuetext = Đang tải xuống mô hình AI văn bản thay thế ({ $downloadedSize } trong số { $totalSize } MB)
+pdfjs-editor-new-alt-text-ai-model-downloading-progress = Đang tải xuống mô hình AI văn bản thay thế ({ $downloadedSize } / { $totalSize } MB)
+    .aria-valuetext = Đang tải xuống mô hình AI văn bản thay thế ({ $downloadedSize } / { $totalSize } MB)
 # This is a button that users can click to edit the alt text they have already added.
 pdfjs-editor-new-alt-text-added-button =
     .aria-label = Đã thêm văn bản thay thế
@@ -492,6 +522,7 @@ pdfjs-editor-undo-bar-message-highlight = Đã xóa đánh dấu
 pdfjs-editor-undo-bar-message-freetext = Đã xóa văn bản
 pdfjs-editor-undo-bar-message-ink = Đã xóa bản vẽ
 pdfjs-editor-undo-bar-message-stamp = Đã xóa hình ảnh
+pdfjs-editor-undo-bar-message-signature = Chữ ký đã bị xoá
 # Variables:
 #   $count (Number) - the number of removed annotations.
 pdfjs-editor-undo-bar-message-multiple = { $count } chú thích đã bị xóa
@@ -501,6 +532,75 @@ pdfjs-editor-undo-bar-undo-button-label = Hoàn tác
 pdfjs-editor-undo-bar-close-button =
     .title = Đóng
 pdfjs-editor-undo-bar-close-button-label = Đóng
+
+## Add a signature dialog
+
+pdfjs-editor-add-signature-dialog-label = Phương thức này cho phép người dùng tạo một chữ ký để thêm vào tài liệu PDF. Người dùng có thể chỉnh sửa tên (cũng đóng vai trò là văn bản thay thế) và tùy chọn lưu chữ ký để sử dụng nhiều lần.
+pdfjs-editor-add-signature-dialog-title = Thêm chữ ký
+
+## Tab names
+
+# Type is a verb (you can type your name as signature)
+pdfjs-editor-add-signature-type-button = Đánh văn bản
+    .title = Đánh văn bản
+# Draw is a verb (you can draw your signature)
+pdfjs-editor-add-signature-draw-button = Vẽ
+    .title = Vẽ
+pdfjs-editor-add-signature-image-button = Hình ảnh
+    .title = Hình ảnh
+
+## Tab panels
+
+pdfjs-editor-add-signature-type-input =
+    .aria-label = Nhập chữ ký của bạn
+    .placeholder = Nhập chữ ký của bạn
+pdfjs-editor-add-signature-draw-placeholder = Vẽ chữ ký của bạn
+pdfjs-editor-add-signature-draw-thickness-range-label = Độ dày
+# Variables:
+#   $thickness (Number) - the thickness (in pixels) of the line used to draw a signature.
+pdfjs-editor-add-signature-draw-thickness-range =
+    .title = Độ dày bút vẽ: { $thickness }
+pdfjs-editor-add-signature-image-placeholder = Kéo một tập tin tại đây để tải lên
+pdfjs-editor-add-signature-image-browse-link =
+    { PLATFORM() ->
+        [macos] Hoặc chọn hình ảnh
+       *[other] Hoặc chọn hình ảnh
+    }
+
+## Controls
+
+pdfjs-editor-add-signature-description-label = Mô tả (văn bản thay thế)
+pdfjs-editor-add-signature-description-input =
+    .title = Mô tả (văn bản thay thế)
+pdfjs-editor-add-signature-description-default-when-drawing = Chữ ký
+pdfjs-editor-add-signature-clear-button-label = Xoá chữ ký
+pdfjs-editor-add-signature-clear-button =
+    .title = Xoá chữ ký
+pdfjs-editor-add-signature-save-checkbox = Lưu chữ ký
+pdfjs-editor-add-signature-save-warning-message = Bạn đã đạt đến giới hạn 5 chữ ký đã lưu. Hãy xóa một cái để lưu thêm.
+pdfjs-editor-add-signature-image-upload-error-title = Không thể tải lên hình ảnh
+pdfjs-editor-add-signature-image-upload-error-description = Kiểm tra kết nối mạng của bạn hoặc thử hình ảnh khác.
+pdfjs-editor-add-signature-error-close-button = Đóng
+
+## Dialog buttons
+
+pdfjs-editor-add-signature-cancel-button = Hủy bỏ
+pdfjs-editor-add-signature-add-button = Thêm
+pdfjs-editor-edit-signature-update-button = Cập nhật
+
+## Main menu for adding/removing signatures
+
+pdfjs-editor-delete-signature-button1 =
+    .title = Xoá chữ ký đã lưu
+pdfjs-editor-delete-signature-button-label1 = Xoá chữ ký đã lưu
+
+## Editor toolbar
+
+pdfjs-editor-add-signature-edit-button-label = Chỉnh sửa mô tả
+
+## Edit signature description dialog
+
+pdfjs-editor-edit-signature-dialog-title = Chỉnh sửa mô tả
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.

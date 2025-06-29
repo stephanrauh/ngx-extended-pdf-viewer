@@ -11,12 +11,20 @@ function fixVersionNumber(folder = 'assets', suffix = '.mjs') {
     if (!viewer.match(pattern)) {
       pattern = /pdfjsVersion\s?=\s?\".+\"/g;
     }
-
-    let pdfjsVersion = viewer.match(pattern)[0].match(/[\'|\"].+?[\'|\"]/g)[0];
-    pdfjsVersion = pdfjsVersion.substring(1, pdfjsVersion.length - 1);
+    if (!viewer.match(pattern)) {
+      pattern = /pdfjsVersion\s?=\s.+/g;
+    }
+    let pdfjsVersion = viewer.match(pattern)[0].match(/[\'|\"|\s=\s].+[\'|\"]?/g)[0];
+    pdfjsVersion = pdfjsVersion.substring(pdfjsVersion.indexOf('=') + 1, pdfjsVersion.length).trim();
+    if (pdfjsVersion.startsWith('"')) {
+      pdfjsVersion = pdfjsVersion.substring(1, pdfjsVersion.length - 1).trim();
+    }
     const pdfjsWorker = fs.readFileSync(f + 'pdf.worker' + suffix).toString();
-    let workerVersion = pdfjsWorker.match(/pdfjsVersion\s?=\s?[\'|\"].+[\'|\"]/g)[0].match(/[\'|\"].+?[\'|\"]/g)[0];
-    workerVersion = workerVersion.substring(1, workerVersion.length - 1);
+    let workerVersion = pdfjsWorker.match(/pdfjsVersion\s?=\s?[\'|\"\s].+[\'|\"]?/g)[0].match(/[\'|\"|\s=\s]\d+\.\d+\.\d+[\'|\"]?/g)[0];
+    workerVersion = workerVersion.substring(workerVersion.indexOf('=') + 1, workerVersion.length).trim();
+    if (workerVersion.startsWith('"')) {
+      workerVersion = workerVersion.substring(1, workerVersion.length - 1).trim();
+    }
     if (workerVersion !== pdfjsVersion) {
       console.error("Version numbers don't match");
       process.exit(-10);
@@ -47,7 +55,7 @@ function fixVersionNumber(folder = 'assets', suffix = '.mjs') {
     if (folder === 'assets') {
       options = options.replace(/pdfjsVersion = \'.+\'/g, `pdfjsVersion = '${pdfjsVersion}'`);
     } else {
-      options = options.replace(/pdfjsBleedingEdgeVersion = \'.+\'/g, `pdfjsBleedingEdgeVersion = '${pdfjsVersion}'`);
+      options = options.replace(/pdfjsBleedingEdgeVersion = \'.*\'/g, `pdfjsBleedingEdgeVersion = '${pdfjsVersion}'`);
     }
   }
 }

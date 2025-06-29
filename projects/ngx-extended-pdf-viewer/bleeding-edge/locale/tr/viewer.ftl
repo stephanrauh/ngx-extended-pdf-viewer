@@ -316,6 +316,25 @@ pdfjs-highlight-floating-button1 =
     .title = Vurgula
     .aria-label = Vurgula
 pdfjs-highlight-floating-button-label = Vurgula
+pdfjs-editor-signature-button =
+    .title = İmza ekle
+pdfjs-editor-signature-button-label = İmza ekle
+
+## Default editor aria labels
+
+# “Highlight” is a noun, the string is used on the editor for highlights.
+pdfjs-editor-highlight-editor =
+    .aria-label = Vurgu düzenleyici
+# “Drawing” is a noun, the string is used on the editor for drawings.
+pdfjs-editor-ink-editor =
+    .aria-label = Çizim düzenleyici
+# Used when a signature editor is selected/hovered.
+# Variables:
+#   $description (String) - a string describing/labeling the signature.
+pdfjs-editor-signature-editor1 =
+    .aria-description = İmza düzenleyici: { $description }
+pdfjs-editor-stamp-editor =
+    .aria-label = Resim düzenleyici
 
 ## Remove button for the various kind of editor.
 
@@ -327,6 +346,8 @@ pdfjs-editor-remove-stamp-button =
     .title = Resmi kaldır
 pdfjs-editor-remove-highlight-button =
     .title = Vurgulamayı kaldır
+pdfjs-editor-remove-signature-button =
+    .title = İmzayı kaldır
 
 ##
 
@@ -343,6 +364,16 @@ pdfjs-editor-stamp-add-image-button-label = Resim ekle
 pdfjs-editor-free-highlight-thickness-input = Kalınlık
 pdfjs-editor-free-highlight-thickness-title =
     .title = Metin dışındaki öğeleri vurgularken kalınlığı değiştir
+pdfjs-editor-add-signature-container =
+    .aria-label = İmza yönetimi ve kayıtlı imzalar
+pdfjs-editor-signature-add-signature-button =
+    .title = Yeni imza ekle
+pdfjs-editor-signature-add-signature-button-label = Yeni imza ekle
+# Used on the button to use an already saved signature.
+# Variables:
+#   $description (String) - a string describing/labeling the signature.
+pdfjs-editor-add-saved-signature-button =
+    .title = Kayıtlı imza: { $description }
 # .default-content is used as a placeholder in an empty text editor.
 pdfjs-free-text2 =
     .aria-label = Metin düzenleyicisi
@@ -453,7 +484,6 @@ pdfjs-editor-new-alt-text-error-close-button = Kapat
 # Variables:
 #   $totalSize (Number) - the total size (in MB) of the AI model.
 #   $downloadedSize (Number) - the downloaded size (in MB) of the AI model.
-#   $percent (Number) - the percentage of the downloaded size.
 pdfjs-editor-new-alt-text-ai-model-downloading-progress = Alt metin yapay zekâ modeli indiriliyor ({ $downloadedSize } / { $totalSize } MB)
     .aria-valuetext = Alt metin yapay zekâ modeli indiriliyor ({ $downloadedSize } / { $totalSize } MB)
 # This is a button that users can click to edit the alt text they have already added.
@@ -500,6 +530,7 @@ pdfjs-editor-undo-bar-message-highlight = Vurgulama silindi
 pdfjs-editor-undo-bar-message-freetext = Metin silindi
 pdfjs-editor-undo-bar-message-ink = Çizim silindi
 pdfjs-editor-undo-bar-message-stamp = Görsel silindi
+pdfjs-editor-undo-bar-message-signature = İmza kaldırıldı
 # Variables:
 #   $count (Number) - the number of removed annotations.
 pdfjs-editor-undo-bar-message-multiple =
@@ -513,6 +544,75 @@ pdfjs-editor-undo-bar-undo-button-label = Geri al
 pdfjs-editor-undo-bar-close-button =
     .title = Kapat
 pdfjs-editor-undo-bar-close-button-label = Kapat
+
+## Add a signature dialog
+
+pdfjs-editor-add-signature-dialog-label = Bu pencereden PDF belgesine eklemek üzere imza oluşturabilirsiniz. Adınızı düzenleyebilir (adınız alt metin olarak da kullanılır) ve isterseniz ileride tekrar kullanmak üzere imzayı kaydedebilirsiniz.
+pdfjs-editor-add-signature-dialog-title = İmza ekle
+
+## Tab names
+
+# Type is a verb (you can type your name as signature)
+pdfjs-editor-add-signature-type-button = Yaz
+    .title = Yaz
+# Draw is a verb (you can draw your signature)
+pdfjs-editor-add-signature-draw-button = Çiz
+    .title = Çiz
+pdfjs-editor-add-signature-image-button = Resim
+    .title = Resim
+
+## Tab panels
+
+pdfjs-editor-add-signature-type-input =
+    .aria-label = İmzanızı yazın
+    .placeholder = İmzanızı yazın
+pdfjs-editor-add-signature-draw-placeholder = İmzanızı çizin
+pdfjs-editor-add-signature-draw-thickness-range-label = Kalınlık
+# Variables:
+#   $thickness (Number) - the thickness (in pixels) of the line used to draw a signature.
+pdfjs-editor-add-signature-draw-thickness-range =
+    .title = Çizgi kalınlığı: { $thickness }
+pdfjs-editor-add-signature-image-placeholder = Yüklenecek dosyayı buraya sürükleyin
+pdfjs-editor-add-signature-image-browse-link =
+    { PLATFORM() ->
+        [macos] Veya resim dosyalarına göz atın
+       *[other] Veya resim dosyalarına göz atın
+    }
+
+## Controls
+
+pdfjs-editor-add-signature-description-label = Açıklama (alt metin)
+pdfjs-editor-add-signature-description-input =
+    .title = Açıklama (alt metin)
+pdfjs-editor-add-signature-description-default-when-drawing = İmza
+pdfjs-editor-add-signature-clear-button-label = İmzayı temizle
+pdfjs-editor-add-signature-clear-button =
+    .title = İmzayı temizle
+pdfjs-editor-add-signature-save-checkbox = İmzayı kaydet
+pdfjs-editor-add-signature-save-warning-message = Kayıtlı 5 imza sınırına ulaştınız. Daha fazla imza kaydetmek için imzalardan birini kaldırın.
+pdfjs-editor-add-signature-image-upload-error-title = Resim yüklenemedi
+pdfjs-editor-add-signature-image-upload-error-description = Ağ bağlantınızı kontrol edin veya başka bir resim deneyin.
+pdfjs-editor-add-signature-error-close-button = Kapat
+
+## Dialog buttons
+
+pdfjs-editor-add-signature-cancel-button = Vazgeç
+pdfjs-editor-add-signature-add-button = Ekle
+pdfjs-editor-edit-signature-update-button = Güncelle
+
+## Main menu for adding/removing signatures
+
+pdfjs-editor-delete-signature-button1 =
+    .title = Kayıtlı imzayı kaldır
+pdfjs-editor-delete-signature-button-label1 = Kayıtlı imzayı kaldır
+
+## Editor toolbar
+
+pdfjs-editor-add-signature-edit-button-label = Açıklamayı düzenle
+
+## Edit signature description dialog
+
+pdfjs-editor-edit-signature-dialog-title = Açıklamayı düzenle
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.

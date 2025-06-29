@@ -39,6 +39,16 @@ This library provides an embeddable PDF viewer component. It's different from ot
 
 Version 20.0.2 is a security fix. It solves CVE-2024-4367. I strongly recommend updating to the latest version of ngx-extended-pdf-viewer as soon as possible, or to version 20.0.2 as a minimum. Older versions contain a bug allowing malicious PDF files to run arbitrary code. Kudos go to GitHub users ScratchPDX and Deepak Shakya to tell me about it, so I could provide a hotfix during my vacations.
 
+## Announcement: Version 25 migrates to signals (and probably more)
+
+This is an early announcement. I want to update ngx-extended-pdf-viewer to support modern Angular. In particular, that's stand-alone components, getting rid of zone.js, and signals. Version 25 is a round version number, so chance are you expect more breaking changes than usual. As always, I'll try to minimize the migration pain, but I'm not sure I'll succeed. I intend to implement a migration schematics to reduce the annoyance, but let's be honest: it's next to impossible to provide a painless migration. On the other hand, I'm pretty sure you'll love it after the migration.
+
+## Version 24
+
+This version migrates to pdf.js 5.3. That's a major jump, including breaking changes and new features. At the time of writing, I'm surprise the update is mostly smoothly, with one exception: my annotation editor events are gone. It'll take a while to bring them back. Plus, I can't guarantee 100% compatibility, simply because I don't know yet what's changed in the based library.
+
+In other words, more likely than not, there'll be an extended time of alpha and beta versions. Please apologize the inconvience!
+
 ## Version 23
 
 Version 23 updates to pdf.js 4.10 and contains several bug fixes, some of which are breaking changes. There's only two new features:
@@ -53,56 +63,10 @@ Breaking changes:
 - Adding ink editor drawings programmatically is no longer supported. More to the point, it should work if you pass the correct parameters, but the API has changed, and I haven't been able to figure out which parameters need to be passed.
 - I've added a selector to the CSS rules of the dialogs. That should improve compatibility to CSS frameworks and to your custom CSS. However, if you're using CSS to modify the dialogs of ngx-extended-pdf-viewer, this might be a breaking change. If you run into this problem, add a ".html" selector. The original selector was `ngx-extended-pdf-viewer .dialog`, and the new selector is `ngx-extended-pdf-viewer .html .dialog`.
 
-## Version 22: improved search UI and update to pdf.js 4.7
-
-Version 22 updates to my fork of pdf.js 4.7. You can also opt in for my fork of pdf.js 4.10.38. I'm calling it the "bleeding edge" branch, so you know that while you're invited to test it, it may be broken. Luckily, it isn't, most of the time.
-
-_Breaking changes_:
-
-- `NgxExtendedPdfViewerService.addEditorAnnotation` is now asynchronous
-- several buttons have new ids
-- Since version 22.3.0 the initialization of the viewer is delayed until it's in a visible container. This means it might never initialize if it's in a tab or modal the user never opens. This optimizes resource usage, but if you're relying on the precise timing or even on the internal implementation of the viewer, this might be a breaking change. However, that's an unlikely corner case.
-
 ## Please avoid version 21.4.5 and 21.4.6
 
 These versions were meant to be alpha versions, but I forgot to update the version number, and now I can't delete the offending version from npm. The update to pdf.js 4.7 didn't go as smoothless as I hoped, so these versions suffer from a few bugs. The good news is that most users probably won't notice. However, several buttons have
 new ids, so their functionality is lost in these two version. Better stick to version 21.4.4.
-
-## Version 21: an optimized viewer
-
-Version 21 is a major refactoring. The new version reduces the memory footprint and start-up times. I consider it a major progress: now the architecture is significantly cleaner. It's still work in progress, but you should notice the difference.
-
-If you're using Content Security Policy (CSP), you might want to follow [issue 2362](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/2362). Earlier versions of the viewer offered a makeshift support of CSP. I hope to come up with a much cleaner solution soon.
-
-Let's have a look at the changes in more detail. Version 21
-
-- updates to pdf.js 4.5 (and starting with version 21.4.0, pdf.js 4.6)
-- gets rid of RxJS
-- stops polluting the global namespace
-- reduces the memory leaks (that's partially finished, but you should notice an improvement)
-- reduces the number of requests loading JavaScript files
-- moves the code loading the huge JavaScript files to a service (so the viewer can reuse the JavaScript files instead of reloading them)
-- improves (and fixes) the responsive design of the toolbar (since version 21.1.0)
-- and it fixes quite a few bugs.
-
-Version 21 contains several breaking changes. The good news is that I assume the vast majority of developers won't even notice. These breaking changes are:
-
-- `window.PDFViewerApplication` is now undefined. Earlier versions of the viewer stored many attributes, objects, and functions in the global namespace (i.e. `globalThis` or `window`). Many of these attributes have already migrated to `PDFScriptLoaderService.PDFViewerApplication`. If you need the `PDFViewerApplication`, you can get it from the `PdfNoticationService`.
-- The API for custom thumbnails has slightly changed. Now it doesn't require you to add functions to the `window` object.
-- The RxJS subjects `recalculateSize$` and `onPDFJSInit` are gone. You can use ``onPDFJSInitSignal` to replace `onPDFJSInit`. I suspect nobody uses `recalculateSize$`, so I didn't implement a replacement yet.
-- Version 21.1.0 improves the responsive design of the toolbar and updated the breakpoint, which had sort of broken after introducing the four editor buttons. This means you might see more buttons, and it moves the zoom dropdown to the left. If you don't want to see the extra buttons, you can hide them via the `[showXXX]` attributes.
-
-## What's new in version 20.5.x?
-
-Basically, version 20.5.0 updates to pdf.js 4.3 and solves some memory leak issues. However, that turned out to be a major task, involving a major rewrite of the initialization of the library.
-
-Breaking changes:
-
-- Compatibility with CSP (Content Security Policy) has - temporarily - become worse. I had to modify the way the JavaScript files are loaded, and I didn't find out yet how to make the new algorithm aware of CSP.
-- Absolute paths in `pdfDefaultOptions.assetsFolder` are temporarily broken. I've fixed this in version 21.0.0-alpha.2, but more likely than not I won't be able to publish the bugfix in a 20.5.x version.
-- I've modified the way the application initializes. It's unlikely you notice this, but if you rely on `window.PDFViewerApplication` to be available early, you might see errors. Starting with version 20.5.0, the recommended approach is to listen to the signal `PDFNotificationService.onPDFJSInitSignal()`. When the viewer is initialized, the signal fires and sends the references to `PDFViewerApplication` and a few other resources. After receiving this signal, you can safely use the `PDFViewerApplication` sent by the signal. When the viewer is destroy, the signal fires again, this time sending `undefined` to indicate you must stop using `PDFViewerApplication`. The next time the viewer initializes, the signal fires again, this time passing the reference to the new instance of `PDFViewerApplication`.
-- The +/- zoom buttons now have a different id. I've renamed them after observing these buttons always triggered two events, on triggered by pdf.js, the other by ngx-extended-pdf-viewer. If you rely on the id for some reason, that might be a breaking change.
-- If you want to use `ngxConsoleFilter`, now you have to register it later. You can safely register the method when `PDFNotificationService.onPDFJSInit` is fired. However, this event is subject to change, too - if everything goes according to plan, version 21 is going to replace this `Observable` by a `Signal`.
 
 ## Full changelog
 

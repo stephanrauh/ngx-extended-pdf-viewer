@@ -28,8 +28,9 @@ const textLayerBuildScss = removeComments(fs.readFileSync('./projects/ngx-extend
 const viewerWithImageScss = removeComments(fs.readFileSync('./projects/ngx-extended-pdf-viewer/src/lib/theme/common/viewer-with-images.scss', 'utf8'));
 const componentScss = removeComments(fs.readFileSync('./projects/ngx-extended-pdf-viewer/src/lib/theme/common/ngx-extended-pdf-viewer.component.scss', 'utf8'));
 
-const dark = sass.compileString(darkScss + textLayerBuildScss + viewerWithImageScss + componentScss, options);
-const light = sass.compileString(lightScss + textLayerBuildScss + viewerWithImageScss + componentScss, options);
+const signature_manager = removeComments(fs.readFileSync('./projects/ngx-extended-pdf-viewer/src/lib/theme/common/signature_manager.scss', 'utf8'));
+const dark = sass.compileString(darkScss + signature_manager + textLayerBuildScss + viewerWithImageScss + componentScss, options);
+const light = sass.compileString(lightScss + signature_manager + textLayerBuildScss + viewerWithImageScss + componentScss, options);
 const print = sass.compile('./projects/ngx-extended-pdf-viewer/src/lib/theme/common/print.scss', options);
 const toggleButton = sass.compile('./projects/ngx-extended-pdf-viewer/src/lib/theme/common/toggle_button.css', options);
 const bookMode = sass.compile('./projects/ngx-extended-pdf-viewer/src/lib/theme/common/book-mode.scss', options);

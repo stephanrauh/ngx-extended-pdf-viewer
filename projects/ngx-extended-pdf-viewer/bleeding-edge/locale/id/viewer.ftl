@@ -308,6 +308,25 @@ pdfjs-highlight-floating-button1 =
     .title = Sorot
     .aria-label = Sorot
 pdfjs-highlight-floating-button-label = Sorot
+pdfjs-editor-signature-button =
+    .title = Tambahkan tanda tangan
+pdfjs-editor-signature-button-label = Tambahkan tanda tangan
+
+## Default editor aria labels
+
+# “Highlight” is a noun, the string is used on the editor for highlights.
+pdfjs-editor-highlight-editor =
+    .aria-label = Editor sorot
+# “Drawing” is a noun, the string is used on the editor for drawings.
+pdfjs-editor-ink-editor =
+    .aria-label = Editor gambar
+# Used when a signature editor is selected/hovered.
+# Variables:
+#   $description (String) - a string describing/labeling the signature.
+pdfjs-editor-signature-editor1 =
+    .aria-description = Editor tanda tangan: { $description }
+pdfjs-editor-stamp-editor =
+    .aria-label = Editor gambar
 
 ## Remove button for the various kind of editor.
 
@@ -319,6 +338,8 @@ pdfjs-editor-remove-stamp-button =
     .title = Hapus gambar
 pdfjs-editor-remove-highlight-button =
     .title = Hapus sorotan
+pdfjs-editor-remove-signature-button =
+    .title = Hapus tanda tangan
 
 ##
 
@@ -335,6 +356,16 @@ pdfjs-editor-stamp-add-image-button-label = Tambahkan gambar
 pdfjs-editor-free-highlight-thickness-input = Ketebalan
 pdfjs-editor-free-highlight-thickness-title =
     .title = Ubah ketebalan saat menyorot item selain teks
+pdfjs-editor-add-signature-container =
+    .aria-label = Kontrol tanda tangan dan tanda tangan tersimpan
+pdfjs-editor-signature-add-signature-button =
+    .title = Tambahkan tanda tangan baru
+pdfjs-editor-signature-add-signature-button-label = Tambahkan tanda tangan baru
+# Used on the button to use an already saved signature.
+# Variables:
+#   $description (String) - a string describing/labeling the signature.
+pdfjs-editor-add-saved-signature-button =
+    .title = Tanda tangan tersimpan: { $description }
 # .default-content is used as a placeholder in an empty text editor.
 pdfjs-free-text2 =
     .aria-label = Editor Teks
@@ -354,125 +385,224 @@ pdfjs-editor-alt-text-edit-button =
     .aria-label = Edit teks alternatif
 pdfjs-editor-alt-text-edit-button-label = Edit teks alternatif
 pdfjs-editor-alt-text-dialog-label = Pilih opsi
+pdfjs-editor-alt-text-dialog-description = Teks alternatif membantu ketika orang tidak dapat melihat gambar atau ketika tidak termuat.
+pdfjs-editor-alt-text-add-description-label = Tambahkan deskripsi
+pdfjs-editor-alt-text-add-description-description = Upayakan 1-2 kalimat yang menggambarkan subjek, latar, atau tindakan.
+pdfjs-editor-alt-text-mark-decorative-label = Tandai sebagai dekoratif
+pdfjs-editor-alt-text-mark-decorative-description = Ini digunakan untuk gambar hias, seperti batas atau tanda air.
+pdfjs-editor-alt-text-cancel-button = Batal
+pdfjs-editor-alt-text-save-button = Simpan
+pdfjs-editor-alt-text-decorative-tooltip = Ditandai sebagai dekoratif
+# .placeholder: This is a placeholder for the alt text input area
+pdfjs-editor-alt-text-textarea =
+    .placeholder = Misalnya, “Seorang pemuda duduk di meja untuk makan”
+# Alternative text (alt text) helps when people can't see the image.
+pdfjs-editor-alt-text-button =
+    .aria-label = Teks alternatif
 
 ## Editor resizers
 ## This is used in an aria label to help to understand the role of the resizer.
 
+pdfjs-editor-resizer-label-top-left = Pojok kiri atas — ubah ukuran
+pdfjs-editor-resizer-label-top-middle = Tengah atas — ubah ukuran
+pdfjs-editor-resizer-label-top-right = Pojok kanan atas — ubah ukuran
+pdfjs-editor-resizer-label-middle-right = Kanan tengah — ubah ukuran
+pdfjs-editor-resizer-label-bottom-right = Pojok kanan bawah — ubah ukuran
+pdfjs-editor-resizer-label-bottom-middle = Tengah bawah — ubah ukuran
+pdfjs-editor-resizer-label-bottom-left = Pojok kiri bawah — ubah ukuran
+pdfjs-editor-resizer-label-middle-left = Kiri tengah — ubah ukuran
+pdfjs-editor-resizer-top-left =
+    .aria-label = Pojok kiri atas — ubah ukuran
+pdfjs-editor-resizer-top-middle =
+    .aria-label = Tengah atas — ubah ukuran
+pdfjs-editor-resizer-top-right =
+    .aria-label = Pojok kanan atas — ubah ukuran
+pdfjs-editor-resizer-middle-right =
+    .aria-label = Kanan tengah — ubah ukuran
+pdfjs-editor-resizer-bottom-right =
+    .aria-label = Pojok kanan bawah — ubah ukuran
+pdfjs-editor-resizer-bottom-middle =
+    .aria-label = Tengah bawah — ubah ukuran
+pdfjs-editor-resizer-bottom-left =
+    .aria-label = Pojok kiri bawah — ubah ukuran
+pdfjs-editor-resizer-middle-left =
+    .aria-label = Kiri tengah — ubah ukuran
 
 ## Color picker
 
+# This means "Color used to highlight text"
+pdfjs-editor-highlight-colorpicker-label = Warna sorot
+pdfjs-editor-colorpicker-button =
+    .title = Ubah warna
+pdfjs-editor-colorpicker-dropdown =
+    .aria-label = Pilihan warna
+pdfjs-editor-colorpicker-yellow =
+    .title = Kuning
+pdfjs-editor-colorpicker-green =
+    .title = Hijau
+pdfjs-editor-colorpicker-blue =
+    .title = Biru
+pdfjs-editor-colorpicker-pink =
+    .title = Merah Jambu
+pdfjs-editor-colorpicker-red =
+    .title = Merah
 
 ## Show all highlights
 ## This is a toggle button to show/hide all the highlights.
 
+pdfjs-editor-highlight-show-all-button-label = Tampilkan semua
+pdfjs-editor-highlight-show-all-button =
+    .title = Tampilkan semua
 
 ## New alt-text dialog
 ## Group note for entire feature: Alternative text (alt text) helps when people can't see the image. This feature includes a tool to create alt text automatically using an AI model that works locally on the user's device to preserve privacy.
 
+# Modal header positioned above a text box where users can edit the alt text.
+pdfjs-editor-new-alt-text-dialog-edit-label = Edit teks alternatif (deskripsi gambar)
+# Modal header positioned above a text box where users can add the alt text.
+pdfjs-editor-new-alt-text-dialog-add-label = Tambahkan teks alternatif (deskripsi gambar)
+pdfjs-editor-new-alt-text-textarea =
+    .placeholder = Tulis deskripsi Anda di sini…
+# This text refers to the alt text box above this description. It offers a definition of alt text.
+pdfjs-editor-new-alt-text-description = Deskripsi singkat untuk orang yang tidak dapat melihat gambar atau saat gambar tidak termuat.
+# This is a required legal disclaimer that refers to the automatically created text inside the alt text box above this text. It disappears if the text is edited by a human.
+pdfjs-editor-new-alt-text-disclaimer1 = Teks alternatif ini dibuat secara otomatis dan mungkin tidak akurat.
+pdfjs-editor-new-alt-text-disclaimer-learn-more-url = Pelajari lebih lanjut
+pdfjs-editor-new-alt-text-create-automatically-button-label = Buat teks alternatif secara otomatis
+pdfjs-editor-new-alt-text-not-now-button = Jangan sekarang
+pdfjs-editor-new-alt-text-error-title = Tidak bisa membuat teks alternatif secara otomatis
+pdfjs-editor-new-alt-text-error-description = Silakan tulis teks alternatif Anda sendiri atau coba lagi nanti.
+pdfjs-editor-new-alt-text-error-close-button = Tutup
+# Variables:
+#   $totalSize (Number) - the total size (in MB) of the AI model.
+#   $downloadedSize (Number) - the downloaded size (in MB) of the AI model.
+pdfjs-editor-new-alt-text-ai-model-downloading-progress = Mengunduh model AI teks alternatif ({ $downloadedSize } dari { $totalSize } MB)
+    .aria-valuetext = Mengunduh model AI teks alternatif ({ $downloadedSize } dari { $totalSize } MB)
+# This is a button that users can click to edit the alt text they have already added.
+pdfjs-editor-new-alt-text-added-button =
+    .aria-label = Teks alternatif ditambahkan
+pdfjs-editor-new-alt-text-added-button-label = Teks alternatif ditambahkan
+# This is a button that users can click to open the alt text editor and add alt text when it is not present.
+pdfjs-editor-new-alt-text-missing-button =
+    .aria-label = Teks alternatif hilang
+pdfjs-editor-new-alt-text-missing-button-label = Teks alternatif hilang
+# This is a button that opens up the alt text modal where users should review the alt text that was automatically generated.
+pdfjs-editor-new-alt-text-to-review-button =
+    .aria-label = Tinjau teks alternatif
+pdfjs-editor-new-alt-text-to-review-button-label = Tinjau teks alternatif
+# "Created automatically" is a prefix that will be added to the beginning of any alt text that has been automatically generated. After the colon, the user will see/hear the actual alt text description. If the alt text has been edited by a human, this prefix will not appear.
+# Variables:
+#   $generatedAltText (String) - the generated alt-text.
+pdfjs-editor-new-alt-text-generated-alt-text-with-disclaimer = Dibuat secara otomatis: { $generatedAltText }
 
 ## Image alt-text settings
 
+pdfjs-image-alt-text-settings-button =
+    .title = Pengaturan teks alternatif gambar
+pdfjs-image-alt-text-settings-button-label = Pengaturan teks alternatif gambar
+pdfjs-editor-alt-text-settings-dialog-label = Pengaturan teks alternatif gambar
+pdfjs-editor-alt-text-settings-automatic-title = Teks alternatif otomatis
+pdfjs-editor-alt-text-settings-create-model-button-label = Buat teks alternatif secara otomatis
+pdfjs-editor-alt-text-settings-create-model-description = Menyarankan deskripsi untuk membantu orang yang tidak dapat melihat gambar atau ketika gambar tidak termuat.
+# Variables:
+#   $totalSize (Number) - the total size (in MB) of the AI model.
+pdfjs-editor-alt-text-settings-download-model-label = Model AI teks alternatif ({ $totalSize } MB)
+pdfjs-editor-alt-text-settings-ai-model-description = Berjalan secara lokal di perangkat Anda sehingga data Anda tetap pribadi. Diperlukan untuk teks alternatif otomatis.
+pdfjs-editor-alt-text-settings-delete-model-button = Hapus
+pdfjs-editor-alt-text-settings-download-model-button = Unduh
+pdfjs-editor-alt-text-settings-downloading-model-button = Mengunduh…
+pdfjs-editor-alt-text-settings-editor-title = Editor teks alternatif
+pdfjs-editor-alt-text-settings-show-dialog-button-label = Tampilkan editor teks alternatif segera saat menambahkan gambar
+pdfjs-editor-alt-text-settings-show-dialog-description = Membantu Anda memastikan semua gambar Anda memiliki teks alternatif.
+pdfjs-editor-alt-text-settings-close-button = Tutup
+
+## "Annotations removed" bar
+
+pdfjs-editor-undo-bar-message-highlight = Sorotan dihapus
+pdfjs-editor-undo-bar-message-freetext = Teks dihapus
+pdfjs-editor-undo-bar-message-ink = Gambar dihapus
+pdfjs-editor-undo-bar-message-stamp = Gambar dihapus
+pdfjs-editor-undo-bar-message-signature = Tanda tangan dihapus
+# Variables:
+#   $count (Number) - the number of removed annotations.
+pdfjs-editor-undo-bar-message-multiple = { $count } anotasi dihapus
+pdfjs-editor-undo-bar-undo-button =
+    .title = Urungkan
+pdfjs-editor-undo-bar-undo-button-label = Urungkan
+pdfjs-editor-undo-bar-close-button =
+    .title = Tutup
+pdfjs-editor-undo-bar-close-button-label = Tutup
+
+## Add a signature dialog
+
+pdfjs-editor-add-signature-dialog-label = Modal ini memungkinkan pengguna untuk membuat tanda tangan yang dapat ditambahkan ke dokumen PDF. Pengguna dapat mengedit nama (yang juga berfungsi sebagai teks alternatif), dan jika diinginkan, menyimpan tanda tangan untuk digunakan kembali.
+pdfjs-editor-add-signature-dialog-title = Tambahkan tanda tangan
+
+## Tab names
+
+# Type is a verb (you can type your name as signature)
+pdfjs-editor-add-signature-type-button = Tipe
+    .title = Tipe
+# Draw is a verb (you can draw your signature)
+pdfjs-editor-add-signature-draw-button = Gambarkan
+    .title = Gambarkan
+pdfjs-editor-add-signature-image-button = Gambar
+    .title = Gambar
+
+## Tab panels
+
+pdfjs-editor-add-signature-type-input =
+    .aria-label = Ketik tanda tangan Anda
+    .placeholder = Ketik tanda tangan Anda
+pdfjs-editor-add-signature-draw-placeholder = Buat tanda tangan Anda
+pdfjs-editor-add-signature-draw-thickness-range-label = Ketebalan
+# Variables:
+#   $thickness (Number) - the thickness (in pixels) of the line used to draw a signature.
+pdfjs-editor-add-signature-draw-thickness-range =
+    .title = Ketebalan gambar: { $thickness }
+pdfjs-editor-add-signature-image-placeholder = Seret berkas ke sini untuk mengunggah
+pdfjs-editor-add-signature-image-browse-link =
+    { PLATFORM() ->
+        [macos] Atau pilih berkas gambar
+       *[other] Atau cari berkas gambar
+    }
+
+## Controls
+
+pdfjs-editor-add-signature-description-label = Deskripsi (teks alternatif)
+pdfjs-editor-add-signature-description-input =
+    .title = Deskripsi (teks alternatif)
+pdfjs-editor-add-signature-description-default-when-drawing = Tanda tangan
+pdfjs-editor-add-signature-clear-button-label = Hapus tanda tangan
+pdfjs-editor-add-signature-clear-button =
+    .title = Hapus tanda tangan
+pdfjs-editor-add-signature-save-checkbox = Simpan tanda tangan
+pdfjs-editor-add-signature-save-warning-message = Anda telah mencapai batas 5 tanda tangan tersimpan. Hapus untuk menyimpan lebih banyak.
+pdfjs-editor-add-signature-image-upload-error-title = Tidak dapat mengunggah gambar
+pdfjs-editor-add-signature-image-upload-error-description = Periksa sambungan jaringan Anda atau coba gambar lain.
+pdfjs-editor-add-signature-error-close-button = Tutup
+
+## Dialog buttons
+
+pdfjs-editor-add-signature-cancel-button = Batal
+pdfjs-editor-add-signature-add-button = Tambah
+pdfjs-editor-edit-signature-update-button = Perbarui
+
+## Main menu for adding/removing signatures
+
+pdfjs-editor-delete-signature-button1 =
+    .title = Hapus tanda tangan tersimpan
+pdfjs-editor-delete-signature-button-label1 = Hapus tanda tangan tersimpan
+
+## Editor toolbar
+
+pdfjs-editor-add-signature-edit-button-label = Edit deskripsi
+
+## Edit signature description dialog
+
+pdfjs-editor-edit-signature-dialog-title = Edit deskripsi
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-editor-alt-text-dialog-description = Alt text (alternative text) helps when people can’t see the image or when it doesn’t load.
-pdfjs-editor-alt-text-add-description-label = Add a description
-pdfjs-editor-alt-text-add-description-description = Aim for 1-2 sentences that describe the subject, setting, or actions.
-pdfjs-editor-alt-text-mark-decorative-label = Mark as decorative
-pdfjs-editor-alt-text-mark-decorative-description = This is used for ornamental images, like borders or watermarks.
-pdfjs-editor-alt-text-cancel-button = Cancel
-pdfjs-editor-alt-text-save-button = Save
-pdfjs-editor-alt-text-decorative-tooltip = Marked as decorative
-pdfjs-editor-alt-text-textarea =
-    .placeholder = For example, “A young man sits down at a table to eat a meal”
-pdfjs-editor-resizer-top-left =
-    .aria-label = Top left corner — resize
-pdfjs-editor-resizer-top-middle =
-    .aria-label = Top middle — resize
-pdfjs-editor-resizer-top-right =
-    .aria-label = Top right corner — resize
-pdfjs-editor-resizer-middle-right =
-    .aria-label = Middle right — resize
-pdfjs-editor-resizer-bottom-right =
-    .aria-label = Bottom right corner — resize
-pdfjs-editor-resizer-bottom-middle =
-    .aria-label = Bottom middle — resize
-pdfjs-editor-resizer-bottom-left =
-    .aria-label = Bottom left corner — resize
-pdfjs-editor-resizer-middle-left =
-    .aria-label = Middle left — resize
-pdfjs-editor-highlight-colorpicker-label = Highlight color
-pdfjs-editor-colorpicker-button =
-    .title = Change color
-pdfjs-editor-colorpicker-dropdown =
-    .aria-label = Color choices
-pdfjs-editor-colorpicker-yellow =
-    .title = Yellow
-pdfjs-editor-colorpicker-green =
-    .title = Green
-pdfjs-editor-colorpicker-blue =
-    .title = Blue
-pdfjs-editor-colorpicker-pink =
-    .title = Pink
-pdfjs-editor-colorpicker-red =
-    .title = Red
-pdfjs-editor-highlight-show-all-button-label = Show all
-pdfjs-editor-highlight-show-all-button =
-    .title = Show all
-pdfjs-editor-new-alt-text-dialog-edit-label = Edit alt text (image description)
-pdfjs-editor-new-alt-text-dialog-add-label = Add alt text (image description)
-pdfjs-editor-new-alt-text-textarea =
-    .placeholder = Write your description here…
-pdfjs-editor-new-alt-text-description = Short description for people who can’t see the image or when the image doesn’t load.
-pdfjs-editor-new-alt-text-disclaimer1 = This alt text was created automatically and may be inaccurate.
-pdfjs-editor-new-alt-text-disclaimer-learn-more-url = Learn more
-pdfjs-editor-new-alt-text-create-automatically-button-label = Create alt text automatically
-pdfjs-editor-new-alt-text-not-now-button = Not now
-pdfjs-editor-new-alt-text-error-title = Couldn’t create alt text automatically
-pdfjs-editor-new-alt-text-error-description = Please write your own alt text or try again later.
-pdfjs-editor-new-alt-text-error-close-button = Close
-pdfjs-editor-new-alt-text-ai-model-downloading-progress = Downloading alt text AI model ({ $downloadedSize } of { $totalSize } MB)
-    .aria-valuetext = Downloading alt text AI model ({ $downloadedSize } of { $totalSize } MB)
-pdfjs-editor-new-alt-text-added-button =
-    .aria-label = Alt text added
-pdfjs-editor-new-alt-text-added-button-label = Alt text added
-pdfjs-editor-new-alt-text-missing-button =
-    .aria-label = Missing alt text
-pdfjs-editor-new-alt-text-missing-button-label = Missing alt text
-pdfjs-editor-new-alt-text-to-review-button =
-    .aria-label = Review alt text
-pdfjs-editor-new-alt-text-to-review-button-label = Review alt text
-pdfjs-editor-new-alt-text-generated-alt-text-with-disclaimer = Created automatically: { $generatedAltText }
-pdfjs-image-alt-text-settings-button =
-    .title = Image alt text settings
-pdfjs-image-alt-text-settings-button-label = Image alt text settings
-pdfjs-editor-alt-text-settings-dialog-label = Image alt text settings
-pdfjs-editor-alt-text-settings-automatic-title = Automatic alt text
-pdfjs-editor-alt-text-settings-create-model-button-label = Create alt text automatically
-pdfjs-editor-alt-text-settings-create-model-description = Suggests descriptions to help people who can’t see the image or when the image doesn’t load.
-pdfjs-editor-alt-text-settings-download-model-label = Alt text AI model ({ $totalSize } MB)
-pdfjs-editor-alt-text-settings-ai-model-description = Runs locally on your device so your data stays private. Required for automatic alt text.
-pdfjs-editor-alt-text-settings-delete-model-button = Delete
-pdfjs-editor-alt-text-settings-download-model-button = Download
-pdfjs-editor-alt-text-settings-downloading-model-button = Downloading…
-pdfjs-editor-alt-text-settings-editor-title = Alt text editor
-pdfjs-editor-alt-text-settings-show-dialog-button-label = Show alt text editor right away when adding an image
-pdfjs-editor-alt-text-settings-show-dialog-description = Helps you make sure all your images have alt text.
-pdfjs-editor-alt-text-settings-close-button = Close
-pdfjs-editor-undo-bar-message-highlight = Highlight removed
-pdfjs-editor-undo-bar-message-freetext = Text removed
-pdfjs-editor-undo-bar-message-ink = Drawing removed
-pdfjs-editor-undo-bar-message-stamp = Image removed
-pdfjs-editor-undo-bar-message-multiple =
-    { $count ->
-        [one] { $count } annotation removed
-       *[other] { $count } annotations removed
-    }
-pdfjs-editor-undo-bar-undo-button =
-    .title = Undo
-pdfjs-editor-undo-bar-undo-button-label = Undo
-pdfjs-editor-undo-bar-close-button =
-    .title = Close
-pdfjs-editor-undo-bar-close-button-label = Close
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = Match Each Word

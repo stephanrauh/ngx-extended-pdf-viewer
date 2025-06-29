@@ -132,7 +132,7 @@ ngx-extended-pdf-viewer {
   #editorUndoBar {
     --text-primary-color: #15141a;
 
-    --message-bar-icon: url(/assets/images/secondaryToolbarButton-documentProperties.svg);
+    --message-bar-icon: url(/assets/images/messageBar_info.svg);
     --message-bar-icon-color: #0060df;
     --message-bar-bg-color: #deeafc;
     --message-bar-fg-color: var(--text-primary-color);
@@ -177,10 +177,12 @@ ngx-extended-pdf-viewer {
       --undo-button-fg-color-active: SelectedItemText;
 
       --focus-ring-color: CanvasText;
+      --undo-button-border: none;
     }
 
     & {
-      position: fixed;
+      /* position: fixed; modified by ngx-extended-pdf-viewer - "position: fixed" only works if the PDF viewer covers the whole screen */
+      position: absolute;
       top: 50px;
       left: 50%;
       transform: translateX(-50%);
@@ -204,7 +206,7 @@ ngx-extended-pdf-viewer {
       font-weight: 590;
       line-height: 19.5px;
       color: var(--undo-button-fg-color);
-      border: none;
+      border: var(--undo-button-border);
       padding: 4px 16px;
       margin-inline-start: 8px;
       height: 32px;

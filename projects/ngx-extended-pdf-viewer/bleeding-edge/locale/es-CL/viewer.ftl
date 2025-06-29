@@ -316,6 +316,25 @@ pdfjs-highlight-floating-button1 =
     .title = Destacar
     .aria-label = Destacar
 pdfjs-highlight-floating-button-label = Destacar
+pdfjs-editor-signature-button =
+    .title = Añadir firma
+pdfjs-editor-signature-button-label = Añadir firma
+
+## Default editor aria labels
+
+# “Highlight” is a noun, the string is used on the editor for highlights.
+pdfjs-editor-highlight-editor =
+    .aria-label = Editor de destacados
+# “Drawing” is a noun, the string is used on the editor for drawings.
+pdfjs-editor-ink-editor =
+    .aria-label = Editor de dibujos
+# Used when a signature editor is selected/hovered.
+# Variables:
+#   $description (String) - a string describing/labeling the signature.
+pdfjs-editor-signature-editor1 =
+    .aria-description = Editor de firmas: { $description }
+pdfjs-editor-stamp-editor =
+    .aria-label = Editor de imágenes
 
 ## Remove button for the various kind of editor.
 
@@ -327,6 +346,8 @@ pdfjs-editor-remove-stamp-button =
     .title = Eliminar imagen
 pdfjs-editor-remove-highlight-button =
     .title = Quitar resaltado
+pdfjs-editor-remove-signature-button =
+    .title = Eliminar firma
 
 ##
 
@@ -343,6 +364,16 @@ pdfjs-editor-stamp-add-image-button-label = Añadir imagen
 pdfjs-editor-free-highlight-thickness-input = Grosor
 pdfjs-editor-free-highlight-thickness-title =
     .title = Cambia el grosor al resaltar elementos que no sean texto
+pdfjs-editor-add-signature-container =
+    .aria-label = Controles de firma y firmas guardadas
+pdfjs-editor-signature-add-signature-button =
+    .title = Añadir nueva firma
+pdfjs-editor-signature-add-signature-button-label = Añadir nueva firma
+# Used on the button to use an already saved signature.
+# Variables:
+#   $description (String) - a string describing/labeling the signature.
+pdfjs-editor-add-saved-signature-button =
+    .title = Firma guardada: { $description }
 # .default-content is used as a placeholder in an empty text editor.
 pdfjs-free-text2 =
     .aria-label = Editor de texto
@@ -453,7 +484,6 @@ pdfjs-editor-new-alt-text-error-close-button = Cerrar
 # Variables:
 #   $totalSize (Number) - the total size (in MB) of the AI model.
 #   $downloadedSize (Number) - the downloaded size (in MB) of the AI model.
-#   $percent (Number) - the percentage of the downloaded size.
 pdfjs-editor-new-alt-text-ai-model-downloading-progress = Descargando el modelo de IA de texto alternativo ({ $downloadedSize } de { $totalSize } MB)
     .aria-valuetext = Descargando el modelo de IA de texto alternativo ({ $downloadedSize } de { $totalSize } MB)
 # This is a button that users can click to edit the alt text they have already added.
@@ -500,6 +530,7 @@ pdfjs-editor-undo-bar-message-highlight = Resaltado eliminado
 pdfjs-editor-undo-bar-message-freetext = Texto eliminado
 pdfjs-editor-undo-bar-message-ink = Dibujo eliminado
 pdfjs-editor-undo-bar-message-stamp = Imagen eliminada
+pdfjs-editor-undo-bar-message-signature = Firma eliminada
 # Variables:
 #   $count (Number) - the number of removed annotations.
 pdfjs-editor-undo-bar-message-multiple =
@@ -513,6 +544,75 @@ pdfjs-editor-undo-bar-undo-button-label = Deshacer
 pdfjs-editor-undo-bar-close-button =
     .title = Cerrar
 pdfjs-editor-undo-bar-close-button-label = Cerrar
+
+## Add a signature dialog
+
+pdfjs-editor-add-signature-dialog-label = Este modal permite al usuario crear una firma para agregarla a un documento PDF. El usuario puede editar el nombre (que también sirve como texto alternativo) y, opcionalmente, guardar la firma para usarla nuevamente.
+pdfjs-editor-add-signature-dialog-title = Añadir una firma
+
+## Tab names
+
+# Type is a verb (you can type your name as signature)
+pdfjs-editor-add-signature-type-button = Escribir
+    .title = Escribir
+# Draw is a verb (you can draw your signature)
+pdfjs-editor-add-signature-draw-button = Dibujar
+    .title = Dibujar
+pdfjs-editor-add-signature-image-button = Imagen
+    .title = Imagen
+
+## Tab panels
+
+pdfjs-editor-add-signature-type-input =
+    .aria-label = Escribe tu firma
+    .placeholder = Escribe tu firma
+pdfjs-editor-add-signature-draw-placeholder = Dibuja tu firma
+pdfjs-editor-add-signature-draw-thickness-range-label = Grosor
+# Variables:
+#   $thickness (Number) - the thickness (in pixels) of the line used to draw a signature.
+pdfjs-editor-add-signature-draw-thickness-range =
+    .title = Grosor del dibujo: { $thickness }
+pdfjs-editor-add-signature-image-placeholder = Arrastre un archivo aquí para cargarlo
+pdfjs-editor-add-signature-image-browse-link =
+    { PLATFORM() ->
+        [macos] O elige archivos de imagen
+       *[other] O busca archivos de imagen
+    }
+
+## Controls
+
+pdfjs-editor-add-signature-description-label = Descripción (texto alternativo)
+pdfjs-editor-add-signature-description-input =
+    .title = Descripción (texto alternativo)
+pdfjs-editor-add-signature-description-default-when-drawing = Firma
+pdfjs-editor-add-signature-clear-button-label = Limpiar firma
+pdfjs-editor-add-signature-clear-button =
+    .title = Limpiar firma
+pdfjs-editor-add-signature-save-checkbox = Guardar firma
+pdfjs-editor-add-signature-save-warning-message = Has alcanzado el límite de 5 firmas guardadas. Elimina una para guardar más.
+pdfjs-editor-add-signature-image-upload-error-title = No se pudo subir la imagen
+pdfjs-editor-add-signature-image-upload-error-description = Verifica tu conexión de red o prueba con otra imagen.
+pdfjs-editor-add-signature-error-close-button = Cerrar
+
+## Dialog buttons
+
+pdfjs-editor-add-signature-cancel-button = Cancelar
+pdfjs-editor-add-signature-add-button = Añadir
+pdfjs-editor-edit-signature-update-button = Actualizar
+
+## Main menu for adding/removing signatures
+
+pdfjs-editor-delete-signature-button1 =
+    .title = Eliminar firma guardada
+pdfjs-editor-delete-signature-button-label1 = Eliminar firma guardada
+
+## Editor toolbar
+
+pdfjs-editor-add-signature-edit-button-label = Editar descripción
+
+## Edit signature description dialog
+
+pdfjs-editor-edit-signature-dialog-title = Editar descripción
 
 # Additional translations for ngx-extended-pdf-viewer (es)
 unverified-signature-warning = Este archivo PDF contiene una firma digital. El visor de PDF no puede verificar si la firma es válida. Por favor, descargue el archivo y ábralo en Acrobat Reader para verificar si la firma es válida.

@@ -316,6 +316,22 @@ pdfjs-highlight-floating-button1 =
     .title = Markere
     .aria-label = Markere
 pdfjs-highlight-floating-button-label = Markere
+pdfjs-editor-signature-button =
+    .title = Legg til signatur
+pdfjs-editor-signature-button-label = Legg til signatur
+
+## Default editor aria labels
+
+# “Highlight” is a noun, the string is used on the editor for highlights.
+pdfjs-editor-highlight-editor =
+    .aria-label = Markeringsredigerar
+# Used when a signature editor is selected/hovered.
+# Variables:
+#   $description (String) - a string describing/labeling the signature.
+pdfjs-editor-signature-editor1 =
+    .aria-description = Signatur-redigerar: { $description }
+pdfjs-editor-stamp-editor =
+    .aria-label = Bildredigerar
 
 ## Remove button for the various kind of editor.
 
@@ -327,6 +343,8 @@ pdfjs-editor-remove-stamp-button =
     .title = Fjern bildet
 pdfjs-editor-remove-highlight-button =
     .title = Fjern utheving
+pdfjs-editor-remove-signature-button =
+    .title = Fjern signatur
 
 ##
 
@@ -343,6 +361,16 @@ pdfjs-editor-stamp-add-image-button-label = Legg til bilde
 pdfjs-editor-free-highlight-thickness-input = Tjukn
 pdfjs-editor-free-highlight-thickness-title =
     .title = Endre tjukn når du markerer andre element enn tekst
+pdfjs-editor-add-signature-container =
+    .aria-label = Signaturkontroll og lagra signaturar
+pdfjs-editor-signature-add-signature-button =
+    .title = Legg til ny signatur
+pdfjs-editor-signature-add-signature-button-label = Legg til ny signatur
+# Used on the button to use an already saved signature.
+# Variables:
+#   $description (String) - a string describing/labeling the signature.
+pdfjs-editor-add-saved-signature-button =
+    .title = Lagra signatur: { $description }
 # .default-content is used as a placeholder in an empty text editor.
 pdfjs-free-text2 =
     .aria-label = Tekstredigering
@@ -453,7 +481,6 @@ pdfjs-editor-new-alt-text-error-close-button = Lat att
 # Variables:
 #   $totalSize (Number) - the total size (in MB) of the AI model.
 #   $downloadedSize (Number) - the downloaded size (in MB) of the AI model.
-#   $percent (Number) - the percentage of the downloaded size.
 pdfjs-editor-new-alt-text-ai-model-downloading-progress = Lastar ned AI-modell med alternativ tekst ({ $downloadedSize } av { $totalSize } MB)
     .aria-valuetext = Lastar ned AI-modell med alternativ tekst ({ $downloadedSize } av { $totalSize } MB)
 # This is a button that users can click to edit the alt text they have already added.
@@ -496,23 +523,96 @@ pdfjs-editor-alt-text-settings-close-button = Lat att
 
 ## "Annotations removed" bar
 
-
-# Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-editor-undo-bar-message-highlight = Highlight removed
-pdfjs-editor-undo-bar-message-freetext = Text removed
-pdfjs-editor-undo-bar-message-ink = Drawing removed
-pdfjs-editor-undo-bar-message-stamp = Image removed
+pdfjs-editor-undo-bar-message-highlight = Markering fjerna
+pdfjs-editor-undo-bar-message-freetext = Tekst fjerna
+pdfjs-editor-undo-bar-message-ink = Teikning fjerna
+pdfjs-editor-undo-bar-message-stamp = Bilde fjerna
+pdfjs-editor-undo-bar-message-signature = Signatur fjerna
+# Variables:
+#   $count (Number) - the number of removed annotations.
 pdfjs-editor-undo-bar-message-multiple =
     { $count ->
-        [one] { $count } annotation removed
-       *[other] { $count } annotations removed
+        [one] { $count } kommentar fjerna
+       *[other] { $count } kommentarar fjerna
     }
 pdfjs-editor-undo-bar-undo-button =
-    .title = Undo
-pdfjs-editor-undo-bar-undo-button-label = Undo
+    .title = Angre
+pdfjs-editor-undo-bar-undo-button-label = Angre
 pdfjs-editor-undo-bar-close-button =
-    .title = Close
-pdfjs-editor-undo-bar-close-button-label = Close
+    .title = Lat att
+pdfjs-editor-undo-bar-close-button-label = Lat att
+
+## Add a signature dialog
+
+pdfjs-editor-add-signature-dialog-label = Denne modalen lèt brukaren lage ein signatur for å leggje til eit PDF-dokument. Brukaren kan redigere namnet (som også fungerer som alt-teksten), og eventuelt lagre signaturen for gjenteken bruk.
+pdfjs-editor-add-signature-dialog-title = Legg til ein signatur
+
+## Tab names
+
+# Type is a verb (you can type your name as signature)
+pdfjs-editor-add-signature-type-button = Type
+    .title = Type
+pdfjs-editor-add-signature-image-button = Bilde
+    .title = Bilde
+
+## Tab panels
+
+pdfjs-editor-add-signature-type-input =
+    .aria-label = Skriv inn signaturen din
+    .placeholder = Skriv inn signaturen din
+pdfjs-editor-add-signature-draw-placeholder = Teikn signaturen din
+pdfjs-editor-add-signature-draw-thickness-range-label = Tjukn
+# Variables:
+#   $thickness (Number) - the thickness (in pixels) of the line used to draw a signature.
+pdfjs-editor-add-signature-draw-thickness-range =
+    .title = Linjetjukn: { $thickness }
+pdfjs-editor-add-signature-image-placeholder = Drag ei fil hit for å laste opp
+pdfjs-editor-add-signature-image-browse-link =
+    { PLATFORM() ->
+        [macos] Eller vel bildefiler
+       *[other] Eller vel bildefiler
+    }
+
+## Controls
+
+pdfjs-editor-add-signature-description-label = Skildring (alternativ tekst)
+pdfjs-editor-add-signature-description-input =
+    .title = Skildring (alternativ tekst)
+pdfjs-editor-add-signature-description-default-when-drawing = Signatur
+pdfjs-editor-add-signature-clear-button-label = Fjern signatur
+pdfjs-editor-add-signature-clear-button =
+    .title = Fjern signatur
+pdfjs-editor-add-signature-save-checkbox = Lagre signatur
+pdfjs-editor-add-signature-save-warning-message = Du har nådd grensa på 5 lagra signaturar. Fjern ein for å lagre ein ny.
+pdfjs-editor-add-signature-image-upload-error-title = Klarte ikkje å oppdatere bilde
+pdfjs-editor-add-signature-image-upload-error-description = Sjekk nettverkstilkoplinga eller prøv eit annet bilde.
+pdfjs-editor-add-signature-error-close-button = Lat att
+
+## Dialog buttons
+
+pdfjs-editor-add-signature-cancel-button = Avbryt
+pdfjs-editor-add-signature-add-button = Legg til
+pdfjs-editor-edit-signature-update-button = Oppdater
+
+## Main menu for adding/removing signatures
+
+pdfjs-editor-delete-signature-button1 =
+    .title = Fjern lagra signatur
+pdfjs-editor-delete-signature-button-label1 = Fjern lagra signatur
+
+## Editor toolbar
+
+pdfjs-editor-add-signature-edit-button-label = Rediger skildring
+
+## Edit signature description dialog
+
+pdfjs-editor-edit-signature-dialog-title = Rediger skildring
+
+# Translations for ngx-extended-pdf-viewer additions only available in en-US
+pdfjs-editor-ink-editor =
+    .aria-label = Drawing editor
+pdfjs-editor-add-signature-draw-button = Draw
+    .title = Draw
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = Match Each Word

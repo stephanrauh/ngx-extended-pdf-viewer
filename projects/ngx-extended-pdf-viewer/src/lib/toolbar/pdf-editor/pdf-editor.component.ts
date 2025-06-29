@@ -17,5 +17,8 @@ export class PdfEditorComponent {
   public showTextEditor: ResponsiveVisibility = true;
 
   @Input()
+  public showSignatureEditor: ResponsiveVisibility = true;
+
+  @Input()
   public showStampEditor: ResponsiveVisibility = true;
 }

@@ -6,9 +6,11 @@ import { DynamicCssComponent } from './dynamic-css/dynamic-css.component';
 import { PositioningService } from './dynamic-css/positioning.service';
 import { NgxExtendedPdfViewerComponent } from './ngx-extended-pdf-viewer.component';
 import { NgxExtendedPdfViewerService } from './ngx-extended-pdf-viewer.service';
+import { AddSignatureDialogComponent as PdfAddSignatureDialogComponent } from './pdf-dialog/pdf-add-signature-dialog/pdf-add-signature-dialog.component';
 import { PdfAltTextDialogComponent } from './pdf-dialog/pdf-alt-text-dialog/pdf-alt-text-dialog.component';
 import { PdfAltTextSettingsDialogComponent } from './pdf-dialog/pdf-alt-text-settings-dialog/pdf-alt-text-settings-dialog.component';
 import { PdfDocumentPropertiesDialogComponent } from './pdf-dialog/pdf-document-properties-dialog/pdf-document-properties-dialog.component';
+import { EditSignatureDialogComponent as PdfEditSignatureDialogComponent } from './pdf-dialog/pdf-edit-signature-dialog/pdf-edit-signature-dialog.component';
 import { PdfErrorMessageComponent } from './pdf-dialog/pdf-error-message/pdf-error-message.component';
 import { PdfPasswordDialogComponent } from './pdf-dialog/pdf-password-dialog/pdf-password-dialog.component';
 import { PdfPreparePrintingDialogComponent } from './pdf-dialog/pdf-prepare-printing-dialog/pdf-prepare-printing-dialog.component';
@@ -26,6 +28,7 @@ import { PdfContextMenuComponent } from './toolbar/pdf-context-menu/pdf-context-
 import { PdfDocumentPropertiesComponent } from './toolbar/pdf-document-properties/pdf-document-properties.component';
 import { PdfDownloadComponent } from './toolbar/pdf-download/pdf-download.component';
 import { PdfDrawEditorComponent } from './toolbar/pdf-draw-editor/pdf-draw-editor.component';
+import { PdfEditorSignatureComponent } from './toolbar/pdf-editor-signature/pdf-editor-signature.component';
 import { PdfEditorComponent } from './toolbar/pdf-editor/pdf-editor.component';
 import { PdfEvenSpreadComponent } from './toolbar/pdf-even-spread/pdf-even-spread.component';
 import { PdfFindButtonComponent } from './toolbar/pdf-find-button/pdf-find-button.component';
@@ -91,6 +94,7 @@ if (!Promise['allSettled']) {
     NegativeResponsiveCSSClassPipe,
     NgxExtendedPdfViewerComponent,
     PdfAcroformDefaultThemeComponent,
+    PdfAddSignatureDialogComponent,
     PdfBookModeComponent,
     PdfContextMenuComponent,
     PdfDarkThemeComponent,
@@ -102,6 +106,8 @@ if (!Promise['allSettled']) {
     PdfDownloadComponent,
     PdfDummyComponentsComponent,
     PdfEditorComponent,
+    PdfEditSignatureDialogComponent,
+    PdfEditorSignatureComponent,
     PdfErrorMessageComponent,
     PdfEvenSpreadComponent,
     PdfFindbarComponent,
@@ -165,6 +171,7 @@ if (!Promise['allSettled']) {
     NegativeResponsiveCSSClassPipe,
     NgxExtendedPdfViewerComponent,
     PdfAcroformDefaultThemeComponent,
+    PdfAddSignatureDialogComponent,
     PdfAltTextDialogComponent,
     PdfAltTextSettingsDialogComponent,
     PdfBookModeComponent,
@@ -175,6 +182,8 @@ if (!Promise['allSettled']) {
     PdfDocumentPropertiesDialogComponent,
     PdfDownloadComponent,
     PdfEditorComponent,
+    PdfEditSignatureDialogComponent,
+    PdfEditorSignatureComponent,
     PdfErrorMessageComponent,
     PdfEvenSpreadComponent,
     PdfFindbarComponent,

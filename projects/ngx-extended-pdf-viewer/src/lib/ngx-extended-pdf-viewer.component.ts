@@ -380,6 +380,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   @Input()
   public showHighlightEditor: ResponsiveVisibility = 'xxl';
 
+  @Input()
+  public showSignatureEditor: ResponsiveVisibility = 'xxl';
+
   /** How many log messages should be printed?
    * Legal values: VerbosityLevel.INFOS (= 5), VerbosityLevel.WARNINGS (= 1), VerbosityLevel.ERRORS (= 0) */
   @Input()

@@ -316,6 +316,25 @@ pdfjs-highlight-floating-button1 =
     .title = Nabarmendu
     .aria-label = Nabarmendu
 pdfjs-highlight-floating-button-label = Nabarmendu
+pdfjs-editor-signature-button =
+    .title = Gehitu sinadura
+pdfjs-editor-signature-button-label = Gehitu sinadura
+
+## Default editor aria labels
+
+# “Highlight” is a noun, the string is used on the editor for highlights.
+pdfjs-editor-highlight-editor =
+    .aria-label = Nabarmendutakoen editorea
+# “Drawing” is a noun, the string is used on the editor for drawings.
+pdfjs-editor-ink-editor =
+    .aria-label = Marrazkien editorea
+# Used when a signature editor is selected/hovered.
+# Variables:
+#   $description (String) - a string describing/labeling the signature.
+pdfjs-editor-signature-editor1 =
+    .aria-description = Sinaduren editorea: { $description }
+pdfjs-editor-stamp-editor =
+    .aria-label = Irudien editorea
 
 ## Remove button for the various kind of editor.
 
@@ -327,6 +346,8 @@ pdfjs-editor-remove-stamp-button =
     .title = Kendu irudia
 pdfjs-editor-remove-highlight-button =
     .title = Kendu nabarmentzea
+pdfjs-editor-remove-signature-button =
+    .title = Kendu sinadura
 
 ##
 
@@ -343,6 +364,16 @@ pdfjs-editor-stamp-add-image-button-label = Gehitu irudia
 pdfjs-editor-free-highlight-thickness-input = Loditasuna
 pdfjs-editor-free-highlight-thickness-title =
     .title = Aldatu loditasuna testua ez beste elementuak nabarmentzean
+pdfjs-editor-add-signature-container =
+    .aria-label = Sinaduren kontrolak eta gordetako sinadurak
+pdfjs-editor-signature-add-signature-button =
+    .title = Gehitu sinadura berria
+pdfjs-editor-signature-add-signature-button-label = Gehitu sinadura berria
+# Used on the button to use an already saved signature.
+# Variables:
+#   $description (String) - a string describing/labeling the signature.
+pdfjs-editor-add-saved-signature-button =
+    .title = Gordetako sinadura: { $description }
 # .default-content is used as a placeholder in an empty text editor.
 pdfjs-free-text2 =
     .aria-label = Testu-editorea
@@ -453,7 +484,6 @@ pdfjs-editor-new-alt-text-error-close-button = Itxi
 # Variables:
 #   $totalSize (Number) - the total size (in MB) of the AI model.
 #   $downloadedSize (Number) - the downloaded size (in MB) of the AI model.
-#   $percent (Number) - the percentage of the downloaded size.
 pdfjs-editor-new-alt-text-ai-model-downloading-progress = Testu alternatiboaren AA modeloa deskargatzen ({ $totalSize }/{ $downloadedSize } MB)
     .aria-valuetext = Testu alternatiboaren AA modeloa deskargatzen ({ $totalSize }/{ $downloadedSize } MB)
 # This is a button that users can click to edit the alt text they have already added.
@@ -500,6 +530,7 @@ pdfjs-editor-undo-bar-message-highlight = Nabarmentzea kenduta
 pdfjs-editor-undo-bar-message-freetext = Testua kenduta
 pdfjs-editor-undo-bar-message-ink = Marrazkia kenduta
 pdfjs-editor-undo-bar-message-stamp = Irudia kenduta
+pdfjs-editor-undo-bar-message-signature = Sinadura kenduta
 # Variables:
 #   $count (Number) - the number of removed annotations.
 pdfjs-editor-undo-bar-message-multiple =
@@ -513,6 +544,79 @@ pdfjs-editor-undo-bar-undo-button-label = Desegin
 pdfjs-editor-undo-bar-close-button =
     .title = Itxi
 pdfjs-editor-undo-bar-close-button-label = Itxi
+
+## Add a signature dialog
+
+pdfjs-editor-add-signature-dialog-label =
+    Leiho modal honek PDF dokumentu batera gehitzeko sinadurak
+    sortzea ahalbidetzen dio erabiltzaileari. Erabiltzaileak izena edita
+    dezake (testu alternatibo modura ere erabiltzen dena) eta sinadura
+    gordetzeko aukera du gehiagotan erabili ahal izateko.
+pdfjs-editor-add-signature-dialog-title = Gehitu sinadura
+
+## Tab names
+
+# Type is a verb (you can type your name as signature)
+pdfjs-editor-add-signature-type-button = Idatzi
+    .title = Idatzi
+# Draw is a verb (you can draw your signature)
+pdfjs-editor-add-signature-draw-button = Marraztu
+    .title = Marraztu
+pdfjs-editor-add-signature-image-button = Irudia
+    .title = Irudia
+
+## Tab panels
+
+pdfjs-editor-add-signature-type-input =
+    .aria-label = Idatzi zure sinadura
+    .placeholder = Idatzi zure sinadura
+pdfjs-editor-add-signature-draw-placeholder = Marraztu zure sinadura
+pdfjs-editor-add-signature-draw-thickness-range-label = Loditasuna
+# Variables:
+#   $thickness (Number) - the thickness (in pixels) of the line used to draw a signature.
+pdfjs-editor-add-signature-draw-thickness-range =
+    .title = Marrazteko loditasuna: { $thickness }
+pdfjs-editor-add-signature-image-placeholder = Igotzeko, jaregin fitxategia hemen
+pdfjs-editor-add-signature-image-browse-link =
+    { PLATFORM() ->
+        [macos] Edo aukeratu irudi-fitxategiak
+       *[other] Edo arakatu irudi-fitxategiak
+    }
+
+## Controls
+
+pdfjs-editor-add-signature-description-label = Azalpena (testu alternatiboa)
+pdfjs-editor-add-signature-description-input =
+    .title = Azalpena (testu alternatiboa)
+pdfjs-editor-add-signature-description-default-when-drawing = Sinadura
+pdfjs-editor-add-signature-clear-button-label = Garbitu sinadura
+pdfjs-editor-add-signature-clear-button =
+    .title = Garbitu sinadura
+pdfjs-editor-add-signature-save-checkbox = Gorde sinadura
+pdfjs-editor-add-signature-save-warning-message = Gordetako sinadura kopuruaren mugara heldu zara (5). Gehiago gorde ahal izateko, ken ezazu bat.
+pdfjs-editor-add-signature-image-upload-error-title = Ezin da irudia igo
+pdfjs-editor-add-signature-image-upload-error-description = Egiaztatu zure sareko konexioa edo saiatu beste irudi batekin.
+pdfjs-editor-add-signature-error-close-button = Itxi
+
+## Dialog buttons
+
+pdfjs-editor-add-signature-cancel-button = Utzi
+pdfjs-editor-add-signature-add-button = Gehitu
+pdfjs-editor-edit-signature-update-button = Eguneratu
+
+## Main menu for adding/removing signatures
+
+pdfjs-editor-delete-signature-button1 =
+    .title = Kendu gordetako sinadura
+pdfjs-editor-delete-signature-button-label1 = Kendu gordetako sinadura
+
+## Editor toolbar
+
+pdfjs-editor-add-signature-edit-button-label = Editatu azalpena
+
+## Edit signature description dialog
+
+pdfjs-editor-edit-signature-dialog-title = Editatu azalpena
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.

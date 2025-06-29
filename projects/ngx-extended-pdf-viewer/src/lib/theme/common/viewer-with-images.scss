@@ -86,19 +86,14 @@ ngx-extended-pdf-viewer {
       height: 100%;
 
       canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
         margin: 0;
         display: block;
         width: 100%;
         height: 100%;
-
-        &[hidden] {
-          display: none;
-        }
-
-        &[zooming] {
-          width: 100%;
-          height: 100%;
-        }
+        contain: content;
 
         .structTree {
           contain: strict;
@@ -108,6 +103,8 @@ ngx-extended-pdf-viewer {
   }
 
   .pdfViewer .page {
+    --user-unit: 1;
+    --total-scale-factor: calc(var(--scale-factor) * var(--user-unit));
     --scale-round-x: 1px;
     --scale-round-y: 1px;
     direction: ltr;
@@ -158,7 +155,7 @@ ngx-extended-pdf-viewer {
     margin-inline: 0;
   }
 
-  .spread .page,
+  .spread :is(.page, .dummyPage),
   .pdfViewer:is(.scrollHorizontal, .scrollWrapped) :is(.page, .spread) {
     display: inline-block;
     vertical-align: middle;
@@ -174,7 +171,7 @@ ngx-extended-pdf-viewer {
     margin-inline: 5px;
   }
 
-  .pdfViewer .page .loadingIcon::after {
+  .pdfViewer .page.loadingIcon::after {
     position: absolute;
     top: 0;
     left: 0;
@@ -189,6 +186,15 @@ ngx-extended-pdf-viewer {
     transition-delay: var(--loading-icon-delay);
     z-index: 5;
     contain: strict;
+  }
+
+  .pdfViewer .page.loading::after {
+    display: block;
+  }
+
+  .pdfViewer .page:not(.loading)::after {
+    transition-property: none;
+    display: none;
   }
 
   .pdfPresentationMode .pdfViewer {
@@ -1640,4 +1646,233 @@ ngx-extended-pdf-viewer {
   .highlighting {
     touch-action: none;
   }
+
+  #toolbarContainer {
+    --menuitem-height: calc(var(--toolbar-height) - 6px);
+
+    width: 100%;
+    height: var(--toolbar-height);
+    padding: var(--toolbar-vertical-padding) var(--toolbar-horizontal-padding);
+    position: relative;
+    box-sizing: border-box;
+    font: message-box;
+    background-color: var(--toolbar-bg-color);
+    box-shadow: var(--toolbar-box-shadow);
+    border-bottom: var(--toolbar-border-bottom);
+  }
+
+  #toolbarContainer #toolbarViewer {
+    width: 100%;
+    height: 100%;
+    justify-content: space-between;
+  }
+
+  :is(#toolbarContainer #toolbarViewer)>* {
+    flex: none;
+  }
+
+  :is(#toolbarContainer #toolbarViewer) input {
+    font: message-box;
+  }
+
+  :is(#toolbarContainer #toolbarViewer) .toolbarButtonSpacer {
+    width: 30px;
+    display: block;
+    height: 1px;
+  }
+
+  :is(#toolbarContainer #toolbarViewer) #toolbarViewerLeft #numPages.toolbarLabel {
+    padding-inline-start: 3px;
+    flex: none;
+  }
+
+  #toolbarContainer #loadingBar {
+    --progressBar-percent: 0%;
+    --progressBar-end-offset: 0;
+
+    position: absolute;
+    top: var(--toolbar-height);
+    inset-inline: 0 var(--progressBar-end-offset);
+    height: 4px;
+    background-color: var(--progressBar-bg-color);
+    border-bottom: 1px solid var(--toolbar-border-color);
+    transition-property: inset-inline-start;
+    transition-duration: var(--sidebar-transition-duration);
+    transition-timing-function: var(--sidebar-transition-timing-function);
+  }
+
+  :is(#toolbarContainer #loadingBar) .progress {
+    position: absolute;
+    top: 0;
+    inset-inline-start: 0;
+    width: 100%;
+    transform: scaleX(var(--progressBar-percent));
+    transform-origin: calc(50% - 50% * var(--dir-factor)) 0;
+    height: 100%;
+    background-color: var(--progressBar-color);
+    overflow: hidden;
+    transition: transform 200ms;
+  }
+
+  .indeterminate:is(#toolbarContainer #loadingBar) .progress {
+    transform: none;
+    background-color: var(--progressBar-bg-color);
+    transition: none;
+  }
+
+  :is(.indeterminate:is(#toolbarContainer #loadingBar) .progress) .glimmer {
+    position: absolute;
+    top: 0;
+    inset-inline-start: 0;
+    height: 100%;
+    width: calc(100% + 150px);
+    background: repeating-linear-gradient(135deg,
+        var(--progressBar-blend-color) 0,
+        var(--progressBar-bg-color) 5px,
+        var(--progressBar-bg-color) 45px,
+        var(--progressBar-color) 55px,
+        var(--progressBar-color) 95px,
+        var(--progressBar-blend-color) 100px);
+    animation: progressIndeterminate 1s linear infinite;
+  }
+
+
+  .toolbarButton.labeled {
+    width: 100%;
+    min-height: var(--menuitem-height);
+    justify-content: flex-start;
+    gap: 8px;
+    padding-inline-start: 12px;
+    aspect-ratio: unset;
+    text-align: start;
+    white-space: normal;
+    cursor: default;
+  }
+
+  .toolbarButton.labeled:is(a) {
+    text-decoration: none;
+  }
+
+  .toolbarButton.labeled[href="#"]:is(a) {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .toolbarButton.labeled::before {
+    opacity: var(--doorhanger-icon-opacity);
+  }
+
+  .toolbarButton.labeled:is(:hover, :focus-visible) {
+    color: var(--doorhanger-hover-color);
+  }
+
+  .toolbarButton.labeled>span {
+    display: inline-block;
+    width: -moz-max-content;
+    width: max-content;
+    height: auto;
+  }
+
+  .toolbarButtonWithContainer {
+    height: 100%;
+    aspect-ratio: 1;
+    display: inline-block;
+    position: relative;
+    flex: none;
+  }
+
+  .toolbarButtonWithContainer>.toolbarButton {
+    width: 100%;
+    height: 100%;
+  }
+
+  .toolbarButtonWithContainer .menu {
+    padding-block: 5px;
+  }
+
+  .toolbarButtonWithContainer .menuContainer {
+    width: 100%;
+    height: auto;
+    max-height: calc(var(--viewer-container-height) - var(--toolbar-height) - var(--doorhanger-height));
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    overflow-y: auto;
+  }
+
+  .toolbarButtonWithContainer .editorParamsToolbar {
+    height: auto;
+    width: 220px;
+    position: absolute;
+    z-index: 30000;
+    cursor: default;
+  }
+
+  :is(.toolbarButtonWithContainer .editorParamsToolbar) :is(#editorStampAddImage, #editorSignatureAddSignature)::before {
+    -webkit-mask-image: var(--editorParams-stampAddImage-icon);
+    mask-image: var(--editorParams-stampAddImage-icon);
+  }
+
+  :is(.toolbarButtonWithContainer .editorParamsToolbar) .editorParamsLabel {
+    flex: none;
+    font: menu;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 150%;
+    width: -moz-fit-content;
+    width: fit-content;
+    inset-inline-start: 0;
+    color: var(--main-color);
+  }
+
+  :is(.toolbarButtonWithContainer .editorParamsToolbar) button:is(:hover, :focus-visible) .editorParamsLabel {
+    color: var(--doorhanger-hover-color);
+  }
+
+  :is(.toolbarButtonWithContainer .editorParamsToolbar) .editorParamsToolbarContainer {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding-inline: 10px;
+    padding-block: 10px;
+  }
+
+  :is(:is(.toolbarButtonWithContainer .editorParamsToolbar) .editorParamsToolbarContainer)>.editorParamsSetter {
+    min-height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  :is(:is(.toolbarButtonWithContainer .editorParamsToolbar) .editorParamsToolbarContainer) .editorParamsColor {
+    width: 32px;
+    height: 32px;
+    flex: none;
+    padding: 0;
+  }
+
+  :is(:is(.toolbarButtonWithContainer .editorParamsToolbar) .editorParamsToolbarContainer) .editorParamsSlider {
+    background-color: transparent;
+    width: 90px;
+    flex: 0 1 0;
+    font: message-box;
+  }
+
+  :is(:is(:is(.toolbarButtonWithContainer .editorParamsToolbar) .editorParamsToolbarContainer) .editorParamsSlider)::-moz-range-progress {
+    background-color: black;
+  }
+
+  :is(:is(:is(.toolbarButtonWithContainer .editorParamsToolbar) .editorParamsToolbarContainer) .editorParamsSlider)::-webkit-slider-runnable-track,
+  :is(:is(:is(.toolbarButtonWithContainer .editorParamsToolbar) .editorParamsToolbarContainer) .editorParamsSlider)::-moz-range-track {
+    background-color: black;
+  }
+
+  :is(:is(:is(.toolbarButtonWithContainer .editorParamsToolbar) .editorParamsToolbarContainer) .editorParamsSlider)::-webkit-slider-thumb,
+  :is(:is(:is(.toolbarButtonWithContainer .editorParamsToolbar) .editorParamsToolbarContainer) .editorParamsSlider)::-moz-range-thumb {
+    background-color: white;
+  }
+
 }

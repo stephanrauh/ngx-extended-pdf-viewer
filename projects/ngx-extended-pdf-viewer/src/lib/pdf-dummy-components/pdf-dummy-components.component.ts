@@ -23,6 +23,8 @@ const requiredIds = [
   'primaryEditorStamp',
   'editorModeButtons',
   'editorNone',
+  //  'editorSignatureButton',
+  //  'editorSignatureAddSignature',
   'editorStampAddImage',
   'errorClose',
   'errorMessage',

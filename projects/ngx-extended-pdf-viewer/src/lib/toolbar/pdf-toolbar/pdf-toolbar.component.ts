@@ -86,6 +86,9 @@ export class PdfToolbarComponent implements AfterViewInit {
   public showSidebarButton: ResponsiveVisibility = true;
 
   @Input()
+  public showSignatureEditor: ResponsiveVisibility = false;
+
+  @Input()
   public sidebarVisible: boolean | undefined = false;
 
   @Input()

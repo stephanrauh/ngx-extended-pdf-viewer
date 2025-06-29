@@ -308,6 +308,25 @@ pdfjs-highlight-floating-button1 =
     .title = 강조 표시
     .aria-label = 강조 표시
 pdfjs-highlight-floating-button-label = 강조 표시
+pdfjs-editor-signature-button =
+    .title = 서명 추가
+pdfjs-editor-signature-button-label = 서명 추가
+
+## Default editor aria labels
+
+# “Highlight” is a noun, the string is used on the editor for highlights.
+pdfjs-editor-highlight-editor =
+    .aria-label = 강조 표시 편집기
+# “Drawing” is a noun, the string is used on the editor for drawings.
+pdfjs-editor-ink-editor =
+    .aria-label = 그리기 편집기
+# Used when a signature editor is selected/hovered.
+# Variables:
+#   $description (String) - a string describing/labeling the signature.
+pdfjs-editor-signature-editor1 =
+    .aria-description = 서명 편집기: { $description }
+pdfjs-editor-stamp-editor =
+    .aria-label = 이미지 편집기
 
 ## Remove button for the various kind of editor.
 
@@ -319,6 +338,8 @@ pdfjs-editor-remove-stamp-button =
     .title = 이미지 제거
 pdfjs-editor-remove-highlight-button =
     .title = 강조 표시 제거
+pdfjs-editor-remove-signature-button =
+    .title = 서명 제거
 
 ##
 
@@ -335,6 +356,16 @@ pdfjs-editor-stamp-add-image-button-label = 이미지 추가
 pdfjs-editor-free-highlight-thickness-input = 두께
 pdfjs-editor-free-highlight-thickness-title =
     .title = 텍스트 이외의 항목을 강조 표시할 때 두께 변경
+pdfjs-editor-add-signature-container =
+    .aria-label = 서명 제어 및 저장된 서명
+pdfjs-editor-signature-add-signature-button =
+    .title = 새 서명 추가
+pdfjs-editor-signature-add-signature-button-label = 새 서명 추가
+# Used on the button to use an already saved signature.
+# Variables:
+#   $description (String) - a string describing/labeling the signature.
+pdfjs-editor-add-saved-signature-button =
+    .title = 저장된 서명: { $description }
 # .default-content is used as a placeholder in an empty text editor.
 pdfjs-free-text2 =
     .aria-label = 텍스트 편집기
@@ -445,7 +476,6 @@ pdfjs-editor-new-alt-text-error-close-button = 닫기
 # Variables:
 #   $totalSize (Number) - the total size (in MB) of the AI model.
 #   $downloadedSize (Number) - the downloaded size (in MB) of the AI model.
-#   $percent (Number) - the percentage of the downloaded size.
 pdfjs-editor-new-alt-text-ai-model-downloading-progress = 대체 텍스트 AI 모델 다운로드 중 ({ $downloadedSize } / { $totalSize } MB)
     .aria-valuetext = 대체 텍스트 AI 모델 다운로드 중 ({ $downloadedSize } / { $totalSize } MB)
 # This is a button that users can click to edit the alt text they have already added.
@@ -492,6 +522,7 @@ pdfjs-editor-undo-bar-message-highlight = 강조 표시 제거됨
 pdfjs-editor-undo-bar-message-freetext = 텍스트 제거됨
 pdfjs-editor-undo-bar-message-ink = 그리기 제거됨
 pdfjs-editor-undo-bar-message-stamp = 이미지 제거됨
+pdfjs-editor-undo-bar-message-signature = 서명 제거됨
 # Variables:
 #   $count (Number) - the number of removed annotations.
 pdfjs-editor-undo-bar-message-multiple = 주석 { $count }개 제거됨
@@ -501,6 +532,75 @@ pdfjs-editor-undo-bar-undo-button-label = 실행 취소
 pdfjs-editor-undo-bar-close-button =
     .title = 닫기
 pdfjs-editor-undo-bar-close-button-label = 닫기
+
+## Add a signature dialog
+
+pdfjs-editor-add-signature-dialog-label = 이 모달로 PDF 문서에 추가 할 서명을 만들 수 있습니다. 사용자는 이름(대체 텍스트 역할도 함)을 편집하고, 반복해 사용할 수 있도록 서명을 저장할 수도 있습니다.
+pdfjs-editor-add-signature-dialog-title = 서명 추가
+
+## Tab names
+
+# Type is a verb (you can type your name as signature)
+pdfjs-editor-add-signature-type-button = 입력
+    .title = 입력
+# Draw is a verb (you can draw your signature)
+pdfjs-editor-add-signature-draw-button = 그리기
+    .title = 그리기
+pdfjs-editor-add-signature-image-button = 이미지
+    .title = 이미지
+
+## Tab panels
+
+pdfjs-editor-add-signature-type-input =
+    .aria-label = 서명 입력
+    .placeholder = 서명 입력
+pdfjs-editor-add-signature-draw-placeholder = 서명 그리기
+pdfjs-editor-add-signature-draw-thickness-range-label = 두께
+# Variables:
+#   $thickness (Number) - the thickness (in pixels) of the line used to draw a signature.
+pdfjs-editor-add-signature-draw-thickness-range =
+    .title = 그리기 두께: { $thickness }
+pdfjs-editor-add-signature-image-placeholder = 이미지 파일을 여기에 끌어서 놓으세요
+pdfjs-editor-add-signature-image-browse-link =
+    { PLATFORM() ->
+        [macos] 또는 이미지 파일 찾아보기
+       *[other] 또는 이미지 파일 찾아보기
+    }
+
+## Controls
+
+pdfjs-editor-add-signature-description-label = 설명 (대체 텍스트)
+pdfjs-editor-add-signature-description-input =
+    .title = 설명 (대체 텍스트)
+pdfjs-editor-add-signature-description-default-when-drawing = 서명
+pdfjs-editor-add-signature-clear-button-label = 서명 지우기
+pdfjs-editor-add-signature-clear-button =
+    .title = 서명 지우기
+pdfjs-editor-add-signature-save-checkbox = 서명 저장
+pdfjs-editor-add-signature-save-warning-message = 저장된 서명의 한계에 도달했습니다. 더 저장하려면 하나를 제거하세요.
+pdfjs-editor-add-signature-image-upload-error-title = 이미지를 업로드할 수 없음
+pdfjs-editor-add-signature-image-upload-error-description = 네트워크 연결을 확인하거나 다른 이미지로 시도하세요.
+pdfjs-editor-add-signature-error-close-button = 닫기
+
+## Dialog buttons
+
+pdfjs-editor-add-signature-cancel-button = 취소
+pdfjs-editor-add-signature-add-button = 추가
+pdfjs-editor-edit-signature-update-button = 업데이트
+
+## Main menu for adding/removing signatures
+
+pdfjs-editor-delete-signature-button1 =
+    .title = 저장된 서명 제거
+pdfjs-editor-delete-signature-button-label1 = 저장된 서명 제거
+
+## Editor toolbar
+
+pdfjs-editor-add-signature-edit-button-label = 설명 편집
+
+## Edit signature description dialog
+
+pdfjs-editor-edit-signature-dialog-title = 설명 편집
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.

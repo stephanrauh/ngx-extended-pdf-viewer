@@ -67,7 +67,10 @@ export class NgxExtendedPdfViewerService {
   private readonly renderer: Renderer2;
   private PDFViewerApplication?: IPDFViewerApplication;
 
-  constructor(private readonly rendererFactory: RendererFactory2, notificationService: PDFNotificationService) {
+  constructor(
+    private readonly rendererFactory: RendererFactory2,
+    notificationService: PDFNotificationService,
+  ) {
     this.renderer = this.rendererFactory.createRenderer(null, null);
     effect(() => {
       this.PDFViewerApplication = notificationService.onPDFJSInitSignal();
@@ -346,7 +349,7 @@ export class NgxExtendedPdfViewerService {
     scale: PDFExportScaleFactor,
     background?: string,
     backgroundColorToReplace: string = '#FFFFFF',
-    annotationMode: AnnotationMode = AnnotationMode.ENABLE
+    annotationMode: AnnotationMode = AnnotationMode.ENABLE,
   ): Promise<HTMLCanvasElement | undefined> {
     if (!this.PDFViewerApplication) {
       return Promise.resolve(undefined);
@@ -361,7 +364,7 @@ export class NgxExtendedPdfViewerService {
     scale: PDFExportScaleFactor,
     background?: string,
     backgroundColorToReplace: string = '#FFFFFF',
-    annotationMode: AnnotationMode = AnnotationMode.ENABLE
+    annotationMode: AnnotationMode = AnnotationMode.ENABLE,
   ): Promise<string | undefined> {
     const canvas = await this.getPageAsCanvas(pageNumber, scale, background, backgroundColorToReplace, annotationMode);
     return canvas?.toDataURL();
@@ -372,7 +375,7 @@ export class NgxExtendedPdfViewerService {
     scale: PDFExportScaleFactor,
     background?: string,
     backgroundColorToReplace: string = '#FFFFFF',
-    annotationMode: AnnotationMode = AnnotationMode.ENABLE
+    annotationMode: AnnotationMode = AnnotationMode.ENABLE,
   ): Promise<HTMLCanvasElement> {
     let zoomFactor = 1;
     if (scale.scale) {
@@ -484,7 +487,7 @@ export class NgxExtendedPdfViewerService {
         this.PDFViewerApplication?.pdfViewer._getVisiblePages(),
         this.PDFViewerApplication?.pdfViewer._pages,
         scrolledDown,
-        renderExtra
+        renderExtra,
       );
       return !nextPage;
     }

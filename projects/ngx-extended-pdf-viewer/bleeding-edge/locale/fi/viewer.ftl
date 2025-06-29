@@ -316,6 +316,25 @@ pdfjs-highlight-floating-button1 =
     .title = Korostus
     .aria-label = Korostus
 pdfjs-highlight-floating-button-label = Korostus
+pdfjs-editor-signature-button =
+    .title = Lisää allekirjoitus
+pdfjs-editor-signature-button-label = Lisää allekirjoitus
+
+## Default editor aria labels
+
+# “Highlight” is a noun, the string is used on the editor for highlights.
+pdfjs-editor-highlight-editor =
+    .aria-label = Korostusmuokkain
+# “Drawing” is a noun, the string is used on the editor for drawings.
+pdfjs-editor-ink-editor =
+    .aria-label = Piirustusmuokkain
+# Used when a signature editor is selected/hovered.
+# Variables:
+#   $description (String) - a string describing/labeling the signature.
+pdfjs-editor-signature-editor1 =
+    .aria-description = Allekirjoituksen muokkain: { $description }
+pdfjs-editor-stamp-editor =
+    .aria-label = Kuvamuokkain
 
 ## Remove button for the various kind of editor.
 
@@ -327,6 +346,8 @@ pdfjs-editor-remove-stamp-button =
     .title = Poista kuva
 pdfjs-editor-remove-highlight-button =
     .title = Poista korostus
+pdfjs-editor-remove-signature-button =
+    .title = Poista allekirjoitus
 
 ##
 
@@ -343,6 +364,16 @@ pdfjs-editor-stamp-add-image-button-label = Lisää kuva
 pdfjs-editor-free-highlight-thickness-input = Paksuus
 pdfjs-editor-free-highlight-thickness-title =
     .title = Muuta paksuutta korostaessasi muita kohteita kuin tekstiä
+pdfjs-editor-add-signature-container =
+    .aria-label = Allekirjoitussäätimet ja tallennetut allekirjoitukset
+pdfjs-editor-signature-add-signature-button =
+    .title = Lisää uusi allekirjoitus
+pdfjs-editor-signature-add-signature-button-label = Lisää uusi allekirjoitus
+# Used on the button to use an already saved signature.
+# Variables:
+#   $description (String) - a string describing/labeling the signature.
+pdfjs-editor-add-saved-signature-button =
+    .title = Tallennettu allekirjoitus: { $description }
 # .default-content is used as a placeholder in an empty text editor.
 pdfjs-free-text2 =
     .aria-label = Tekstimuokkain
@@ -453,7 +484,6 @@ pdfjs-editor-new-alt-text-error-close-button = Sulje
 # Variables:
 #   $totalSize (Number) - the total size (in MB) of the AI model.
 #   $downloadedSize (Number) - the downloaded size (in MB) of the AI model.
-#   $percent (Number) - the percentage of the downloaded size.
 pdfjs-editor-new-alt-text-ai-model-downloading-progress = Ladataan vaihtoehtoisen tekstin tekoälymallia ({ $downloadedSize } / { $totalSize } Mt)
     .aria-valuetext = Ladataan vaihtoehtoisen tekstin tekoälymallia ({ $downloadedSize } / { $totalSize } Mt)
 # This is a button that users can click to edit the alt text they have already added.
@@ -500,6 +530,7 @@ pdfjs-editor-undo-bar-message-highlight = Korostus poistettu
 pdfjs-editor-undo-bar-message-freetext = Teksti poistettu
 pdfjs-editor-undo-bar-message-ink = Piirustus poistettu
 pdfjs-editor-undo-bar-message-stamp = Kuva poistettu
+pdfjs-editor-undo-bar-message-signature = Allekirjoitus poistettu
 # Variables:
 #   $count (Number) - the number of removed annotations.
 pdfjs-editor-undo-bar-message-multiple =
@@ -513,6 +544,75 @@ pdfjs-editor-undo-bar-undo-button-label = Kumoa
 pdfjs-editor-undo-bar-close-button =
     .title = Sulje
 pdfjs-editor-undo-bar-close-button-label = Sulje
+
+## Add a signature dialog
+
+pdfjs-editor-add-signature-dialog-label = Tämän ikkunan avulla käyttäjä voi luoda allekirjoituksen PDF-asiakirjaan lisättäväksi. Käyttäjä voi muokata nimeä (joka toimii myös vaihtoehtoisena tekstinä) ja valinnaisesti tallentaa allekirjoituksen toistuvaa käyttöä varten.
+pdfjs-editor-add-signature-dialog-title = Lisää allekirjoitus
+
+## Tab names
+
+# Type is a verb (you can type your name as signature)
+pdfjs-editor-add-signature-type-button = Kirjoita
+    .title = Kirjoita
+# Draw is a verb (you can draw your signature)
+pdfjs-editor-add-signature-draw-button = Piirrä
+    .title = Piirrä
+pdfjs-editor-add-signature-image-button = Kuva
+    .title = Kuva
+
+## Tab panels
+
+pdfjs-editor-add-signature-type-input =
+    .aria-label = Kirjoita allekirjoituksesi
+    .placeholder = Kirjoita allekirjoituksesi
+pdfjs-editor-add-signature-draw-placeholder = Piirrä allekirjoituksesi
+pdfjs-editor-add-signature-draw-thickness-range-label = Paksuus
+# Variables:
+#   $thickness (Number) - the thickness (in pixels) of the line used to draw a signature.
+pdfjs-editor-add-signature-draw-thickness-range =
+    .title = Piirustuksen paksuus: { $thickness }
+pdfjs-editor-add-signature-image-placeholder = Lähetä tiedosto vetämällä se tähän
+pdfjs-editor-add-signature-image-browse-link =
+    { PLATFORM() ->
+        [macos] Tai selaa kuvatiedostoja
+       *[other] Tai selaa kuvatiedostoja
+    }
+
+## Controls
+
+pdfjs-editor-add-signature-description-label = Kuvaus (vaihtoehtoinen teksti)
+pdfjs-editor-add-signature-description-input =
+    .title = Kuvaus (vaihtoehtoinen teksti)
+pdfjs-editor-add-signature-description-default-when-drawing = Allekirjoitus
+pdfjs-editor-add-signature-clear-button-label = Tyhjennä allekirjoitus
+pdfjs-editor-add-signature-clear-button =
+    .title = Tyhjennä allekirjoitus
+pdfjs-editor-add-signature-save-checkbox = Tallenna allekirjoitus
+pdfjs-editor-add-signature-save-warning-message = Olet saavuttanut viiden tallennetun allekirjoituksen rajan. Poista yksi säästääksesi lisää.
+pdfjs-editor-add-signature-image-upload-error-title = Kuvaa ei voitu lähettää
+pdfjs-editor-add-signature-image-upload-error-description = Tarkista verkkoyhteyden tila tai kokeile toista kuvaa.
+pdfjs-editor-add-signature-error-close-button = Sulje
+
+## Dialog buttons
+
+pdfjs-editor-add-signature-cancel-button = Peruuta
+pdfjs-editor-add-signature-add-button = Lisää
+pdfjs-editor-edit-signature-update-button = Päivitä
+
+## Main menu for adding/removing signatures
+
+pdfjs-editor-delete-signature-button1 =
+    .title = Poista tallennettu allekirjoitus
+pdfjs-editor-delete-signature-button-label1 = Poista tallennettu allekirjoitus
+
+## Editor toolbar
+
+pdfjs-editor-add-signature-edit-button-label = Muokkaa kuvausta
+
+## Edit signature description dialog
+
+pdfjs-editor-edit-signature-dialog-title = Muokkaa kuvausta
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.

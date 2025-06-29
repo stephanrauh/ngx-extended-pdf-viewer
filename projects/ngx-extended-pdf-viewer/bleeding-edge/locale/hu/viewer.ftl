@@ -316,6 +316,25 @@ pdfjs-highlight-floating-button1 =
     .title = Kiemelés
     .aria-label = Kiemelés
 pdfjs-highlight-floating-button-label = Kiemelés
+pdfjs-editor-signature-button =
+    .title = Aláírás hozzáadása
+pdfjs-editor-signature-button-label = Aláírás hozzáadása
+
+## Default editor aria labels
+
+# “Highlight” is a noun, the string is used on the editor for highlights.
+pdfjs-editor-highlight-editor =
+    .aria-label = Kiemelésszerkesztő
+# “Drawing” is a noun, the string is used on the editor for drawings.
+pdfjs-editor-ink-editor =
+    .aria-label = Rajzszerkesztő
+# Used when a signature editor is selected/hovered.
+# Variables:
+#   $description (String) - a string describing/labeling the signature.
+pdfjs-editor-signature-editor1 =
+    .aria-description = Aláírás-szerkesztő: { $description }
+pdfjs-editor-stamp-editor =
+    .aria-label = Képszerkesztő
 
 ## Remove button for the various kind of editor.
 
@@ -327,6 +346,8 @@ pdfjs-editor-remove-stamp-button =
     .title = Kép eltávolítása
 pdfjs-editor-remove-highlight-button =
     .title = Kiemelés eltávolítása
+pdfjs-editor-remove-signature-button =
+    .title = Aláírás eltávolítása
 
 ##
 
@@ -343,6 +364,16 @@ pdfjs-editor-stamp-add-image-button-label = Kép hozzáadása
 pdfjs-editor-free-highlight-thickness-input = Vastagság
 pdfjs-editor-free-highlight-thickness-title =
     .title = Vastagság módosítása, ha nem szöveges elemeket emel ki
+pdfjs-editor-add-signature-container =
+    .aria-label = Aláírás-vezérlők és mentett aláírások
+pdfjs-editor-signature-add-signature-button =
+    .title = Új aláírás hozzáadása
+pdfjs-editor-signature-add-signature-button-label = Új aláírás hozzáadása
+# Used on the button to use an already saved signature.
+# Variables:
+#   $description (String) - a string describing/labeling the signature.
+pdfjs-editor-add-saved-signature-button =
+    .title = Mentett aláírás: { $description }
 # .default-content is used as a placeholder in an empty text editor.
 pdfjs-free-text2 =
     .aria-label = Szövegszerkesztő
@@ -453,7 +484,6 @@ pdfjs-editor-new-alt-text-error-close-button = Bezárás
 # Variables:
 #   $totalSize (Number) - the total size (in MB) of the AI model.
 #   $downloadedSize (Number) - the downloaded size (in MB) of the AI model.
-#   $percent (Number) - the percentage of the downloaded size.
 pdfjs-editor-new-alt-text-ai-model-downloading-progress = Alternatív szöveg MI modell letöltése ({ $downloadedSize } / { $totalSize } MB)
     .aria-valuetext = Alternatív szöveg MI modell letöltése ({ $downloadedSize } / { $totalSize } MB)
 # This is a button that users can click to edit the alt text they have already added.
@@ -500,6 +530,7 @@ pdfjs-editor-undo-bar-message-highlight = Kiemelés eltávolítva
 pdfjs-editor-undo-bar-message-freetext = Szöveg eltávolítva
 pdfjs-editor-undo-bar-message-ink = Rajz eltávolítva
 pdfjs-editor-undo-bar-message-stamp = Kép eltávolítva
+pdfjs-editor-undo-bar-message-signature = Aláírás eltávolítva
 # Variables:
 #   $count (Number) - the number of removed annotations.
 pdfjs-editor-undo-bar-message-multiple =
@@ -513,6 +544,75 @@ pdfjs-editor-undo-bar-undo-button-label = Visszavonás
 pdfjs-editor-undo-bar-close-button =
     .title = Bezárás
 pdfjs-editor-undo-bar-close-button-label = Bezárás
+
+## Add a signature dialog
+
+pdfjs-editor-add-signature-dialog-label = Ez a mód lehetővé teszi a felhasználónak, hogy aláírást hozzon létre, és ezt egy PDF dokumentumhoz adja. A felhasználó szerkesztheti a nevet (ez egyben alternatív szövegként is szolgál), és ismételt felhasználás céljából tetszés szerint mentheti az aláírást.
+pdfjs-editor-add-signature-dialog-title = Aláírás hozzáadása
+
+## Tab names
+
+# Type is a verb (you can type your name as signature)
+pdfjs-editor-add-signature-type-button = Beírás
+    .title = Beírás
+# Draw is a verb (you can draw your signature)
+pdfjs-editor-add-signature-draw-button = Rajzolás
+    .title = Rajzolás
+pdfjs-editor-add-signature-image-button = Kép
+    .title = Kép
+
+## Tab panels
+
+pdfjs-editor-add-signature-type-input =
+    .aria-label = Írja be az aláírását
+    .placeholder = Írja be az aláírását
+pdfjs-editor-add-signature-draw-placeholder = Rajzolja le az aláírását
+pdfjs-editor-add-signature-draw-thickness-range-label = Vastagság
+# Variables:
+#   $thickness (Number) - the thickness (in pixels) of the line used to draw a signature.
+pdfjs-editor-add-signature-draw-thickness-range =
+    .title = Rajzolási vastagság: { $thickness }
+pdfjs-editor-add-signature-image-placeholder = Húzzon ide egy fájlt a feltöltéshez
+pdfjs-editor-add-signature-image-browse-link =
+    { PLATFORM() ->
+        [macos] Vagy tallózzon a képfájlok között
+       *[other] Vagy tallózzon a képfájlok között
+    }
+
+## Controls
+
+pdfjs-editor-add-signature-description-label = Leírás (alternatív szöveg)
+pdfjs-editor-add-signature-description-input =
+    .title = Leírás (alternatív szöveg)
+pdfjs-editor-add-signature-description-default-when-drawing = Aláírás
+pdfjs-editor-add-signature-clear-button-label = Aláírás törlése
+pdfjs-editor-add-signature-clear-button =
+    .title = Aláírás törlése
+pdfjs-editor-add-signature-save-checkbox = Aláírás mentése
+pdfjs-editor-add-signature-save-warning-message = Elérte a mentett aláírások 5 darabos korlátját. A mentéshez távolítson el egyet.
+pdfjs-editor-add-signature-image-upload-error-title = A kép nem tölthető fel
+pdfjs-editor-add-signature-image-upload-error-description = Ellenőrizze a hálózati kapcsolatot, vagy próbálkozzon egy másik képpel.
+pdfjs-editor-add-signature-error-close-button = Bezárás
+
+## Dialog buttons
+
+pdfjs-editor-add-signature-cancel-button = Mégse
+pdfjs-editor-add-signature-add-button = Hozzáadás
+pdfjs-editor-edit-signature-update-button = Frissítés
+
+## Main menu for adding/removing signatures
+
+pdfjs-editor-delete-signature-button1 =
+    .title = Mentett aláírás eltávolítása
+pdfjs-editor-delete-signature-button-label1 = Mentett aláírás eltávolítása
+
+## Editor toolbar
+
+pdfjs-editor-add-signature-edit-button-label = Leírás szerkesztése
+
+## Edit signature description dialog
+
+pdfjs-editor-edit-signature-dialog-title = Leírás szerkesztése
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.

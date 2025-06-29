@@ -61,7 +61,7 @@ ngx-extended-pdf-viewer {
 
     .highlight {
       --highlight-bg-color: rgb(180 0 170 / 0.25);
-      --highlight-selected-bg-color: rgb(0 100 0 / 0.25);
+      --highlight-selected-bg-color: rgb(0 0 100 / 0.25);
       --highlight-backdrop-filter: none;
       --highlight-selected-backdrop-filter: none;
 
@@ -98,19 +98,20 @@ ngx-extended-pdf-viewer {
 
       &.selected {
         background-color: $highlight-selected;
+        opacity: 0.25;
         backdrop-filter: var(--highlight-selected-backdrop-filter);
       }
     }
 
     .customHighlight {
-      --highlight-bg-color: rgba(0, 0, 180, 0.3);
-      --highlight-selected-bg-color: rgba(0, 0, 180, 0.6);
+      --custom-highlight-bg-color: rgba(0, 0, 180, 0.3);
+      --custom-highlight-selected-bg-color: rgba(0, 0, 180, 0.6);
       --highlight-backdrop-filter: none;
       --highlight-selected-backdrop-filter: none;
-      background-color: var(--highlight-bg-color);
+      background-color: var(--custom-highlight-bg-color);
 
       &.selected {
-        background-color: var(--highlight-selected-bg-color);
+        background-color: var(--custom-highlight-selected-bg-color);
         backdrop-filter: var(--highlight-selected-backdrop-filter);
       }
     }

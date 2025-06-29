@@ -316,6 +316,14 @@ pdfjs-highlight-floating-button1 =
     .title = Ерекшелеу
     .aria-label = Ерекшелеу
 pdfjs-highlight-floating-button-label = Ерекшелеу
+pdfjs-editor-signature-button =
+    .title = Қолтаңбаны қосу
+pdfjs-editor-signature-button-label = Қолтаңбаны қосу
+
+## Default editor aria labels
+
+pdfjs-editor-stamp-editor =
+    .aria-label = Сурет редакторы
 
 ## Remove button for the various kind of editor.
 
@@ -327,6 +335,8 @@ pdfjs-editor-remove-stamp-button =
     .title = Суретті өшіру
 pdfjs-editor-remove-highlight-button =
     .title = Түспен ерекшелеуді өшіру
+pdfjs-editor-remove-signature-button =
+    .title = Қолтаңбаны өшіру
 
 ##
 
@@ -343,6 +353,16 @@ pdfjs-editor-stamp-add-image-button-label = Суретті қосу
 pdfjs-editor-free-highlight-thickness-input = Қалыңдығы
 pdfjs-editor-free-highlight-thickness-title =
     .title = Мәтіннен басқа элементтерді ерекшелеу кезінде қалыңдықты өзгерту
+pdfjs-editor-add-signature-container =
+    .aria-label = Қолтаңбаларды басқару және сақталған қолтаңбалар
+pdfjs-editor-signature-add-signature-button =
+    .title = Жаңа қолтаңбаны қосу
+pdfjs-editor-signature-add-signature-button-label = Жаңа қолтаңбаны қосу
+# Used on the button to use an already saved signature.
+# Variables:
+#   $description (String) - a string describing/labeling the signature.
+pdfjs-editor-add-saved-signature-button =
+    .title = Сақталған қолтаңба: { $description }
 # .default-content is used as a placeholder in an empty text editor.
 pdfjs-free-text2 =
     .aria-label = Мәтін түзеткіші
@@ -453,7 +473,6 @@ pdfjs-editor-new-alt-text-error-close-button = Жабу
 # Variables:
 #   $totalSize (Number) - the total size (in MB) of the AI model.
 #   $downloadedSize (Number) - the downloaded size (in MB) of the AI model.
-#   $percent (Number) - the percentage of the downloaded size.
 pdfjs-editor-new-alt-text-ai-model-downloading-progress = Балама мәтін үшін ЖИ моделі жүктеп алынуда ({ $downloadedSize }/{ $totalSize } МБ)
     .aria-valuetext = Балама мәтін үшін ЖИ моделі жүктеп алынуда ({ $downloadedSize }/{ $totalSize } МБ)
 # This is a button that users can click to edit the alt text they have already added.
@@ -500,6 +519,7 @@ pdfjs-editor-undo-bar-message-highlight = Ерекшелеу өшірілді
 pdfjs-editor-undo-bar-message-freetext = Мәтін өшірілді
 pdfjs-editor-undo-bar-message-ink = Сызба өшірілді
 pdfjs-editor-undo-bar-message-stamp = Сурет өшірілді
+pdfjs-editor-undo-bar-message-signature = Қолтаңба өшірілді
 # Variables:
 #   $count (Number) - the number of removed annotations.
 pdfjs-editor-undo-bar-message-multiple =
@@ -514,7 +534,82 @@ pdfjs-editor-undo-bar-close-button =
     .title = Жабу
 pdfjs-editor-undo-bar-close-button-label = Жабу
 
+## Add a signature dialog
+
+pdfjs-editor-add-signature-dialog-title = Қолтаңба қосу
+
+## Tab names
+
+# Type is a verb (you can type your name as signature)
+pdfjs-editor-add-signature-type-button = Енгізу
+    .title = Енгізу
+# Draw is a verb (you can draw your signature)
+pdfjs-editor-add-signature-draw-button = Сурет салу
+    .title = Сурет салу
+pdfjs-editor-add-signature-image-button = Сурет
+    .title = Сурет
+
+## Tab panels
+
+pdfjs-editor-add-signature-draw-thickness-range-label = Қалыңдығы
+# Variables:
+#   $thickness (Number) - the thickness (in pixels) of the line used to draw a signature.
+pdfjs-editor-add-signature-draw-thickness-range =
+    .title = Сызба қалыңздығы: { $thickness }
+pdfjs-editor-add-signature-image-placeholder = Жүктеп жіберу үшін файлды осы жерге сүйреңіз
+pdfjs-editor-add-signature-image-browse-link =
+    { PLATFORM() ->
+        [macos] Немесе сурет файлдарын таңдаңыз
+       *[other] Немесе сурет файлдарын шолыңыз
+    }
+
+## Controls
+
+pdfjs-editor-add-signature-description-label = Сипаттама (балама мәтін)
+pdfjs-editor-add-signature-description-input =
+    .title = Сипаттама (балама мәтін)
+pdfjs-editor-add-signature-description-default-when-drawing = Қолтаңба
+pdfjs-editor-add-signature-clear-button-label = Қолтаңбаны өшіру
+pdfjs-editor-add-signature-clear-button =
+    .title = Қолтаңбаны өшіру
+pdfjs-editor-add-signature-save-checkbox = Қолтаңбаны сақтау
+pdfjs-editor-add-signature-save-warning-message = Сақталған 5 қолтаңбаның шегіне жеттіңіз. Көбірек сақтау үшін біреуін алып тастаңыз.
+pdfjs-editor-add-signature-image-upload-error-title = Суретті жүктеп жіберу мүмкін емес.
+pdfjs-editor-add-signature-error-close-button = Жабу
+
+## Dialog buttons
+
+pdfjs-editor-add-signature-cancel-button = Бас тарту
+pdfjs-editor-add-signature-add-button = Қосу
+pdfjs-editor-edit-signature-update-button = Жаңарту
+
+## Main menu for adding/removing signatures
+
+
+## Editor toolbar
+
+pdfjs-editor-add-signature-edit-button-label = Сипаттаманы түзету
+
+## Edit signature description dialog
+
+pdfjs-editor-edit-signature-dialog-title = Сипаттаманы түзету
+
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
+pdfjs-editor-highlight-editor =
+    .aria-label = Highlight editor
+pdfjs-editor-ink-editor =
+    .aria-label = Drawing editor
+pdfjs-editor-signature-editor1 =
+    .aria-description = Signature editor: { $description }
+pdfjs-editor-add-signature-dialog-label = This modal allows the user to create a signature to add to a PDF document. The user can edit the name (which also serves as the alt text), and optionally save the signature for repeated use.
+pdfjs-editor-add-signature-type-input =
+    .aria-label = Type your signature
+    .placeholder = Type your signature
+pdfjs-editor-add-signature-draw-placeholder = Draw your signature
+pdfjs-editor-add-signature-image-upload-error-description = Check your network connection or try another image.
+pdfjs-editor-delete-signature-button1 =
+    .title = Remove saved signature
+pdfjs-editor-delete-signature-button-label1 = Remove saved signature
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = Match Each Word

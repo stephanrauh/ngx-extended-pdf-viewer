@@ -2,8 +2,8 @@ export enum AnnotationMode {
   DISABLE = 0,
   ENABLE = 1,
   ENABLE_FORMS = 2,
-  ENABLE_STORAGE = 3
-};
+  ENABLE_STORAGE = 3,
+}
 
 export enum AnnotationEditorType {
   DISABLE = -1,
@@ -12,6 +12,7 @@ export enum AnnotationEditorType {
   HIGHLIGHT = 9,
   STAMP = 13,
   INK = 15,
+  SIGNATURE = 101,
 }
 
 export const AnnotationEditorParamsType = {
@@ -28,6 +29,7 @@ export const AnnotationEditorParamsType = {
   HIGHLIGHT_THICKNESS: 33,
   HIGHLIGHT_FREE: 34,
   HIGHLIGHT_SHOW_ALL: 35,
+  DRAW_STEP: 41,
 };
 
 export type AnnotationEditorTypeValue = -1 | 0 | 3 | 9 | 13 | 15;

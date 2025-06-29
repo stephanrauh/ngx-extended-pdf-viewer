@@ -46,13 +46,23 @@
               [showRotateCcwButton]="showRotateCcwButton"
               [showSecondaryToolbarButton]="showSecondaryToolbarButton && !service.secondaryMenuIsEmpty"
               [showSidebarButton]="showSidebarButton" [showSinglePageModeButton]="showSinglePageModeButton"
-              [showSpreadButton]="showSpreadButton" [showStampEditor]="showStampEditor"
-              [showTextEditor]="showTextEditor" [showVerticalScrollButton]="showVerticalScrollButton"
-              [showWrappedScrollButton]="showWrappedScrollButton" [showZoomButtons]="showZoomButtons"
-              [showZoomDropdown]="showZoomDropdown" [spread]="spread" [textLayer]="textLayer"
-              [toolbarMarginTop]="toolbarMarginTop" [toolbarWidth]="toolbarWidth" [zoomLevels]="zoomLevels"
-              [findbarVisible]="findbarVisible" [hasTextLayer]="hasTextLayer"></pdf-toolbar>
+              [showSignatureEditor]="showSignatureEditor && (pdfJsVersion>'5')" [showSpreadButton]="showSpreadButton"
+              [showStampEditor]="showStampEditor" [showTextEditor]="showTextEditor"
+              [showVerticalScrollButton]="showVerticalScrollButton" [showWrappedScrollButton]="showWrappedScrollButton"
+              [showZoomButtons]="showZoomButtons" [showZoomDropdown]="showZoomDropdown" [spread]="spread"
+              [textLayer]="textLayer" [toolbarMarginTop]="toolbarMarginTop" [toolbarWidth]="toolbarWidth"
+              [zoomLevels]="zoomLevels" [findbarVisible]="findbarVisible" [hasTextLayer]="hasTextLayer"></pdf-toolbar>
 
+            <div class="editorParamsToolbar hidden doorHangerRight menu" id="editorSignatureParamsToolbar">
+              <div id="addSignatureDoorHanger" class="menuContainer" role="region"
+                data-l10n-id="pdfjs-editor-add-signature-container">
+                <button id="editorSignatureAddSignature" class="toolbarButton labeled" type="button" tabindex="0"
+                  data-l10n-id="pdfjs-editor-signature-add-signature-button">
+                  <span data-l10n-id="pdfjs-editor-signature-add-signature-button-label"
+                    class="editorParamsLabel"></span>
+                </button>
+              </div>
+            </div>
             <div class="editorParamsToolbar hidden doorHangerRight" id="editorHighlightParamsToolbar"
               [style.transform]="'scale(' + mobileFriendlyZoomScale + ')'">
               <div id="highlightParamsToolbarContainer" class="editorParamsToolbarContainer">
@@ -180,6 +190,8 @@
             <pdf-alt-text-dialog></pdf-alt-text-dialog>
             <pdf-alt-text-settings-dialog></pdf-alt-text-settings-dialog>
             <pdf-prepare-printing-dialog></pdf-prepare-printing-dialog>
+            <pdf-add-signature-dialog></pdf-add-signature-dialog>
+            <pdf-edit-signature-dialog></pdf-edit-signature-dialog>
           </div>
           <!-- dialogContainer -->
         </div>

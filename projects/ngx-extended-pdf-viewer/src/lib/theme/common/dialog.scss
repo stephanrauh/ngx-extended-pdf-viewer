@@ -14,6 +14,10 @@
  */
 
 ngx-extended-pdf-viewer .html {
+  & dialog[open].dialog {
+    display: block;
+  }
+
   .dialog {
     --dialog-bg-color: white;
     --dialog-border-color: white;
@@ -42,6 +46,9 @@ ngx-extended-pdf-viewer .html {
     --button-secondary-hover-bg-color: var(--button-secondary-bg-color);
     --button-secondary-hover-fg-color: var(--button-secondary-fg-color);
     --button-secondary-hover-border-color: var(--button-secondary-hover-bg-color);
+    --button-secondary-disabled-bg-color: var(--button-secondary-bg-color);
+    --button-secondary-disabled-border-color: var(--button-secondary-border-color);
+    --button-secondary-disabled-fg-color: var(--button-secondary-fg-color);
 
     --button-primary-bg-color: #0060df;
     --button-primary-fg-color: #fbfbfe;
@@ -204,11 +211,12 @@ ngx-extended-pdf-viewer .html {
         }
       }
 
-      button:not(:is(.toggle-button, .closeButton)) {
+      button:not(:is(.toggle-button, .closeButton, .clearInputButton)) {
         border-radius: 4px;
         border: 1px solid;
         font: menu;
-        font-weight: 600;
+        font-weight: 590;
+        font-size: 13px;
         padding: 4px 16px;
         width: auto;
         height: 32px;
@@ -216,6 +224,11 @@ ngx-extended-pdf-viewer .html {
         &:hover {
           cursor: pointer;
           filter: var(--hover-filter);
+        }
+
+        >span {
+          color: inherit;
+          font: inherit;
         }
 
         &.secondaryButton {
@@ -227,6 +240,19 @@ ngx-extended-pdf-viewer .html {
             color: var(--button-secondary-hover-fg-color);
             background-color: var(--button-secondary-hover-bg-color);
             border-color: var(--button-secondary-hover-border-color);
+          }
+
+          &:active {
+            color: var(--button-secondary-active-fg-color);
+            background-color: var(--button-secondary-active-bg-color);
+            border-color: var(--button-secondary-active-border-color);
+          }
+
+          &:disabled {
+            background-color: var(--button-secondary-disabled-bg-color);
+            border-color: var(--button-secondary-disabled-border-color);
+            color: var(--button-secondary-disabled-fg-color);
+            opacity: var(--button-disabled-opacity);
           }
         }
 
@@ -241,6 +267,23 @@ ngx-extended-pdf-viewer .html {
             background-color: var(--button-primary-hover-bg-color);
             border-color: var(--button-primary-hover-border-color);
           }
+
+          &:active {
+            color: var(--button-primary-active-fg-color);
+            background-color: var(--button-primary-active-bg-color);
+            border-color: var(--button-primary-active-border-color);
+          }
+
+          &:disabled {
+            background-color: var(--button-primary-disabled-bg-color);
+            border-color: var(--button-primary-disabled-border-color);
+            color: var(--button-primary-disabled-fg-color);
+            opacity: var(--button-disabled-opacity);
+          }
+        }
+
+        &:disabled {
+          pointer-events: none;
         }
       }
 
@@ -272,6 +315,11 @@ ngx-extended-pdf-viewer .html {
           pointer-events: none;
           opacity: 0.4;
         }
+      }
+
+      input[type="text"] {
+        background-color: var(--input-text-bg-color);
+        color: var(--input-text-fg-color);
       }
 
       .messageBar {

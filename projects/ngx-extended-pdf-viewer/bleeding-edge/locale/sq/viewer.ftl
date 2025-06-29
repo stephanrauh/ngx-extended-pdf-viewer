@@ -307,6 +307,25 @@ pdfjs-highlight-floating-button1 =
     .title = Theksim
     .aria-label = Theksim
 pdfjs-highlight-floating-button-label = Theksim
+pdfjs-editor-signature-button =
+    .title = Shtoni nënshkrim
+pdfjs-editor-signature-button-label = Shtoni nënshkrim
+
+## Default editor aria labels
+
+# “Highlight” is a noun, the string is used on the editor for highlights.
+pdfjs-editor-highlight-editor =
+    .aria-label = Përpunues theksimesh
+# “Drawing” is a noun, the string is used on the editor for drawings.
+pdfjs-editor-ink-editor =
+    .aria-label = Përpunues vizatimesh
+# Used when a signature editor is selected/hovered.
+# Variables:
+#   $description (String) - a string describing/labeling the signature.
+pdfjs-editor-signature-editor1 =
+    .aria-description = Përpunues nënshkrimesh: { $description }
+pdfjs-editor-stamp-editor =
+    .aria-label = Përpunues figurash
 
 ## Remove button for the various kind of editor.
 
@@ -318,6 +337,8 @@ pdfjs-editor-remove-stamp-button =
     .title = Hiq figurë
 pdfjs-editor-remove-highlight-button =
     .title = Hiqe theksimin
+pdfjs-editor-remove-signature-button =
+    .title = Hiqe nënshkrimin
 
 ##
 
@@ -334,6 +355,16 @@ pdfjs-editor-stamp-add-image-button-label = Shtoni figurë
 pdfjs-editor-free-highlight-thickness-input = Trashësi
 pdfjs-editor-free-highlight-thickness-title =
     .title = Ndryshoni trashësinë kur theksoni objekte tjetër nga tekst
+pdfjs-editor-add-signature-container =
+    .aria-label = Kontrolle nënshkrimesh dhe nënshkrime të ruajtur
+pdfjs-editor-signature-add-signature-button =
+    .title = Shtoni nënshkrim të ri
+pdfjs-editor-signature-add-signature-button-label = Shtoni nënshkrim të ri
+# Used on the button to use an already saved signature.
+# Variables:
+#   $description (String) - a string describing/labeling the signature.
+pdfjs-editor-add-saved-signature-button =
+    .title = Nënshkrim i ruajtur: { $description }
 # .default-content is used as a placeholder in an empty text editor.
 pdfjs-free-text2 =
     .aria-label = Përpunues Tekstesh
@@ -444,7 +475,6 @@ pdfjs-editor-new-alt-text-error-close-button = Mbylle
 # Variables:
 #   $totalSize (Number) - the total size (in MB) of the AI model.
 #   $downloadedSize (Number) - the downloaded size (in MB) of the AI model.
-#   $percent (Number) - the percentage of the downloaded size.
 pdfjs-editor-new-alt-text-ai-model-downloading-progress = Po shkarkohet model IA teksti alternativ ({ $downloadedSize } nga { $totalSize } MB)
     .aria-valuetext = Po shkarkohet model IA teksti alternativ ({ $downloadedSize } nga { $totalSize } MB)
 # This is a button that users can click to edit the alt text they have already added.
@@ -491,6 +521,7 @@ pdfjs-editor-undo-bar-message-highlight = U hoq theksimi
 pdfjs-editor-undo-bar-message-freetext = U hoq tekst
 pdfjs-editor-undo-bar-message-ink = U hoq vizatim
 pdfjs-editor-undo-bar-message-stamp = U hoq figurë
+pdfjs-editor-undo-bar-message-signature = Nënshkrimi u hoq
 # Variables:
 #   $count (Number) - the number of removed annotations.
 pdfjs-editor-undo-bar-message-multiple =
@@ -504,6 +535,75 @@ pdfjs-editor-undo-bar-undo-button-label = Zhbëje
 pdfjs-editor-undo-bar-close-button =
     .title = Mbylle
 pdfjs-editor-undo-bar-close-button-label = Mbylle
+
+## Add a signature dialog
+
+pdfjs-editor-add-signature-dialog-label = Kjo dritare modale i lejon përdoruesit të krijojë një nënshkrim për ta shtuar te një dokument PDF. Përdoruesi mund të përpunojë emrin (i cili shërben edhe si tekst alternativ) dhe, nëse do, ta ruajë nënshkrimin, për ta përdorur prapë.
+pdfjs-editor-add-signature-dialog-title = Shtoni një nënshkrim
+
+## Tab names
+
+# Type is a verb (you can type your name as signature)
+pdfjs-editor-add-signature-type-button = Lloj
+    .title = Lloj
+# Draw is a verb (you can draw your signature)
+pdfjs-editor-add-signature-draw-button = Vizatoni
+    .title = Vizatoni
+pdfjs-editor-add-signature-image-button = Figurë
+    .title = Figurë
+
+## Tab panels
+
+pdfjs-editor-add-signature-type-input =
+    .aria-label = Shtypni nënshkrimin tuaj
+    .placeholder = Shtypni nënshkrimin tuaj
+pdfjs-editor-add-signature-draw-placeholder = Vizatoni nënshkrimin tuaj
+pdfjs-editor-add-signature-draw-thickness-range-label = Trashësi
+# Variables:
+#   $thickness (Number) - the thickness (in pixels) of the line used to draw a signature.
+pdfjs-editor-add-signature-draw-thickness-range =
+    .title = Trashësi vizatimi: { $thickness }
+pdfjs-editor-add-signature-image-placeholder = Tërhiqni këtu një kartelë për ngarkim
+pdfjs-editor-add-signature-image-browse-link =
+    { PLATFORM() ->
+        [macos] Ose zgjidhni kartelë figure
+       *[other] Ose zgjidhni kartelë figure
+    }
+
+## Controls
+
+pdfjs-editor-add-signature-description-label = Përshkrim (tekst alternativ)
+pdfjs-editor-add-signature-description-input =
+    .title = Përshkrim (tekst alternativ)
+pdfjs-editor-add-signature-description-default-when-drawing = Nënshkrim
+pdfjs-editor-add-signature-clear-button-label = Spastroje nënshkrimin
+pdfjs-editor-add-signature-clear-button =
+    .title = Spastroje nënshkrimin
+pdfjs-editor-add-signature-save-checkbox = Ruaje nënshkrimin
+pdfjs-editor-add-signature-save-warning-message = Keni mbërritur në kufirin e 5 nënshkrimeve të ruajtura. Që të ruani tjetër, hiqni një.
+pdfjs-editor-add-signature-image-upload-error-title = S’u ngarkua dot figurë
+pdfjs-editor-add-signature-image-upload-error-description = Kontrolloni lidhjen tuaj në rrjet, ose provoni figurë tjetër.
+pdfjs-editor-add-signature-error-close-button = Mbylle
+
+## Dialog buttons
+
+pdfjs-editor-add-signature-cancel-button = Anuloje
+pdfjs-editor-add-signature-add-button = Shtoje
+pdfjs-editor-edit-signature-update-button = Përditësoje
+
+## Main menu for adding/removing signatures
+
+pdfjs-editor-delete-signature-button1 =
+    .title = Hiqe nënshkrimin e ruajtur
+pdfjs-editor-delete-signature-button-label1 = Hiqe nënshkrimin e ruajtur
+
+## Editor toolbar
+
+pdfjs-editor-add-signature-edit-button-label = Përpunoni përshkrimin
+
+## Edit signature description dialog
+
+pdfjs-editor-edit-signature-dialog-title = Përpunoni përshkrimin
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-spread-none-button =
