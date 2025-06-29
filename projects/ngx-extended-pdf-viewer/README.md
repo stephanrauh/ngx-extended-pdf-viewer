@@ -1,172 +1,203 @@
 # ngx-extended-pdf-viewer
 
-<p>
-  <a href="https://www.npmjs.com/package/ngx-extended-pdf-viewer">
-    <img src="https://img.shields.io/npm/dm/ngx-extended-pdf-viewer.svg?style=flat" alt="downloads">
-  </a>
-  <a href="https://pdfviewer.net">
-    <img src="https://img.shields.io/badge/showcase-pdfviewer.net-blue">
-  </a>
-  <a href="https://badge.fury.io/js/ngx-extended-pdf-viewer">
-    <img src="https://badge.fury.io/js/ngx-extended-pdf-viewer.svg" alt="npm version">
-  </a>
-  <a href="https://opensource.org/licenses/Apache-2.0"><img src="https://img.shields.io/badge/License-Apache%202.0-brightgreen.svg"></a>
-  <a href="https://sonarcloud.io/summary/new_code?id=stephanrauh_ngx-extended-pdf-viewer"><img src="https://sonarcloud.io/api/project_badges/measure?project=stephanrauh_ngx-extended-pdf-viewer&metric=alert_status"></a>
-  <a href="https://unpkg.com/browse/ngx-extended-pdf-viewer/">
-    <img src="https://img.shields.io/badge/cdn-unpkg.com-orange">
-  </a>
-  <a href="https://www.beyondjava.net">
-    <img src="https://img.shields.io/badge/blog-beyondjava.net-blue">
-  </a>
- </p>
+Welcome to `ngx-extended-pdf-viewer` – a powerful, full-featured PDF viewer for Angular applications. Whether you're building enterprise tools or internal utilities, this library gives you the control and customization options you need, all while preserving a native-like viewing experience.
 
-## Bringing PDF to the Angular world
+Built on Mozilla’s pdf.js and extended with dozens of enhancements, it's ideal for serious applications that demand more than just basic PDF display.
 
-This library provides an embeddable PDF viewer component. It's different from other approaches like [ng2-pdf-viewer](https://vadimdez.github.io/ng2-pdf-viewer/) in that it shows the full suite of UI widgets. In other words, it strongly resembles the PDF viewer of your browser:
+[![npm](https://img.shields.io/npm/dm/ngx-extended-pdf-viewer.svg?style=flat)](https://www.npmjs.com/package/ngx-extended-pdf-viewer)
+[![showcase](https://img.shields.io/badge/showcase-pdfviewer.net-blue)](https://pdfviewer.net)
+[![version](https://badge.fury.io/js/ngx-extended-pdf-viewer.svg)](https://badge.fury.io/js/ngx-extended-pdf-viewer)
+[![license](https://img.shields.io/badge/License-Apache%202.0-brightgreen.svg)](https://opensource.org/licenses/Apache-2.0)
 
-<img src="https://github.com/stephanrauh/ngx-extended-pdf-viewer/blob/main/projects/ngx-extended-pdf-viewer/example.png?raw=true">
+---
 
-## Getting it up and running
+## 🚀 Getting Started
 
-1. run `npm add ngx-extended-pdf-viewer` and accept all the defaults
-2. There's an example component, but it isn't yet part of your application. You can either add the example component to your application or copy the relevant line to your HTML template:
+### 0. Prerequisites
+
+The library requires Angular 17+. Older versions are not supported. In general, I aim to support the last four Angular versions (roughly two years of updates), but this may not always be feasible.
+
+### 1. Installation
+
+Install via npm:
+
+```bash
+npm add ngx-extended-pdf-viewer
+```
+
+### 2. Usage in Your Angular Component
+
+In your component HTML:
 
 ```html
 <ngx-extended-pdf-viewer [src]="'assets/example.pdf'"></ngx-extended-pdf-viewer>
 ```
 
-## Security
+In your module or standalone component:
 
-Version 20.0.2 is a security fix. It solves CVE-2024-4367. I strongly recommend updating to the latest version of ngx-extended-pdf-viewer as soon as possible, or to version 20.0.2 as a minimum. Older versions contain a bug allowing malicious PDF files to run arbitrary code. Kudos go to GitHub users ScratchPDX and Deepak Shakya to tell me about it, so I could provide a hotfix during my vacations.
+```ts
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 
-## Announcement: Version 25 migrates to signals (and probably more)
+@NgModule({
+  imports: [NgxExtendedPdfViewerModule],
+})
+export class AppModule {}
+```
 
-This is an early announcement. I want to update ngx-extended-pdf-viewer to support modern Angular. In particular, that's stand-alone components, getting rid of zone.js, and signals. Version 25 is a round version number, so chance are you expect more breaking changes than usual. As always, I'll try to minimize the migration pain, but I'm not sure I'll succeed. I intend to implement a migration schematics to reduce the annoyance, but let's be honest: it's next to impossible to provide a painless migration. On the other hand, I'm pretty sure you'll love it after the migration.
+> 🧭 For hands-on examples and step-by-step guides, visit the [showcase](https://pdfviewer.net) and the [getting started page](https://pdfviewer.net/extended-pdf-viewer/getting-started).
 
-## Version 24
+---
 
-This version migrates to pdf.js 5.3. That's a major jump, including breaking changes and new features. At the time of writing, I'm surprise the update is mostly smoothly, with one exception: my annotation editor events are gone. It'll take a while to bring them back. Plus, I can't guarantee 100% compatibility, simply because I don't know yet what's changed in the based library.
+## 🔐 Security Notice
 
-In other words, more likely than not, there'll be an extended time of alpha and beta versions. Please apologize the inconvience!
+Version `20.0.2` fixes a critical security vulnerability (CVE-2024-4367). Update to this version or newer to stay safe from exploits via malicious PDF files.
 
-## Version 23
+Thanks to GitHub users ScratchPDX and Deepak Shakya for reporting the issue promptly.
 
-Version 23 updates to pdf.js 4.10 and contains several bug fixes, some of which are breaking changes. There's only two new features:
+---
 
-- Version 23.1.0 starts positioning the popup dialogs with JavaScript. This works with custom toolbars, right-to-left languages, and `[mobileFriendlyZoom]`. If this calculation does not work in your project, you can switch it off with `pdfDefaultOptions.positionPopupDialogsWithJavaScript=false`. In that case, you're back to the old (slightly broken) calculation, and you can position the popup with CSS.
-- The attribute `[forceFullReloadOfJavaScriptCode]="true"` forces the PDF viewer to re-execute the JavaScript libraries if it has to load them again. That should be the default, but since version 21 the PDF viewer uses JavaScript module files (\*.mjs), and the browser considers these files singleton. If you display a PDF file, navigate to another page without PDF, and see a blank page when navigating back, activate the new flag. By default it's set to `false` because I want to play it safe, but more likely than not, the default is going to be `true` soon.
+## 📣 Roadmap Highlights
 
-Breaking changes:
+### Upcoming in Version 25
 
-- Version 23.0 to 23.2 lost the ink editor events. They're back with version 23.3.0, but the parameter list is slightly different than before. In particular, the `bezierPathChanged` event now doesn't contain the coordinates of the drawing.
-- I've reduced the default maximum resolution of the canvas files. As it turned out, going to the limit caused many Android and iOS devices to crash. Now the algorithm is much more careful when calculating the maximum resolution. If you know what you're doing and want to go to the limit, you can still do that: just set `pdfDefaultOptions.maxCanvasPixels = -1`.
-- Adding ink editor drawings programmatically is no longer supported. More to the point, it should work if you pass the correct parameters, but the API has changed, and I haven't been able to figure out which parameters need to be passed.
-- I've added a selector to the CSS rules of the dialogs. That should improve compatibility to CSS frameworks and to your custom CSS. However, if you're using CSS to modify the dialogs of ngx-extended-pdf-viewer, this might be a breaking change. If you run into this problem, add a ".html" selector. The original selector was `ngx-extended-pdf-viewer .dialog`, and the new selector is `ngx-extended-pdf-viewer .html .dialog`.
+- Migration to Angular Signals
+- Support for standalone components
+- Removal of `zone.js`
+- Migration schematics planned
 
-## Please avoid version 21.4.5 and 21.4.6
+Expect some breaking changes — but better performance and modern Angular support await!
 
-These versions were meant to be alpha versions, but I forgot to update the version number, and now I can't delete the offending version from npm. The update to pdf.js 4.7 didn't go as smoothless as I hoped, so these versions suffer from a few bugs. The good news is that most users probably won't notice. However, several buttons have
-new ids, so their functionality is lost in these two version. Better stick to version 21.4.4.
+---
 
-## Full changelog
+## 🧩 Core Features
 
-There's also a detailed <a href="https://github.com/stephanrauh/ngx-extended-pdf-viewer/tree/main/projects/ngx-extended-pdf-viewer/changelog.md">changelog</a>.
+- Customizable toolbar and UI
+- Programmatic access (searching, scrolling, printing, layer toggling)
+- Support for both standard and XFA forms
+- Basic PDF editing (text, images, ink, highlights)
+- Multiple scroll modes and zoom control
+- Sidebar with thumbnails, outlines, and attachments
+- Built-in internationalization (dozens of languages)
+- Drag-and-drop support
+- Fullscreen and book mode
+- Responsive layout and mobile optimization
+- Direct access to pdf.js core API with TypeScript types
 
-## Showcase and manual
+<sub>See the full list of [features on the showcase site](https://pdfviewer.net).</sub>
 
-There's a showcase at <a href="https://pdfviewer.net">https://pdfviewer.net</a>. Check this page for live demos, source code examples, and a handbook.
+---
 
-## Contributors welcome!
+## 📦 Version Highlights
 
-Would you like to participate in a popular open source-project? It's easy: just open a ticket so we can discuss the change, create a fork, and send me a pull request. Contributions to the showcase are as welcome as contributions to the core library.
+### Version 24 (alpha)
 
-## Features
+- Upgraded to `pdf.js 5.3`
+- Annotation editor events temporarily removed
+- Ongoing alpha/beta phase
 
-- programmatic API for many features, such as searching
-- resizable toolbars to support small mobile devices or working places where users wear gloves
-- Editor: add text, images, highlights, or free-style drawings to your PDF file.
-- Printing
-- Dragging and dropping PDF files to the viewer
-- Support for forms, including two-way binding
-- XFA forms are also supported (with a few limitations)
-- (Limited) support for signatures (lacking verification of the signature, so use at your own risk!)
-- Sidebar with thumbnails, outlines, and attachments (each of them is both optional and customizable)
-- Rotating pages
-- Download (including form data) and upload
-- Zoom (with optional two-way binding to an attribute)
-- Full-screen mode
-- Book mode with animated page-turn animations
-- Single page mode (supporting giant PDF documents of 30000+ pages)
-- Infinite scrolling
-- Plus several other approaches to scrolling (vertical, horizontal, "wrapped" scrolling)
-- A wide range of event listeners
-- Internationalization (providing translations to several dozen languages)
-- Direct access to the core API of pdf.js (including TypeScript definition files)
-- The ability to hide every button, menu item, and the context menu
-- Responsive design that even includes your custom toolbars
-- Color theming
+### Version 23 (current stable)
 
-Not to mention the ability to display PDF files, running on a customized version of Mozilla's pdf.js 4.6, released in September 2024.
+- Popup dialog positioning via JavaScript
+- Option to force JavaScript code reload
+- Improved mobile stability (reduced canvas resolution)
+- Ink editor API updated (breaking change)
+- Dialog CSS selectors adjusted for theming
 
-## Alternatives
+❗ Version 23 includes a CSS bug where search highlights may render text invisible. To work around this, add the following to your global `styles.css`:
 
-Even I have to admit my pet project doesn't match every requirement. There are several alternatives out there. Feel free to expand the description to learn what other developers have in store for you:
+```css
+ngx-extended-pdf-viewer .textLayer .highlight.selected {
+  opacity: 0.25;
+}
+```
 
-<details>
-  <summary><b>Expand to learn more about the other options to display PDF files in Angular</b></summary>
-  If you only need the base functionality, I'll happily pass you to <a href="https://github.com/vadimdez/ng2-pdf-viewer/" target="#">the project of Vadym Yatsyuk</a>. Vadym does a great job delivering a no-nonsense PDF viewer. However, if you need something that can easily pass as the native viewer on a gloomy day, ngx-extended-pdf-viewer is your friend.
+Remove this workaround after updating to 24.0.0+.
 
-There's also a direct counterpart to my library: <a href="https://www.npmjs.com/package/ng2-pdfjs-viewer" target="#">ng2-pdfjs-viewer</a>. As far as I can see, it's also a good library. As of Augst 2024, it's running on PDF.js 2.2.171. It wraps the PDF viewer in an iFrame. That's a more reliable approach, but it also offers fewer options. The list of attributes is shorter, and the PDF viewer can't emit events to your application. If you're not happy with my library, check out ng2-pdfjs-viewer. It's a good library, too. Its unique selling point is displaying multiple PDF files simultaneously on the same page.
+---
 
-You might also try to use the native PDF viewer of your browser. That's a valid approach. It's even the preferred approach. However, `ngx-extended-pdf-viewer` gives you a wide range of options that aren't available using the native API.
+## 🧪 Try the Showcase Locally
 
-</details>
+If you're stuck on a feature, try cloning the showcase repository. It’s a clean and working example, and comparing it to your app often helps locate the issue. And if the showcase doesn’t work — you can blame me!
 
-## Running the showcase locally
+```bash
+git clone https://github.com/stephanrauh/extended-pdf-viewer-showcase.git
+cd extended-pdf-viewer-showcase
+npm install
+npm start
+```
 
-As a rule of thumb, I recommend cloning the [showcase project from GitHub](https://github.com/stephanrauh/extended-pdf-viewer-showcase) to get familiar with the library. It's a standard Angular CLI application, so you'll get it up and running in less than ten minutes. It's a good starting point to do your experiments. Maybe even more important: you'll learn whether the library works on your machine. (Of course, it does, but it's always good to double-check!)
+👉 [Open a ticket here](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues) if something’s broken.
 
-Currently, the minimum required version is Angular 16. The idea is to support the four most current versions of Angular, which gives you roughly two years to update. However, supporting so many versions isn't always possible.
+---
 
-If you're running a non-standard configuration, have a look at <a href="https://pdfviewer.net/extended-pdf-viewer/getting-started">the getting-started page"</a> of the showcase.
+## 🔧 Configuration & Events
 
-## Configuration, options, and events
+- Full list of `[inputs]`, events, and CSS hooks:
+  - 📘 [Attribute reference](https://pdfviewer.net/attributes)
+  - 🧱 [Default options](https://pdfviewer.net/extended-pdf-viewer/default-options)
 
-See [the attribute list on the showcase](https://pdfviewer.net/attributes) and the [list of default options page](https://pdfviewer.net/extended-pdf-viewer/default-options). The lists have become too long to put them here: 87 `@Input()` attributes, 25 event emitters, and 50 default options, give or take a few.
+Use `NgxExtendedPdfViewerService` for:
 
-Missing a configuration option? File an issue on the [project bug tracker](https://github.com/stephanrauh/ExploringAngular/tree/main/embedding-pdf). If your request makes sense to me and if I can implement it in my (limited) leisure time, I'll add it. BTW, you can speed up the process by providing a code snippet telling me how to implement the feature or by submitting a pull request.
+- Starting/stopping search
+- Scrolling to pages or coordinates
+- Toggling layers
+- Triggering print
 
-## Searching programmatically
+---
 
-The service `NgxExtendedPdfViewerService` offers a programmatic API for searching, printing, dealing with layers, and scrolling within the page.
+## 🐞 Bug Reports & Feature Requests
 
-## Troubleshooting
+We want to hear from you!
 
-See https://github.com/stephanrauh/ngx-extended-pdf-viewer/tree/main/projects/ngx-extended-pdf-viewer/troubleshooting.md
+👉 File issues here: [GitHub Bug Tracker](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues)
 
-## Feedback, pull requests, and bug reports
+If possible, include a code snippet or reproduction. Better yet — send a pull request!
 
-Pull requests and bug reports are welcome. Please send them to the bug tracker of
-the project page: https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues
+---
 
-## Building the library from scratch (and updating to the latest version of Mozilla's pdf.js)
+## 🕰️ Need a Fix for an Older Version?
 
-Have a look at [this walkthrough](https://github.com/stephanrauh/ngx-extended-pdf-viewer/blob/main/projects/ngx-extended-pdf-viewer/how-to-build.md).
+I understand, but... realistically, I can’t maintain old versions in my spare time. The architecture allows for it, but I simply don’t have the bandwidth — unless something critical breaks.
 
-## License and Kudos
+If you're desperate for a fix or a new feature, there’s one option: ask my employer. I work as an IT consultant, and they may be willing to sponsor time to work on ngx-extended-pdf-viewer during business hours.
 
-The license of the `ngx-extended-pdf-viewer` is the Apache V2 license.
+---
 
-The library is based on https://github.com/mozilla/pdf.js, which has been published under an Apache V2 license.
+## 💡 Alternatives
 
-Some of the default icons have been published under a <a href="http://scripts.sil.org/cms/scripts/page.php?item_id=OFL_web" target="#">SIL Open Font License 1.1</a> license at <a href="https://materialdesignicons.com/" target="#">Material Design Icons</a>. The other icons have either been published under an <a href="https://github.com/google/material-design-icons/blob/main/LICENSE" target="#">Apache V2 license</a> by Google or by the pdf.js team at Mozilla.
+If this library doesn't fit your needs:
 
-Thanks to the awesome pdf.js team and all the users who've reported bugs and even sent me pull requests!
+- [`ng2-pdf-viewer`](https://github.com/vadimdez/ng2-pdf-viewer): Minimal and lightweight
+- [`ng2-pdfjs-viewer`](https://www.npmjs.com/package/ng2-pdfjs-viewer): iframe-based, supports multiple PDFs
+- Native browser PDF viewer: Fast, but limited customization
 
-## Internet Explorer 11 is no longer supported
+---
 
-Reluctantly, I have to drop support for Internet Explorer 11. The base library, Mozilla's pdf.js, now generates binaries no longer compatible with Internet Explorer 11, and it seems there's no easy fix. That's a pity because IE11 support was the original use-case of the library and because I frequently get messages from developers who need IE11 support. The last version known to be compatible is 5.3. Version 7.3.2 should be compatible, too, but a user reported crashes.
+## 🙌 Contributions Welcome
 
-## Changelog
+Your feedback matters!
 
-See https://github.com/stephanrauh/ngx-extended-pdf-viewer/tree/main/projects/ngx-extended-pdf-viewer/changelog.md
+- File a ticket to discuss your idea
+- Submit a PR (core or showcase)
+- Even polite complaints help improve the project
+
+Just keep it respectful — the ngx-extended-pdf-viewer community is a friendly place, and I want to keep it that way!
+
+---
+
+## 📜 License & Acknowledgments
+
+- Apache 2.0 License
+- Based on Mozilla’s [pdf.js](https://github.com/mozilla/pdf.js)
+- Icons from [MaterialDesignIcons.com](https://materialdesignicons.com/) and Google
+- Thanks to all users, contributors, and bug reporters! You rock! Just counting the people contributing pull requests - that's already [several dozen developers:](https://github.com/stephanrauh/ngx-extended-pdf-viewer/graphs/contributors)
+
+---
+
+## 🧓 Internet Explorer 11 Support
+
+Still using IE11 in 2025? You're braver than most.
+
+I hate to admit it - but I've dropped support years ago. The last known compatible version is 5.3. Use it at your own risk — no updates, no fixes, no guarantees.
+
+---
