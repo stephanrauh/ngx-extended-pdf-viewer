@@ -1,63 +1,77 @@
 import { pdfDefaultOptions } from '../options/pdf-default-options';
 
 export class PositioningService {
-  public positionPopupBelowItsButton(buttonId: string, popupId: string) {
+  private static readonly DOORHANGER_OFFSET = 17;
+  private static readonly TOOLBAR_MARGIN = 4;
+
+  public positionPopupBelowItsButton(buttonId: string, popupId: string): void {
     if (!pdfDefaultOptions.positionPopupDialogsWithJavaScript) {
       return;
     }
+
     setTimeout(() => {
-      let visibleButton = Array.from(document.querySelectorAll(`#${buttonId}`)).find((el: HTMLElement) => el.offsetParent !== null);
-      if (!visibleButton) {
-        visibleButton = Array.from(document.querySelectorAll(`#secondaryToolbarToggle`)).find((el: HTMLElement) => el.offsetParent !== null);
-      }
-      if (visibleButton) {
-        const popup = document.querySelector(`#${popupId}`);
-        if (popup instanceof HTMLElement) {
-          const popupContainer = popup.offsetParent as HTMLElement;
-          if (popupContainer) {
-            const buttonRect = visibleButton.getBoundingClientRect();
-            const containerRect = popupContainer.getBoundingClientRect();
+      const button = this.findVisibleButton(buttonId);
+      const popup = this.getPopupElement(popupId);
 
-            const width = buttonRect.width;
-            const doorhangerOffset = 17;
+      if (!button || !popup) return;
 
-            // Detect text direction
-            const isRTL = document.documentElement.getAttribute('dir') === 'rtl';
-            let doorHangerRight = isRTL;
-            if (popup.classList.contains('doorHangerRight')) {
-              doorHangerRight = !isRTL;
-            }
-
-            // Apply styles
-            popup.style.position = 'absolute';
-            popup.style.display = 'block';
-
-            // support the attribute 'mobileFriendlyZoom' correctly
-            popup.style.transformOrigin = doorHangerRight ? 'top right' : 'top left';
-
-            if (!doorHangerRight) {
-              // For RTL languages, use 'left' property
-              // also use the 'left' property for the findbar in LTR languages
-              const left = buttonRect.left - containerRect.left + width / 2 - doorhangerOffset;
-
-              popup.style.left = `${left}px`;
-              popup.style.right = '';
-            } else {
-              // For LTR, use 'right' property
-              const right = containerRect.right - buttonRect.right + width / 2 - doorhangerOffset;
-              popup.style.right = `${right}px`; // 109
-              popup.style.left = '';
-            }
-
-            const toolbarContainer = document.querySelector('#toolbarContainer');
-            if (toolbarContainer instanceof HTMLElement) {
-              const toolbarContainerRect = toolbarContainer.getBoundingClientRect();
-              const top = toolbarContainerRect.bottom - containerRect.top + 4;
-              popup.style.top = `${top}px`; // 92
-            }
-          }
-        }
-      }
+      this.applyPopupPositioning(button, popup);
     });
+  }
+
+  private findVisibleButton(buttonId: string): HTMLElement | null {
+    const findVisible = (selector: string) => Array.from(document.querySelectorAll<HTMLElement>(`#${selector}`)).find((el) => el.offsetParent !== null);
+
+    return findVisible(buttonId) || findVisible('secondaryToolbarToggle') || null;
+  }
+
+  private getPopupElement(popupId: string): HTMLElement | null {
+    const popup = document.querySelector<HTMLElement>(`#${popupId}`);
+    return popup?.offsetParent ? popup : null;
+  }
+
+  private applyPopupPositioning(button: HTMLElement, popup: HTMLElement): void {
+    const popupContainer = popup.offsetParent as HTMLElement;
+    const buttonRect = button.getBoundingClientRect();
+    const containerRect = popupContainer.getBoundingClientRect();
+
+    const isRTL = document.documentElement.getAttribute('dir') === 'rtl';
+    let isRightAligned = isRTL;
+    if (popup.classList.contains('doorHangerRight')) {
+      isRightAligned = !isRTL;
+    }
+
+    this.setBasicPopupStyles(popup, isRightAligned);
+    this.setHorizontalPosition(popup, buttonRect, containerRect, isRightAligned);
+    this.setVerticalPosition(popup, containerRect);
+  }
+
+  private setBasicPopupStyles(popup: HTMLElement, isRightAligned: boolean): void {
+    Object.assign(popup.style, {
+      position: 'absolute',
+      display: 'block',
+      transformOrigin: isRightAligned ? 'top right' : 'top left',
+    });
+  }
+
+  private setHorizontalPosition(popup: HTMLElement, buttonRect: DOMRect, containerRect: DOMRect, isRightAligned: boolean): void {
+    const centerOffset = buttonRect.width / 2 - PositioningService.DOORHANGER_OFFSET;
+
+    if (!isRightAligned) {
+      popup.style.left = `${buttonRect.left - containerRect.left + centerOffset}px`;
+      popup.style.right = '';
+    } else {
+      popup.style.right = `${containerRect.right - buttonRect.right + centerOffset}px`;
+      popup.style.left = '';
+    }
+  }
+
+  private setVerticalPosition(popup: HTMLElement, containerRect: DOMRect): void {
+    const toolbarContainer = document.querySelector<HTMLElement>('#toolbarContainer');
+    if (!toolbarContainer) return;
+
+    const toolbarRect = toolbarContainer.getBoundingClientRect();
+    const top = toolbarRect.bottom - containerRect.top + PositioningService.TOOLBAR_MARGIN;
+    popup.style.top = `${top}px`;
   }
 }

@@ -3,6 +3,7 @@ import { AnnotationEditorParamsType, AnnotationMode, EditorAnnotation, StampEdit
 import { PdfLayer } from './options/optional_content_config';
 import { PDFPrintRange } from './options/pdf-print-range';
 import { IPDFViewerApplication, PDFDocumentProxy, PDFFindParameters, PDFPageProxy, TextItem, TextMarkedContent } from './options/pdf-viewer-application';
+import { ZoomType } from './options/zoom-type';
 import { PDFNotificationService } from './pdf-notification-service';
 
 export interface FindOptions {
@@ -667,7 +668,7 @@ export class NgxExtendedPdfViewerService {
     return undefined;
   }
 
-  private convertToPDFCoordinates(value: string | number | undefined, maxValue: number, defaultValue: number, imageMaxValue: number): number {
+  private convertToPDFCoordinates(value: ZoomType, maxValue: number, defaultValue: number, imageMaxValue: number): number {
     if (!value) {
       return defaultValue;
     }

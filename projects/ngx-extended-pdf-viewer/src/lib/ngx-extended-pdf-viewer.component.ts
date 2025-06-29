@@ -63,6 +63,7 @@ import { NgxHasHeight } from './ngx-has-height';
 import { NgxKeyboardManagerService } from './ngx-keyboard-manager.service';
 import { PdfSidebarView } from './options/pdf-sidebar-views';
 import { SpreadType } from './options/spread-type';
+import { ZoomType } from './options/zoom-type';
 import { PdfCspPolicyService } from './pdf-csp-policy.service';
 import { PDFScriptLoaderService } from './pdf-script-loader.service';
 import { ResponsiveVisibility } from './responsive-visibility';
@@ -81,6 +82,23 @@ interface ElementAndPosition {
 
 export interface FormDataType {
   [fieldName: string]: null | string | number | boolean | string[];
+}
+
+export function isIOS(): boolean {
+  if (typeof window === 'undefined') {
+    return false;
+  }
+
+  const userAgent = navigator?.userAgent;
+  if (!userAgent) {
+    return false;
+  }
+
+  return (
+    /iPad|iPhone|iPod/.test(userAgent) ||
+    // iPad on iOS 13+ detection (reports as Mac)
+    (userAgent.includes('Mac') && 'ontouchend' in document)
+  );
 }
 
 @Component({
@@ -150,9 +168,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
   @Input()
   public set formData(formData: FormDataType) {
-    if (this.initialAngularFormData === undefined) {
-      this.initialAngularFormData = formData;
-    }
+    this.initialAngularFormData ??= formData;
     this.formSupport.formData = formData;
   }
 
@@ -348,7 +364,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   public currentZoomFactor = new EventEmitter<number>();
 
   /** This field stores the previous zoom level if the page is enlarged with a double-tap or double-click */
-  private previousZoom: string | number | undefined;
+  private previousZoom: ZoomType;
 
   @Input()
   public enablePrint = true;
@@ -780,11 +796,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   @Input()
   public showRotateCcwButton: ResponsiveVisibility = true;
 
-  private _handTool = !this.isIOS();
+  private _handTool = !isIOS();
 
   @Input()
   public set handTool(handTool: boolean) {
-    if (this.isIOS() && handTool) {
+    if (isIOS() && handTool) {
       console.log(
         "On iOS, the handtool doesn't work reliably. Plus, you don't need it because touch gestures allow you to distinguish easily between swiping and selecting text. Therefore, the library ignores your setting.",
       );
@@ -894,10 +910,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
   /** Legal values: undefined, 'auto', 'page-actual', 'page-fit', 'page-width', or '50' (or any other percentage) */
   @Input()
-  public zoom: string | number | undefined = undefined;
+  public zoom: ZoomType = undefined;
 
   @Output()
-  public zoomChange = new EventEmitter<string | number | undefined>();
+  public zoomChange = new EventEmitter<ZoomType>();
 
   private _zoomLevels = ['auto', 'page-actual', 'page-fit', 'page-width', 0.5, 1, 1.25, 1.5, 2, 3, 4];
 
@@ -1057,18 +1073,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     }
   }
 
-  public isIOS(): boolean {
-    if (typeof window === 'undefined') {
-      // server-side rendering
-      return false;
-    }
-    return (
-      ['iPad Simulator', 'iPhone Simulator', 'iPod Simulator', 'iPad', 'iPhone', 'iPod'].includes(navigator.platform) ||
-      // iPad on iOS 13 detection
-      (navigator.userAgent.includes('Mac') && 'ontouchend' in document)
-    );
-  }
-
   private reportSourceChanges(change: { sourcefile: string }): void {
     this._src = change.sourcefile;
     this.srcChangeTriggeredByUser = true;
@@ -1127,7 +1131,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
           return;
         }
 
-        if (this.root && this.root.nativeElement && this.root.nativeElement.offsetParent !== null) {
+        if (this.root?.nativeElement?.offsetParent) {
           resolve();
         } else {
           this.checkRootElementTimeout = setTimeout(checkRootElement, 50);

@@ -46,12 +46,13 @@
               [showRotateCcwButton]="showRotateCcwButton"
               [showSecondaryToolbarButton]="showSecondaryToolbarButton && !service.secondaryMenuIsEmpty"
               [showSidebarButton]="showSidebarButton" [showSinglePageModeButton]="showSinglePageModeButton"
-              [showSignatureEditor]="showSignatureEditor && (pdfJsVersion>'5')" [showSpreadButton]="showSpreadButton"
-              [showStampEditor]="showStampEditor" [showTextEditor]="showTextEditor"
-              [showVerticalScrollButton]="showVerticalScrollButton" [showWrappedScrollButton]="showWrappedScrollButton"
-              [showZoomButtons]="showZoomButtons" [showZoomDropdown]="showZoomDropdown" [spread]="spread"
-              [textLayer]="textLayer" [toolbarMarginTop]="toolbarMarginTop" [toolbarWidth]="toolbarWidth"
-              [zoomLevels]="zoomLevels" [findbarVisible]="findbarVisible" [hasTextLayer]="hasTextLayer"></pdf-toolbar>
+              [showSignatureEditor]="(pdfJsVersion>'5')? showSignatureEditor : false"
+              [showSpreadButton]="showSpreadButton" [showStampEditor]="showStampEditor"
+              [showTextEditor]="showTextEditor" [showVerticalScrollButton]="showVerticalScrollButton"
+              [showWrappedScrollButton]="showWrappedScrollButton" [showZoomButtons]="showZoomButtons"
+              [showZoomDropdown]="showZoomDropdown" [spread]="spread" [textLayer]="textLayer"
+              [toolbarMarginTop]="toolbarMarginTop" [toolbarWidth]="toolbarWidth" [zoomLevels]="zoomLevels"
+              [findbarVisible]="findbarVisible" [hasTextLayer]="hasTextLayer"></pdf-toolbar>
 
             <div class="editorParamsToolbar hidden doorHangerRight menu" id="editorSignatureParamsToolbar">
               <div id="addSignatureDoorHanger" class="menuContainer" role="region"

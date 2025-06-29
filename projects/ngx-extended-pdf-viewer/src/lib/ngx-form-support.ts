@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, EventEmitter, NgZone } from '@angular/core';
-import { FormDataType, IPDFViewerApplication } from '../public_api';
+import { FormDataType } from './ngx-extended-pdf-viewer.component';
+import { IPDFViewerApplication } from './options/pdf-viewer-application';
 
 export type HtmlFormElement = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
 

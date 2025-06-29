@@ -46,7 +46,7 @@ export interface IPDFViewer {
   optionalContentConfigPromise: Promise<OptionalContentConfig> | null;
   _scrollPageIntoView({ pageDiv, pageSpot, pageNumber }: { pageDiv: HTMLElement; pageSpot: any; pageNumber: number }): void;
   getSerializedAnnotations(): EditorAnnotation[] | null; // #1783 added by ngx-extended-pdf-viewer
-  addEditorAnnotation(serialized: string | EditorAnnotation): void; // #1783 added by ngx-extended-pdf-viewer
+  addEditorAnnotation(serialized: string | EditorAnnotation): Promise<void>; // #1783 added by ngx-extended-pdf-viewer
   removeEditorAnnotations(filter?: (serialized: EditorAnnotation) => boolean): void; // #1783 added by ngx-extended-pdf-viewer
   getPageView(index: number): PDFPageView;
   destroyBookMode(): void;
