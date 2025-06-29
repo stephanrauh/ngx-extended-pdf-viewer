@@ -32,6 +32,7 @@ runCommand('npx @cyclonedx/cyclonedx-npm --output-file sbom.json --mc-type libra
 // Build base library (bleeding edge)
 process.chdir(path.join('..', 'mypdf.js'));
 runCommand('git checkout bleeding-edge', 'Error 66: Git checkout failed', 59);
+runCommand('npm i', 'Error 66b: npm install failed', 59);
 process.chdir(path.join('..', 'ngx-extended-pdf-viewer'));
 
 runCommand('node ./build-tools/1-build-base-library.js', 'Error 53: build-base-library.js failed', 53);
@@ -43,6 +44,7 @@ process.chdir(path.join('..', 'ngx-extended-pdf-viewer'));
 // Build base library (stable branch)
 process.chdir(path.join('..', 'mypdf.js'));
 runCommand('git checkout 4.10', 'Error 68: Git checkout failed', 59);
+runCommand('npm i', 'Error 68b: npm install failed', 59);
 process.chdir(path.join('..', 'ngx-extended-pdf-viewer'));
 
 runCommand('node ./build-tools/1-build-base-library.js', 'Error 53: build-base-library.js failed', 53);
