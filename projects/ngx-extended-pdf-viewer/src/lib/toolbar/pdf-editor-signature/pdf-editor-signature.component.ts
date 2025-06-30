@@ -21,7 +21,7 @@ export class PdfEditorSignatureComponent {
 
   constructor(
     notificationService: PDFNotificationService,
-    private cdr: ChangeDetectorRef,
+    private readonly cdr: ChangeDetectorRef,
   ) {
     effect(() => {
       this.PDFViewerApplication = notificationService.onPDFJSInitSignal();
