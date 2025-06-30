@@ -10,7 +10,8 @@ export interface AnnotationEditorEvent {
     | 'thicknessChanged'
     | 'opacityChanged'
     | 'bezierPathChanged'
-    | 'moved';
+    | 'moved'
+    | 'imageAdded';
   editorType: string;
   value: any;
   previousValue?: any;

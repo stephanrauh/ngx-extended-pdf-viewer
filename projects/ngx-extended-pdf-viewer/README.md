@@ -15,7 +15,9 @@ Built on Mozilla’s pdf.js and extended with dozens of enhancements, it's ideal
 
 ### 0. Prerequisites
 
-The library requires Angular 17+. Older versions are not supported. In general, I aim to support the last four Angular versions (roughly two years of updates), but this may not always be feasible.
+The library requires Angular 17+. Older versions are not supported.
+
+In general, I aim to support the last four Angular versions (roughly two years of updates), but this may not always be feasible. For example, the upcoming version 25 might raise the minimum required Angular version significantly: I plan to support modern Angular (and I know many of you are waiting for that). You can't have an omelette without breaking an egg.
 
 ### 1. Installation
 
@@ -62,8 +64,8 @@ Thanks to GitHub users ScratchPDX and Deepak Shakya for reporting the issue prom
 
 - Migration to Angular Signals
 - Support for standalone components
-- Removal of `zone.js`
-- Migration schematics planned
+- Removal of `zone.js` (maybe)
+- Migration schematics planned (but not promised)
 
 Expect some breaking changes — but better performance and modern Angular support await!
 
@@ -92,8 +94,8 @@ Expect some breaking changes — but better performance and modern Angular suppo
 ### Version 24 (alpha)
 
 - Upgraded to `pdf.js 5.3`
-- Annotation editor events temporarily removed
-- Ongoing alpha/beta phase
+- Annotation editor events were temporarily removed (but now they're back, starting with version 24.0.0-alpha.1)
+- Ongoing alpha/beta phase. You can help me by testing the alpha version and giving feedback!
 
 ### Version 23 (current stable)
 
