@@ -448,7 +448,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   public hasSignature: boolean;
 
   @Input()
-  public set src(url: string | ArrayBuffer | Blob | Uint8Array | URL | { range: any }) {
+  public set src(url: string | ArrayBuffer | Blob | Uint8Array | URL | { range: any } | undefined) {
     if (url instanceof Uint8Array) {
       this._src = url.buffer;
     } else if (url instanceof URL) {
