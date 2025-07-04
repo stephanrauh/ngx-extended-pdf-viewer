@@ -180,8 +180,8 @@ If this library doesn't fit your needs:
 Your feedback matters!
 
 - File a ticket to discuss your idea
-- Submit a PR (core or showcase)
-- Even polite complaints help improve the project
+- Submit a PR (core or showcase). [The how-to-build page](https://github.com/stephanrauh/ngx-extended-pdf-viewer/blob/main/projects/ngx-extended-pdf-viewer/how-to-build.md) has detailed instructions for you.
+- Even complaints help improve the project!
 
 Just keep it respectful — the ngx-extended-pdf-viewer community is a friendly place, and I want to keep it that way!
 
@@ -190,7 +190,7 @@ Just keep it respectful — the ngx-extended-pdf-viewer community is a friendly 
 ## 📜 License & Acknowledgments
 
 - Apache 2.0 License
-- Based on Mozilla’s [pdf.js](https://github.com/mozilla/pdf.js)
+- Based on Mozilla’s [pdf.js](https://github.com/mozilla/pdf.js) (also published under a friendly Apache 2.0 license)
 - Icons from [MaterialDesignIcons.com](https://materialdesignicons.com/) and Google
 - Thanks to all users, contributors, and bug reporters! You rock! Just counting the people contributing pull requests - that's already [several dozen developers:](https://github.com/stephanrauh/ngx-extended-pdf-viewer/graphs/contributors)
 
