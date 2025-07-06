@@ -1003,7 +1003,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     this.toolbarWidth = (100 / factor).toString() + '%';
     this.toolbarMarginTop = (factor - 1) * 16 + 'px';
 
-    setTimeout(() => this.calcViewerPositionTop());
+    this.calcViewerPositionTop();
   }
 
   public serverSideRendering = true;
@@ -1024,10 +1024,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       return;
     }
     const top = this.toolbar.getBoundingClientRect().height;
+    const previous = this.viewerPositionTop;
     if (top < 33) {
       this.viewerPositionTop = '33px';
     } else {
       this.viewerPositionTop = top + 'px';
+    }
+    if (previous !== this.viewerPositionTop) {
+      this.cdr.markForCheck();
     }
 
     const factor = top / 33;

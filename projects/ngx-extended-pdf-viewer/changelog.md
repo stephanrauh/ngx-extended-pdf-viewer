@@ -662,5 +662,4 @@
 - 23.3.1 #2890 delay opening the print dialog to increase compatibility with slower browsers, especially on iOS smartphones
 - 24.0.0-alpha.0 #2939 update the bleeding edge to pdf.js 5.3; make the "find" highlighting semi-transparent again (previously you couldn't read the text)
 - 24.0.0-alpha.1 #2256 fixed the annotation editor events in the bleeding edge version
-- 24.0.0-alpha.2 #2934 added "undefined" to the legal values of `[src]`
-- 24.0.0-alpha.3 #2710 documented the new build scripts; removed an unused empty TypeScript file
+- 24.0.0-alpha.2 #2934 added "undefined" to the legal values of `[src]`; #2710 documented the new build scripts; removed an unused empty TypeScript file; fixed a few minor bugs; dependency updates

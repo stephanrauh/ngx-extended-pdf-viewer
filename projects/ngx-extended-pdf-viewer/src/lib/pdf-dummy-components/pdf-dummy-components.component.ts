@@ -17,6 +17,7 @@ const requiredIds = [
   'documentProperties',
   'documentPropertiesClose',
   'download',
+  'editorSignatureButton',
   'primaryEditorFreeText',
   'primaryEditorHighlight',
   'primaryEditorInk',
