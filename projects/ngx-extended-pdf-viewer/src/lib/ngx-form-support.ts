@@ -301,30 +301,32 @@ export class NgxFormSupport {
       });
       radios[0].dispatchEvent(updateFromAngular);
     } else {
-      const fieldId = this.findFormIdFromFieldName(key);
-      if (fieldId) {
-        const htmlField = this.formIdToField[fieldId];
+      const fieldIds = this.findFormIdsFromFieldName(key);
+      if (fieldIds) {
+        fieldIds.forEach((fieldId) => {
+          const htmlField = this.formIdToField[fieldId];
 
-        if (htmlField) {
-          if (htmlField instanceof HTMLInputElement && htmlField.type === 'checkbox') {
-            let activeValue = htmlField.getAttribute('xfaon') ?? htmlField.getAttribute('exportvalue') ?? true;
-            if (newValue === true || newValue === false) {
-              activeValue = true;
+          if (htmlField) {
+            if (htmlField instanceof HTMLInputElement && htmlField.type === 'checkbox') {
+              let activeValue = htmlField.getAttribute('xfaon') ?? htmlField.getAttribute('exportvalue') ?? true;
+              if (newValue === true || newValue === false) {
+                activeValue = true;
+              }
+              htmlField.checked = activeValue === newValue;
+            } else if (htmlField instanceof HTMLSelectElement) {
+              this.populateSelectField(htmlField, newValue);
+            } else {
+              // textareas and input fields
+              htmlField.value = newValue;
             }
-            htmlField.checked = activeValue === newValue;
-          } else if (htmlField instanceof HTMLSelectElement) {
-            this.populateSelectField(htmlField, newValue);
+            const updateFromAngular = new CustomEvent('updateFromAngular', {
+              detail: newValue,
+            });
+            htmlField.dispatchEvent(updateFromAngular);
           } else {
-            // textareas and input fields
-            htmlField.value = newValue;
+            console.error("Couldn't set the value of the field", key);
           }
-          const updateFromAngular = new CustomEvent('updateFromAngular', {
-            detail: newValue,
-          });
-          htmlField.dispatchEvent(updateFromAngular);
-        } else {
-          console.error("Couldn't set the value of the field", key);
-        }
+        });
       }
     }
   }
@@ -344,25 +346,17 @@ export class NgxFormSupport {
     }
   }
 
-  private findFormIdFromFieldName(fieldName: string): string | undefined {
+  private findFormIdsFromFieldName(fieldName: string): string[] | undefined {
     if (Object.entries(this.formIdToFullFieldName).length === 0) {
       // sometimes, ngOnChanges() is called before initializing the PDF file
       return undefined;
     }
     const matchingEntries = Object.entries(this.formIdToFullFieldName).filter((entry) => entry[1] === fieldName || entry[1].endsWith('.' + fieldName));
-    if (matchingEntries.length > 1) {
-      console.log(
-        `More than one field name matches the field name ${fieldName}. Please use the one of these qualified field names:`,
-        matchingEntries.map((f) => f[1]),
-      );
-      console.log(
-        'ngx-extended-pdf-viewer uses the first matching field (which may or may not be the topmost field on your PDF form): ' + matchingEntries[0][0],
-      );
-    } else if (matchingEntries.length === 0) {
+    if (matchingEntries.length === 0) {
       console.log("Couldn't find the field " + fieldName);
       return undefined;
     }
-    return matchingEntries[0][0];
+    return matchingEntries.map((e) => e[0]);
   }
 
   private findRadioButtonGroup(fieldName: string): Array<HTMLInputElement> | null {
