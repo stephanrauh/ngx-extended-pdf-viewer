@@ -19,7 +19,6 @@ export class TranslatePipe implements PipeTransform {
 
   public async translate(key: string, englishText: string): Promise<string | undefined> {
     while (!this.PDFViewerApplication) {
-      console.log('waiting for PDFViewerApplication to translate ' + key);
       await new Promise((resolve) => setTimeout(resolve, 1));
     }
     return this.PDFViewerApplication?.l10n.get(key, null, englishText);

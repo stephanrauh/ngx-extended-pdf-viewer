@@ -10,7 +10,12 @@ export type TextLayerBuilderOptions = {
      */
     highlighter?: import("./text_highlighter").TextHighlighter | undefined;
     accessibilityManager?: import("./text_accessibility.js").TextAccessibilityManager | undefined;
+    enablePermissions?: boolean | undefined;
     onAppend?: Function | undefined;
+};
+export type TextLayerBuilderRenderOptions = {
+    viewport: PageViewport;
+    textContentParams?: Object | undefined;
 };
 /**
  * @typedef {Object} TextLayerBuilderOptions
@@ -18,7 +23,13 @@ export type TextLayerBuilderOptions = {
  * @property {TextHighlighter} [highlighter] - Optional object that will handle
  *   highlighting text from the find controller.
  * @property {TextAccessibilityManager} [accessibilityManager]
+ * @property {boolean} [enablePermissions]
  * @property {function} [onAppend]
+ */
+/**
+ * @typedef {Object} TextLayerBuilderRenderOptions
+ * @property {PageViewport} viewport
+ * @property {Object} [textContentParams]
  */
 /**
  * The text layer builder provides text selection functionality for the PDF.
@@ -26,27 +37,24 @@ export type TextLayerBuilderOptions = {
  * contain text that matches the PDF text they are overlaying.
  */
 export class TextLayerBuilder {
-    static "__#75@#textLayers": Map<any, any>;
-    static "__#75@#selectionChangeAbortController": null;
-    static "__#75@#removeGlobalSelectionListener"(textLayerDiv: any): void;
-    static "__#75@#enableGlobalSelectionListener"(): void;
-    constructor({ pdfPage, highlighter, accessibilityManager, enablePermissions, onAppend, }: {
-        pdfPage: any;
-        highlighter?: null | undefined;
-        accessibilityManager?: null | undefined;
-        enablePermissions?: boolean | undefined;
-        onAppend?: null | undefined;
-    });
-    pdfPage: any;
-    highlighter: any;
-    accessibilityManager: any;
+    static "__#79@#textLayers": Map<any, any>;
+    static "__#79@#selectionChangeAbortController": null;
+    static "__#79@#removeGlobalSelectionListener"(textLayerDiv: any): void;
+    static "__#79@#enableGlobalSelectionListener"(): void;
+    /**
+     * @param {TextLayerBuilderOptions} options
+     */
+    constructor({ pdfPage, highlighter, accessibilityManager, enablePermissions, onAppend, }: TextLayerBuilderOptions);
+    pdfPage: import("../src/display/api").PDFPageProxy;
+    highlighter: import("./text_highlighter").TextHighlighter;
+    accessibilityManager: import("./text_accessibility.js").TextAccessibilityManager;
     div: HTMLDivElement;
     /**
      * Renders the text layer.
-     * @param {PageViewport} viewport
-     * @param {Object} [textContentParams]
+     * @param {TextLayerBuilderRenderOptions} options
+     * @returns {Promise<void>}
      */
-    render(viewport: PageViewport, textContentParams?: Object): Promise<void>;
+    render({ viewport, textContentParams }: TextLayerBuilderRenderOptions): Promise<void>;
     hide(): void;
     show(): void;
     /**

@@ -6,7 +6,8 @@ export namespace PathType {
 }
 export class TilingPattern {
     static MAX_PATTERN_SIZE: number;
-    constructor(IR: any, color: any, ctx: any, canvasGraphicsFactory: any, baseTransform: any);
+    constructor(IR: any, ctx: any, canvasGraphicsFactory: any, baseTransform: any);
+    color: any;
     operatorList: any;
     matrix: any;
     bbox: any;
@@ -14,7 +15,6 @@ export class TilingPattern {
     ystep: any;
     paintType: any;
     tilingType: any;
-    color: any;
     ctx: any;
     canvasGraphicsFactory: any;
     baseTransform: any;
@@ -31,6 +31,7 @@ export class TilingPattern {
     };
     clipBbox(graphics: any, x0: any, y0: any, x1: any, y1: any): void;
     setFillAndStrokeStyleToContext(graphics: any, paintType: any, color: any): void;
+    isModifyingCurrentTransform(): boolean;
     getPattern(ctx: any, owner: any, inverse: any, pathType: any): any;
 }
 declare class RadialAxialShadingPattern extends BaseShadingPattern {
@@ -68,6 +69,7 @@ declare class DummyShadingPattern extends BaseShadingPattern {
     getPattern(): string;
 }
 declare class BaseShadingPattern {
+    isModifyingCurrentTransform(): boolean;
     getPattern(): void;
 }
 export {};

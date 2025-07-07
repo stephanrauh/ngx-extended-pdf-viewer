@@ -8,7 +8,11 @@ export class TouchManager {
         onPinchEnd?: null | undefined;
         signal: any;
     });
-    get MIN_TOUCH_DISTANCE_TO_PINCH(): any;
+    /**
+     * NOTE: Don't shadow this value since `devicePixelRatio` may change if the
+     * window resolution changes, e.g. if the viewer is moved to another monitor.
+     */
+    get MIN_TOUCH_DISTANCE_TO_PINCH(): number;
     destroy(): void;
     #private;
 }

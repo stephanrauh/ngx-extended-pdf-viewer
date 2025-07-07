@@ -319,6 +319,9 @@ pdfjs-highlight-floating-button1 =
     .aria-label = Istakni
 pdfjs-highlight-floating-button-label = Istakni
 
+## Default editor aria labels
+
+
 ## Remove button for the various kind of editor.
 
 pdfjs-editor-remove-ink-button =
@@ -345,6 +348,10 @@ pdfjs-editor-stamp-add-image-button-label = Dodaj sliku
 pdfjs-editor-free-highlight-thickness-input = Debljina
 pdfjs-editor-free-highlight-thickness-title =
     .title = Promjeni debljinu pri isticanju drugih stavki osim teksta
+# .default-content is used as a placeholder in an empty text editor.
+pdfjs-free-text2 =
+    .aria-label = Uređivač teksta
+    .default-content = Počni tipkati …
 pdfjs-free-text =
     .aria-label = Uređivač teksta
 pdfjs-free-text-default-content = Počni tipkati …
@@ -356,6 +363,8 @@ pdfjs-ink-canvas =
 ## Alt-text dialog
 
 pdfjs-editor-alt-text-button-label = Alternativni tekst
+pdfjs-editor-alt-text-edit-button =
+    .aria-label = Uredi alternativni tekst
 pdfjs-editor-alt-text-edit-button-label = Uredi alternativni tekst
 pdfjs-editor-alt-text-dialog-label = Odaberi jednu opciju
 pdfjs-editor-alt-text-dialog-description = Alternativni tekst pomaže slijepim osobama ili kada se slika ne učita.
@@ -369,6 +378,9 @@ pdfjs-editor-alt-text-decorative-tooltip = Označeno kao ukrasno
 # .placeholder: This is a placeholder for the alt text input area
 pdfjs-editor-alt-text-textarea =
     .placeholder = Na primjer, „Mladić sjeda za stol kako bi jeo”
+# Alternative text (alt text) helps when people can't see the image.
+pdfjs-editor-alt-text-button =
+    .aria-label = Alternativni tekst
 
 ## Editor resizers
 ## This is used in an aria label to help to understand the role of the resizer.
@@ -427,20 +439,34 @@ pdfjs-editor-highlight-show-all-button =
 ## New alt-text dialog
 ## Group note for entire feature: Alternative text (alt text) helps when people can't see the image. This feature includes a tool to create alt text automatically using an AI model that works locally on the user's device to preserve privacy.
 
+# Modal header positioned above a text box where users can edit the alt text.
+pdfjs-editor-new-alt-text-dialog-edit-label = Uredi alternativni tekst (opis slike)
+# Modal header positioned above a text box where users can add the alt text.
+pdfjs-editor-new-alt-text-dialog-add-label = Dodaj alternativni tekst (opis slike)
 pdfjs-editor-new-alt-text-textarea =
     .placeholder = Ovdje upiši tvoj opis …
+# This text refers to the alt text box above this description. It offers a definition of alt text.
+pdfjs-editor-new-alt-text-description = Kratki opis koji pomažu osobama koji ne mogu vidjeti sliku ili kada se slika ne učita.
 # This is a required legal disclaimer that refers to the automatically created text inside the alt text box above this text. It disappears if the text is edited by a human.
 pdfjs-editor-new-alt-text-disclaimer1 = Ovaj je alternativni tekst stvoren automatski i može biti netočan.
 pdfjs-editor-new-alt-text-disclaimer-learn-more-url = Saznaj više
 pdfjs-editor-new-alt-text-create-automatically-button-label = Automatski stvori alternativni tekst
+pdfjs-editor-new-alt-text-not-now-button = Ne sada
 pdfjs-editor-new-alt-text-error-title = Nije bilo moguće automatski izraditi alternativni tekst
+pdfjs-editor-new-alt-text-error-description = Napiši vlastiti alternativni tekst ili pokušaj kasnije ponovo.
+pdfjs-editor-new-alt-text-error-close-button = Zatvori
 # Variables:
 #   $totalSize (Number) - the total size (in MB) of the AI model.
 #   $downloadedSize (Number) - the downloaded size (in MB) of the AI model.
-#   $percent (Number) - the percentage of the downloaded size.
 pdfjs-editor-new-alt-text-ai-model-downloading-progress = Preuzimanje alternativnog teksta UI modela ({ $downloadedSize } od { $totalSize } MB)
     .aria-valuetext = Preuzimanje alternativnog teksta UI modela ({ $downloadedSize } od { $totalSize } MB)
+# This is a button that users can click to edit the alt text they have already added.
+pdfjs-editor-new-alt-text-added-button =
+    .aria-label = Alternativni tekst je dodan
 pdfjs-editor-new-alt-text-added-button-label = Alternativni tekst je dodan
+# This is a button that users can click to open the alt text editor and add alt text when it is not present.
+pdfjs-editor-new-alt-text-missing-button =
+    .aria-label = Nedostaje alternativni tekst
 pdfjs-editor-new-alt-text-missing-button-label = Nedostaje alternativni tekst
 # This is a button that opens up the alt text modal where users should review the alt text that was automatically generated.
 pdfjs-editor-new-alt-text-to-review-button =
@@ -472,35 +498,52 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Prikaži uređivač al
 pdfjs-editor-alt-text-settings-show-dialog-description = Pomaže osigurati da sve tvoje slike imaju alternativni tekst.
 pdfjs-editor-alt-text-settings-close-button = Zatvori
 
-# Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-free-text2 =
-    .aria-label = Text Editor
-    .default-content = Start typing…
-pdfjs-editor-new-alt-text-dialog-edit-label = Edit alt text (image description)
-pdfjs-editor-new-alt-text-dialog-add-label = Add alt text (image description)
-pdfjs-editor-new-alt-text-description = Short description for people who can’t see the image or when the image doesn’t load.
-pdfjs-editor-new-alt-text-not-now-button = Not now
-pdfjs-editor-new-alt-text-error-description = Please write your own alt text or try again later.
-pdfjs-editor-new-alt-text-error-close-button = Close
-pdfjs-editor-undo-bar-message-highlight = Highlight removed
-pdfjs-editor-undo-bar-message-freetext = Text removed
-pdfjs-editor-undo-bar-message-ink = Drawing removed
-pdfjs-editor-undo-bar-message-stamp = Image removed
+## "Annotations removed" bar
+
+pdfjs-editor-undo-bar-message-highlight = Isticanje uklonjeno
+pdfjs-editor-undo-bar-message-freetext = Tekst uklonjen
+pdfjs-editor-undo-bar-message-ink = Crtež uklonjen
+pdfjs-editor-undo-bar-message-stamp = Slika uklonjena
+# Variables:
+#   $count (Number) - the number of removed annotations.
 pdfjs-editor-undo-bar-message-multiple =
     { $count ->
-        [one] { $count } annotation removed
-       *[other] { $count } annotations removed
+        [one] { $count } pribilješka uklonjena
+        [few] { $count } pribilješke uklonjene
+       *[other] { $count } pribilješki uklonjeno
     }
 pdfjs-editor-undo-bar-undo-button =
-    .title = Undo
-pdfjs-editor-undo-bar-undo-button-label = Undo
+    .title = Poništi
+pdfjs-editor-undo-bar-undo-button-label = Poništi
 pdfjs-editor-undo-bar-close-button =
-    .title = Close
-pdfjs-editor-undo-bar-close-button-label = Close
-unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
-pdfjs-infinite-scroll-button-label = Infinite scroll
-pdfjs-find-multiple-checkbox-label = Match Each Word
-pdfjs-find-regexp-checkbox-label = Regular Expression
+    .title = Zatvori
+pdfjs-editor-undo-bar-close-button-label = Zatvori
+
+## Add a signature dialog
+
+
+## Tab names
+
+
+## Tab panels
+
+
+## Controls
+
+
+## Dialog buttons
+
+
+## Main menu for adding/removing signatures
+
+
+## Editor toolbar
+
+
+## Edit signature description dialog
+
+
+# Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-editor-signature-button =
     .title = Add signature
 pdfjs-editor-signature-button-label = Add signature
@@ -563,3 +606,7 @@ pdfjs-editor-delete-signature-button-label1 = Remove saved signature
 pdfjs-editor-add-signature-edit-button-label = Edit description
 pdfjs-editor-edit-signature-dialog-title = Edit description
 pdfjs-editor-edit-signature-update-button = Update
+unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
+pdfjs-infinite-scroll-button-label = Infinite scroll
+pdfjs-find-multiple-checkbox-label = Match Each Word
+pdfjs-find-regexp-checkbox-label = Regular Expression

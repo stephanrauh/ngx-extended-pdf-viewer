@@ -46,7 +46,7 @@
               [showRotateCcwButton]="showRotateCcwButton"
               [showSecondaryToolbarButton]="showSecondaryToolbarButton && !service.secondaryMenuIsEmpty"
               [showSidebarButton]="showSidebarButton" [showSinglePageModeButton]="showSinglePageModeButton"
-              [showSignatureEditor]="(pdfJsVersion>'5')? showSignatureEditor : false"
+              [showSignatureEditor]="enableSignatureEditor? showSignatureEditor : false"
               [showSpreadButton]="showSpreadButton" [showStampEditor]="showStampEditor"
               [showTextEditor]="showTextEditor" [showVerticalScrollButton]="showVerticalScrollButton"
               [showWrappedScrollButton]="showWrappedScrollButton" [showZoomButtons]="showZoomButtons"

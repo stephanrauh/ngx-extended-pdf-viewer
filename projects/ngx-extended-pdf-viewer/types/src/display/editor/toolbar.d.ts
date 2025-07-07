@@ -8,6 +8,8 @@ export class EditorToolbar {
     show(): void;
     addAltText(altText: any): Promise<void>;
     addColorPicker(colorPicker: any): void;
+    addEditSignatureButton(signatureManager: any): Promise<void>;
+    updateEditSignatureButton(description: any): void;
     remove(): void;
     #private;
 }

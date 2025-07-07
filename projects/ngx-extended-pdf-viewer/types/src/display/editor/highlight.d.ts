@@ -31,6 +31,7 @@ export class HighlightEditor extends AnnotationEditor {
     static deserialize(data: any, parent: any, uiManager: any): Promise<AnnotationEditor | null>;
     constructor(params: any);
     color: any;
+    defaultL10nId: string;
     /** @inheritdoc */
     get telemetryInitialData(): {
         action: string;

@@ -105,6 +105,14 @@ pdfjs-document-properties-button-label = خصائص المستند…
 pdfjs-document-properties-file-name = اسم الملف:
 pdfjs-document-properties-file-size = حجم الملف:
 # Variables:
+#   $kb (Number) - the PDF file size in kilobytes
+#   $b (Number) - the PDF file size in bytes
+pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } ك.بايت ({ $b } بايتات)
+# Variables:
+#   $mb (Number) - the PDF file size in megabytes
+#   $b (Number) - the PDF file size in bytes
+pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } م.بايت ({ $b } بايتات)
+# Variables:
 #   $size_kb (Number) - the PDF file size in kilobytes
 #   $size_b (Number) - the PDF file size in bytes
 pdfjs-document-properties-kb = { $size_kb } ك.بايت ({ $size_b } بايت)
@@ -118,6 +126,9 @@ pdfjs-document-properties-subject = الموضوع:
 pdfjs-document-properties-keywords = الكلمات الأساسية:
 pdfjs-document-properties-creation-date = تاريخ الإنشاء:
 pdfjs-document-properties-modification-date = تاريخ التعديل:
+# Variables:
+#   $dateObj (Date) - the creation/modification date and time of the PDF file
+pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 # Variables:
 #   $date (Date) - the creation/modification date of the PDF file
 #   $time (Time) - the creation/modification time of the PDF file
@@ -216,7 +227,7 @@ pdfjs-find-next-button =
 pdfjs-find-next-button-label = التالي
 pdfjs-find-highlight-checkbox = أبرِز الكل
 pdfjs-find-match-case-checkbox-label = طابق حالة الأحرف
-pdfjs-find-match-diacritics-checkbox-label = طابِق الحركات
+pdfjs-find-match-diacritics-checkbox-label = طابِق التشكيل
 pdfjs-find-entire-word-checkbox-label = كلمات كاملة
 pdfjs-find-reached-top = تابعت من الأسفل بعدما وصلت إلى بداية المستند
 pdfjs-find-reached-bottom = تابعت من الأعلى بعدما وصلت إلى نهاية المستند
@@ -283,6 +294,9 @@ pdfjs-annotation-date-string = { $date }، { $time }
 # Some common types are e.g.: "Check", "Text", "Comment", "Note"
 pdfjs-text-annotation-type =
     .alt = [تعليق { $type }]
+# Variables:
+#   $dateObj (Date) - the modification date and time of the annotation
+pdfjs-annotation-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 
 ## Password
 
@@ -310,6 +324,25 @@ pdfjs-highlight-floating-button1 =
     .title = أبرِز
     .aria-label = أبرِز
 pdfjs-highlight-floating-button-label = أبرِز
+pdfjs-editor-signature-button =
+    .title = أضِف توقيع
+pdfjs-editor-signature-button-label = أضِف توقيع
+
+## Default editor aria labels
+
+# “Highlight” is a noun, the string is used on the editor for highlights.
+pdfjs-editor-highlight-editor =
+    .aria-label = محرِّر الإبراز
+# “Drawing” is a noun, the string is used on the editor for drawings.
+pdfjs-editor-ink-editor =
+    .aria-label = محرِّر الرسم
+# Used when a signature editor is selected/hovered.
+# Variables:
+#   $description (String) - a string describing/labeling the signature.
+pdfjs-editor-signature-editor1 =
+    .aria-description = محرِّر التوقيع: { $description }
+pdfjs-editor-stamp-editor =
+    .aria-label = محرِّر الصور
 
 ## Remove button for the various kind of editor.
 
@@ -321,6 +354,8 @@ pdfjs-editor-remove-stamp-button =
     .title = أزِل الصورة
 pdfjs-editor-remove-highlight-button =
     .title = أزِل الإبراز
+pdfjs-editor-remove-signature-button =
+    .title = أزِل التوقيع
 
 ##
 
@@ -337,6 +372,20 @@ pdfjs-editor-stamp-add-image-button-label = أضِف صورة
 pdfjs-editor-free-highlight-thickness-input = السماكة
 pdfjs-editor-free-highlight-thickness-title =
     .title = غيّر السُمك عند إبراز عناصر أُخرى غير النص
+pdfjs-editor-add-signature-container =
+    .aria-label = عناصر التحكم في التوقيع والتوقيعات المحفوظة
+pdfjs-editor-signature-add-signature-button =
+    .title = أضِف توقيع جديد
+pdfjs-editor-signature-add-signature-button-label = أضِف توقيع جديد
+# Used on the button to use an already saved signature.
+# Variables:
+#   $description (String) - a string describing/labeling the signature.
+pdfjs-editor-add-saved-signature-button =
+    .title = التوقيع المحفوظ: { $description }
+# .default-content is used as a placeholder in an empty text editor.
+pdfjs-free-text2 =
+    .aria-label = محرِّر النص
+    .default-content = ابدأ في كتابة…
 pdfjs-free-text =
     .aria-label = محرِّر النص
 pdfjs-free-text-default-content = ابدأ الكتابة…
@@ -347,8 +396,9 @@ pdfjs-ink-canvas =
 
 ## Alt-text dialog
 
-# Alternative text (alt text) helps when people can't see the image.
 pdfjs-editor-alt-text-button-label = نص بديل
+pdfjs-editor-alt-text-edit-button =
+    .aria-label = حرّر النص البديل
 pdfjs-editor-alt-text-edit-button-label = تحرير النص البديل
 pdfjs-editor-alt-text-dialog-label = اختر خيار
 pdfjs-editor-alt-text-dialog-description = يساعد النص البديل عندما لا يتمكن الأشخاص من رؤية الصورة أو عندما لا يتم تحميلها.
@@ -362,6 +412,9 @@ pdfjs-editor-alt-text-decorative-tooltip = عُلّمت على أنها زخرف
 # .placeholder: This is a placeholder for the alt text input area
 pdfjs-editor-alt-text-textarea =
     .placeholder = على سبيل المثال، "يجلس شاب على الطاولة لتناول وجبة"
+# Alternative text (alt text) helps when people can't see the image.
+pdfjs-editor-alt-text-button =
+    .aria-label = نص بديل
 
 ## Editor resizers
 ## This is used in an aria label to help to understand the role of the resizer.
@@ -420,136 +473,161 @@ pdfjs-editor-highlight-show-all-button =
 ## New alt-text dialog
 ## Group note for entire feature: Alternative text (alt text) helps when people can't see the image. This feature includes a tool to create alt text automatically using an AI model that works locally on the user's device to preserve privacy.
 
+# Modal header positioned above a text box where users can edit the alt text.
+pdfjs-editor-new-alt-text-dialog-edit-label = حرّر النص البديل (وصف الصورة)
+# Modal header positioned above a text box where users can add the alt text.
+pdfjs-editor-new-alt-text-dialog-add-label = أضِف النص البديل (وصف الصورة)
+pdfjs-editor-new-alt-text-textarea =
+    .placeholder = اكتب وصفك هنا…
+# This text refers to the alt text box above this description. It offers a definition of alt text.
+pdfjs-editor-new-alt-text-description = وصف مختصر للأشخاص الذين لا يستطيعون رؤية الصورة أو عندما لا يتم تحميل الصورة.
+# This is a required legal disclaimer that refers to the automatically created text inside the alt text box above this text. It disappears if the text is edited by a human.
+pdfjs-editor-new-alt-text-disclaimer1 = أُنشئ هذا النص البديل تلقائيًا وقد يكون غير دقيق.
+pdfjs-editor-new-alt-text-disclaimer-learn-more-url = اطّلع على المزيد
+pdfjs-editor-new-alt-text-create-automatically-button-label = أنشئ نص بديل تلقائيًا
+pdfjs-editor-new-alt-text-not-now-button = ليس الآن
+pdfjs-editor-new-alt-text-error-title = لم يتمكن من إنشاء نص بديل تلقائيًا
+pdfjs-editor-new-alt-text-error-description = يُرجى كتابة نص بديلك أو المحاولة مرة أخرى لاحقًا.
+pdfjs-editor-new-alt-text-error-close-button = أغلق
+# Variables:
+#   $totalSize (Number) - the total size (in MB) of the AI model.
+#   $downloadedSize (Number) - the downloaded size (in MB) of the AI model.
+pdfjs-editor-new-alt-text-ai-model-downloading-progress = يُنزّل نموذج الذكاء الاصطناعي للنص البديل ({ $downloadedSize } من { $totalSize } م.بايت)
+    .aria-valuetext = يُنزّل نموذج الذكاء الاصطناعي للنص البديل ({ $downloadedSize } من { $totalSize } م.بايت)
+# This is a button that users can click to edit the alt text they have already added.
+pdfjs-editor-new-alt-text-added-button =
+    .aria-label = أُضِيف نص بديل
+pdfjs-editor-new-alt-text-added-button-label = أُضِيف نص بديل
+# This is a button that users can click to open the alt text editor and add alt text when it is not present.
+pdfjs-editor-new-alt-text-missing-button =
+    .aria-label = نص بديل مفقود
+pdfjs-editor-new-alt-text-missing-button-label = نص بديل مفقود
+# This is a button that opens up the alt text modal where users should review the alt text that was automatically generated.
+pdfjs-editor-new-alt-text-to-review-button =
+    .aria-label = راجع النص البديل
+pdfjs-editor-new-alt-text-to-review-button-label = راجع النص البديل
+# "Created automatically" is a prefix that will be added to the beginning of any alt text that has been automatically generated. After the colon, the user will see/hear the actual alt text description. If the alt text has been edited by a human, this prefix will not appear.
+# Variables:
+#   $generatedAltText (String) - the generated alt-text.
+pdfjs-editor-new-alt-text-generated-alt-text-with-disclaimer = أُنشئ تلقائيًا: { $generatedAltText }
 
 ## Image alt-text settings
 
-
-# Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } KB ({ $b } bytes)
-pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } bytes)
-pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
-pdfjs-annotation-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
-pdfjs-free-text2 =
-    .aria-label = Text Editor
-    .default-content = Start typing…
-pdfjs-editor-new-alt-text-dialog-edit-label = Edit alt text (image description)
-pdfjs-editor-new-alt-text-dialog-add-label = Add alt text (image description)
-pdfjs-editor-new-alt-text-textarea =
-    .placeholder = Write your description here…
-pdfjs-editor-new-alt-text-description = Short description for people who can’t see the image or when the image doesn’t load.
-pdfjs-editor-new-alt-text-disclaimer1 = This alt text was created automatically and may be inaccurate.
-pdfjs-editor-new-alt-text-disclaimer-learn-more-url = Learn more
-pdfjs-editor-new-alt-text-create-automatically-button-label = Create alt text automatically
-pdfjs-editor-new-alt-text-not-now-button = Not now
-pdfjs-editor-new-alt-text-error-title = Couldn’t create alt text automatically
-pdfjs-editor-new-alt-text-error-description = Please write your own alt text or try again later.
-pdfjs-editor-new-alt-text-error-close-button = Close
-pdfjs-editor-new-alt-text-ai-model-downloading-progress = Downloading alt text AI model ({ $downloadedSize } of { $totalSize } MB)
-    .aria-valuetext = Downloading alt text AI model ({ $downloadedSize } of { $totalSize } MB)
-pdfjs-editor-new-alt-text-added-button =
-    .aria-label = Alt text added
-pdfjs-editor-new-alt-text-added-button-label = Alt text added
-pdfjs-editor-new-alt-text-missing-button =
-    .aria-label = Missing alt text
-pdfjs-editor-new-alt-text-missing-button-label = Missing alt text
-pdfjs-editor-new-alt-text-to-review-button =
-    .aria-label = Review alt text
-pdfjs-editor-new-alt-text-to-review-button-label = Review alt text
-pdfjs-editor-new-alt-text-generated-alt-text-with-disclaimer = Created automatically: { $generatedAltText }
 pdfjs-image-alt-text-settings-button =
-    .title = Image alt text settings
-pdfjs-image-alt-text-settings-button-label = Image alt text settings
-pdfjs-editor-alt-text-settings-dialog-label = Image alt text settings
-pdfjs-editor-alt-text-settings-automatic-title = Automatic alt text
-pdfjs-editor-alt-text-settings-create-model-button-label = Create alt text automatically
-pdfjs-editor-alt-text-settings-create-model-description = Suggests descriptions to help people who can’t see the image or when the image doesn’t load.
-pdfjs-editor-alt-text-settings-download-model-label = Alt text AI model ({ $totalSize } MB)
-pdfjs-editor-alt-text-settings-ai-model-description = Runs locally on your device so your data stays private. Required for automatic alt text.
-pdfjs-editor-alt-text-settings-delete-model-button = Delete
-pdfjs-editor-alt-text-settings-download-model-button = Download
-pdfjs-editor-alt-text-settings-downloading-model-button = Downloading…
-pdfjs-editor-alt-text-settings-editor-title = Alt text editor
-pdfjs-editor-alt-text-settings-show-dialog-button-label = Show alt text editor right away when adding an image
-pdfjs-editor-alt-text-settings-show-dialog-description = Helps you make sure all your images have alt text.
-pdfjs-editor-alt-text-settings-close-button = Close
-pdfjs-editor-undo-bar-message-highlight = Highlight removed
-pdfjs-editor-undo-bar-message-freetext = Text removed
-pdfjs-editor-undo-bar-message-ink = Drawing removed
-pdfjs-editor-undo-bar-message-stamp = Image removed
+    .title = إعدادات النص البديل للصورة
+pdfjs-image-alt-text-settings-button-label = إعدادات النص البديل للصورة
+pdfjs-editor-alt-text-settings-dialog-label = إعدادات النص البديل للصورة
+pdfjs-editor-alt-text-settings-automatic-title = نص بديل تلقائي
+pdfjs-editor-alt-text-settings-create-model-button-label = أنشئ نص بديل تلقائيًا
+pdfjs-editor-alt-text-settings-create-model-description = يقترح أوصافًا لمساعدة الأشخاص الذين لا يستطيعون رؤية الصورة أو عندما لا يتم تحميل الصورة.
+# Variables:
+#   $totalSize (Number) - the total size (in MB) of the AI model.
+pdfjs-editor-alt-text-settings-download-model-label = نموذج الذكاء الاصطناعي للنص البديل ({ $totalSize } م.بايت)
+pdfjs-editor-alt-text-settings-ai-model-description = يتم تشغيله محليًا على جهازك حتى تظل بياناتك خاصة. مطلوب للنص البديل التلقائي.
+pdfjs-editor-alt-text-settings-delete-model-button = احذف
+pdfjs-editor-alt-text-settings-download-model-button = نزّل
+pdfjs-editor-alt-text-settings-downloading-model-button = يُنزل…
+pdfjs-editor-alt-text-settings-editor-title = مُحرِّر النص البديل
+pdfjs-editor-alt-text-settings-show-dialog-button-label = أظهِر مُحرِّر النص البديل على الفور عند إضافة صورة
+pdfjs-editor-alt-text-settings-show-dialog-description = يساعدك على التأكد من أن جميع صورك تحتوي على نص بديل.
+pdfjs-editor-alt-text-settings-close-button = أغلق
+
+## "Annotations removed" bar
+
+pdfjs-editor-undo-bar-message-highlight = أُزِيل البرز
+pdfjs-editor-undo-bar-message-freetext = أُزيل النص
+pdfjs-editor-undo-bar-message-ink = أُزِيلت الرسمة
+pdfjs-editor-undo-bar-message-stamp = أُزيلت الصورة
+pdfjs-editor-undo-bar-message-signature = أُزيل التوقيع
+# Variables:
+#   $count (Number) - the number of removed annotations.
 pdfjs-editor-undo-bar-message-multiple =
     { $count ->
-        [one] { $count } annotation removed
-       *[other] { $count } annotations removed
+        [zero] أُزيل لا تعليق
+        [one] أُزيل تعليق
+        [two] أُزيل تعليقين
+        [few] أُزيلت { $count } تعليقات
+        [many] أُزيل { $count } تعليق
+       *[other] أُزيل { $count } تعليق
     }
 pdfjs-editor-undo-bar-undo-button =
-    .title = Undo
-pdfjs-editor-undo-bar-undo-button-label = Undo
+    .title = تراجع
+pdfjs-editor-undo-bar-undo-button-label = تراجع
 pdfjs-editor-undo-bar-close-button =
-    .title = Close
-pdfjs-editor-undo-bar-close-button-label = Close
+    .title = أغلق
+pdfjs-editor-undo-bar-close-button-label = أغلق
+
+## Add a signature dialog
+
+pdfjs-editor-add-signature-dialog-label = يتيح هذا النموذج للمستخدم إنشاء توقيع لإضافته إلى مستند PDF. ويمكن للمستخدم تحرير الاسم (الذي يعمل أيضًا كنص بديل)، وحفظ التوقيع بشكل اختياري للاستخدام المتكرر.
+pdfjs-editor-add-signature-dialog-title = أضِف توقيعا
+
+## Tab names
+
+# Type is a verb (you can type your name as signature)
+pdfjs-editor-add-signature-type-button = اكتب
+    .title = اكتب
+# Draw is a verb (you can draw your signature)
+pdfjs-editor-add-signature-draw-button = ارسم
+    .title = ارسم
+pdfjs-editor-add-signature-image-button = صورة
+    .title = صورة
+
+## Tab panels
+
+pdfjs-editor-add-signature-type-input =
+    .aria-label = اكتب توقيعك
+    .placeholder = اكتب توقيعك
+pdfjs-editor-add-signature-draw-placeholder = ارسم توقيعك
+pdfjs-editor-add-signature-draw-thickness-range-label = السماكة
+# Variables:
+#   $thickness (Number) - the thickness (in pixels) of the line used to draw a signature.
+pdfjs-editor-add-signature-draw-thickness-range =
+    .title = سمك الرسم: { $thickness }
+pdfjs-editor-add-signature-image-placeholder = اسحب الملف هنا لرفعه
+pdfjs-editor-add-signature-image-browse-link =
+    { PLATFORM() ->
+        [macos] أو اختر ملفات الصور
+       *[other] أو تصفح ملفات الصور
+    }
+
+## Controls
+
+pdfjs-editor-add-signature-description-label = الوصف (نص بديل)
+pdfjs-editor-add-signature-description-input =
+    .title = الوصف (نص بديل)
+pdfjs-editor-add-signature-description-default-when-drawing = توقيع
+pdfjs-editor-add-signature-clear-button-label = امحُ التوقيع
+pdfjs-editor-add-signature-clear-button =
+    .title = امحُ التوقيع
+pdfjs-editor-add-signature-save-checkbox = احفظ التوقيع
+pdfjs-editor-add-signature-save-warning-message = لقد وصلت إلى الحد الأقصى وهو 5 توقيعات محفوظة. أزِل توقيع واحد لحفظ المزيد.
+pdfjs-editor-add-signature-image-upload-error-title = تعذر رفع الصورة.
+pdfjs-editor-add-signature-image-upload-error-description = تحقق من اتصال الشبكة لديك أو جرّب صورة أخرى.
+pdfjs-editor-add-signature-error-close-button = أغلق
+
+## Dialog buttons
+
+pdfjs-editor-add-signature-cancel-button = ألغِ
+pdfjs-editor-add-signature-add-button = أضِف
+pdfjs-editor-edit-signature-update-button = حدّث
+
+## Main menu for adding/removing signatures
+
+pdfjs-editor-delete-signature-button1 =
+    .title = أزِل التوقيع المحفوظ
+pdfjs-editor-delete-signature-button-label1 = أزِل التوقيع المحفوظ
+
+## Editor toolbar
+
+pdfjs-editor-add-signature-edit-button-label = عدّل الوصف
+
+## Edit signature description dialog
+
+pdfjs-editor-edit-signature-dialog-title = عدّل الوصف
+
+# Translations for ngx-extended-pdf-viewer additions only available in en-US
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = Match Each Word
 pdfjs-find-regexp-checkbox-label = Regular Expression
-pdfjs-editor-signature-button =
-    .title = Add signature
-pdfjs-editor-signature-button-label = Add signature
-pdfjs-editor-highlight-editor =
-    .aria-label = Highlight editor
-pdfjs-editor-ink-editor =
-    .aria-label = Drawing editor
-pdfjs-editor-signature-editor1 =
-    .aria-description = Signature editor: { $description }
-pdfjs-editor-stamp-editor =
-    .aria-label = Image editor
-pdfjs-editor-remove-signature-button =
-    .title = Remove signature
-pdfjs-editor-add-signature-container =
-    .aria-label = Signature controls and saved signatures
-pdfjs-editor-signature-add-signature-button =
-    .title = Add new signature
-pdfjs-editor-signature-add-signature-button-label = Add new signature
-pdfjs-editor-add-saved-signature-button =
-    .title = Saved signature: { $description }
-pdfjs-editor-undo-bar-message-signature = Signature removed
-pdfjs-editor-add-signature-dialog-label = This modal allows the user to create a signature to add to a PDF document. The user can edit the name (which also serves as the alt text), and optionally save the signature for repeated use.
-pdfjs-editor-add-signature-dialog-title = Add a signature
-pdfjs-editor-add-signature-type-button = Type
-    .title = Type
-pdfjs-editor-add-signature-draw-button = Draw
-    .title = Draw
-pdfjs-editor-add-signature-image-button = Image
-    .title = Image
-pdfjs-editor-add-signature-type-input =
-    .aria-label = Type your signature
-    .placeholder = Type your signature
-pdfjs-editor-add-signature-draw-placeholder = Draw your signature
-pdfjs-editor-add-signature-draw-thickness-range-label = Thickness
-pdfjs-editor-add-signature-draw-thickness-range =
-    .title = Drawing thickness: { $thickness }
-pdfjs-editor-add-signature-image-placeholder = Drag a file here to upload
-pdfjs-editor-add-signature-image-browse-link =
-    { PLATFORM() ->
-        [macos] Or choose image files
-       *[other] Or browse image files
-    }
-pdfjs-editor-add-signature-description-label = Description (alt text)
-pdfjs-editor-add-signature-description-input =
-    .title = Description (alt text)
-pdfjs-editor-add-signature-description-default-when-drawing = Signature
-pdfjs-editor-add-signature-clear-button-label = Clear signature
-pdfjs-editor-add-signature-clear-button =
-    .title = Clear signature
-pdfjs-editor-add-signature-save-checkbox = Save signature
-pdfjs-editor-add-signature-save-warning-message = You’ve reached the limit of 5 saved signatures. Remove one to save more.
-pdfjs-editor-add-signature-image-upload-error-title = Couldn’t upload image
-pdfjs-editor-add-signature-image-upload-error-description = Check your network connection or try another image.
-pdfjs-editor-add-signature-error-close-button = Close
-pdfjs-editor-add-signature-cancel-button = Cancel
-pdfjs-editor-add-signature-add-button = Add
-pdfjs-editor-delete-signature-button1 =
-    .title = Remove saved signature
-pdfjs-editor-delete-signature-button-label1 = Remove saved signature
-pdfjs-editor-add-signature-edit-button-label = Edit description
-pdfjs-editor-edit-signature-dialog-title = Edit description
-pdfjs-editor-edit-signature-update-button = Update

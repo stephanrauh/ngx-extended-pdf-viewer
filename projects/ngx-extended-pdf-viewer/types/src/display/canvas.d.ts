@@ -15,7 +15,6 @@ export class CanvasGraphics {
     canvasFactory: any;
     filterFactory: any;
     groupStack: any[];
-    processingType3: any;
     baseTransform: any;
     baseTransformStack: any[];
     groupLevel: number;
@@ -84,17 +83,18 @@ export class CanvasGraphics {
     save(): void;
     restore(): void;
     transform(a: any, b: any, c: any, d: any, e: any, f: any): void;
-    constructPath(ops: any, args: any, minMax: any): void;
+    constructPath(op: any, data: any, minMax: any): void;
     closePath(): void;
-    stroke(consumePath?: boolean): void;
-    closeStroke(): void;
-    fill(consumePath?: boolean): void;
-    eoFill(): void;
-    fillStroke(): void;
-    eoFillStroke(): void;
-    closeFillStroke(): void;
-    closeEOFillStroke(): void;
-    endPath(): void;
+    stroke(path: any, consumePath?: boolean): void;
+    closeStroke(path: any): void;
+    fill(path: any, consumePath?: boolean): void;
+    eoFill(path: any): void;
+    fillStroke(path: any): void;
+    eoFillStroke(path: any): void;
+    closeFillStroke(path: any): void;
+    closeEOFillStroke(path: any): void;
+    endPath(path: any): void;
+    rawFillPath(path: any): void;
     clip(): void;
     eoClip(): void;
     beginText(): void;
@@ -108,7 +108,7 @@ export class CanvasGraphics {
     setTextRise(rise: any): void;
     moveText(x: any, y: any): void;
     setLeadingMoveText(x: any, y: any): void;
-    setTextMatrix(a: any, b: any, c: any, d: any, e: any, f: any): void;
+    setTextMatrix(matrix: any): void;
     nextLine(): void;
     paintChar(character: any, x: any, y: any, patternFillTransform: any, patternStrokeTransform: any): void;
     get isFontSubpixelAAEnabled(): any;
@@ -119,9 +119,9 @@ export class CanvasGraphics {
     getColorN_Pattern(IR: any): any;
     setStrokeColorN(...args: any[]): void;
     setFillColorN(...args: any[]): void;
-    setStrokeRGBColor(r: any, g: any, b: any): void;
+    setStrokeRGBColor(color: any): void;
     setStrokeTransparent(): void;
-    setFillRGBColor(r: any, g: any, b: any): void;
+    setFillRGBColor(color: any): void;
     setFillTransparent(): void;
     _getPattern(objId: any, matrix?: null): any;
     shadingFill(objId: any): void;
@@ -151,10 +151,10 @@ export class CanvasGraphics {
     endMarkedContent(): void;
     beginCompat(): void;
     endCompat(): void;
-    consumePath(clipBox: any): void;
+    consumePath(path: any, clipBox: any): void;
     getSinglePixelWidth(): number;
     getScaleForStroking(): number[];
-    rescaleAndStroke(saveRestore: any): void;
+    rescaleAndStroke(path: any, saveRestore: any): void;
     isContentVisible(): boolean;
     #private;
 }
@@ -163,7 +163,7 @@ declare class CanvasExtraState {
     alphaIsShape: boolean;
     fontSize: number;
     fontSizeScale: number;
-    textMatrix: number[];
+    textMatrix: null;
     textMatrixScale: number;
     fontMatrix: number[];
     leading: number;
@@ -183,23 +183,15 @@ declare class CanvasExtraState {
     fillAlpha: number;
     strokeAlpha: number;
     lineWidth: number;
-    activeSMask: any;
+    activeSMask: null;
     transferMaps: string;
+    clipBox: Float32Array<ArrayBuffer>;
+    minMax: Float32Array<ArrayBuffer>;
     clone(): any;
-    setCurrentPoint(x: any, y: any): void;
-    updatePathMinMax(transform: any, x: any, y: any): void;
-    minX: any;
-    minY: any;
-    maxX: any;
-    maxY: any;
-    updateRectMinMax(transform: any, rect: any): void;
-    updateScalingPathMinMax(transform: any, minMax: any): void;
-    updateCurvePathMinMax(transform: any, x0: any, y0: any, x1: any, y1: any, x2: any, y2: any, x3: any, y3: any, minMax: any): void;
-    getPathBoundingBox(pathType?: string, transform?: null): any[];
+    getPathBoundingBox(pathType?: string, transform?: null): Float32Array<ArrayBuffer>;
     updateClipFromPath(): void;
     isEmptyClip(): boolean;
     startNewPathAndClipBox(box: any): void;
-    clipBox: any;
     getClippedPathBoundingBox(pathType?: string, transform?: null): number[] | null;
 }
 declare class CachedCanvases {

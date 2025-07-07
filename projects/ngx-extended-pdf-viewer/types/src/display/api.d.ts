@@ -48,7 +48,7 @@ export type DocumentInitParameters = {
     range?: PDFDataRangeTransport | undefined;
     /**
      * - Specify maximum number of bytes fetched
-     * per range request. The default value is {@link DEFAULT_RANGE_CHUNK_SIZE}.
+     * per range request. The default value is 65536 (= 2^16).
      */
     rangeChunkSize?: number | undefined;
     /**
@@ -79,11 +79,15 @@ export type DocumentInitParameters = {
     cMapPacked?: boolean | undefined;
     /**
      * - The factory that will be used when
-     * reading built-in CMap files. Providing a custom factory is useful for
-     * environments without Fetch API or `XMLHttpRequest` support, such as
-     * Node.js. The default value is {DOMCMapReaderFactory}.
+     * reading built-in CMap files.
+     * The default value is {DOMCMapReaderFactory}.
      */
     CMapReaderFactory?: Object | undefined;
+    /**
+     * - The URL where the predefined ICC profiles are
+     * located. Include the trailing slash.
+     */
+    iccUrl?: string | undefined;
     /**
      * - When `true`, fonts that aren't
      * embedded in the PDF document will fallback to a system font.
@@ -99,18 +103,35 @@ export type DocumentInitParameters = {
     standardFontDataUrl?: string | undefined;
     /**
      * - The factory that will be used
-     * when reading the standard font files. Providing a custom factory is useful
-     * for environments without Fetch API or `XMLHttpRequest` support, such as
-     * Node.js. The default value is {DOMStandardFontDataFactory}.
+     * when reading the standard font files.
+     * The default value is {DOMStandardFontDataFactory}.
      */
     StandardFontDataFactory?: Object | undefined;
     /**
+     * - The URL where the wasm files are located.
+     * Include the trailing slash.
+     */
+    wasmUrl?: string | undefined;
+    /**
+     * - The factory that will be used
+     * when reading the wasm files.
+     * The default value is {DOMWasmFactory}.
+     */
+    WasmFactory?: Object | undefined;
+    /**
      * - Enable using the Fetch API in the
      * worker-thread when reading CMap and standard font files. When `true`,
-     * the `CMapReaderFactory` and `StandardFontDataFactory` options are ignored.
+     * the `CMapReaderFactory`, `StandardFontDataFactory`, and `WasmFactory`
+     * options are ignored.
      * The default value is `true` in web environments and `false` in Node.js.
      */
     useWorkerFetch?: boolean | undefined;
+    /**
+     * - Attempt to use WebAssembly in order to
+     * improve e.g. image decoding performance.
+     * The default value is `true`.
+     */
+    useWasm?: boolean | undefined;
     /**
      * - Reject certain promises, e.g.
      * `getOperatorList`, `getTextContent`, and `RenderTask`, when the associated
@@ -553,10 +574,6 @@ export type PDFWorkerParameters = {
 };
 /** @type {string} */
 export const build: string;
-export const DefaultCanvasFactory: typeof DOMCanvasFactory | typeof NodeCanvasFactory;
-export const DefaultCMapReaderFactory: typeof DOMCMapReaderFactory;
-export const DefaultFilterFactory: typeof DOMFilterFactory | typeof NodeFilterFactory;
-export const DefaultStandardFontDataFactory: typeof DOMStandardFontDataFactory;
 /**
  * @typedef { Int8Array | Uint8Array | Uint8ClampedArray |
  *            Int16Array | Uint16Array |
@@ -592,7 +609,7 @@ export const DefaultStandardFontDataFactory: typeof DOMStandardFontDataFactory;
  * @property {PDFDataRangeTransport} [range] - Allows for using a custom range
  *   transport implementation.
  * @property {number} [rangeChunkSize] - Specify maximum number of bytes fetched
- *   per range request. The default value is {@link DEFAULT_RANGE_CHUNK_SIZE}.
+ *   per range request. The default value is 65536 (= 2^16).
  * @property {PDFWorker} [worker] - The worker that will be used for loading and
  *   parsing the PDF data.
  * @property {number} [verbosity] - Controls the logging level; the constants
@@ -605,9 +622,10 @@ export const DefaultStandardFontDataFactory: typeof DOMStandardFontDataFactory;
  * @property {boolean} [cMapPacked] - Specifies if the Adobe CMaps are binary
  *   packed or not. The default value is `true`.
  * @property {Object} [CMapReaderFactory] - The factory that will be used when
- *   reading built-in CMap files. Providing a custom factory is useful for
- *   environments without Fetch API or `XMLHttpRequest` support, such as
- *   Node.js. The default value is {DOMCMapReaderFactory}.
+ *   reading built-in CMap files.
+ *   The default value is {DOMCMapReaderFactory}.
+ * @property {string} [iccUrl] - The URL where the predefined ICC profiles are
+ *   located. Include the trailing slash.
  * @property {boolean} [useSystemFonts] - When `true`, fonts that aren't
  *   embedded in the PDF document will fallback to a system font.
  *   The default value is `true` in web environments and `false` in Node.js;
@@ -616,13 +634,21 @@ export const DefaultStandardFontDataFactory: typeof DOMStandardFontDataFactory;
  * @property {string} [standardFontDataUrl] - The URL where the standard font
  *   files are located. Include the trailing slash.
  * @property {Object} [StandardFontDataFactory] - The factory that will be used
- *   when reading the standard font files. Providing a custom factory is useful
- *   for environments without Fetch API or `XMLHttpRequest` support, such as
- *   Node.js. The default value is {DOMStandardFontDataFactory}.
+ *   when reading the standard font files.
+ *   The default value is {DOMStandardFontDataFactory}.
+ * @property {string} [wasmUrl] - The URL where the wasm files are located.
+ *   Include the trailing slash.
+ * @property {Object} [WasmFactory] - The factory that will be used
+ *   when reading the wasm files.
+ *   The default value is {DOMWasmFactory}.
  * @property {boolean} [useWorkerFetch] - Enable using the Fetch API in the
  *   worker-thread when reading CMap and standard font files. When `true`,
- *   the `CMapReaderFactory` and `StandardFontDataFactory` options are ignored.
+ *   the `CMapReaderFactory`, `StandardFontDataFactory`, and `WasmFactory`
+ *   options are ignored.
  *   The default value is `true` in web environments and `false` in Node.js.
+ * @property {boolean} [useWasm] - Attempt to use WebAssembly in order to
+ *    improve e.g. image decoding performance.
+ *    The default value is `true`.
  * @property {boolean} [stopAtErrors] - Reject certain promises, e.g.
  *   `getOperatorList`, `getTextContent`, and `RenderTask`, when the associated
  *   PDF data cannot be successfully parsed, instead of attempting to recover
@@ -706,13 +732,6 @@ export const DefaultStandardFontDataFactory: typeof DOMStandardFontDataFactory;
  * @returns {PDFDocumentLoadingTask}
  */
 export function getDocument(src?: string | URL | TypedArray | ArrayBuffer | DocumentInitParameters): PDFDocumentLoadingTask;
-export class LoopbackPort {
-    postMessage(obj: any, transfer: any): void;
-    addEventListener(name: any, listener: any, options?: null): void;
-    removeEventListener(name: any, listener: any): void;
-    terminate(): void;
-    #private;
-}
 /**
  * Abstract class to support range requests file loading.
  *
@@ -732,11 +751,6 @@ export class PDFDataRangeTransport {
     initialData: Uint8Array<ArrayBufferLike> | null;
     progressiveDone: boolean;
     contentDispositionFilename: string;
-    _rangeListeners: any[];
-    _progressListeners: any[];
-    _progressiveReadListeners: any[];
-    _progressiveDoneListeners: any[];
-    _readyCapability: any;
     /**
      * @param {function} listener
      */
@@ -775,6 +789,7 @@ export class PDFDataRangeTransport {
      */
     requestDataRange(begin: number, end: number): void;
     abort(): void;
+    #private;
 }
 /**
  * @typedef {Object} OnProgressParameters
@@ -787,10 +802,19 @@ export class PDFDataRangeTransport {
  * after which individual pages can be rendered.
  */
 export class PDFDocumentLoadingTask {
-    static "__#54@#docId": number;
-    _capability: any;
-    _transport: any;
-    _worker: any;
+    static "__#57@#docId": number;
+    /**
+     * @private
+     */
+    private _capability;
+    /**
+     * @private
+     */
+    private _transport;
+    /**
+     * @private
+     */
+    private _worker;
     /**
      * Unique identifier for the document loading task.
      * @type {string}
@@ -826,6 +850,13 @@ export class PDFDocumentLoadingTask {
      *   completed.
      */
     destroy(): Promise<void>;
+    /**
+     * Attempt to fetch the raw data of the PDF document, when e.g.
+     *  - An exception was thrown during document initialization.
+     *  - An `onPassword` callback is delaying initialization.
+     * @returns {Promise<Uint8Array>}
+     */
+    getData(): Promise<Uint8Array>;
 }
 /**
  * Proxy to a `PDFDocument` in the worker thread.
@@ -1279,7 +1310,6 @@ export class PDFPageProxy {
     /** @type {PDFObjects} */
     commonObjs: PDFObjects;
     objs: PDFObjects;
-    _maybeCleanupAfterRender: boolean;
     _intentStates: Map<any, any>;
     destroyed: boolean;
     /**
@@ -1425,19 +1455,20 @@ export class PDFPageProxy {
  * @param {PDFWorkerParameters} params - The worker initialization parameters.
  */
 export class PDFWorker {
-    static "__#57@#fakeWorkerId": number;
-    static "__#57@#isWorkerDisabled": boolean;
-    static "__#57@#workerPorts": any;
+    static "__#60@#fakeWorkerId": number;
+    static "__#60@#isWorkerDisabled": boolean;
+    static "__#60@#workerPorts": WeakMap<object, any>;
     /**
      * @param {PDFWorkerParameters} params - The worker initialization parameters.
+     * @returns {PDFWorker}
      */
-    static fromPort(params: PDFWorkerParameters): any;
+    static create(params: PDFWorkerParameters): PDFWorker;
     /**
      * The current `workerSrc`, when it exists.
      * @type {string}
      */
     static get workerSrc(): string;
-    static get "__#57@#mainThreadWorkerMessageHandler"(): any;
+    static get "__#60@#mainThreadWorkerMessageHandler"(): any;
     static get _setupFakeWorkerGlobal(): any;
     constructor({ name, port, verbosity, cspPolicyService, }?: {
         name?: null | undefined;
@@ -1447,10 +1478,6 @@ export class PDFWorker {
     name: any;
     destroyed: boolean;
     verbosity: number;
-    _readyCapability: any;
-    _port: any;
-    _webWorker: Worker | null;
-    _messageHandler: MessageHandler | null;
     /**
      * Promise for worker initialization completion.
      * @type {Promise<void>}
@@ -1466,9 +1493,7 @@ export class PDFWorker {
      * @type {MessageHandler}
      */
     get messageHandler(): MessageHandler;
-    _initializeFromPort(port: any): void;
     _initialize(cspPolicyService: any): void;
-    _setupFakeWorker(): void;
     /**
      * Destroys the worker instance.
      */
@@ -1487,6 +1512,15 @@ export class RenderTask {
      * @type {function}
      */
     onContinue: Function;
+    /**
+     * A function that will be synchronously called when the rendering tasks
+     * finishes with an error (either because of an actual error, or because the
+     * rendering is cancelled).
+     *
+     * @type {function}
+     * @param {Error} error
+     */
+    onError: Function;
     /**
      * Promise for rendering task completion.
      * @type {Promise<void>}
@@ -1512,54 +1546,8 @@ export const version: string;
 import { PageViewport } from "./display_utils.js";
 import { OptionalContentConfig } from "./optional_content_config.js";
 import { PrintAnnotationStorage } from "./annotation_storage.js";
-import { DOMCanvasFactory } from "./canvas_factory.js";
-import { NodeCanvasFactory } from "./node_utils";
-import { DOMCMapReaderFactory } from "./cmap_reader_factory";
-import { DOMFilterFactory } from "./filter_factory.js";
-import { NodeFilterFactory } from "./node_utils";
-import { DOMStandardFontDataFactory } from "./standard_fontdata_factory";
 import { AnnotationStorage } from "./annotation_storage.js";
 import { Metadata } from "./metadata.js";
 import { StatTimer } from "./display_utils.js";
-/**
- * A PDF document and page is built of many objects. E.g. there are objects for
- * fonts, images, rendering code, etc. These objects may get processed inside of
- * a worker. This class implements some basic methods to manage these objects.
- */
-declare class PDFObjects {
-    /**
-     * If called *without* callback, this returns the data of `objId` but the
-     * object needs to be resolved. If it isn't, this method throws.
-     *
-     * If called *with* a callback, the callback is called with the data of the
-     * object once the object is resolved. That means, if you call this method
-     * and the object is already resolved, the callback gets called right away.
-     *
-     * @param {string} objId
-     * @param {function} [callback]
-     * @returns {any}
-     */
-    get(objId: string, callback?: Function): any;
-    /**
-     * @param {string} objId
-     * @returns {boolean}
-     */
-    has(objId: string): boolean;
-    /**
-     * @param {string} objId
-     * @returns {boolean}
-     */
-    delete(objId: string): boolean;
-    /**
-     * Resolves the object `objId` with optional `data`.
-     *
-     * @param {string} objId
-     * @param {any} [data]
-     */
-    resolve(objId: string, data?: any): void;
-    clear(): void;
-    [Symbol.iterator](): Generator<any[], void, unknown>;
-    #private;
-}
+import { PDFObjects } from "./pdf_objects.js";
 import { MessageHandler } from "../shared/message_handler.js";
-export {};

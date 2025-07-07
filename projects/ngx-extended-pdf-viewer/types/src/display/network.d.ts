@@ -46,7 +46,7 @@ declare class PDFNetworkStreamFullRequestReader implements IPDFStreamReader {
     _cachedChunks: any[];
     _requests: any[];
     _done: boolean;
-    _storedError: import("../shared/util.js").MissingPDFException | import("../shared/util.js").UnexpectedResponseException | undefined;
+    _storedError: import("../shared/util.js").ResponseException | undefined;
     _filename: string | null;
     onProgress: any;
     _onHeadersReceived(): void;

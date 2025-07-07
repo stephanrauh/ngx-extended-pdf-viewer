@@ -980,6 +980,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     return fullVersion.substring(0, pos).replace('.', '-');
   }
 
+  public get enableSignatureEditor(): boolean {
+    return pdfDefaultOptions.enableSignatureEditor;
+  }
+
   /**
    * This attributes allows you to increase the size of the UI elements so you can use them on small mobile devices.
    * This attribute is a string with a percent character at the end (e.g. "150%").

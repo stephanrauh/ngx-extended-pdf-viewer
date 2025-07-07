@@ -91,6 +91,26 @@ export type PDFViewerOptions = {
      */
     maxCanvasPixels?: number | undefined;
     /**
+     * - The maximum supported canvas dimension,
+     * in either width or height. Use `-1` for no limit.
+     * The default value is 32767.
+     */
+    maxCanvasDim?: number | undefined;
+    /**
+     * - Cap the canvas area to the
+     * viewport increased by the value in percent. Use `-1` for no limit.
+     * The default value is 200%.
+     */
+    capCanvasAreaFactor?: number | undefined;
+    /**
+     * - When enabled, if the rendered
+     * pages would need a canvas that is larger than `maxCanvasPixels` or
+     * `maxCanvasDim`, it will draw a second canvas on top of the CSS-zoomed one,
+     * that only renders the part of the page that is close to the viewport.
+     * The default value is `true`.
+     */
+    enableDetailCanvas?: boolean | undefined;
+    /**
      * - Localization service.
      */
     l10n?: import("./interfaces").IL10n | undefined;
@@ -115,6 +135,16 @@ export type PDFViewerOptions = {
      * The default value is `true`.
      */
     supportsPinchToZoom?: boolean | undefined;
+    /**
+     * - Enable creation of hyperlinks from
+     * text that look like URLs. The default value is `true`.
+     */
+    enableAutoLinking?: boolean | undefined;
+    /**
+     * - Minimum duration to wait
+     * before updating the canvas. The default value is `500`.
+     */
+    minDurationToUpdateCanvas?: number | undefined;
 };
 export namespace PagesCountLimit {
     let FORCE_SCROLL_MODE_PAGE: number;
@@ -156,6 +186,17 @@ export namespace PagesCountLimit {
  * @property {number} [maxCanvasPixels] - The maximum supported canvas size in
  *   total pixels, i.e. width * height. Use `-1` for no limit, or `0` for
  *   CSS-only zooming. The default value is 4096 * 8192 (32 mega-pixels).
+ * @property {number} [maxCanvasDim] - The maximum supported canvas dimension,
+ *   in either width or height. Use `-1` for no limit.
+ *   The default value is 32767.
+ * @property {number} [capCanvasAreaFactor] - Cap the canvas area to the
+ *   viewport increased by the value in percent. Use `-1` for no limit.
+ *   The default value is 200%.
+ * @property {boolean} [enableDetailCanvas] - When enabled, if the rendered
+ *   pages would need a canvas that is larger than `maxCanvasPixels` or
+ *   `maxCanvasDim`, it will draw a second canvas on top of the CSS-zoomed one,
+ *   that only renders the part of the page that is close to the viewport.
+ *   The default value is `true`.
  * @property {IL10n} [l10n] - Localization service.
  * @property {boolean} [enablePermissions] - Enables PDF document permissions,
  *   when they exist. The default value is `false`.
@@ -166,6 +207,10 @@ export namespace PagesCountLimit {
  *   rendering. The default value is `false`.
  * @property {boolean} [supportsPinchToZoom] - Enable zooming on pinch gesture.
  *   The default value is `true`.
+ * @property {boolean} [enableAutoLinking] - Enable creation of hyperlinks from
+ *   text that look like URLs. The default value is `true`.
+ * @property {number} [minDurationToUpdateCanvas] - Minimum duration to wait
+ *   before updating the canvas. The default value is `500`.
  */
 export class PDFPageViewBuffer {
     constructor(size: any);
@@ -207,6 +252,9 @@ export class PDFViewer {
     enablePrintAutoRotate: boolean;
     removePageBorders: boolean | undefined;
     maxCanvasPixels: number | undefined;
+    maxCanvasDim: number | undefined;
+    capCanvasAreaFactor: number | undefined;
+    enableDetailCanvas: boolean;
     l10n: import("./interfaces").IL10n | GenericL10n | undefined;
     pageColors: Object | null;
     defaultRenderingQueue: boolean;

@@ -3,6 +3,7 @@ export type PageViewport = import("../src/display/display_utils").PageViewport;
 export type AnnotationStorage = import("../src/display/annotation_storage").AnnotationStorage;
 export type IDownloadManager = import("./interfaces").IDownloadManager;
 export type IPDFLinkService = import("./interfaces").IPDFLinkService;
+export type StructTreeLayerBuilder = import("./struct_tree_layer_builder.js").StructTreeLayerBuilder;
 export type TextAccessibilityManager = import("./text_accessibility.js").TextAccessibilityManager;
 export type AnnotationEditorUIManager = import("../src/display/editor/tools.js").AnnotationEditorUIManager;
 export type AnnotationLayerBuilderOptions = {
@@ -26,6 +27,19 @@ export type AnnotationLayerBuilderOptions = {
     annotationEditorUIManager?: import("../src/pdf").AnnotationEditorUIManager | undefined;
     onAppend?: Function | undefined;
 };
+export type AnnotationLayerBuilderRenderOptions = {
+    viewport: PageViewport;
+    /**
+     * - The default value is "display".
+     */
+    intent?: string | undefined;
+    structTreeLayer?: import("./struct_tree_layer_builder.js").StructTreeLayerBuilder | undefined;
+};
+export type InjectLinkAnnotationsOptions = {
+    inferredLinks: Array<Object>;
+    viewport: PageViewport;
+    structTreeLayer?: import("./struct_tree_layer_builder.js").StructTreeLayerBuilder | undefined;
+};
 /**
  * @typedef {Object} AnnotationLayerBuilderOptions
  * @property {PDFPageProxy} pdfPage
@@ -43,6 +57,18 @@ export type AnnotationLayerBuilderOptions = {
  * @property {TextAccessibilityManager} [accessibilityManager]
  * @property {AnnotationEditorUIManager} [annotationEditorUIManager]
  * @property {function} [onAppend]
+ */
+/**
+ * @typedef {Object} AnnotationLayerBuilderRenderOptions
+ * @property {PageViewport} viewport
+ * @property {string} [intent] - The default value is "display".
+ * @property {StructTreeLayerBuilder} [structTreeLayer]
+ */
+/**
+ * @typedef {Object} InjectLinkAnnotationsOptions
+ * @property {Array<Object>} inferredLinks
+ * @property {PageViewport} viewport
+ * @property {StructTreeLayerBuilder} [structTreeLayer]
  */
 export class AnnotationLayerBuilder {
     /**
@@ -68,16 +94,20 @@ export class AnnotationLayerBuilder {
     _cancelled: boolean;
     _eventBus: any;
     /**
-     * @param {PageViewport} viewport
-     * @param {Object} options
-     * @param {string} intent (default value is 'display')
+     * @param {AnnotationLayerBuilderRenderOptions} options
      * @returns {Promise<void>} A promise that is resolved when rendering of the
      *   annotations is complete.
      */
-    render(viewport: PageViewport, options: Object, intent?: string): Promise<void>;
+    render({ viewport, intent, structTreeLayer }: AnnotationLayerBuilderRenderOptions): Promise<void>;
     cancel(): void;
-    hide(): void;
+    hide(internal?: boolean): void;
     hasEditableAnnotations(): boolean;
+    /**
+     * @param {InjectLinkAnnotationsOptions} options
+     * @returns {Promise<void>} A promise that is resolved when the inferred links
+     *   are added to the annotation layer.
+     */
+    injectLinkAnnotations({ inferredLinks, viewport, structTreeLayer, }: InjectLinkAnnotationsOptions): Promise<void>;
     #private;
 }
 import { AnnotationLayer } from "../src/pdf";

@@ -38,11 +38,8 @@ export class FreeTextEditor extends AnnotationEditor {
      * @returns {undefined}
      */
     commit(): undefined;
-    /**
-     * ondblclick callback.
-     * @param {MouseEvent} event
-     */
-    dblclick(event: MouseEvent): void;
+    /** @inheritdoc */
+    keydown(event: any): void;
     editorDivKeydown(event: any): void;
     editorDivFocus(event: any): void;
     editorDivBlur(event: any): void;

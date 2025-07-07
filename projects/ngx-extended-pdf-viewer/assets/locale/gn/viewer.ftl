@@ -316,6 +316,25 @@ pdfjs-highlight-floating-button1 =
     .title = Mbosa’y
     .aria-label = Mbosa’y
 pdfjs-highlight-floating-button-label = Mbosa’y
+pdfjs-editor-signature-button =
+    .title = Embojuaju teraguapy
+pdfjs-editor-signature-button-label = Embojuaju teraguapy
+
+## Default editor aria labels
+
+# “Highlight” is a noun, the string is used on the editor for highlights.
+pdfjs-editor-highlight-editor =
+    .aria-label = Jehechaukarã mbosako’iha
+# “Drawing” is a noun, the string is used on the editor for drawings.
+pdfjs-editor-ink-editor =
+    .aria-label = Ta’ãnga’apo moheñoiha
+# Used when a signature editor is selected/hovered.
+# Variables:
+#   $description (String) - a string describing/labeling the signature.
+pdfjs-editor-signature-editor1 =
+    .aria-description = Teraguapy mbosako’iha: { $description }
+pdfjs-editor-stamp-editor =
+    .aria-label = Ta’ãnga mbosako’iha
 
 ## Remove button for the various kind of editor.
 
@@ -327,6 +346,8 @@ pdfjs-editor-remove-stamp-button =
     .title = Emboguete ta’ãnga
 pdfjs-editor-remove-highlight-button =
     .title = Eipe’a jehechaveha
+pdfjs-editor-remove-signature-button =
+    .title = Embogue teraguapy
 
 ##
 
@@ -343,6 +364,16 @@ pdfjs-editor-stamp-add-image-button-label = Embojuaju ta’ãnga
 pdfjs-editor-free-highlight-thickness-input = Anambusu
 pdfjs-editor-free-highlight-thickness-title =
     .title = Emoambue anambusukue embosa’ývo mba’eporu ha’e’ỹva moñe’ẽrã
+pdfjs-editor-add-signature-container =
+    .aria-label = Teraguapy ñemaña ha teraguapy ñongatupyre
+pdfjs-editor-signature-add-signature-button =
+    .title = Embojuaju teraguapy pyahu
+pdfjs-editor-signature-add-signature-button-label = Embojuaju teraguapy pyahu
+# Used on the button to use an already saved signature.
+# Variables:
+#   $description (String) - a string describing/labeling the signature.
+pdfjs-editor-add-saved-signature-button =
+    .title = Teraguapy ñongatupyre: { $description }
 # .default-content is used as a placeholder in an empty text editor.
 pdfjs-free-text2 =
     .aria-label = Moñe’ẽrã moheñoiha
@@ -453,7 +484,6 @@ pdfjs-editor-new-alt-text-error-close-button = Mboty
 # Variables:
 #   $totalSize (Number) - the total size (in MB) of the AI model.
 #   $downloadedSize (Number) - the downloaded size (in MB) of the AI model.
-#   $percent (Number) - the percentage of the downloaded size.
 pdfjs-editor-new-alt-text-ai-model-downloading-progress = Emboguejyhína IA moñe’ẽrã mokõiháva ({ $downloadedSize } { $totalSize } MB) mba’e
     .aria-valuetext = Emboguejyhína IA moñe’ẽrã mokõiháva ({ $downloadedSize } { $totalSize } MB) mba’e
 # This is a button that users can click to edit the alt text they have already added.
@@ -500,6 +530,7 @@ pdfjs-editor-undo-bar-message-highlight = Mbosa’ýva mboguete
 pdfjs-editor-undo-bar-message-freetext = Moñe’ẽrã mboguepyre
 pdfjs-editor-undo-bar-message-ink = Ta’ãnga mboguepyre
 pdfjs-editor-undo-bar-message-stamp = Ta’ãnga mboguepyre
+pdfjs-editor-undo-bar-message-signature = Teraguapy mboguepyre
 # Variables:
 #   $count (Number) - the number of removed annotations.
 pdfjs-editor-undo-bar-message-multiple =
@@ -514,70 +545,77 @@ pdfjs-editor-undo-bar-close-button =
     .title = Mboty
 pdfjs-editor-undo-bar-close-button-label = Mboty
 
+## Add a signature dialog
+
+pdfjs-editor-add-signature-dialog-title = Embojuaju teraguapy
+
+## Tab names
+
+# Type is a verb (you can type your name as signature)
+pdfjs-editor-add-signature-type-button = Jehai
+    .title = Jehai
+# Draw is a verb (you can draw your signature)
+pdfjs-editor-add-signature-draw-button = Moha’ãnga
+    .title = Moha’ãnga
+pdfjs-editor-add-signature-image-button = Ta’ãnga
+    .title = Ta’ãnga
+
+## Tab panels
+
+pdfjs-editor-add-signature-type-input =
+    .aria-label = Ehai nde reraguapy
+    .placeholder = Ehai nde reraguapy
+pdfjs-editor-add-signature-draw-placeholder = Emoha’ãnga nde reraguapy
+pdfjs-editor-add-signature-draw-thickness-range-label = Anambusu
+# Variables:
+#   $thickness (Number) - the thickness (in pixels) of the line used to draw a signature.
+pdfjs-editor-add-signature-draw-thickness-range =
+    .title = Ta’ãnga anambusukue: { $thickness }
+pdfjs-editor-add-signature-image-placeholder = Egueru marandurenda ápe ehupi hag̃ua
+pdfjs-editor-add-signature-image-browse-link =
+    { PLATFORM() ->
+        [macos] Eiporavo ta’ãnga marandurenda
+       *[other] Eiporavo ta’ãnga marandurenda
+    }
+
+## Controls
+
+pdfjs-editor-add-signature-description-label = Moha’ãnga (moñe’ẽrã ykepegua)
+pdfjs-editor-add-signature-description-input =
+    .title = Moha’ãnga (moñe’ẽrã ykepegua)
+pdfjs-editor-add-signature-description-default-when-drawing = Teraguapy
+pdfjs-editor-add-signature-clear-button-label = Emboguete teraguapy
+pdfjs-editor-add-signature-clear-button =
+    .title = Emboguete teraguapy
+pdfjs-editor-add-signature-save-checkbox = Eñongatu teraguapy
+pdfjs-editor-add-signature-save-warning-message = Ehupytýma 5 mboheraguapy ñongatupyre. Embogue peteĩ eñongatukuaa jey hag̃ua.
+pdfjs-editor-add-signature-image-upload-error-title = Ndaikatúi ojehupi pe ta’ãnga
+pdfjs-editor-add-signature-image-upload-error-description = Ehechajey ne ñanduti oikópa térã aha’ã ambue ta’ãnga ndive.
+pdfjs-editor-add-signature-error-close-button = Mboty
+
+## Dialog buttons
+
+pdfjs-editor-add-signature-cancel-button = Heja
+pdfjs-editor-add-signature-add-button = Mbojuaju
+pdfjs-editor-edit-signature-update-button = Mbohekopyahu
+
+## Main menu for adding/removing signatures
+
+pdfjs-editor-delete-signature-button1 =
+    .title = Embogue teraguapy ñongatupyre
+pdfjs-editor-delete-signature-button-label1 = Embogue teraguapy ñongatupyre
+
+## Editor toolbar
+
+pdfjs-editor-add-signature-edit-button-label = Embosako’i moha’ãnga
+
+## Edit signature description dialog
+
+pdfjs-editor-edit-signature-dialog-title = Embosako’i moha’ãnga
+
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
+pdfjs-editor-add-signature-dialog-label = This modal allows the user to create a signature to add to a PDF document. The user can edit the name (which also serves as the alt text), and optionally save the signature for repeated use.
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = Match Each Word
 pdfjs-find-regexp-checkbox-label = Regular Expression
-pdfjs-editor-signature-button =
-    .title = Add signature
-pdfjs-editor-signature-button-label = Add signature
-pdfjs-editor-highlight-editor =
-    .aria-label = Highlight editor
-pdfjs-editor-ink-editor =
-    .aria-label = Drawing editor
-pdfjs-editor-signature-editor1 =
-    .aria-description = Signature editor: { $description }
-pdfjs-editor-stamp-editor =
-    .aria-label = Image editor
-pdfjs-editor-remove-signature-button =
-    .title = Remove signature
-pdfjs-editor-add-signature-container =
-    .aria-label = Signature controls and saved signatures
-pdfjs-editor-signature-add-signature-button =
-    .title = Add new signature
-pdfjs-editor-signature-add-signature-button-label = Add new signature
-pdfjs-editor-add-saved-signature-button =
-    .title = Saved signature: { $description }
-pdfjs-editor-undo-bar-message-signature = Signature removed
-pdfjs-editor-add-signature-dialog-label = This modal allows the user to create a signature to add to a PDF document. The user can edit the name (which also serves as the alt text), and optionally save the signature for repeated use.
-pdfjs-editor-add-signature-dialog-title = Add a signature
-pdfjs-editor-add-signature-type-button = Type
-    .title = Type
-pdfjs-editor-add-signature-draw-button = Draw
-    .title = Draw
-pdfjs-editor-add-signature-image-button = Image
-    .title = Image
-pdfjs-editor-add-signature-type-input =
-    .aria-label = Type your signature
-    .placeholder = Type your signature
-pdfjs-editor-add-signature-draw-placeholder = Draw your signature
-pdfjs-editor-add-signature-draw-thickness-range-label = Thickness
-pdfjs-editor-add-signature-draw-thickness-range =
-    .title = Drawing thickness: { $thickness }
-pdfjs-editor-add-signature-image-placeholder = Drag a file here to upload
-pdfjs-editor-add-signature-image-browse-link =
-    { PLATFORM() ->
-        [macos] Or choose image files
-       *[other] Or browse image files
-    }
-pdfjs-editor-add-signature-description-label = Description (alt text)
-pdfjs-editor-add-signature-description-input =
-    .title = Description (alt text)
-pdfjs-editor-add-signature-description-default-when-drawing = Signature
-pdfjs-editor-add-signature-clear-button-label = Clear signature
-pdfjs-editor-add-signature-clear-button =
-    .title = Clear signature
-pdfjs-editor-add-signature-save-checkbox = Save signature
-pdfjs-editor-add-signature-save-warning-message = You’ve reached the limit of 5 saved signatures. Remove one to save more.
-pdfjs-editor-add-signature-image-upload-error-title = Couldn’t upload image
-pdfjs-editor-add-signature-image-upload-error-description = Check your network connection or try another image.
-pdfjs-editor-add-signature-error-close-button = Close
-pdfjs-editor-add-signature-cancel-button = Cancel
-pdfjs-editor-add-signature-add-button = Add
-pdfjs-editor-delete-signature-button1 =
-    .title = Remove saved signature
-pdfjs-editor-delete-signature-button-label1 = Remove saved signature
-pdfjs-editor-add-signature-edit-button-label = Edit description
-pdfjs-editor-edit-signature-dialog-title = Edit description
-pdfjs-editor-edit-signature-update-button = Update

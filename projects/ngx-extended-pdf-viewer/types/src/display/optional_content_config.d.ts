@@ -11,8 +11,8 @@ export class OptionalContentConfig {
     }): void;
     get hasInitialVisibility(): boolean;
     getOrder(): any;
-    getGroups(): any;
     getGroup(id: any): any;
     getHash(): string;
+    [Symbol.iterator](): MapIterator<[any, any]>;
     #private;
 }

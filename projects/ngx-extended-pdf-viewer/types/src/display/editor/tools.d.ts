@@ -12,7 +12,7 @@ export class AnnotationEditorUIManager {
     static TRANSLATE_SMALL: number;
     static TRANSLATE_BIG: number;
     static get _keyboardManager(): any;
-    constructor(container: any, viewer: any, altTextManager: any, eventBus: any, pdfDocument: any, pageColors: any, highlightColors: any, enableHighlightFloatingButton: any, enableUpdatedAddImage: any, enableNewAltTextWhenAddingImage: any, mlManager: any, editorUndoBar: any, supportsPinchToZoom: any);
+    constructor(container: any, viewer: any, altTextManager: any, signatureManager: any, eventBus: any, pdfDocument: any, pageColors: any, highlightColors: any, enableHighlightFloatingButton: any, enableUpdatedAddImage: any, enableNewAltTextWhenAddingImage: any, mlManager: any, editorUndoBar: any, supportsPinchToZoom: any);
     _editorUndoBar: null;
     _signal: AbortSignal;
     _eventBus: any;
@@ -38,6 +38,8 @@ export class AnnotationEditorUIManager {
     setCurrentDrawingSession(layer: AnnotationEditorLayer): void;
     setMainHighlightColorPicker(colorPicker: any): void;
     editAltText(editor: any, firstTime?: boolean): void;
+    getSignature(editor: any): void;
+    get signatureManager(): null;
     switchToMode(mode: any, callback: any): void;
     setPreference(name: any, value: any): void;
     onSetPreference({ name, value }: {
@@ -145,10 +147,11 @@ export class AnnotationEditorUIManager {
     addNewEditorFromKeyboard(): void;
     /**
      * Update the toolbar if it's required to reflect the tool currently used.
+     * @param {Object} options
      * @param {number} mode
      * @returns {undefined}
      */
-    updateToolbar(mode: number): undefined;
+    updateToolbar(options: Object): undefined;
     /**
      * Update a parameter in the current editor or globally.
      * @param {number} type
@@ -312,6 +315,8 @@ export class AnnotationEditorUIManager {
         annotationElementId: any;
     }): void;
     renderAnnotationElement(annotation: any): void;
+    setMissingCanvas(annotationId: any, annotationElementId: any, canvas: any): void;
+    addMissingCanvas(annotationId: any, editor: any): void;
     #private;
 }
 export function bindEvents(obj: any, element: any, names: any): void;
@@ -415,9 +420,3 @@ export class KeyboardManager {
     exec(self: Object, event: KeyboardEvent): void;
     #private;
 }
-/**
- * Convert a number between 0 and 100 into an hex number between 0 and 255.
- * @param {number} opacity
- * @return {string}
- */
-export function opacityToHex(opacity: number): string;

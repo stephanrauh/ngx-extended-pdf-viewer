@@ -77,6 +77,7 @@ export class DrawingEditor extends AnnotationEditor {
     static deserialize(data: any, parent: any, uiManager: any): Promise<AnnotationEditor | null>;
     constructor(params: any);
     _drawId: null;
+    _addOutlines(params: any): void;
     /** @inheritdoc */
     updateParams(type: any, value: any): void;
     /** @inheritdoc */
@@ -87,7 +88,7 @@ export class DrawingEditor extends AnnotationEditor {
      */
     _updateProperty(type: any, name: any, value: any): void;
     /** @inheritdoc */
-    _onTranslating(x: any, y: any): void;
+    _onTranslating(_x: any, _y: any): void;
     /** @inheritdoc */
     _onTranslated(): void;
     /** @inheritdoc */

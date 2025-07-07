@@ -23,6 +23,8 @@ export namespace FindState {
     let WRAPPED: number;
     let PENDING: number;
 }
+export function getOriginalIndex(diffs: any, pos: any, len: any): any[];
+export function normalize(text: any): any[];
 /**
  * @typedef {Object} PDFFindControllerOptions
  * @property {IPDFLinkService} linkService - The navigation/linking service.

@@ -36,6 +36,18 @@ export type PDFThumbnailViewOptions = {
      */
     renderingQueue: PDFRenderingQueue;
     /**
+     * - The maximum supported canvas size in
+     * total pixels, i.e. width * height. Use `-1` for no limit, or `0` for
+     * CSS-only zooming. The default value is 4096 * 8192 (32 mega-pixels).
+     */
+    maxCanvasPixels?: number | undefined;
+    /**
+     * - The maximum supported canvas dimension,
+     * in either width or height. Use `-1` for no limit.
+     * The default value is 32767.
+     */
+    maxCanvasDim?: number | undefined;
+    /**
      * - Overwrites background and foreground colors
      * with user defined ones in order to improve readability in high contrast
      * mode.
@@ -54,7 +66,7 @@ export class PDFThumbnailView implements IRenderableView {
     /**
      * @param {PDFThumbnailViewOptions} options
      */
-    constructor({ container, eventBus, id, defaultViewport, optionalContentConfigPromise, linkService, renderingQueue, pageColors, enableHWA, }: PDFThumbnailViewOptions);
+    constructor({ container, eventBus, id, defaultViewport, optionalContentConfigPromise, linkService, renderingQueue, maxCanvasPixels, maxCanvasDim, pageColors, enableHWA, }: PDFThumbnailViewOptions);
     id: number;
     renderingId: string;
     pageLabel: string | null;
@@ -63,6 +75,8 @@ export class PDFThumbnailView implements IRenderableView {
     viewport: import("../src/display/display_utils").PageViewport;
     pdfPageRotate: number;
     _optionalContentConfigPromise: Promise<import("../src/display/optional_content_config").OptionalContentConfig> | null;
+    maxCanvasPixels: any;
+    maxCanvasDim: any;
     pageColors: Object | null;
     enableHWA: boolean;
     eventBus: import("./event_utils").EventBus;
@@ -89,7 +103,7 @@ export class PDFThumbnailView implements IRenderableView {
      */
     cancelRendering(): void;
     image: HTMLImageElement | undefined;
-    draw(): Promise<any>;
+    draw(): Promise<void>;
     setImage(pageView: any): void;
     /**
      * @param {string|null} label
@@ -108,6 +122,12 @@ export class PDFThumbnailView implements IRenderableView {
  *   The default value is `null`.
  * @property {IPDFLinkService} linkService - The navigation/linking service.
  * @property {PDFRenderingQueue} renderingQueue - The rendering queue object.
+ * @property {number} [maxCanvasPixels] - The maximum supported canvas size in
+ *   total pixels, i.e. width * height. Use `-1` for no limit, or `0` for
+ *   CSS-only zooming. The default value is 4096 * 8192 (32 mega-pixels).
+ * @property {number} [maxCanvasDim] - The maximum supported canvas dimension,
+ *   in either width or height. Use `-1` for no limit.
+ *   The default value is 32767.
  * @property {Object} [pageColors] - Overwrites background and foreground colors
  *   with user defined ones in order to improve readability in high contrast
  *   mode.
@@ -115,7 +135,7 @@ export class PDFThumbnailView implements IRenderableView {
  *   rendering. The default value is `false`.
  */
 export class TempImageFactory {
-    static "__#79@#tempCanvas": null;
+    static "__#83@#tempCanvas": null;
     static getCanvas(width: any, height: any): (HTMLCanvasElement | CanvasRenderingContext2D | null)[];
     static destroyCanvas(): void;
 }

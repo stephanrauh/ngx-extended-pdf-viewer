@@ -35,8 +35,9 @@ export class PDFRenderingQueue {
      * @param {Array} views
      * @param {boolean} scrolledDown
      * @param {boolean} [preRenderExtra]
+     * @param {boolean} [ignoreDetailViews]
      */
-    getHighestPriority(visible: Object, views: any[], scrolledDown: boolean, preRenderExtra?: boolean): any;
+    getHighestPriority(visible: Object, views: any[], scrolledDown: boolean, preRenderExtra?: boolean, ignoreDetailViews?: boolean): any;
     /**
      * @param {IRenderableView} view
      * @returns {boolean}

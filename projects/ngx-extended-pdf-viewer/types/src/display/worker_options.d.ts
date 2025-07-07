@@ -1,6 +1,6 @@
 export class GlobalWorkerOptions {
-    static "__#49@#port": null;
-    static "__#49@#src": string;
+    static "__#51@#port": null;
+    static "__#51@#src": string;
     /**
      * @param {Worker | null} workerPort - Defines global port for worker process.
      *   Overrides the `workerSrc` option.

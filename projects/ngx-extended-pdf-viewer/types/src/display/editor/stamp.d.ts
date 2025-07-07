@@ -6,10 +6,8 @@ export class StampEditor extends AnnotationEditor {
     static _editorType: number;
     /** @inheritdoc */
     static initialize(l10n: any, uiManager: any): void;
-    static get supportedTypes(): any;
-    static get supportedTypesStr(): any;
     /** @inheritdoc */
-    static isHandlingMimeForPasting(mime: any): any;
+    static isHandlingMimeForPasting(mime: any): boolean;
     /** @inheritdoc */
     static paste(item: any, parent: any): void;
     static computeTelemetryFinalData(data: any): {
@@ -19,6 +17,7 @@ export class StampEditor extends AnnotationEditor {
     /** @inheritdoc */
     static deserialize(data: any, parent: any, uiManager: any): Promise<AnnotationEditor | null>;
     constructor(params: any);
+    defaultL10nId: string;
     /** @inheritdoc */
     get telemetryFinalData(): {
         type: string;
@@ -27,6 +26,7 @@ export class StampEditor extends AnnotationEditor {
     mlGuessAltText(imageData?: null, updateAltTextData?: boolean): Promise<any>;
     /** @inheritdoc */
     onceAdded(focus: any): void;
+    setCanvas(annotationElementId: any, canvas: any): void;
     onScaleChanging(): void;
     copyCanvas(maxDataDimension: any, maxPreviewDimension: any, createImageData?: boolean): {
         canvas: HTMLCanvasElement | null;
@@ -38,8 +38,6 @@ export class StampEditor extends AnnotationEditor {
             data: Uint8ClampedArray<ArrayBufferLike>;
         } | null;
     };
-    /** @inheritdoc */
-    getImageForAltText(): null;
     /** @inheritdoc */
     serialize(isForCopying?: boolean, context?: null): Object | null;
     /** @inheritdoc */

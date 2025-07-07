@@ -40,10 +40,9 @@ export class MessageHandler {
     destroy(): void;
     #private;
 }
-export function wrapReason(ex: any): PasswordException | UnknownErrorException | InvalidPDFException | MissingPDFException | UnexpectedResponseException | AbortException;
+export function wrapReason(ex: any): PasswordException | UnknownErrorException | InvalidPDFException | ResponseException | AbortException;
 import { PasswordException } from "./util.js";
 import { UnknownErrorException } from "./util.js";
 import { InvalidPDFException } from "./util.js";
-import { MissingPDFException } from "./util.js";
-import { UnexpectedResponseException } from "./util.js";
+import { ResponseException } from "./util.js";
 import { AbortException } from "./util.js";

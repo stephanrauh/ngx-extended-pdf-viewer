@@ -27,7 +27,7 @@ export type RenderEditorLayerOptions = {
  */
 export class AnnotationEditorLayer {
     static _initialized: boolean;
-    static "__#33@#editorTypes": Map<number, typeof FreeTextEditor | typeof HighlightEditor | typeof InkEditor | typeof StampEditor>;
+    static "__#34@#editorTypes": Map<number, typeof FreeTextEditor | typeof HighlightEditor | typeof InkEditor | typeof SignatureEditor | typeof StampEditor>;
     /**
      * @param {AnnotationEditorLayerOptions} options
      */
@@ -42,9 +42,9 @@ export class AnnotationEditorLayer {
     get isInvisible(): boolean;
     /**
      * Update the toolbar if it's required to reflect the tool currently used.
-     * @param {number} mode
+     * @param {Object} options
      */
-    updateToolbar(mode: number): void;
+    updateToolbar(options: Object): void;
     /**
      * The mode has changed: it must be updated.
      * @param {number} mode
@@ -122,10 +122,10 @@ export class AnnotationEditorLayer {
     canCreateNewEmptyEditor(): boolean | undefined;
     /**
      * Paste some content into a new editor.
-     * @param {number} mode
+     * @param {Object} options
      * @param {Object} params
      */
-    pasteEditor(mode: number, params: Object): void;
+    pasteEditor(options: Object, params: Object): Promise<void>;
     /**
      * Create a new editor
      * @param {Object} data
@@ -143,7 +143,7 @@ export class AnnotationEditorLayer {
     /**
      * Create and add a new editor.
      */
-    addNewEditor(): void;
+    addNewEditor(data?: {}): void;
     /**
      * Set the last selected editor.
      * @param {AnnotationEditor} editor
@@ -208,4 +208,5 @@ import { AnnotationEditor } from "./editor.js";
 import { FreeTextEditor } from "./freetext.js";
 import { HighlightEditor } from "./highlight.js";
 import { InkEditor } from "./ink.js";
+import { SignatureEditor } from "./signature.js";
 import { StampEditor } from "./stamp.js";

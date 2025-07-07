@@ -73,7 +73,7 @@ export class AnnotationEditor {
      * @param {AnnotationEditorLayer} parent
      */
     static paste(item: DataTransferItem, parent: AnnotationEditorLayer): void;
-    static "__#41@#rotatePoint"(x: any, y: any, angle: any): any[];
+    static "__#42@#rotatePoint"(x: any, y: any, angle: any): any[];
     static _round(x: any): number;
     /**
      * Deserialize the editor.
@@ -91,6 +91,8 @@ export class AnnotationEditor {
      * @param {AnnotationEditorParameters} parameters
      */
     constructor(parameters: AnnotationEditorParameters);
+    isSelected: boolean;
+    _isCopy: boolean;
     _editToolbar: null;
     _initialOptions: any;
     _initialData: null;
@@ -168,6 +170,7 @@ export class AnnotationEditor {
      * @param {number} ty - y-translation in screen coordinates.
      */
     setAt(x: number, y: number, tx: number, ty: number): void;
+    _moveAfterPaste(baseX: any, baseY: any): void;
     /**
      * Translate the editor position within its parent.
      * @param {number} x - x-translation in screen coordinates.
@@ -181,6 +184,7 @@ export class AnnotationEditor {
      * @param {number} y - y-translation in page coordinates.
      */
     translateInPage(x: number, y: number): void;
+    translationDone(): void;
     drag(tx: any, ty: any): void;
     /**
      * Called when the editor is being translated.
@@ -282,7 +286,6 @@ export class AnnotationEditor {
      * @param {PointerEvent} event
      */
     pointerdown(event: PointerEvent): void;
-    get isSelected(): any;
     _onStartDragging(): void;
     _onStopDragging(): void;
     moveInDOM(): void;
@@ -307,12 +310,14 @@ export class AnnotationEditor {
     isEmpty(): boolean;
     /**
      * Enable edit mode.
+     * @returns {boolean} - true if the edit mode has been enabled.
      */
-    enableEditMode(): void;
+    enableEditMode(): boolean;
     /**
      * Disable edit mode.
+     * @returns {boolean} - true if the edit mode has been disabled.
      */
-    disableEditMode(): void;
+    disableEditMode(): boolean;
     /**
      * Check if the editor is edited.
      * @returns {boolean}
@@ -413,13 +418,25 @@ export class AnnotationEditor {
      */
     enableEditing(): void;
     /**
+     * Check if the content of this editor can be changed.
+     * For example, a FreeText editor can be changed (the user can change the
+     * text), but a Stamp editor cannot.
+     * @returns {boolean}
+     */
+    get canChangeContent(): boolean;
+    /**
      * The editor is about to be edited.
      */
     enterInEditMode(): void;
     /**
+     * ondblclick callback.
+     * @param {MouseEvent} event
+     */
+    dblclick(event: MouseEvent): void;
+    /**
      * @returns {HTMLElement | null} the element requiring an alt text.
      */
-    getImageForAltText(): HTMLElement | null;
+    getElementForAltText(): HTMLElement | null;
     /**
      * Get the div which really contains the displayed content.
      * @returns {HTMLDivElement | undefined}

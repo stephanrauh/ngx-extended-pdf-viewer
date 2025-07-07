@@ -1,6 +1,6 @@
 export class AppOptions {
     static eventBus: any;
-    static "__#72@#opts": Map<any, any>;
+    static "__#73@#opts": Map<any, any>;
     static get(name: any): any;
     static getAll(kind?: null, defaultOnly?: boolean): any;
     static set(name: any, value: any): void;

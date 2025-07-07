@@ -97,6 +97,8 @@ export function noContextMenu(e: any): void;
  * Scale factors for the canvas, necessary with HiDPI displays.
  */
 export class OutputScale {
+    static get pixelRatio(): number;
+    static capPixels(maxPixels: any, capAreaFactor: any): any;
     /**
      * @type {number} Horizontal scale.
      */
@@ -109,7 +111,16 @@ export class OutputScale {
      * @type {boolean} Returns `true` when scaling is required, `false` otherwise.
      */
     get scaled(): boolean;
+    /**
+     * @type {boolean} Returns `true` when scaling is symmetric,
+     *   `false` otherwise.
+     */
     get symmetric(): boolean;
+    /**
+     * @returns {boolean} Returns `true` if scaling was limited,
+     *   `false` otherwise.
+     */
+    limitCanvas(width: any, height: any, maxPixels: any, maxDim: any, capAreaFactor?: number): boolean;
 }
 /**
  * @typedef {Object} PageViewportParameters
@@ -242,5 +253,6 @@ export class StatTimer {
     toString(): string;
 }
 export function stopEvent(e: any): void;
+export const SupportedImageMimeTypes: string[];
 export const SVG_NS: "http://www.w3.org/2000/svg";
 export {};

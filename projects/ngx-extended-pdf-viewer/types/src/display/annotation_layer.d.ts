@@ -78,6 +78,10 @@ export type AnnotationLayerParameters = {
  * Manage the layer containing all the annotations.
  */
 export class AnnotationLayer {
+    /**
+     * @private
+     */
+    private static get _defaultBorderStyle();
     constructor({ div, accessibilityManager, annotationCanvasMap, annotationEditorUIManager, page, viewport, structTreeLayer, }: {
         div: any;
         accessibilityManager: any;
@@ -101,6 +105,14 @@ export class AnnotationLayer {
      * @memberof AnnotationLayer
      */
     render(params: AnnotationLayerParameters): Promise<void>;
+    /**
+     * Add link annotations to the annotation layer.
+     *
+     * @param {Array<Object>} annotations
+     * @param {IPDFLinkService} linkService
+     * @memberof AnnotationLayer
+     */
+    addLinkAnnotations(annotations: Array<Object>, linkService: IPDFLinkService): Promise<void>;
     /**
      * Update the annotation elements on existing annotation layer.
      *
@@ -222,6 +234,8 @@ declare class AnnotationElement {
     public getElementsToTriggerPopup(): Array<HTMLElement> | HTMLElement;
     addHighlightArea(): void;
     _editOnDoubleClick(): void;
+    get width(): number;
+    get height(): number;
     #private;
 }
 export {};

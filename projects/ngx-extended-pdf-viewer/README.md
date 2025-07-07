@@ -91,13 +91,13 @@ Expect some breaking changes — but better performance and modern Angular suppo
 
 ## 📦 Version Highlights
 
-### Version 24 (alpha)
+### Version 24
 
 - Upgraded to `pdf.js 5.3`
-- Annotation editor events were temporarily removed (but now they're back, starting with version 24.0.0-alpha.1)
-- Ongoing alpha/beta phase. You can help me by testing the alpha version and giving feedback!
+- Minor breaking change: Every Acroform field with the same name is now updated by the two-way binding `[(formData)]`. In earlier versions, only the first field was changed. Kudos to Sebastien Fauvart for submitting this pull request!
+- There a new "signature editor". Disabled by default, you can opt in with `pdfDefaultOptions.enableSignatureEditor = true;`. Caveat: these signature are not cyptographic PDF signatures. At the time of writing (July 07, 2025), they're merely "stamp annotations".
 
-### Version 23 (current stable)
+### Version 23
 
 - Popup dialog positioning via JavaScript
 - Option to force JavaScript code reload

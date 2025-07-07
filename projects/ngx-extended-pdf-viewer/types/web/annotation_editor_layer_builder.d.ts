@@ -16,6 +16,13 @@ export type AnnotationEditorLayerBuilderOptions = {
     drawLayer?: DrawLayer;
     onAppend?: Function | undefined;
 };
+export type AnnotationEditorLayerBuilderRenderOptions = {
+    viewport: PageViewport;
+    /**
+     * - The default value is "display".
+     */
+    intent?: string | undefined;
+};
 /**
  * @typedef {Object} AnnotationEditorLayerBuilderOptions
  * @property {AnnotationEditorUIManager} [uiManager]
@@ -27,6 +34,11 @@ export type AnnotationEditorLayerBuilderOptions = {
  * @property {TextLayer} [textLayer]
  * @property {DrawLayer} [drawLayer]
  * @property {function} [onAppend]
+ */
+/**
+ * @typedef {Object} AnnotationEditorLayerBuilderRenderOptions
+ * @property {PageViewport} viewport
+ * @property {string} [intent] - The default value is "display".
  */
 export class AnnotationEditorLayerBuilder {
     /**
@@ -41,10 +53,10 @@ export class AnnotationEditorLayerBuilder {
     _cancelled: boolean;
     eventBus: any;
     /**
-     * @param {PageViewport} viewport
-     * @param {string} intent (default value is 'display')
+     * @param {AnnotationEditorLayerBuilderRenderOptions} options
+     * @returns {Promise<void>}
      */
-    render(viewport: PageViewport, intent?: string): Promise<void>;
+    render({ viewport, intent }: AnnotationEditorLayerBuilderRenderOptions): Promise<void>;
     cancel(): void;
     hide(): void;
     show(): void;
