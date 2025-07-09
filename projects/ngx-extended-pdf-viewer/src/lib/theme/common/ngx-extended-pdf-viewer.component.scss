@@ -68,30 +68,35 @@ ngx-extended-pdf-viewer {
 }
 
 ngx-extended-pdf-viewer {
+
+  button.secondaryToolbarButton:focus,
   button:focus,
   a:focus,
   input:focus,
   select:focus {
-    outline: none !important;
-    border: 1px solid blue !important;
+    outline: none;
+    border: 1px solid blue;
   }
 
+  button.secondaryToolbarButton:hover,
   button:hover,
   a:hover {
-    background-color: $general-button-hover !important;
+    background-color: $general-button-hover;
   }
 
   .toolbar {
+
     button:hover,
     a:hover {
-      background-color: $toolbar-button-hover !important;
+      background-color: $toolbar-button-hover;
     }
   }
 
   #sidebarContainer {
+
     button:hover,
     a:hover {
-      background-color: $toolbar-button-hover !important;
+      background-color: $toolbar-button-hover;
     }
   }
 

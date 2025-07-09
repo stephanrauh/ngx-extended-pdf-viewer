@@ -93,6 +93,10 @@ Expect some breaking changes — but better performance and modern Angular suppo
 
 ### Version 24
 
+- Version 24.1.0 and above: improved accessability by showing a hover effect when the mouse is over a button and by adding a blue ring to the active element, thus restoring the implementation we used to have a long time ago. Thanks to Megan for contributing this pull request!
+
+Version 24.0.0:
+
 - Upgraded to `pdf.js 5.3`
 - Minor breaking change: Every Acroform field with the same name is now updated by the two-way binding `[(formData)]`. In earlier versions, only the first field was changed. Kudos to Sebastien Fauvart for submitting this pull request!
 - There a new "signature editor". Disabled by default, you can opt in with `pdfDefaultOptions.enableSignatureEditor = true;`. Caveat: these signature are not cyptographic PDF signatures. At the time of writing (July 07, 2025), they're merely "stamp annotations".
