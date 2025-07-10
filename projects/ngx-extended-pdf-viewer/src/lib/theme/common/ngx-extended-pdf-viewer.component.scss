@@ -114,3 +114,31 @@ ngx-extended-pdf-viewer div.zoom * {
 .hiddenCanvasElement {
   display: none;
 }
+
+
+/* #2943 modified by ngx-extended-pdf-viewer */
+:root {
+  --toolbarButton-pageUp-icon: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M8.35179 5.001L13.8178 10.466C13.876 10.524 13.9222 10.5929 13.9537 10.6688C13.9852 10.7447 14.0013 10.826 14.0012 10.9082C14.0011 10.9904 13.9848 11.0717 13.9531 11.1475C13.9215 11.2234 13.8751 11.2922 13.8168 11.35C13.6991 11.4668 13.5401 11.5324 13.3743 11.5324C13.2085 11.5324 13.0494 11.4668 12.9318 11.35L7.99879 6.416L3.06679 11.349C2.94842 11.4614 2.79085 11.5231 2.62765 11.521C2.46445 11.5189 2.30853 11.4531 2.19312 11.3377C2.07771 11.2223 2.01193 11.0663 2.00982 10.9031C2.0077 10.7399 2.06941 10.5824 2.18179 10.464L7.64779 5L8.35179 5.001Z' fill='black'/%3E%3C/svg%3E");
+  --toolbarButton-pageDown-icon: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M8.35176 10.9989L13.8178 5.53391C13.876 5.47594 13.9222 5.40702 13.9537 5.33113C13.9851 5.25524 14.0013 5.17387 14.0012 5.0917C14.0011 5.00954 13.9848 4.9282 13.9531 4.85238C13.9215 4.77656 13.8751 4.70775 13.8168 4.64991C13.6991 4.53309 13.5401 4.46753 13.3743 4.46753C13.2085 4.46753 13.0494 4.53309 12.9318 4.64991L7.99776 9.58491L3.06776 4.65091C2.9494 4.53853 2.79183 4.47682 2.62863 4.47894C2.46542 4.48106 2.3095 4.54683 2.19409 4.66224C2.07868 4.77765 2.01291 4.93357 2.01079 5.09677C2.00868 5.25997 2.07039 5.41754 2.18276 5.53591L7.64776 10.9999L8.35176 10.9989Z' fill='black'/%3E%3C/svg%3E");
+}
+
+ngx-extended-pdf-viewer {
+  #movePageUpButton::before {
+    mask-image: var(--toolbarButton-pageUp-icon);
+  }
+
+  #movePageDownButton::before {
+    mask-image: var(--toolbarButton-pageDown-icon);
+  }
+
+  /* #2943 modified by ngx-extended-pdf-viewer */
+  .dotted-line {
+    --dotted-line-margin-x: 6px;
+    border-top: 2px dotted lightslategrey;
+    margin: var(--dotted-line-margin-x) 0;
+  }
+
+  /* #2943 end of modification by ngx-extended-pdf-viewer */
+
+  /* #2943 end of modification by ngx-extended-pdf-viewer */
+}

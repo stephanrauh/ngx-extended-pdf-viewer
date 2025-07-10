@@ -58,6 +58,8 @@ const requiredIds = [
   'lastPage',
   'linearizedField',
   'modificationDateField',
+  'movePageUpButton',
+  'movePageDownButton',
   'next',
   'numPages',
   'openFile',
