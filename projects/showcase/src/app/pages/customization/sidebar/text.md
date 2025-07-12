@@ -8,12 +8,13 @@ The attribute `[(sidebarVisible)]` supports two-way binding. It's updated when t
 
 ```html
 <ngx-extended-pdf-viewer
-    #pdfViewer
-    [src]="'/assets/pdfs/stluciadance.com.pdf'"
-    [customSidebar]="theme==='fancy' ? fancySidebar: theme === 'without'? withoutSidebar: null"
-    [(sidebarVisible)]="sidebarOpen"
-    [textLayer]="true"
-    [showHandToolButton]="true">
+  #pdfViewer
+  [src]="'/assets/pdfs/ngx-extended-pdf-viewer-flyer.pdf'"
+  [customSidebar]="theme==='fancy' ? fancySidebar: theme === 'without'? withoutSidebar: null"
+  [(sidebarVisible)]="sidebarOpen"
+  [textLayer]="true"
+  [showHandToolButton]="true"
+>
 </ngx-extended-pdf-viewer>
 ```
 
@@ -36,10 +37,13 @@ The attribute `[(sidebarVisible)]` supports two-way binding. It's updated when t
     <div id="additionalSidebarContainer">
       <div id="toolbarSidebar">
         <div id="outlineOptionsContainer" class="splitToolbarButton toggled">
-          <button style="background-color: red; height:100%;width: 34%;border:0;margin:0;padding:0" 
-            type="button" id="viewThumbnail" 
-            class="toolbarButton" 
-            data-l10n-id="thumbs">
+          <button
+            style="background-color: red; height:100%;width: 34%;border:0;margin:0;padding:0"
+            type="button"
+            id="viewThumbnail"
+            class="toolbarButton"
+            data-l10n-id="thumbs"
+          >
             <span data-l10n-id="thumbs_label">Thumbnails</span>
           </button>
           <button
@@ -47,15 +51,17 @@ The attribute `[(sidebarVisible)]` supports two-way binding. It's updated when t
             type="button"
             id="viewOutline"
             class="toolbarButton"
-            data-l10n-id="document_outline">
+            data-l10n-id="document_outline"
+          >
             <span data-l10n-id="document_outline_label">Document Outline</span>
           </button>
           <button
             style="background-color: blue; height:100%;width: 34%;border:0;margin:0;padding:0"
-            type="button" 
-            id="viewAttachments" 
-            class="toolbarButton" 
-            data-l10n-id="attachments">
+            type="button"
+            id="viewAttachments"
+            class="toolbarButton"
+            data-l10n-id="attachments"
+          >
             <span data-l10n-id="attachments_label">Attachments</span>
           </button>
         </div>
@@ -65,5 +71,4 @@ The attribute `[(sidebarVisible)]` supports two-way binding. It's updated when t
     <div id="sidebarResizer" class="hidden"></div>
   </div>
 </ng-template>
-
 ```

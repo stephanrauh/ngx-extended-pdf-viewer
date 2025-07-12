@@ -4,12 +4,13 @@ Using the `progress` event of the `ngx-extended-pdf-viewer` allows you to displa
 
 ```html
 <ngx-extended-pdf-viewer
-  [src]="'/assets/pdfs/A%20COOL%20KID%20LIKE%20ME.pdf'"
+  [src]="'/assets/pdfs/GraalVM.pdf'"
   zoom="50%"
   [showToolbar]="false"
   (beforePrint)="onBeforePrint()"
   (afterPrint)="onAfterPrint()"
-  (progress)="onProgress($event)">
+  (progress)="onProgress($event)"
+>
 </ngx-extended-pdf-viewer>
 @if (showProgress) {
 <div style="padding-bottom:10px; padding-top:10px">

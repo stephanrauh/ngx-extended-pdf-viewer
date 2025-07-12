@@ -1,11 +1,11 @@
 import { Component, computed, inject } from '@angular/core';
 import { NgxExtendedPdfViewerModule, PDFNotificationService, PdfThumbnailDrawnEvent } from 'ngx-extended-pdf-viewer';
-import { SplitViewComponent } from '../../../shared/components/split-view.component';
-import { SetMinifiedLibraryUsageDirective } from '../../../shared/directives/set-minified-library-usage.directive';
 import { ContentPageComponent } from '../../../shared/components/content-page/content-page.component';
 import { MarkdownContentComponent } from '../../../shared/components/markdown-content.component';
+import { SplitViewComponent } from '../../../shared/components/split-view.component';
 import { SetDefaultViewerHeightDirective } from '../../../shared/directives/set-default-viewer-height.directive';
 import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-default-zoom-level.directive';
+import { SetMinifiedLibraryUsageDirective } from '../../../shared/directives/set-minified-library-usage.directive';
 
 @Component({
   selector: 'pvs-thumbnails-page',
@@ -25,7 +25,7 @@ import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-def
       <pvs-split-view>
         <ngx-extended-pdf-viewer
           slot="end"
-          src="/assets/pdfs/stluciadance.com.pdf"
+          src="/assets/pdfs/ngx-extended-pdf-viewer-flyer.pdf"
           (pageChange)="onPageChange($event)"
           (thumbnailDrawn)="onThumbnailDrawn($event)"
           [textLayer]="true"

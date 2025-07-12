@@ -3,9 +3,9 @@ import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { ContentPageComponent } from '../../../shared/components/content-page/content-page.component';
 import { MarkdownContentComponent } from '../../../shared/components/markdown-content.component';
 import { SplitViewComponent } from '../../../shared/components/split-view.component';
-import { SetMinifiedLibraryUsageDirective } from '../../../shared/directives/set-minified-library-usage.directive';
 import { SetDefaultViewerHeightDirective } from '../../../shared/directives/set-default-viewer-height.directive';
 import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-default-zoom-level.directive';
+import { SetMinifiedLibraryUsageDirective } from '../../../shared/directives/set-minified-library-usage.directive';
 
 @Component({
   selector: 'pvs-mobile-devices-page',
@@ -34,7 +34,7 @@ import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-def
           <div class="speaker"></div>
           <div class="screen">
             <ngx-extended-pdf-viewer
-              src="/assets/pdfs/A COOL KID LIKE ME.pdf"
+              src="/assets/pdfs/GraalVM.pdf"
               height="667px"
               [mobileFriendlyZoom]="'150%'"
               [showSecondaryToolbarButton]="false"
