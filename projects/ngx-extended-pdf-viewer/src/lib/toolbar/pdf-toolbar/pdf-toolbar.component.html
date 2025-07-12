@@ -51,20 +51,9 @@
       <pdf-download [showDownloadButton]="showDownloadButton"></pdf-download>
 
       <!-- #2943 modified by ngx-extended-pdf-viewer -->
-      <div id="movePageUp" class="toolbarButtonWithContainer">
-        <button id="movePageUpButton" class="toolbarButton" type="button" role="radio" aria-expanded="false"
-          aria-haspopup="false" aria-controls="movePageUpParamsToolbar" tabindex="0"
-          data-l10n-id="pdfjs-editor-movePageUp-button">
-          <span data-l10n-id="pdfjs-editor-movePageUp-button-label"></span>
-        </button>
-      </div>
-      <div id="movePageDown" class="toolbarButtonWithContainer">
-        <button id="movePageDownButton" class="toolbarButton" type="button" role="radio" aria-expanded="false"
-          aria-haspopup="false" aria-controls="movePageDownParamsToolbar" tabindex="0"
-          data-l10n-id="pdfjs-editor-movePageDown-button">
-          <span data-l10n-id="pdfjs-editor-movePageDown-button-label"></span>
-        </button>
-      </div>
+      <pdf-move-down></pdf-move-down>
+      <pdf-move-up></pdf-move-up>
+
       <!-- #2943 end of modification by ngx-extended-pdf-viewer -->
 
       <pdf-editor [showDrawEditor]="showDrawEditor" [showHighlightEditor]="showHighlightEditor"

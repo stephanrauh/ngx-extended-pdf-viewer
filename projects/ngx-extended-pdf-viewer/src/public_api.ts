@@ -93,6 +93,8 @@ export * from './lib/toolbar/pdf-hand-tool/pdf-hand-tool.component';
 export * from './lib/toolbar/pdf-highlight-editor/pdf-highlight-editor.component';
 export * from './lib/toolbar/pdf-horizontal-scroll/pdf-horizontal-scroll.component';
 export * from './lib/toolbar/pdf-infinite-scroll/pdf-infinite-scroll.component';
+export * from './lib/toolbar/pdf-move-down/pdf-move-down.component';
+export * from './lib/toolbar/pdf-move-up/pdf-move-up.component';
 export * from './lib/toolbar/pdf-no-spread/pdf-no-spread.component';
 export * from './lib/toolbar/pdf-odd-spread/pdf-odd-spread.component';
 export * from './lib/toolbar/pdf-open-file/pdf-open-file.component';

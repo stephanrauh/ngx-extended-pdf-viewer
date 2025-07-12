@@ -49,6 +49,8 @@ import { PdfHandToolComponent } from './toolbar/pdf-hand-tool/pdf-hand-tool.comp
 import { PdfHighlightEditorComponent } from './toolbar/pdf-highlight-editor/pdf-highlight-editor.component';
 import { PdfHorizontalScrollComponent } from './toolbar/pdf-horizontal-scroll/pdf-horizontal-scroll.component';
 import { PdfInfiniteScrollComponent } from './toolbar/pdf-infinite-scroll/pdf-infinite-scroll.component';
+import { PdfMoveDownComponent } from './toolbar/pdf-move-down/pdf-move-down.component';
+import { PdfMoveUpComponent } from './toolbar/pdf-move-up/pdf-move-up.component';
 import { PdfNoSpreadComponent } from './toolbar/pdf-no-spread/pdf-no-spread.component';
 import { PdfOddSpreadComponent } from './toolbar/pdf-odd-spread/pdf-odd-spread.component';
 import { PdfOpenFileComponent } from './toolbar/pdf-open-file/pdf-open-file.component';
@@ -130,6 +132,8 @@ if (!Promise['allSettled']) {
     PdfLastPageComponent,
     PdfLightThemeComponent,
     PdfMatchDiacriticsComponent,
+    PdfMoveDownComponent,
+    PdfMoveUpComponent,
     PdfNextPageComponent,
     PdfNoSpreadComponent,
     PdfOddSpreadComponent,
@@ -204,6 +208,8 @@ if (!Promise['allSettled']) {
     PdfLastPageComponent,
     PdfLightThemeComponent,
     PdfMatchDiacriticsComponent,
+    PdfMoveDownComponent,
+    PdfMoveUpComponent,
     PdfNextPageComponent,
     PdfNoSpreadComponent,
     PdfOddSpreadComponent,
