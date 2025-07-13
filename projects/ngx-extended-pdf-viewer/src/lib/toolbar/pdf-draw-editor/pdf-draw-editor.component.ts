@@ -20,7 +20,7 @@ export class PdfDrawEditorComponent {
   private PDFViewerApplication: IPDFViewerApplication | undefined;
 
   constructor(
-    private notificationService: PDFNotificationService,
+    notificationService: PDFNotificationService,
     private cdr: ChangeDetectorRef,
   ) {
     effect(() => {

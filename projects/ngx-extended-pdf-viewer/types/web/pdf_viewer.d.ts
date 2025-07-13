@@ -275,6 +275,7 @@ export class PDFViewer {
     setTextLayerMode(mode: any): void;
     get pagesCount(): number;
     getPageView(index: any): any;
+    swapPages(oldIndex: any, newIndex: any): void;
     getCachedPageViews(): Set<any>;
     /**
      * @type {boolean} - True if all {PDFPageView} objects are initialized.

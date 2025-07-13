@@ -100,6 +100,7 @@ export class PDFThumbnailViewer {
     set pagesRotation(rotation: any);
     get pagesRotation(): any;
     _pagesRotation: any;
+    swapThumbnails(prevIndex: any, newIndex: any): void;
     cleanup(): void;
     _thumbnails: any[] | undefined;
     _pageLabels: any[] | null | undefined;

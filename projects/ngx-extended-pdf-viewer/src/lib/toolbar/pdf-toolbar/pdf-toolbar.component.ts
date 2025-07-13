@@ -62,6 +62,9 @@ export class PdfToolbarComponent implements AfterViewInit {
   public showFirstAndLastPageButtons: ResponsiveVisibility = true;
 
   @Input()
+  public showMovePageButton: ResponsiveVisibility = true;
+
+  @Input()
   public showPreviousAndNextPageButtons: ResponsiveVisibility = true;
 
   @Input()

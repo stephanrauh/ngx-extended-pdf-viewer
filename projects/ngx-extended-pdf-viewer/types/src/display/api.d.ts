@@ -1072,7 +1072,7 @@ export class PDFDocumentProxy {
      * @returns {Promise<Uint8Array>} A promise that is resolved with a
      *   {Uint8Array} containing the full data of the saved document.
      */
-    saveDocument(): Promise<Uint8Array>;
+    saveDocument(pageOrder?: null): Promise<Uint8Array>;
     /**
      * @returns {Promise<{ length: number }>} A promise that is resolved when the
      *   document's data is loaded. It is resolved with an {Object} that contains

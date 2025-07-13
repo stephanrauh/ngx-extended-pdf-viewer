@@ -86,6 +86,13 @@ export class PDFThumbnailView implements IRenderableView {
     renderingState: number;
     resume: (() => void) | null;
     _placeholderImg: Element | null | undefined;
+    _dragStartHandler(event: any): void;
+    _dragOverHandler(event: any): void;
+    _dropHandler(event: any): void;
+    _mouseDownHandler(event: any): void;
+    _showDottedLine(target: any, height: any, insertAbove: any): void;
+    _removeDottedLine(): void;
+    _movePage(draggedId: any, targetId: any): void;
     createThumbnail(pdfThumbnailView: any, linkService: any, id: any, container: any, pageL10nArgs: any): void;
     anchor: HTMLAnchorElement | undefined;
     div: HTMLDivElement | undefined;
@@ -135,7 +142,7 @@ export class PDFThumbnailView implements IRenderableView {
  *   rendering. The default value is `false`.
  */
 export class TempImageFactory {
-    static "__#83@#tempCanvas": null;
+    static "__#87@#tempCanvas": null;
     static getCanvas(width: any, height: any): (HTMLCanvasElement | CanvasRenderingContext2D | null)[];
     static destroyCanvas(): void;
 }

@@ -725,6 +725,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   public showFindMessages = true;
 
   @Input()
+  public showMovePageButton: ResponsiveVisibility = false;
+
+  @Input()
   public showPagingButtons: ResponsiveVisibility = true;
 
   @Input()
