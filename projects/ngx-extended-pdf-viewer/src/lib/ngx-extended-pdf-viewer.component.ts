@@ -987,6 +987,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     return pdfDefaultOptions.enableSignatureEditor;
   }
 
+  public get enablePageReordering(): boolean {
+    return pdfDefaultOptions.enablePageReordering;
+  }
+
   /**
    * This attributes allows you to increase the size of the UI elements so you can use them on small mobile devices.
    * This attribute is a string with a percent character at the end (e.g. "150%").

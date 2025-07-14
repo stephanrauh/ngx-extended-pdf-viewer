@@ -4,7 +4,7 @@ const _isIE11 = typeof window === 'undefined' ? false : !!(<any>globalThis).MSIn
 const isEdge = typeof navigator === 'undefined' || /Edge\/\d./i.test(navigator.userAgent);
 const needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
 
-export const pdfjsVersion = '5.3.738';
+export const pdfjsVersion = '5.3.740';
 export const pdfjsBleedingEdgeVersion = '5.3.742';
 export function getVersionSuffix(folder: string): string {
   if (folder?.includes('bleeding-edge')) {
@@ -161,4 +161,5 @@ export const pdfDefaultOptions = {
   passwordPrompt: undefined,
   enableHWA: true, // enable hardware acceleration. Active since pdf.js 4.4.
   positionPopupDialogsWithJavaScript: true,
+  enablePageReordering: false, // allows users to reorder pages by dragging thumbnails
 };
