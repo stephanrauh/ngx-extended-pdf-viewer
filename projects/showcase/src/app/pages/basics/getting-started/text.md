@@ -1,8 +1,10 @@
+## Prequisites
 
+You can get the PDF viewer up and running in roughly two minutes. You need node.js, npm and a current version of Angular. Plus, you need to configure your server to support \*.mjs files with the correct MIME type. See the <a href="/extended-pdf-viewer/troubleshooting">troubleshooting</a> page to learn how to configure your server.
 
-## Prequisites and announcement
+## Which Angular version do you need?
 
-You can get the PDF viewer up and running in roughly two minutes. You need node.js, npm and a current version of Angular. This library aims to be compatible to the last four versions of Angular, which gives you two years time to update.
+There are no promises - but this library aims to be compatible to the last four versions of Angular, which gives you two years time to update. Most of the time, this works. Version 25 may be one of the version that break this goal: I want to support signals, migrate to stand-alone components, and - maybe - even support zone-less Angular. It's unlikely that this works with older versions of Angular, so that might raise the bar to Angular 18, 19 or even 20.
 
 With very few exceptions, I only maintain the most current version of the viewer. As much as I'd like to provide bug fixes to older versions, I don't have enough time to spare.
 
@@ -22,9 +24,11 @@ I've described these steps in more detail <a href="https://github.com/stephanrau
 
 1. Open a terminal and navigate to the root folder of your project.
 2. Run this command and accept the defaults:
+
 ```batch
 ng add ngx-extended-pdf-viewer@latest
-``` 
+```
+
 3. If you need a specific version of ngx-extended-pdf-viewer, replace `@latest` by the version number you need. `@latest` gets you the newest stable version. If you omit `@latest`, Angular tries to detect the latest compatible version. Note that this may be an alpha version. Usually these alpha version are useful, too, but they ship without promises. By definition, an alpha version is a version that might be broken.
 4. Add the new component `<app-example-pdf-viewer>` to your `<app-component>` to display the PDF file.
 
@@ -74,14 +78,17 @@ If you want to use the "bleeding edge" version of pdf.js, add these lines:
   "scripts": []
 ```
 
-
 You will also need to add those lines to your component :
+
 1. An import statement
+
 ```ts
 import { pdfDefaultOptions } from 'ngx-extended-pdf-viewer';
 ```
+
 2. A line in your constructor
-```ts 
+
+```ts
 pdfDefaultOptions.assetsFolder = 'bleeding-edge';
 ```
 
@@ -132,65 +139,9 @@ Now you can display the PDF file like so:
 
 _Hint:_ If you are using JHipster, note there's no `assets` folder, so most likely the path of the URL is something like `[src]="'content/example.pdf'"`.
 
-
-### older JHipster or Webpack
-
-**Caveat**: I don't support non-standard installations. This includes JHipster. Nonetheless, I've collected some hint that might help you get the PDF viewer up and running.
-
-1. Install the library with `npm install`:
-
-```batch
-npm i ngx-extended-pdf-viewer --save
-```
-
-
-1. Locate the `CopyWebpackPlugin` in the file `webpack.common.js` (currently line 70) and add this line:
-
-```javascript
-new CopyWebpackPlugin([
-  { from: "./node_modules/ngx-extended-pdf-viewer/assets/locale", to: 'content/assets/locale' },
-```
-
-2. Copy the files
-- `node_modules/ngx-extended-pdf-viewer/assets/pdf.worker.min.js` and
-- `node_modules/ngx-extended-pdf-viewer/assets/pdf.min.js`
-  manually to `src/main/webcontent/app`.
-
-3. Copy the file `node_modules/ngx-extended-pdf-viewer/assets/viewer.min.js` manually to a new folder `src/main/webcontent/app/web`.
-
-4. Add these lines to the imports section of the `app.main.ts` file:
-
-```typescript
-require('ngx-extended-pdf-viewer/assets/pdf.min.js');
-require('ngx-extended-pdf-viewer/assets/pdf.worker.min.js');
-require('ngx-extended-pdf-viewer/assets/web/viewer.min.js');
-```
-
-5. If you want to support Internet Explorer 11 and some other older browsers, also copy the ES5 version of these files:
-- `node_modules/ngx-extended-pdf-viewer/assets/pdf.worker-es5.min.js` and
-- `node_modules/ngx-extended-pdf-viewer/assets/pdf-es5.min.js`
-- `node_modules/ngx-extended-pdf-viewer/assets/viewer-es5.min.js`
-
-6. If you need to debug the PDF viewer, you may want to use the non-minified versions of these files: `pdf.worker.js`, `pdf.js`, and `viewer.js`.
-
-7. Open the freshly copied pdf.js file, locate the function `webpackUniversalModuleDefinition()` and replace the first ten lines by this version:
-
-```typescript
-(function webpackUniversalModuleDefinition(root, factory) {
-  if(typeof exports === 'object' && typeof module === 'object')
-    module.exports = factory();
-  else if(typeof define === 'function' && define.amd)
-    define("pdfjs-dist/build/pdf", [], factory);
-  else if(typeof exports === 'object')
-    exports["pdfjs-dist/build/pdf"] = factory();
-  // else <-- delete line
-  window["pdfjs-dist/build/pdf"] = root["pdfjs-dist/build/pdf"] = root.pdfjsLib = factory(); // <-- modified line
-})(this, function() {
-```
-
 #### Almost there!
 
-Add `NgxExtendedPdfViewerModule` to the import section of your module file. If your IDE doesn't find 
+Add `NgxExtendedPdfViewerModule` to the import section of your module file. If your IDE doesn't find
 the import automatically, here it is:
 
 ```typescript
@@ -204,7 +155,6 @@ Now you can display the PDF file like so:
 ```
 
 _Hint:_ If you are using JHipster, note there's no `assets` folder, so most likely the path of the URL is something like `[src]="'content/example.pdf'"`.
-
 
 ### Still got difficulties?
 

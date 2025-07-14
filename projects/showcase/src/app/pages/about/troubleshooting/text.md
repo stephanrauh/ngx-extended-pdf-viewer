@@ -32,10 +32,9 @@ Material Design tab:
 Add a short timeout. The idea is to show the PDF viewer with a short delay, so the modal has enough time to become visible before the PDF viewer initializes:
 
 ```html
-@if (showViewer) { 
-  <ngx-extended-pdf-viewer [src]="'assets/Example.pdf'"> 
-  </ngx-extended-pdf-viewer>
-} 
+@if (showViewer) {
+<ngx-extended-pdf-viewer [src]="'assets/Example.pdf'"> </ngx-extended-pdf-viewer>
+}
 ```
 
 ```ts
@@ -52,6 +51,7 @@ public class PDFTabComponent {
 Most of these problems should be a thing of the past since version 22.3.0. You can drop the timeout, because ngx-extended-pdf-viewer now detects the issue and delays initialization internally. Note that this means it never initializes if the user doesn't open the modal or tab.
 
 ## Modals - Exceptions on close
+
 If the PDF viewer prints exceptions in the console log when closing the modal, you may want to call `ngOnDestroy()`
 manually. <a href="/modal">The demo on modals</a> demonstrates this approach.
 
@@ -61,13 +61,13 @@ Please update the library `zone.js` to a current version. At the time of writing
 
 ## Running Angular in a context path or using a non-standard assets folder
 
-The CMap files and the JavaScript files <code>pdf.min.js</code>, <code>viewer.min.js</code>, and <code>pdf.worker.min.js</code> are expected to be in the assets folder of your application.
+The CMap files and the JavaScript files <code>viewer-\*.min.mjs</code>, and <code>pdf.worker-\*.min.mjs</code> are expected to be in the assets folder of your application.
 Sometimes the path resolution fails. In this case, you'll need to set the default option <code>assetsFolder</code> to the appropriate value.
 Maybe you'll even have to modify the derived options <code>workerSrc</code> and <code>cMapUrl</code>.
 
-Another workaround is to load the files <code>pdf.min.js</code> and <code>viewer.min.js</code> yourself. You just have to make sure that the files are loaded before ngx-extended-pdf-viewer is initialized. The drawback of this approach is that there's no automatic browser switch. ngx-extended-pdf-viewer detects the capabilities the user's browsers and selects either the slow-but-safe ECMAScript 5 version, or the faster default version that only runs on modern browsers.
+Another workaround is to load the file <code>viewer-\*.min.mjs</code> yourself. You just have to make sure that the files are loaded before ngx-extended-pdf-viewer is initialized. The drawback of this approach is that there's no automatic browser switch. ngx-extended-pdf-viewer detects the capabilities the user's browsers and selects either the slow-but-safe ECMAScript 5 version, or the faster default version that only runs on modern browsers.
 
-In any case, you should not load the file <code>pdf.worker.min.js</code> yourself. Technically, that's possible, and the approach works well for small PDF files. But it ruins the performance of the PDF viewer. One of our <a href="https://www.obwb.ca/library/okanagan-basin-waterscape-poster/">test PDF files (75 MB!)</a> shows almost immediately in the default configuration, but takes several minutes when your loading <code>pdf.worker.min.js</code> yourself. (The technical explanation is that loading the pdf worker file yourself disables the service worker).
+In any case, you should not load the file <code>pdf.worker-\*.min.mjs</code> yourself. Technically, that's possible, and the approach works well for small PDF files. But it ruins the performance of the PDF viewer. One of our <a href="https://www.obwb.ca/library/okanagan-basin-waterscape-poster/">test PDF files (75 MB!)</a> shows almost immediately in the default configuration, but takes several minutes when your loading <code>pdf.worker-\*.min.mjs</code> yourself. (The technical explanation is that loading the pdf worker file yourself disables the service worker).
 
 ## I can't find the find button
 

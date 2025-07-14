@@ -35,7 +35,7 @@ In your component HTML:
 <ngx-extended-pdf-viewer [src]="'assets/example.pdf'"></ngx-extended-pdf-viewer>
 ```
 
-In your module or standalone component:
+**For NgModule-based applications:**
 
 ```ts
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
@@ -44,6 +44,36 @@ import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
   imports: [NgxExtendedPdfViewerModule],
 })
 export class AppModule {}
+```
+
+**For standalone components (Angular 17+):**
+
+```ts
+import { Component } from '@angular/core';
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
+
+@Component({
+  selector: 'app-pdf-viewer',
+  standalone: true,
+  imports: [NgxExtendedPdfViewerModule],
+  template: `<ngx-extended-pdf-viewer [src]="'assets/example.pdf'"></ngx-extended-pdf-viewer>`,
+})
+export class PdfViewerComponent {}
+```
+
+**Or configure in main.ts for application-wide availability:**
+
+```ts
+import { bootstrapApplication } from '@angular/platform-browser';
+import { importProvidersFrom } from '@angular/core';
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
+
+bootstrapApplication(AppComponent, {
+  providers: [
+    importProvidersFrom(NgxExtendedPdfViewerModule),
+    // other providers...
+  ],
+});
 ```
 
 > 🧭 For hands-on examples and step-by-step guides, visit the [showcase](https://pdfviewer.net) and the [getting started page](https://pdfviewer.net/extended-pdf-viewer/getting-started).
@@ -73,17 +103,25 @@ Expect some breaking changes — but better performance and modern Angular suppo
 
 ## 🧩 Core Features
 
-- Customizable toolbar and UI
-- Programmatic access (searching, scrolling, printing, layer toggling)
-- Support for both standard and XFA forms
-- Basic PDF editing (text, images, ink, highlights)
-- Multiple scroll modes and zoom control
-- Sidebar with thumbnails, outlines, and attachments
-- Built-in internationalization (dozens of languages)
-- Drag-and-drop support
-- Fullscreen and book mode
-- Responsive layout and mobile optimization
-- Direct access to pdf.js core API with TypeScript types
+- 🎨 **Customizable toolbar and UI** - Hide/show any button, customize layout
+- 🔍 **Advanced search capabilities** - Find text, highlight all, multiple search terms, regex support
+- 📝 **Comprehensive form support** - Standard and XFA forms with two-way data binding
+- ✏️ **PDF annotation and editing** - Text, images, ink drawings, highlights, stamps, signatures
+- 🔄 **Page reordering** - Drag and drop pages via thumbnails (v24.2+)
+- 📊 **Multiple viewing modes** - Single page, book mode, infinite scroll, side-by-side
+- 🎯 **Precision zoom control** - Programmatic zoom, fit-to-width/height, custom levels
+- 🗂️ **Rich sidebar** - Thumbnails, document outline, attachments, layers
+- 🌍 **Internationalization** - Built-in support for dozens of languages
+- 📱 **Mobile optimization** - Touch gestures, responsive design, mobile-friendly zoom
+- 🖱️ **Drag-and-drop support** - Load PDFs by dropping files onto the viewer
+- 🖥️ **Fullscreen mode** - Immersive viewing experience
+- ♿ **Accessibility features** - Keyboard navigation, screen reader support, focus indicators
+- 🎛️ **Advanced JavaScript API** - Popup positioning, custom find controllers, annotation events
+- 🚀 **Performance optimized** - Canvas size detection, memory leak prevention, efficient rendering
+- 🔗 **Direct pdf.js API access** - Full TypeScript support for low-level operations
+- 🔒 **Security features** - CSP compatibility, XSS protection
+
+Regarding security: I'm not perfect - it's always a best-effort approach without guarantees. I'm 100% committed, but I need your help, and even so, in the long run, errors are invevitable. The art is to close vulnerabilities before a hacker can exploit then - and that's a joint effort. Together, we'll manage. Don't hesitate to report bugs and vulnerabilities as soon as possible!
 
 <sub>See the full list of [features on the showcase site](https://pdfviewer.net).</sub>
 
@@ -92,6 +130,10 @@ Expect some breaking changes — but better performance and modern Angular suppo
 ## 📦 Version Highlights
 
 ### Version 24
+
+- Version 24.2.0 and above:
+  - **Showcase Application Modernization**: The showcase application has been converted to standalone components, demonstrating modern Angular patterns and best practices for integration.
+  - **Page Reordering Feature**: New `enablePageReordering` option allows users to reorder PDF pages by dragging thumbnails. Enable it with `pdfDefaultOptions.enablePageReordering = true;`.
 
 - Version 24.1.0 and above: improved accessability by showing a hover effect when the mouse is over a button and by adding a blue ring to the active element, thus restoring the implementation we used to have a long time ago. Thanks to Megan for contributing this pull request!
 

@@ -666,3 +666,4 @@
 - 24.0.0-alpha.3 update the stable branch to pdf.js 5.3; #2959 two-way binding of forms now also updates multiple fields with the same name (kudos to Sebastien Fauvart!)
 - 24.1.0 #2962 restored the hover effect of the buttons which has gone lost a long time ago; also add a blue ring around the active button (kudos to Megan who kindly contributed this pull request!)
 - 24.2.0.alpha-0 #2943 added a feature allowing to users to re-order the pages (kudos to Christian Stolle for contributing this pull request!)
+- 24.2.0.alpha-1 #2943 fine-tuning; added `pdfDefaultOptions.enablePageReordering`

@@ -1168,6 +1168,7 @@ export interface IPDFViewerApplication {
   onError: (error: Error) => void;
   page: number;
   pagesCount: number;
+  pageOrder: Array<number>; // #2943
   passwordPrompt: PasswordPrompt;
   pdfDocument: PDFDocumentProxy;
   pdfLinkService: any /* PDFLinkService;*/;
