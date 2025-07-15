@@ -1,1 +1,1 @@
-export const ngxExtendedPdfViewerVersion: "24.2.1";
+export const ngxExtendedPdfViewerVersion: "24.2.2";
