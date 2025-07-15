@@ -13,11 +13,11 @@
 # limitations under the License.
 
 # Additional translations
-unverified-signature-warning = Dokument vsebuje digitalni podpis. PDF viewer ne more preveriti veljavnost podpisa. Prosimo prenesite dokument in veljavnost podpisa preverite v programu Acrobat Reader.
-pdfjs-infinite-scroll-button-label = Neskončno drsenje
-pdfjs-find-multiple-checkbox-label = Najdi vsako besedo
+unverified-signature-warning = Ova PDF datoteka sadrži digitalni potpis. PDF pregljednik ne može provjeriti je li potpis valjan. Molimo preuzmite datoteku i otvorite je u Acrobat Reader-u da biste provjerili valjanost potpisa.
+pdfjs-infinite-scroll-button-label = Beskonačno pomicanje
+pdfjs-find-multiple-checkbox-label = Podudaraj svaku riječ
 pdfjs-find-regexp-checkbox-label = Regularni izraz
-pdfjs-editor-movePageUp-button = Premakni stran navzgor
-pdfjs-editor-movePageUp-button-label = Premakni stran navzgor
-pdfjs-editor-movePageDown-button = Premakni stran navzdol
-pdfjs-editor-movePageDown-button-label = Premakni stran navzdol
+pdfjs-editor-movePageUp-button = Pomakni stranicu gore
+pdfjs-editor-movePageUp-button-label = Pomakni stranicu gore
+pdfjs-editor-movePageDown-button = Pomakni stranicu dolje
+pdfjs-editor-movePageDown-button-label = Pomakni stranicu dolje

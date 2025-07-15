@@ -14,4 +14,11 @@
 
 # Additional translations
 unverified-signature-warning = Este arquivo PDF contém uma assinatura digital. O visualizador de PDF não pode verificar se a assinatura é válida. Faça download do arquivo e abra-o no Acrobat Reader para verificar se a assinatura é válida.
+pdfjs-infinite-scroll-button-label = Rolagem infinita
+pdfjs-find-multiple-checkbox-label = Corresponder a cada palavra
+pdfjs-find-regexp-checkbox-label = Expressão regular
+pdfjs-editor-movePageUp-button = Mover página para cima
+pdfjs-editor-movePageUp-button-label = Mover página para cima
+pdfjs-editor-movePageDown-button = Mover página para baixo
+pdfjs-editor-movePageDown-button-label = Mover página para baixo
 

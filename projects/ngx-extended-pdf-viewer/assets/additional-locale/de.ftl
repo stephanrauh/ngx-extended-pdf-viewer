@@ -17,3 +17,7 @@ unverified-signature-warning = Diese PDF-Datei enthält eine digitale Signatur. 
 pdfjs-infinite-scroll-button-label = Infinite Scroll
 pdfjs-find-multiple-checkbox-label = Jedes Wort finden
 pdfjs-find-regexp-checkbox-label = Regulärer Ausdruck
+pdfjs-editor-movePageUp-button = Seite nach oben verschieben
+pdfjs-editor-movePageUp-button-label = Seite nach oben verschieben
+pdfjs-editor-movePageDown-button = Seite nach unten verschieben
+pdfjs-editor-movePageDown-button-label = Seite nach unten verschieben

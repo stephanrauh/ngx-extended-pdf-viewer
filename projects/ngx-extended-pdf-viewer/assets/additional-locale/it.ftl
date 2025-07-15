@@ -14,3 +14,10 @@
 
 # Additional translations
 unverified-signature-warning = Questo file PDF contiene una firma digitale. Questo visualizzatore PDF non può verificare se la firma è valida. Scarica il file e aprilo in Acrobat Reader per verificare che la firma sia valida.
+pdfjs-infinite-scroll-button-label = Scorrimento infinito
+pdfjs-find-multiple-checkbox-label = Trova ogni parola
+pdfjs-find-regexp-checkbox-label = Espressione regolare
+pdfjs-editor-movePageUp-button = Sposta pagina in alto
+pdfjs-editor-movePageUp-button-label = Sposta pagina in alto
+pdfjs-editor-movePageDown-button = Sposta pagina in basso
+pdfjs-editor-movePageDown-button-label = Sposta pagina in basso

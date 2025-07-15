@@ -25,6 +25,7 @@
     "add-documentation-page": "schematics ./projects/showcase-schematics:documentationPage --dry-run=false",
     "--- test ng add ngx-extended-pdf-viewer": "",
     "add": "./build-tools/7-test-schematics.sh",
+    "merge-translations": "node merge-translations.js",
     "--- test": "",
     "test": "jest",
     "test:ci": "jest --coverage",
