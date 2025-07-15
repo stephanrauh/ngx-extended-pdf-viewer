@@ -667,3 +667,5 @@
 - 24.1.0 #2962 restored the hover effect of the buttons which has gone lost a long time ago; also add a blue ring around the active button (kudos to Megan who kindly contributed this pull request!)
 - 24.2.0.alpha-0 #2943 added a feature allowing to users to re-order the pages (kudos to Christian Stolle for contributing this pull request!)
 - 24.2.0 #2943 fine-tuning; added `pdfDefaultOptions.enablePageReordering`
+- 24.2.1 #2943 fixed a bug of the new "move page down" button; added AI-generated translations for 20 European languages (if that experiment works well, I'll add translation for all 112 supported languages later)
+- 24.2.2 updated the README

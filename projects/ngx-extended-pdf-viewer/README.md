@@ -134,6 +134,7 @@ Regarding security: I'm not perfect - it's always a best-effort approach without
 - Version 24.2.0 and above:
   - **Showcase Application Modernization**: The showcase application has been converted to standalone components, demonstrating modern Angular patterns and best practices for integration.
   - **Page Reordering Feature**: New `enablePageReordering` option allows users to reorder PDF pages by dragging thumbnails. Enable it with `pdfDefaultOptions.enablePageReordering = true;`.
+  - **Translations of ngx-extendeded-pdf-viewer extensions**: I had my AI translate the labels of the buttons to 20 European languages. That's an experiment. If it works well, I'll add translations for all 112 languages supported by pdf.js. But let's start small - I don't speak non-European languages, which means I can't verify the AI generates the correct translation!
 
 - Version 24.1.0 and above: improved accessability by showing a hover effect when the mouse is over a button and by adding a blue ring to the active element, thus restoring the implementation we used to have a long time ago. Thanks to Megan for contributing this pull request!
 
