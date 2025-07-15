@@ -622,7 +622,10 @@ pdfjs-editor-edit-signature-dialog-title = Uredi opis
 
 # Additional translations for ngx-extended-pdf-viewer (sl)
 unverified-signature-warning = Dokument vsebuje digitalni podpis. PDF viewer ne more preveriti veljavnost podpisa. Prosimo prenesite dokument in veljavnost podpisa preverite v programu Acrobat Reader.
-# Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-infinite-scroll-button-label = Infinite scroll
-pdfjs-find-multiple-checkbox-label = Match Each Word
-pdfjs-find-regexp-checkbox-label = Regular Expression
+pdfjs-infinite-scroll-button-label = Neskončno drsenje
+pdfjs-find-multiple-checkbox-label = Najdi vsako besedo
+pdfjs-find-regexp-checkbox-label = Regularni izraz
+pdfjs-editor-movePageUp-button = Premakni stran navzgor
+pdfjs-editor-movePageUp-button-label = Premakni stran navzgor
+pdfjs-editor-movePageDown-button = Premakni stran navzdol
+pdfjs-editor-movePageDown-button-label = Premakni stran navzdol

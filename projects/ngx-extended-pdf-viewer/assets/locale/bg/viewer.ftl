@@ -450,6 +450,15 @@ pdfjs-editor-new-alt-text-not-now-button = Не сега
 ## Edit signature description dialog
 
 
+# Additional translations for ngx-extended-pdf-viewer (bg)
+unverified-signature-warning = Този PDF файл съдържа цифров подпис. PDF преглядачът не може да провери дали подписът е валиден. Моля, изтеглете файла и го отворете в Acrobat Reader, за да проверите дали подписът е валиден.
+pdfjs-infinite-scroll-button-label = Безкрайно превъртане
+pdfjs-find-multiple-checkbox-label = Съвпадение на всяка дума
+pdfjs-find-regexp-checkbox-label = Регулярен израз
+pdfjs-editor-movePageUp-button = Премести страницата нагоре
+pdfjs-editor-movePageUp-button-label = Премести страницата нагоре
+pdfjs-editor-movePageDown-button = Премести страницата надолу
+pdfjs-editor-movePageDown-button-label = Премести страницата надолу
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-editor-highlight-button =
     .title = Highlight
@@ -580,7 +589,3 @@ pdfjs-editor-delete-signature-button-label1 = Remove saved signature
 pdfjs-editor-add-signature-edit-button-label = Edit description
 pdfjs-editor-edit-signature-dialog-title = Edit description
 pdfjs-editor-edit-signature-update-button = Update
-unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
-pdfjs-infinite-scroll-button-label = Infinite scroll
-pdfjs-find-multiple-checkbox-label = Match Each Word
-pdfjs-find-regexp-checkbox-label = Regular Expression

@@ -617,8 +617,12 @@ pdfjs-editor-add-signature-edit-button-label = Edytuj opis
 
 pdfjs-editor-edit-signature-dialog-title = Edycja opisu
 
-# Translations for ngx-extended-pdf-viewer additions only available in en-US
-unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
-pdfjs-infinite-scroll-button-label = Infinite scroll
-pdfjs-find-multiple-checkbox-label = Match Each Word
-pdfjs-find-regexp-checkbox-label = Regular Expression
+# Additional translations for ngx-extended-pdf-viewer (pl)
+unverified-signature-warning = Ten plik PDF zawiera podpis cyfrowy. Przeglądarka PDF nie może zweryfikować, czy podpis jest ważny. Pobierz plik i otwórz go w Acrobat Reader, aby zweryfikować ważność podpisu.
+pdfjs-infinite-scroll-button-label = Nieskończone przewijanie
+pdfjs-find-multiple-checkbox-label = Dopasuj każde słowo
+pdfjs-find-regexp-checkbox-label = Wyrażenie regularne
+pdfjs-editor-movePageUp-button = Przenieś stronę w górę
+pdfjs-editor-movePageUp-button-label = Przenieś stronę w górę
+pdfjs-editor-movePageDown-button = Przenieś stronę w dół
+pdfjs-editor-movePageDown-button-label = Przenieś stronę w dół

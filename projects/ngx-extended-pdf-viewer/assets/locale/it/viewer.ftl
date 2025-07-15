@@ -616,7 +616,10 @@ pdfjs-editor-edit-signature-dialog-title = Modifica descrizione
 
 # Additional translations for ngx-extended-pdf-viewer (it)
 unverified-signature-warning = Questo file PDF contiene una firma digitale. Questo visualizzatore PDF non può verificare se la firma è valida. Scarica il file e aprilo in Acrobat Reader per verificare che la firma sia valida.
-# Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-infinite-scroll-button-label = Infinite scroll
-pdfjs-find-multiple-checkbox-label = Match Each Word
-pdfjs-find-regexp-checkbox-label = Regular Expression
+pdfjs-infinite-scroll-button-label = Scorrimento infinito
+pdfjs-find-multiple-checkbox-label = Trova ogni parola
+pdfjs-find-regexp-checkbox-label = Espressione regolare
+pdfjs-editor-movePageUp-button = Sposta pagina in alto
+pdfjs-editor-movePageUp-button-label = Sposta pagina in alto
+pdfjs-editor-movePageDown-button = Sposta pagina in basso
+pdfjs-editor-movePageDown-button-label = Sposta pagina in basso

@@ -543,6 +543,15 @@ pdfjs-editor-undo-bar-close-button-label = Zatvori
 ## Edit signature description dialog
 
 
+# Additional translations for ngx-extended-pdf-viewer (hr)
+unverified-signature-warning = Ova PDF datoteka sadrži digitalni potpis. PDF pregljednik ne može provjeriti je li potpis valjan. Molimo preuzmite datoteku i otvorite je u Acrobat Reader-u da biste provjerili valjanost potpisa.
+pdfjs-infinite-scroll-button-label = Beskonačno pomicanje
+pdfjs-find-multiple-checkbox-label = Podudaraj svaku riječ
+pdfjs-find-regexp-checkbox-label = Regularni izraz
+pdfjs-editor-movePageUp-button = Pomakni stranicu gore
+pdfjs-editor-movePageUp-button-label = Pomakni stranicu gore
+pdfjs-editor-movePageDown-button = Pomakni stranicu dolje
+pdfjs-editor-movePageDown-button-label = Pomakni stranicu dolje
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-editor-signature-button =
     .title = Add signature
@@ -606,7 +615,3 @@ pdfjs-editor-delete-signature-button-label1 = Remove saved signature
 pdfjs-editor-add-signature-edit-button-label = Edit description
 pdfjs-editor-edit-signature-dialog-title = Edit description
 pdfjs-editor-edit-signature-update-button = Update
-unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
-pdfjs-infinite-scroll-button-label = Infinite scroll
-pdfjs-find-multiple-checkbox-label = Match Each Word
-pdfjs-find-regexp-checkbox-label = Regular Expression

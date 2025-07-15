@@ -614,8 +614,12 @@ pdfjs-editor-add-signature-edit-button-label = Leírás szerkesztése
 
 pdfjs-editor-edit-signature-dialog-title = Leírás szerkesztése
 
-# Translations for ngx-extended-pdf-viewer additions only available in en-US
-unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
-pdfjs-infinite-scroll-button-label = Infinite scroll
-pdfjs-find-multiple-checkbox-label = Match Each Word
-pdfjs-find-regexp-checkbox-label = Regular Expression
+# Additional translations for ngx-extended-pdf-viewer (hu)
+unverified-signature-warning = Ez a PDF fájl digitális aláírást tartalmaz. A PDF megjelenítő nem tudja ellenőrizni, hogy az aláírás érvényes-e. Kérjük, töltse le a fájlt és nyissa meg az Acrobat Reader programban az aláírás érvényességének ellenőrzéséhez.
+pdfjs-infinite-scroll-button-label = Végtelen görgetés
+pdfjs-find-multiple-checkbox-label = Minden szó egyeztetése
+pdfjs-find-regexp-checkbox-label = Reguláris kifejezés
+pdfjs-editor-movePageUp-button = Oldal mozgatása felfelé
+pdfjs-editor-movePageUp-button-label = Oldal mozgatása felfelé
+pdfjs-editor-movePageDown-button = Oldal mozgatása lefelé
+pdfjs-editor-movePageDown-button-label = Oldal mozgatása lefelé

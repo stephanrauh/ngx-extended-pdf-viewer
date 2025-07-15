@@ -614,8 +614,12 @@ pdfjs-editor-add-signature-edit-button-label = Muokkaa kuvausta
 
 pdfjs-editor-edit-signature-dialog-title = Muokkaa kuvausta
 
-# Translations for ngx-extended-pdf-viewer additions only available in en-US
-unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
-pdfjs-infinite-scroll-button-label = Infinite scroll
-pdfjs-find-multiple-checkbox-label = Match Each Word
-pdfjs-find-regexp-checkbox-label = Regular Expression
+# Additional translations for ngx-extended-pdf-viewer (fi)
+unverified-signature-warning = Tämä PDF-tiedosto sisältää digitaalisen allekirjoituksen. PDF-katselin ei voi vahvistaa allekirjoituksen pätevyyttä. Lataa tiedosto ja avaa se Acrobat Readerissa allekirjoituksen pätevyyden vahvistamiseksi.
+pdfjs-infinite-scroll-button-label = Loputon vieritys
+pdfjs-find-multiple-checkbox-label = Etsi jokainen sana
+pdfjs-find-regexp-checkbox-label = Säännöllinen lauseke
+pdfjs-editor-movePageUp-button = Siirrä sivu ylös
+pdfjs-editor-movePageUp-button-label = Siirrä sivu ylös
+pdfjs-editor-movePageDown-button = Siirrä sivu alas
+pdfjs-editor-movePageDown-button-label = Siirrä sivu alas

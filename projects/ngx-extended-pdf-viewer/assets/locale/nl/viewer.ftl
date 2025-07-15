@@ -616,7 +616,10 @@ pdfjs-editor-edit-signature-dialog-title = Beschrijving bewerken
 
 # Additional translations for ngx-extended-pdf-viewer (nl)
 unverified-signature-warning = Deze PDF bevat een digitale handtekening. De PDF viewer kan de geldigheid niet controleren. Gelieve het bestand te downloaden en te openen in Acrobat Reader om de handtekening te controleren.
-# Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-infinite-scroll-button-label = Infinite scroll
-pdfjs-find-multiple-checkbox-label = Match Each Word
-pdfjs-find-regexp-checkbox-label = Regular Expression
+pdfjs-infinite-scroll-button-label = Oneindig scrollen
+pdfjs-find-multiple-checkbox-label = Elk woord zoeken
+pdfjs-find-regexp-checkbox-label = Reguliere expressie
+pdfjs-editor-movePageUp-button = Pagina omhoog verplaatsen
+pdfjs-editor-movePageUp-button-label = Pagina omhoog verplaatsen
+pdfjs-editor-movePageDown-button = Pagina omlaag verplaatsen
+pdfjs-editor-movePageDown-button-label = Pagina omlaag verplaatsen

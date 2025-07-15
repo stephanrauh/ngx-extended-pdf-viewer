@@ -620,8 +620,12 @@ pdfjs-editor-add-signature-edit-button-label = Upravit popis
 
 pdfjs-editor-edit-signature-dialog-title = Upravit popis
 
-# Translations for ngx-extended-pdf-viewer additions only available in en-US
-unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
-pdfjs-infinite-scroll-button-label = Infinite scroll
-pdfjs-find-multiple-checkbox-label = Match Each Word
-pdfjs-find-regexp-checkbox-label = Regular Expression
+# Additional translations for ngx-extended-pdf-viewer (cs)
+unverified-signature-warning = Tento PDF soubor obsahuje digitální podpis. PDF prohlížeč nemůže ověřit, zda je podpis platný. Stáhněte si soubor a otevřete jej v Acrobat Reader pro ověření platnosti podpisu.
+pdfjs-infinite-scroll-button-label = Nekonečné posouvání
+pdfjs-find-multiple-checkbox-label = Najít každé slovo
+pdfjs-find-regexp-checkbox-label = Regulární výraz
+pdfjs-editor-movePageUp-button = Přesunout stránku nahoru
+pdfjs-editor-movePageUp-button-label = Přesunout stránku nahoru
+pdfjs-editor-movePageDown-button = Přesunout stránku dolů
+pdfjs-editor-movePageDown-button-label = Přesunout stránku dolů

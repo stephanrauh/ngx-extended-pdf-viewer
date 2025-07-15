@@ -301,6 +301,15 @@ pdfjs-editor-alt-text-cancel-button = Anulează
 ## Edit signature description dialog
 
 
+# Additional translations for ngx-extended-pdf-viewer (ro)
+unverified-signature-warning = Acest fișier PDF conține o semnătură digitală. Vizualizatorul PDF nu poate verifica dacă semnătura este validă. Vă rugăm să descărcați fișierul și să îl deschideți în Acrobat Reader pentru a verifica dacă semnătura este validă.
+pdfjs-infinite-scroll-button-label = Derulare infinită
+pdfjs-find-multiple-checkbox-label = Potrivește fiecare cuvânt
+pdfjs-find-regexp-checkbox-label = Expresie regulată
+pdfjs-editor-movePageUp-button = Mută pagina în sus
+pdfjs-editor-movePageUp-button-label = Mută pagina în sus
+pdfjs-editor-movePageDown-button = Mută pagina în jos
+pdfjs-editor-movePageDown-button-label = Mută pagina în jos
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-save-button =
     .title = Save
@@ -544,7 +553,3 @@ pdfjs-editor-delete-signature-button-label1 = Remove saved signature
 pdfjs-editor-add-signature-edit-button-label = Edit description
 pdfjs-editor-edit-signature-dialog-title = Edit description
 pdfjs-editor-edit-signature-update-button = Update
-unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
-pdfjs-infinite-scroll-button-label = Infinite scroll
-pdfjs-find-multiple-checkbox-label = Match Each Word
-pdfjs-find-regexp-checkbox-label = Regular Expression

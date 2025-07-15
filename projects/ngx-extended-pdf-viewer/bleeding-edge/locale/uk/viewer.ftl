@@ -617,8 +617,12 @@ pdfjs-editor-add-signature-edit-button-label = Редагувати опис
 
 pdfjs-editor-edit-signature-dialog-title = Редагувати опис
 
-# Translations for ngx-extended-pdf-viewer additions only available in en-US
-unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
-pdfjs-infinite-scroll-button-label = Infinite scroll
-pdfjs-find-multiple-checkbox-label = Match Each Word
-pdfjs-find-regexp-checkbox-label = Regular Expression
+# Additional translations for ngx-extended-pdf-viewer (uk)
+unverified-signature-warning = Цей PDF файл містить цифровий підпис. Переглядач PDF не може перевірити, чи є підпис дійсним. Будь ласка, завантажте файл і відкрийте його в Acrobat Reader, щоб перевірити дійсність підпису.
+pdfjs-infinite-scroll-button-label = Нескінченне прокручування
+pdfjs-find-multiple-checkbox-label = Знайти кожне слово
+pdfjs-find-regexp-checkbox-label = Регулярний вираз
+pdfjs-editor-movePageUp-button = Перемістити сторінку вгору
+pdfjs-editor-movePageUp-button-label = Перемістити сторінку вгору
+pdfjs-editor-movePageDown-button = Перемістити сторінку вниз
+pdfjs-editor-movePageDown-button-label = Перемістити сторінку вниз
