@@ -729,4 +729,54 @@ export class NgxExtendedPdfViewerService {
     this.PDFViewerApplication?.eventBus.dispatch('switchannotationeditorparams', { type: editorPropertyType, value });
     this.PDFViewerApplication?.eventBus.dispatch('annotationeditorparamschanged', { details: [[editorPropertyType, value]] });
   }
+
+  public getCurrentPage(): number {
+    if (!this.PDFViewerApplication) {
+      return 1;
+    }
+    return this.PDFViewerApplication.page ?? 1;
+  }
+
+  public getPageCount(): number {
+    if (!this.PDFViewerApplication) {
+      return 0;
+    }
+    return this.PDFViewerApplication.pagesCount ?? 0;
+  }
+
+  public movePage(fromIndex: number, toIndex: number): void {
+    if (!this.PDFViewerApplication) {
+      console.error('PDF viewer not initialized');
+      return;
+    }
+
+    // Check if page reordering is enabled
+    const enablePageReordering = (globalThis as any).pdfDefaultOptions?.enablePageReordering;
+    if (!enablePageReordering) {
+      console.error('Page reordering is not enabled. Set pdfDefaultOptions.enablePageReordering = true');
+      return;
+    }
+
+    // Validate indices (1-based)
+    const pageCount = this.getPageCount();
+    if (fromIndex < 1 || fromIndex > pageCount || toIndex < 1 || toIndex > pageCount) {
+      console.error(`Invalid page indices. fromIndex: ${fromIndex}, toIndex: ${toIndex}, pageCount: ${pageCount}`);
+      return;
+    }
+
+    if (fromIndex === toIndex) {
+      return; // No movement needed
+    }
+
+    try {
+      // Call the movePage function from app.js
+      if (this.PDFViewerApplication.movePage) {
+        this.PDFViewerApplication.movePage(fromIndex, toIndex);
+      } else {
+        console.error('movePage function not available in PDF viewer application');
+      }
+    } catch (error) {
+      console.error('Error moving page:', error);
+    }
+  }
 }

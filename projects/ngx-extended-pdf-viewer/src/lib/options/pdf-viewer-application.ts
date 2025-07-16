@@ -1195,4 +1195,5 @@ export interface IPDFViewerApplication {
   printPdf(): void;
   ngxKeyboardManager: any;
   cspPolicyService: any;
+  movePage(prevPageIndex: number, newPageIndex: number): void;
 }
