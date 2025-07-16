@@ -72,6 +72,7 @@ viewerFiles.forEach((file) => fs.removeSync(file));
 fs.copySync(path.join('..', 'mypdf.js', 'build', 'minified', 'web', 'locale'), path.join(targetDir, 'locale'));
 copyFilesWithoutRecursion(path.join('..', 'mypdf.js', 'build', 'minified', 'web', 'cmaps'), path.join(targetDir, 'cmaps'));
 copyFilesWithoutRecursion(path.join('..', 'mypdf.js', 'build', 'minified', 'web', 'standard_fonts'), path.join(targetDir, 'standard_fonts'));
+fs.copySync(path.join('..', 'mypdf.js', 'build', 'generic', 'web', 'wasm'), path.join(targetDir, 'wasm'));
 
 copyFilesWithoutRecursion(path.join('..', 'mypdf.js', 'build', 'generic', 'build'), targetDir);
 copyFilesWithoutRecursion(path.join('..', 'mypdf.js', 'build', 'generic', 'web'), targetDir);

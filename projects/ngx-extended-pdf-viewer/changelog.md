@@ -669,3 +669,4 @@
 - 24.2.0 #2943 fine-tuning; added `pdfDefaultOptions.enablePageReordering`
 - 24.2.1 #2943 fixed a bug of the new "move page down" button; added AI-generated translations for 20 European languages (if that experiment works well, I'll add translation for all 112 supported languages later)
 - 24.2.2 updated the README
+- 24.2.3 #2943 fixed a bug of the new "move page up" button; make sure the icons of the new page move buttons shown; added some methods regarding page moval to the NgxExtendedPdfViewerService
