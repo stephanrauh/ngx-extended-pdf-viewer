@@ -183,9 +183,19 @@ export class NgxFormSupport {
     return fieldName;
   }
 
-  private updateAngularFormValueCalledByPdfjs(key: string | HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement, value: { value: string }): void {
+  private updateAngularFormValueCalledByPdfjs(
+    key: string | HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement,
+    value: { value?: string; formattedValue?: string },
+  ): void {
     if (!this.formData) {
       this.formData = {};
+    }
+
+    // Ignore formattedValue-only updates to prevent clearing Angular form data
+    // The formattedValue is just for display formatting, not actual user input
+    if (value.formattedValue !== undefined && value.value === undefined) {
+      debugger;
+      return;
     }
 
     if (typeof key === 'string') {
@@ -222,12 +232,14 @@ export class NgxFormSupport {
     }
   }
 
-  private doUpdateAngularFormValue(field: HtmlFormElement, value: { value: string }, fullKey: string) {
+  private doUpdateAngularFormValue(field: HtmlFormElement, value: { value?: string; formattedValue?: string }, fullKey: string) {
     let change = false;
+    // Use the actual user input value, not the formatted display value
+    const actualValue = value.value;
     if (field instanceof HTMLInputElement && field.type === 'checkbox') {
       const exportValue = field.getAttribute('exportvalue');
       if (exportValue) {
-        if (value.value) {
+        if (actualValue) {
           if (this.formData[fullKey] !== exportValue) {
             this.formData[fullKey] = exportValue;
             change = true;
@@ -238,20 +250,20 @@ export class NgxFormSupport {
             change = true;
           }
         }
-      } else if (this.formData[fullKey] !== value.value) {
-        this.formData[fullKey] = value.value;
+      } else if (this.formData[fullKey] !== actualValue) {
+        this.formData[fullKey] = actualValue ?? '';
         change = true;
       }
     } else if (field instanceof HTMLInputElement && field.type === 'radio') {
       const exportValue = field.getAttribute('exportvalue') ?? field.getAttribute('xfaon');
-      if (value.value) {
+      if (actualValue) {
         if (this.formData[fullKey] !== exportValue) {
           this.formData[fullKey] = exportValue;
           change = true;
         }
       }
-    } else if (this.formData[fullKey] !== value.value) {
-      this.formData[fullKey] = value.value;
+    } else if (this.formData[fullKey] !== actualValue) {
+      this.formData[fullKey] = actualValue ?? '';
       change = true;
     }
     return change;

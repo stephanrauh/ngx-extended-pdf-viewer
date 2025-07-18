@@ -670,3 +670,4 @@
 - 24.2.1 #2943 fixed a bug of the new "move page down" button; added AI-generated translations for 20 European languages (if that experiment works well, I'll add translation for all 112 supported languages later)
 - 24.2.2 updated the README
 - 24.2.3 #2943 fixed a bug of the new "move page up" button; make sure the icons of the new page move buttons shown; added some methods regarding page moval to the NgxExtendedPdfViewerService; #2973 activate WASM support for compressed JPEG2000 images
+- 24.2.4 #2133 if a form contains at least one formatted field, two way binding with `[formData]` was broken. Every field was cleared when the focus moved out of the field. Version 24.2.4 fixes this bug.
