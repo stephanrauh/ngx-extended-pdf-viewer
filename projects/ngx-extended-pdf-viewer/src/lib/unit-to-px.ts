@@ -25,12 +25,13 @@ export class UnitToPx {
   }
 
   private static pxPerUnit(unit: string): number {
-    if (!this.pxPerUnitCache[unit]) {
+    if (this.pxPerUnitCache[unit] === undefined) {
       if (!this.con || !this.el) {
         this.initElements();
       }
       if (!this.con || !this.el) {
         // dummy implementation for server-side rendering
+        this.pxPerUnitCache[unit] = 1;
         return 1;
       }
       this.el.style.width = this.sample + unit;
@@ -43,14 +44,24 @@ export class UnitToPx {
   }
 
   public static toPx(length): number {
-    const unitRe = /^\s*([+-]?[\d\.]*)\s*(.*)\s*$/i; // NOSONAR
+    if (length == null || length === '') {
+      throw new TypeError('Error parsing length');
+    }
+    
+    const unitRe = /^\s*([+-]?[\d\.]*)\s*(.*?)\s*$/i; // NOSONAR - trim trailing whitespace too
     const match = unitRe.exec(length);
     if (match != null && match.length > 2) {
       const bare = match[1] === '';
       const val = bare ? 1 : Number(match[1]);
-      const unit = match[2];
-      const valid = !isNaN(val) && unit;
-      if (valid) {
+      const unit = match[2].trim(); // Explicitly trim the unit
+      const valid = !isNaN(val) && unit && (bare || match[1] !== 'NaN');
+      
+      // Validate that we have a proper unit (known CSS units)
+      const knownUnits = ['px', 'em', 'rem', 'pt', 'pc', 'in', 'cm', 'mm', '%', 'vh', 'vw', 'ex', 'ch'];
+      const hasValidUnit = knownUnits.includes(unit);
+      
+      // Only allow bare units (like "px" without number) for known units
+      if (valid && hasValidUnit) {
         return unit === 'px' ? val : this.pxPerUnit(unit) * val;
       }
     }
