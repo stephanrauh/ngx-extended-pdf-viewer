@@ -34,9 +34,9 @@ export const AnnotationEditorParamsType = {
 
 export type AnnotationEditorTypeValue = -1 | 0 | 3 | 9 | 13 | 15;
 
-export type BezierPath = {
-  bezier: Array<number>;
-  points: Array<number>;
+export type InkPaths = {
+  lines: Array<Array<number>>;  // Array of bezier curve arrays
+  points: Array<Array<number>>; // Array of raw point arrays
 };
 
 export type InkEditorAnnotation = {
@@ -44,10 +44,11 @@ export type InkEditorAnnotation = {
   color: Array<number>; // an array of three integer numbers
   thickness: number;
   opacity: number;
-  paths: Array<BezierPath>;
+  paths: InkPaths;
   pageIndex: number;
   rect: Array<number>; // [left, bottom, right, top]
   rotation: 0 | 90 | 180 | 270; // in degrees
+  isCopy: boolean;
 };
 
 export type FreeTextEditorAnnotation = {
@@ -58,6 +59,7 @@ export type FreeTextEditorAnnotation = {
   pageIndex: number;
   rect: Array<number>; // rect[1] is the y position; rect[2] is the x position
   rotation: 0 | 90 | 180 | 270; // in degrees
+  isCopy: boolean;
 };
 
 export type StampEditorAnnotation = {
@@ -66,14 +68,20 @@ export type StampEditorAnnotation = {
   bitmapUrl: string | Blob;
   rect: Array<number>; // [left, bottom, right, top]
   rotation: 0 | 90 | 180 | 270; // in degrees
+  isCopy: boolean;
 };
 
 export type HighlightEditorAnnotation = {
   annotationType: 9;
   color: Array<number>; // an array of three integer numbers
-  rect: Array<number>; // [left, bottom, right, top]
+  opacity: number;
+  thickness: number;
+  quadPoints: any; // Object with numeric keys containing text bounds
+  outlines: Array<Array<number>>; // Array of coordinate arrays for highlight shapes
   pageIndex: number;
+  rect: Array<number>; // [left, bottom, right, top]
   rotation: 0 | 90 | 180 | 270; // in degrees
+  isCopy: boolean;
 };
 
 export type EditorAnnotation = InkEditorAnnotation | FreeTextEditorAnnotation | StampEditorAnnotation | HighlightEditorAnnotation;

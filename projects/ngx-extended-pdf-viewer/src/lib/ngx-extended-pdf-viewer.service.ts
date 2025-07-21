@@ -1,5 +1,5 @@
 import { effect, Injectable, Renderer2, RendererFactory2 } from '@angular/core';
-import { AnnotationEditorParamsType, AnnotationMode, EditorAnnotation, StampEditorAnnotation } from './options/editor-annotations';
+import { AnnotationEditorParamsType, AnnotationMode, EditorAnnotation, HighlightEditorAnnotation, StampEditorAnnotation } from './options/editor-annotations';
 import { PdfLayer } from './options/optional_content_config';
 import { PDFPrintRange } from './options/pdf-print-range';
 import { IPDFViewerApplication, PDFDocumentProxy, PDFFindParameters, PDFPageProxy, TextItem, TextMarkedContent } from './options/pdf-viewer-application';
@@ -654,8 +654,94 @@ export class NgxExtendedPdfViewerService {
       bitmapUrl: dataUrl,
       rect: [leftPdf, bottomPdf, rightPdf, topPdf],
       rotation: rotation ?? 0,
+      isCopy: true,
     };
     this.addEditorAnnotation(stampAnnotation);
+    await this.sleep(10);
+    this.switchAnnotationEdtorMode(previousAnnotationEditorMode);
+  }
+
+  public async addHighlightToAnnotationLayer(
+    color: number[],
+    page: number | undefined,
+    left: number | string,
+    bottom: number | string,
+    right: number | string,
+    top: number | string,
+    thickness: number = 12,
+    rotation: 0 | 90 | 180 | 270 = 0,
+    opacity: number = 0.5,
+  ): Promise<void> {
+    if (!this.PDFViewerApplication) {
+      console.error('The PDF viewer has not been initialized yet.');
+      return;
+    }
+
+    let pageToModify: number;
+    if (page !== undefined) {
+      if (page !== this.currentPageIndex()) {
+        await this.renderPage(page);
+      }
+      pageToModify = page;
+    } else {
+      pageToModify = this.currentPageIndex() ?? 0;
+    }
+
+    const previousAnnotationEditorMode = this.PDFViewerApplication.pdfViewer.annotationEditorMode;
+    this.switchAnnotationEdtorMode(9); // AnnotationEditorType.HIGHLIGHT
+
+    const pageSize = this.PDFViewerApplication.pdfViewer._pages[pageToModify].pdfPage.view;
+    const leftDim = pageSize[0];
+    const bottomDim = pageSize[1];
+    const rightDim = pageSize[2];
+    const topDim = pageSize[3];
+    const width = rightDim - leftDim;
+    const height = topDim - bottomDim;
+    const pageWidth = this.PDFViewerApplication?.pdfViewer._pages[pageToModify].div.clientWidth;
+    const pageHeight = this.PDFViewerApplication?.pdfViewer._pages[pageToModify].div.clientHeight;
+
+    const leftPdf = this.convertToPDFCoordinates(left, width, 0, pageWidth);
+    const bottomPdf = this.convertToPDFCoordinates(bottom, height, 0, pageHeight);
+    const rightPdf = this.convertToPDFCoordinates(right, width, width, pageWidth);
+    const topPdf = this.convertToPDFCoordinates(top, height, height, pageHeight);
+
+    // Create quadPoints object with numeric keys (matching export format)
+    const quadPoints: any = {};
+    quadPoints[0] = leftPdf; // x1 - left edge start
+    quadPoints[1] = topPdf; // y1 - top edge start
+    quadPoints[2] = rightPdf; // x2 - right edge end
+    quadPoints[3] = topPdf; // y2 - top edge end
+    quadPoints[4] = leftPdf; // x3 - left edge start (bottom)
+    quadPoints[5] = bottomPdf; // y3 - bottom edge start
+    quadPoints[6] = rightPdf; // x4 - right edge end (bottom)
+    quadPoints[7] = bottomPdf; // y4 - bottom edge end
+
+    const highlightAnnotation: HighlightEditorAnnotation = {
+      annotationType: 9,
+      color: color,
+      opacity: opacity,
+      thickness: thickness,
+      quadPoints: quadPoints,
+      outlines: [
+        [
+          // Single outline rectangle
+          leftPdf,
+          bottomPdf, // Bottom-left
+          leftPdf,
+          topPdf, // Top-left
+          rightPdf,
+          topPdf, // Top-right
+          rightPdf,
+          bottomPdf, // Bottom-right
+        ],
+      ],
+      pageIndex: pageToModify,
+      rect: [leftPdf, bottomPdf, rightPdf, topPdf],
+      rotation: rotation,
+      isCopy: true,
+    };
+
+    this.addEditorAnnotation(highlightAnnotation);
     await this.sleep(10);
     this.switchAnnotationEdtorMode(previousAnnotationEditorMode);
   }
