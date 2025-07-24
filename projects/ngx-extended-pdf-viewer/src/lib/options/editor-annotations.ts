@@ -35,7 +35,7 @@ export const AnnotationEditorParamsType = {
 export type AnnotationEditorTypeValue = -1 | 0 | 3 | 9 | 13 | 15;
 
 export type InkPaths = {
-  lines: Array<Array<number>>;  // Array of bezier curve arrays
+  lines: Array<Array<number>>; // Array of bezier curve arrays
   points: Array<Array<number>>; // Array of raw point arrays
 };
 
@@ -48,7 +48,7 @@ export type InkEditorAnnotation = {
   pageIndex: number;
   rect: Array<number>; // [left, bottom, right, top]
   rotation: 0 | 90 | 180 | 270; // in degrees
-  isCopy: boolean;
+  isCopy?: boolean;
 };
 
 export type FreeTextEditorAnnotation = {
@@ -59,7 +59,7 @@ export type FreeTextEditorAnnotation = {
   pageIndex: number;
   rect: Array<number>; // rect[1] is the y position; rect[2] is the x position
   rotation: 0 | 90 | 180 | 270; // in degrees
-  isCopy: boolean;
+  isCopy?: boolean;
 };
 
 export type StampEditorAnnotation = {
@@ -68,7 +68,7 @@ export type StampEditorAnnotation = {
   bitmapUrl: string | Blob;
   rect: Array<number>; // [left, bottom, right, top]
   rotation: 0 | 90 | 180 | 270; // in degrees
-  isCopy: boolean;
+  isCopy?: boolean;
 };
 
 export type HighlightEditorAnnotation = {
@@ -81,7 +81,7 @@ export type HighlightEditorAnnotation = {
   pageIndex: number;
   rect: Array<number>; // [left, bottom, right, top]
   rotation: 0 | 90 | 180 | 270; // in degrees
-  isCopy: boolean;
+  isCopy?: boolean;
 };
 
 export type EditorAnnotation = InkEditorAnnotation | FreeTextEditorAnnotation | StampEditorAnnotation | HighlightEditorAnnotation;

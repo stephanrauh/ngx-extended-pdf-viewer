@@ -671,3 +671,4 @@
 - 24.2.2 updated the README
 - 24.2.3 #2943 fixed a bug of the new "move page up" button; make sure the icons of the new page move buttons shown; added some methods regarding page moval to the NgxExtendedPdfViewerService; #2973 activate WASM support for compressed JPEG2000 images
 - 24.2.4 #2133 if a form contains at least one formatted field, two way binding with `[formData]` was broken. Every field was cleared when the focus moved out of the field. Version 24.2.4 fixes this bug.
+- 24.4.5 #2355 / #2985 fixed `pdfViewerService.getSerializedAnnotations()`; fixed `pdfViewerService.addImageToAnnotationLayer()`; added `pdfViewerService.addHighlightToAnnotationLayer()`
