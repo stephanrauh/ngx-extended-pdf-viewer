@@ -57,3 +57,4 @@ sbom.json
 .env
 /ftp/.env
 .htaccess
+.claude
