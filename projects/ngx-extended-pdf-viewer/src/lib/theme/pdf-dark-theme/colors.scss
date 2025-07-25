@@ -1,46 +1,95 @@
-$highlight: rgb(180, 0, 170);
+$highlight: rgba(180, 0, 170, 0.4);
 
 $highlight-selected: rgba(0, 100, 0, 1);
 
-$selected: rgba(0, 0, 255, 1);
+$background: #2a2a2e;
 
-$background: rgba(0, 0, 0, 1);
+$text-color: #ffffff;
 
-$container-border: rgba(51, 51, 51, 1);
+$page-background: $background;
 
-$page-background: rgba(255, 255, 255, 1);
+$fullscreen-background: $background;
 
-$fullscreen-background: rgba(0, 0, 0, 0);
+$border: #9f9fa1;
 
-$sidebar-background: rgba(0, 0, 0, 0.1);
+$border-dark: #222226;
 
-$border: rgba(0, 0, 0, 0.5);
+/** MAIN TOOLBAR **/
 
-$border-dark: rgba(0, 0, 0, 0.4);
+$toolbar-background: #38383d;
 
-$sidebar-toolbar-background: rgba(66, 66, 66, 1);
+$toolbar-border: #0c0c0d;
 
-$toolbar-background: rgba(71, 71, 71, 1);
+/** SIDEBAR **/
 
-$toolbar-border: $border;
+$sidebar-background: $background;
 
-$toolbar-button-hover: #ffffff;
+$sidebar-border: $border-dark;
 
-$general-button-hover: #f0f0f0;
+$thumbnail-selection-color: #545457;
 
-$text-color: rgba(217, 217, 217, 1);
+$thumbnail-hover-color: #3f3f43;
 
-$inputfield-text-color: #4d4d4d;
+$sidebar-toolbar-background: #323234;
+
+$sidebar-toolbar-border: #222226;
+
+/** ICONS **/
+
+$icon-color: #c3c3c5;
+
+$icon-color-on-hover: #bcbcbe;
+
+$icon-background-hover: #58585c;
+
+$icon-selected-color: #bebebf;
+
+$icon-background-selected: #27272a;
+
+$icon-disabled-color: #707074;
+
+$icon-disabled-color-on-hover: $icon-disabled-color;
+
+$icon-disabled-background-hover: #48484d;
+
+/** SECONDARY TOOLBAR **/
+
+$secondary-toolbar-background: #42414d;
+
+$secondary-toolbar-text-color: $text-color;
+
+$secondary-toolbar-disabled-text-color: #909097;
+
+$secondary-toolbar-selected-background: #2e2d35;
+
+$secondary-toolbar-hover-background: #60606a;
+
+/** DOCUMENT PROPERTIES DIALOG **/
+
+$document-properties-dialog-background: #42414d;
+
+$document-properties-border: #212026;
+
+$document-properties-button: #5c5c61;
+
+$document-properties-button-text: $text-color;
+
+$document-properties-button-hover: #737373;
+
+/** ETC **/
+$inputfield-text-color: $text-color;
 
 $select-text-color: $text-color;
 
-$select-background-color: $toolbar-background;
+$select-background-color: #4a4a4f;
 
-$tree-text-color: rgba(66, 66, 66, 1);
+$tree-text-color: $text-color;
 
 $loading-bar-background: rgba(221, 221, 221, 1);
 
 $loadingBar-progress-indeterminate: rgba(153, 153, 153, 1);
+
+$container-border: rgba(51, 51, 51, 1);
 
 $placeholder-color: rgba(217, 217, 217, 1);
 
@@ -48,15 +97,11 @@ $error-color: rgba(255, 102, 102, 1);
 
 $notification-color: rgba(112, 219, 85, 1);
 
-$input-backgrund-color: rgba(255, 255, 255, 0.8);
+$input-background-color: #4a4a4f;
 
-$thumbnail-selection-ring: rgba(255, 255, 255, 0.25);
-
-$window-background: rgba(0, 0, 0, 0.2);
+$window-background: #aeaeaf; // Here
 
 $thumbnail-not-loaded-ring: rgba(255, 0, 0, 0.5);
-
-$thumbnail-selection-ring: rgba(255, 255, 255, 0.4);
 
 $toolbarfield-focus-ring: rgba(77, 184, 255, 0.8);
 
@@ -65,6 +110,7 @@ $selection-background: rgba(0, 0, 255, 0.3);
 $outline-active-color: rgba(255, 255, 255, 0.08);
 $outline-active-bg-color: rgba(255, 255, 255, 1);
 
+// outline hover: #bebec1
 
 $sidebar-width: 200px;
 $sidebar-transition-duration: 200ms;

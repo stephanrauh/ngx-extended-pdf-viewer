@@ -68,7 +68,6 @@ ngx-extended-pdf-viewer {
 }
 
 ngx-extended-pdf-viewer {
-
   button.secondaryToolbarButton:focus,
   button:focus,
   a:focus,
@@ -76,28 +75,6 @@ ngx-extended-pdf-viewer {
   select:focus {
     outline: none;
     border: 1px solid blue;
-  }
-
-  button.secondaryToolbarButton:hover,
-  button:hover,
-  a:hover {
-    background-color: $general-button-hover;
-  }
-
-  .toolbar {
-
-    button:hover,
-    a:hover {
-      background-color: $toolbar-button-hover;
-    }
-  }
-
-  #sidebarContainer {
-
-    button:hover,
-    a:hover {
-      background-color: $toolbar-button-hover;
-    }
   }
 
   input[type="checkbox"]:focus {
