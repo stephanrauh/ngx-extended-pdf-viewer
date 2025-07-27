@@ -76,8 +76,8 @@ export type HighlightEditorAnnotation = {
   color: Array<number>; // an array of three integer numbers
   opacity: number;
   thickness: number;
-  quadPoints: any; // Object with numeric keys containing text bounds
-  outlines: Array<Array<number>>; // Array of coordinate arrays for highlight shapes
+  quadPoints?: any; // Object with numeric keys containing text bounds
+  outlines?: Array<Array<number>>; // Array of coordinate arrays for highlight shapes
   pageIndex: number;
   rect: Array<number>; // [left, bottom, right, top]
   rotation: 0 | 90 | 180 | 270; // in degrees
