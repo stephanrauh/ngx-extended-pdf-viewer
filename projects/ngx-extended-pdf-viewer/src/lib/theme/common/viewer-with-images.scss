@@ -102,6 +102,13 @@ ngx-extended-pdf-viewer {
     }
   }
 
+  // #2984 modified by ngx-extended-pdf-viewer to improve the light and dark mode
+  .pdfViewer#viewer {
+    background-color: $background;
+  }
+
+  // #2984 end of modification by ngx-extended-pdf-viewer to improve the light and dark mode
+
   .pdfViewer .page {
     --user-unit: 1;
     --total-scale-factor: calc(var(--scale-factor) * var(--user-unit));
@@ -399,6 +406,9 @@ ngx-extended-pdf-viewer {
     z-index: 100;
     transition-duration: $sidebar-transition-duration;
     transition-timing-function: $sidebar-transition-timing-function;
+    // #2984 modified by ngx-extended-pdf-viewer to improve the light and dark mode
+    border-right: solid 1px $sidebar-border;
+    // #2984 end of modification by ngx-extended-pdf-viewer to improve the light and dark mode
   }
 }
 
@@ -456,6 +466,9 @@ ngx-extended-pdf-viewer {
     position: absolute;
     width: 100%;
     background-color: $sidebar-background;
+    // #2984 modified by ngx-extended-pdf-viewer to improve the light and dark mode
+    border-top: 1px solid $sidebar-toolbar-border;
+    // #2984 end of modification by ngx-extended-pdf-viewer to improve the light and dark mode
   }
 }
 
@@ -953,6 +966,21 @@ ngx-extended-pdf-viewer {
     height: 25px;
   }
 
+  // #2984 modified by ngx-extended-pdf-viewer to improve the light and dark mode
+  .toolbarButton:hover {
+    background-color: $icon-background-hover;
+  }
+
+  .toolbarButton>svg {
+    color: $icon-color;
+
+    &:hover {
+      color: $icon-color-on-hover;
+    }
+  }
+
+  // #2984 end of modification by ngx-extended-pdf-viewer to improve the light and dark mode
+
   .toolbarButton>span {
     display: inline-block;
     width: 0;
@@ -962,7 +990,21 @@ ngx-extended-pdf-viewer {
 
   .toolbarButton[disabled],
   .dialogButton[disabled] {
-    opacity: 0.5;
+
+    // #2984 modified by ngx-extended-pdf-viewer to improve the light and dark mode
+    svg {
+      color: $icon-disabled-color;
+
+      &:hover {
+        color: $icon-disabled-color-on-hover;
+      }
+    }
+
+    &:hover {
+      background-color: $icon-disabled-background-hover;
+    }
+
+    // #2984 end of modification by ngx-extended-pdf-viewer to improve the light and dark mode
   }
 }
 
@@ -972,7 +1014,9 @@ ngx-extended-pdf-viewer {
   .dropdownToolbarButton,
   .secondaryToolbarButton,
   .dialogButton {
-    border: 1px solid $fullscreen-background;
+    // #2984 modified by ngx-extended-pdf-viewer to improve the light and dark mode
+    // border: 1px solid $fullscreen-background;
+    // #2984 end of modification by ngx-extended-pdf-viewer to improve the light and dark mode
     color: $text-color;
   }
 
@@ -990,6 +1034,34 @@ ngx-extended-pdf-viewer {
     /* Opera does not support user-select, use <... unselectable="on"> instead */
     cursor: pointer;
   }
+
+  // #2984 modified by ngx-extended-pdf-viewer to improve the light and dark mode
+  .secondaryToolbar {
+    color: $secondary-toolbar-text-color;
+    background-color: $secondary-toolbar-background;
+
+    .secondaryToolbarButton {
+      color: $secondary-toolbar-text-color;
+
+      &:hover {
+        background-color: $secondary-toolbar-hover-background;
+      }
+    }
+
+    .secondaryToolbarButton[disabled] {
+      color: $secondary-toolbar-disabled-text-color;
+    }
+
+    .secondaryToolbarButton.toggled {
+      background-color: $secondary-toolbar-selected-background;
+
+      &:hover {
+        background-color: $secondary-toolbar-hover-background;
+      }
+    }
+  }
+
+  // #2984 end of modification by ngx-extended-pdf-viewer to improve the light and dark mode
 }
 
 html[dir='ltr'] ngx-extended-pdf-viewer .toolbarButton,
@@ -1014,17 +1086,24 @@ ngx-extended-pdf-viewer {
     border: 1px solid $border-dark;
   }
 
-  .toolbarButton.toggled,
-  .secondaryToolbarButton.toggled {
-    background-color: $window-background;
+  // #2984 modified by ngx-extended-pdf-viewer to improve the light and dark mode
+  .toolbarButton.toggled {
+    background-color: $icon-background-selected;
+    color: $icon-selected-color;
     border-color: $border-dark;
+
+    &:hover {
+      background-color: $icon-background-hover;
+    }
   }
+
+  // #2984 end of modification by ngx-extended-pdf-viewer to improve the light and dark mode
 }
 
 ngx-extended-pdf-viewer {
   .dropdownToolbarButton>select {
     color: $text-color;
-    background-color: $input-backgrund-color;
+    background-color: $input-background-color;
     /* Opera does not support 'transparent' <select> background */
   }
 
@@ -1096,7 +1175,9 @@ ngx-extended-pdf-viewer .html {
     padding: 3px 6px;
     margin: 4px 0 4px 0;
     border-radius: 2px;
-    background-color: $input-backgrund-color;
+    // #2984 modified by ngx-extended-pdf-viewer to improve the light and dark mode
+    background-color: $input-background-color;
+    // #2984 end of modification by ngx-extended-pdf-viewer to improve the light and dark mode
     background-clip: padding-box;
     border-width: 1px;
     border-style: solid;
@@ -1142,7 +1223,9 @@ ngx-extended-pdf-viewer .html {
     min-width: 16px;
     padding: 3px 6px 3px 2px;
     margin: 4px 2px 4px 0;
-    border: 1px solid $fullscreen-background;
+    // #2984 end of modified by ngx-extended-pdf-viewer to improve the light and dark mode
+    //border: 1px solid $fullscreen-background;
+    // #2984 end of modification by ngx-extended-pdf-viewer to improve the light and dark mode
     border-radius: 2px;
     color: $text-color;
     font-size: 12px;
@@ -1169,6 +1252,13 @@ ngx-extended-pdf-viewer .html {
     outline: 0;
   }
 
+  // #2984 modified by ngx-extended-pdf-viewer to improve the light and dark mode
+  #thumbnailView>a {
+    display: inline-block;
+  }
+
+  // #2984 end of modification by ngx-extended-pdf-viewer to improve the light and dark mode
+
   #thumbnailView img.thumbnailImage {
     display: none;
   }
@@ -1188,6 +1278,13 @@ ngx-extended-pdf-viewer .html {
     padding: 1px;
     border: 7px solid transparent;
     border-radius: 2px;
+
+    // #2984 modified by ngx-extended-pdf-viewer to improve the light and dark mode
+    &:hover {
+      border: 7px solid $thumbnail-hover-color;
+    }
+
+    // #2984 end of modification by ngx-extended-pdf-viewer to improve the light and dark mode
   }
 }
 
@@ -1232,14 +1329,22 @@ ngx-extended-pdf-viewer {
   }
 
   .thumbnail.selected>.thumbnailSelectionRing {
-    background-color: $thumbnail-selection-ring;
+    // #2984 modified by ngx-extended-pdf-viewer to improve the light and dark mode
+    background-color: $thumbnail-selection-color;
+    // #2984 end of modification by ngx-extended-pdf-viewer to improve the light and dark mode
     background-clip: padding-box;
     color: $page-background;
   }
 
   .thumbnail.selected {
-    border-color: $thumbnail-selection-ring !important;
+    // #2984 modified by ngx-extended-pdf-viewer to improve the light and dark mode
+    border-color: $thumbnail-selection-color;
+
+    &:hover {
+      border-color: $thumbnail-hover-color;
+    }
   }
+  // #2984 end of modification by ngx-extended-pdf-viewer to improve the light and dark mode
 
   .thumbnail:not([data-loaded])>.thumbnailImage {
     width: calc(var(--thumbnail-width) - 2px);
@@ -1298,6 +1403,13 @@ ngx-extended-pdf-viewer {
     user-select: none;
     white-space: normal;
     cursor: pointer;
+
+    // #2984 modified by ngx-extended-pdf-viewer to improve the light and dark mode
+    &:hover {
+      background-color: $thumbnail-hover-color;
+    }
+
+    // #2984 end of modification by ngx-extended-pdf-viewer to improve the light and dark mode
   }
 }
 
@@ -1334,6 +1446,9 @@ ngx-extended-pdf-viewer {
     position: relative;
     height: 0;
     width: 0;
+    // #2984 end of modified by ngx-extended-pdf-viewer to improve the light and dark mode
+    color: $text-color;
+    // #2984 end of modification by ngx-extended-pdf-viewer to improve the light and dark mode
   }
 
   .treeItemToggler::before {
@@ -1548,6 +1663,23 @@ ngx-extended-pdf-viewer {
     margin-top: 10px;
   }
 
+  // #2984 modified by ngx-extended-pdf-viewer to improve the light and dark mode
+  #documentPropertiesDialog {
+    background-color: $document-properties-dialog-background;
+    border-color: $document-properties-border;
+
+    #documentPropertiesClose {
+      background-color: $document-properties-button;
+      color: $document-properties-button-text;
+
+      &:hover {
+        background-color: $document-properties-button-hover;
+      }
+    }
+  }
+
+  // #2984 end of modification by ngx-extended-pdf-viewer to improve the light and dark mode
+
   .clearBoth {
     clear: both;
   }
@@ -1585,8 +1717,6 @@ ngx-extended-pdf-viewer {
 @page {
   margin: 0;
 }
-
-
 
 @media screen and (-webkit-min-device-pixel-ratio: 1.1),
 screen and (min-resolution: 1.1dppx) {
@@ -1656,9 +1786,13 @@ ngx-extended-pdf-viewer {
     position: relative;
     box-sizing: border-box;
     font: message-box;
-    background-color: var(--toolbar-bg-color);
+    // #2984 modified by ngx-extended-pdf-viewer to improve the light and dark mode
+    background-color: $toolbar-background;
+    // #2984 end of modification by ngx-extended-pdf-viewer to improve the light and dark mode
     box-shadow: var(--toolbar-box-shadow);
-    border-bottom: var(--toolbar-border-bottom);
+    // #2984 modified by ngx-extended-pdf-viewer to improve the light and dark mode
+    border-bottom: $toolbar-border;
+    // #2984 end of modification by ngx-extended-pdf-viewer to improve the light and dark mode
   }
 
   #toolbarContainer #toolbarViewer {
