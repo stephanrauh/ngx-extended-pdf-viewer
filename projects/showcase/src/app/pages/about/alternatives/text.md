@@ -3,6 +3,7 @@
 There's a similar article at <a target="#" href="https://beyondjava.net/angular-pdf-viewers-2020">https://beyondjava.net/angular-pdf-viewers-2020</a> and an older text at <a target="#" href="https://www.beyondjava.net/ngx-extended-pdf-viewer">beyondjava.net/ngx-extended-pdf-viewer</a>.
 
 ## TLDR
+
 In general, I recommend using either my own PDF viewer, ngx-extended-pdf-viewer, or the PDF viewer of Vadym Yatsyuk, <a href="https://www.npmjs.com/package/ng2-pdf-viewer">ng2-pdf-viewer</a>. Vadym's viewer is the tool of choice if you don't need the menu, the sidebar, or anything else beyond displaying the PDF file. ngx-extended-pdf-viewer is the tool of choice if you need the fancy UI, too.
 
 If you need to display multiple PDF files simultaneously and if you don't mind using iFrames, I recommend <a target="#" href="https://www.npmjs.com/package/ng2-pdfjs-viewer">ng2-pdfjs-viewer</a>. The library has less features than ngx-extended-pdf-viewer, but its iFrame approach allows it do some tricks that make it unique. Such as opening a PDF file in a new tab or a new window, or - as I've mentioned before - displaying multiple PDF files side-by-side.
@@ -16,7 +17,12 @@ In a way, it's crazy to use a library to display PDF files in a browser. Every m
 Only - well, there are some outdated versions of our good old friend called Internet Explorer out there. Plus, many other browsers don't support PDF files. Sometimes it's not enough to focus on the evergreen browsers. Adding insult to injury, there's no standardized way to embed a PDF file on a web page, and the public API is limited. What you can do is using the `<object>` tag like so:
 
 ```html
-<object data="https://example.com/test.pdf#page=2" type="application/pdf" width="100%" height="100%">
+<object
+  data="https://example.com/test.pdf#page=2"
+  type="application/pdf"
+  width="100%"
+  height="100%"
+>
   <p>Your browser does not support PDFs. <a href="https://example.com/test.pdf">Download the PDF</a>.</p>
 </object>
 ```
@@ -33,7 +39,7 @@ The catch is it's easy as long as you're happy with just displaying the PDF file
 
 What we're looking for is a simple but powerful solution.
 
-## https://www.npmjs.com/package/ng2-pdfjs-viewer
+## ng2-pdfjs-viewer
 
 Did I say nobody's using iFrames in 2020? A developer nicknamed Code Hippie does. As things go, they implemented their PDF viewer almost at the same time as I did. Their approach is very simple: create an Angular component wrapping the PDF viewer in an iFrame. You can send parameters to the PDF viewer using the URL. That's quite a few parameters, so chances are you're happy with this approach.
 

@@ -11,7 +11,3 @@ This project simply wraps Mozilla's PDF viewer as an Angular component. It's the
 There's no point denying it: viewing PDF files comes with a huge memory penalty. Mozilla's PDF viewer consists of four files, weighing in at roughly two megabytes. Minification and Gzip reduce this to roughly half a megabyte.
 
 However, almost every alternative I know also relies on Mozilla's PDF viewer, so you get a similar memory and bandwidth penalty.
-
-## Is pdfviewer.net open to document other PDF viewers?
-
-Yes, of course. At the moment I focus on my own project. In the long run, I intend to include other PDF viewer as well as approaches to view PDF natively in the browser.

@@ -27,10 +27,9 @@ export interface AnnotationStorage {
   /**
    * Set the value for a given key
    * @param {string} key
-   * @param {string} fieldName name of the input field
    * @param {Object} value
    */
-  setValue(key: string, fieldname: any, value: Object, radioButtonField?: undefined, isDefaultValue?: boolean): void;
+  setValue(key: string, value: Object): void;
   /**
    * Check if the storage contains the given key.
    * @param {string} key

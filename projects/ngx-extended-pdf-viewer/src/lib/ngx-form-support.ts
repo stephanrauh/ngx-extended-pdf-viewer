@@ -194,7 +194,6 @@ export class NgxFormSupport {
     // Ignore formattedValue-only updates to prevent clearing Angular form data
     // The formattedValue is just for display formatting, not actual user input
     if (value.formattedValue !== undefined && value.value === undefined) {
-      debugger;
       return;
     }
 
