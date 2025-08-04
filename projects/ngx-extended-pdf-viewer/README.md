@@ -131,6 +131,7 @@ Regarding security: I'm not perfect - it's always a best-effort approach without
 
 ### Version 24
 
+- Version 24.3.0 adds a dark mode. Thanks to Megan Truso for providing the pull request!
 - Version 24.2.0 and above:
   - **Showcase Application Modernization**: The showcase application has been converted to standalone components, demonstrating modern Angular patterns and best practices for integration.
   - **Page Reordering Feature**: New `enablePageReordering` option allows users to reorder PDF pages by dragging thumbnails. Enable it with `pdfDefaultOptions.enablePageReordering = true;`.

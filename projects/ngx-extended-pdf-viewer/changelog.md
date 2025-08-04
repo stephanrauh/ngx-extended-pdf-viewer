@@ -673,3 +673,4 @@
 - 24.2.4 #2133 if a form contains at least one formatted field, two way binding with `[formData]` was broken. Every field was cleared when the focus moved out of the field. Version 24.2.4 fixes this bug.
 - 24.2.5 #2355 / #2985 fixed `pdfViewerService.getSerializedAnnotations()`; fixed `pdfViewerService.addImageToAnnotationLayer()`; added `pdfViewerService.addHighlightToAnnotationLayer()`; #2943 use a different icon for the new "move page up/down" buttons
 - 24.3.0 #2984 better light and dark mode colors (big kudos to Megan Truso for providing this pull request!)
+- 24.3.1-alpha.0 #2990 added a forgotten event to the public_api.ts; fixed CSS problems of forms (work in progress)
