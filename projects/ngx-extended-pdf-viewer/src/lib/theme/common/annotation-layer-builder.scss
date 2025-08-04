@@ -128,7 +128,7 @@ ngx-extended-pdf-viewer {
       position: absolute;
       text-align: initial;
       pointer-events: auto;
-      box-sizing: border-box !important;
+      box-sizing: border-box !important; // #2282 enforce the content-box model for the PDF viewer except forms, so it works with ng-zorro-antd
       transform-origin: 0 0;
       user-select: none;
 
@@ -180,10 +180,11 @@ ngx-extended-pdf-viewer {
     .buttonWidgetAnnotation:is(.checkBox, .radioButton) input {
       background-image: var(--annotation-unfocused-field-background);
       border: 2px solid var(--input-unfocused-border-color);
-      box-sizing: border-box;
+      box-sizing: border-box !important;
       font: calc(9px * var(--total-scale-factor)) sans-serif;
       height: 100%;
       margin: 0;
+      padding: 0;
       vertical-align: top;
       width: 100%;
     }
