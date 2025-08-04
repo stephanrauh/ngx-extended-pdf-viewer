@@ -614,6 +614,11 @@ pdfjs-editor-add-signature-edit-button-label = Embosako’i moha’ãnga
 pdfjs-editor-edit-signature-dialog-title = Embosako’i moha’ãnga
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
+pdfjs-editor-highlight-added-alert = Highlight added
+pdfjs-editor-freetext-added-alert = Text added
+pdfjs-editor-ink-added-alert = Drawing added
+pdfjs-editor-stamp-added-alert = Image added
+pdfjs-editor-signature-added-alert = Signature added
 pdfjs-editor-add-signature-dialog-label = This modal allows the user to create a signature to add to a PDF document. The user can edit the name (which also serves as the alt text), and optionally save the signature for repeated use.
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

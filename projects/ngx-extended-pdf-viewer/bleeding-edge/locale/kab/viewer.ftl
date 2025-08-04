@@ -600,6 +600,11 @@ pdfjs-editor-new-alt-text-disclaimer1 = This alt text was created automatically 
 pdfjs-editor-new-alt-text-error-description = Please write your own alt text or try again later.
 pdfjs-editor-alt-text-settings-create-model-description = Suggests descriptions to help people who can’t see the image or when the image doesn’t load.
 pdfjs-editor-alt-text-settings-ai-model-description = Runs locally on your device so your data stays private. Required for automatic alt text.
+pdfjs-editor-highlight-added-alert = Highlight added
+pdfjs-editor-freetext-added-alert = Text added
+pdfjs-editor-ink-added-alert = Drawing added
+pdfjs-editor-stamp-added-alert = Image added
+pdfjs-editor-signature-added-alert = Signature added
 pdfjs-editor-undo-bar-message-multiple =
     { $count ->
         [one] { $count } annotation removed

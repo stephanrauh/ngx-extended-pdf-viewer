@@ -322,6 +322,19 @@ pdfjs-editor-signature-button-label = Legg til signatur
 
 ## Default editor aria labels
 
+# “Highlight” is a noun, the string is used on the editor for highlights.
+pdfjs-editor-highlight-editor =
+    .aria-label = Redigering av markering
+# “Drawing” is a noun, the string is used on the editor for drawings.
+pdfjs-editor-ink-editor =
+    .aria-label = Redigering av tegninger
+# Used when a signature editor is selected/hovered.
+# Variables:
+#   $description (String) - a string describing/labeling the signature.
+pdfjs-editor-signature-editor1 =
+    .aria-description = Signatur-redigerer: { $description }
+pdfjs-editor-stamp-editor =
+    .aria-label = Bilderedigerer
 
 ## Remove button for the various kind of editor.
 
@@ -351,9 +364,16 @@ pdfjs-editor-stamp-add-image-button-label = Legg til bilde
 pdfjs-editor-free-highlight-thickness-input = Tykkelse
 pdfjs-editor-free-highlight-thickness-title =
     .title = Endre tykkelse når du markerer andre elementer enn tekst
+pdfjs-editor-add-signature-container =
+    .aria-label = Signaturkontroller og lagrede signaturer
 pdfjs-editor-signature-add-signature-button =
     .title = Legg til ny signatur
 pdfjs-editor-signature-add-signature-button-label = Legg til ny signatur
+# Used on the button to use an already saved signature.
+# Variables:
+#   $description (String) - a string describing/labeling the signature.
+pdfjs-editor-add-saved-signature-button =
+    .title = Lagret signatur: { $description }
 # .default-content is used as a placeholder in an empty text editor.
 pdfjs-free-text2 =
     .aria-label = Tekstredigering
@@ -511,6 +531,13 @@ pdfjs-editor-undo-bar-message-freetext = Tekst fjernet
 pdfjs-editor-undo-bar-message-ink = Tegning fjernet
 pdfjs-editor-undo-bar-message-stamp = Bilde fjernet
 pdfjs-editor-undo-bar-message-signature = Signatur fjernet
+# Variables:
+#   $count (Number) - the number of removed annotations.
+pdfjs-editor-undo-bar-message-multiple =
+    { $count ->
+        [one] { $count } kommentar fjernet
+       *[other] { $count } kommentarer fjernet
+    }
 pdfjs-editor-undo-bar-undo-button =
     .title = Angre
 pdfjs-editor-undo-bar-undo-button-label = Angre
@@ -575,6 +602,8 @@ pdfjs-editor-edit-signature-update-button = Oppdater
 
 ## Main menu for adding/removing signatures
 
+pdfjs-editor-delete-signature-button1 =
+    .title = Fjern lagret signatur
 
 ## Editor toolbar
 
@@ -585,25 +614,11 @@ pdfjs-editor-add-signature-edit-button-label = Rediger beskrivelse
 pdfjs-editor-edit-signature-dialog-title = Rediger beskrivelse
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-editor-highlight-editor =
-    .aria-label = Highlight editor
-pdfjs-editor-ink-editor =
-    .aria-label = Drawing editor
-pdfjs-editor-signature-editor1 =
-    .aria-description = Signature editor: { $description }
-pdfjs-editor-stamp-editor =
-    .aria-label = Image editor
-pdfjs-editor-add-signature-container =
-    .aria-label = Signature controls and saved signatures
-pdfjs-editor-add-saved-signature-button =
-    .title = Saved signature: { $description }
-pdfjs-editor-undo-bar-message-multiple =
-    { $count ->
-        [one] { $count } annotation removed
-       *[other] { $count } annotations removed
-    }
-pdfjs-editor-delete-signature-button1 =
-    .title = Remove saved signature
+pdfjs-editor-highlight-added-alert = Highlight added
+pdfjs-editor-freetext-added-alert = Text added
+pdfjs-editor-ink-added-alert = Drawing added
+pdfjs-editor-stamp-added-alert = Image added
+pdfjs-editor-signature-added-alert = Signature added
 pdfjs-editor-delete-signature-button-label1 = Remove saved signature
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

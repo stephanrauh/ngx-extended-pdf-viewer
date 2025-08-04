@@ -629,3 +629,9 @@ pdfjs-editor-movePageUp-button = Presunúť stránku nahor
 pdfjs-editor-movePageUp-button-label = Presunúť stránku nahor
 pdfjs-editor-movePageDown-button = Presunúť stránku nadol
 pdfjs-editor-movePageDown-button-label = Presunúť stránku nadol
+# Translations for ngx-extended-pdf-viewer additions only available in en-US
+pdfjs-editor-highlight-added-alert = Highlight added
+pdfjs-editor-freetext-added-alert = Text added
+pdfjs-editor-ink-added-alert = Drawing added
+pdfjs-editor-stamp-added-alert = Image added
+pdfjs-editor-signature-added-alert = Signature added

@@ -289,6 +289,7 @@ pdfjs-web-fonts-disabled = Veebifondid on keelatud: PDFiga kaasatud fonte pole v
 
 ## Image alt-text settings
 
+pdfjs-editor-alt-text-settings-delete-model-button = Kustuta
 
 ## "Annotations removed" bar
 
@@ -482,13 +483,17 @@ pdfjs-editor-alt-text-settings-create-model-button-label = Create alt text autom
 pdfjs-editor-alt-text-settings-create-model-description = Suggests descriptions to help people who can’t see the image or when the image doesn’t load.
 pdfjs-editor-alt-text-settings-download-model-label = Alt text AI model ({ $totalSize } MB)
 pdfjs-editor-alt-text-settings-ai-model-description = Runs locally on your device so your data stays private. Required for automatic alt text.
-pdfjs-editor-alt-text-settings-delete-model-button = Delete
 pdfjs-editor-alt-text-settings-download-model-button = Download
 pdfjs-editor-alt-text-settings-downloading-model-button = Downloading…
 pdfjs-editor-alt-text-settings-editor-title = Alt text editor
 pdfjs-editor-alt-text-settings-show-dialog-button-label = Show alt text editor right away when adding an image
 pdfjs-editor-alt-text-settings-show-dialog-description = Helps you make sure all your images have alt text.
 pdfjs-editor-alt-text-settings-close-button = Close
+pdfjs-editor-highlight-added-alert = Highlight added
+pdfjs-editor-freetext-added-alert = Text added
+pdfjs-editor-ink-added-alert = Drawing added
+pdfjs-editor-stamp-added-alert = Image added
+pdfjs-editor-signature-added-alert = Signature added
 pdfjs-editor-undo-bar-message-highlight = Highlight removed
 pdfjs-editor-undo-bar-message-freetext = Text removed
 pdfjs-editor-undo-bar-message-ink = Drawing removed

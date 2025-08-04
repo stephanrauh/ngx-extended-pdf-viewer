@@ -263,8 +263,8 @@ pdfjs-annotation-date-time-string = { DATETIME($dateObj, dateStyle: "short", tim
 
 ## Password
 
-pdfjs-password-label = ഈ പിഡിഎഫ് ഫയല്‍ തുറക്കുന്നതിനു് രഹസ്യവാക്ക് നല്‍കുക.
-pdfjs-password-invalid = തെറ്റായ രഹസ്യവാക്ക്, ദയവായി വീണ്ടും ശ്രമിയ്ക്കുക.
+pdfjs-password-label = ഈ പിഡിഎഫ് ഫയല്‍ തുറക്കുന്നതിനു് ഒളിവാക്ക് നല്‍കുക.
+pdfjs-password-invalid = തെറ്റായ ഒളിവാക്ക്, ദയവായി വീണ്ടും ശ്രമിയ്ക്കുക.
 pdfjs-password-ok-button = ശരി
 pdfjs-password-cancel-button = റദ്ദാക്കുക
 pdfjs-web-fonts-disabled = വെബിനുള്ള അക്ഷരസഞ്ചയങ്ങള്‍ പ്രവര്‍ത്തന രഹിതം: എംബഡ്ഡ് ചെയ്ത പിഡിഎഫ് അക്ഷരസഞ്ചയങ്ങള്‍ ഉപയോഗിയ്ക്കുവാന്‍ സാധ്യമല്ല.
@@ -595,6 +595,11 @@ pdfjs-editor-alt-text-settings-download-model-label = Alt text AI model ({ $tota
 pdfjs-editor-alt-text-settings-ai-model-description = Runs locally on your device so your data stays private. Required for automatic alt text.
 pdfjs-editor-alt-text-settings-editor-title = Alt text editor
 pdfjs-editor-alt-text-settings-show-dialog-button-label = Show alt text editor right away when adding an image
+pdfjs-editor-highlight-added-alert = Highlight added
+pdfjs-editor-freetext-added-alert = Text added
+pdfjs-editor-ink-added-alert = Drawing added
+pdfjs-editor-stamp-added-alert = Image added
+pdfjs-editor-signature-added-alert = Signature added
 pdfjs-editor-add-signature-dialog-label = This modal allows the user to create a signature to add to a PDF document. The user can edit the name (which also serves as the alt text), and optionally save the signature for repeated use.
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
