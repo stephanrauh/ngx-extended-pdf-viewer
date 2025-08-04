@@ -623,3 +623,9 @@ pdfjs-editor-movePageUp-button = Mover página para cima
 pdfjs-editor-movePageUp-button-label = Mover página para cima
 pdfjs-editor-movePageDown-button = Mover página para baixo
 pdfjs-editor-movePageDown-button-label = Mover página para baixo
+# Translations for ngx-extended-pdf-viewer additions only available in en-US
+pdfjs-editor-highlight-added-alert = Highlight added
+pdfjs-editor-freetext-added-alert = Text added
+pdfjs-editor-ink-added-alert = Drawing added
+pdfjs-editor-stamp-added-alert = Image added
+pdfjs-editor-signature-added-alert = Signature added

@@ -626,3 +626,9 @@ pdfjs-editor-movePageUp-button = Перемістити сторінку вго�
 pdfjs-editor-movePageUp-button-label = Перемістити сторінку вгору
 pdfjs-editor-movePageDown-button = Перемістити сторінку вниз
 pdfjs-editor-movePageDown-button-label = Перемістити сторінку вниз
+# Translations for ngx-extended-pdf-viewer additions only available in en-US
+pdfjs-editor-highlight-added-alert = Highlight added
+pdfjs-editor-freetext-added-alert = Text added
+pdfjs-editor-ink-added-alert = Drawing added
+pdfjs-editor-stamp-added-alert = Image added
+pdfjs-editor-signature-added-alert = Signature added

@@ -623,3 +623,9 @@ pdfjs-editor-movePageUp-button = Oldal mozgatása felfelé
 pdfjs-editor-movePageUp-button-label = Oldal mozgatása felfelé
 pdfjs-editor-movePageDown-button = Oldal mozgatása lefelé
 pdfjs-editor-movePageDown-button-label = Oldal mozgatása lefelé
+# Translations for ngx-extended-pdf-viewer additions only available in en-US
+pdfjs-editor-highlight-added-alert = Highlight added
+pdfjs-editor-freetext-added-alert = Text added
+pdfjs-editor-ink-added-alert = Drawing added
+pdfjs-editor-stamp-added-alert = Image added
+pdfjs-editor-signature-added-alert = Signature added

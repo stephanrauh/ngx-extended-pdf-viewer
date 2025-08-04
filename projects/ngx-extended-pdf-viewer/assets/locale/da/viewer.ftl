@@ -623,3 +623,9 @@ pdfjs-editor-movePageUp-button = Flyt side op
 pdfjs-editor-movePageUp-button-label = Flyt side op
 pdfjs-editor-movePageDown-button = Flyt side ned
 pdfjs-editor-movePageDown-button-label = Flyt side ned
+# Translations for ngx-extended-pdf-viewer additions only available in en-US
+pdfjs-editor-highlight-added-alert = Highlight added
+pdfjs-editor-freetext-added-alert = Text added
+pdfjs-editor-ink-added-alert = Drawing added
+pdfjs-editor-stamp-added-alert = Image added
+pdfjs-editor-signature-added-alert = Signature added
