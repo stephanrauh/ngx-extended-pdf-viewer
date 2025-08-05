@@ -589,6 +589,10 @@ pdfjs-editor-movePageUp-button-label = Mover página hacia arriba
 pdfjs-editor-movePageDown-button = Mover página hacia abajo
 pdfjs-editor-movePageDown-button-label = Mover página hacia abajo
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
+pdfjs-editor-color-picker-free-text-input =
+    .title = Change text color
+pdfjs-editor-color-picker-ink-input =
+    .title = Change drawing color
 pdfjs-editor-highlight-editor =
     .aria-label = Highlight editor
 pdfjs-editor-ink-editor =
@@ -613,7 +617,23 @@ pdfjs-editor-add-signature-image-browse-link =
         [macos] Or choose image files
        *[other] Or browse image files
     }
+pdfjs-editor-add-signature-image-no-data-error-title = Can’t convert this image into a signature
+pdfjs-editor-add-signature-image-no-data-error-description = Please try uploading a different image.
 pdfjs-editor-delete-signature-button1 =
     .title = Remove saved signature
 pdfjs-editor-delete-signature-button-label1 = Remove saved signature
 pdfjs-editor-edit-signature-update-button = Update
+pdfjs-editor-edit-comment-actions-button-label = Actions
+pdfjs-editor-edit-comment-actions-button =
+    .title = Actions
+pdfjs-editor-edit-comment-close-button-label = Close
+pdfjs-editor-edit-comment-close-button =
+    .title = Close
+pdfjs-editor-edit-comment-actions-edit-button-label = Edit
+pdfjs-editor-edit-comment-actions-delete-button-label = Delete
+pdfjs-editor-edit-comment-manager-text-input =
+    .placeholder = Enter your comment
+pdfjs-editor-edit-comment-manager-cancel-button = Cancel
+pdfjs-editor-edit-comment-manager-save-button = Save
+pdfjs-editor-edit-comment-button =
+    .title = Edit comment

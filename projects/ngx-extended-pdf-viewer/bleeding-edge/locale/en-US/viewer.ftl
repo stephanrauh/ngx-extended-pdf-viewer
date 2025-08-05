@@ -306,9 +306,13 @@ pdfjs-web-fonts-disabled = Web fonts are disabled: unable to use embedded PDF fo
 
 pdfjs-editor-free-text-button =
     .title = Text
+pdfjs-editor-color-picker-free-text-input =
+    .title = Change text color
 pdfjs-editor-free-text-button-label = Text
 pdfjs-editor-ink-button =
     .title = Draw
+pdfjs-editor-color-picker-ink-input =
+    .title = Change drawing color
 pdfjs-editor-ink-button-label = Draw
 pdfjs-editor-stamp-button =
     .title = Add or edit images
@@ -614,6 +618,8 @@ pdfjs-editor-add-signature-save-checkbox = Save signature
 pdfjs-editor-add-signature-save-warning-message = You’ve reached the limit of 5 saved signatures. Remove one to save more.
 pdfjs-editor-add-signature-image-upload-error-title = Couldn’t upload image
 pdfjs-editor-add-signature-image-upload-error-description = Check your network connection or try another image.
+pdfjs-editor-add-signature-image-no-data-error-title = Can’t convert this image into a signature
+pdfjs-editor-add-signature-image-no-data-error-description = Please try uploading a different image.
 pdfjs-editor-add-signature-error-close-button = Close
 
 ## Dialog buttons
@@ -638,6 +644,27 @@ pdfjs-editor-edit-signature-dialog-title = Edit description
 ## Dialog buttons
 
 pdfjs-editor-edit-signature-update-button = Update
+
+##  Edit a comment dialog
+
+pdfjs-editor-edit-comment-actions-button-label = Actions
+pdfjs-editor-edit-comment-actions-button =
+    .title = Actions
+pdfjs-editor-edit-comment-close-button-label = Close
+pdfjs-editor-edit-comment-close-button =
+    .title = Close
+pdfjs-editor-edit-comment-actions-edit-button-label = Edit
+pdfjs-editor-edit-comment-actions-delete-button-label = Delete
+pdfjs-editor-edit-comment-manager-text-input =
+    .placeholder = Enter your comment
+
+pdfjs-editor-edit-comment-manager-cancel-button = Cancel
+pdfjs-editor-edit-comment-manager-save-button = Save
+
+## Edit a comment button in the editor toolbar
+
+pdfjs-editor-edit-comment-button =
+    .title = Edit comment
 
 # Additional translations for ngx-extended-pdf-viewer (en)
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.

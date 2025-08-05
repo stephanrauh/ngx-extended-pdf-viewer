@@ -206,7 +206,7 @@ pdfjs-find-previous-button-label = Kent
 pdfjs-find-next-button =
     .title = Kavout an tamm frazenn war-lerc'h o klotañ ganti
 pdfjs-find-next-button-label = War-lerc'h
-pdfjs-find-highlight-checkbox = Usskediñ pep tra
+pdfjs-find-highlight-checkbox = Sklêrijennañ pep tra
 pdfjs-find-match-case-checkbox-label = Teurel evezh ouzh ar pennlizherennoù
 pdfjs-find-match-diacritics-checkbox-label = Doujañ d’an tiredoù
 pdfjs-find-entire-word-checkbox-label = Gerioù a-bezh
@@ -272,6 +272,13 @@ pdfjs-editor-ink-button-label = Tresañ
 pdfjs-editor-stamp-button =
     .title = Ouzhpennañ pe aozañ skeudennoù
 pdfjs-editor-stamp-button-label = Ouzhpennañ pe aozañ skeudennoù
+pdfjs-editor-highlight-button =
+    .title = Sklerijennañ
+pdfjs-editor-highlight-button-label = Sklerijennañ
+pdfjs-highlight-floating-button1 =
+    .title = Sklerijennañ
+    .aria-label = Sklerijennañ
+pdfjs-highlight-floating-button-label = Sklerijennañ
 
 ## Default editor aria labels
 
@@ -304,6 +311,9 @@ pdfjs-ink-canvas =
 pdfjs-editor-alt-text-add-description-label = Ouzhpennañ un deskrivadur
 pdfjs-editor-alt-text-cancel-button = Nullañ
 pdfjs-editor-alt-text-save-button = Enrollañ
+# .placeholder: This is a placeholder for the alt text input area
+pdfjs-editor-alt-text-textarea =
+    .placeholder = Da skouer, “Ur paotr yaouank ouzh taol o tebriñ boued”
 
 ## Editor resizers
 ## This is used in an aria label to help to understand the role of the resizer.
@@ -311,6 +321,8 @@ pdfjs-editor-alt-text-save-button = Enrollañ
 
 ## Color picker
 
+# This means "Color used to highlight text"
+pdfjs-editor-highlight-colorpicker-label = Liv sklêrijennañ
 pdfjs-editor-colorpicker-button =
     .title = Cheñch liv
 pdfjs-editor-colorpicker-yellow =
@@ -390,13 +402,10 @@ pdfjs-find-match-count-limit =
        *[other] More than { $limit } matches
     }
 pdfjs-annotation-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
-pdfjs-editor-highlight-button =
-    .title = Highlight
-pdfjs-editor-highlight-button-label = Highlight
-pdfjs-highlight-floating-button1 =
-    .title = Highlight
-    .aria-label = Highlight
-pdfjs-highlight-floating-button-label = Highlight
+pdfjs-editor-color-picker-free-text-input =
+    .title = Change text color
+pdfjs-editor-color-picker-ink-input =
+    .title = Change drawing color
 pdfjs-editor-signature-button =
     .title = Add signature
 pdfjs-editor-signature-button-label = Add signature
@@ -441,8 +450,6 @@ pdfjs-editor-alt-text-add-description-description = Aim for 1-2 sentences that d
 pdfjs-editor-alt-text-mark-decorative-label = Mark as decorative
 pdfjs-editor-alt-text-mark-decorative-description = This is used for ornamental images, like borders or watermarks.
 pdfjs-editor-alt-text-decorative-tooltip = Marked as decorative
-pdfjs-editor-alt-text-textarea =
-    .placeholder = For example, “A young man sits down at a table to eat a meal”
 pdfjs-editor-resizer-top-left =
     .aria-label = Top left corner — resize
 pdfjs-editor-resizer-top-middle =
@@ -459,7 +466,6 @@ pdfjs-editor-resizer-bottom-left =
     .aria-label = Bottom left corner — resize
 pdfjs-editor-resizer-middle-left =
     .aria-label = Middle left — resize
-pdfjs-editor-highlight-colorpicker-label = Highlight color
 pdfjs-editor-colorpicker-dropdown =
     .aria-label = Color choices
 pdfjs-editor-colorpicker-green =
@@ -551,6 +557,8 @@ pdfjs-editor-add-signature-save-checkbox = Save signature
 pdfjs-editor-add-signature-save-warning-message = You’ve reached the limit of 5 saved signatures. Remove one to save more.
 pdfjs-editor-add-signature-image-upload-error-title = Couldn’t upload image
 pdfjs-editor-add-signature-image-upload-error-description = Check your network connection or try another image.
+pdfjs-editor-add-signature-image-no-data-error-title = Can’t convert this image into a signature
+pdfjs-editor-add-signature-image-no-data-error-description = Please try uploading a different image.
 pdfjs-editor-add-signature-error-close-button = Close
 pdfjs-editor-add-signature-cancel-button = Cancel
 pdfjs-editor-add-signature-add-button = Add
@@ -560,6 +568,20 @@ pdfjs-editor-delete-signature-button-label1 = Remove saved signature
 pdfjs-editor-add-signature-edit-button-label = Edit description
 pdfjs-editor-edit-signature-dialog-title = Edit description
 pdfjs-editor-edit-signature-update-button = Update
+pdfjs-editor-edit-comment-actions-button-label = Actions
+pdfjs-editor-edit-comment-actions-button =
+    .title = Actions
+pdfjs-editor-edit-comment-close-button-label = Close
+pdfjs-editor-edit-comment-close-button =
+    .title = Close
+pdfjs-editor-edit-comment-actions-edit-button-label = Edit
+pdfjs-editor-edit-comment-actions-delete-button-label = Delete
+pdfjs-editor-edit-comment-manager-text-input =
+    .placeholder = Enter your comment
+pdfjs-editor-edit-comment-manager-cancel-button = Cancel
+pdfjs-editor-edit-comment-manager-save-button = Save
+pdfjs-editor-edit-comment-button =
+    .title = Edit comment
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = Match Each Word

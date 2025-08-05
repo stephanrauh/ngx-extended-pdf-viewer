@@ -324,6 +324,19 @@ pdfjs-editor-signature-button-label = Dodaj potpis
 
 ## Default editor aria labels
 
+# “Highlight” is a noun, the string is used on the editor for highlights.
+pdfjs-editor-highlight-editor =
+    .aria-label = Uređivač za isticanje teksta
+# “Drawing” is a noun, the string is used on the editor for drawings.
+pdfjs-editor-ink-editor =
+    .aria-label = Uređivač crteža
+# Used when a signature editor is selected/hovered.
+# Variables:
+#   $description (String) - a string describing/labeling the signature.
+pdfjs-editor-signature-editor1 =
+    .aria-description = Uređivač potpisa: { $description }
+pdfjs-editor-stamp-editor =
+    .aria-label = Uređivač slika
 
 ## Remove button for the various kind of editor.
 
@@ -335,6 +348,8 @@ pdfjs-editor-remove-stamp-button =
     .title = Ukloni sliku
 pdfjs-editor-remove-highlight-button =
     .title = Ukloni isticanje
+pdfjs-editor-remove-signature-button =
+    .title = Ukloni potpis
 
 ##
 
@@ -351,9 +366,16 @@ pdfjs-editor-stamp-add-image-button-label = Dodaj sliku
 pdfjs-editor-free-highlight-thickness-input = Debljina
 pdfjs-editor-free-highlight-thickness-title =
     .title = Promjeni debljinu pri isticanju drugih stavki osim teksta
+pdfjs-editor-add-signature-container =
+    .aria-label = Kontrole potpisa i spremljeni potpisi
 pdfjs-editor-signature-add-signature-button =
     .title = Dodaj novi potpis
 pdfjs-editor-signature-add-signature-button-label = Dodaj novi potpis
+# Used on the button to use an already saved signature.
+# Variables:
+#   $description (String) - a string describing/labeling the signature.
+pdfjs-editor-add-saved-signature-button =
+    .title = Spremljeni potpis: { $description }
 # .default-content is used as a placeholder in an empty text editor.
 pdfjs-free-text2 =
     .aria-label = Uređivač teksta
@@ -510,6 +532,7 @@ pdfjs-editor-undo-bar-message-highlight = Isticanje uklonjeno
 pdfjs-editor-undo-bar-message-freetext = Tekst uklonjen
 pdfjs-editor-undo-bar-message-ink = Crtež uklonjen
 pdfjs-editor-undo-bar-message-stamp = Slika uklonjena
+pdfjs-editor-undo-bar-message-signature = Potpis uklonjen
 # Variables:
 #   $count (Number) - the number of removed annotations.
 pdfjs-editor-undo-bar-message-multiple =
@@ -532,24 +555,67 @@ pdfjs-editor-add-signature-dialog-title = Dodaj potpis
 
 ## Tab names
 
+# Type is a verb (you can type your name as signature)
+pdfjs-editor-add-signature-type-button = Utipkaj
+    .title = Utipkaj
+# Draw is a verb (you can draw your signature)
+pdfjs-editor-add-signature-draw-button = Crtaj
+    .title = Crtaj
+pdfjs-editor-add-signature-image-button = Slika
+    .title = Slika
 
 ## Tab panels
 
+pdfjs-editor-add-signature-type-input =
+    .aria-label = Utipkaj svoj potpis
+    .placeholder = Utipkaj svoj potpis
+pdfjs-editor-add-signature-draw-placeholder = Nacrtaj svoj potpis
+pdfjs-editor-add-signature-draw-thickness-range-label = Debljina
+# Variables:
+#   $thickness (Number) - the thickness (in pixels) of the line used to draw a signature.
+pdfjs-editor-add-signature-draw-thickness-range =
+    .title = Debljina crtanja: { $thickness }
+pdfjs-editor-add-signature-image-placeholder = Povuci datoteku za prijenos ovamo
+pdfjs-editor-add-signature-image-browse-link =
+    { PLATFORM() ->
+        [macos] Ili odaberi slikovne datoteke
+       *[other] Ili odaberi slikovne datoteke
+    }
 
 ## Controls
 
+pdfjs-editor-add-signature-description-label = Opis (alternativni tekst)
+pdfjs-editor-add-signature-description-input =
+    .title = Opis (alternativni tekst)
+pdfjs-editor-add-signature-description-default-when-drawing = Potpis
+pdfjs-editor-add-signature-clear-button-label = Izbriši potpis
+pdfjs-editor-add-signature-clear-button =
+    .title = Izbriši potpis
+pdfjs-editor-add-signature-save-checkbox = Spremi potpis
+pdfjs-editor-add-signature-save-warning-message = Dosegnuto je ograničenje od 5 spremljenih potpisa. Za spremanje novih ukloni jedan potpis.
+pdfjs-editor-add-signature-image-upload-error-title = Nije moguće prenijeti sliku
+pdfjs-editor-add-signature-image-upload-error-description = Provjeri mrežnu vezu ili pokušaj s jednom drugom slikom.
+pdfjs-editor-add-signature-error-close-button = Zatvori
 
 ## Dialog buttons
 
+pdfjs-editor-add-signature-cancel-button = Odustani
+pdfjs-editor-add-signature-add-button = Dodaj
+pdfjs-editor-edit-signature-update-button = Aktualiziraj
 
 ## Main menu for adding/removing signatures
 
+pdfjs-editor-delete-signature-button1 =
+    .title = Ukloni spremljeni potpis
+pdfjs-editor-delete-signature-button-label1 = Ukloni spremljeni potpis
 
 ## Editor toolbar
 
+pdfjs-editor-add-signature-edit-button-label = Uredi opis
 
 ## Edit signature description dialog
 
+pdfjs-editor-edit-signature-dialog-title = Uredi opis
 
 # Additional translations for ngx-extended-pdf-viewer (hr)
 unverified-signature-warning = Ova PDF datoteka sadrži digitalni potpis. PDF pregljednik ne može provjeriti je li potpis valjan. Molimo preuzmite datoteku i otvorite je u Acrobat Reader-u da biste provjerili valjanost potpisa.
@@ -561,62 +627,28 @@ pdfjs-editor-movePageUp-button-label = Pomakni stranicu gore
 pdfjs-editor-movePageDown-button = Pomakni stranicu dolje
 pdfjs-editor-movePageDown-button-label = Pomakni stranicu dolje
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-editor-highlight-editor =
-    .aria-label = Highlight editor
-pdfjs-editor-ink-editor =
-    .aria-label = Drawing editor
-pdfjs-editor-signature-editor1 =
-    .aria-description = Signature editor: { $description }
-pdfjs-editor-stamp-editor =
-    .aria-label = Image editor
-pdfjs-editor-remove-signature-button =
-    .title = Remove signature
-pdfjs-editor-add-signature-container =
-    .aria-label = Signature controls and saved signatures
-pdfjs-editor-add-saved-signature-button =
-    .title = Saved signature: { $description }
+pdfjs-editor-color-picker-free-text-input =
+    .title = Change text color
+pdfjs-editor-color-picker-ink-input =
+    .title = Change drawing color
 pdfjs-editor-highlight-added-alert = Highlight added
 pdfjs-editor-freetext-added-alert = Text added
 pdfjs-editor-ink-added-alert = Drawing added
 pdfjs-editor-stamp-added-alert = Image added
 pdfjs-editor-signature-added-alert = Signature added
-pdfjs-editor-undo-bar-message-signature = Signature removed
-pdfjs-editor-add-signature-type-button = Type
-    .title = Type
-pdfjs-editor-add-signature-draw-button = Draw
-    .title = Draw
-pdfjs-editor-add-signature-image-button = Image
-    .title = Image
-pdfjs-editor-add-signature-type-input =
-    .aria-label = Type your signature
-    .placeholder = Type your signature
-pdfjs-editor-add-signature-draw-placeholder = Draw your signature
-pdfjs-editor-add-signature-draw-thickness-range-label = Thickness
-pdfjs-editor-add-signature-draw-thickness-range =
-    .title = Drawing thickness: { $thickness }
-pdfjs-editor-add-signature-image-placeholder = Drag a file here to upload
-pdfjs-editor-add-signature-image-browse-link =
-    { PLATFORM() ->
-        [macos] Or choose image files
-       *[other] Or browse image files
-    }
-pdfjs-editor-add-signature-description-label = Description (alt text)
-pdfjs-editor-add-signature-description-input =
-    .title = Description (alt text)
-pdfjs-editor-add-signature-description-default-when-drawing = Signature
-pdfjs-editor-add-signature-clear-button-label = Clear signature
-pdfjs-editor-add-signature-clear-button =
-    .title = Clear signature
-pdfjs-editor-add-signature-save-checkbox = Save signature
-pdfjs-editor-add-signature-save-warning-message = You’ve reached the limit of 5 saved signatures. Remove one to save more.
-pdfjs-editor-add-signature-image-upload-error-title = Couldn’t upload image
-pdfjs-editor-add-signature-image-upload-error-description = Check your network connection or try another image.
-pdfjs-editor-add-signature-error-close-button = Close
-pdfjs-editor-add-signature-cancel-button = Cancel
-pdfjs-editor-add-signature-add-button = Add
-pdfjs-editor-delete-signature-button1 =
-    .title = Remove saved signature
-pdfjs-editor-delete-signature-button-label1 = Remove saved signature
-pdfjs-editor-add-signature-edit-button-label = Edit description
-pdfjs-editor-edit-signature-dialog-title = Edit description
-pdfjs-editor-edit-signature-update-button = Update
+pdfjs-editor-add-signature-image-no-data-error-title = Can’t convert this image into a signature
+pdfjs-editor-add-signature-image-no-data-error-description = Please try uploading a different image.
+pdfjs-editor-edit-comment-actions-button-label = Actions
+pdfjs-editor-edit-comment-actions-button =
+    .title = Actions
+pdfjs-editor-edit-comment-close-button-label = Close
+pdfjs-editor-edit-comment-close-button =
+    .title = Close
+pdfjs-editor-edit-comment-actions-edit-button-label = Edit
+pdfjs-editor-edit-comment-actions-delete-button-label = Delete
+pdfjs-editor-edit-comment-manager-text-input =
+    .placeholder = Enter your comment
+pdfjs-editor-edit-comment-manager-cancel-button = Cancel
+pdfjs-editor-edit-comment-manager-save-button = Save
+pdfjs-editor-edit-comment-button =
+    .title = Edit comment

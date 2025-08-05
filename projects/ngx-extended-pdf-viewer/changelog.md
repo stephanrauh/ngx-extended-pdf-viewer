@@ -674,3 +674,4 @@
 - 24.2.5 #2355 / #2985 fixed `pdfViewerService.getSerializedAnnotations()`; fixed `pdfViewerService.addImageToAnnotationLayer()`; added `pdfViewerService.addHighlightToAnnotationLayer()`; #2943 use a different icon for the new "move page up/down" buttons
 - 24.3.0 #2984 better light and dark mode colors (big kudos to Megan Truso for providing this pull request!)
 - 24.3.1-alpha.0 #2990 added a forgotten event to the public_api.ts; fixed CSS problems of forms (work in progress)
+- 24.3.1-alpha.1 updated the bleeding edge branch to pdf.js 5.4.54

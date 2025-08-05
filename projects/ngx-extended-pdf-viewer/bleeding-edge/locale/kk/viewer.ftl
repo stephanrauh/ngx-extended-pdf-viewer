@@ -551,6 +551,10 @@ pdfjs-editor-add-signature-image-button = Сурет
 
 ## Tab panels
 
+pdfjs-editor-add-signature-type-input =
+    .aria-label = Қолтаңбаңызды теріңіз
+    .placeholder = Қолтаңбаңызды теріңіз
+pdfjs-editor-add-signature-draw-placeholder = Қолтаңбаңызды сызыңыз
 pdfjs-editor-add-signature-draw-thickness-range-label = Қалыңдығы
 # Variables:
 #   $thickness (Number) - the thickness (in pixels) of the line used to draw a signature.
@@ -575,6 +579,7 @@ pdfjs-editor-add-signature-clear-button =
 pdfjs-editor-add-signature-save-checkbox = Қолтаңбаны сақтау
 pdfjs-editor-add-signature-save-warning-message = Сақталған 5 қолтаңбаның шегіне жеттіңіз. Көбірек сақтау үшін біреуін алып тастаңыз.
 pdfjs-editor-add-signature-image-upload-error-title = Суретті жүктеп жіберу мүмкін емес.
+pdfjs-editor-add-signature-image-upload-error-description = Желі байланысын тексеріңіз немесе басқа бейнені қолданып көріңіз.
 pdfjs-editor-add-signature-error-close-button = Жабу
 
 ## Dialog buttons
@@ -585,6 +590,9 @@ pdfjs-editor-edit-signature-update-button = Жаңарту
 
 ## Main menu for adding/removing signatures
 
+pdfjs-editor-delete-signature-button1 =
+    .title = Сақталған қолтаңбаны өшіру
+pdfjs-editor-delete-signature-button-label1 = Сақталған қолтаңбаны өшіру
 
 ## Editor toolbar
 
@@ -595,6 +603,10 @@ pdfjs-editor-add-signature-edit-button-label = Сипаттаманы түзет
 pdfjs-editor-edit-signature-dialog-title = Сипаттаманы түзету
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
+pdfjs-editor-color-picker-free-text-input =
+    .title = Change text color
+pdfjs-editor-color-picker-ink-input =
+    .title = Change drawing color
 pdfjs-editor-highlight-editor =
     .aria-label = Highlight editor
 pdfjs-editor-ink-editor =
@@ -607,14 +619,22 @@ pdfjs-editor-ink-added-alert = Drawing added
 pdfjs-editor-stamp-added-alert = Image added
 pdfjs-editor-signature-added-alert = Signature added
 pdfjs-editor-add-signature-dialog-label = This modal allows the user to create a signature to add to a PDF document. The user can edit the name (which also serves as the alt text), and optionally save the signature for repeated use.
-pdfjs-editor-add-signature-type-input =
-    .aria-label = Type your signature
-    .placeholder = Type your signature
-pdfjs-editor-add-signature-draw-placeholder = Draw your signature
-pdfjs-editor-add-signature-image-upload-error-description = Check your network connection or try another image.
-pdfjs-editor-delete-signature-button1 =
-    .title = Remove saved signature
-pdfjs-editor-delete-signature-button-label1 = Remove saved signature
+pdfjs-editor-add-signature-image-no-data-error-title = Can’t convert this image into a signature
+pdfjs-editor-add-signature-image-no-data-error-description = Please try uploading a different image.
+pdfjs-editor-edit-comment-actions-button-label = Actions
+pdfjs-editor-edit-comment-actions-button =
+    .title = Actions
+pdfjs-editor-edit-comment-close-button-label = Close
+pdfjs-editor-edit-comment-close-button =
+    .title = Close
+pdfjs-editor-edit-comment-actions-edit-button-label = Edit
+pdfjs-editor-edit-comment-actions-delete-button-label = Delete
+pdfjs-editor-edit-comment-manager-text-input =
+    .placeholder = Enter your comment
+pdfjs-editor-edit-comment-manager-cancel-button = Cancel
+pdfjs-editor-edit-comment-manager-save-button = Save
+pdfjs-editor-edit-comment-button =
+    .title = Edit comment
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = Match Each Word
