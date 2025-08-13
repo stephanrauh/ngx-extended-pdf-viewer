@@ -4,8 +4,8 @@ const _isIE11 = typeof window === 'undefined' ? false : !!(<any>globalThis).MSIn
 const isEdge = typeof navigator === 'undefined' || /Edge\/\d./i.test(navigator.userAgent);
 const needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
 
-export const pdfjsVersion = '5.3.754';
-export const pdfjsBleedingEdgeVersion = '5.4.784';
+export const pdfjsVersion = '5.4.788';
+export const pdfjsBleedingEdgeVersion = '5.4.788';
 export function getVersionSuffix(folder: string): string {
   if (folder?.includes('bleeding-edge')) {
     return pdfjsBleedingEdgeVersion;
@@ -157,10 +157,12 @@ export const pdfDefaultOptions = {
   doubleTapZoomsInHandMode: true,
   doubleTapZoomsInTextSelectionMode: false,
   doubleTapResetsZoomOnSecondDoubleTap: false,
-  enableScripting: true,
+  enableScripting: false,
+  enableCatalogAAJavaScript: false,
+  enableOpenActionJavaScript: false,
   defaultCacheSize: 50,
   passwordPrompt: undefined,
   enableHWA: true, // enable hardware acceleration. Active since pdf.js 4.4.
   positionPopupDialogsWithJavaScript: true,
-  enablePageReordering: false, // allows users to reorder pages by dragging thumbnails
+  enablePageReordering: false, // allows users to reorder pages by dragging thumbnails,
 };
