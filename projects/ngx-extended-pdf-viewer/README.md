@@ -90,7 +90,9 @@ Thanks to GitHub users ScratchPDX and Deepak Shakya for reporting the issue prom
 
 ## 📣 Roadmap Highlights
 
-### Upcoming in Version 25
+### Upcoming in Version 26
+
+Originally, these features where announced for version 25. But an unexpected breaking changed forced me to add an intermediate major version.
 
 - Migration to Angular Signals
 - Support for standalone components
@@ -128,6 +130,16 @@ Regarding security: I'm not perfect - it's always a best-effort approach without
 ---
 
 ## 📦 Version Highlights
+
+### Version 25
+
+Embedded JavaScript now is an opt-in feature. You can activate it with three feature toggles:
+
+- `pdfDefaultOptions.enableScripting` is the main toggle. Set it to true to activate JavaScript.
+- `pdfDefaultOptions.enableOpenActionJavaScript` enables JavaScript that runs when opening a PDF file. Note that this flag also requires you to set `pdfDefaultOptions.enableScripting = true`.
+- `pdfDefaultOptions.enableCatalogAAJavaScript` enables JavaScript that runs when printing, saving or closing a PDF file. Note that this flag also requires you to set `pdfDefaultOptions.enableScripting = true`.
+
+Contrary to public belief, executing embedded JavaScript shouldn't be a security risk. Hackers are clever, so there's no guarantee, and that's why I've deactivated embedded JavaScript by default and added fine-grained feature toggles. That said, embedded JavaScript runs in a sandbox which is a JavaScript interpreter written in C and transpiled to JavaScript. It does not use a risky function like `eval()`. Nonetheless, setting the defaults to `false` makes sense because the library is written and maintained by fallible humans.
 
 ### Version 24
 

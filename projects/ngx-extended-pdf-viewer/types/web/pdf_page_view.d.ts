@@ -96,11 +96,6 @@ export type PDFPageViewOptions = {
      */
     layerProperties?: Object | undefined;
     /**
-     * - Enables hardware acceleration for
-     * rendering. The default value is `false`.
-     */
-    enableHWA?: boolean | undefined;
-    /**
      * - Enable creation of hyperlinks from
      * text that look like URLs. The default value is `true`.
      */
@@ -204,8 +199,8 @@ export class PDFPageView extends BasePDFPageView implements IRenderableView {
     get height(): number;
     getPagePoint(x: any, y: any): any[];
     _ensureCanvasWrapper(): null;
-    _getRenderingContext(canvasContext: any, transform: any): {
-        canvasContext: any;
+    _getRenderingContext(canvas: any, transform: any): {
+        canvas: any;
         transform: any;
         viewport: import("../src/display/display_utils").PageViewport;
         annotationMode: number;

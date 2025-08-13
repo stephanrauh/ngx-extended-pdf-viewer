@@ -178,7 +178,7 @@ ngx-extended-pdf-viewer {
     .textWidgetAnnotation :is(input, textarea),
     .choiceWidgetAnnotation select,
     .buttonWidgetAnnotation:is(.checkBox, .radioButton) input {
-      background-image: var(--annotation-unfocused-field-background);
+      background-color: rgba(0, 54, 255, 0.13) !important;
       border: 2px solid var(--input-unfocused-border-color);
       box-sizing: border-box !important;
       font: calc(9px * var(--total-scale-factor)) sans-serif;

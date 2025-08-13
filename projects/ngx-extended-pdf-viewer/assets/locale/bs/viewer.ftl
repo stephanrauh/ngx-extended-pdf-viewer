@@ -39,6 +39,18 @@ pdfjs-open-file-button-label = Otvori
 pdfjs-print-button =
     .title = Štampaj
 pdfjs-print-button-label = Štampaj
+pdfjs-save-button =
+    .title = Sačuvaj
+pdfjs-save-button-label = Sačuvaj
+# Used in Firefox for Android as a tooltip for the download button (“download” is a verb).
+pdfjs-download-button =
+    .title = Preuzmi
+# Used in Firefox for Android as a label for the download button (“download” is a verb).
+# Length of the translation matters since we are in a mobile context, with limited screen estate.
+pdfjs-download-button-label = Preuzmi
+pdfjs-bookmark-button =
+    .title = Trenutna stranica (Prikaži URL sa trenutne stranice)
+pdfjs-bookmark-button-label = Trenutna stranica
 
 ##  Secondary toolbar and context menu
 
@@ -63,6 +75,27 @@ pdfjs-cursor-text-select-tool-button-label = Alat za označavanje teksta
 pdfjs-cursor-hand-tool-button =
     .title = Omogući ručni alat
 pdfjs-cursor-hand-tool-button-label = Ručni alat
+pdfjs-scroll-page-button =
+    .title = Koristite pomicanje stranice
+pdfjs-scroll-page-button-label = Pomicanje stranice
+pdfjs-scroll-vertical-button =
+    .title = Koristite vertikalno pomicanje
+pdfjs-scroll-vertical-button-label = Vertikalno pomicanje
+pdfjs-scroll-horizontal-button =
+    .title = Koristite horizontalno pomicanje
+pdfjs-scroll-horizontal-button-label = Horizontalno pomicanje
+pdfjs-scroll-wrapped-button =
+    .title = Koristite omotno pomicanje
+pdfjs-scroll-wrapped-button-label = Omotno pomicanje
+pdfjs-spread-none-button =
+    .title = Ne izrađuj duplerice
+pdfjs-spread-none-button-label = Bez duplerica
+pdfjs-spread-odd-button =
+    .title = Izradi duplerice koje počinju s neparnim stranicama
+pdfjs-spread-odd-button-label = Neparne duplerice
+pdfjs-spread-even-button =
+    .title = Izradi duplerice koje počinju s parnim stranicama
+pdfjs-spread-even-button-label = Parne duplerice
 
 ## Document properties dialog
 
@@ -71,6 +104,14 @@ pdfjs-document-properties-button =
 pdfjs-document-properties-button-label = Svojstva dokumenta...
 pdfjs-document-properties-file-name = Naziv fajla:
 pdfjs-document-properties-file-size = Veličina fajla:
+# Variables:
+#   $kb (Number) - the PDF file size in kilobytes
+#   $b (Number) - the PDF file size in bytes
+pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } KB ({ $b } bajtova)
+# Variables:
+#   $mb (Number) - the PDF file size in megabytes
+#   $b (Number) - the PDF file size in bytes
+pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } bajtova)
 # Variables:
 #   $size_kb (Number) - the PDF file size in kilobytes
 #   $size_b (Number) - the PDF file size in bytes
@@ -85,6 +126,9 @@ pdfjs-document-properties-subject = Predmet:
 pdfjs-document-properties-keywords = Ključne riječi:
 pdfjs-document-properties-creation-date = Datum kreiranja:
 pdfjs-document-properties-modification-date = Datum promjene:
+# Variables:
+#   $dateObj (Date) - the creation/modification date and time of the PDF file
+pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 # Variables:
 #   $date (Date) - the creation/modification date of the PDF file
 #   $time (Time) - the creation/modification time of the PDF file
@@ -115,6 +159,11 @@ pdfjs-document-properties-page-size-dimension-name-string = { $width } × { $hei
 
 ##
 
+# The linearization status of the document; usually called "Fast Web View" in
+# English locales of Adobe software.
+pdfjs-document-properties-linearized = Brzi web pregled:
+pdfjs-document-properties-linearized-yes = Da
+pdfjs-document-properties-linearized-no = Ne
 pdfjs-document-properties-close-button = Zatvori
 
 ## Print
@@ -131,6 +180,8 @@ pdfjs-printing-not-ready = Upozorenje: PDF nije u potpunosti učitan za štampan
 
 pdfjs-toggle-sidebar-button =
     .title = Uključi/isključi bočnu traku
+pdfjs-toggle-sidebar-notification-button =
+    .title = Uključi/isključi bočnu traku (dokument sadrži obris/priloge/slojeve)
 pdfjs-toggle-sidebar-button-label = Uključi/isključi bočnu traku
 pdfjs-document-outline-button =
     .title = Prikaži outline dokumenta (dvoklik za skupljanje/širenje svih stavki)
@@ -138,12 +189,19 @@ pdfjs-document-outline-button-label = Konture dokumenta
 pdfjs-attachments-button =
     .title = Prikaži priloge
 pdfjs-attachments-button-label = Prilozi
+pdfjs-layers-button =
+    .title = Prikaži slojeve (dvostruki klik da biste vratili sve slojeve na zadano stanje)
+pdfjs-layers-button-label = Slojevi
 pdfjs-thumbs-button =
     .title = Prikaži thumbnailove
 pdfjs-thumbs-button-label = Thumbnailovi
+pdfjs-current-outline-item-button =
+    .title = Pronađi trenutnu stavku strukture
+pdfjs-current-outline-item-button-label = Trenutna stavka strukture
 pdfjs-findbar-button =
     .title = Pronađi u dokumentu
 pdfjs-findbar-button-label = Pronađi
+pdfjs-additional-layers = Dodatni slojevi
 
 ## Thumbnails panel item (tooltip and alt text for images)
 
@@ -169,8 +227,27 @@ pdfjs-find-next-button =
 pdfjs-find-next-button-label = Sljedeće
 pdfjs-find-highlight-checkbox = Označi sve
 pdfjs-find-match-case-checkbox-label = Osjetljivost na karaktere
+pdfjs-find-match-diacritics-checkbox-label = Podudaranje dijakritika
+pdfjs-find-entire-word-checkbox-label = Cijele riječi
 pdfjs-find-reached-top = Dostigao sam vrh dokumenta, nastavljam sa dna
 pdfjs-find-reached-bottom = Dostigao sam kraj dokumenta, nastavljam sa vrha
+# Variables:
+#   $current (Number) - the index of the currently active find result
+#   $total (Number) - the total number of matches in the document
+pdfjs-find-match-count =
+    { $total ->
+        [one] { $current } od { $total } podudaranje
+        [few] { $current } od { $total } podudaranja
+       *[other] { $current } od { $total } podudaranja
+    }
+# Variables:
+#   $limit (Number) - the maximum number of matches
+pdfjs-find-match-count-limit =
+    { $limit ->
+        [one] Više od { $limit } podudaranja
+        [few] Više od { $limit } podudaranja
+       *[other] Više od { $limit } podudaranja
+    }
 pdfjs-find-not-found = Fraza nije pronađena
 
 ## Predefined zoom values
@@ -185,6 +262,10 @@ pdfjs-page-scale-percent = { $scale }%
 
 ## PDF page
 
+# Variables:
+#   $page (Number) - the page number
+pdfjs-page-landmark =
+    .aria-label = Stranica { $page }
 
 ## Loading indicator messages
 
@@ -196,6 +277,10 @@ pdfjs-rendering-error = Došlo je do greške prilikom renderiranja strane.
 
 ## Annotations
 
+# Variables:
+#   $date (Date) - the modification date of the annotation
+#   $time (Time) - the modification time of the annotation
+pdfjs-annotation-date-string = { $date }, { $time }
 # .alt: This is used as a tooltip.
 # Variables:
 #   $type (String) - an annotation type from a list defined in the PDF spec
@@ -203,6 +288,9 @@ pdfjs-rendering-error = Došlo je do greške prilikom renderiranja strane.
 # Some common types are e.g.: "Check", "Text", "Comment", "Note"
 pdfjs-text-annotation-type =
     .alt = [{ $type } pribilješka]
+# Variables:
+#   $dateObj (Date) - the modification date and time of the annotation
+pdfjs-annotation-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 
 ## Password
 
@@ -214,338 +302,322 @@ pdfjs-web-fonts-disabled = Web fontovi su onemogućeni: nemoguće koristiti uba�
 
 ## Editing
 
+pdfjs-editor-free-text-button =
+    .title = Tekst
+pdfjs-editor-free-text-button-label = Tekst
+pdfjs-editor-ink-button =
+    .title = Crtanje
+pdfjs-editor-ink-button-label = Crtanje
+pdfjs-editor-stamp-button =
+    .title = Dodajte ili uredite slike
+pdfjs-editor-stamp-button-label = Dodajte ili uredite slike
+pdfjs-editor-highlight-button =
+    .title = Istaknite
+pdfjs-editor-highlight-button-label = Istaknite
+pdfjs-highlight-floating-button1 =
+    .title = Istaknite
+    .aria-label = Istaknite
+pdfjs-highlight-floating-button-label = Istaknite
+pdfjs-editor-signature-button =
+    .title = Dodaj potpis
+pdfjs-editor-signature-button-label = Dodaj potpis
 
 ## Default editor aria labels
 
+# “Highlight” is a noun, the string is used on the editor for highlights.
+pdfjs-editor-highlight-editor =
+    .aria-label = Uređivač istaknutih elemenata
+# “Drawing” is a noun, the string is used on the editor for drawings.
+pdfjs-editor-ink-editor =
+    .aria-label = Uređivač crteža
+# Used when a signature editor is selected/hovered.
+# Variables:
+#   $description (String) - a string describing/labeling the signature.
+pdfjs-editor-signature-editor1 =
+    .aria-description = Uređivač potpisa: { $description }
+pdfjs-editor-stamp-editor =
+    .aria-label = Uređivač slika
 
 ## Remove button for the various kind of editor.
 
+pdfjs-editor-remove-ink-button =
+    .title = Ukloni crtež
+pdfjs-editor-remove-freetext-button =
+    .title = Ukloni tekst
+pdfjs-editor-remove-stamp-button =
+    .title = Ukloni sliku
+pdfjs-editor-remove-highlight-button =
+    .title = Ukloni istaknuti dio
+pdfjs-editor-remove-signature-button =
+    .title = Ukloni potpis
 
 ##
 
+# Editor Parameters
+pdfjs-editor-free-text-color-input = Boja
+pdfjs-editor-free-text-size-input = Veličina
+pdfjs-editor-ink-color-input = Boja
+pdfjs-editor-ink-thickness-input = Debljina
+pdfjs-editor-ink-opacity-input = Neprozirnost
+pdfjs-editor-stamp-add-image-button =
+    .title = Dodaj sliku
+pdfjs-editor-stamp-add-image-button-label = Dodaj sliku
+# This refers to the thickness of the line used for free highlighting (not bound to text)
+pdfjs-editor-free-highlight-thickness-input = Debljina
+pdfjs-editor-free-highlight-thickness-title =
+    .title = Promijenite debljinu prilikom označavanja stavki koje nisu tekst
+pdfjs-editor-add-signature-container =
+    .aria-label = Kontrole potpisa i sačuvani potpisi
+pdfjs-editor-signature-add-signature-button =
+    .title = Dodaj novi potpis
+pdfjs-editor-signature-add-signature-button-label = Dodaj novi potpis
+# Used on the button to use an already saved signature.
+# Variables:
+#   $description (String) - a string describing/labeling the signature.
+pdfjs-editor-add-saved-signature-button =
+    .title = Sačuvani potpis: { $description }
+# .default-content is used as a placeholder in an empty text editor.
+pdfjs-free-text2 =
+    .aria-label = Uređivač teksta
+    .default-content = Počnite kucati…
+pdfjs-free-text =
+    .aria-label = Uređivač teksta
+pdfjs-free-text-default-content = Počnite kucati…
+pdfjs-ink =
+    .aria-label = Uređivač crtanja
+pdfjs-ink-canvas =
+    .aria-label = Slika koju je kreirao korisnik
 
 ## Alt-text dialog
 
+pdfjs-editor-alt-text-button-label = Alternativni tekst
+pdfjs-editor-alt-text-edit-button =
+    .aria-label = Uredi alternativni tekst
+pdfjs-editor-alt-text-edit-button-label = Uredi alternativni tekst
+pdfjs-editor-alt-text-dialog-label = Odaberite opciju
+pdfjs-editor-alt-text-dialog-description = Alternativni tekst (Alt tekst) pomaže kada ljudi ne mogu vidjeti sliku ili kada se ona ne učitava.
+pdfjs-editor-alt-text-add-description-label = Dodajte opis
+pdfjs-editor-alt-text-add-description-description = Ciljajte na 1-2 rečenice koje opisuju temu, okruženje ili radnju.
+pdfjs-editor-alt-text-mark-decorative-label = Označi kao dekorativno
+pdfjs-editor-alt-text-mark-decorative-description = Ovo se koristi za ukrasne slike, poput okvira ili vodenih žigova.
+pdfjs-editor-alt-text-cancel-button = Otkaži
+pdfjs-editor-alt-text-save-button = Sačuvaj
+pdfjs-editor-alt-text-decorative-tooltip = Označeno kao dekorativno
+# .placeholder: This is a placeholder for the alt text input area
+pdfjs-editor-alt-text-textarea =
+    .placeholder = Na primjer, „Mladić sjeda za stol da jede obrok“
+# Alternative text (alt text) helps when people can't see the image.
+pdfjs-editor-alt-text-button =
+    .aria-label = Alternativni tekst
 
 ## Editor resizers
 ## This is used in an aria label to help to understand the role of the resizer.
 
+pdfjs-editor-resizer-label-top-left = Gornji lijevi ugao — promjena veličine
+pdfjs-editor-resizer-label-top-middle = Gore u sredini — promijeni veličinu
+pdfjs-editor-resizer-label-top-right = Gornji desni ugao — promijeni veličinu
+pdfjs-editor-resizer-label-middle-right = Sredina desno — promijeni veličinu
+pdfjs-editor-resizer-label-bottom-right = Donji desni ugao — promijeni veličinu
+pdfjs-editor-resizer-label-bottom-middle = Donji srednji dio — promijeni veličinu
+pdfjs-editor-resizer-label-bottom-left = Donji lijevi ugao — promijeni veličinu
+pdfjs-editor-resizer-label-middle-left = Sredina lijevo — promijeni veličinu
+pdfjs-editor-resizer-top-left =
+    .aria-label = Gornji lijevi ugao — promjena veličine
+pdfjs-editor-resizer-top-middle =
+    .aria-label = Gore u sredini — promijeni veličinu
+pdfjs-editor-resizer-top-right =
+    .aria-label = Gornji desni ugao — promijeni veličinu
+pdfjs-editor-resizer-middle-right =
+    .aria-label = Sredina desno — promijeni veličinu
+pdfjs-editor-resizer-bottom-right =
+    .aria-label = Donji desni ugao — promijeni veličinu
+pdfjs-editor-resizer-bottom-middle =
+    .aria-label = Donji srednji dio — promijeni veličinu
+pdfjs-editor-resizer-bottom-left =
+    .aria-label = Donji lijevi ugao — promijeni veličinu
+pdfjs-editor-resizer-middle-left =
+    .aria-label = Sredina lijevo — promijeni veličinu
 
 ## Color picker
 
+# This means "Color used to highlight text"
+pdfjs-editor-highlight-colorpicker-label = Boja isticanja
+pdfjs-editor-colorpicker-button =
+    .title = Promijeni boju
+pdfjs-editor-colorpicker-dropdown =
+    .aria-label = Izbor boja
+pdfjs-editor-colorpicker-yellow =
+    .title = Žuta
+pdfjs-editor-colorpicker-green =
+    .title = Zelena
+pdfjs-editor-colorpicker-blue =
+    .title = Plava
+pdfjs-editor-colorpicker-pink =
+    .title = Roza
+pdfjs-editor-colorpicker-red =
+    .title = Crvena
 
 ## Show all highlights
 ## This is a toggle button to show/hide all the highlights.
 
+pdfjs-editor-highlight-show-all-button-label = Prikaži sve
+pdfjs-editor-highlight-show-all-button =
+    .title = Prikaži sve
 
 ## New alt-text dialog
 ## Group note for entire feature: Alternative text (alt text) helps when people can't see the image. This feature includes a tool to create alt text automatically using an AI model that works locally on the user's device to preserve privacy.
 
+# Modal header positioned above a text box where users can edit the alt text.
+pdfjs-editor-new-alt-text-dialog-edit-label = Uredi alternativni tekst (opis slike)
+# Modal header positioned above a text box where users can add the alt text.
+pdfjs-editor-new-alt-text-dialog-add-label = Dodaj alternativni tekst (opis slike)
+pdfjs-editor-new-alt-text-textarea =
+    .placeholder = Ovdje napišite svoj opis…
+# This text refers to the alt text box above this description. It offers a definition of alt text.
+pdfjs-editor-new-alt-text-description = Kratak opis za osobe koje ne mogu vidjeti sliku ili kada se slika ne učitava.
+# This is a required legal disclaimer that refers to the automatically created text inside the alt text box above this text. It disappears if the text is edited by a human.
+pdfjs-editor-new-alt-text-disclaimer1 = Ovaj alternativni tekst je kreiran automatski i moguće je da je netačan.
+pdfjs-editor-new-alt-text-disclaimer-learn-more-url = Saznajte više
+pdfjs-editor-new-alt-text-create-automatically-button-label = Automatski kreiraj alternativni tekst
+pdfjs-editor-new-alt-text-not-now-button = Ne sada
+pdfjs-editor-new-alt-text-error-title = Nije moguće automatski kreirati alternativni tekst
+pdfjs-editor-new-alt-text-error-description = Molimo vas da napišete vlastiti alternativni tekst ili pokušate ponovo kasnije.
+pdfjs-editor-new-alt-text-error-close-button = Zatvori
+# Variables:
+#   $totalSize (Number) - the total size (in MB) of the AI model.
+#   $downloadedSize (Number) - the downloaded size (in MB) of the AI model.
+pdfjs-editor-new-alt-text-ai-model-downloading-progress = Preuzimanje alternativnog tekstualnog AI modela ({ $downloadedSize } od { $totalSize } MB)
+    .aria-valuetext = Preuzimanje alternativnog tekstualnog AI modela ({ $downloadedSize } od { $totalSize } MB)
+# This is a button that users can click to edit the alt text they have already added.
+pdfjs-editor-new-alt-text-added-button =
+    .aria-label = Alternativni tekst je dodan
+pdfjs-editor-new-alt-text-added-button-label = Alternativni tekst je dodan
+# This is a button that users can click to open the alt text editor and add alt text when it is not present.
+pdfjs-editor-new-alt-text-missing-button =
+    .aria-label = Nedostaje alternativni tekst
+pdfjs-editor-new-alt-text-missing-button-label = Nedostaje alternativni tekst
+# This is a button that opens up the alt text modal where users should review the alt text that was automatically generated.
+pdfjs-editor-new-alt-text-to-review-button =
+    .aria-label = Alternativni tekst recenzije
+pdfjs-editor-new-alt-text-to-review-button-label = Alternativni tekst recenzije
+# "Created automatically" is a prefix that will be added to the beginning of any alt text that has been automatically generated. After the colon, the user will see/hear the actual alt text description. If the alt text has been edited by a human, this prefix will not appear.
+# Variables:
+#   $generatedAltText (String) - the generated alt-text.
+pdfjs-editor-new-alt-text-generated-alt-text-with-disclaimer = Automatski kreirano: { $generatedAltText }
 
 ## Image alt-text settings
 
+pdfjs-image-alt-text-settings-button =
+    .title = Postavke alternativnog teksta slike
+pdfjs-image-alt-text-settings-button-label = Postavke alternativnog teksta slike
+pdfjs-editor-alt-text-settings-dialog-label = Postavke alternativnog teksta slike
+pdfjs-editor-alt-text-settings-automatic-title = Automatski alternativni tekst
+pdfjs-editor-alt-text-settings-create-model-button-label = Automatski kreiraj alternativni tekst
+pdfjs-editor-alt-text-settings-create-model-description = Predlaže opise kako bi pomogao ljudima koji ne vide sliku ili kada se slika ne učitava.
+# Variables:
+#   $totalSize (Number) - the total size (in MB) of the AI model.
+pdfjs-editor-alt-text-settings-download-model-label = Alternativni tekst AI model ({ $totalSize } MB)
+pdfjs-editor-alt-text-settings-ai-model-description = Radi lokalno na vašem uređaju tako da vaši podaci ostaju privatni. Potrebno za automatski alternativni tekst.
+pdfjs-editor-alt-text-settings-delete-model-button = Izbriši
+pdfjs-editor-alt-text-settings-download-model-button = Preuzmi
+pdfjs-editor-alt-text-settings-downloading-model-button = Preuzimam…
+pdfjs-editor-alt-text-settings-editor-title = Uređivač alternativnog teksta
+pdfjs-editor-alt-text-settings-show-dialog-button-label = Odmah prikaži uređivač alternativnog teksta prilikom dodavanja slike
+pdfjs-editor-alt-text-settings-show-dialog-description = Pomaže vam da osigurate da sve vaše slike imaju alternativni tekst.
+pdfjs-editor-alt-text-settings-close-button = Zatvori
 
 ## "Annotations removed" bar
 
+pdfjs-editor-undo-bar-message-highlight = Istaknuto je uklonjeno
+pdfjs-editor-undo-bar-message-freetext = Tekst uklonjen
+pdfjs-editor-undo-bar-message-ink = Crtež uklonjen
+pdfjs-editor-undo-bar-message-stamp = Slika uklonjena
+pdfjs-editor-undo-bar-message-signature = Potpis uklonjen
+# Variables:
+#   $count (Number) - the number of removed annotations.
+pdfjs-editor-undo-bar-message-multiple =
+    { $count ->
+        [one] { $count } bilješka uklonjena
+        [few] { $count } bilješke uklonjene
+       *[other] { $count } bilješki uklonjeno
+    }
+pdfjs-editor-undo-bar-undo-button =
+    .title = Poništi
+pdfjs-editor-undo-bar-undo-button-label = Poništi
+pdfjs-editor-undo-bar-close-button =
+    .title = Zatvori
+pdfjs-editor-undo-bar-close-button-label = Zatvori
 
 ## Add a signature dialog
 
+pdfjs-editor-add-signature-dialog-label = Ovaj modalni prozor omogućava korisniku da kreira potpis koji će dodati PDF dokumentu. Korisnik može urediti ime (koje služi i kao alternativni tekst) i opcionalno sačuvati potpis za ponovnu upotrebu.
+pdfjs-editor-add-signature-dialog-title = Dodaj potpis
 
 ## Tab names
 
+# Type is a verb (you can type your name as signature)
+pdfjs-editor-add-signature-type-button = Ukucaj
+    .title = Ukucaj
+# Draw is a verb (you can draw your signature)
+pdfjs-editor-add-signature-draw-button = Napiši
+    .title = Napiši
+pdfjs-editor-add-signature-image-button = Slika
+    .title = Slika
 
 ## Tab panels
 
+pdfjs-editor-add-signature-type-input =
+    .aria-label = Ukucajte svoj potpis
+    .placeholder = Ukucajte svoj potpis
+pdfjs-editor-add-signature-draw-placeholder = Napišite svoj potpis
+pdfjs-editor-add-signature-draw-thickness-range-label = Debljina
+# Variables:
+#   $thickness (Number) - the thickness (in pixels) of the line used to draw a signature.
+pdfjs-editor-add-signature-draw-thickness-range =
+    .title = Debljina pisanja: { $thickness }
+pdfjs-editor-add-signature-image-placeholder = Prevucite datoteku ovdje da biste je učitali
+pdfjs-editor-add-signature-image-browse-link =
+    { PLATFORM() ->
+        [macos] Ili odaberite slikovne datoteke
+       *[other] Ili pregledajte slikovne datoteke
+    }
 
 ## Controls
 
+pdfjs-editor-add-signature-description-label = Opis (alternativni tekst)
+pdfjs-editor-add-signature-description-input =
+    .title = Opis (alternativni tekst)
+pdfjs-editor-add-signature-description-default-when-drawing = Potpis
+pdfjs-editor-add-signature-clear-button-label = Očisti potpis
+pdfjs-editor-add-signature-clear-button =
+    .title = Očisti potpis
+pdfjs-editor-add-signature-save-checkbox = Sačuvaj potpis
+pdfjs-editor-add-signature-save-warning-message = Dostigli ste ograničenje od 5 sačuvanih potpisa. Uklonite jedan da biste sačuvali više.
+pdfjs-editor-add-signature-image-upload-error-title = Nije moguće učitati sliku
+pdfjs-editor-add-signature-image-upload-error-description = Provjerite mrežnu vezu ili pokušajte s drugom slikom.
+pdfjs-editor-add-signature-error-close-button = Zatvori
 
 ## Dialog buttons
 
+pdfjs-editor-add-signature-cancel-button = Otkaži
+pdfjs-editor-add-signature-add-button = Dodaj
+pdfjs-editor-edit-signature-update-button = Ažuriraj
 
 ## Main menu for adding/removing signatures
 
+pdfjs-editor-delete-signature-button1 =
+    .title = Ukloni sačuvani potpis
+pdfjs-editor-delete-signature-button-label1 = Ukloni sačuvani potpis
 
 ## Editor toolbar
 
+pdfjs-editor-add-signature-edit-button-label = Uredi opis
 
 ## Edit signature description dialog
 
+pdfjs-editor-edit-signature-dialog-title = Uredi opis
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-save-button =
-    .title = Save
-pdfjs-save-button-label = Save
-pdfjs-download-button =
-    .title = Download
-pdfjs-download-button-label = Download
-pdfjs-bookmark-button =
-    .title = Current Page (View URL from Current Page)
-pdfjs-bookmark-button-label = Current Page
-pdfjs-scroll-page-button =
-    .title = Use Page Scrolling
-pdfjs-scroll-page-button-label = Page Scrolling
-pdfjs-scroll-vertical-button =
-    .title = Use Vertical Scrolling
-pdfjs-scroll-vertical-button-label = Vertical Scrolling
-pdfjs-scroll-horizontal-button =
-    .title = Use Horizontal Scrolling
-pdfjs-scroll-horizontal-button-label = Horizontal Scrolling
-pdfjs-scroll-wrapped-button =
-    .title = Use Wrapped Scrolling
-pdfjs-scroll-wrapped-button-label = Wrapped Scrolling
-pdfjs-spread-none-button =
-    .title = Do not join page spreads
-pdfjs-spread-none-button-label = No Spreads
-pdfjs-spread-odd-button =
-    .title = Join page spreads starting with odd-numbered pages
-pdfjs-spread-odd-button-label = Odd Spreads
-pdfjs-spread-even-button =
-    .title = Join page spreads starting with even-numbered pages
-pdfjs-spread-even-button-label = Even Spreads
-pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } KB ({ $b } bytes)
-pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } bytes)
-pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
-pdfjs-document-properties-linearized = Fast Web View:
-pdfjs-document-properties-linearized-yes = Yes
-pdfjs-document-properties-linearized-no = No
-pdfjs-toggle-sidebar-notification-button =
-    .title = Toggle Sidebar (document contains outline/attachments/layers)
-pdfjs-layers-button =
-    .title = Show Layers (double-click to reset all layers to the default state)
-pdfjs-layers-button-label = Layers
-pdfjs-current-outline-item-button =
-    .title = Find Current Outline Item
-pdfjs-current-outline-item-button-label = Current Outline Item
-pdfjs-additional-layers = Additional Layers
-pdfjs-find-match-diacritics-checkbox-label = Match Diacritics
-pdfjs-find-entire-word-checkbox-label = Whole Words
-pdfjs-find-match-count =
-    { $total ->
-        [one] { $current } of { $total } match
-       *[other] { $current } of { $total } matches
-    }
-pdfjs-find-match-count-limit =
-    { $limit ->
-        [one] More than { $limit } match
-       *[other] More than { $limit } matches
-    }
-pdfjs-page-landmark =
-    .aria-label = Page { $page }
-pdfjs-annotation-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
-pdfjs-editor-free-text-button =
-    .title = Text
-pdfjs-editor-free-text-button-label = Text
-pdfjs-editor-ink-button =
-    .title = Draw
-pdfjs-editor-ink-button-label = Draw
-pdfjs-editor-stamp-button =
-    .title = Add or edit images
-pdfjs-editor-stamp-button-label = Add or edit images
-pdfjs-editor-highlight-button =
-    .title = Highlight
-pdfjs-editor-highlight-button-label = Highlight
-pdfjs-highlight-floating-button1 =
-    .title = Highlight
-    .aria-label = Highlight
-pdfjs-highlight-floating-button-label = Highlight
-pdfjs-editor-signature-button =
-    .title = Add signature
-pdfjs-editor-signature-button-label = Add signature
-pdfjs-editor-highlight-editor =
-    .aria-label = Highlight editor
-pdfjs-editor-ink-editor =
-    .aria-label = Drawing editor
-pdfjs-editor-signature-editor1 =
-    .aria-description = Signature editor: { $description }
-pdfjs-editor-stamp-editor =
-    .aria-label = Image editor
-pdfjs-editor-remove-ink-button =
-    .title = Remove drawing
-pdfjs-editor-remove-freetext-button =
-    .title = Remove text
-pdfjs-editor-remove-stamp-button =
-    .title = Remove image
-pdfjs-editor-remove-highlight-button =
-    .title = Remove highlight
-pdfjs-editor-remove-signature-button =
-    .title = Remove signature
-pdfjs-editor-free-text-color-input = Color
-pdfjs-editor-free-text-size-input = Size
-pdfjs-editor-ink-color-input = Color
-pdfjs-editor-ink-thickness-input = Thickness
-pdfjs-editor-ink-opacity-input = Opacity
-pdfjs-editor-stamp-add-image-button =
-    .title = Add image
-pdfjs-editor-stamp-add-image-button-label = Add image
-pdfjs-editor-free-highlight-thickness-input = Thickness
-pdfjs-editor-free-highlight-thickness-title =
-    .title = Change thickness when highlighting items other than text
-pdfjs-editor-add-signature-container =
-    .aria-label = Signature controls and saved signatures
-pdfjs-editor-signature-add-signature-button =
-    .title = Add new signature
-pdfjs-editor-signature-add-signature-button-label = Add new signature
-pdfjs-editor-add-saved-signature-button =
-    .title = Saved signature: { $description }
-pdfjs-free-text2 =
-    .aria-label = Text Editor
-    .default-content = Start typing…
-pdfjs-editor-alt-text-button =
-    .aria-label = Alt text
-pdfjs-editor-alt-text-button-label = Alt text
-pdfjs-editor-alt-text-edit-button =
-    .aria-label = Edit alt text
-pdfjs-editor-alt-text-dialog-label = Choose an option
-pdfjs-editor-alt-text-dialog-description = Alt text (alternative text) helps when people can’t see the image or when it doesn’t load.
-pdfjs-editor-alt-text-add-description-label = Add a description
-pdfjs-editor-alt-text-add-description-description = Aim for 1-2 sentences that describe the subject, setting, or actions.
-pdfjs-editor-alt-text-mark-decorative-label = Mark as decorative
-pdfjs-editor-alt-text-mark-decorative-description = This is used for ornamental images, like borders or watermarks.
-pdfjs-editor-alt-text-cancel-button = Cancel
-pdfjs-editor-alt-text-save-button = Save
-pdfjs-editor-alt-text-decorative-tooltip = Marked as decorative
-pdfjs-editor-alt-text-textarea =
-    .placeholder = For example, “A young man sits down at a table to eat a meal”
-pdfjs-editor-resizer-top-left =
-    .aria-label = Top left corner — resize
-pdfjs-editor-resizer-top-middle =
-    .aria-label = Top middle — resize
-pdfjs-editor-resizer-top-right =
-    .aria-label = Top right corner — resize
-pdfjs-editor-resizer-middle-right =
-    .aria-label = Middle right — resize
-pdfjs-editor-resizer-bottom-right =
-    .aria-label = Bottom right corner — resize
-pdfjs-editor-resizer-bottom-middle =
-    .aria-label = Bottom middle — resize
-pdfjs-editor-resizer-bottom-left =
-    .aria-label = Bottom left corner — resize
-pdfjs-editor-resizer-middle-left =
-    .aria-label = Middle left — resize
-pdfjs-editor-highlight-colorpicker-label = Highlight color
-pdfjs-editor-colorpicker-button =
-    .title = Change color
-pdfjs-editor-colorpicker-dropdown =
-    .aria-label = Color choices
-pdfjs-editor-colorpicker-yellow =
-    .title = Yellow
-pdfjs-editor-colorpicker-green =
-    .title = Green
-pdfjs-editor-colorpicker-blue =
-    .title = Blue
-pdfjs-editor-colorpicker-pink =
-    .title = Pink
-pdfjs-editor-colorpicker-red =
-    .title = Red
-pdfjs-editor-highlight-show-all-button-label = Show all
-pdfjs-editor-highlight-show-all-button =
-    .title = Show all
-pdfjs-editor-new-alt-text-dialog-edit-label = Edit alt text (image description)
-pdfjs-editor-new-alt-text-dialog-add-label = Add alt text (image description)
-pdfjs-editor-new-alt-text-textarea =
-    .placeholder = Write your description here…
-pdfjs-editor-new-alt-text-description = Short description for people who can’t see the image or when the image doesn’t load.
-pdfjs-editor-new-alt-text-disclaimer1 = This alt text was created automatically and may be inaccurate.
-pdfjs-editor-new-alt-text-disclaimer-learn-more-url = Learn more
-pdfjs-editor-new-alt-text-create-automatically-button-label = Create alt text automatically
-pdfjs-editor-new-alt-text-not-now-button = Not now
-pdfjs-editor-new-alt-text-error-title = Couldn’t create alt text automatically
-pdfjs-editor-new-alt-text-error-description = Please write your own alt text or try again later.
-pdfjs-editor-new-alt-text-error-close-button = Close
-pdfjs-editor-new-alt-text-ai-model-downloading-progress = Downloading alt text AI model ({ $downloadedSize } of { $totalSize } MB)
-    .aria-valuetext = Downloading alt text AI model ({ $downloadedSize } of { $totalSize } MB)
-pdfjs-editor-new-alt-text-added-button =
-    .aria-label = Alt text added
-pdfjs-editor-new-alt-text-added-button-label = Alt text added
-pdfjs-editor-new-alt-text-missing-button =
-    .aria-label = Missing alt text
-pdfjs-editor-new-alt-text-missing-button-label = Missing alt text
-pdfjs-editor-new-alt-text-to-review-button =
-    .aria-label = Review alt text
-pdfjs-editor-new-alt-text-to-review-button-label = Review alt text
-pdfjs-editor-new-alt-text-generated-alt-text-with-disclaimer = Created automatically: { $generatedAltText }
-pdfjs-image-alt-text-settings-button =
-    .title = Image alt text settings
-pdfjs-image-alt-text-settings-button-label = Image alt text settings
-pdfjs-editor-alt-text-settings-dialog-label = Image alt text settings
-pdfjs-editor-alt-text-settings-automatic-title = Automatic alt text
-pdfjs-editor-alt-text-settings-create-model-button-label = Create alt text automatically
-pdfjs-editor-alt-text-settings-create-model-description = Suggests descriptions to help people who can’t see the image or when the image doesn’t load.
-pdfjs-editor-alt-text-settings-download-model-label = Alt text AI model ({ $totalSize } MB)
-pdfjs-editor-alt-text-settings-ai-model-description = Runs locally on your device so your data stays private. Required for automatic alt text.
-pdfjs-editor-alt-text-settings-delete-model-button = Delete
-pdfjs-editor-alt-text-settings-download-model-button = Download
-pdfjs-editor-alt-text-settings-downloading-model-button = Downloading…
-pdfjs-editor-alt-text-settings-editor-title = Alt text editor
-pdfjs-editor-alt-text-settings-show-dialog-button-label = Show alt text editor right away when adding an image
-pdfjs-editor-alt-text-settings-show-dialog-description = Helps you make sure all your images have alt text.
-pdfjs-editor-alt-text-settings-close-button = Close
-pdfjs-editor-undo-bar-message-highlight = Highlight removed
-pdfjs-editor-undo-bar-message-freetext = Text removed
-pdfjs-editor-undo-bar-message-ink = Drawing removed
-pdfjs-editor-undo-bar-message-stamp = Image removed
-pdfjs-editor-undo-bar-message-signature = Signature removed
-pdfjs-editor-undo-bar-message-multiple =
-    { $count ->
-        [one] { $count } annotation removed
-       *[other] { $count } annotations removed
-    }
-pdfjs-editor-undo-bar-undo-button =
-    .title = Undo
-pdfjs-editor-undo-bar-undo-button-label = Undo
-pdfjs-editor-undo-bar-close-button =
-    .title = Close
-pdfjs-editor-undo-bar-close-button-label = Close
-pdfjs-editor-add-signature-dialog-label = This modal allows the user to create a signature to add to a PDF document. The user can edit the name (which also serves as the alt text), and optionally save the signature for repeated use.
-pdfjs-editor-add-signature-dialog-title = Add a signature
-pdfjs-editor-add-signature-type-button = Type
-    .title = Type
-pdfjs-editor-add-signature-draw-button = Draw
-    .title = Draw
-pdfjs-editor-add-signature-image-button = Image
-    .title = Image
-pdfjs-editor-add-signature-type-input =
-    .aria-label = Type your signature
-    .placeholder = Type your signature
-pdfjs-editor-add-signature-draw-placeholder = Draw your signature
-pdfjs-editor-add-signature-draw-thickness-range-label = Thickness
-pdfjs-editor-add-signature-draw-thickness-range =
-    .title = Drawing thickness: { $thickness }
-pdfjs-editor-add-signature-image-placeholder = Drag a file here to upload
-pdfjs-editor-add-signature-image-browse-link =
-    { PLATFORM() ->
-        [macos] Or choose image files
-       *[other] Or browse image files
-    }
-pdfjs-editor-add-signature-description-label = Description (alt text)
-pdfjs-editor-add-signature-description-input =
-    .title = Description (alt text)
-pdfjs-editor-add-signature-description-default-when-drawing = Signature
-pdfjs-editor-add-signature-clear-button-label = Clear signature
-pdfjs-editor-add-signature-clear-button =
-    .title = Clear signature
-pdfjs-editor-add-signature-save-checkbox = Save signature
-pdfjs-editor-add-signature-save-warning-message = You’ve reached the limit of 5 saved signatures. Remove one to save more.
-pdfjs-editor-add-signature-image-upload-error-title = Couldn’t upload image
-pdfjs-editor-add-signature-image-upload-error-description = Check your network connection or try another image.
-pdfjs-editor-add-signature-error-close-button = Close
-pdfjs-editor-add-signature-cancel-button = Cancel
-pdfjs-editor-add-signature-add-button = Add
-pdfjs-editor-delete-signature-button1 =
-    .title = Remove saved signature
-pdfjs-editor-delete-signature-button-label1 = Remove saved signature
-pdfjs-editor-add-signature-edit-button-label = Edit description
-pdfjs-editor-edit-signature-dialog-title = Edit description
-pdfjs-editor-edit-signature-update-button = Update
-unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
-pdfjs-infinite-scroll-button-label = Infinite scroll
-pdfjs-find-multiple-checkbox-label = Match Each Word
-pdfjs-find-regexp-checkbox-label = Regular Expression
-pdfjs-editor-movePageUp-button = Move Page Up
-pdfjs-editor-movePageUp-button-label = Move Page Up
-pdfjs-editor-movePageDown-button = Move Page Down
-pdfjs-editor-movePageDown-button-label = Move Page Down
 pdfjs-editor-color-picker-free-text-input =
     .title = Change text color
 pdfjs-editor-color-picker-ink-input =
@@ -571,19 +643,11 @@ pdfjs-editor-edit-comment-manager-cancel-button = Cancel
 pdfjs-editor-edit-comment-manager-save-button = Save
 pdfjs-editor-edit-comment-button =
     .title = Edit comment
-# Additional translations for ngx-extended-pdf-viewer from the bs bleeding edge branch
-pdfjs-annotation-date-string = { $date }, { $time }
-pdfjs-free-text-default-content = Počnite kucati…
-pdfjs-ink =
-    .aria-label = Uređivač crtanja
-pdfjs-ink-canvas =
-    .aria-label = Slika koju je kreirao korisnik
-pdfjs-editor-alt-text-edit-button-label = Uredi alternativni tekst
-pdfjs-editor-resizer-label-top-left = Gornji lijevi ugao — promjena veličine
-pdfjs-editor-resizer-label-top-middle = Gore u sredini — promijeni veličinu
-pdfjs-editor-resizer-label-top-right = Gornji desni ugao — promijeni veličinu
-pdfjs-editor-resizer-label-middle-right = Sredina desno — promijeni veličinu
-pdfjs-editor-resizer-label-bottom-right = Donji desni ugao — promijeni veličinu
-pdfjs-editor-resizer-label-bottom-middle = Donji srednji dio — promijeni veličinu
-pdfjs-editor-resizer-label-bottom-left = Donji lijevi ugao — promijeni veličinu
-pdfjs-editor-resizer-label-middle-left = Sredina lijevo — promijeni veličinu
+unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
+pdfjs-infinite-scroll-button-label = Infinite scroll
+pdfjs-find-multiple-checkbox-label = Match Each Word
+pdfjs-find-regexp-checkbox-label = Regular Expression
+pdfjs-editor-movePageUp-button = Move Page Up
+pdfjs-editor-movePageUp-button-label = Move Page Up
+pdfjs-editor-movePageDown-button = Move Page Down
+pdfjs-editor-movePageDown-button-label = Move Page Down

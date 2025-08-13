@@ -73,7 +73,7 @@ export class AnnotationEditor {
      * @param {AnnotationEditorLayer} parent
      */
     static paste(item: DataTransferItem, parent: AnnotationEditorLayer): void;
-    static "__#42@#rotatePoint"(x: any, y: any, angle: any): any[];
+    static "__#44@#rotatePoint"(x: any, y: any, angle: any): any[];
     static _round(x: any): number;
     /**
      * Deserialize the editor.
@@ -120,6 +120,7 @@ export class AnnotationEditor {
     deleted: boolean;
     eventBus: any;
     get editorType(): any;
+    get mode(): any;
     /**
      * Get the properties to update in the UI for this editor.
      * @returns {Array}
@@ -258,6 +259,11 @@ export class AnnotationEditor {
      */
     altTextFinish(): void;
     /**
+     * Get the toolbar buttons for this editor.
+     * @returns {Array<Array<string|object|null>>|null}
+     */
+    get toolbarButtons(): Array<Array<string | object | null>> | null;
+    /**
      * Add a toolbar for this editor.
      * @returns {Promise<EditorToolbar|null>}
      */
@@ -265,7 +271,11 @@ export class AnnotationEditor {
     removeEditToolbar(): void;
     addContainer(container: any): void;
     getClientDimensions(): DOMRect;
-    addAltTextButton(): Promise<void>;
+    /**
+     * Create the alt text for this editor.
+     * @returns {object}
+     */
+    createAltText(): object;
     /**
      * Set the alt text data.
      */
@@ -276,6 +286,24 @@ export class AnnotationEditor {
     serializeAltText(isForCopying: any): any;
     hasAltText(): boolean;
     hasAltTextData(): any;
+    addCommentButton(): Comment;
+    get commentColor(): null;
+    set comment(text: {
+        text: any;
+        date: any;
+        deleted: any;
+        color: null;
+    });
+    get comment(): {
+        text: any;
+        date: any;
+        deleted: any;
+        color: null;
+    };
+    setCommentData(text: any): void;
+    get hasEditedComment(): any;
+    editComment(): Promise<void>;
+    addComment(serialized: any): void;
     /**
      * Render this editor in a div.
      * @returns {HTMLDivElement | null}
@@ -487,4 +515,5 @@ export class AnnotationEditor {
 }
 import { AnnotationEditorUIManager } from "./tools.js";
 import { EditorToolbar } from "./toolbar.js";
+import { Comment } from "./comment.js";
 import { ColorManager } from "./tools.js";

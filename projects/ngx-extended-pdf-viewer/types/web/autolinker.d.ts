@@ -1,6 +1,6 @@
 export class Autolinker {
-    static "__#74@#index": number;
-    static "__#74@#regex": any;
+    static "__#76@#index": number;
+    static "__#76@#regex": any;
     static findLinks(text: any): {
         url: string;
         index: any;

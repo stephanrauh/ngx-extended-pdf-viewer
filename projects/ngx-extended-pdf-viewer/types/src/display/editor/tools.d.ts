@@ -12,7 +12,7 @@ export class AnnotationEditorUIManager {
     static TRANSLATE_SMALL: number;
     static TRANSLATE_BIG: number;
     static get _keyboardManager(): any;
-    constructor(container: any, viewer: any, altTextManager: any, signatureManager: any, eventBus: any, pdfDocument: any, pageColors: any, highlightColors: any, enableHighlightFloatingButton: any, enableUpdatedAddImage: any, enableNewAltTextWhenAddingImage: any, mlManager: any, editorUndoBar: any, supportsPinchToZoom: any);
+    constructor(container: any, viewer: any, viewerAlert: any, altTextManager: any, commentManager: any, signatureManager: any, eventBus: any, pdfDocument: any, pageColors: any, highlightColors: any, enableHighlightFloatingButton: any, enableUpdatedAddImage: any, enableNewAltTextWhenAddingImage: any, mlManager: any, editorUndoBar: any, supportsPinchToZoom: any);
     _editorUndoBar: null;
     _signal: AbortSignal;
     _eventBus: any;
@@ -29,8 +29,11 @@ export class AnnotationEditorUIManager {
     get useNewAltTextWhenAddingImage(): boolean;
     get hcmFilter(): any;
     get direction(): any;
+    get _highlightColors(): any;
     get highlightColors(): any;
     get highlightColorNames(): any;
+    getNonHCMColor(color: any): any;
+    getNonHCMColorName(color: any): any;
     /**
      * Set the current drawing session.
      * @param {AnnotationEditorLayer} layer
@@ -38,6 +41,8 @@ export class AnnotationEditorUIManager {
     setCurrentDrawingSession(layer: AnnotationEditorLayer): void;
     setMainHighlightColorPicker(colorPicker: any): void;
     editAltText(editor: any, firstTime?: boolean): void;
+    hasCommentManager(): boolean;
+    editComment(editor: any, position: any): void;
     getSignature(editor: any): void;
     get signatureManager(): null;
     switchToMode(mode: any, callback: any): void;
@@ -66,6 +71,7 @@ export class AnnotationEditorUIManager {
      * @param {AnnotationEditor} editor
      */
     addToAnnotationStorage(editor: AnnotationEditor): void;
+    a11yAlert(messageId: any, args?: null): void;
     blur(): void;
     focus(): void;
     addEditListeners(): void;
@@ -142,8 +148,12 @@ export class AnnotationEditorUIManager {
      * @param {string|null} editId
      * @param {boolean} [isFromKeyboard] - true if the mode change is due to a
      *   keyboard action.
+     * @param {boolean} [mustEnterInEditMode] - true if the editor must enter in
+     *   edit mode.
+     * @param {boolean} [editComment] - true if the mode change is due to a
+     *   comment edit.
      */
-    updateMode(mode: number, editId?: string | null, isFromKeyboard?: boolean): Promise<void>;
+    updateMode(mode: number, editId?: string | null, isFromKeyboard?: boolean, mustEnterInEditMode?: boolean, editComment?: boolean): Promise<void>;
     addNewEditorFromKeyboard(): void;
     /**
      * Update the toolbar if it's required to reflect the tool currently used.

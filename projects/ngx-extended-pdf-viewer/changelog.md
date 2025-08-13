@@ -675,3 +675,4 @@
 - 24.3.0 #2984 better light and dark mode colors (big kudos to Megan Truso for providing this pull request!)
 - 24.3.1-alpha.0 #2990 added a forgotten event to the public_api.ts; fixed CSS problems of forms (work in progress)
 - 24.3.1-alpha.1 updated the bleeding edge branch to pdf.js 5.4.54
+- 25.0.0 #2995 added `pdfDefaultOptions.enableCatalogAAJavaScript` to disable embedded JavaScript that runs when opening the PDF; added `pdfDefaultOptions.enableCatalogAAJavaScript` to disable embedded JavaScript that runs on the "additional actions" (/AA) WillClose (WC), WillSave (WS), DidSave (DS), WillPrint (WP), DidPrint (DP); both options are false by default; set `pdfDefaultOptions.enableScripting` to false; updated to pdf.js 5.4 (stable branch)

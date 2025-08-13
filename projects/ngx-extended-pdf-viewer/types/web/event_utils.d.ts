@@ -48,7 +48,7 @@ export class EventBus {
     #private;
 }
 /**
- * NOTE: Only used in the Firefox build-in pdf viewer.
+ * NOTE: Only used in the Firefox built-in pdf viewer.
  */
 export class FirefoxEventBus extends EventBus {
     constructor(globalEventNames: any, externalServices: any, isInAutomation: any);

@@ -31,6 +31,8 @@ export class SignatureEditor extends DrawingEditor {
         areContours: any;
         outline: InkDrawOutline;
     };
+    /** @inheritdoc */
+    get toolbarButtons(): any[][] | null;
     addSignature(data: any, heightInPage: any, description: any, uuid: any): void;
     getFromImage(bitmap: any): {
         outline: InkDrawOutline;

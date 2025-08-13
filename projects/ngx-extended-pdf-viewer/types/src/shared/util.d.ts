@@ -40,7 +40,6 @@ export namespace AnnotationEditorParamsType {
     let INK_THICKNESS: number;
     let INK_OPACITY: number;
     let HIGHLIGHT_COLOR: number;
-    let HIGHLIGHT_DEFAULT_COLOR: number;
     let HIGHLIGHT_THICKNESS: number;
     let HIGHLIGHT_FREE: number;
     let HIGHLIGHT_SHOW_ALL: number;
@@ -55,6 +54,7 @@ export namespace AnnotationEditorType {
     let STAMP: number;
     let INK: number;
     let SIGNATURE: number;
+    let COMMENT: number;
 }
 export namespace AnnotationFieldFlag {
     let READONLY: number;

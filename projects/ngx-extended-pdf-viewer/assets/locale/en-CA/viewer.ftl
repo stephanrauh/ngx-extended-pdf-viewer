@@ -328,6 +328,11 @@ pdfjs-editor-highlight-editor =
 # “Drawing” is a noun, the string is used on the editor for drawings.
 pdfjs-editor-ink-editor =
     .aria-label = Drawing editor
+# Used when a signature editor is selected/hovered.
+# Variables:
+#   $description (String) - a string describing/labeling the signature.
+pdfjs-editor-signature-editor1 =
+    .aria-description = Signature editor: { $description }
 pdfjs-editor-stamp-editor =
     .aria-label = Image editor
 
@@ -619,8 +624,6 @@ pdfjs-editor-movePageUp-button-label = Move Page Up
 pdfjs-editor-movePageDown-button = Move Page Down
 pdfjs-editor-movePageDown-button-label = Move Page Down
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-editor-signature-editor1 =
-    .aria-description = Signature editor: { $description }
 pdfjs-editor-color-picker-free-text-input =
     .title = Change text color
 pdfjs-editor-color-picker-ink-input =

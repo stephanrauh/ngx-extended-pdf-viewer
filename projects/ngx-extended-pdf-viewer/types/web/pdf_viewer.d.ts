@@ -556,11 +556,15 @@ export class PDFViewer {
      * @property {string|null} [editId] - ID of the existing annotation to edit.
      * @property {boolean} [isFromKeyboard] - True if the mode change is due to a
      *   keyboard action.
+     * @property {boolean} [mustEnterInEditMode] - True if the editor must enter
+     *   edit mode.
+     * @property {boolean} [editComment] - True if the editor must enter
+     *   comment edit mode.
      */
     /**
      * @param {AnnotationEditorModeOptions} options
      */
-    set annotationEditorMode({ mode, editId, isFromKeyboard }: {
+    set annotationEditorMode({ mode, editId, isFromKeyboard, mustEnterInEditMode, editComment, }: {
         /**
          * - The editor mode (none, FreeText, ink, ...).
          */
@@ -574,6 +578,16 @@ export class PDFViewer {
          * keyboard action.
          */
         isFromKeyboard?: boolean | undefined;
+        /**
+         * - True if the editor must enter
+         * edit mode.
+         */
+        mustEnterInEditMode?: boolean | undefined;
+        /**
+         * - True if the editor must enter
+         * comment edit mode.
+         */
+        editComment?: boolean | undefined;
     });
     get annotationEditorMode(): {
         /**
@@ -589,6 +603,16 @@ export class PDFViewer {
          * keyboard action.
          */
         isFromKeyboard?: boolean | undefined;
+        /**
+         * - True if the editor must enter
+         * edit mode.
+         */
+        mustEnterInEditMode?: boolean | undefined;
+        /**
+         * - True if the editor must enter
+         * comment edit mode.
+         */
+        editComment?: boolean | undefined;
     };
     refresh(noUpdate?: boolean, updateArgs?: any): void;
     getSerializedAnnotations(): any[] | null;

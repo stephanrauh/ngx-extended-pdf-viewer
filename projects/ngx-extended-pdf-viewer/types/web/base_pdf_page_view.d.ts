@@ -14,7 +14,6 @@ export class BasePDFPageView {
     _createCanvas(onShow: any, hideUntilComplete?: boolean): {
         canvas: HTMLCanvasElement;
         prevCanvas: null;
-        ctx: CanvasRenderingContext2D | null;
     };
     _resetCanvas(): void;
     _drawCanvas(options: any, onCancel: any, onFinish: any): Promise<void>;

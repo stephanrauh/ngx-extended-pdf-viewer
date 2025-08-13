@@ -414,10 +414,19 @@ export type GetAnnotationsParameters = {
  */
 export type RenderParameters = {
     /**
-     * - A 2D context of a DOM
-     * Canvas object.
+     * - 2D context of a DOM
+     * Canvas object for backwards compatibility; it is recommended to use the
+     * `canvas` parameter instead.
+     * If the context must absolutely be used to render the page, the canvas must
+     * be null.
      */
     canvasContext: CanvasRenderingContext2D;
+    /**
+     * - A DOM Canvas object. The default
+     * value is the canvas associated with the `canvasContext` parameter if no
+     * value is provided explicitly.
+     */
+    canvas: HTMLCanvasElement | null;
     /**
      * - Rendering viewport obtained by calling
      * the `PDFPageProxy.getViewport` method.
@@ -802,7 +811,7 @@ export class PDFDataRangeTransport {
  * after which individual pages can be rendered.
  */
 export class PDFDocumentLoadingTask {
-    static "__#57@#docId": number;
+    static "__#60@#docId": number;
     /**
      * @private
      */
@@ -1209,8 +1218,14 @@ export class PDFDocumentProxy {
  * Page render parameters.
  *
  * @typedef {Object} RenderParameters
- * @property {CanvasRenderingContext2D} canvasContext - A 2D context of a DOM
- *   Canvas object.
+ * @property {CanvasRenderingContext2D} canvasContext - 2D context of a DOM
+ *   Canvas object for backwards compatibility; it is recommended to use the
+ *   `canvas` parameter instead.
+ *   If the context must absolutely be used to render the page, the canvas must
+ *   be null.
+ * @property {HTMLCanvasElement|null} canvas - A DOM Canvas object. The default
+ *   value is the canvas associated with the `canvasContext` parameter if no
+ *   value is provided explicitly.
  * @property {PageViewport} viewport - Rendering viewport obtained by calling
  *   the `PDFPageProxy.getViewport` method.
  * @property {string} [intent] - Rendering intent, can be 'display', 'print',
@@ -1372,7 +1387,7 @@ export class PDFPageProxy {
      * @returns {RenderTask} An object that contains a promise that is
      *   resolved when the page finishes rendering.
      */
-    render({ canvasContext, viewport, intent, annotationMode, transform, background, optionalContentConfigPromise, annotationCanvasMap, pageColors, printAnnotationStorage, isEditing, }: RenderParameters): RenderTask;
+    render({ canvasContext, canvas, viewport, intent, annotationMode, transform, background, optionalContentConfigPromise, annotationCanvasMap, pageColors, printAnnotationStorage, isEditing, }: RenderParameters): RenderTask;
     /**
      * @param {GetOperatorListParameters} params - Page getOperatorList
      *   parameters.
@@ -1455,9 +1470,9 @@ export class PDFPageProxy {
  * @param {PDFWorkerParameters} params - The worker initialization parameters.
  */
 export class PDFWorker {
-    static "__#60@#fakeWorkerId": number;
-    static "__#60@#isWorkerDisabled": boolean;
-    static "__#60@#workerPorts": WeakMap<object, any>;
+    static "__#63@#fakeWorkerId": number;
+    static "__#63@#isWorkerDisabled": boolean;
+    static "__#63@#workerPorts": WeakMap<object, any>;
     /**
      * @param {PDFWorkerParameters} params - The worker initialization parameters.
      * @returns {PDFWorker}
@@ -1468,7 +1483,7 @@ export class PDFWorker {
      * @type {string}
      */
     static get workerSrc(): string;
-    static get "__#60@#mainThreadWorkerMessageHandler"(): any;
+    static get "__#63@#mainThreadWorkerMessageHandler"(): any;
     static get _setupFakeWorkerGlobal(): any;
     constructor({ name, port, verbosity, cspPolicyService, }?: {
         name?: null | undefined;

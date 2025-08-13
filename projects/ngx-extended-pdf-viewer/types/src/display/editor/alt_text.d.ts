@@ -1,5 +1,5 @@
 export class AltText {
-    static "__#40@#l10nNewButton": null;
+    static "__#41@#l10nNewButton": null;
     static _l10n: null;
     static initialize(l10n: any): void;
     constructor(editor: any);

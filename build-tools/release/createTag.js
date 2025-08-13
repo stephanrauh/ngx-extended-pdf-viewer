@@ -61,20 +61,20 @@ console.log(`Created bleeding-edge tag: ngx-extended-pdf-viewer-${version}-bleed
 runCommand('git push origin --tags', 'Error pushing bleeding-edge tag in mypdf.js:');
 console.log('Pushed bleeding-edge tag in mypdf.js.');
 
-// Checkout 5.3 branch
-runCommand('git checkout 5.3', 'Error checking out 5.3 branch:');
-console.log('Checked out 5.3 branch.');
-// Commit changes in 5.3 branch
-runCommand(`git commit -a -m "published ${version}"`, 'Error committing changes in 5.3 branch:');
-console.log('Committed changes in 5.3 branch.');
-runCommand('git push', 'Error pushing changes in 5.3 branch:');
-console.log('Pushed changes in 5.3 branch.');
+// Checkout 5.4 branch
+runCommand('git checkout 5.4', 'Error checking out 5.4 branch:');
+console.log('Checked out 5.4 branch.');
+// Commit changes in 5.4 branch
+runCommand(`git commit -a -m "published ${version}"`, 'Error committing changes in 5.4 branch:');
+console.log('Committed changes in 5.4 branch.');
+runCommand('git push', 'Error pushing changes in 5.4 branch:');
+console.log('Pushed changes in 5.4 branch.');
 
-// Create and push tag for 5.3
-runCommand(`git tag -a "ngx-extended-pdf-viewer-${version}" -m "ngx-extended-pdf-viewer ${version}"`, 'Error creating 5.3 tag in mypdf.js:');
-console.log(`Created 5.3 tag: ngx-extended-pdf-viewer-${version}`);
-runCommand('git push origin --tags', 'Error pushing 5.3 tag in mypdf.js:');
-console.log('Pushed 5.3 tag in mypdf.js.');
+// Create and push tag for 5.4
+runCommand(`git tag -a "ngx-extended-pdf-viewer-${version}" -m "ngx-extended-pdf-viewer ${version}"`, 'Error creating 5.4 tag in mypdf.js:');
+console.log(`Created 5.4 tag: ngx-extended-pdf-viewer-${version}`);
+runCommand('git push origin --tags', 'Error pushing 5.4 tag in mypdf.js:');
+console.log('Pushed 5.4 tag in mypdf.js.');
 
 // Switch back to bleeding-edge
 runCommand('git checkout bleeding-edge', 'Error switching back to bleeding-edge:');

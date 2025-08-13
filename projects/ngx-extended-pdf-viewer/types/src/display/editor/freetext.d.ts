@@ -16,15 +16,20 @@ export class FreeTextEditor extends AnnotationEditor {
     static updateDefaultParams(type: any, value: any): void;
     /** @inheritdoc */
     static get defaultPropertiesToUpdate(): any[][];
-    static "__#18@#getNodeContent"(node: any): any;
-    static "__#18@#deserializeContent"(content: any): any;
+    static "__#20@#getNodeContent"(node: any): any;
+    static "__#20@#deserializeContent"(content: any): any;
     /** @inheritdoc */
     static deserialize(data: any, parent: any, uiManager: any): Promise<AnnotationEditor | null>;
     constructor(params: any);
+    _colorPicker: null;
     /** @inheritdoc */
     updateParams(type: any, value: any): void;
     /** @inheritdoc */
     get propertiesToUpdate(): any[][];
+    /** @inheritdoc */
+    get toolbarButtons(): (string | null)[][];
+    get colorType(): number;
+    get colorValue(): any;
     /**
      * Helper to translate the editor with the keyboard when it's empty.
      * @param {number} x in page units.

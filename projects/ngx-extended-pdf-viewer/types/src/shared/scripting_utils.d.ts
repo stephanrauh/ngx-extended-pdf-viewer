@@ -14,3 +14,5 @@ export class ColorConverters {
     static CMYK_HTML(components: any): string;
     static RGB_CMYK([r, g, b]: [any, any, any]): (string | number)[];
 }
+export const DateFormats: string[];
+export const TimeFormats: string[];

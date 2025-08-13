@@ -27,7 +27,7 @@ export type RenderEditorLayerOptions = {
  */
 export class AnnotationEditorLayer {
     static _initialized: boolean;
-    static "__#34@#editorTypes": Map<number, typeof FreeTextEditor | typeof HighlightEditor | typeof InkEditor | typeof SignatureEditor | typeof StampEditor>;
+    static "__#35@#editorTypes": Map<number, typeof FreeTextEditor | typeof HighlightEditor | typeof InkEditor | typeof SignatureEditor | typeof StampEditor>;
     /**
      * @param {AnnotationEditorLayerOptions} options
      */
@@ -93,7 +93,7 @@ export class AnnotationEditorLayer {
     remove(editor: AnnotationEditor): void;
     /**
      * An editor can have a different parent, for example after having
-     * being dragged and droped from a page to another.
+     * being dragged and dropped from a page to another.
      * @param {AnnotationEditor} editor
      */
     changeParent(editor: AnnotationEditor): void;
