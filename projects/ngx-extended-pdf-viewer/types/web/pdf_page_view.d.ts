@@ -208,6 +208,7 @@ export class PDFPageView extends BasePDFPageView implements IRenderableView {
         annotationCanvasMap: any;
         pageColors: null;
         isEditing: boolean;
+        background: any;
     };
     draw(): Promise<void>;
     /**
