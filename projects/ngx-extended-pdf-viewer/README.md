@@ -7,7 +7,7 @@ Built on Mozilla’s pdf.js and extended with dozens of enhancements, it's ideal
 [![npm](https://img.shields.io/npm/dm/ngx-extended-pdf-viewer.svg?style=flat)](https://www.npmjs.com/package/ngx-extended-pdf-viewer)
 [![showcase](https://img.shields.io/badge/showcase-pdfviewer.net-blue)](https://pdfviewer.net)
 [![version](https://badge.fury.io/js/ngx-extended-pdf-viewer.svg)](https://badge.fury.io/js/ngx-extended-pdf-viewer)
-[![license](https://img.shields.io/badge/License-Apache%202.0-brightgreen.svg)](https://opensource.org/licenses/Apache-2.0)
+[![license](https://img.shields.io/badge/License-Apache%202.0%20with%20Commons%20Clause-brightgreen.svg)](https://github.com/stephanrauh/ngx-extended-pdf-viewer/blob/main/projects/ngx-extended-pdf-viewer/LICENSE)
 
 ---
 
@@ -133,13 +133,22 @@ Regarding security: I'm not perfect - it's always a best-effort approach without
 
 ### Version 25
 
-Embedded JavaScript now is an opt-in feature. You can activate it with three feature toggles:
+#### ❗ License change notice
 
-- `pdfDefaultOptions.enableScripting` is the main toggle. Set it to true to activate JavaScript.
-- `pdfDefaultOptions.enableOpenActionJavaScript` enables JavaScript that runs when opening a PDF file. Note that this flag also requires you to set `pdfDefaultOptions.enableScripting = true`.
-- `pdfDefaultOptions.enableCatalogAAJavaScript` enables JavaScript that runs when printing, saving or closing a PDF file. Note that this flag also requires you to set `pdfDefaultOptions.enableScripting = true`.
+The license has changed from Apache 2.0 to Apache 2.0 with Commons Clause.
+This means you may not sell the library itself without my explicit consent.
+You can still use ngx-extended-pdf-viewer in your commercial or closed-source products, and you can distribute it with your software, provided you keep the copyright notice intact.
+For the exact terms, please refer to the LICENSE file — that is the legally binding document.
 
-Contrary to public belief, executing embedded JavaScript shouldn't be a security risk. Hackers are clever, so there's no guarantee, and that's why I've deactivated embedded JavaScript by default and added fine-grained feature toggles. That said, embedded JavaScript runs in a sandbox which is a JavaScript interpreter written in C and transpiled to JavaScript. It does not use a risky function like `eval()`. Nonetheless, setting the defaults to `false` makes sense because the library is written and maintained by fallible humans.
+#### ❗ Breaking changes:
+
+- The default background color of PDF files has changed from `#E8E8EB` to `#FFFFFF`.
+- Embedded JavaScript is now an opt-in feature. You can enable it with three feature toggles:
+  - `pdfDefaultOptions.enableScripting` — main toggle. Set it to true to allow execution of embedded JavaScript.
+  - `pdfDefaultOptions.enableOpenActionJavaScript` — allows JavaScript that runs when opening a PDF file. Requires `pdfDefaultOptions.enableScripting = true`.
+  - `pdfDefaultOptions.enableCatalogAAJavaScript` — allows JavaScript that runs when printing, saving, or closing a PDF file. Requires `pdfDefaultOptions.enableScripting = true`.
+
+Security note: Embedded JavaScript in PDFs runs inside a sandboxed JavaScript interpreter (written in C and transpiled to JavaScript) and does not use functions like eval(). These measures reduce — but do not eliminate — potential security risks. For that reason, all related options are disabled by default, and enabling them is at your own risk. While these features can be useful, be aware that no software can guarantee complete protection against malicious content.
 
 ### Version 24
 
