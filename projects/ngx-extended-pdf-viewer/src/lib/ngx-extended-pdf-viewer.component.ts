@@ -610,6 +610,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
   private readonly originalPrint = typeof window !== 'undefined' ? window.print : undefined;
 
+  /** Store the original color-scheme value to restore it on destroy */
+  private originalColorScheme: string | null = null;
+
   public _showSidebarButton: ResponsiveVisibility = true;
 
   @Input()
@@ -1379,6 +1382,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
   /** Notifies every widget that implements onLibraryInit() that the PDF viewer objects are available */
   private afterLibraryInit() {
+    // Store the original color-scheme value before PDF.js might change it
+    if (typeof window !== 'undefined' && typeof document !== 'undefined' && this.originalColorScheme === null) {
+      const docStyle = document.documentElement.style;
+      this.originalColorScheme = docStyle.getPropertyValue('color-scheme') || '';
+    }
+    
     queueMicrotask(() => this.notificationService.onPDFJSInitSignal.set(this.pdfScriptLoaderService.PDFViewerApplication));
   }
 
@@ -2000,6 +2009,17 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       const pc = document.getElementById('printContainer');
       if (pc) {
         pc.remove();
+      }
+      
+      // Restore original color-scheme to avoid polluting the global document
+      if (this.originalColorScheme !== null) {
+        const docStyle = document.documentElement.style;
+        if (this.originalColorScheme === '') {
+          docStyle.removeProperty('color-scheme');
+        } else {
+          docStyle.setProperty('color-scheme', this.originalColorScheme);
+        }
+        this.originalColorScheme = null;
       }
     }
 
