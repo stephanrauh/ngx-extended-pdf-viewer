@@ -1,186 +1,368 @@
 @if (theme === 'dark') {
-<pdf-dark-theme></pdf-dark-theme>
+  <pdf-dark-theme></pdf-dark-theme>
 }
 @if (theme === 'light') {
-<pdf-light-theme></pdf-light-theme>
+  <pdf-light-theme></pdf-light-theme>
 }
 <pdf-acroform-default-theme></pdf-acroform-default-theme>
 
-<pdf-dynamic-css #DynamicCssComponent [zoom]="mobileFriendlyZoomScale"></pdf-dynamic-css>
+<pdf-dynamic-css
+  #DynamicCssComponent
+  [zoom]="mobileFriendlyZoomScale"
+></pdf-dynamic-css>
 <ng-content *ngTemplateOutlet="customPdfViewer ? customPdfViewer : defaultPdfViewer"></ng-content>
 
 <ng-template #defaultPdfViewer>
-  <div class="zoom" [style.height]="minHeight ? minHeight : height" #root>
+  <div
+    class="zoom"
+    [style.height]="minHeight ? minHeight : height"
+    #root
+  >
     <div class="html">
-      <div class="body pdf-js-version-{{ majorMinorPdfJsVersion }}" [style.backgroundColor]="backgroundColor">
+      <div
+        class="body pdf-js-version-{{ majorMinorPdfJsVersion }}"
+        [style.backgroundColor]="backgroundColor"
+      >
         <div id="outerContainer">
           @if (showFreeFloatingBar) {
-          <div class="free-floating-bar">
-            <ng-content *ngTemplateOutlet="customFreeFloatingBar ? customFreeFloatingBar : defaultFreeFloatingBar">
-            </ng-content>
-          </div>
+            <div class="free-floating-bar">
+              <ng-content *ngTemplateOutlet="customFreeFloatingBar ? customFreeFloatingBar : defaultFreeFloatingBar"> </ng-content>
+            </div>
           }
-          <pdf-sidebar #pdfsidebar [sidebarVisible]="sidebarVisible || false" [showSidebarButton]="showSidebarButton"
-            [customSidebar]="customSidebar" [customThumbnail]="customThumbnail"
-            (thumbnailDrawn)="thumbnailDrawn.emit($event)" [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
-            [sidebarPositionTop]="sidebarPositionTop">
+          <pdf-sidebar
+            #pdfsidebar
+            [sidebarVisible]="sidebarVisible || false"
+            [showSidebarButton]="showSidebarButton"
+            [customSidebar]="customSidebar"
+            [customThumbnail]="customThumbnail"
+            (thumbnailDrawn)="thumbnailDrawn.emit($event)"
+            [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
+            [sidebarPositionTop]="sidebarPositionTop"
+          >
           </pdf-sidebar>
-          <div id="mainContainer" [class.toolbar-hidden]="!primaryMenuVisible">
+          <div
+            id="mainContainer"
+            [class.toolbar-hidden]="!primaryMenuVisible"
+          >
             <pdf-dummy-components></pdf-dummy-components>
 
-            <pdf-toolbar (onToolbarLoaded)="onToolbarLoaded($event)" [sidebarVisible]="sidebarVisible"
-              [class.server-side-rendering]="serverSideRendering" [customToolbar]="customToolbar"
-              [mobileFriendlyZoomScale]="mobileFriendlyZoomScale" [(pageViewMode)]="pageViewMode"
-              [primaryMenuVisible]="primaryMenuVisible" [scrollMode]="scrollMode ?? 0"
-              [showPropertiesButton]="showPropertiesButton" [showBookModeButton]="showBookModeButton"
-              [showDownloadButton]="showDownloadButton" [showDrawEditor]="showDrawEditor"
-              [showHighlightEditor]="showHighlightEditor" [showFindButton]="showFindButton"
-              [showHandToolButton]="showHandToolButton" [handTool]="handTool"
+            <pdf-toolbar
+              (onToolbarLoaded)="onToolbarLoaded($event)"
+              [sidebarVisible]="sidebarVisible"
+              [class.server-side-rendering]="serverSideRendering"
+              [customToolbar]="customToolbar"
+              [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
+              [(pageViewMode)]="pageViewMode"
+              [primaryMenuVisible]="primaryMenuVisible"
+              [scrollMode]="scrollMode ?? 0"
+              [showPropertiesButton]="showPropertiesButton"
+              [showBookModeButton]="showBookModeButton"
+              [showDownloadButton]="showDownloadButton"
+              [showDrawEditor]="showDrawEditor"
+              [showHighlightEditor]="showHighlightEditor"
+              [showFindButton]="showFindButton"
+              [showHandToolButton]="showHandToolButton"
+              [handTool]="handTool"
               [showHorizontalScrollButton]="showHorizontalScrollButton"
-              [showInfiniteScrollButton]="showInfiniteScrollButton" [showOpenFileButton]="showOpenFileButton"
-              [showMovePageButton]="showMovePageButton" [showPagingButtons]="showPagingButtons"
+              [showInfiniteScrollButton]="showInfiniteScrollButton"
+              [showOpenFileButton]="showOpenFileButton"
+              [showMovePageButton]="showMovePageButton"
+              [showPagingButtons]="showPagingButtons"
               [showFirstAndLastPageButtons]="showFirstAndLastPageButtons"
-              [showPreviousAndNextPageButtons]="showPreviousAndNextPageButtons" [showPageNumber]="showPageNumber"
+              [showPreviousAndNextPageButtons]="showPreviousAndNextPageButtons"
+              [showPageNumber]="showPageNumber"
               [showPageLabel]="showPageLabel"
               [showPresentationModeButton]="showPresentationModeButton && pageViewMode !== 'book'"
-              [showPrintButton]="enablePrint ? showPrintButton : false" [showRotateCwButton]="showRotateCwButton"
+              [showPrintButton]="enablePrint ? showPrintButton : false"
+              [showRotateCwButton]="showRotateCwButton"
               [showRotateCcwButton]="showRotateCcwButton"
               [showSecondaryToolbarButton]="showSecondaryToolbarButton && !service.secondaryMenuIsEmpty"
-              [showSidebarButton]="showSidebarButton" [showSinglePageModeButton]="showSinglePageModeButton"
-              [showSignatureEditor]="enableSignatureEditor? showSignatureEditor : false"
-              [showSpreadButton]="showSpreadButton" [showStampEditor]="showStampEditor"
-              [showTextEditor]="showTextEditor" [showVerticalScrollButton]="showVerticalScrollButton"
-              [showWrappedScrollButton]="showWrappedScrollButton" [showZoomButtons]="showZoomButtons"
-              [showZoomDropdown]="showZoomDropdown" [spread]="spread" [textLayer]="textLayer"
-              [toolbarMarginTop]="toolbarMarginTop" [toolbarWidth]="toolbarWidth" [zoomLevels]="zoomLevels"
-              [findbarVisible]="findbarVisible" [hasTextLayer]="hasTextLayer"></pdf-toolbar>
+              [showSidebarButton]="showSidebarButton"
+              [showSinglePageModeButton]="showSinglePageModeButton"
+              [showSignatureEditor]="enableSignatureEditor ? showSignatureEditor : false"
+              [showSpreadButton]="showSpreadButton"
+              [showStampEditor]="showStampEditor"
+              [showTextEditor]="showTextEditor"
+              [showVerticalScrollButton]="showVerticalScrollButton"
+              [showWrappedScrollButton]="showWrappedScrollButton"
+              [showZoomButtons]="showZoomButtons"
+              [showZoomDropdown]="showZoomDropdown"
+              [spread]="spread"
+              [textLayer]="textLayer"
+              [toolbarMarginTop]="toolbarMarginTop"
+              [toolbarWidth]="toolbarWidth"
+              [zoomLevels]="zoomLevels"
+              [findbarVisible]="findbarVisible"
+              [hasTextLayer]="hasTextLayer"
+            ></pdf-toolbar>
 
-            <div class="editorParamsToolbar hidden doorHangerRight menu" id="editorSignatureParamsToolbar">
-              <div id="addSignatureDoorHanger" class="menuContainer" role="region"
-                data-l10n-id="pdfjs-editor-add-signature-container">
-                <button id="editorSignatureAddSignature" class="toolbarButton labeled" type="button" tabindex="0"
-                  data-l10n-id="pdfjs-editor-signature-add-signature-button">
-                  <span data-l10n-id="pdfjs-editor-signature-add-signature-button-label"
-                    class="editorParamsLabel"></span>
+            <div
+              class="editorParamsToolbar hidden doorHangerRight menu"
+              id="editorSignatureParamsToolbar"
+            >
+              <div
+                id="addSignatureDoorHanger"
+                class="menuContainer"
+                role="region"
+                data-l10n-id="pdfjs-editor-add-signature-container"
+              >
+                <button
+                  id="editorSignatureAddSignature"
+                  class="toolbarButton labeled"
+                  type="button"
+                  tabindex="0"
+                  data-l10n-id="pdfjs-editor-signature-add-signature-button"
+                >
+                  <span
+                    data-l10n-id="pdfjs-editor-signature-add-signature-button-label"
+                    class="editorParamsLabel"
+                  ></span>
                 </button>
               </div>
             </div>
-            <div class="editorParamsToolbar hidden doorHangerRight" id="editorHighlightParamsToolbar"
-              [style.transform]="'scale(' + mobileFriendlyZoomScale + ')'">
-              <div id="highlightParamsToolbarContainer" class="editorParamsToolbarContainer">
-                <div id="editorHighlightColorPicker" class="colorPicker">
-                  <span id="highlightColorPickerLabel" class="editorParamsLabel"
-                    data-l10n-id="pdfjs-editor-highlight-colorpicker-label">Highlight color</span>
+            <div
+              class="editorParamsToolbar hidden doorHangerRight"
+              id="editorHighlightParamsToolbar"
+              [style.transform]="'scale(' + mobileFriendlyZoomScale + ')'"
+            >
+              <div
+                id="highlightParamsToolbarContainer"
+                class="editorParamsToolbarContainer"
+              >
+                <div
+                  id="editorHighlightColorPicker"
+                  class="colorPicker"
+                >
+                  <span
+                    id="highlightColorPickerLabel"
+                    class="editorParamsLabel"
+                    data-l10n-id="pdfjs-editor-highlight-colorpicker-label"
+                    >Highlight color</span
+                  >
                 </div>
                 <div id="editorHighlightThickness">
-                  <label for="editorFreeHighlightThickness" class="editorParamsLabel"
-                    data-l10n-id="pdfjs-editor-free-highlight-thickness-input">Thickness</label>
+                  <label
+                    for="editorFreeHighlightThickness"
+                    class="editorParamsLabel"
+                    data-l10n-id="pdfjs-editor-free-highlight-thickness-input"
+                    >Thickness</label
+                  >
                   <div class="thicknessPicker">
-                    <input type="range" id="editorFreeHighlightThickness" class="editorParamsSlider"
-                      data-l10n-id="pdfjs-editor-free-highlight-thickness-title" value="12" min="8" max="24" step="1" />
+                    <input
+                      type="range"
+                      id="editorFreeHighlightThickness"
+                      class="editorParamsSlider"
+                      data-l10n-id="pdfjs-editor-free-highlight-thickness-title"
+                      value="12"
+                      min="8"
+                      max="24"
+                      step="1"
+                    />
                   </div>
                 </div>
                 <div id="editorHighlightVisibility">
                   <div class="divider"></div>
                   <div class="toggler">
-                    <label for="editorHighlightShowAll" class="editorParamsLabel"
-                      data-l10n-id="pdfjs-editor-highlight-show-all-button-label">Show all</label>
-                    <button id="editorHighlightShowAll" class="toggle-button"
-                      data-l10n-id="pdfjs-editor-highlight-show-all-button" aria-pressed="true"></button>
+                    <label
+                      for="editorHighlightShowAll"
+                      class="editorParamsLabel"
+                      data-l10n-id="pdfjs-editor-highlight-show-all-button-label"
+                      >Show all</label
+                    >
+                    <button
+                      id="editorHighlightShowAll"
+                      class="toggle-button"
+                      data-l10n-id="pdfjs-editor-highlight-show-all-button"
+                      aria-pressed="true"
+                    ></button>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div class="editorParamsToolbar hidden doorHangerRight" id="editorFreeTextParamsToolbar"
+            <div
+              class="editorParamsToolbar hidden doorHangerRight"
+              id="editorFreeTextParamsToolbar"
               [class.server-side-rendering]="serverSideRendering"
-              [style.transform]="'scale(' + mobileFriendlyZoomScale + ')'">
+              [style.transform]="'scale(' + mobileFriendlyZoomScale + ')'"
+            >
               <div class="editorParamsToolbarContainer">
                 <div class="editorParamsSetter">
-                  <label for="editorFreeTextColor" class="editorParamsLabel"
-                    data-l10n-id="pdfjs-editor-free-text-color-input">Font Color</label>
-                  <input type="color" id="editorFreeTextColor" class="editorParamsColor" />
+                  <label
+                    for="editorFreeTextColor"
+                    class="editorParamsLabel"
+                    data-l10n-id="pdfjs-editor-free-text-color-input"
+                    >Font Color</label
+                  >
+                  <input
+                    type="color"
+                    id="editorFreeTextColor"
+                    class="editorParamsColor"
+                  />
                 </div>
                 <div class="editorParamsSetter">
-                  <label for="editorFreeTextFontSize" class="editorParamsLabel"
-                    data-l10n-id="pdfjs-editor-free-text-size-input">Font Size</label>
-                  <input type="range" id="editorFreeTextFontSize" class="editorParamsSlider" value="10" min="5"
-                    max="100" step="1" />
+                  <label
+                    for="editorFreeTextFontSize"
+                    class="editorParamsLabel"
+                    data-l10n-id="pdfjs-editor-free-text-size-input"
+                    >Font Size</label
+                  >
+                  <input
+                    type="range"
+                    id="editorFreeTextFontSize"
+                    class="editorParamsSlider"
+                    value="10"
+                    min="5"
+                    max="100"
+                    step="1"
+                  />
                 </div>
               </div>
             </div>
 
-            <div class="editorParamsToolbar hidden doorHangerRight" id="editorStampParamsToolbar"
-              [style.transform]="'scale(' + mobileFriendlyZoomScale + ')'">
+            <div
+              class="editorParamsToolbar hidden doorHangerRight"
+              id="editorStampParamsToolbar"
+              [style.transform]="'scale(' + mobileFriendlyZoomScale + ')'"
+            >
               <div class="editorParamsToolbarContainer">
-                <button id="editorStampAddImage" class="secondaryToolbarButton" title="Add image"
-                  data-l10n-id="pdfjs-editor-stamp-add-image-button">
-                  <svg aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 16 16" fill="none"
-                    xmlns="http://www.w3.org/2000/svg" class="align-image-to-text">
+                <button
+                  id="editorStampAddImage"
+                  class="secondaryToolbarButton"
+                  title="Add image"
+                  data-l10n-id="pdfjs-editor-stamp-add-image-button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    focusable="false"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="align-image-to-text"
+                  >
                     <path
                       d="M7.00488 9.75V14C7.00488 14.1658 7.07073 14.3247 7.18794 14.4419C7.30515 14.5592 7.46412 14.625 7.62988 14.625C7.79564 14.625 7.95461 14.5592 8.07183 14.4419C8.18904 14.3247 8.25488 14.1658 8.25488 14V9.75L8.75488 9.25H13.0049C13.1706 9.25 13.3296 9.18415 13.4468 9.06694C13.564 8.94973 13.6299 8.79076 13.6299 8.625C13.6299 8.45924 13.564 8.30027 13.4468 8.18306C13.3296 8.06585 13.1706 8 13.0049 8H8.75488L8.25488 7.5V3.25C8.25488 3.08424 8.18904 2.92527 8.07183 2.80806C7.95461 2.69085 7.79564 2.625 7.62988 2.625C7.46412 2.625 7.30515 2.69085 7.18794 2.80806C7.07073 2.92527 7.00488 3.08424 7.00488 3.25V7.5L6.50488 8H2.25488C2.08912 8 1.93015 8.06585 1.81294 8.18306C1.69573 8.30027 1.62988 8.45924 1.62988 8.625C1.62988 8.79076 1.69573 8.94973 1.81294 9.06694C1.93015 9.18415 2.08912 9.25 2.25488 9.25H6.39188L7.00488 9.75Z"
-                      fill="black" />
+                      fill="black"
+                    />
                   </svg>
                   <span data-l10n-id="pdfjs-editor-stamp-add-image-button-label">Add image</span>
                 </button>
               </div>
             </div>
 
-            <div class="editorParamsToolbar hidden doorHangerRight" id="editorInkParamsToolbar"
+            <div
+              class="editorParamsToolbar hidden doorHangerRight"
+              id="editorInkParamsToolbar"
               [style.transform]="'scale(' + mobileFriendlyZoomScale + ')'"
-              [class.server-side-rendering]="serverSideRendering">
+              [class.server-side-rendering]="serverSideRendering"
+            >
               <div class="editorParamsToolbarContainer">
                 <div class="editorParamsSetter">
-                  <label for="editorInkColor" class="editorParamsLabel"
-                    data-l10n-id="pdfjs-editor-ink-color-input">Color</label>
-                  <input type="color" id="editorInkColor" class="editorParamsColor" />
+                  <label
+                    for="editorInkColor"
+                    class="editorParamsLabel"
+                    data-l10n-id="pdfjs-editor-ink-color-input"
+                    >Color</label
+                  >
+                  <input
+                    type="color"
+                    id="editorInkColor"
+                    class="editorParamsColor"
+                  />
                 </div>
                 <div class="editorParamsSetter">
-                  <label for="editorInkThickness" class="editorParamsLabel"
-                    data-l10n-id="pdfjs-editor-ink-thickness-input">Thickness</label>
-                  <input type="range" id="editorInkThickness" class="editorParamsSlider" value="1" min="1" max="20"
-                    step="1" />
+                  <label
+                    for="editorInkThickness"
+                    class="editorParamsLabel"
+                    data-l10n-id="pdfjs-editor-ink-thickness-input"
+                    >Thickness</label
+                  >
+                  <input
+                    type="range"
+                    id="editorInkThickness"
+                    class="editorParamsSlider"
+                    value="1"
+                    min="1"
+                    max="20"
+                    step="1"
+                  />
                 </div>
                 <div class="editorParamsSetter">
-                  <label for="editorInkOpacity" class="editorParamsLabel"
-                    data-l10n-id="pdfjs-editor-ink-opacity-input">Opacity</label>
-                  <input type="range" id="editorInkOpacity" class="editorParamsSlider" value="1" min="0.05" max="1"
-                    step="0.05" />
+                  <label
+                    for="editorInkOpacity"
+                    class="editorParamsLabel"
+                    data-l10n-id="pdfjs-editor-ink-opacity-input"
+                    >Opacity</label
+                  >
+                  <input
+                    type="range"
+                    id="editorInkOpacity"
+                    class="editorParamsSlider"
+                    value="1"
+                    min="0.05"
+                    max="1"
+                    step="0.05"
+                  />
                 </div>
               </div>
             </div>
 
-            <pdf-secondary-toolbar #pdfSecondaryToolbarComponent [class.server-side-rendering]="serverSideRendering"
-              [customSecondaryToolbar]="customSecondaryToolbar" [secondaryToolbarTop]="secondaryToolbarTop"
-              [mobileFriendlyZoomScale]="mobileFriendlyZoomScale" (spreadChange)="onSpreadChange($event)"
-              [localizationInitialized]="localizationInitialized">
+            <pdf-secondary-toolbar
+              #pdfSecondaryToolbarComponent
+              [class.server-side-rendering]="serverSideRendering"
+              [customSecondaryToolbar]="customSecondaryToolbar"
+              [secondaryToolbarTop]="secondaryToolbarTop"
+              [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
+              (spreadChange)="onSpreadChange($event)"
+              [localizationInitialized]="localizationInitialized"
+            >
             </pdf-secondary-toolbar>
 
-            <pdf-findbar [class.server-side-rendering]="serverSideRendering" [findbarLeft]="findbarLeft"
-              [findbarTop]="findbarTop" [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
-              [showFindButton]="showFindButton || false" [customFindbarInputArea]="customFindbarInputArea"
-              [customFindbarButtons]="customFindbarButtons" [showFindEntireWord]="showFindEntireWord"
-              [showFindHighlightAll]="showFindHighlightAll" [showFindMatchDiacritics]="showFindMatchDiacritics"
-              [showFindMatchCase]="showFindMatchCase" [showFindMultiple]="showFindMultiple"
-              [showFindRegexp]="showFindRegexp" [showFindMessages]="showFindMessages"
-              [showFindResultsCount]="showFindResultsCount">
+            <pdf-findbar
+              [class.server-side-rendering]="serverSideRendering"
+              [findbarLeft]="findbarLeft"
+              [findbarTop]="findbarTop"
+              [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
+              [showFindButton]="showFindButton || false"
+              [customFindbarInputArea]="customFindbarInputArea"
+              [customFindbarButtons]="customFindbarButtons"
+              [showFindEntireWord]="showFindEntireWord"
+              [showFindHighlightAll]="showFindHighlightAll"
+              [showFindMatchDiacritics]="showFindMatchDiacritics"
+              [showFindMatchCase]="showFindMatchCase"
+              [showFindMultiple]="showFindMultiple"
+              [showFindRegexp]="showFindRegexp"
+              [showFindMessages]="showFindMessages"
+              [showFindResultsCount]="showFindResultsCount"
+            >
             </pdf-findbar>
 
             <pdf-context-menu></pdf-context-menu>
 
-            <div id="viewerContainer" [style.top]="viewerPositionTop" [style.backgroundColor]="backgroundColor">
+            <div
+              id="viewerContainer"
+              [style.top]="viewerPositionTop"
+              [style.backgroundColor]="backgroundColor"
+            >
               @if (hasSignature && showUnverifiedSignatures) {
-              <div class="unverified-signature-warning">
-                {{
-                'unverified-signature-warning'
-                | translate
-                : "This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid.
+                <div class="unverified-signature-warning">
+                  {{
+                    'unverified-signature-warning'
+                      | translate
+                        : "This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid.
                 Please download the file and open it in Acrobat Reader to verify the signature is valid."
-                | async
-                }}
-              </div>
+                      | async
+                  }}
+                </div>
               }
-              <div id="viewer" class="pdfViewer" (dblclick)="zoomToPageWidth($event)"></div>
+              <div
+                id="viewer"
+                class="pdfViewer"
+                [style.backgroundColor]="backgroundColor"
+                (dblclick)="zoomToPageWidth($event)"
+              ></div>
             </div>
             <pdf-error-message></pdf-error-message>
           </div>
@@ -197,22 +379,44 @@
           </div>
           <!-- dialogContainer -->
         </div>
-        <div id="editorUndoBar" class="messageBar" role="status" aria-labelledby="editorUndoBarMessage" tabindex="-1"
-          hidden>
+        <div
+          id="editorUndoBar"
+          class="messageBar"
+          role="status"
+          aria-labelledby="editorUndoBarMessage"
+          tabindex="-1"
+          hidden
+        >
           <div>
             <div>
-              <span id="editorUndoBarMessage" class="description"></span>
+              <span
+                id="editorUndoBarMessage"
+                class="description"
+              ></span>
             </div>
-            <button id="editorUndoBarUndoButton" class="undoButton" type="button" tabindex="0" title="Undo"
-              data-l10n-id="pdfjs-editor-undo-bar-undo-button">
+            <button
+              id="editorUndoBarUndoButton"
+              class="undoButton"
+              type="button"
+              tabindex="0"
+              title="Undo"
+              data-l10n-id="pdfjs-editor-undo-bar-undo-button"
+            >
               <span data-l10n-id="pdfjs-editor-undo-bar-undo-button-label">Undo</span>
             </button>
-            <button id="editorUndoBarCloseButton" class="closeButton" type="button" tabindex="0" title="Close"
-              data-l10n-id="pdfjs-editor-undo-bar-close-button">
+            <button
+              id="editorUndoBarCloseButton"
+              class="closeButton"
+              type="button"
+              tabindex="0"
+              title="Close"
+              data-l10n-id="pdfjs-editor-undo-bar-close-button"
+            >
               <span data-l10n-id="pdfjs-editor-undo-bar-close-button-label">Close</span>
             </button>
           </div>
-        </div> <!-- editorUndoBar -->
+        </div>
+        <!-- editorUndoBar -->
         <!-- outerContainer -->
       </div>
     </div>

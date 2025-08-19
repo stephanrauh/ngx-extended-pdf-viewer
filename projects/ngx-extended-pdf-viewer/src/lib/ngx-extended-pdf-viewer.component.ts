@@ -562,6 +562,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   @Input()
   public backgroundColor = undefined;
 
+  @Input()
+  public pdfBackgroundColor = undefined;
+
   /** Allows the user to define the name of the file after clicking "download" */
   @Input()
   public filenameForDownload: string | undefined = undefined;
@@ -1331,7 +1334,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         PDFViewerApplicationOptions.set('maxZoom', this.maxZoom);
         PDFViewerApplicationOptions.set('pageViewMode', this.pageViewMode);
         PDFViewerApplicationOptions.set('verbosity', this.logLevel);
-        PDFViewerApplicationOptions.set('backgroundColor', this.backgroundColor);
+        PDFViewerApplicationOptions.set('pdfBackgroundColor', this.pdfBackgroundColor);
         if (this.theme === 'dark') {
           PDFViewerApplicationOptions.set('viewerCssTheme', 2);
         } else if (this.theme === 'light') {
