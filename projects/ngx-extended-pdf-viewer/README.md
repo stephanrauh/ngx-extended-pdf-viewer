@@ -17,7 +17,7 @@ Built on Mozilla’s pdf.js and extended with dozens of enhancements, it's ideal
 
 The library requires Angular 17+. Older versions are not supported.
 
-In general, I aim to support the last four Angular versions (roughly two years of updates), but this may not always be feasible. For example, the upcoming version 25 might raise the minimum required Angular version significantly: I plan to support modern Angular (and I know many of you are waiting for that). You can't have an omelette without breaking an egg.
+In general, I aim to support the last four Angular versions (roughly two years of updates), but this may not always be feasible. For example, the upcoming version 26 might raise the minimum required Angular version significantly: I plan to support modern Angular (and I know many of you are waiting for that). You can't have an omelette without breaking an egg.
 
 ### 1. Installation
 
@@ -135,15 +135,13 @@ Regarding security: I'm not perfect - it's always a best-effort approach without
 
 #### ❗ License change notice
 
-The license has changed from Apache 2.0 to Apache 2.0 with Commons Clause.
-This means you may not sell the library itself without my explicit consent.
-You can still use ngx-extended-pdf-viewer in your commercial or closed-source products, and you can distribute it with your software, provided you keep the copyright notice intact.
+The license has changed from Apache 2.0 to Apache 2.0 with Commons Clause, which allows free use, modification, and distribution while preventing commercial sale or paid services without permission. You can still use ngx-extended-pdf-viewer in your commercial or closed-source products, and you can distribute it with your software, provided you keep the copyright notice intact.
 For the exact terms, please refer to the LICENSE file — that is the legally binding document.
 
 #### ❗ Breaking changes:
 
 - The default background color of PDF files has changed from `#E8E8EB` to `#FFFFFF`.
-- Embedded JavaScript is now an opt-in feature. You can enable it with three feature toggles:
+- Embedded JavaScript is now an opt-in feature. It's no longer enabled by default. You can enable it with three feature toggles:
   - `pdfDefaultOptions.enableScripting` — main toggle. Set it to true to allow execution of embedded JavaScript.
   - `pdfDefaultOptions.enableOpenActionJavaScript` — allows JavaScript that runs when opening a PDF file. Requires `pdfDefaultOptions.enableScripting = true`.
   - `pdfDefaultOptions.enableCatalogAAJavaScript` — allows JavaScript that runs when printing, saving, or closing a PDF file. Requires `pdfDefaultOptions.enableScripting = true`.
@@ -258,7 +256,8 @@ Just keep it respectful — the ngx-extended-pdf-viewer community is a friendly 
 
 ## 📜 License & Acknowledgments
 
-- Apache 2.0 License
+- Apache 2.0 License with Common Clause, which allows free use, modification, and distribution while preventing commercial sale or
+  paid services without permission.
 - Based on Mozilla’s [pdf.js](https://github.com/mozilla/pdf.js) (also published under a friendly Apache 2.0 license)
 - Icons from [MaterialDesignIcons.com](https://materialdesignicons.com/) and Google
 - Thanks to all users, contributors, and bug reporters! You rock! Just counting the people contributing pull requests - that's already [several dozen developers:](https://github.com/stephanrauh/ngx-extended-pdf-viewer/graphs/contributors)
