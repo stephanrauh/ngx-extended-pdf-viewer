@@ -4,7 +4,7 @@ const _isIE11 = typeof window === 'undefined' ? false : !!(<any>globalThis).MSIn
 const isEdge = typeof navigator === 'undefined' || /Edge\/\d./i.test(navigator.userAgent);
 const needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
 
-export const pdfjsVersion = '5.4.790';
+export const pdfjsVersion = '5.4.792';
 export const pdfjsBleedingEdgeVersion = '5.4.791';
 export function getVersionSuffix(folder: string): string {
   if (folder?.includes('bleeding-edge')) {
