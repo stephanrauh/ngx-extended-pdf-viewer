@@ -957,8 +957,14 @@ html[dir="rtl"] #toolbarSidebarRight * {
 }
 
 ngx-extended-pdf-viewer {
+  button.toolbarButton {
+    border: 0 none;
+    background: none;
+    width: 24px;
+    margin-right: 8px !important;
+    height: 25px;
+  }
 
-  .toolbarButton,
   .dialogButton {
     border: 0 none;
     background: none;
@@ -1344,6 +1350,7 @@ ngx-extended-pdf-viewer {
       border-color: $thumbnail-hover-color;
     }
   }
+
   // #2984 end of modification by ngx-extended-pdf-viewer to improve the light and dark mode
 
   .thumbnail:not([data-loaded])>.thumbnailImage {
