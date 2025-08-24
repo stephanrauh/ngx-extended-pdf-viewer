@@ -20,31 +20,24 @@ runCommand('ng build ngx-extended-pdf-viewer', 'Error 70: Building ngx-extended-
 
 // Build schematics
 process.chdir('projects/ngx-extended-pdf-viewer');
-runCommand('npm run build', 'Error 70: Building schematics failed', 70);
+runCommand('npm run build', 'Error 71: Building schematics failed', 70);
 process.chdir('../..');
-
-// Link the built library
-runCommand('npm link ./dist/ngx-extended-pdf-viewer', 'Error 70: Linking library failed', 70);
 
 // Create or navigate to test project
 if (!fs.existsSync(path.join('..', 'test'))) {
-  process.chdir('..');
-  runCommand('ng new test --routing=false --style=css', 'Error 70: Creating test project failed', 70);
-  process.chdir('test');
+  runCommand('cd .. && pwd && ls -alsi && ng new test --routing=false --style=css', 'Error 73: Creating test project failed', 70);
+  process.chdir('../test');
 } else {
   process.chdir(path.join('..', 'test'));
 }
 
-// Link the library in the test project
-runCommand('npm link ../ngx-extended-pdf-viewer/dist/ngx-extended-pdf-viewer', 'Error 70: Linking library in test project failed', 70);
-
 // Stash any changes in the test project
-runCommand('git stash', 'Error 70: Git stash failed', 70);
+runCommand('git stash', 'Error 75: Git stash failed', 70);
 
 // Install dependencies
-runCommand('npm i', 'Error 70: npm install failed', 70);
+runCommand('npm i', 'Error 76: npm install failed', 70);
 
 // Add ngx-extended-pdf-viewer to the test project
-runCommand('ng add ngx-extended-pdf-viewer', 'Error 71: ng add failed', 71);
+runCommand('ng g ../ngx-extended-pdf-viewer/dist/ngx-extended-pdf-viewer:ng-add', 'Error 77: ng add failed', 71);
 
 console.log('Schematics test completed successfully');

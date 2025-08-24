@@ -679,3 +679,4 @@
 - 25.0.0-alpha.1 #2997 fixed `[backgroundColor]` and restored `[pdfBackgroundColor]`
 - 25.0.0-alpha.2 #2984 optimized the width of the toolbar button so that the focus highlight doesn't bleed into the next button
 - 25.0.0 fixed `pdfDefaultOptions.enableCatalogAAJavaScript` and `pdfDefaultOptions.enableOpenActionJavaScript`
+- 25.0.1 #2773 updated "ng add ngx-extended-pdf-viewer": now it supports multiple Angular versions and folder layouts
