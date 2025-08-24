@@ -147,6 +147,7 @@ For the exact terms, please refer to the LICENSE file — that is the legally bi
   - `pdfDefaultOptions.enableCatalogAAJavaScript` — allows JavaScript that runs when printing, saving, or closing a PDF file. Requires `pdfDefaultOptions.enableScripting = true`.
 
 Security note: Embedded JavaScript in PDFs runs inside a sandboxed JavaScript interpreter (written in C and transpiled to JavaScript) and does not use functions like eval(). These measures reduce — but do not eliminate — potential security risks. For that reason, all related options are disabled by default, and enabling them is at your own risk. While these features can be useful, be aware that no software can guarantee complete protection against malicious content.
+Read more about the [JavaScript sandbox here](href="https://attackanddefense.dev/firefox-internals/2021/10/14/implementing-form-filling-and-accessibility-in-the-firefox-pdf-viewer.html").
 
 ### Version 24
 
