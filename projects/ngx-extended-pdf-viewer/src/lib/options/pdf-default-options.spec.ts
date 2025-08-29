@@ -1,11 +1,11 @@
-import { 
-  getVersionSuffix, 
-  assetsUrl, 
-  isBleedingEdge, 
+import {
+  assetsUrl,
   getSafeCanvasSize,
-  pdfjsVersion,
+  getVersionSuffix,
+  isBleedingEdge,
+  pdfDefaultOptions,
   pdfjsBleedingEdgeVersion,
-  pdfDefaultOptions
+  pdfjsVersion,
 } from './pdf-default-options';
 
 describe('PDF Default Options Utility Functions', () => {
@@ -176,46 +176,46 @@ describe('PDF Default Options Utility Functions', () => {
     it.skip('should calculate safe size based on WebGL context', () => {
       // SKIP: JSDOM doesn't support WebGL context - HTMLCanvasElement.prototype.getContext not implemented
       const mockCanvas = {
-        getContext: jest.fn()
+        getContext: jest.fn(),
       };
-      
+
       const mockWebGLContext = {
-        MAX_TEXTURE_SIZE: 0x0D33, // WebGL constant
+        MAX_TEXTURE_SIZE: 0x0d33, // WebGL constant
         getParameter: jest.fn((param) => {
-          if (param === 0x0D33) return 8192;
+          if (param === 0x0d33) return 8192;
           return null;
-        })
+        }),
       };
 
       const mockDocument = {
-        createElement: jest.fn(() => mockCanvas)
+        createElement: jest.fn(() => mockCanvas),
       };
 
       const mockNavigator = {
         userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
-        deviceMemory: 8 // 8GB
+        deviceMemory: 8, // 8GB
       };
 
       const mockWindow = {
         performance: {
           memory: {
-            jsHeapSizeLimit: 4 * 1024 * 1024 * 1024 // 4GB
-          }
-        }
+            jsHeapSizeLimit: 4 * 1024 * 1024 * 1024, // 4GB
+          },
+        },
       };
 
       mockCanvas.getContext = jest.fn(() => mockWebGLContext);
-      
+
       (global as any).window = mockWindow;
       (global as any).document = mockDocument;
       (global as any).navigator = mockNavigator;
       (global as any).process = undefined;
 
       const result = getSafeCanvasSize();
-      
+
       expect(mockDocument.createElement).toHaveBeenCalledWith('canvas');
       expect(mockCanvas.getContext).toHaveBeenCalledWith('webgl');
-      expect(mockWebGLContext.getParameter).toHaveBeenCalledWith(0x0D33);
+      expect(mockWebGLContext.getParameter).toHaveBeenCalledWith(0x0d33);
       expect(typeof result).toBe('number');
       expect(result).toBeGreaterThan(0);
     });
@@ -223,43 +223,41 @@ describe('PDF Default Options Utility Functions', () => {
     it.skip('should fallback to experimental-webgl if webgl fails', () => {
       // SKIP: JSDOM doesn't support WebGL context - HTMLCanvasElement.prototype.getContext not implemented
       const mockCanvas = {
-        getContext: jest.fn()
+        getContext: jest.fn(),
       };
-      
+
       const mockWebGLContext = {
-        MAX_TEXTURE_SIZE: 0x0D33,
-        getParameter: jest.fn(() => 4096)
+        MAX_TEXTURE_SIZE: 0x0d33,
+        getParameter: jest.fn(() => 4096),
       };
 
       const mockDocument = {
-        createElement: jest.fn(() => mockCanvas)
+        createElement: jest.fn(() => mockCanvas),
       };
 
       const mockNavigator = {
         userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)',
-        deviceMemory: 16
+        deviceMemory: 16,
       };
 
       const mockWindow = {
         performance: {
           memory: {
-            jsHeapSizeLimit: 8 * 1024 * 1024 * 1024
-          }
-        }
+            jsHeapSizeLimit: 8 * 1024 * 1024 * 1024,
+          },
+        },
       };
 
       // First call returns null (webgl not supported), second returns context
-      mockCanvas.getContext = jest.fn()
-        .mockReturnValueOnce(null)
-        .mockReturnValueOnce(mockWebGLContext);
-      
+      mockCanvas.getContext = jest.fn().mockReturnValueOnce(null).mockReturnValueOnce(mockWebGLContext);
+
       (global as any).window = mockWindow;
       (global as any).document = mockDocument;
       (global as any).navigator = mockNavigator;
       (global as any).process = undefined;
 
       getSafeCanvasSize();
-      
+
       expect(mockCanvas.getContext).toHaveBeenCalledWith('webgl');
       expect(mockCanvas.getContext).toHaveBeenCalledWith('experimental-webgl');
     });
@@ -268,26 +266,26 @@ describe('PDF Default Options Utility Functions', () => {
       // SKIP: JSDOM doesn't support WebGL context - HTMLCanvasElement.prototype.getContext not implemented
       const mockCanvas = {
         getContext: jest.fn(() => ({
-          MAX_TEXTURE_SIZE: 0x0D33,
-          getParameter: jest.fn(() => 8192)
-        }))
+          MAX_TEXTURE_SIZE: 0x0d33,
+          getParameter: jest.fn(() => 8192),
+        })),
       };
 
       const mockDocument = {
-        createElement: jest.fn(() => mockCanvas)
+        createElement: jest.fn(() => mockCanvas),
       };
 
       const mockNavigator = {
         userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_7_1 like Mac OS X)',
-        deviceMemory: 6
+        deviceMemory: 6,
       };
 
       const mockWindow = {
         performance: {
           memory: {
-            jsHeapSizeLimit: 2 * 1024 * 1024 * 1024
-          }
-        }
+            jsHeapSizeLimit: 2 * 1024 * 1024 * 1024,
+          },
+        },
       };
 
       (global as any).window = mockWindow;
@@ -296,7 +294,7 @@ describe('PDF Default Options Utility Functions', () => {
       (global as any).process = undefined;
 
       const result = getSafeCanvasSize();
-      
+
       expect(result).toBeGreaterThan(0);
       // iOS devices should be limited
     });
@@ -305,26 +303,26 @@ describe('PDF Default Options Utility Functions', () => {
       // SKIP: JSDOM doesn't support WebGL context - HTMLCanvasElement.prototype.getContext not implemented
       const mockCanvas = {
         getContext: jest.fn(() => ({
-          MAX_TEXTURE_SIZE: 0x0D33,
-          getParameter: jest.fn(() => 4096)
-        }))
+          MAX_TEXTURE_SIZE: 0x0d33,
+          getParameter: jest.fn(() => 4096),
+        })),
       };
 
       const mockDocument = {
-        createElement: jest.fn(() => mockCanvas)
+        createElement: jest.fn(() => mockCanvas),
       };
 
       const mockNavigator = {
         userAgent: 'Mozilla/5.0 (Linux; Android 11; SM-G991B)',
-        deviceMemory: 4
+        deviceMemory: 4,
       };
 
       const mockWindow = {
         performance: {
           memory: {
-            jsHeapSizeLimit: 3 * 1024 * 1024 * 1024
-          }
-        }
+            jsHeapSizeLimit: 3 * 1024 * 1024 * 1024,
+          },
+        },
       };
 
       (global as any).window = mockWindow;
@@ -333,7 +331,7 @@ describe('PDF Default Options Utility Functions', () => {
       (global as any).process = undefined;
 
       const result = getSafeCanvasSize();
-      
+
       expect(result).toBeGreaterThan(0);
     });
 
@@ -341,26 +339,26 @@ describe('PDF Default Options Utility Functions', () => {
       // SKIP: JSDOM doesn't support WebGL context - HTMLCanvasElement.prototype.getContext not implemented
       const mockCanvas = {
         getContext: jest.fn(() => ({
-          MAX_TEXTURE_SIZE: 0x0D33,
-          getParameter: jest.fn(() => 16384)
-        }))
+          MAX_TEXTURE_SIZE: 0x0d33,
+          getParameter: jest.fn(() => 16384),
+        })),
       };
 
       const mockDocument = {
-        createElement: jest.fn(() => mockCanvas)
+        createElement: jest.fn(() => mockCanvas),
       };
 
       const mockNavigator = {
         userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/91.0.4472.124',
-        deviceMemory: 32 // 32GB high-end desktop
+        deviceMemory: 32, // 32GB high-end desktop
       };
 
       const mockWindow = {
         performance: {
           memory: {
-            jsHeapSizeLimit: 16 * 1024 * 1024 * 1024
-          }
-        }
+            jsHeapSizeLimit: 16 * 1024 * 1024 * 1024,
+          },
+        },
       };
 
       (global as any).window = mockWindow;
@@ -369,18 +367,18 @@ describe('PDF Default Options Utility Functions', () => {
       (global as any).process = undefined;
 
       const result = getSafeCanvasSize();
-      
+
       expect(result).toBeGreaterThan(0);
     });
 
     it.skip('should fallback to default when WebGL is not available', () => {
       // SKIP: JSDOM doesn't support WebGL context - HTMLCanvasElement.prototype.getContext not implemented
       const mockCanvas = {
-        getContext: jest.fn(() => null) // WebGL not supported
+        getContext: jest.fn(() => null), // WebGL not supported
       };
 
       const mockDocument = {
-        createElement: jest.fn(() => mockCanvas)
+        createElement: jest.fn(() => mockCanvas),
       };
 
       const mockNavigator = {
@@ -389,7 +387,7 @@ describe('PDF Default Options Utility Functions', () => {
       };
 
       const mockWindow = {
-        performance: {} // No memory info
+        performance: {}, // No memory info
       };
 
       (global as any).window = mockWindow;
@@ -398,7 +396,7 @@ describe('PDF Default Options Utility Functions', () => {
       (global as any).process = undefined;
 
       const result = getSafeCanvasSize();
-      
+
       expect(result).toBeGreaterThan(0);
       expect(mockCanvas.getContext).toHaveBeenCalledWith('webgl');
       expect(mockCanvas.getContext).toHaveBeenCalledWith('experimental-webgl');
@@ -408,26 +406,26 @@ describe('PDF Default Options Utility Functions', () => {
       // SKIP: JSDOM doesn't support WebGL context - HTMLCanvasElement.prototype.getContext not implemented
       const mockCanvas = {
         getContext: jest.fn(() => ({
-          MAX_TEXTURE_SIZE: 0x0D33,
-          getParameter: jest.fn(() => 4096)
-        }))
+          MAX_TEXTURE_SIZE: 0x0d33,
+          getParameter: jest.fn(() => 4096),
+        })),
       };
 
       const mockDocument = {
-        createElement: jest.fn(() => mockCanvas)
+        createElement: jest.fn(() => mockCanvas),
       };
 
       const mockNavigator = {
-        userAgent: 'Mozilla/5.0 (X11; Linux x86_64)'
+        userAgent: 'Mozilla/5.0 (X11; Linux x86_64)',
         // No deviceMemory property
       };
 
       const mockWindow = {
         performance: {
           memory: {
-            jsHeapSizeLimit: 4 * 1024 * 1024 * 1024
-          }
-        }
+            jsHeapSizeLimit: 4 * 1024 * 1024 * 1024,
+          },
+        },
       };
 
       (global as any).window = mockWindow;
@@ -436,7 +434,7 @@ describe('PDF Default Options Utility Functions', () => {
       (global as any).process = undefined;
 
       const result = getSafeCanvasSize();
-      
+
       expect(result).toBeGreaterThan(0);
     });
 
@@ -445,21 +443,21 @@ describe('PDF Default Options Utility Functions', () => {
       // Error: Not implemented: HTMLCanvasElement.prototype.getContext (without installing the canvas npm package)
       const mockCanvas = {
         getContext: jest.fn(() => ({
-          MAX_TEXTURE_SIZE: 0x0D33,
-          getParameter: jest.fn(() => 4096)
-        }))
+          MAX_TEXTURE_SIZE: 0x0d33,
+          getParameter: jest.fn(() => 4096),
+        })),
       };
 
       const mockDocument = {
-        createElement: jest.fn(() => mockCanvas)
+        createElement: jest.fn(() => mockCanvas),
       };
 
       const mockNavigator = {
-        userAgent: 'Mozilla/5.0 (compatible; MSIE 11.0; Windows NT 10.0)'
+        userAgent: 'Mozilla/5.0 (compatible; MSIE 11.0; Windows NT 10.0)',
       };
 
       const mockWindow = {
-        performance: undefined
+        performance: undefined,
       };
 
       (global as any).window = mockWindow;
@@ -468,7 +466,7 @@ describe('PDF Default Options Utility Functions', () => {
       (global as any).process = undefined;
 
       const result = getSafeCanvasSize();
-      
+
       expect(result).toBeGreaterThan(0);
     });
   });
@@ -477,7 +475,7 @@ describe('PDF Default Options Utility Functions', () => {
     it('should have valid version strings', () => {
       expect(typeof pdfjsVersion).toBe('string');
       expect(pdfjsVersion).toMatch(/^\d+\.\d+\.\d+$/);
-      
+
       expect(typeof pdfjsBleedingEdgeVersion).toBe('string');
       expect(pdfjsBleedingEdgeVersion).toMatch(/^\d+\.\d+\.\d+$/);
     });
@@ -593,7 +591,7 @@ describe('PDF Default Options Utility Functions', () => {
       expect(pdfDefaultOptions.doubleTapZoomsInHandMode).toBe(true);
       expect(pdfDefaultOptions.doubleTapZoomsInTextSelectionMode).toBe(false);
       expect(pdfDefaultOptions.doubleTapResetsZoomOnSecondDoubleTap).toBe(false);
-      expect(pdfDefaultOptions.enableScripting).toBe(true);
+      expect(pdfDefaultOptions.enableScripting).toBe(false);
       expect(pdfDefaultOptions.enableHWA).toBe(true);
       expect(pdfDefaultOptions.positionPopupDialogsWithJavaScript).toBe(true);
       expect(pdfDefaultOptions.enablePageReordering).toBe(false);
@@ -634,26 +632,26 @@ describe('PDF Default Options Utility Functions', () => {
       it('should return ES5 versions when needsES5 is true', () => {
         const originalNeedsES5 = pdfDefaultOptions.needsES5;
         pdfDefaultOptions.needsES5 = true;
-        
+
         const sandboxResult = pdfDefaultOptions.sandboxBundleSrc();
         const workerResult = pdfDefaultOptions.workerSrc();
-        
+
         expect(sandboxResult).toContain('-es5.mjs');
         expect(workerResult).toContain('-es5.mjs');
-        
+
         pdfDefaultOptions.needsES5 = originalNeedsES5;
       });
 
       it('should return minified versions when needsES5 is false', () => {
         const originalNeedsES5 = pdfDefaultOptions.needsES5;
         pdfDefaultOptions.needsES5 = false;
-        
+
         const sandboxResult = pdfDefaultOptions.sandboxBundleSrc();
         const workerResult = pdfDefaultOptions.workerSrc();
-        
+
         expect(sandboxResult).toContain('.min.mjs');
         expect(workerResult).toContain('.min.mjs');
-        
+
         pdfDefaultOptions.needsES5 = originalNeedsES5;
       });
     });
@@ -664,7 +662,7 @@ describe('PDF Default Options Utility Functions', () => {
       // SKIP: JSDOM doesn't support WebGL context - HTMLCanvasElement.prototype.getContext not implemented
       const originalWindow = (global as any).window;
       (global as any).window = undefined;
-      
+
       try {
         expect(() => getSafeCanvasSize()).not.toThrow();
       } finally {
