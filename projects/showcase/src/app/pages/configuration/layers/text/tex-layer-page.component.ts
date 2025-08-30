@@ -138,19 +138,25 @@ export class TexLayerPageComponent {
 
   private doMarkLongWordsInLayer(layer: HTMLSpanElement, markLongWords: boolean): void {
     if (!markLongWords) {
-      layer.innerHTML = layer.innerText.replace('\n', '');
+      layer.textContent = layer.innerText.replace('\n', '');
       return;
     }
-    layer.innerHTML = layer.innerText
-      .split(' ')
-      .map((t) => this.markOneLongWord(t))
-      .join(' ');
-  }
-
-  private markOneLongWord(word: string) {
-    if (word.length > 6) {
-      return `<div class="long-word">${word}</div>`;
-    }
-    return word;
+    // Create elements safely
+    const originalText = layer.innerText;
+    layer.textContent = '';
+    originalText.split(' ').forEach((word, index) => {
+      if (word.length > 6) {
+        const span = document.createElement('div');
+        span.className = 'long-word';
+        span.textContent = word; // Safe - no HTML parsing
+        layer.appendChild(span);
+      } else {
+        layer.appendChild(document.createTextNode(word));
+      }
+      // Add space between words except for the last one
+      if (index < originalText.split(' ').length - 1) {
+        layer.appendChild(document.createTextNode(' '));
+      }
+    });
   }
 }
