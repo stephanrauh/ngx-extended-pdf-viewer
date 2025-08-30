@@ -680,4 +680,4 @@
 - 25.0.0-alpha.2 #2984 optimized the width of the toolbar button so that the focus highlight doesn't bleed into the next button
 - 25.0.0 fixed `pdfDefaultOptions.enableCatalogAAJavaScript` and `pdfDefaultOptions.enableOpenActionJavaScript`
 - 25.0.1 #2773 updated "ng add ngx-extended-pdf-viewer": now it supports multiple Angular versions and folder layouts
-- 25.0.2 updated the SonarCloud scanner and the node.js version of the GitHub action
+- 25.0.2 fixed and updated the GitHub action; #2984 make the tip of the door hanger transparent again

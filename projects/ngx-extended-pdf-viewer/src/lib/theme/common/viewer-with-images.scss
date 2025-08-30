@@ -842,7 +842,7 @@ ngx-extended-pdf-viewer {
   .doorHangerRight:after,
   .doorHangerRight:before {
     bottom: 100%;
-    border: solid $fullscreen-background;
+    border: solid transparent;
     content: ' ';
     height: 0;
     width: 0;
