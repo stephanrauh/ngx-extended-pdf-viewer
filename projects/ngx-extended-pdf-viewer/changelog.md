@@ -681,3 +681,4 @@
 - 25.0.0 fixed `pdfDefaultOptions.enableCatalogAAJavaScript` and `pdfDefaultOptions.enableOpenActionJavaScript`
 - 25.0.1 #2773 updated "ng add ngx-extended-pdf-viewer": now it supports multiple Angular versions and folder layouts
 - 25.0.2 fixed and updated the GitHub action; #2984 make the tip of the door hanger transparent again; #2899 changing the highlight color now also changes the default highlight color, so the next highlight you draw uses the color you expect
+- 25.1.0-alpha.0 #2951 when opening a PDF file for the second time, re-open it with the same `[zoom]` and `[page]` unless the developer explicitely sets these attributes

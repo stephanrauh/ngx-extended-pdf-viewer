@@ -1106,6 +1106,20 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     }
   }
 
+  private handleStoredValuesAvailable(event: any): void {
+    // Only apply stored values if developer hasn't explicitly set zoom/page
+
+    // Apply stored zoom if zoom is not explicitly set by developer
+    if (this.zoom === undefined && event.storedZoom !== undefined) {
+      this.zoom = event.storedZoom as ZoomType;
+    }
+
+    // Apply stored page if page is not explicitly set by developer
+    if (this._page === undefined && event.storedPage !== undefined) {
+      this._page = event.storedPage;
+    }
+  }
+
   public async ngOnInit() {
     this.hideToolbarIfItIsEmpty();
     if (isPlatformBrowser(this.platformId)) {
@@ -1390,7 +1404,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       const docStyle = document.documentElement.style;
       this.originalColorScheme = docStyle.getPropertyValue('color-scheme') || '';
     }
-    
+
     queueMicrotask(() => this.notificationService.onPDFJSInitSignal.set(this.pdfScriptLoaderService.PDFViewerApplication));
   }
 
@@ -1769,6 +1783,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       });
     });
 
+    PDFViewerApplication.eventBus.on('storedvaluesavailable', (event) => {
+      queueMicrotask(() => {
+        this.handleStoredValuesAvailable(event);
+      });
+    });
+
     PDFViewerApplication.eventBus.on('documentloaded', (pdfLoadedEvent: PdfDocumentLoadedEvent) => {
       queueMicrotask(async () => {
         const pages = pdfLoadedEvent.source.pagesCount;
@@ -2013,7 +2033,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       if (pc) {
         pc.remove();
       }
-      
+
       // Restore original color-scheme to avoid polluting the global document
       if (this.originalColorScheme !== null) {
         const docStyle = document.documentElement.style;
