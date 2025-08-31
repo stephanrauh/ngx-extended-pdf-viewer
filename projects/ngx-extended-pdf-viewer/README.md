@@ -140,6 +140,7 @@ For the exact terms, please refer to the LICENSE file — that is the legally bi
 
 #### ❗ Breaking changes:
 
+- Version 25.5.0: if you omit the attribute `[page]` or `[zoom]` and if the PDF viewer opens a PDF document for the second time, the PDF opens on the same page and with the same zoom setting it had before. Before version 25.5.0, the PDF would always open at page 1 and with `zoom = pdfDefaultOptions.defaultZoomValue` (which usually is `'auto'`). I think that's a mildly breaking change, so I raised the version number to 25.5.0.
 - The default background color of PDF files has changed from `#E8E8EB` to `#FFFFFF`.
 - Embedded JavaScript is now an opt-in feature. It's no longer enabled by default. You can enable it with three feature toggles:
   - `pdfDefaultOptions.enableScripting` — main toggle. Set it to true to allow execution of embedded JavaScript.
