@@ -391,6 +391,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   public showStampEditor: ResponsiveVisibility = 'xxl';
 
   @Input()
+  public showCommentEditor: ResponsiveVisibility = 'xxl';
+
+  @Input()
   public showDrawEditor: ResponsiveVisibility = 'xxl';
 
   @Input()
@@ -2122,6 +2125,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     if (this.showToolbar) {
       const visible =
         this.showDownloadButton ||
+        this.showCommentEditor ||
         this.showDrawEditor ||
         this.showHighlightEditor ||
         this.showTextEditor ||
@@ -2596,5 +2600,15 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     layers.forEach((layer) => layer.querySelectorAll('input').forEach((x) => (x.disabled = this.disableForms)));
     layers.forEach((layer) => layer.querySelectorAll('select').forEach((x) => (x.disabled = this.disableForms)));
     layers.forEach((layer) => layer.querySelectorAll('textarea').forEach((x) => (x.disabled = this.disableForms)));
+  }
+
+  public closeCommentsSidebar(): void {
+    const PDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
+    if (PDFViewerApplication?.eventBus) {
+      PDFViewerApplication.eventBus.dispatch('switchannotationeditormode', {
+        source: this,
+        mode: 0, // AnnotationEditorType.NONE
+      });
+    }
   }
 }

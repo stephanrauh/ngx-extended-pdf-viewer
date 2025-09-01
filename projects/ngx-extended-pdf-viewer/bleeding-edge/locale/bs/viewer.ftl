@@ -595,6 +595,8 @@ pdfjs-editor-add-signature-save-checkbox = Sačuvaj potpis
 pdfjs-editor-add-signature-save-warning-message = Dostigli ste ograničenje od 5 sačuvanih potpisa. Uklonite jedan da biste sačuvali više.
 pdfjs-editor-add-signature-image-upload-error-title = Nije moguće učitati sliku
 pdfjs-editor-add-signature-image-upload-error-description = Provjerite mrežnu vezu ili pokušajte s drugom slikom.
+pdfjs-editor-add-signature-image-no-data-error-title = Nije moguće pretvoriti ovu sliku u potpis
+pdfjs-editor-add-signature-image-no-data-error-description = Molimo pokušajte učitati drugu sliku.
 pdfjs-editor-add-signature-error-close-button = Zatvori
 
 ## Dialog buttons
@@ -602,6 +604,26 @@ pdfjs-editor-add-signature-error-close-button = Zatvori
 pdfjs-editor-add-signature-cancel-button = Otkaži
 pdfjs-editor-add-signature-add-button = Dodaj
 pdfjs-editor-edit-signature-update-button = Ažuriraj
+
+##  Edit a comment dialog
+
+pdfjs-editor-edit-comment-actions-button-label = Radnje
+pdfjs-editor-edit-comment-actions-button =
+    .title = Radnje
+pdfjs-editor-edit-comment-close-button-label = Zatvori
+pdfjs-editor-edit-comment-close-button =
+    .title = Zatvori
+pdfjs-editor-edit-comment-actions-edit-button-label = Uredi
+pdfjs-editor-edit-comment-actions-delete-button-label = Izbriši
+pdfjs-editor-edit-comment-manager-text-input =
+    .placeholder = Unesite svoj komentar
+pdfjs-editor-edit-comment-manager-cancel-button = Otkaži
+pdfjs-editor-edit-comment-manager-save-button = Sačuvaj
+
+## Edit a comment button in the editor toolbar
+
+pdfjs-editor-edit-comment-button =
+    .title = Uredi komentar
 
 ## Main menu for adding/removing signatures
 
@@ -622,27 +644,29 @@ pdfjs-editor-color-picker-free-text-input =
     .title = Change text color
 pdfjs-editor-color-picker-ink-input =
     .title = Change drawing color
+pdfjs-comment-floating-button =
+    .title = Comment
+    .aria-label = Comment
+pdfjs-comment-floating-button-label = Comment
+pdfjs-editor-comment-button =
+    .title = Comment
+    .aria-label = Comment
+pdfjs-editor-comment-button-label = Comment
+pdfjs-editor-comments-sidebar-title =
+    { $count ->
+        [one] Comment
+       *[other] Comments
+    }
+pdfjs-editor-comments-sidebar-close-button =
+    .title = Close the sidebar
+    .aria-label = Close the sidebar
+pdfjs-editor-comments-sidebar-close-button-label = Close the sidebar
+pdfjs-editor-comments-sidebar-no-comments = Add a comment by selecting text or an annotation.
 pdfjs-editor-highlight-added-alert = Highlight added
 pdfjs-editor-freetext-added-alert = Text added
 pdfjs-editor-ink-added-alert = Drawing added
 pdfjs-editor-stamp-added-alert = Image added
 pdfjs-editor-signature-added-alert = Signature added
-pdfjs-editor-add-signature-image-no-data-error-title = Can’t convert this image into a signature
-pdfjs-editor-add-signature-image-no-data-error-description = Please try uploading a different image.
-pdfjs-editor-edit-comment-actions-button-label = Actions
-pdfjs-editor-edit-comment-actions-button =
-    .title = Actions
-pdfjs-editor-edit-comment-close-button-label = Close
-pdfjs-editor-edit-comment-close-button =
-    .title = Close
-pdfjs-editor-edit-comment-actions-edit-button-label = Edit
-pdfjs-editor-edit-comment-actions-delete-button-label = Delete
-pdfjs-editor-edit-comment-manager-text-input =
-    .placeholder = Enter your comment
-pdfjs-editor-edit-comment-manager-cancel-button = Cancel
-pdfjs-editor-edit-comment-manager-save-button = Save
-pdfjs-editor-edit-comment-button =
-    .title = Edit comment
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = Match Each Word

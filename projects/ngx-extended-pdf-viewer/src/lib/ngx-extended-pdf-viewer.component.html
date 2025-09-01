@@ -58,6 +58,7 @@
               [showPropertiesButton]="showPropertiesButton"
               [showBookModeButton]="showBookModeButton"
               [showDownloadButton]="showDownloadButton"
+              [showCommentEditor]="showCommentEditor"
               [showDrawEditor]="showDrawEditor"
               [showHighlightEditor]="showHighlightEditor"
               [showFindButton]="showFindButton"
@@ -95,6 +96,28 @@
               [findbarVisible]="findbarVisible"
               [hasTextLayer]="hasTextLayer"
             ></pdf-toolbar>
+
+            <div 
+              class="editorParamsToolbar hidden doorHangerRight menu" 
+              id="editorCommentParamsToolbar"
+              [style.transform]="'scale(' + mobileFriendlyZoomScale + ')'"
+            >
+              <div id="editorCommentsSidebar" class="menuContainer" role="landmark" aria-labelledby="editorCommentsSidebarHeader">
+                <div id="editorCommentsSidebarHeader" role="heading" aria-level="2">
+                  <span class="commentCount">
+                    <span id="editorCommentsSidebarTitle">Comments</span>
+                    <span id="editorCommentsSidebarCount"></span>
+                  </span>
+                  <button id="editorCommentsSidebarCloseButton" type="button" tabindex="0" title="Close the sidebar" (click)="closeCommentsSidebar()">
+                    <svg aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 16 16">
+                      <path fill="currentColor" d="M2.343 2.343a.5.5 0 0 1 .707 0L8 7.293l4.95-4.95a.5.5 0 1 1 .707.707L8.707 8l4.95 4.95a.5.5 0 0 1-.707.707L8 8.707l-4.95 4.95a.5.5 0 0 1-.707-.707L7.293 8 2.343 2.657a.5.5 0 0 1 0-.707z"/>
+                    </svg>
+                    <span class="visually-hidden">Close the sidebar</span>
+                  </button>
+                </div>
+                <ul id="editorCommentsSidebarList"></ul>
+              </div>
+            </div>
 
             <div
               class="editorParamsToolbar hidden doorHangerRight menu"

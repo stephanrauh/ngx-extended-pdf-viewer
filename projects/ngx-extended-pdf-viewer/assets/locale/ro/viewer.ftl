@@ -578,3 +578,36 @@ pdfjs-editor-edit-comment-manager-cancel-button = Cancel
 pdfjs-editor-edit-comment-manager-save-button = Save
 pdfjs-editor-edit-comment-button =
     .title = Edit comment
+pdfjs-comment-floating-button =
+    .title = Comment
+    .aria-label = Comment
+pdfjs-comment-floating-button-label = Comment
+pdfjs-editor-comment-button =
+    .title = Comment
+    .aria-label = Comment
+pdfjs-editor-comment-button-label = Comment
+pdfjs-editor-comments-sidebar-title =
+    { $count ->
+        [one] Comment
+       *[other] Comments
+    }
+pdfjs-editor-comments-sidebar-close-button =
+    .title = Close the sidebar
+    .aria-label = Close the sidebar
+pdfjs-editor-comments-sidebar-close-button-label = Close the sidebar
+pdfjs-editor-comments-sidebar-no-comments = Add a comment by selecting text or an annotation.
+# Additional translations for ngx-extended-pdf-viewer from the ro bleeding edge branch
+pdfjs-free-text-default-content = Începe să tastezi…
+pdfjs-ink =
+    .aria-label = Editor de desene
+pdfjs-ink-canvas =
+    .aria-label = Imagine creată de utilizator
+pdfjs-editor-alt-text-edit-button-label = Editează textul alternativ
+pdfjs-editor-resizer-label-top-left = Colțul din stânga sus — redimensionează
+pdfjs-editor-resizer-label-top-middle = Mijloc de sus — redimensionează
+pdfjs-editor-resizer-label-top-right = Colțul din dreapta sus — redimensionează
+pdfjs-editor-resizer-label-middle-right = Mijloc dreapta — redimensionează
+pdfjs-editor-resizer-label-bottom-right = Colțul din dreapta jos — redimensionează
+pdfjs-editor-resizer-label-bottom-middle = Mijloc de jos - redimensionează
+pdfjs-editor-resizer-label-bottom-left = Colțul din stânga jos — redimensionează
+pdfjs-editor-resizer-label-middle-left = Mijloc stânga — redimensionează

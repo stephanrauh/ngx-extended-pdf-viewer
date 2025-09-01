@@ -279,12 +279,6 @@ pdfjs-highlight-floating-button1 =
     .aria-label = برجسته کردن
 pdfjs-highlight-floating-button-label = برجسته کردن
 
-## Default editor aria labels
-
-
-## Remove button for the various kind of editor.
-
-
 ##
 
 # Editor Parameters
@@ -307,10 +301,6 @@ pdfjs-free-text-default-content = شروع به نوشتن کنید…
 pdfjs-editor-alt-text-add-description-label = افزودن توضیحات
 pdfjs-editor-alt-text-cancel-button = انصراف
 pdfjs-editor-alt-text-save-button = ذخیره
-
-## Editor resizers
-## This is used in an aria label to help to understand the role of the resizer.
-
 
 ## Color picker
 
@@ -350,33 +340,6 @@ pdfjs-editor-alt-text-settings-download-model-button = دریافت
 pdfjs-editor-alt-text-settings-downloading-model-button = در حال دریافت…
 pdfjs-editor-alt-text-settings-close-button = بستن
 
-## "Annotations removed" bar
-
-
-## Add a signature dialog
-
-
-## Tab names
-
-
-## Tab panels
-
-
-## Controls
-
-
-## Dialog buttons
-
-
-## Main menu for adding/removing signatures
-
-
-## Editor toolbar
-
-
-## Edit signature description dialog
-
-
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-scroll-wrapped-button =
     .title = Use Wrapped Scrolling
@@ -410,6 +373,14 @@ pdfjs-editor-color-picker-free-text-input =
     .title = Change text color
 pdfjs-editor-color-picker-ink-input =
     .title = Change drawing color
+pdfjs-comment-floating-button =
+    .title = Comment
+    .aria-label = Comment
+pdfjs-comment-floating-button-label = Comment
+pdfjs-editor-comment-button =
+    .title = Comment
+    .aria-label = Comment
+pdfjs-editor-comment-button-label = Comment
 pdfjs-editor-signature-button =
     .title = Add signature
 pdfjs-editor-signature-button-label = Add signature
@@ -443,6 +414,16 @@ pdfjs-editor-signature-add-signature-button =
 pdfjs-editor-signature-add-signature-button-label = Add new signature
 pdfjs-editor-add-saved-signature-button =
     .title = Saved signature: { $description }
+pdfjs-editor-comments-sidebar-title =
+    { $count ->
+        [one] Comment
+       *[other] Comments
+    }
+pdfjs-editor-comments-sidebar-close-button =
+    .title = Close the sidebar
+    .aria-label = Close the sidebar
+pdfjs-editor-comments-sidebar-close-button-label = Close the sidebar
+pdfjs-editor-comments-sidebar-no-comments = Add a comment by selecting text or an annotation.
 pdfjs-editor-alt-text-button =
     .aria-label = Alt text
 pdfjs-editor-alt-text-button-label = Alt text

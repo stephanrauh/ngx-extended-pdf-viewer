@@ -115,6 +115,227 @@ ngx-extended-pdf-viewer {
     margin: var(--dotted-line-margin-x) 0;
   }
 
+  /* Comment editor styles */
+  .annotationLayer.disabled .annotationCommentButton {
+    display: none;
+  }
+
+  .annotationLayer,
+  .annotationEditorLayer {
+    .annotationCommentButton {
+      --comment-button-bg: light-dark(white, #1c1b22);
+      --comment-button-fg: light-dark(#5b5b66, #fbfbfe);
+      --comment-button-active-bg: light-dark(#0041a4, #a6ecf4);
+      --comment-button-active-fg: light-dark(white, #15141a);
+      --comment-button-hover-bg: light-dark(#0053cb, #61dce9);
+      --comment-button-hover-fg: light-dark(white, #15141a);
+      --comment-button-selected-bg: light-dark(#0062fa, #00cadb);
+      --comment-button-border-color: light-dark(#8f8f9d, #bfbfc9);
+      --comment-button-active-border-color: var(--comment-button-active-bg);
+      --comment-button-focus-border-color: light-dark(#cfcfd8, #3a3944);
+      --comment-button-hover-border-color: var(--comment-button-hover-bg);
+      --comment-button-selected-border-color: var(--comment-button-selected-bg);
+      --comment-button-selected-fg: light-dark(white, #15141a);
+      --comment-button-dim: 24px;
+      --comment-button-box-shadow:
+        0 0.25px 0.75px 0 light-dark(rgb(0 0 0 / 0.05), rgb(0 0 0 / 0.2)),
+        0 2px 6px 0 light-dark(rgb(0 0 0 / 0.1), rgb(0 0 0 / 0.4));
+      --comment-button-focus-outline-color: light-dark(#0062fa, #00cadb);
+
+      background-color: var(--comment-button-bg);
+      color: var(--comment-button-fg);
+      border: 1px solid var(--comment-button-border-color);
+      border-radius: calc(var(--comment-button-dim) / 2);
+      box-shadow: var(--comment-button-box-shadow);
+      cursor: pointer;
+      inset-inline-end: calc(-1 * var(--comment-button-dim) / 2);
+      inset-block-start: calc(-1 * var(--comment-button-dim) / 2);
+      width: var(--comment-button-dim);
+      height: var(--comment-button-dim);
+      position: absolute;
+      z-index: 1;
+
+      @media screen and (forced-colors: active) {
+        --comment-button-bg: Canvas;
+        --comment-button-fg: CanvasText;
+        --comment-button-active-bg: Highlight;
+        --comment-button-active-fg: HighlightText;
+        --comment-button-hover-bg: Highlight;
+        --comment-button-hover-fg: HighlightText;
+        --comment-button-selected-bg: Highlight;
+        --comment-button-selected-fg: HighlightText;
+        --comment-button-border-color: CanvasText;
+        --comment-button-active-border-color: HighlightText;
+        --comment-button-focus-border-color: CanvasText;
+        --comment-button-hover-border-color: HighlightText;
+        --comment-button-selected-border-color: HighlightText;
+      }
+
+      &:hover {
+        background-color: var(--comment-button-hover-bg);
+        color: var(--comment-button-hover-fg);
+        border-color: var(--comment-button-hover-border-color);
+      }
+
+      &:active {
+        background-color: var(--comment-button-active-bg);
+        color: var(--comment-button-active-fg);
+        border-color: var(--comment-button-active-border-color);
+      }
+
+      &:focus-visible {
+        border-color: var(--comment-button-focus-border-color);
+        outline: 2px solid var(--comment-button-focus-outline-color);
+        outline-offset: 2px;
+      }
+
+      &.selected {
+        background-color: var(--comment-button-selected-bg);
+        color: var(--comment-button-selected-fg);
+        border-color: var(--comment-button-selected-border-color);
+      }
+    }
+  }
+
+  /* Comment sidebar specific styling */
+  #editorCommentParamsToolbar {
+    --editor-toolbar-min-width: 220px;
+    height: auto;
+    min-width: var(--editor-toolbar-min-width);
+    width: max-content;
+    position: absolute;
+    z-index: 30000;
+    cursor: default;
+  }
+
+  #editorCommentsSidebar {
+    .menuContainer {
+      width: 100%;
+      height: auto;
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+      padding: 10px;
+    }
+  }
+
+  #editorCommentsSidebarHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--sidebar-border-color);
+  }
+
+  #editorCommentsSidebarTitle {
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--main-color, #000);
+  }
+
+  #editorCommentsSidebarCloseButton {
+    background: none;
+    border: none;
+    padding: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    color: var(--main-color, #000);
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .visually-hidden {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+    }
+
+    &:hover {
+      background-color: light-dark(#e0e0e6, #52525e);
+    }
+  }
+
+  #editorCommentsSidebarList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  /* Comment manager dialog styles (for individual comment editing) */
+  #commentManagerDialog {
+    --comment-dialog-bg: light-dark(#fff, #23222b);
+    --comment-dialog-border: light-dark(
+      rgb(21 20 26 / 0.1),
+      rgb(251 251 254 / 0.1)
+    );
+    --comment-dialog-text: light-dark(#15141a, #fbfbfe);
+    --comment-dialog-header-bg: light-dark(#f0f0f4, #2b2a33);
+    --comment-button-hover-bg-dialog: light-dark(#e0e0e6, #52525e);
+    background-color: var(--comment-dialog-bg);
+    border: 1px solid var(--comment-dialog-border);
+    color: var(--comment-dialog-text);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    max-width: 400px;
+    min-width: 300px;
+
+    @media screen and (forced-colors: active) {
+      --comment-dialog-bg: Canvas;
+      --comment-dialog-border: CanvasText;
+      --comment-dialog-text: CanvasText;
+      --comment-dialog-header-bg: Canvas;
+      --comment-button-hover-bg-dialog: Highlight;
+    }
+  }
+
+  .commentManagerHeader {
+    background-color: var(--comment-dialog-header-bg);
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--comment-dialog-border);
+    border-radius: 8px 8px 0 0;
+  }
+
+  .commentManagerContent {
+    padding: 16px;
+  }
+
+  .commentManagerActions {
+    padding: 12px 16px;
+    border-top: 1px solid var(--comment-dialog-border);
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+  }
+
+  .commentManagerActions button {
+    background: none;
+    border: 1px solid var(--comment-dialog-border);
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    color: var(--comment-dialog-text);
+
+    &:hover {
+      background-color: var(--comment-button-hover-bg-dialog);
+    }
+  }
+
   /* #2943 end of modification by ngx-extended-pdf-viewer */
 
   /* #2943 end of modification by ngx-extended-pdf-viewer */

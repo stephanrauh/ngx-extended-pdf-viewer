@@ -1,6 +1,11 @@
-<div class="toolbar" [class.invisible]="!primaryMenuVisible"
-  [style.transform]="'scale(' + mobileFriendlyZoomScale + ')'" [style.transformOrigin]="'left center'"
-  [style.width]="toolbarWidth" [style.marginTop]="toolbarMarginTop">
+<div
+  class="toolbar"
+  [class.invisible]="!primaryMenuVisible"
+  [style.transform]="'scale(' + mobileFriendlyZoomScale + ')'"
+  [style.transformOrigin]="'left center'"
+  [style.width]="toolbarWidth"
+  [style.marginTop]="toolbarMarginTop"
+>
   <div id="toolbarContainer">
     <ng-content *ngTemplateOutlet="customToolbar ? customToolbar : defaultToolbar"></ng-content>
     <div id="loadingBar">
@@ -14,35 +19,88 @@
 <ng-template #defaultToolbar>
   <div id="toolbarViewer">
     <div id="toolbarViewerLeft">
-      <pdf-toggle-sidebar [show]="showSidebarButton" [sidebarVisible]="sidebarVisible"></pdf-toggle-sidebar>
-      <pdf-find-button [showFindButton]="showFindButton" [textLayer]="textLayer" [findbarVisible]="findbarVisible"
-        [hasTextLayer]="hasTextLayer"></pdf-find-button>
-      <pdf-paging-area [showPagingButtons]="showPagingButtons"
+      <pdf-toggle-sidebar
+        [show]="showSidebarButton"
+        [sidebarVisible]="sidebarVisible"
+      ></pdf-toggle-sidebar>
+      <pdf-find-button
+        [showFindButton]="showFindButton"
+        [textLayer]="textLayer"
+        [findbarVisible]="findbarVisible"
+        [hasTextLayer]="hasTextLayer"
+      ></pdf-find-button>
+      <pdf-paging-area
+        [showPagingButtons]="showPagingButtons"
         [showFirstAndLastPageButtons]="showFirstAndLastPageButtons"
-        [showPreviousAndNextPageButtons]="showPreviousAndNextPageButtons" [showPageNumber]="showPageNumber"
-        [showPageLabel]="showPageLabel"></pdf-paging-area>
+        [showPreviousAndNextPageButtons]="showPreviousAndNextPageButtons"
+        [showPageNumber]="showPageNumber"
+        [showPageLabel]="showPageLabel"
+      ></pdf-paging-area>
     </div>
-    <pdf-zoom-toolbar id="toolbarViewerMiddleContainer" [showZoomButtons]="showZoomButtons"
-      [showZoomDropdown]="showZoomDropdown" [zoomLevels]="zoomLevels"></pdf-zoom-toolbar>
+    <pdf-zoom-toolbar
+      id="toolbarViewerMiddleContainer"
+      [showZoomButtons]="showZoomButtons"
+      [showZoomDropdown]="showZoomDropdown"
+      [zoomLevels]="zoomLevels"
+    ></pdf-zoom-toolbar>
     <div id="toolbarViewerRight">
       <pdf-document-properties [show]="showPropertiesButton"></pdf-document-properties>
-      <pdf-no-spread [scrollMode]="scrollMode" [show]="showSpreadButton"></pdf-no-spread>
-      <pdf-odd-spread [scrollMode]="scrollMode" [show]="showSpreadButton"></pdf-odd-spread>
-      <pdf-even-spread [scrollMode]="scrollMode" [show]="showSpreadButton"></pdf-even-spread>
-      <pdf-single-page-mode [show]="showSinglePageModeButton" [pageViewMode]="pageViewMode"
-        (pageViewModeChange)="updatePageViewMode($event)" [scrollMode]="scrollMode"></pdf-single-page-mode>
-      <pdf-vertical-scroll-mode [show]="showVerticalScrollButton" [pageViewMode]="pageViewMode"
-        (pageViewModeChange)="updatePageViewMode($event)" [scrollMode]="scrollMode"></pdf-vertical-scroll-mode>
-      <pdf-horizontal-scroll [show]="showHorizontalScrollButton" [pageViewMode]="pageViewMode"
-        (pageViewModeChange)="updatePageViewMode($event)" [scrollMode]="scrollMode"></pdf-horizontal-scroll>
-      <pdf-wrapped-scroll-mode [show]="showWrappedScrollButton" [pageViewMode]="pageViewMode"
-        (pageViewModeChange)="updatePageViewMode($event)" [scrollMode]="scrollMode"></pdf-wrapped-scroll-mode>
-      <pdf-infinite-scroll [show]="showInfiniteScrollButton" [pageViewMode]="pageViewMode"
-        (pageViewModeChange)="updatePageViewMode($event)" [scrollMode]="scrollMode"></pdf-infinite-scroll>
-      <pdf-book-mode [show]="showBookModeButton" [pageViewMode]="pageViewMode"
-        (pageViewModeChange)="updatePageViewMode($event)" [scrollMode]="scrollMode"></pdf-book-mode>
-      <pdf-hand-tool [showHandToolButton]="showHandToolButton" [handTool]="handTool"></pdf-hand-tool>
-      <pdf-select-tool [showSelectToolButton]="showHandToolButton" [handTool]="handTool"></pdf-select-tool>
+      <pdf-no-spread
+        [scrollMode]="scrollMode"
+        [show]="showSpreadButton"
+      ></pdf-no-spread>
+      <pdf-odd-spread
+        [scrollMode]="scrollMode"
+        [show]="showSpreadButton"
+      ></pdf-odd-spread>
+      <pdf-even-spread
+        [scrollMode]="scrollMode"
+        [show]="showSpreadButton"
+      ></pdf-even-spread>
+      <pdf-single-page-mode
+        [show]="showSinglePageModeButton"
+        [pageViewMode]="pageViewMode"
+        (pageViewModeChange)="updatePageViewMode($event)"
+        [scrollMode]="scrollMode"
+      ></pdf-single-page-mode>
+      <pdf-vertical-scroll-mode
+        [show]="showVerticalScrollButton"
+        [pageViewMode]="pageViewMode"
+        (pageViewModeChange)="updatePageViewMode($event)"
+        [scrollMode]="scrollMode"
+      ></pdf-vertical-scroll-mode>
+      <pdf-horizontal-scroll
+        [show]="showHorizontalScrollButton"
+        [pageViewMode]="pageViewMode"
+        (pageViewModeChange)="updatePageViewMode($event)"
+        [scrollMode]="scrollMode"
+      ></pdf-horizontal-scroll>
+      <pdf-wrapped-scroll-mode
+        [show]="showWrappedScrollButton"
+        [pageViewMode]="pageViewMode"
+        (pageViewModeChange)="updatePageViewMode($event)"
+        [scrollMode]="scrollMode"
+      ></pdf-wrapped-scroll-mode>
+      <pdf-infinite-scroll
+        [show]="showInfiniteScrollButton"
+        [pageViewMode]="pageViewMode"
+        (pageViewModeChange)="updatePageViewMode($event)"
+        [scrollMode]="scrollMode"
+      ></pdf-infinite-scroll>
+      <pdf-book-mode
+        [show]="showBookModeButton"
+        [pageViewMode]="pageViewMode"
+        (pageViewModeChange)="updatePageViewMode($event)"
+        [scrollMode]="scrollMode"
+      ></pdf-book-mode>
+      <pdf-hand-tool
+        [showHandToolButton]="showHandToolButton"
+        [handTool]="handTool"
+      ></pdf-hand-tool>
+      <pdf-select-tool
+        [showSelectToolButton]="showHandToolButton"
+        [handTool]="handTool"
+      ></pdf-select-tool>
       <pdf-rotate-page-cw [showRotateCwButton]="showRotateCwButton"> </pdf-rotate-page-cw>
       <pdf-rotate-page-ccw [showRotateCcwButton]="showRotateCcwButton"> </pdf-rotate-page-ccw>
       <pdf-presentation-mode [showPresentationModeButton]="showPresentationModeButton"></pdf-presentation-mode>
@@ -56,11 +114,15 @@
 
       <!-- #2943 end of modification by ngx-extended-pdf-viewer -->
 
-      <pdf-editor [showDrawEditor]="showDrawEditor" [showHighlightEditor]="showHighlightEditor"
-        [showTextEditor]="showTextEditor" [showStampEditor]="showStampEditor"
-        [showSignatureEditor]="showSignatureEditor"></pdf-editor>
-      <pdf-toggle-secondary-toolbar [showSecondaryToolbarButton]="showSecondaryToolbarButton">
-      </pdf-toggle-secondary-toolbar>
+      <pdf-editor
+        [showCommentEditor]="false && showCommentEditor"
+        [showDrawEditor]="showDrawEditor"
+        [showHighlightEditor]="showHighlightEditor"
+        [showTextEditor]="showTextEditor"
+        [showStampEditor]="showStampEditor"
+        [showSignatureEditor]="showSignatureEditor"
+      ></pdf-editor>
+      <pdf-toggle-secondary-toolbar [showSecondaryToolbarButton]="showSecondaryToolbarButton"> </pdf-toggle-secondary-toolbar>
     </div>
   </div>
 </ng-template>

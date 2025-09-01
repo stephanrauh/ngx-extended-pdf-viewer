@@ -302,9 +302,13 @@ pdfjs-web-fonts-disabled = Webbtypsnitt är inaktiverade: kan inte använda inb�
 
 pdfjs-editor-free-text-button =
     .title = Text
+pdfjs-editor-color-picker-free-text-input =
+    .title = Ändra textfärg
 pdfjs-editor-free-text-button-label = Text
 pdfjs-editor-ink-button =
     .title = Rita
+pdfjs-editor-color-picker-ink-input =
+    .title = Ändra ritningsfärg
 pdfjs-editor-ink-button-label = Rita
 pdfjs-editor-stamp-button =
     .title = Lägg till eller redigera bilder
@@ -316,6 +320,10 @@ pdfjs-highlight-floating-button1 =
     .title = Markera
     .aria-label = Markera
 pdfjs-highlight-floating-button-label = Markera
+pdfjs-comment-floating-button =
+    .title = Kommentar
+    .aria-label = Kommentar
+pdfjs-comment-floating-button-label = Kommentar
 pdfjs-editor-signature-button =
     .title = Lägg till signatur
 pdfjs-editor-signature-button-label = Lägg till signatur
@@ -524,6 +532,14 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Visa alternativ textre
 pdfjs-editor-alt-text-settings-show-dialog-description = Hjälper dig att se till att alla dina bilder har alternativ text.
 pdfjs-editor-alt-text-settings-close-button = Stäng
 
+## Accessibility labels (announced by screen readers) for objects added to the editor.
+
+pdfjs-editor-highlight-added-alert = Markering tillagd
+pdfjs-editor-freetext-added-alert = Text tillagd
+pdfjs-editor-ink-added-alert = Ritning tillagd
+pdfjs-editor-stamp-added-alert = Bild tillagd
+pdfjs-editor-signature-added-alert = Signatur tillagd
+
 ## "Annotations removed" bar
 
 pdfjs-editor-undo-bar-message-highlight = Markering borttagen
@@ -592,6 +608,8 @@ pdfjs-editor-add-signature-save-checkbox = Spara signatur
 pdfjs-editor-add-signature-save-warning-message = Du har nått gränsen på 5 sparade signaturer. Ta bort en för att spara fler.
 pdfjs-editor-add-signature-image-upload-error-title = Det gick inte att ladda upp bilden
 pdfjs-editor-add-signature-image-upload-error-description = Kontrollera din nätverksanslutning eller försök med en annan bild.
+pdfjs-editor-add-signature-image-no-data-error-title = Det går inte att konvertera den här bilden till en signatur
+pdfjs-editor-add-signature-image-no-data-error-description = Prova att ladda upp en annan bild.
 pdfjs-editor-add-signature-error-close-button = Stäng
 
 ## Dialog buttons
@@ -599,6 +617,26 @@ pdfjs-editor-add-signature-error-close-button = Stäng
 pdfjs-editor-add-signature-cancel-button = Avbryt
 pdfjs-editor-add-signature-add-button = Lägg till
 pdfjs-editor-edit-signature-update-button = Uppdatera
+
+##  Edit a comment dialog
+
+pdfjs-editor-edit-comment-actions-button-label = Åtgärder
+pdfjs-editor-edit-comment-actions-button =
+    .title = Åtgärder
+pdfjs-editor-edit-comment-close-button-label = Stäng
+pdfjs-editor-edit-comment-close-button =
+    .title = Stäng
+pdfjs-editor-edit-comment-actions-edit-button-label = Redigera
+pdfjs-editor-edit-comment-actions-delete-button-label = Ta bort
+pdfjs-editor-edit-comment-manager-text-input =
+    .placeholder = Ange din kommentar
+pdfjs-editor-edit-comment-manager-cancel-button = Avbryt
+pdfjs-editor-edit-comment-manager-save-button = Spara
+
+## Edit a comment button in the editor toolbar
+
+pdfjs-editor-edit-comment-button =
+    .title = Redigera kommentar
 
 ## Main menu for adding/removing signatures
 
@@ -615,31 +653,20 @@ pdfjs-editor-add-signature-edit-button-label = Redigera beskrivning
 pdfjs-editor-edit-signature-dialog-title = Redigera beskrivning
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-editor-color-picker-free-text-input =
-    .title = Change text color
-pdfjs-editor-color-picker-ink-input =
-    .title = Change drawing color
-pdfjs-editor-highlight-added-alert = Highlight added
-pdfjs-editor-freetext-added-alert = Text added
-pdfjs-editor-ink-added-alert = Drawing added
-pdfjs-editor-stamp-added-alert = Image added
-pdfjs-editor-signature-added-alert = Signature added
-pdfjs-editor-add-signature-image-no-data-error-title = Can’t convert this image into a signature
-pdfjs-editor-add-signature-image-no-data-error-description = Please try uploading a different image.
-pdfjs-editor-edit-comment-actions-button-label = Actions
-pdfjs-editor-edit-comment-actions-button =
-    .title = Actions
-pdfjs-editor-edit-comment-close-button-label = Close
-pdfjs-editor-edit-comment-close-button =
-    .title = Close
-pdfjs-editor-edit-comment-actions-edit-button-label = Edit
-pdfjs-editor-edit-comment-actions-delete-button-label = Delete
-pdfjs-editor-edit-comment-manager-text-input =
-    .placeholder = Enter your comment
-pdfjs-editor-edit-comment-manager-cancel-button = Cancel
-pdfjs-editor-edit-comment-manager-save-button = Save
-pdfjs-editor-edit-comment-button =
-    .title = Edit comment
+pdfjs-editor-comment-button =
+    .title = Comment
+    .aria-label = Comment
+pdfjs-editor-comment-button-label = Comment
+pdfjs-editor-comments-sidebar-title =
+    { $count ->
+        [one] Comment
+       *[other] Comments
+    }
+pdfjs-editor-comments-sidebar-close-button =
+    .title = Close the sidebar
+    .aria-label = Close the sidebar
+pdfjs-editor-comments-sidebar-close-button-label = Close the sidebar
+pdfjs-editor-comments-sidebar-no-comments = Add a comment by selecting text or an annotation.
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = Match Each Word

@@ -513,6 +513,13 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Суретті қос�
 pdfjs-editor-alt-text-settings-show-dialog-description = Барлық суреттерде балама мәтін бар екеніне көз жеткізуге көмектеседі.
 pdfjs-editor-alt-text-settings-close-button = Жабу
 
+## Accessibility labels (announced by screen readers) for objects added to the editor.
+
+pdfjs-editor-freetext-added-alert = Мәтін қосылды
+pdfjs-editor-ink-added-alert = Сызба қосылды
+pdfjs-editor-stamp-added-alert = Сурет қосылды
+pdfjs-editor-signature-added-alert = Қолтаңба қосылды
+
 ## "Annotations removed" bar
 
 pdfjs-editor-undo-bar-message-highlight = Ерекшелеу өшірілді
@@ -536,6 +543,7 @@ pdfjs-editor-undo-bar-close-button-label = Жабу
 
 ## Add a signature dialog
 
+pdfjs-editor-add-signature-dialog-label = Бұл модальді терезе пайдаланушыға PDF құжатына қосу үшін қолтаңба жасауға мүмкіндік береді. Пайдаланушы өз атын (ол балама мәтін ретінде де қолданылады) өңдей алады және қолтаңбаны кейін қайта пайдалану үшін сақтай алады.
 pdfjs-editor-add-signature-dialog-title = Қолтаңба қосу
 
 ## Tab names
@@ -607,18 +615,31 @@ pdfjs-editor-color-picker-free-text-input =
     .title = Change text color
 pdfjs-editor-color-picker-ink-input =
     .title = Change drawing color
+pdfjs-comment-floating-button =
+    .title = Comment
+    .aria-label = Comment
+pdfjs-comment-floating-button-label = Comment
+pdfjs-editor-comment-button =
+    .title = Comment
+    .aria-label = Comment
+pdfjs-editor-comment-button-label = Comment
 pdfjs-editor-highlight-editor =
     .aria-label = Highlight editor
 pdfjs-editor-ink-editor =
     .aria-label = Drawing editor
 pdfjs-editor-signature-editor1 =
     .aria-description = Signature editor: { $description }
+pdfjs-editor-comments-sidebar-title =
+    { $count ->
+        [one] Comment
+       *[other] Comments
+    }
+pdfjs-editor-comments-sidebar-close-button =
+    .title = Close the sidebar
+    .aria-label = Close the sidebar
+pdfjs-editor-comments-sidebar-close-button-label = Close the sidebar
+pdfjs-editor-comments-sidebar-no-comments = Add a comment by selecting text or an annotation.
 pdfjs-editor-highlight-added-alert = Highlight added
-pdfjs-editor-freetext-added-alert = Text added
-pdfjs-editor-ink-added-alert = Drawing added
-pdfjs-editor-stamp-added-alert = Image added
-pdfjs-editor-signature-added-alert = Signature added
-pdfjs-editor-add-signature-dialog-label = This modal allows the user to create a signature to add to a PDF document. The user can edit the name (which also serves as the alt text), and optionally save the signature for repeated use.
 pdfjs-editor-add-signature-image-no-data-error-title = Can’t convert this image into a signature
 pdfjs-editor-add-signature-image-no-data-error-description = Please try uploading a different image.
 pdfjs-editor-edit-comment-actions-button-label = Actions

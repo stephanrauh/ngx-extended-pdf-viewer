@@ -302,9 +302,13 @@ pdfjs-web-fonts-disabled = Шрифтҳои интернетӣ ғайрифаъ�
 
 pdfjs-editor-free-text-button =
     .title = Матн
+pdfjs-editor-color-picker-free-text-input =
+    .title = Иваз кардани ранги матн
 pdfjs-editor-free-text-button-label = Матн
 pdfjs-editor-ink-button =
     .title = Расмкашӣ
+pdfjs-editor-color-picker-ink-input =
+    .title = Иваз кардани ранги расмкашӣ
 pdfjs-editor-ink-button-label = Расмкашӣ
 pdfjs-editor-stamp-button =
     .title = Илова ё таҳрир кардани тасвирҳо
@@ -316,6 +320,10 @@ pdfjs-highlight-floating-button1 =
     .title = Ҷудокунӣ
     .aria-label = Ҷудокунӣ
 pdfjs-highlight-floating-button-label = Ҷудокунӣ
+pdfjs-comment-floating-button =
+    .title = Шарҳ
+    .aria-label = Шарҳ
+pdfjs-comment-floating-button-label = Шарҳ
 pdfjs-editor-signature-button =
     .title = Илова кардани имзо
 pdfjs-editor-signature-button-label = Илова кардани имзо
@@ -524,6 +532,14 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Дарҳол нишо�
 pdfjs-editor-alt-text-settings-show-dialog-description = Ба шумо кумак мекунад, ки боварӣ ҳосил кунед, ки ҳамаи тасвирҳои шумо дорои матни ивазкунанда мебошанд.
 pdfjs-editor-alt-text-settings-close-button = Пӯшидан
 
+## Accessibility labels (announced by screen readers) for objects added to the editor.
+
+pdfjs-editor-highlight-added-alert = Ҷудокунӣ илова карда шуд
+pdfjs-editor-freetext-added-alert = Матн илова карда шуд
+pdfjs-editor-ink-added-alert = Расм илова карда шуд
+pdfjs-editor-stamp-added-alert = Тасвир илова карда шуд
+pdfjs-editor-signature-added-alert = Имзо илова карда шуд
+
 ## "Annotations removed" bar
 
 pdfjs-editor-undo-bar-message-highlight = Ҷудосозӣ тоза карда шуд
@@ -592,6 +608,8 @@ pdfjs-editor-add-signature-save-checkbox = Нигоҳ доштани имзо
 pdfjs-editor-add-signature-save-warning-message = Шумо ба ҳадди 5 имзои нигоҳдошташуда расидед. Барои нигоҳ доштани имзои нав, яке аз имзоҳои нигоҳдошташударо тоза намоед.
 pdfjs-editor-add-signature-image-upload-error-title = Тасвир бор карда нашуд
 pdfjs-editor-add-signature-image-upload-error-description = Пайвастшавии шабакаи худро санҷед ё тасвири дигареро кӯшиш кунед.
+pdfjs-editor-add-signature-image-no-data-error-title = Ин тасвир ба имзо табдил дода нашуд
+pdfjs-editor-add-signature-image-no-data-error-description = Лутфан, кӯшиш кунед, ки тасвири дигареро бор намоед.
 pdfjs-editor-add-signature-error-close-button = Пӯшидан
 
 ## Dialog buttons
@@ -599,6 +617,26 @@ pdfjs-editor-add-signature-error-close-button = Пӯшидан
 pdfjs-editor-add-signature-cancel-button = Бекор кардан
 pdfjs-editor-add-signature-add-button = Илова кардан
 pdfjs-editor-edit-signature-update-button = Навсозӣ кардан
+
+##  Edit a comment dialog
+
+pdfjs-editor-edit-comment-actions-button-label = Амалҳо
+pdfjs-editor-edit-comment-actions-button =
+    .title = Амалҳо
+pdfjs-editor-edit-comment-close-button-label = Пӯшидан
+pdfjs-editor-edit-comment-close-button =
+    .title = Пӯшидан
+pdfjs-editor-edit-comment-actions-edit-button-label = Таҳрир кардан
+pdfjs-editor-edit-comment-actions-delete-button-label = Нест кардан
+pdfjs-editor-edit-comment-manager-text-input =
+    .placeholder = Шарҳи худро ворид кунед
+pdfjs-editor-edit-comment-manager-cancel-button = Бекор кардан
+pdfjs-editor-edit-comment-manager-save-button = Нигоҳ доштан
+
+## Edit a comment button in the editor toolbar
+
+pdfjs-editor-edit-comment-button =
+    .title = Таҳрир кардани шарҳ
 
 ## Main menu for adding/removing signatures
 
@@ -615,31 +653,20 @@ pdfjs-editor-add-signature-edit-button-label = Таҳрир кардани та�
 pdfjs-editor-edit-signature-dialog-title = Таҳрир кардани тавсиф
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-editor-color-picker-free-text-input =
-    .title = Change text color
-pdfjs-editor-color-picker-ink-input =
-    .title = Change drawing color
-pdfjs-editor-highlight-added-alert = Highlight added
-pdfjs-editor-freetext-added-alert = Text added
-pdfjs-editor-ink-added-alert = Drawing added
-pdfjs-editor-stamp-added-alert = Image added
-pdfjs-editor-signature-added-alert = Signature added
-pdfjs-editor-add-signature-image-no-data-error-title = Can’t convert this image into a signature
-pdfjs-editor-add-signature-image-no-data-error-description = Please try uploading a different image.
-pdfjs-editor-edit-comment-actions-button-label = Actions
-pdfjs-editor-edit-comment-actions-button =
-    .title = Actions
-pdfjs-editor-edit-comment-close-button-label = Close
-pdfjs-editor-edit-comment-close-button =
-    .title = Close
-pdfjs-editor-edit-comment-actions-edit-button-label = Edit
-pdfjs-editor-edit-comment-actions-delete-button-label = Delete
-pdfjs-editor-edit-comment-manager-text-input =
-    .placeholder = Enter your comment
-pdfjs-editor-edit-comment-manager-cancel-button = Cancel
-pdfjs-editor-edit-comment-manager-save-button = Save
-pdfjs-editor-edit-comment-button =
-    .title = Edit comment
+pdfjs-editor-comment-button =
+    .title = Comment
+    .aria-label = Comment
+pdfjs-editor-comment-button-label = Comment
+pdfjs-editor-comments-sidebar-title =
+    { $count ->
+        [one] Comment
+       *[other] Comments
+    }
+pdfjs-editor-comments-sidebar-close-button =
+    .title = Close the sidebar
+    .aria-label = Close the sidebar
+pdfjs-editor-comments-sidebar-close-button-label = Close the sidebar
+pdfjs-editor-comments-sidebar-no-comments = Add a comment by selecting text or an annotation.
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = Match Each Word

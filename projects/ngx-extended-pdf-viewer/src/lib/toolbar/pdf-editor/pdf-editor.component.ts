@@ -8,6 +8,9 @@ import { ResponsiveVisibility } from '../../responsive-visibility';
 })
 export class PdfEditorComponent {
   @Input()
+  public showCommentEditor: ResponsiveVisibility = true;
+
+  @Input()
   public showDrawEditor: ResponsiveVisibility = true;
 
   @Input()

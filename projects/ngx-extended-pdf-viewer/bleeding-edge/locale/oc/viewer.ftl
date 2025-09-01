@@ -306,9 +306,6 @@ pdfjs-highlight-floating-button1 =
     .aria-label = Subrelinhar
 pdfjs-highlight-floating-button-label = Subrelinhar
 
-## Default editor aria labels
-
-
 ## Remove button for the various kind of editor.
 
 pdfjs-editor-remove-ink-button =
@@ -353,10 +350,6 @@ pdfjs-editor-alt-text-dialog-label = Causir una opcion
 pdfjs-editor-alt-text-add-description-label = Apondre una descripcion
 pdfjs-editor-alt-text-cancel-button = Anullar
 pdfjs-editor-alt-text-save-button = Enregistrar
-
-## Editor resizers
-## This is used in an aria label to help to understand the role of the resizer.
-
 
 ## Color picker
 
@@ -411,30 +404,6 @@ pdfjs-editor-undo-bar-close-button =
     .title = Tampar
 pdfjs-editor-undo-bar-close-button-label = Tampar
 
-## Add a signature dialog
-
-
-## Tab names
-
-
-## Tab panels
-
-
-## Controls
-
-
-## Dialog buttons
-
-
-## Main menu for adding/removing signatures
-
-
-## Editor toolbar
-
-
-## Edit signature description dialog
-
-
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } KB ({ $b } bytes)
 pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } bytes)
@@ -443,6 +412,14 @@ pdfjs-editor-color-picker-free-text-input =
     .title = Change text color
 pdfjs-editor-color-picker-ink-input =
     .title = Change drawing color
+pdfjs-comment-floating-button =
+    .title = Comment
+    .aria-label = Comment
+pdfjs-comment-floating-button-label = Comment
+pdfjs-editor-comment-button =
+    .title = Comment
+    .aria-label = Comment
+pdfjs-editor-comment-button-label = Comment
 pdfjs-editor-signature-button =
     .title = Add signature
 pdfjs-editor-signature-button-label = Add signature
@@ -465,6 +442,16 @@ pdfjs-editor-signature-add-signature-button =
 pdfjs-editor-signature-add-signature-button-label = Add new signature
 pdfjs-editor-add-saved-signature-button =
     .title = Saved signature: { $description }
+pdfjs-editor-comments-sidebar-title =
+    { $count ->
+        [one] Comment
+       *[other] Comments
+    }
+pdfjs-editor-comments-sidebar-close-button =
+    .title = Close the sidebar
+    .aria-label = Close the sidebar
+pdfjs-editor-comments-sidebar-close-button-label = Close the sidebar
+pdfjs-editor-comments-sidebar-no-comments = Add a comment by selecting text or an annotation.
 pdfjs-editor-alt-text-dialog-description = Alt text (alternative text) helps when people can’t see the image or when it doesn’t load.
 pdfjs-editor-alt-text-add-description-description = Aim for 1-2 sentences that describe the subject, setting, or actions.
 pdfjs-editor-alt-text-mark-decorative-label = Mark as decorative

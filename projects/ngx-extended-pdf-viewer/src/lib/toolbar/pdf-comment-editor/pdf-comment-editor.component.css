@@ -1,0 +1,80 @@
+/* Comment editor specific styles */
+#editorCommentButton::before {
+  mask-image: var(--toolbarButton-editorComment-icon);
+  transform: scaleX(var(--dir-factor));
+}
+
+/* Comment sidebar styles */
+#editorCommentsSidebar {
+  --comment-sidebar-bg: light-dark(#fff, #23222b);
+  --comment-sidebar-border: light-dark(
+    rgb(21 20 26 / 0.1),
+    rgb(251 251 254 / 0.1)
+  );
+  --comment-sidebar-text: light-dark(#15141a, #fbfbfe);
+  --comment-sidebar-header-bg: light-dark(#f0f0f4, #2b2a33);
+  --comment-button-hover-bg: light-dark(#e0e0e6, #52525e);
+
+  background-color: var(--comment-sidebar-bg);
+  border: 1px solid var(--comment-sidebar-border);
+  color: var(--comment-sidebar-text);
+}
+
+#editorCommentsSidebarHeader {
+  background-color: var(--comment-sidebar-header-bg);
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--comment-sidebar-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#editorCommentsSidebarTitle {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+#editorCommentsSidebarCount {
+  font-weight: normal;
+  margin-left: 4px;
+  color: var(--comment-sidebar-text);
+  opacity: 0.7;
+}
+
+#editorCommentsSidebarCloseButton {
+  background: none;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--comment-sidebar-text);
+  font-size: 12px;
+}
+
+#editorCommentsSidebarCloseButton:hover {
+  background-color: var(--comment-button-hover-bg);
+}
+
+#editorCommentsSidebarList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.commentCount {
+  display: flex;
+  align-items: center;
+}
+
+/* Forced colors mode support */
+@media screen and (forced-colors: active) {
+  #editorCommentsSidebar {
+    --comment-sidebar-bg: Canvas;
+    --comment-sidebar-border: CanvasText;
+    --comment-sidebar-text: CanvasText;
+    --comment-sidebar-header-bg: Canvas;
+    --comment-button-hover-bg: Highlight;
+  }
+}

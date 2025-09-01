@@ -528,6 +528,14 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Ob dodajanju slike tak
 pdfjs-editor-alt-text-settings-show-dialog-description = Pomaga vam zagotoviti, da imajo vse vaše slike nadomestno besedilo.
 pdfjs-editor-alt-text-settings-close-button = Zapri
 
+## Accessibility labels (announced by screen readers) for objects added to the editor.
+
+pdfjs-editor-highlight-added-alert = Označba dodana
+pdfjs-editor-freetext-added-alert = Besedilo dodano
+pdfjs-editor-ink-added-alert = Risba dodana
+pdfjs-editor-stamp-added-alert = Slika dodana
+pdfjs-editor-signature-added-alert = Podpis dodan
+
 ## "Annotations removed" bar
 
 pdfjs-editor-undo-bar-message-highlight = Označba odstranjena
@@ -634,11 +642,24 @@ pdfjs-editor-color-picker-free-text-input =
     .title = Change text color
 pdfjs-editor-color-picker-ink-input =
     .title = Change drawing color
-pdfjs-editor-highlight-added-alert = Highlight added
-pdfjs-editor-freetext-added-alert = Text added
-pdfjs-editor-ink-added-alert = Drawing added
-pdfjs-editor-stamp-added-alert = Image added
-pdfjs-editor-signature-added-alert = Signature added
+pdfjs-comment-floating-button =
+    .title = Comment
+    .aria-label = Comment
+pdfjs-comment-floating-button-label = Comment
+pdfjs-editor-comment-button =
+    .title = Comment
+    .aria-label = Comment
+pdfjs-editor-comment-button-label = Comment
+pdfjs-editor-comments-sidebar-title =
+    { $count ->
+        [one] Comment
+       *[other] Comments
+    }
+pdfjs-editor-comments-sidebar-close-button =
+    .title = Close the sidebar
+    .aria-label = Close the sidebar
+pdfjs-editor-comments-sidebar-close-button-label = Close the sidebar
+pdfjs-editor-comments-sidebar-no-comments = Add a comment by selecting text or an annotation.
 pdfjs-editor-add-signature-image-no-data-error-title = Can’t convert this image into a signature
 pdfjs-editor-add-signature-image-no-data-error-description = Please try uploading a different image.
 pdfjs-editor-edit-comment-actions-button-label = Actions

@@ -12,6 +12,7 @@ export enum AnnotationEditorType {
   HIGHLIGHT = 9,
   STAMP = 13,
   INK = 15,
+  POPUP = 16,
   SIGNATURE = 101,
 }
 
@@ -32,7 +33,7 @@ export const AnnotationEditorParamsType = {
   DRAW_STEP: 41,
 };
 
-export type AnnotationEditorTypeValue = -1 | 0 | 3 | 9 | 13 | 15;
+export type AnnotationEditorTypeValue = -1 | 0 | 3 | 9 | 13 | 15 | 16;
 
 export type InkPaths = {
   lines: Array<Array<number>>; // Array of bezier curve arrays
@@ -84,4 +85,13 @@ export type HighlightEditorAnnotation = {
   isCopy?: boolean;
 };
 
-export type EditorAnnotation = InkEditorAnnotation | FreeTextEditorAnnotation | StampEditorAnnotation | HighlightEditorAnnotation;
+export type PopupEditorAnnotation = {
+  annotationType: 16;
+  content: string;
+  pageIndex: number;
+  rect: Array<number>; // [left, bottom, right, top]
+  rotation: 0 | 90 | 180 | 270; // in degrees
+  isCopy?: boolean;
+};
+
+export type EditorAnnotation = InkEditorAnnotation | FreeTextEditorAnnotation | StampEditorAnnotation | HighlightEditorAnnotation | PopupEditorAnnotation;

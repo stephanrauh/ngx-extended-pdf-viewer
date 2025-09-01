@@ -291,9 +291,6 @@ pdfjs-editor-signature-button =
     .title = പുതിയ ഒപ്പു് ചേൎക്കുക
 pdfjs-editor-signature-button-label = പുതിയ ഒപ്പു് ചേൎക്കുക
 
-## Default editor aria labels
-
-
 ## Remove button for the various kind of editor.
 
 pdfjs-editor-remove-ink-button =
@@ -555,6 +552,14 @@ pdfjs-editor-color-picker-free-text-input =
     .title = Change text color
 pdfjs-editor-color-picker-ink-input =
     .title = Change drawing color
+pdfjs-comment-floating-button =
+    .title = Comment
+    .aria-label = Comment
+pdfjs-comment-floating-button-label = Comment
+pdfjs-editor-comment-button =
+    .title = Comment
+    .aria-label = Comment
+pdfjs-editor-comment-button-label = Comment
 pdfjs-editor-highlight-editor =
     .aria-label = Highlight editor
 pdfjs-editor-ink-editor =
@@ -570,6 +575,16 @@ pdfjs-editor-add-signature-container =
 pdfjs-free-text2 =
     .aria-label = Text Editor
     .default-content = Start typing…
+pdfjs-editor-comments-sidebar-title =
+    { $count ->
+        [one] Comment
+       *[other] Comments
+    }
+pdfjs-editor-comments-sidebar-close-button =
+    .title = Close the sidebar
+    .aria-label = Close the sidebar
+pdfjs-editor-comments-sidebar-close-button-label = Close the sidebar
+pdfjs-editor-comments-sidebar-no-comments = Add a comment by selecting text or an annotation.
 pdfjs-editor-alt-text-dialog-description = Alt text (alternative text) helps when people can’t see the image or when it doesn’t load.
 pdfjs-editor-alt-text-add-description-description = Aim for 1-2 sentences that describe the subject, setting, or actions.
 pdfjs-editor-alt-text-mark-decorative-label = Mark as decorative

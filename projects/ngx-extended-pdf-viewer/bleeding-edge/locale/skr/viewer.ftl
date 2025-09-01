@@ -317,9 +317,6 @@ pdfjs-highlight-floating-button1 =
     .aria-label = نمایاں کرو
 pdfjs-highlight-floating-button-label = نمایاں کرو
 
-## Default editor aria labels
-
-
 ## Remove button for the various kind of editor.
 
 pdfjs-editor-remove-ink-button =
@@ -499,30 +496,6 @@ pdfjs-editor-undo-bar-close-button =
     .title = بند کرو
 pdfjs-editor-undo-bar-close-button-label = بند کرو
 
-## Add a signature dialog
-
-
-## Tab names
-
-
-## Tab panels
-
-
-## Controls
-
-
-## Dialog buttons
-
-
-## Main menu for adding/removing signatures
-
-
-## Editor toolbar
-
-
-## Edit signature description dialog
-
-
 # Additional translations for ngx-extended-pdf-viewer (sk)
 unverified-signature-warning = Tento PDF súbor obsahuje digitálny podpis. PDF prehliadač nemôže overiť, či je podpis platný. Stiahnite si súbor a otvorte ho v Acrobat Reader na overenie platnosti podpisu.
 pdfjs-infinite-scroll-button-label = Nekonečné posúvanie
@@ -537,6 +510,14 @@ pdfjs-editor-color-picker-free-text-input =
     .title = Change text color
 pdfjs-editor-color-picker-ink-input =
     .title = Change drawing color
+pdfjs-comment-floating-button =
+    .title = Comment
+    .aria-label = Comment
+pdfjs-comment-floating-button-label = Comment
+pdfjs-editor-comment-button =
+    .title = Comment
+    .aria-label = Comment
+pdfjs-editor-comment-button-label = Comment
 pdfjs-editor-signature-button =
     .title = Add signature
 pdfjs-editor-signature-button-label = Add signature
@@ -560,6 +541,16 @@ pdfjs-editor-add-saved-signature-button =
 pdfjs-free-text2 =
     .aria-label = Text Editor
     .default-content = Start typing…
+pdfjs-editor-comments-sidebar-title =
+    { $count ->
+        [one] Comment
+       *[other] Comments
+    }
+pdfjs-editor-comments-sidebar-close-button =
+    .title = Close the sidebar
+    .aria-label = Close the sidebar
+pdfjs-editor-comments-sidebar-close-button-label = Close the sidebar
+pdfjs-editor-comments-sidebar-no-comments = Add a comment by selecting text or an annotation.
 pdfjs-editor-highlight-added-alert = Highlight added
 pdfjs-editor-freetext-added-alert = Text added
 pdfjs-editor-ink-added-alert = Drawing added

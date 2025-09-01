@@ -24,6 +24,7 @@ import { PdfAcroformDefaultThemeComponent } from './theme/acroform-default-theme
 import { PdfDarkThemeComponent } from './theme/pdf-dark-theme/pdf-dark-theme.component';
 import { PdfLightThemeComponent } from './theme/pdf-light-theme/pdf-light-theme.component';
 import { PdfBookModeComponent } from './toolbar/pdf-book-mode/pdf-book-mode.component';
+import { PdfCommentEditorComponent } from './toolbar/pdf-comment-editor/pdf-comment-editor.component';
 import { PdfContextMenuComponent } from './toolbar/pdf-context-menu/pdf-context-menu.component';
 import { PdfDocumentPropertiesComponent } from './toolbar/pdf-document-properties/pdf-document-properties.component';
 import { PdfDownloadComponent } from './toolbar/pdf-download/pdf-download.component';
@@ -98,6 +99,7 @@ if (!Promise['allSettled']) {
     PdfAcroformDefaultThemeComponent,
     PdfAddSignatureDialogComponent,
     PdfBookModeComponent,
+    PdfCommentEditorComponent,
     PdfContextMenuComponent,
     PdfDarkThemeComponent,
     PdfDrawEditorComponent,
@@ -179,6 +181,7 @@ if (!Promise['allSettled']) {
     PdfAltTextDialogComponent,
     PdfAltTextSettingsDialogComponent,
     PdfBookModeComponent,
+    PdfCommentEditorComponent,
     PdfContextMenuComponent,
     PdfDarkThemeComponent,
     PdfDocumentPropertiesComponent,

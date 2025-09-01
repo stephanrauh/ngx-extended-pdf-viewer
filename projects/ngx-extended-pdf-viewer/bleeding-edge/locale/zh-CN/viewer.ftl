@@ -294,9 +294,13 @@ pdfjs-web-fonts-disabled = Web 字体已被禁用：无法使用嵌入的 PDF �
 
 pdfjs-editor-free-text-button =
     .title = 文本
+pdfjs-editor-color-picker-free-text-input =
+    .title = 更改文本颜色
 pdfjs-editor-free-text-button-label = 文本
 pdfjs-editor-ink-button =
     .title = 绘图
+pdfjs-editor-color-picker-ink-input =
+    .title = 更改绘图颜色
 pdfjs-editor-ink-button-label = 绘图
 pdfjs-editor-stamp-button =
     .title = 添加或编辑图像
@@ -308,6 +312,10 @@ pdfjs-highlight-floating-button1 =
     .title = 高亮
     .aria-label = 高亮
 pdfjs-highlight-floating-button-label = 高亮
+pdfjs-comment-floating-button =
+    .title = 批注
+    .aria-label = 批注
+pdfjs-comment-floating-button-label = 批注
 pdfjs-editor-signature-button =
     .title = 添加签名
 pdfjs-editor-signature-button-label = 添加签名
@@ -516,6 +524,14 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = 添加图像后立即�
 pdfjs-editor-alt-text-settings-show-dialog-description = 帮助确保所有图像均拥有替换文字。
 pdfjs-editor-alt-text-settings-close-button = 关闭
 
+## Accessibility labels (announced by screen readers) for objects added to the editor.
+
+pdfjs-editor-highlight-added-alert = 已添加高亮
+pdfjs-editor-freetext-added-alert = 已添加文本
+pdfjs-editor-ink-added-alert = 已添加绘图
+pdfjs-editor-stamp-added-alert = 已添加图像
+pdfjs-editor-signature-added-alert = 已添加签名
+
 ## "Annotations removed" bar
 
 pdfjs-editor-undo-bar-message-highlight = 已移除高亮
@@ -580,6 +596,8 @@ pdfjs-editor-add-signature-save-checkbox = 保存签名
 pdfjs-editor-add-signature-save-warning-message = 最多可保存 5 个签名，请移除一个以继续保存。
 pdfjs-editor-add-signature-image-upload-error-title = 无法上传图像
 pdfjs-editor-add-signature-image-upload-error-description = 请检查网络连接，或尝试上传其他图像。
+pdfjs-editor-add-signature-image-no-data-error-title = 无法将此图像转换为签名
+pdfjs-editor-add-signature-image-no-data-error-description = 请尝试上传其他图像。
 pdfjs-editor-add-signature-error-close-button = 关闭
 
 ## Dialog buttons
@@ -587,6 +605,26 @@ pdfjs-editor-add-signature-error-close-button = 关闭
 pdfjs-editor-add-signature-cancel-button = 取消
 pdfjs-editor-add-signature-add-button = 添加
 pdfjs-editor-edit-signature-update-button = 更新
+
+##  Edit a comment dialog
+
+pdfjs-editor-edit-comment-actions-button-label = 操作
+pdfjs-editor-edit-comment-actions-button =
+    .title = 操作
+pdfjs-editor-edit-comment-close-button-label = 关闭
+pdfjs-editor-edit-comment-close-button =
+    .title = 关闭
+pdfjs-editor-edit-comment-actions-edit-button-label = 编辑
+pdfjs-editor-edit-comment-actions-delete-button-label = 删除
+pdfjs-editor-edit-comment-manager-text-input =
+    .placeholder = 输入批注
+pdfjs-editor-edit-comment-manager-cancel-button = 取消
+pdfjs-editor-edit-comment-manager-save-button = 保存
+
+## Edit a comment button in the editor toolbar
+
+pdfjs-editor-edit-comment-button =
+    .title = 编辑批注
 
 ## Main menu for adding/removing signatures
 
@@ -603,31 +641,20 @@ pdfjs-editor-add-signature-edit-button-label = 编辑描述
 pdfjs-editor-edit-signature-dialog-title = 编辑描述
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-editor-color-picker-free-text-input =
-    .title = Change text color
-pdfjs-editor-color-picker-ink-input =
-    .title = Change drawing color
-pdfjs-editor-highlight-added-alert = Highlight added
-pdfjs-editor-freetext-added-alert = Text added
-pdfjs-editor-ink-added-alert = Drawing added
-pdfjs-editor-stamp-added-alert = Image added
-pdfjs-editor-signature-added-alert = Signature added
-pdfjs-editor-add-signature-image-no-data-error-title = Can’t convert this image into a signature
-pdfjs-editor-add-signature-image-no-data-error-description = Please try uploading a different image.
-pdfjs-editor-edit-comment-actions-button-label = Actions
-pdfjs-editor-edit-comment-actions-button =
-    .title = Actions
-pdfjs-editor-edit-comment-close-button-label = Close
-pdfjs-editor-edit-comment-close-button =
-    .title = Close
-pdfjs-editor-edit-comment-actions-edit-button-label = Edit
-pdfjs-editor-edit-comment-actions-delete-button-label = Delete
-pdfjs-editor-edit-comment-manager-text-input =
-    .placeholder = Enter your comment
-pdfjs-editor-edit-comment-manager-cancel-button = Cancel
-pdfjs-editor-edit-comment-manager-save-button = Save
-pdfjs-editor-edit-comment-button =
-    .title = Edit comment
+pdfjs-editor-comment-button =
+    .title = Comment
+    .aria-label = Comment
+pdfjs-editor-comment-button-label = Comment
+pdfjs-editor-comments-sidebar-title =
+    { $count ->
+        [one] Comment
+       *[other] Comments
+    }
+pdfjs-editor-comments-sidebar-close-button =
+    .title = Close the sidebar
+    .aria-label = Close the sidebar
+pdfjs-editor-comments-sidebar-close-button-label = Close the sidebar
+pdfjs-editor-comments-sidebar-no-comments = Add a comment by selecting text or an annotation.
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = Match Each Word
