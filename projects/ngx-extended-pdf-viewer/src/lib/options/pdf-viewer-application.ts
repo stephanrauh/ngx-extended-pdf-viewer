@@ -2,6 +2,7 @@ import { INgxConsole } from './ngx-console';
 import { OptionalContentConfig } from './optional_content_config';
 import { PasswordPrompt } from './password-prompt';
 import { AnnotationStorage, PrintAnnotationStorage } from './pdf-annotation-storage';
+import { IDownloadManager } from './pdf-download-manager';
 import { IEventBus } from './pdf-event-bus';
 import { PageViewport } from './pdf-page-view-port';
 import { PDFPrintService } from './pdf-print-service';
@@ -1156,6 +1157,8 @@ export interface IPDFViewerApplication {
   pdfDocumentProperties: any;
   appConfig: IPDFViewerAppConfig;
   _boundEvents: any;
+
+  downloadManager: IDownloadManager;
   enablePrint: boolean;
   eventBus: IEventBus;
   findBar: any;

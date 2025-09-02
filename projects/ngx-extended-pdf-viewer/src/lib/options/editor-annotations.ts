@@ -14,6 +14,7 @@ export enum AnnotationEditorType {
   INK = 15,
   POPUP = 16,
   SIGNATURE = 101,
+  COMMENT = 102,
 }
 
 export const AnnotationEditorParamsType = {
