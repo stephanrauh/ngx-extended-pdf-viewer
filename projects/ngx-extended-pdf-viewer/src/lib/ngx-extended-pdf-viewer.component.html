@@ -98,7 +98,7 @@
             ></pdf-toolbar>
 
             <div 
-              class="editorParamsToolbar hidden doorHangerRight menu" 
+              class="editorParamsToolbar sidebar hidden menu" 
               id="editorCommentParamsToolbar"
               [style.transform]="'scale(' + mobileFriendlyZoomScale + ')'"
             >
@@ -115,7 +115,9 @@
                     <span class="visually-hidden">Close the sidebar</span>
                   </button>
                 </div>
-                <ul id="editorCommentsSidebarList"></ul>
+                <div id="editorCommentsSidebarListContainer">
+                  <ul id="editorCommentsSidebarList"></ul>
+                </div>
               </div>
             </div>
 
