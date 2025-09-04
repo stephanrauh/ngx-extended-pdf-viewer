@@ -137,6 +137,16 @@ ngx-extended-pdf-viewer {
           display: none;
         }
       }
+
+      .overlaidText {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 0;
+        display: inline-block;
+        overflow: hidden;
+      }
     }
 
     .textLayer.selecting~& section {
@@ -344,8 +354,9 @@ ngx-extended-pdf-viewer {
       display: inline-block;
     }
 
-    .popup>.header h1 {
+    .popup>.header>.title {
       display: inline;
+      font-weight: bold;
     }
 
     .popup>.header .popupDate {
