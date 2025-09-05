@@ -684,3 +684,4 @@
 - 25.5.0 #2951 when opening a PDF file for the second time, re-open it with the same `[zoom]` and `[page]` the PDF had before closing unless the developer explicitly sets these attributes
 - 25.5.1 #2898 stop sending events to the parent document of an iFrame; that causes problems with CSP and ngx-extended-pdf-viewer doesn't need that (in contrary, it might cause problems)
 - 25.6.0-alpha.0 updated the stable branch to pdf.js 5.4.149; updated the bleeding edge branch to the latest developer version; #804 replaced some `console.log()` statements by `NgxConsole.log()`; #3006 added the `DownloadManager` to the `IPdfViewerApplication` interface; #3012 added a missing CSS rule that ensures that the highlight annotation is displayed correctly
+- 25.6.0-alpha.1 #2939 reduce the maximum resolution during pinch gestures to prevent lagging

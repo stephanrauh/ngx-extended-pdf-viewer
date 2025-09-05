@@ -28,6 +28,7 @@ export * from './lib/events/textlayer-rendered';
 export * from './lib/events/toggle-sidebar-event';
 export * from './lib/events/xfa-layer-rendered-event';
 export * from './lib/ngx-extended-pdf-viewer.component';
+export * from './lib/services/ios-canvas-optimization.service';
 export * from './lib/ngx-extended-pdf-viewer.module';
 export * from './lib/ngx-extended-pdf-viewer.service';
 export * from './lib/ngx-keyboard-manager.service';

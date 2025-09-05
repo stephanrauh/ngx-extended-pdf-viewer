@@ -23,11 +23,13 @@ export interface ScrollModeChangedEvent {
 }
 export interface IPDFRenderingQueue {
   getHighestPriority(visiblePage: Array<any>, pages: Array<any>, scrolledDown: boolean, preRenderExtra: boolean);
+  renderView(pageView: any): void; // Added for iOS canvas optimization
 }
 
 export interface IPDFViewer {
   maxZoom: number;
   minZoom: number;
+  maxCanvasPixels: number; // Added for iOS canvas optimization
   setTextLayerMode(textLayerMode: number): unknown;
   annotationEditorMode: any;
   currentPageLabel: string | undefined;

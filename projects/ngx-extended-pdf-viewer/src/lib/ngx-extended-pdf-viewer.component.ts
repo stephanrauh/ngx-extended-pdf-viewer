@@ -46,6 +46,7 @@ import { VerbosityLevel } from './options/verbosity-level';
 import { PdfDummyComponentsComponent } from './pdf-dummy-components/pdf-dummy-components.component';
 import { PDFNotificationService } from './pdf-notification-service';
 import { PdfSecondaryToolbarComponent } from './secondary-toolbar/pdf-secondary-toolbar/pdf-secondary-toolbar.component';
+import { IOSCanvasOptimizationService } from './services/ios-canvas-optimization.service';
 import { PdfSidebarComponent } from './sidebar/pdf-sidebar/pdf-sidebar.component';
 
 import { DynamicCssComponent } from './dynamic-css/dynamic-css.component';
@@ -1088,6 +1089,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     private readonly pdfScriptLoaderService: PDFScriptLoaderService,
     private readonly keyboardManager: NgxKeyboardManagerService,
     private readonly cspPolicyService: PdfCspPolicyService,
+    private readonly iosCanvasService: IOSCanvasOptimizationService,
     private readonly ngZone: NgZone,
   ) {
     this.baseHref = this.platformLocation.getBaseHrefFromDOM();
@@ -1154,6 +1156,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
           this.formSupport.cdr = this.cdr;
         }
         this.pdfScriptLoaderService.PDFViewerApplication.cspPolicyService = this.cspPolicyService;
+        
+        // Initialize iOS canvas optimization service with PDFViewerApplication
+        this.iosCanvasService.initialize(this.pdfScriptLoaderService.PDFViewerApplication);
+        
         this.ngZone.runOutsideAngular(() => this.doInitPDFViewer());
       }
     } catch (error) {
