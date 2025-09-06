@@ -302,9 +302,13 @@ pdfjs-web-fonts-disabled = I web font risultano disattivati: impossibile utilizz
 
 pdfjs-editor-free-text-button =
     .title = Testo
+pdfjs-editor-color-picker-free-text-input =
+    .title = Cambia colore del testo
 pdfjs-editor-free-text-button-label = Testo
 pdfjs-editor-ink-button =
     .title = Disegno
+pdfjs-editor-color-picker-ink-input =
+    .title = Cambia colore del disegno
 pdfjs-editor-ink-button-label = Disegno
 pdfjs-editor-stamp-button =
     .title = Aggiungi o rimuovi immagine
@@ -316,6 +320,10 @@ pdfjs-highlight-floating-button1 =
     .title = Evidenzia
     .aria-label = Evidenzia
 pdfjs-highlight-floating-button-label = Evidenzia
+pdfjs-comment-floating-button =
+    .title = Commenta
+    .aria-label = Commenta
+pdfjs-comment-floating-button-label = Commenta
 pdfjs-editor-signature-button =
     .title = Aggiungi firma
 pdfjs-editor-signature-button-label = Aggiungi firma
@@ -600,6 +608,8 @@ pdfjs-editor-add-signature-save-checkbox = Salva firma
 pdfjs-editor-add-signature-save-warning-message = Hai raggiunto il limite di 5 firme salvate. Rimuovine una per salvarne altre.
 pdfjs-editor-add-signature-image-upload-error-title = Impossibile caricare l’immagine
 pdfjs-editor-add-signature-image-upload-error-description = Controlla la connessione di rete o prova con un’altra immagine.
+pdfjs-editor-add-signature-image-no-data-error-title = Impossibile convertire questa immagine in una firma
+pdfjs-editor-add-signature-image-no-data-error-description = Prova a caricare un’altra immagine.
 pdfjs-editor-add-signature-error-close-button = Chiudi
 
 ## Dialog buttons
@@ -607,6 +617,26 @@ pdfjs-editor-add-signature-error-close-button = Chiudi
 pdfjs-editor-add-signature-cancel-button = Annulla
 pdfjs-editor-add-signature-add-button = Aggiungi
 pdfjs-editor-edit-signature-update-button = Aggiorna
+
+##  Edit a comment dialog
+
+pdfjs-editor-edit-comment-actions-button-label = Azioni
+pdfjs-editor-edit-comment-actions-button =
+    .title = Azioni
+pdfjs-editor-edit-comment-close-button-label = Chiudi
+pdfjs-editor-edit-comment-close-button =
+    .title = Chiudi
+pdfjs-editor-edit-comment-actions-edit-button-label = Modifica
+pdfjs-editor-edit-comment-actions-delete-button-label = Elimina
+pdfjs-editor-edit-comment-manager-text-input =
+    .placeholder = Inserisci il tuo commento
+pdfjs-editor-edit-comment-manager-cancel-button = Annulla
+pdfjs-editor-edit-comment-manager-save-button = Salva
+
+## Edit a comment button in the editor toolbar
+
+pdfjs-editor-edit-comment-button =
+    .title = Modifica commento
 
 ## Main menu for adding/removing signatures
 
@@ -622,6 +652,7 @@ pdfjs-editor-add-signature-edit-button-label = Modifica descrizione
 
 pdfjs-editor-edit-signature-dialog-title = Modifica descrizione
 
+
 # Additional translations for ngx-extended-pdf-viewer (it)
 unverified-signature-warning = Questo file PDF contiene una firma digitale. Questo visualizzatore PDF non può verificare se la firma è valida. Scarica il file e aprilo in Acrobat Reader per verificare che la firma sia valida.
 pdfjs-infinite-scroll-button-label = Scorrimento infinito
@@ -632,30 +663,6 @@ pdfjs-editor-movePageUp-button-label = Sposta pagina in alto
 pdfjs-editor-movePageDown-button = Sposta pagina in basso
 pdfjs-editor-movePageDown-button-label = Sposta pagina in basso
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-editor-color-picker-free-text-input =
-    .title = Change text color
-pdfjs-editor-color-picker-ink-input =
-    .title = Change drawing color
-pdfjs-editor-add-signature-image-no-data-error-title = Can’t convert this image into a signature
-pdfjs-editor-add-signature-image-no-data-error-description = Please try uploading a different image.
-pdfjs-editor-edit-comment-actions-button-label = Actions
-pdfjs-editor-edit-comment-actions-button =
-    .title = Actions
-pdfjs-editor-edit-comment-close-button-label = Close
-pdfjs-editor-edit-comment-close-button =
-    .title = Close
-pdfjs-editor-edit-comment-actions-edit-button-label = Edit
-pdfjs-editor-edit-comment-actions-delete-button-label = Delete
-pdfjs-editor-edit-comment-manager-text-input =
-    .placeholder = Enter your comment
-pdfjs-editor-edit-comment-manager-cancel-button = Cancel
-pdfjs-editor-edit-comment-manager-save-button = Save
-pdfjs-editor-edit-comment-button =
-    .title = Edit comment
-pdfjs-comment-floating-button =
-    .title = Comment
-    .aria-label = Comment
-pdfjs-comment-floating-button-label = Comment
 pdfjs-editor-comment-button =
     .title = Comment
     .aria-label = Comment

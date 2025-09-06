@@ -17,6 +17,7 @@ export type AnnotationLayerBuilderOptions = {
     renderForms: boolean;
     linkService: IPDFLinkService;
     downloadManager?: import("./interfaces").IDownloadManager | undefined;
+    enableComment?: boolean | undefined;
     enableScripting?: boolean | undefined;
     hasJSActionsPromise?: Promise<boolean> | undefined;
     fieldObjectsPromise?: Promise<{
@@ -49,6 +50,7 @@ export type InjectLinkAnnotationsOptions = {
  * @property {boolean} renderForms
  * @property {IPDFLinkService} linkService
  * @property {IDownloadManager} [downloadManager]
+ * @property {boolean} [enableComment]
  * @property {boolean} [enableScripting]
  * @property {Promise<boolean>} [hasJSActionsPromise]
  * @property {Promise<Object<string, Array<Object>> | null>}
@@ -74,13 +76,14 @@ export class AnnotationLayerBuilder {
     /**
      * @param {AnnotationLayerBuilderOptions} options
      */
-    constructor({ pdfPage, linkService, downloadManager, annotationStorage, imageResourcesPath, renderForms, enableScripting, hasJSActionsPromise, fieldObjectsPromise, annotationCanvasMap, accessibilityManager, annotationEditorUIManager, onAppend, }: AnnotationLayerBuilderOptions);
+    constructor({ pdfPage, linkService, downloadManager, annotationStorage, imageResourcesPath, renderForms, enableComment, enableScripting, hasJSActionsPromise, fieldObjectsPromise, annotationCanvasMap, accessibilityManager, annotationEditorUIManager, onAppend, }: AnnotationLayerBuilderOptions);
     pdfPage: import("../src/display/api").PDFPageProxy;
     linkService: import("./interfaces").IPDFLinkService;
     downloadManager: import("./interfaces").IDownloadManager | undefined;
     imageResourcesPath: string;
     renderForms: boolean;
     annotationStorage: import("../src/display/annotation_storage").AnnotationStorage;
+    enableComment: boolean;
     enableScripting: boolean;
     _hasJSActionsPromise: Promise<boolean>;
     _fieldObjectsPromise: Promise<{

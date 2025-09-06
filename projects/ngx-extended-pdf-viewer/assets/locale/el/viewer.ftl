@@ -302,9 +302,13 @@ pdfjs-web-fonts-disabled = Οι γραμματοσειρές ιστού είνα
 
 pdfjs-editor-free-text-button =
     .title = Κείμενο
+pdfjs-editor-color-picker-free-text-input =
+    .title = Αλλαγή χρώματος κειμένου
 pdfjs-editor-free-text-button-label = Κείμενο
 pdfjs-editor-ink-button =
     .title = Σχέδιο
+pdfjs-editor-color-picker-ink-input =
+    .title = Αλλαγή χρώματος σχεδίου
 pdfjs-editor-ink-button-label = Σχέδιο
 pdfjs-editor-stamp-button =
     .title = Προσθήκη ή επεξεργασία εικόνων
@@ -316,6 +320,10 @@ pdfjs-highlight-floating-button1 =
     .title = Επισήμανση
     .aria-label = Επισήμανση
 pdfjs-highlight-floating-button-label = Επισήμανση
+pdfjs-comment-floating-button =
+    .title = Σχόλιο
+    .aria-label = Σχόλιο
+pdfjs-comment-floating-button-label = Σχόλιο
 pdfjs-editor-signature-button =
     .title = Προσθήκη υπογραφής
 pdfjs-editor-signature-button-label = Προσθήκη υπογραφής
@@ -524,6 +532,14 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Άμεση εμφάν�
 pdfjs-editor-alt-text-settings-show-dialog-description = Σας βοηθά να βεβαιωθείτε ότι όλες οι εικόνες σας έχουν εναλλακτικό κείμενο.
 pdfjs-editor-alt-text-settings-close-button = Κλείσιμο
 
+## Accessibility labels (announced by screen readers) for objects added to the editor.
+
+pdfjs-editor-highlight-added-alert = Προστέθηκε επισήμανση
+pdfjs-editor-freetext-added-alert = Προστέθηκε κείμενο
+pdfjs-editor-ink-added-alert = Προστέθηκε σχέδιο
+pdfjs-editor-stamp-added-alert = Προστέθηκε εικόνα
+pdfjs-editor-signature-added-alert = Προστέθηκε υπογραφή
+
 ## "Annotations removed" bar
 
 pdfjs-editor-undo-bar-message-highlight = Η επισήμανση αφαιρέθηκε
@@ -592,6 +608,8 @@ pdfjs-editor-add-signature-save-checkbox = Αποθήκευση υπογραφή
 pdfjs-editor-add-signature-save-warning-message = Έχετε φτάσει το όριο των 5 αποθηκευμένων υπογραφών. Αφαιρέστε μία για να αποθηκεύσετε περισσότερες.
 pdfjs-editor-add-signature-image-upload-error-title = Δεν ήταν δυνατή η μεταφόρτωση της εικόνας
 pdfjs-editor-add-signature-image-upload-error-description = Ελέγξτε τη σύνδεση δικτύου σας ή δοκιμάστε μια άλλη εικόνα.
+pdfjs-editor-add-signature-image-no-data-error-title = Δεν είναι δυνατή η μετατροπή αυτής της εικόνας σε υπογραφή
+pdfjs-editor-add-signature-image-no-data-error-description = Δοκιμάστε να μεταφορτώσετε μια άλλη εικόνα.
 pdfjs-editor-add-signature-error-close-button = Κλείσιμο
 
 ## Dialog buttons
@@ -599,6 +617,26 @@ pdfjs-editor-add-signature-error-close-button = Κλείσιμο
 pdfjs-editor-add-signature-cancel-button = Ακύρωση
 pdfjs-editor-add-signature-add-button = Προσθήκη
 pdfjs-editor-edit-signature-update-button = Ενημέρωση
+
+##  Edit a comment dialog
+
+pdfjs-editor-edit-comment-actions-button-label = Ενέργειες
+pdfjs-editor-edit-comment-actions-button =
+    .title = Ενέργειες
+pdfjs-editor-edit-comment-close-button-label = Κλείσιμο
+pdfjs-editor-edit-comment-close-button =
+    .title = Κλείσιμο
+pdfjs-editor-edit-comment-actions-edit-button-label = Επεξεργασία
+pdfjs-editor-edit-comment-actions-delete-button-label = Διαγραφή
+pdfjs-editor-edit-comment-manager-text-input =
+    .placeholder = Εισαγάγετε το σχόλιό σας
+pdfjs-editor-edit-comment-manager-cancel-button = Ακύρωση
+pdfjs-editor-edit-comment-manager-save-button = Αποθήκευση
+
+## Edit a comment button in the editor toolbar
+
+pdfjs-editor-edit-comment-button =
+    .title = Επεξεργασία σχολίου
 
 ## Main menu for adding/removing signatures
 
@@ -615,43 +653,6 @@ pdfjs-editor-add-signature-edit-button-label = Επεξεργασία περιγ
 pdfjs-editor-edit-signature-dialog-title = Επεξεργασία περιγραφής
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-editor-color-picker-free-text-input =
-    .title = Change text color
-pdfjs-editor-color-picker-ink-input =
-    .title = Change drawing color
-pdfjs-editor-highlight-added-alert = Highlight added
-pdfjs-editor-freetext-added-alert = Text added
-pdfjs-editor-ink-added-alert = Drawing added
-pdfjs-editor-stamp-added-alert = Image added
-pdfjs-editor-signature-added-alert = Signature added
-pdfjs-editor-add-signature-image-no-data-error-title = Can’t convert this image into a signature
-pdfjs-editor-add-signature-image-no-data-error-description = Please try uploading a different image.
-pdfjs-editor-edit-comment-actions-button-label = Actions
-pdfjs-editor-edit-comment-actions-button =
-    .title = Actions
-pdfjs-editor-edit-comment-close-button-label = Close
-pdfjs-editor-edit-comment-close-button =
-    .title = Close
-pdfjs-editor-edit-comment-actions-edit-button-label = Edit
-pdfjs-editor-edit-comment-actions-delete-button-label = Delete
-pdfjs-editor-edit-comment-manager-text-input =
-    .placeholder = Enter your comment
-pdfjs-editor-edit-comment-manager-cancel-button = Cancel
-pdfjs-editor-edit-comment-manager-save-button = Save
-pdfjs-editor-edit-comment-button =
-    .title = Edit comment
-unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
-pdfjs-infinite-scroll-button-label = Infinite scroll
-pdfjs-find-multiple-checkbox-label = Match Each Word
-pdfjs-find-regexp-checkbox-label = Regular Expression
-pdfjs-editor-movePageUp-button = Move Page Up
-pdfjs-editor-movePageUp-button-label = Move Page Up
-pdfjs-editor-movePageDown-button = Move Page Down
-pdfjs-editor-movePageDown-button-label = Move Page Down
-pdfjs-comment-floating-button =
-    .title = Comment
-    .aria-label = Comment
-pdfjs-comment-floating-button-label = Comment
 pdfjs-editor-comment-button =
     .title = Comment
     .aria-label = Comment
@@ -666,3 +667,11 @@ pdfjs-editor-comments-sidebar-close-button =
     .aria-label = Close the sidebar
 pdfjs-editor-comments-sidebar-close-button-label = Close the sidebar
 pdfjs-editor-comments-sidebar-no-comments = Add a comment by selecting text or an annotation.
+unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
+pdfjs-infinite-scroll-button-label = Infinite scroll
+pdfjs-find-multiple-checkbox-label = Match Each Word
+pdfjs-find-regexp-checkbox-label = Regular Expression
+pdfjs-editor-movePageUp-button = Move Page Up
+pdfjs-editor-movePageUp-button-label = Move Page Up
+pdfjs-editor-movePageDown-button = Move Page Down
+pdfjs-editor-movePageDown-button-label = Move Page Down

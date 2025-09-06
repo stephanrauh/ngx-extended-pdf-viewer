@@ -304,9 +304,13 @@ pdfjs-web-fonts-disabled = Веб-шрифты отключены: не удал
 
 pdfjs-editor-free-text-button =
     .title = Текст
+pdfjs-editor-color-picker-free-text-input =
+    .title = Изменить цвет текста
 pdfjs-editor-free-text-button-label = Текст
 pdfjs-editor-ink-button =
     .title = Рисовать
+pdfjs-editor-color-picker-ink-input =
+    .title = Изменить цвет прорисовки
 pdfjs-editor-ink-button-label = Рисовать
 pdfjs-editor-stamp-button =
     .title = Добавить или изменить изображения
@@ -318,6 +322,10 @@ pdfjs-highlight-floating-button1 =
     .title = Выделение
     .aria-label = Выделение
 pdfjs-highlight-floating-button-label = Выделение
+pdfjs-comment-floating-button =
+    .title = Комментировать
+    .aria-label = Комментировать
+pdfjs-comment-floating-button-label = Комментировать
 pdfjs-editor-signature-button =
     .title = Добавить подпись
 pdfjs-editor-signature-button-label = Добавить подпись
@@ -526,6 +534,14 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Сразу показ�
 pdfjs-editor-alt-text-settings-show-dialog-description = Помогает вам убедиться, что все ваши изображения имеют альтернативный текст.
 pdfjs-editor-alt-text-settings-close-button = Закрыть
 
+## Accessibility labels (announced by screen readers) for objects added to the editor.
+
+pdfjs-editor-highlight-added-alert = Выделение добавлено
+pdfjs-editor-freetext-added-alert = Текст добавлен
+pdfjs-editor-ink-added-alert = Изображение добавлено
+pdfjs-editor-stamp-added-alert = Изображение добавлено
+pdfjs-editor-signature-added-alert = Подпись добавлена
+
 ## "Annotations removed" bar
 
 pdfjs-editor-undo-bar-message-highlight = Выделение удалено
@@ -595,6 +611,8 @@ pdfjs-editor-add-signature-save-checkbox = Сохранить подпись
 pdfjs-editor-add-signature-save-warning-message = Вы достигли лимита в 5 сохранённых подписей. Удалите одну, чтобы сохранить другие.
 pdfjs-editor-add-signature-image-upload-error-title = Не удалось загрузить изображение
 pdfjs-editor-add-signature-image-upload-error-description = Проверьте подключение к сети или попробуйте другое изображение.
+pdfjs-editor-add-signature-image-no-data-error-title = Не удалось преобразовать это изображение в подпись
+pdfjs-editor-add-signature-image-no-data-error-description = Пожалуйста, попробуйте загрузить другое изображение.
 pdfjs-editor-add-signature-error-close-button = Закрыть
 
 ## Dialog buttons
@@ -602,6 +620,26 @@ pdfjs-editor-add-signature-error-close-button = Закрыть
 pdfjs-editor-add-signature-cancel-button = Отмена
 pdfjs-editor-add-signature-add-button = Добавить
 pdfjs-editor-edit-signature-update-button = Обновить
+
+##  Edit a comment dialog
+
+pdfjs-editor-edit-comment-actions-button-label = Действия
+pdfjs-editor-edit-comment-actions-button =
+    .title = Действия
+pdfjs-editor-edit-comment-close-button-label = Закрыть
+pdfjs-editor-edit-comment-close-button =
+    .title = Закрыть
+pdfjs-editor-edit-comment-actions-edit-button-label = Изменить
+pdfjs-editor-edit-comment-actions-delete-button-label = Удалить
+pdfjs-editor-edit-comment-manager-text-input =
+    .placeholder = Введите ваш комментарий
+pdfjs-editor-edit-comment-manager-cancel-button = Отмена
+pdfjs-editor-edit-comment-manager-save-button = Сохранить
+
+## Edit a comment button in the editor toolbar
+
+pdfjs-editor-edit-comment-button =
+    .title = Редактировать комментарий
 
 ## Main menu for adding/removing signatures
 
@@ -618,43 +656,6 @@ pdfjs-editor-add-signature-edit-button-label = Изменить описание
 pdfjs-editor-edit-signature-dialog-title = Изменить описание
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-editor-color-picker-free-text-input =
-    .title = Change text color
-pdfjs-editor-color-picker-ink-input =
-    .title = Change drawing color
-pdfjs-editor-highlight-added-alert = Highlight added
-pdfjs-editor-freetext-added-alert = Text added
-pdfjs-editor-ink-added-alert = Drawing added
-pdfjs-editor-stamp-added-alert = Image added
-pdfjs-editor-signature-added-alert = Signature added
-pdfjs-editor-add-signature-image-no-data-error-title = Can’t convert this image into a signature
-pdfjs-editor-add-signature-image-no-data-error-description = Please try uploading a different image.
-pdfjs-editor-edit-comment-actions-button-label = Actions
-pdfjs-editor-edit-comment-actions-button =
-    .title = Actions
-pdfjs-editor-edit-comment-close-button-label = Close
-pdfjs-editor-edit-comment-close-button =
-    .title = Close
-pdfjs-editor-edit-comment-actions-edit-button-label = Edit
-pdfjs-editor-edit-comment-actions-delete-button-label = Delete
-pdfjs-editor-edit-comment-manager-text-input =
-    .placeholder = Enter your comment
-pdfjs-editor-edit-comment-manager-cancel-button = Cancel
-pdfjs-editor-edit-comment-manager-save-button = Save
-pdfjs-editor-edit-comment-button =
-    .title = Edit comment
-unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
-pdfjs-infinite-scroll-button-label = Infinite scroll
-pdfjs-find-multiple-checkbox-label = Match Each Word
-pdfjs-find-regexp-checkbox-label = Regular Expression
-pdfjs-editor-movePageUp-button = Move Page Up
-pdfjs-editor-movePageUp-button-label = Move Page Up
-pdfjs-editor-movePageDown-button = Move Page Down
-pdfjs-editor-movePageDown-button-label = Move Page Down
-pdfjs-comment-floating-button =
-    .title = Comment
-    .aria-label = Comment
-pdfjs-comment-floating-button-label = Comment
 pdfjs-editor-comment-button =
     .title = Comment
     .aria-label = Comment
@@ -669,3 +670,11 @@ pdfjs-editor-comments-sidebar-close-button =
     .aria-label = Close the sidebar
 pdfjs-editor-comments-sidebar-close-button-label = Close the sidebar
 pdfjs-editor-comments-sidebar-no-comments = Add a comment by selecting text or an annotation.
+unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
+pdfjs-infinite-scroll-button-label = Infinite scroll
+pdfjs-find-multiple-checkbox-label = Match Each Word
+pdfjs-find-regexp-checkbox-label = Regular Expression
+pdfjs-editor-movePageUp-button = Move Page Up
+pdfjs-editor-movePageUp-button-label = Move Page Up
+pdfjs-editor-movePageDown-button = Move Page Down
+pdfjs-editor-movePageDown-button-label = Move Page Down

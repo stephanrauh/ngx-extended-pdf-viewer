@@ -306,9 +306,13 @@ pdfjs-web-fonts-disabled = Webpisma su znjemóžnjone: njejo móžno, zasajźone
 
 pdfjs-editor-free-text-button =
     .title = Tekst
+pdfjs-editor-color-picker-free-text-input =
+    .title = Tekstowu barwu změniś
 pdfjs-editor-free-text-button-label = Tekst
 pdfjs-editor-ink-button =
     .title = Kresliś
+pdfjs-editor-color-picker-ink-input =
+    .title = Kresleńsku barwu změniś
 pdfjs-editor-ink-button-label = Kresliś
 pdfjs-editor-stamp-button =
     .title = Wobraze pśidaś abo wobźěłaś
@@ -320,6 +324,10 @@ pdfjs-highlight-floating-button1 =
     .title = Wuzwignuś
     .aria-label = Wuzwignuś
 pdfjs-highlight-floating-button-label = Wuzwignuś
+pdfjs-comment-floating-button =
+    .title = Komentěrowaś
+    .aria-label = Komentěrowaś
+pdfjs-comment-floating-button-label = Komentěrowaś
 pdfjs-editor-signature-button =
     .title = Signaturu pśidaś
 pdfjs-editor-signature-button-label = Signaturu pśidaś
@@ -528,6 +536,14 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Editor alternatiwnego 
 pdfjs-editor-alt-text-settings-show-dialog-description = Pomaga, wam wšym swójim wobrazam alternatiwny tekst pśidaś.
 pdfjs-editor-alt-text-settings-close-button = Zacyniś
 
+## Accessibility labels (announced by screen readers) for objects added to the editor.
+
+pdfjs-editor-highlight-added-alert = Wuzwignjenje pśidane
+pdfjs-editor-freetext-added-alert = Tekst pśidany
+pdfjs-editor-ink-added-alert = Kreslanka pśidana
+pdfjs-editor-stamp-added-alert = Wobraz pśidany
+pdfjs-editor-signature-added-alert = Signatura pśidana
+
 ## "Annotations removed" bar
 
 pdfjs-editor-undo-bar-message-highlight = Wótwónoźone wuzwignuś
@@ -598,6 +614,8 @@ pdfjs-editor-add-signature-save-checkbox = Signaturu składowaś
 pdfjs-editor-add-signature-save-warning-message = Sćo dojśpił limit 5 skłaźonych signaturow. Wótwónoźćo jadnu, aby wěcej składował.
 pdfjs-editor-add-signature-image-upload-error-title = Wobraz njedajo se nagraś
 pdfjs-editor-add-signature-image-upload-error-description = Pśeglědajśo swój seśowy zwisk abo wopytajśo drugi wobraz.
+pdfjs-editor-add-signature-image-no-data-error-title = Toś ten wobraz njedajo se do signatury pśetwóriś
+pdfjs-editor-add-signature-image-no-data-error-description = Wopytajśo pšosym drugi wobraz nagraś.
 pdfjs-editor-add-signature-error-close-button = Zacyniś
 
 ## Dialog buttons
@@ -605,6 +623,26 @@ pdfjs-editor-add-signature-error-close-button = Zacyniś
 pdfjs-editor-add-signature-cancel-button = Pśetergnuś
 pdfjs-editor-add-signature-add-button = Pśidaś
 pdfjs-editor-edit-signature-update-button = Aktualizěrowaś
+
+##  Edit a comment dialog
+
+pdfjs-editor-edit-comment-actions-button-label = Akcije
+pdfjs-editor-edit-comment-actions-button =
+    .title = Akcije
+pdfjs-editor-edit-comment-close-button-label = Zacyniś
+pdfjs-editor-edit-comment-close-button =
+    .title = Zacyniś
+pdfjs-editor-edit-comment-actions-edit-button-label = Wobźěłaś
+pdfjs-editor-edit-comment-actions-delete-button-label = Lašowaś
+pdfjs-editor-edit-comment-manager-text-input =
+    .placeholder = Zapódajśo swój komentar
+pdfjs-editor-edit-comment-manager-cancel-button = Pśetergnuś
+pdfjs-editor-edit-comment-manager-save-button = Składowaś
+
+## Edit a comment button in the editor toolbar
+
+pdfjs-editor-edit-comment-button =
+    .title = Komentar wobźěłaś
 
 ## Main menu for adding/removing signatures
 
@@ -621,43 +659,6 @@ pdfjs-editor-add-signature-edit-button-label = Wopisanje wobźěłaś
 pdfjs-editor-edit-signature-dialog-title = Wopisanje wobźěłaś
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-editor-color-picker-free-text-input =
-    .title = Change text color
-pdfjs-editor-color-picker-ink-input =
-    .title = Change drawing color
-pdfjs-editor-highlight-added-alert = Highlight added
-pdfjs-editor-freetext-added-alert = Text added
-pdfjs-editor-ink-added-alert = Drawing added
-pdfjs-editor-stamp-added-alert = Image added
-pdfjs-editor-signature-added-alert = Signature added
-pdfjs-editor-add-signature-image-no-data-error-title = Can’t convert this image into a signature
-pdfjs-editor-add-signature-image-no-data-error-description = Please try uploading a different image.
-pdfjs-editor-edit-comment-actions-button-label = Actions
-pdfjs-editor-edit-comment-actions-button =
-    .title = Actions
-pdfjs-editor-edit-comment-close-button-label = Close
-pdfjs-editor-edit-comment-close-button =
-    .title = Close
-pdfjs-editor-edit-comment-actions-edit-button-label = Edit
-pdfjs-editor-edit-comment-actions-delete-button-label = Delete
-pdfjs-editor-edit-comment-manager-text-input =
-    .placeholder = Enter your comment
-pdfjs-editor-edit-comment-manager-cancel-button = Cancel
-pdfjs-editor-edit-comment-manager-save-button = Save
-pdfjs-editor-edit-comment-button =
-    .title = Edit comment
-unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
-pdfjs-infinite-scroll-button-label = Infinite scroll
-pdfjs-find-multiple-checkbox-label = Match Each Word
-pdfjs-find-regexp-checkbox-label = Regular Expression
-pdfjs-editor-movePageUp-button = Move Page Up
-pdfjs-editor-movePageUp-button-label = Move Page Up
-pdfjs-editor-movePageDown-button = Move Page Down
-pdfjs-editor-movePageDown-button-label = Move Page Down
-pdfjs-comment-floating-button =
-    .title = Comment
-    .aria-label = Comment
-pdfjs-comment-floating-button-label = Comment
 pdfjs-editor-comment-button =
     .title = Comment
     .aria-label = Comment
@@ -672,3 +673,11 @@ pdfjs-editor-comments-sidebar-close-button =
     .aria-label = Close the sidebar
 pdfjs-editor-comments-sidebar-close-button-label = Close the sidebar
 pdfjs-editor-comments-sidebar-no-comments = Add a comment by selecting text or an annotation.
+unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
+pdfjs-infinite-scroll-button-label = Infinite scroll
+pdfjs-find-multiple-checkbox-label = Match Each Word
+pdfjs-find-regexp-checkbox-label = Regular Expression
+pdfjs-editor-movePageUp-button = Move Page Up
+pdfjs-editor-movePageUp-button-label = Move Page Up
+pdfjs-editor-movePageDown-button = Move Page Down
+pdfjs-editor-movePageDown-button-label = Move Page Down

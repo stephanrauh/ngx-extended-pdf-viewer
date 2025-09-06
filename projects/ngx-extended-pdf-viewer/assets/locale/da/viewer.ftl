@@ -302,9 +302,13 @@ pdfjs-web-fonts-disabled = Webskrifttyper er deaktiverede. De indlejrede skriftt
 
 pdfjs-editor-free-text-button =
     .title = Tekst
+pdfjs-editor-color-picker-free-text-input =
+    .title = Skift tekstfarve
 pdfjs-editor-free-text-button-label = Tekst
 pdfjs-editor-ink-button =
     .title = Tegn
+pdfjs-editor-color-picker-ink-input =
+    .title = Skift tegne-farve
 pdfjs-editor-ink-button-label = Tegn
 pdfjs-editor-stamp-button =
     .title = Tilføj eller rediger billeder
@@ -316,6 +320,10 @@ pdfjs-highlight-floating-button1 =
     .title = Fremhæv
     .aria-label = Fremhæv
 pdfjs-highlight-floating-button-label = Fremhæv
+pdfjs-comment-floating-button =
+    .title = Kommentar
+    .aria-label = Kommentar
+pdfjs-comment-floating-button-label = Kommentar
 pdfjs-editor-signature-button =
     .title = Tilføj signatur
 pdfjs-editor-signature-button-label = Tilføj signatur
@@ -524,6 +532,14 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Vis redigering af alte
 pdfjs-editor-alt-text-settings-show-dialog-description = Hjælper dig med at sikre, at alle dine billeder har alternativ tekst.
 pdfjs-editor-alt-text-settings-close-button = Luk
 
+## Accessibility labels (announced by screen readers) for objects added to the editor.
+
+pdfjs-editor-highlight-added-alert = Fremhævning tilføjet
+pdfjs-editor-freetext-added-alert = Tekst tilføjet
+pdfjs-editor-ink-added-alert = Tegning tilføjet
+pdfjs-editor-stamp-added-alert = Billede tilføjet
+pdfjs-editor-signature-added-alert = Signatur tilføjet
+
 ## "Annotations removed" bar
 
 pdfjs-editor-undo-bar-message-highlight = Fremhævning fjernet
@@ -592,6 +608,8 @@ pdfjs-editor-add-signature-save-checkbox = Gem signatur
 pdfjs-editor-add-signature-save-warning-message = Du har nået grænsen på 5 gemte signaturer. Fjern en for at tilføje en ny.
 pdfjs-editor-add-signature-image-upload-error-title = Kunne ikke uploade billede
 pdfjs-editor-add-signature-image-upload-error-description = Kontroller din netværksforbindelse eller prøv med et andet billede.
+pdfjs-editor-add-signature-image-no-data-error-title = Kan ikke konvertere dette billede til en signatur
+pdfjs-editor-add-signature-image-no-data-error-description = Prøv at uploade et andet billede.
 pdfjs-editor-add-signature-error-close-button = Luk
 
 ## Dialog buttons
@@ -599,6 +617,26 @@ pdfjs-editor-add-signature-error-close-button = Luk
 pdfjs-editor-add-signature-cancel-button = Annuller
 pdfjs-editor-add-signature-add-button = Tilføj
 pdfjs-editor-edit-signature-update-button = Opdater
+
+##  Edit a comment dialog
+
+pdfjs-editor-edit-comment-actions-button-label = Handlinger
+pdfjs-editor-edit-comment-actions-button =
+    .title = Handlinger
+pdfjs-editor-edit-comment-close-button-label = Luk
+pdfjs-editor-edit-comment-close-button =
+    .title = Luk
+pdfjs-editor-edit-comment-actions-edit-button-label = Rediger
+pdfjs-editor-edit-comment-actions-delete-button-label = Slet
+pdfjs-editor-edit-comment-manager-text-input =
+    .placeholder = Indtast din kommentar
+pdfjs-editor-edit-comment-manager-cancel-button = Annuller
+pdfjs-editor-edit-comment-manager-save-button = Gem
+
+## Edit a comment button in the editor toolbar
+
+pdfjs-editor-edit-comment-button =
+    .title = Rediger kommentar
 
 ## Main menu for adding/removing signatures
 
@@ -624,35 +662,6 @@ pdfjs-editor-movePageUp-button-label = Flyt side op
 pdfjs-editor-movePageDown-button = Flyt side ned
 pdfjs-editor-movePageDown-button-label = Flyt side ned
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-editor-color-picker-free-text-input =
-    .title = Change text color
-pdfjs-editor-color-picker-ink-input =
-    .title = Change drawing color
-pdfjs-editor-highlight-added-alert = Highlight added
-pdfjs-editor-freetext-added-alert = Text added
-pdfjs-editor-ink-added-alert = Drawing added
-pdfjs-editor-stamp-added-alert = Image added
-pdfjs-editor-signature-added-alert = Signature added
-pdfjs-editor-add-signature-image-no-data-error-title = Can’t convert this image into a signature
-pdfjs-editor-add-signature-image-no-data-error-description = Please try uploading a different image.
-pdfjs-editor-edit-comment-actions-button-label = Actions
-pdfjs-editor-edit-comment-actions-button =
-    .title = Actions
-pdfjs-editor-edit-comment-close-button-label = Close
-pdfjs-editor-edit-comment-close-button =
-    .title = Close
-pdfjs-editor-edit-comment-actions-edit-button-label = Edit
-pdfjs-editor-edit-comment-actions-delete-button-label = Delete
-pdfjs-editor-edit-comment-manager-text-input =
-    .placeholder = Enter your comment
-pdfjs-editor-edit-comment-manager-cancel-button = Cancel
-pdfjs-editor-edit-comment-manager-save-button = Save
-pdfjs-editor-edit-comment-button =
-    .title = Edit comment
-pdfjs-comment-floating-button =
-    .title = Comment
-    .aria-label = Comment
-pdfjs-comment-floating-button-label = Comment
 pdfjs-editor-comment-button =
     .title = Comment
     .aria-label = Comment

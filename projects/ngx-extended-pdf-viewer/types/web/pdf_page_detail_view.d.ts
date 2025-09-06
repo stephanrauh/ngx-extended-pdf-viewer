@@ -26,6 +26,7 @@ export class PDFPageDetailView extends BasePDFPageView implements IRenderableVie
         visibleArea?: null | undefined;
         underlyingViewUpdated?: boolean | undefined;
     }): void;
+    _getRenderingContext(canvas: any, transform: any): any;
     draw(): Promise<void>;
     #private;
 }

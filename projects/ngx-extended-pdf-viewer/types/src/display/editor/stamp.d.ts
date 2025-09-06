@@ -37,7 +37,7 @@ export class StampEditor extends AnnotationEditor {
         imageData: {
             width: any;
             height: any;
-            data: Uint8ClampedArray<ArrayBufferLike>;
+            data: ImageDataArray;
         } | null;
     };
     /** @inheritdoc */

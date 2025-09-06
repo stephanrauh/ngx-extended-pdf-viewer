@@ -73,7 +73,7 @@ export class AnnotationEditor {
      * @param {AnnotationEditorLayer} parent
      */
     static paste(item: DataTransferItem, parent: AnnotationEditorLayer): void;
-    static "__#44@#rotatePoint"(x: any, y: any, angle: any): any[];
+    static #rotatePoint(x: any, y: any, angle: any): any[];
     static _round(x: any): number;
     /**
      * Deserialize the editor.
@@ -326,6 +326,12 @@ export class AnnotationEditor {
      */
     getRect(tx: number, ty: number, rotation?: number): any[];
     getRectInCurrentCoords(rect: any, pageHeight: any): any[];
+    /**
+     * Get the rect in page coordinates without any translation.
+     * It's used when serializing the editor.
+     * @returns {Array<number>}
+     */
+    getPDFRect(): Array<number>;
     /**
      * Executed once this editor has been rendered.
      * @param {boolean} focus - true if the editor should be focused.

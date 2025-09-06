@@ -111,6 +111,13 @@ export type PDFViewerOptions = {
      */
     enableDetailCanvas?: boolean | undefined;
     /**
+     * - When enabled, PDF
+     * rendering will keep track of which areas of the page each PDF operation
+     * affects. Then, when rendering a partial page (if `enableDetailCanvas` is
+     * enabled), it will only run through the operations that affect that portion.
+     */
+    enableOptimizedPartialRendering?: boolean | undefined;
+    /**
      * - Localization service.
      */
     l10n?: import("./interfaces").IL10n | undefined;
@@ -197,6 +204,10 @@ export namespace PagesCountLimit {
  *   `maxCanvasDim`, it will draw a second canvas on top of the CSS-zoomed one,
  *   that only renders the part of the page that is close to the viewport.
  *   The default value is `true`.
+ * @property {boolean} [enableOptimizedPartialRendering] - When enabled, PDF
+ *   rendering will keep track of which areas of the page each PDF operation
+ *   affects. Then, when rendering a partial page (if `enableDetailCanvas` is
+ *   enabled), it will only run through the operations that affect that portion.
  * @property {IL10n} [l10n] - Localization service.
  * @property {boolean} [enablePermissions] - Enables PDF document permissions,
  *   when they exist. The default value is `false`.
@@ -255,6 +266,7 @@ export class PDFViewer {
     maxCanvasDim: number | undefined;
     capCanvasAreaFactor: number | undefined;
     enableDetailCanvas: boolean;
+    enableOptimizedPartialRendering: boolean;
     l10n: import("./interfaces").IL10n | GenericL10n | undefined;
     pageColors: Object | null;
     defaultRenderingQueue: boolean;
@@ -273,6 +285,7 @@ export class PDFViewer {
     set minZoom(value: number);
     get minZoom(): number;
     setTextLayerMode(mode: any): void;
+    get printingAllowed(): boolean;
     get pagesCount(): number;
     getPageView(index: any): any;
     swapPages(oldIndex: any, newIndex: any): void;

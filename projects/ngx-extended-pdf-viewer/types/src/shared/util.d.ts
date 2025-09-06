@@ -53,6 +53,7 @@ export namespace AnnotationEditorType {
     let HIGHLIGHT: number;
     let STAMP: number;
     let INK: number;
+    let POPUP: number;
     let SIGNATURE: number;
     let COMMENT: number;
 }
@@ -123,7 +124,8 @@ export namespace AnnotationType {
     export let CARET: number;
     let INK_1: number;
     export { INK_1 as INK };
-    export let POPUP: number;
+    let POPUP_1: number;
+    export { POPUP_1 as POPUP };
     export let FILEATTACHMENT: number;
     export let SOUND: number;
     export let MOVIE: number;
@@ -386,8 +388,10 @@ export function updateUrlHash(url: URL | string, hash: string, allowRel?: boolea
 export function utf8StringToString(str: any): string;
 export class Util {
     static makeHexColor(r: any, g: any, b: any): string;
+    static domMatrixToTransform(dm: any): any[];
     static scaleMinMax(transform: any, minMax: any): void;
     static transform(m1: any, m2: any): any[];
+    static multiplyByDOMMatrix(m: any, md: any): any[];
     static applyTransform(p: any, m: any, pos?: number): void;
     static applyTransformToBezier(p: any, transform: any, pos?: number): void;
     static applyInverseTransform(p: any, m: any): void;
@@ -398,8 +402,8 @@ export class Util {
     static intersect(rect1: any, rect2: any): number[] | null;
     static pointBoundingBox(x: any, y: any, minMax: any): void;
     static rectBoundingBox(x0: any, y0: any, x1: any, y1: any, minMax: any): void;
-    static "__#1@#getExtremumOnCurve"(x0: any, x1: any, x2: any, x3: any, y0: any, y1: any, y2: any, y3: any, t: any, minMax: any): void;
-    static "__#1@#getExtremum"(x0: any, x1: any, x2: any, x3: any, y0: any, y1: any, y2: any, y3: any, a: any, b: any, c: any, minMax: any): void;
+    static #getExtremumOnCurve(x0: any, x1: any, x2: any, x3: any, y0: any, y1: any, y2: any, y3: any, t: any, minMax: any): void;
+    static #getExtremum(x0: any, x1: any, x2: any, x3: any, y0: any, y1: any, y2: any, y3: any, a: any, b: any, c: any, minMax: any): void;
     static bezierBoundingBox(x0: any, y0: any, x1: any, y1: any, x2: any, y2: any, x3: any, y3: any, minMax: any): void;
 }
 export namespace VerbosityLevel {

@@ -1,6 +1,6 @@
 export class EditorToolbar {
-    static "__#3@#l10nRemove": null;
-    static "__#3@#pointerDown"(e: any): void;
+    static #l10nRemove: null;
+    static #pointerDown(e: any): void;
     constructor(editor: any);
     render(): HTMLDivElement;
     get div(): null;
@@ -16,7 +16,7 @@ export class EditorToolbar {
     remove(): void;
     #private;
 }
-export class HighlightToolbar {
+export class FloatingToolbar {
     constructor(uiManager: any);
     show(parent: any, boxes: any, isLTR: any): void;
     hide(): void;

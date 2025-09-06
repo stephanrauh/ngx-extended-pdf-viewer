@@ -19,14 +19,14 @@ export class HighlightEditor extends AnnotationEditor {
     /** @inheritdoc */
     static updateDefaultParams(type: any, value: any): void;
     static get defaultPropertiesToUpdate(): (number | null)[][];
-    static "__#25@#rotateBbox"([x, y, width, height]: [any, any, any, any], angle: any): any[];
+    static #rotateBbox([x, y, width, height]: [any, any, any, any], angle: any): any[];
     static startHighlighting(parent: any, isLTR: any, { target: textLayer, x, y }: {
         target: any;
         x: any;
         y: any;
     }): void;
-    static "__#25@#highlightMove"(parent: any, event: any): void;
-    static "__#25@#endHighlight"(parent: any, event: any): void;
+    static #highlightMove(parent: any, event: any): void;
+    static #endHighlight(parent: any, event: any): void;
     /** @inheritdoc */
     static deserialize(data: any, parent: any, uiManager: any): Promise<AnnotationEditor | null>;
     constructor(params: any);

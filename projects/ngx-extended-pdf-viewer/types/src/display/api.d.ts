@@ -414,14 +414,6 @@ export type GetAnnotationsParameters = {
  */
 export type RenderParameters = {
     /**
-     * - 2D context of a DOM
-     * Canvas object for backwards compatibility; it is recommended to use the
-     * `canvas` parameter instead.
-     * If the context must absolutely be used to render the page, the canvas must
-     * be null.
-     */
-    canvasContext: CanvasRenderingContext2D;
-    /**
      * - A DOM Canvas object. The default
      * value is the canvas associated with the `canvasContext` parameter if no
      * value is provided explicitly.
@@ -432,6 +424,14 @@ export type RenderParameters = {
      * the `PDFPageProxy.getViewport` method.
      */
     viewport: PageViewport;
+    /**
+     * - 2D context of a DOM
+     * Canvas object for backwards compatibility; it is recommended to use the
+     * `canvas` parameter instead.
+     * If the context must absolutely be used to render the page, the canvas must
+     * be null.
+     */
+    canvasContext?: CanvasRenderingContext2D | undefined;
     /**
      * - Rendering intent, can be 'display', 'print',
      * or 'any'. The default value is 'display'.
@@ -492,6 +492,16 @@ export type RenderParameters = {
      * - Render the page in editing mode.
      */
     isEditing?: boolean | undefined;
+    /**
+     * - Record the dependencies and bounding
+     * boxes of all PDF operations that render onto the canvas.
+     */
+    recordOperations?: boolean | undefined;
+    /**
+     * - If provided, only run
+     * the PDF operations that are included in this set.
+     */
+    filteredOperationIndexes?: Set<number> | undefined;
 };
 /**
  * Page getOperatorList parameters.
@@ -811,7 +821,7 @@ export class PDFDataRangeTransport {
  * after which individual pages can be rendered.
  */
 export class PDFDocumentLoadingTask {
-    static "__#60@#docId": number;
+    static #docId: number;
     /**
      * @private
      */
@@ -969,6 +979,13 @@ export class PDFDocumentProxy {
      *   for mapping named attachments to their content.
      */
     getAttachments(): Promise<any>;
+    /**
+     * @param {Set<number>} types - The annotation types to retrieve.
+     * @param {Set<number>} pageIndexesToSkip
+     * @returns {Promise<Array<Object>>} A promise that is resolved with a list of
+     *   annotations data.
+     */
+    getAnnotationsByType(types: Set<number>, pageIndexesToSkip: Set<number>): Promise<Array<Object>>;
     /**
      * @returns {Promise<Object | null>} A promise that is resolved with
      *   an {Object} with the JavaScript actions:
@@ -1218,16 +1235,16 @@ export class PDFDocumentProxy {
  * Page render parameters.
  *
  * @typedef {Object} RenderParameters
- * @property {CanvasRenderingContext2D} canvasContext - 2D context of a DOM
- *   Canvas object for backwards compatibility; it is recommended to use the
- *   `canvas` parameter instead.
- *   If the context must absolutely be used to render the page, the canvas must
- *   be null.
  * @property {HTMLCanvasElement|null} canvas - A DOM Canvas object. The default
  *   value is the canvas associated with the `canvasContext` parameter if no
  *   value is provided explicitly.
  * @property {PageViewport} viewport - Rendering viewport obtained by calling
  *   the `PDFPageProxy.getViewport` method.
+ * @property {CanvasRenderingContext2D} [canvasContext] - 2D context of a DOM
+ *   Canvas object for backwards compatibility; it is recommended to use the
+ *   `canvas` parameter instead.
+ *   If the context must absolutely be used to render the page, the canvas must
+ *   be null.
  * @property {string} [intent] - Rendering intent, can be 'display', 'print',
  *   or 'any'. The default value is 'display'.
  * @property {number} [annotationMode] Controls which annotations are rendered
@@ -1265,6 +1282,10 @@ export class PDFDocumentProxy {
  *   annotation ids with canvases used to render them.
  * @property {PrintAnnotationStorage} [printAnnotationStorage]
  * @property {boolean} [isEditing] - Render the page in editing mode.
+ * @property {boolean} [recordOperations] - Record the dependencies and bounding
+ *   boxes of all PDF operations that render onto the canvas.
+ * @property {Set<number>} [filteredOperationIndexes] - If provided, only run
+ *   the PDF operations that are included in this set.
  */
 /**
  * Page getOperatorList parameters.
@@ -1327,6 +1348,7 @@ export class PDFPageProxy {
     objs: PDFObjects;
     _intentStates: Map<any, any>;
     destroyed: boolean;
+    recordedGroups: any;
     /**
      * @type {number} Page number of the page. First page is 1.
      */
@@ -1387,7 +1409,7 @@ export class PDFPageProxy {
      * @returns {RenderTask} An object that contains a promise that is
      *   resolved when the page finishes rendering.
      */
-    render({ canvasContext, canvas, viewport, intent, annotationMode, transform, background, optionalContentConfigPromise, annotationCanvasMap, pageColors, printAnnotationStorage, isEditing, }: RenderParameters): RenderTask;
+    render({ canvasContext, canvas, viewport, intent, annotationMode, transform, background, optionalContentConfigPromise, annotationCanvasMap, pageColors, printAnnotationStorage, isEditing, recordOperations, filteredOperationIndexes, }: RenderParameters): RenderTask;
     /**
      * @param {GetOperatorListParameters} params - Page getOperatorList
      *   parameters.
@@ -1470,9 +1492,9 @@ export class PDFPageProxy {
  * @param {PDFWorkerParameters} params - The worker initialization parameters.
  */
 export class PDFWorker {
-    static "__#63@#fakeWorkerId": number;
-    static "__#63@#isWorkerDisabled": boolean;
-    static "__#63@#workerPorts": WeakMap<object, any>;
+    static #fakeWorkerId: number;
+    static #isWorkerDisabled: boolean;
+    static #workerPorts: WeakMap<object, any>;
     /**
      * @param {PDFWorkerParameters} params - The worker initialization parameters.
      * @returns {PDFWorker}
@@ -1483,7 +1505,7 @@ export class PDFWorker {
      * @type {string}
      */
     static get workerSrc(): string;
-    static get "__#63@#mainThreadWorkerMessageHandler"(): any;
+    static get #mainThreadWorkerMessageHandler(): any;
     static get _setupFakeWorkerGlobal(): any;
     constructor({ name, port, verbosity, cspPolicyService, }?: {
         name?: null | undefined;

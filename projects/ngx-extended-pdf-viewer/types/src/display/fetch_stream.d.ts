@@ -16,7 +16,7 @@ export class PDFFetchStream implements IPDFStream {
 declare class PDFFetchStreamReader implements IPDFStreamReader {
     constructor(stream: any);
     _stream: any;
-    _reader: ReadableStreamDefaultReader<Uint8Array<ArrayBufferLike>> | null;
+    _reader: ReadableStreamDefaultReader<Uint8Array<ArrayBuffer>> | null;
     _loaded: number;
     _filename: string | null;
     _withCredentials: any;
@@ -43,7 +43,7 @@ declare class PDFFetchStreamReader implements IPDFStreamReader {
 declare class PDFFetchStreamRangeReader implements IPDFStreamRangeReader {
     constructor(stream: any, begin: any, end: any);
     _stream: any;
-    _reader: ReadableStreamDefaultReader<Uint8Array<ArrayBufferLike>> | null;
+    _reader: ReadableStreamDefaultReader<Uint8Array<ArrayBuffer>> | null;
     _loaded: number;
     _withCredentials: any;
     _readCapability: any;

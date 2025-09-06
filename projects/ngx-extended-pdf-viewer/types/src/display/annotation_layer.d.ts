@@ -170,6 +170,7 @@ declare class AnnotationElement {
     renderForms: any;
     svgFactory: any;
     annotationStorage: any;
+    enableComment: any;
     enableScripting: any;
     hasJSActions: any;
     _fieldObjects: any;
@@ -177,6 +178,10 @@ declare class AnnotationElement {
     container: HTMLElement | undefined;
     get _isEditable(): any;
     get hasPopupData(): boolean;
+    get hasCommentButton(): any;
+    get commentButtonPosition(): any[] | null;
+    get commentButtonColor(): string | null;
+    _normalizePoint(point: any): any;
     updateEdited(params: any): void;
     popup: any;
     resetEdited(): void;

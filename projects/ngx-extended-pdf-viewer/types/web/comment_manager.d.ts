@@ -11,7 +11,12 @@ export class CommentManager {
         textView: any;
         cancelButton: any;
         saveButton: any;
-    }, overlayManager: any);
+    }, sidebar: any, eventBus: any, linkService: any, overlayManager: any);
+    showSidebar(annotations: any): void;
+    hideSidebar(): void;
+    removeComments(ids: any): void;
+    selectComment(id: any): void;
+    addComment(annotation: any): void;
     open(uiManager: any, editor: any, position: any): Promise<void>;
     get _dialogWidth(): any;
     destroy(): void;

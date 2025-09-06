@@ -81,6 +81,14 @@ export type PDFPageViewOptions = {
      */
     enableDetailCanvas?: boolean | undefined;
     /**
+     * - When enabled, PDF
+     * rendering will keep track of which areas of the page each PDF operation
+     * affects. Then, when rendering a partial page (if `enableDetailCanvas` is
+     * enabled), it will only run through the operations that affect that portion.
+     * The default value is `false`.
+     */
+    enableOptimizedPartialRendering?: boolean | undefined;
+    /**
      * - Overwrites background and foreground colors
      * with user defined ones in order to improve readability in high contrast
      * mode.
@@ -209,6 +217,7 @@ export class PDFPageView extends BasePDFPageView implements IRenderableView {
         pageColors: null;
         isEditing: boolean;
         background: any;
+        recordOperations: boolean;
     };
     draw(): Promise<void>;
     /**

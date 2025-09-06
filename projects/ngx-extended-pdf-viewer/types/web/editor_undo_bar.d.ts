@@ -1,5 +1,5 @@
 export class EditorUndoBar {
-    static "__#87@#l10nMessages": Readonly<{
+    static #l10nMessages: Readonly<{
         highlight: "pdfjs-editor-undo-bar-message-highlight";
         freetext: "pdfjs-editor-undo-bar-message-freetext";
         stamp: "pdfjs-editor-undo-bar-message-stamp";

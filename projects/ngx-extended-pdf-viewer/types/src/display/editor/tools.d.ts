@@ -65,7 +65,8 @@ export class AnnotationEditorUIManager {
     onRotationChanging({ pagesRotation }: {
         pagesRotation: any;
     }): void;
-    highlightSelection(methodOfCreation?: string): void;
+    highlightSelection(methodOfCreation?: string, comment?: boolean): void;
+    commentSelection(methodOfCreation?: string): void;
     /**
      * Add an editor in the annotation storage.
      * @param {AnnotationEditor} editor

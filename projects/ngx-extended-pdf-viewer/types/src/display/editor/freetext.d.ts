@@ -16,8 +16,8 @@ export class FreeTextEditor extends AnnotationEditor {
     static updateDefaultParams(type: any, value: any): void;
     /** @inheritdoc */
     static get defaultPropertiesToUpdate(): any[][];
-    static "__#20@#getNodeContent"(node: any): any;
-    static "__#20@#deserializeContent"(content: any): any;
+    static #getNodeContent(node: any): any;
+    static #deserializeContent(content: any): any;
     /** @inheritdoc */
     static deserialize(data: any, parent: any, uiManager: any): Promise<AnnotationEditor | null>;
     constructor(params: any);
@@ -52,6 +52,8 @@ export class FreeTextEditor extends AnnotationEditor {
     editorDiv: HTMLDivElement | undefined;
     overlayDiv: HTMLDivElement | undefined;
     editorDivPaste(event: any): void;
+    /** @inheritdoc */
+    getPDFRect(): any[];
     /** @inheritdoc */
     serialize(isForCopying?: boolean): Object | null;
     /** @inheritdoc */

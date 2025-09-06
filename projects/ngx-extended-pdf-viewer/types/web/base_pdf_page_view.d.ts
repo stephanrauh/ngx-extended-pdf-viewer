@@ -3,9 +3,11 @@ export class BasePDFPageView {
     canvas: null;
     /** @type {null | HTMLDivElement} */
     div: null | HTMLDivElement;
+    enableOptimizedPartialRendering: boolean;
     eventBus: null;
     id: null;
     pageColors: null;
+    recordedGroups: null;
     renderingQueue: null;
     renderTask: null;
     resume: null;

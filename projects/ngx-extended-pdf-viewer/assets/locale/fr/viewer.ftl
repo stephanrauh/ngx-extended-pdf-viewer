@@ -298,9 +298,13 @@ pdfjs-web-fonts-disabled = Les polices web sont désactivées : impossible d’
 
 pdfjs-editor-free-text-button =
     .title = Texte
+pdfjs-editor-color-picker-free-text-input =
+    .title = Changer la couleur du texte
 pdfjs-editor-free-text-button-label = Texte
 pdfjs-editor-ink-button =
     .title = Dessiner
+pdfjs-editor-color-picker-ink-input =
+    .title = Changer la couleur pour dessiner
 pdfjs-editor-ink-button-label = Dessiner
 pdfjs-editor-stamp-button =
     .title = Ajouter ou modifier des images
@@ -312,6 +316,10 @@ pdfjs-highlight-floating-button1 =
     .title = Surligner
     .aria-label = Surligner
 pdfjs-highlight-floating-button-label = Surligner
+pdfjs-comment-floating-button =
+    .title = Commenter
+    .aria-label = Commenter
+pdfjs-comment-floating-button-label = Commenter
 pdfjs-editor-signature-button =
     .title = Ajouter une signature
 pdfjs-editor-signature-button-label = Ajouter une signature
@@ -520,6 +528,14 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Afficher l’éditeur 
 pdfjs-editor-alt-text-settings-show-dialog-description = Vous aide à vous assurer que toutes vos images ont du texte alternatif.
 pdfjs-editor-alt-text-settings-close-button = Fermer
 
+## Accessibility labels (announced by screen readers) for objects added to the editor.
+
+pdfjs-editor-highlight-added-alert = Surlignage ajouté
+pdfjs-editor-freetext-added-alert = Texte ajouté
+pdfjs-editor-ink-added-alert = Dessin ajouté
+pdfjs-editor-stamp-added-alert = Image ajoutée
+pdfjs-editor-signature-added-alert = Signature ajoutée
+
 ## "Annotations removed" bar
 
 pdfjs-editor-undo-bar-message-highlight = Surlignage supprimé
@@ -588,6 +604,8 @@ pdfjs-editor-add-signature-save-checkbox = Enregistrer la signature
 pdfjs-editor-add-signature-save-warning-message = Vous avez atteint la limite de 5 signatures enregistrées. Supprimez-en une pour en enregistrer une autre.
 pdfjs-editor-add-signature-image-upload-error-title = Impossible d’envoyer l’image
 pdfjs-editor-add-signature-image-upload-error-description = Vérifiez votre connexion réseau ou essayez avec une autre image.
+pdfjs-editor-add-signature-image-no-data-error-title = Impossible de convertir cette image en signature
+pdfjs-editor-add-signature-image-no-data-error-description = Veuillez essayer d’envoyer une autre image.
 pdfjs-editor-add-signature-error-close-button = Fermer
 
 ## Dialog buttons
@@ -595,6 +613,26 @@ pdfjs-editor-add-signature-error-close-button = Fermer
 pdfjs-editor-add-signature-cancel-button = Annuler
 pdfjs-editor-add-signature-add-button = Ajouter
 pdfjs-editor-edit-signature-update-button = Mettre à jour
+
+##  Edit a comment dialog
+
+pdfjs-editor-edit-comment-actions-button-label = Actions
+pdfjs-editor-edit-comment-actions-button =
+    .title = Actions
+pdfjs-editor-edit-comment-close-button-label = Fermer
+pdfjs-editor-edit-comment-close-button =
+    .title = Fermer
+pdfjs-editor-edit-comment-actions-edit-button-label = Modifier
+pdfjs-editor-edit-comment-actions-delete-button-label = Supprimer
+pdfjs-editor-edit-comment-manager-text-input =
+    .placeholder = Saisissez votre commentaire
+pdfjs-editor-edit-comment-manager-cancel-button = Annuler
+pdfjs-editor-edit-comment-manager-save-button = Enregistrer
+
+## Edit a comment button in the editor toolbar
+
+pdfjs-editor-edit-comment-button =
+    .title = Modifier le commentaire
 
 ## Main menu for adding/removing signatures
 
@@ -620,35 +658,6 @@ pdfjs-editor-movePageUp-button-label = Déplacer la page vers le haut
 pdfjs-editor-movePageDown-button = Déplacer la page vers le bas
 pdfjs-editor-movePageDown-button-label = Déplacer la page vers le bas
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-editor-color-picker-free-text-input =
-    .title = Change text color
-pdfjs-editor-color-picker-ink-input =
-    .title = Change drawing color
-pdfjs-editor-highlight-added-alert = Highlight added
-pdfjs-editor-freetext-added-alert = Text added
-pdfjs-editor-ink-added-alert = Drawing added
-pdfjs-editor-stamp-added-alert = Image added
-pdfjs-editor-signature-added-alert = Signature added
-pdfjs-editor-add-signature-image-no-data-error-title = Can’t convert this image into a signature
-pdfjs-editor-add-signature-image-no-data-error-description = Please try uploading a different image.
-pdfjs-editor-edit-comment-actions-button-label = Actions
-pdfjs-editor-edit-comment-actions-button =
-    .title = Actions
-pdfjs-editor-edit-comment-close-button-label = Close
-pdfjs-editor-edit-comment-close-button =
-    .title = Close
-pdfjs-editor-edit-comment-actions-edit-button-label = Edit
-pdfjs-editor-edit-comment-actions-delete-button-label = Delete
-pdfjs-editor-edit-comment-manager-text-input =
-    .placeholder = Enter your comment
-pdfjs-editor-edit-comment-manager-cancel-button = Cancel
-pdfjs-editor-edit-comment-manager-save-button = Save
-pdfjs-editor-edit-comment-button =
-    .title = Edit comment
-pdfjs-comment-floating-button =
-    .title = Comment
-    .aria-label = Comment
-pdfjs-comment-floating-button-label = Comment
 pdfjs-editor-comment-button =
     .title = Comment
     .aria-label = Comment

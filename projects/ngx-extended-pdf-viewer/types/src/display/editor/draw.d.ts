@@ -4,13 +4,13 @@
 export class DrawingEditor extends AnnotationEditor {
     static _currentDrawId: number;
     static _currentParent: null;
-    static "__#27@#currentDraw": null;
-    static "__#27@#currentDrawingAC": null;
-    static "__#27@#currentDrawingOptions": null;
-    static "__#27@#currentPointerId": number;
-    static "__#27@#currentPointerType": null;
-    static "__#27@#currentPointerIds": null;
-    static "__#27@#currentMoveTimestamp": number;
+    static #currentDraw: null;
+    static #currentDrawingAC: null;
+    static #currentDrawingOptions: null;
+    static #currentPointerId: number;
+    static #currentPointerType: null;
+    static #currentPointerIds: null;
+    static #currentMoveTimestamp: number;
     static _INNER_MARGIN: number;
     static _mergeSVGProperties(p1: any, p2: any): any;
     /**

@@ -208,7 +208,7 @@ export class PageViewport {
     convertToPdfPoint(x: number, y: number): any[];
 }
 export class PDFDateString {
-    static "__#2@#regex": any;
+    static #regex: any;
     /**
      * Convert a PDF date string to a JavaScript `Date` object.
      *
