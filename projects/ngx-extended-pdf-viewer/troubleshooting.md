@@ -55,6 +55,32 @@ customHeaders:
         value: 'application/javascript'
 ```
 
+Azure Web App requires this configuration (notice the `application/javascript` setting):
+
+```xml
+<configuration>
+    <system.webServer>
+        <staticContent>
+            <mimeMap fileExtension=".json" mimeType="application/json" />
+            <mimeMap fileExtension=".importmap" mimeType="application/importmap+json" />
+            <mimeMap fileExtension=".mjs" mimeType="application/javascript" />
+            <mimeMap fileExtension=".ftl" mimeType="text/html" />
+        </staticContent>
+        <rewrite>
+            <rules>
+                <rule name="Main Rule" stopProcessing="true">
+                    <match url=".*" />
+                    <conditions logicalGrouping="MatchAll">
+                        <add input="{REQUEST_FILENAME}" matchType="IsFile" negate="true" />
+                    </conditions>
+                    <action type="Rewrite" url="/" />
+                </rule>
+            </rules>
+        </rewrite>
+    </system.webServer>
+</configuration>
+```
+
 ## Compatibility to Bootstrap (and other CSS frameworks)
 
 Bootstrap interferes with the printing algorithm of `pdf.js`. Guard it with a media query to avoid unwanted effects, such as scaling the print to 65%. For example, if you're using SCSS and Bootstrap 4, remove the import of Bootstrap.min.css from the Angular.json file. Instead, import it by including Bootstrap by adding this line to the global `styles.scss` file:
@@ -103,12 +129,20 @@ The PDF viewer is very prone to timing problems:
 <mat-tab-group (selectedTabChange)="activateTab($event.index)">
   <mat-tab label="BootsFAces Deep-Dive PDF">
     <ng-template matTabContent>
-      <ngx-extended-pdf-viewer *ngIf="visible[0]" [src]="'assets/pdfs/BootsFaces_Deep_Dive_1.0.pdf'"> </ngx-extended-pdf-viewer>
+      <ngx-extended-pdf-viewer
+        *ngIf="visible[0]"
+        [src]="'assets/pdfs/BootsFaces_Deep_Dive_1.0.pdf'"
+      >
+      </ngx-extended-pdf-viewer>
     </ng-template>
   </mat-tab>
   <mat-tab label="Codpaste PDF">
     <ng-template matTabContent>
-      <ngx-extended-pdf-viewer *ngIf="visible[1]" [src]="'assets/pdfs/codpaste-teachingpack.pdf'"> </ngx-extended-pdf-viewer>
+      <ngx-extended-pdf-viewer
+        *ngIf="visible[1]"
+        [src]="'assets/pdfs/codpaste-teachingpack.pdf'"
+      >
+      </ngx-extended-pdf-viewer>
     </ng-template>
   </mat-tab>
 </mat-tab-group>
