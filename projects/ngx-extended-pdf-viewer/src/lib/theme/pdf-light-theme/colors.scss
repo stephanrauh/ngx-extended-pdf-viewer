@@ -112,10 +112,6 @@ $outline-active-bg-color: #aaaaac; // Here
 
 // outline hover: #bebec1
 
-$sidebar-width: 200px;
-$sidebar-transition-duration: 200ms;
-$sidebar-transition-timing-function: ease;
-
 .hidden-by-fullscreen {
   display: none !important;
 }
@@ -123,6 +119,9 @@ $sidebar-transition-timing-function: ease;
 :root {
   --scrollbar-color: auto;
   --scrollbar-bg-color: auto;
+  --sidebar-width: 200px;
+  --sidebar-transition-duration: 200ms;
+  --sidebar-transition-timing-function: ease;
 }
 
 // These imports are simulate by the compile-sass.ts script:

@@ -28,6 +28,9 @@ ngx-extended-pdf-viewer {
     --page-border: 9px solid transparent;
     --spreadHorizontalWrapped-margin-LR: -3.5px;
     --zoom-factor: 1;
+    --sidebar-width: 200px;
+    --sidebar-transition-duration: 200ms;
+    --sidebar-transition-timing-function: ease;
   }
 
   @media screen and (forced-colors: active) {
@@ -68,7 +71,7 @@ ngx-extended-pdf-viewer {
     --page-bg-color: unset;
 
     padding-bottom: var(--pdfViewer-padding-bottom);
-    
+
     /* GPU acceleration for smoother pinch-to-zoom on iOS Safari */
     transform: translateZ(0);
     -webkit-backface-visibility: hidden;
@@ -406,11 +409,11 @@ ngx-extended-pdf-viewer {
     position: absolute;
     top: 32px;
     bottom: 0;
-    width: $sidebar-width;
+    width: var(--sidebar-width);
     visibility: hidden;
     z-index: 100;
-    transition-duration: $sidebar-transition-duration;
-    transition-timing-function: $sidebar-transition-timing-function;
+    transition-duration: var(--sidebar-transition-duration);
+    transition-timing-function: var(--sidebar-transition-timing-function);
     // #2984 modified by ngx-extended-pdf-viewer to improve the light and dark mode
     border-right: solid 1px $sidebar-border;
     // #2984 end of modification by ngx-extended-pdf-viewer to improve the light and dark mode
@@ -419,13 +422,13 @@ ngx-extended-pdf-viewer {
 
 html[dir='ltr'] ngx-extended-pdf-viewer #sidebarContainer {
   transition-property: left;
-  left: -$sidebar-width;
-  left: calc(0px - $sidebar-width);
+  left: calc(-1 * var(--sidebar-width));
+  left: calc(0px - var(--sidebar-width));
 }
 
 html[dir='rtl'] ngx-extended-pdf-viewer #sidebarContainer {
   transition-property: right;
-  right: calc(0px - $sidebar-width);
+  right: calc(0px - var(--sidebar-width));
 }
 
 ngx-extended-pdf-viewer {
@@ -501,8 +504,8 @@ ngx-extended-pdf-viewer {
   }
 
   #viewerContainer:not(.pdfPresentationMode) {
-    transition-duration: $sidebar-transition-duration;
-    transition-timing-function: $sidebar-transition-timing-function;
+    transition-duration: var(--sidebar-transition-duration);
+    transition-timing-function: var(--sidebar-transition-timing-function);
   }
 }
 
@@ -515,12 +518,12 @@ ngx-extended-pdf-viewer {
 
 html[dir='ltr'] ngx-extended-pdf-viewer #outerContainer.sidebarOpen #viewerContainer:not(.pdfPresentationMode) {
   transition-property: left;
-  left: $sidebar-width;
+  left: var(--sidebar-width);
 }
 
 html[dir='rtl'] ngx-extended-pdf-viewer #outerContainer.sidebarOpen #viewerContainer:not(.pdfPresentationMode) {
   transition-property: right;
-  right: $sidebar-width;
+  right: var(--sidebar-width);
 }
 
 ngx-extended-pdf-viewer {
@@ -569,20 +572,12 @@ html[dir="rtl"] #sidebarToggle {
 ngx-extended-pdf-viewer {
   #sidebarResizer {
     position: absolute;
-    top: 0;
-    bottom: 0;
+    inset-block: 0;
+    inset-inline-end: -6px;
     width: 6px;
     z-index: 200;
     cursor: ew-resize;
   }
-}
-
-html[dir='ltr'] ngx-extended-pdf-viewer #sidebarResizer {
-  right: -6px;
-}
-
-html[dir='rtl'] ngx-extended-pdf-viewer #sidebarResizer {
-  left: -6px;
 }
 
 ngx-extended-pdf-viewer {

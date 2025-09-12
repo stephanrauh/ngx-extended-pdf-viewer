@@ -686,3 +686,4 @@
 - 25.6.0-alpha.0 updated the bleeding edge branch to the latest developer version; #804 replaced some `console.log()` statements by `NgxConsole.log()`; #3006 added the `DownloadManager` to the `IPdfViewerApplication` interface; #3012 added a missing CSS rule that ensures that the highlight annotation is displayed correctly
 - 25.6.0-alpha.1 #2939 reduce the maximum resolution during pinch gestures to prevent lagging
 - 25.6.0-alpha.2 updated the stable branch to pdf.js 5.4.149
+- 25.6.0-alpha.3 #3016 activated the sidebar resizer

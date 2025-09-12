@@ -3,8 +3,15 @@
 </div>
 
 <ng-template #defaultSidebar>
-  <div id="sidebarContainer" [style.top]="sidebarPositionTop">
-    <div id="additionalSidebarContainer" class="hidden" [class.hidden]="hideSidebarToolbar">
+  <div
+    id="sidebarContainer"
+    [style.top]="sidebarPositionTop"
+  >
+    <div
+      id="additionalSidebarContainer"
+      class="hidden"
+      [class.hidden]="hideSidebarToolbar"
+    >
       <pdf-sidebar-toolbar [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"></pdf-sidebar-toolbar>
     </div>
     <pdf-sidebar-content
@@ -13,6 +20,6 @@
       [hideSidebarToolbar]="hideSidebarToolbar"
       [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
     ></pdf-sidebar-content>
-    <div id="sidebarResizer" class="hidden"></div>
+    <div id="sidebarResizer"></div>
   </div>
 </ng-template>
