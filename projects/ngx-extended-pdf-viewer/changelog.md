@@ -687,3 +687,4 @@
 - 25.6.0-alpha.1 #2939 reduce the maximum resolution during pinch gestures to prevent lagging
 - 25.6.0-alpha.2 updated the stable branch to pdf.js 5.4.149
 - 25.6.0-alpha.3 #3016 activated the sidebar resizer
+- 25.6.0-alpha.4 #2843 stop showing "0%" zoom
