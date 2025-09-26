@@ -1199,4 +1199,7 @@ export interface IPDFViewerApplication {
   ngxKeyboardManager: any;
   cspPolicyService: any;
   movePage(prevPageIndex: number, newPageIndex: number): void;
+  // #2691 modified by ngx-extended-pdf-viewer
+  setInitialAnnotationValues?(): void;
+  // #2691 end of modification by ngx-extended-pdf-viewer
 }

@@ -1814,6 +1814,16 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
           PDFViewerApplication.pdfDocumentProperties.open();
         }
         this.hasTextLayer = this.textLayer === true;
+
+        // #2691 modified by ngx-extended-pdf-viewer
+        // If initial form data was provided, update the baseline for change detection
+        // after the document is loaded and form fields are initialized
+        if (this.initialAngularFormData && PDFViewerApplication.setInitialAnnotationValues) {
+          setTimeout(() => {
+            PDFViewerApplication.setInitialAnnotationValues?.();
+          }, 200); // Allow time for form fields to be rendered and initialized
+        }
+        // #2691 end of modification by ngx-extended-pdf-viewer
       });
     });
 

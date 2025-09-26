@@ -298,6 +298,15 @@ export class NgxFormSupport {
         }
       }
     }
+
+    // #2691 modified by ngx-extended-pdf-viewer
+    // After programmatically setting form values, update the baseline for change detection
+    if (this.PDFViewerApplication?.setInitialAnnotationValues) {
+      setTimeout(() => {
+        this.PDFViewerApplication?.setInitialAnnotationValues?.();
+      }, 10); // Small delay to ensure all form updates are processed
+    }
+    // #2691 end of modification by ngx-extended-pdf-viewer
   }
 
   private setFieldValueAndUpdateAnnotationStorage(key: string, newValue: any) {
