@@ -8,6 +8,19 @@
     display: block;
   }
 
+  /* #3040 Ionic set the body position to fixed, ruining our print functionality */
+  html,
+  body,
+  ion-app,
+  ion-router-outlet,
+  .ion-page,
+  ion-content,
+  ion-content::part(scroll) {
+    position: static;
+  }
+
+  /** end of #3040 */
+
   body[data-pdfjsprinting],
   html {
     overflow-y: visible !important;
@@ -20,7 +33,7 @@
     height: 100%;
     width: 100%;
 
-    & > * {
+    &>* {
       display: none !important;
       outline: 0;
       padding: 0;
@@ -42,7 +55,7 @@
     }
 
     /* wrapper around (scaled) print canvas elements */
-    #printContainer > .printedPage {
+    #printContainer>.printedPage {
       page-break-after: always;
       page-break-inside: avoid;
 
@@ -55,11 +68,12 @@
       justify-content: center;
       align-items: center;
     }
-    #printContainer > .xfaPrintedPage .xfaPage {
+
+    #printContainer>.xfaPrintedPage .xfaPage {
       position: absolute;
     }
 
-    #printContainer > .xfaPrintedPage {
+    #printContainer>.xfaPrintedPage {
       page-break-after: always;
       page-break-inside: avoid;
       width: 100%;
@@ -67,8 +81,8 @@
       position: relative;
     }
 
-    #printContainer > .printedPage canvas,
-    #printContainer > .printedPage img {
+    #printContainer>.printedPage canvas,
+    #printContainer>.printedPage img {
       /* The intrinsic canvas / image size will make sure that we fit the page. */
       max-width: 100%;
       max-height: 100%;
