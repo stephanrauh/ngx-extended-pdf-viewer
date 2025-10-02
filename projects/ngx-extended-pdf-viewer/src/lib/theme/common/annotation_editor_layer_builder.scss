@@ -242,6 +242,8 @@ ngx-extended-pdf-viewer {
   .textLayer {
     .editToolbar {
       --editor-toolbar-delete-image: url("data:image/svg+xml; utf8, <svg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M11 3H13.6C14 3 14.3 3.3 14.3 3.6C14.3 3.9 14 4.2 13.7 4.2H13.3V14C13.3 15.1 12.4 16 11.3 16H4.80005C3.70005 16 2.80005 15.1 2.80005 14V4.2H2.40005C2.00005 4.2 1.80005 4 1.80005 3.6C1.80005 3.2 2.00005 3 2.40005 3H5.00005V2C5.00005 0.9 5.90005 0 7.00005 0H9.00005C10.1 0 11 0.9 11 2V3ZM6.90005 1.2L6.30005 1.8V3H9.80005V1.8L9.20005 1.2H6.90005ZM11.4 14.7L12 14.1V4.2H4.00005V14.1L4.60005 14.7H11.4ZM7.00005 12.4C7.00005 12.7 6.70005 13 6.40005 13C6.10005 13 5.80005 12.7 5.80005 12.4V7.6C5.70005 7.3 6.00005 7 6.40005 7C6.80005 7 7.00005 7.3 7.00005 7.6V12.4ZM10.2001 12.4C10.2001 12.7 9.90006 13 9.60006 13C9.30006 13 9.00006 12.7 9.00006 12.4V7.6C9.00006 7.3 9.30006 7 9.60006 7C9.90006 7 10.2001 7.3 10.2001 7.6V12.4Z' fill='black' /></svg>");
+      --new-alt-text-ai-disclaimer-icon: url("data:image/svg+xml; utf8, <svg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M8 1C4.1 1 1 4.1 1 8s3.1 7 7 7 7-3.1 7-7-3.1-7-7-7zm0 12.5c-3 0-5.5-2.5-5.5-5.5S5 2.5 8 2.5s5.5 2.5 5.5 5.5-2.5 5.5-5.5 5.5z' fill='black'/><path d='M7 5h2v2H7V5zm0 3h2v5H7V8z' fill='black'/></svg>");
+      --new-alt-text-spinner-icon: url("data:image/svg+xml; utf8, <svg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M8 1.5A6.5 6.5 0 0 1 14.5 8h1.5A8 8 0 0 0 8 0v1.5z' fill='black'><animateTransform attributeName='transform' attributeType='XML' type='rotate' from='0 8 8' to='360 8 8' dur='1s' repeatCount='indefinite'/></path></svg>");
       --editor-toolbar-bg-color: #f0f0f4;
       --editor-toolbar-highlight-image: url('data:image/svg+xml; utf8, <svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg"><g><path fill-rule="evenodd" clip-rule="evenodd" d="M7.10918 11.66C7.24918 11.8 7.43918 11.88 7.63918 11.88C7.83918 11.88 8.02918 11.8 8.16918 11.66L14.9192 4.91C15.2692 4.57 15.4592 4.11 15.4592 3.62C15.4592 3.13 15.2692 2.67 14.9192 2.33L13.1292 0.54C12.7892 0.19 12.3292 0 11.8392 0C11.3492 0 10.8892 0.2 10.5492 0.54L3.79918 7.29C3.50918 7.58 3.50918 8.06 3.79918 8.35L4.38988 8.9407L1.40918 11.93H5.64918L6.51419 11.065L7.10918 11.66ZM7.63918 10.07L5.38918 7.82V7.81L7.8648 5.33438L10.1198 7.58938L7.63918 10.07ZM11.1805 6.52872L13.8592 3.85C13.9892 3.72 13.9892 3.52 13.8592 3.39L12.0692 1.6C11.9892 1.52 11.8892 1.5 11.8392 1.5C11.8392 1.5 11.6892 1.51 11.6092 1.59L8.92546 4.27372L11.1805 6.52872Z" fill="#000"/><path d="M0.40918 14H15.4092V16H0.40918V14Z" fill="#000"/></g></svg>');
       --editor-toolbar-fg-color: #2e2e56;
@@ -368,6 +370,44 @@ ngx-extended-pdf-viewer {
           &::before {
             content: "";
             mask-image: var(--editor-toolbar-delete-image);
+            mask-repeat: no-repeat;
+            mask-position: center;
+            display: inline-block;
+            background-color: var(--editor-toolbar-fg-color);
+            width: 100%;
+            height: 100%;
+          }
+
+          &:hover::before {
+            background-color: var(--editor-toolbar-hover-fg-color);
+          }
+        }
+
+        .deleteButton {
+          width: var(--editor-toolbar-height);
+
+          &::before {
+            content: "";
+            mask-image: var(--editor-toolbar-delete-image);
+            mask-repeat: no-repeat;
+            mask-position: center;
+            display: inline-block;
+            background-color: var(--editor-toolbar-fg-color);
+            width: 100%;
+            height: 100%;
+          }
+
+          &:hover::before {
+            background-color: var(--editor-toolbar-hover-fg-color);
+          }
+        }
+
+        .commentButton {
+          width: var(--editor-toolbar-height);
+
+          &::before {
+            content: "";
+            mask-image: var(--comment-edit-button-icon);
             mask-repeat: no-repeat;
             mask-position: center;
             display: inline-block;

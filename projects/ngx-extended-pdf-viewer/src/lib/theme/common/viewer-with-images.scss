@@ -31,6 +31,7 @@ ngx-extended-pdf-viewer {
     --sidebar-width: 200px;
     --sidebar-transition-duration: 200ms;
     --sidebar-transition-timing-function: ease;
+    --comment-edit-button-icon: url("data:image/svg+xml; utf8, <svg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M13 1H3C2.4 1 2 1.4 2 2V10C2 10.6 2.4 11 3 11H4V14L8 11H13C13.6 11 14 10.6 14 10V2C14 1.4 13.6 1 13 1ZM12.5 9.5H7.7L5.5 11V9.5H3.5V2.5H12.5V9.5Z' fill='black'/><path d='M5 4H11V5H5V4ZM5 6H11V7H5V6ZM5 8H9V9H5V8Z' fill='black'/></svg>");
   }
 
   @media screen and (forced-colors: active) {
