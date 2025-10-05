@@ -286,6 +286,8 @@ pdfjs-web-fonts-disabled = Веб қаріптері сөндірілген: қ�
 
 pdfjs-editor-free-text-button =
     .title = Мәтін
+pdfjs-editor-color-picker-free-text-input =
+    .title = Мәтін түсін өзгерту
 pdfjs-editor-free-text-button-label = Мәтін
 pdfjs-editor-ink-button =
     .title = Сурет салу
@@ -300,12 +302,21 @@ pdfjs-highlight-floating-button1 =
     .title = Ерекшелеу
     .aria-label = Ерекшелеу
 pdfjs-highlight-floating-button-label = Ерекшелеу
+pdfjs-comment-floating-button =
+    .title = Түсіндірме
+    .aria-label = Түсіндірме
+pdfjs-comment-floating-button-label = Түсіндірме
 pdfjs-editor-signature-button =
     .title = Қолтаңбаны қосу
 pdfjs-editor-signature-button-label = Қолтаңбаны қосу
 
 ## Default editor aria labels
 
+# Used when a signature editor is selected/hovered.
+# Variables:
+#   $description (String) - a string describing/labeling the signature.
+pdfjs-editor-signature-editor1 =
+    .aria-description = Қолтаңба түзеткіші: { $description }
 pdfjs-editor-stamp-editor =
     .aria-label = Сурет редакторы
 
@@ -564,6 +575,26 @@ pdfjs-editor-add-signature-cancel-button = Бас тарту
 pdfjs-editor-add-signature-add-button = Қосу
 pdfjs-editor-edit-signature-update-button = Жаңарту
 
+##  Edit a comment dialog
+
+pdfjs-editor-edit-comment-actions-button-label = Әрекеттер
+pdfjs-editor-edit-comment-actions-button =
+    .title = Әрекеттер
+pdfjs-editor-edit-comment-close-button-label = Жабу
+pdfjs-editor-edit-comment-close-button =
+    .title = Жабу
+pdfjs-editor-edit-comment-actions-edit-button-label = Түзету
+pdfjs-editor-edit-comment-actions-delete-button-label = Өшіру
+pdfjs-editor-edit-comment-manager-text-input =
+    .placeholder = Пікіріңізді енгізіңіз
+pdfjs-editor-edit-comment-manager-cancel-button = Бас тарту
+pdfjs-editor-edit-comment-manager-save-button = Сақтау
+
+## Edit a comment button in the editor toolbar
+
+pdfjs-editor-edit-comment-button =
+    .title = Пікірді түзету
+
 ## Main menu for adding/removing signatures
 
 pdfjs-editor-delete-signature-button1 =
@@ -579,14 +610,8 @@ pdfjs-editor-add-signature-edit-button-label = Сипаттаманы түзет
 pdfjs-editor-edit-signature-dialog-title = Сипаттаманы түзету
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-editor-color-picker-free-text-input =
-    .title = Change text color
 pdfjs-editor-color-picker-ink-input =
     .title = Change drawing color
-pdfjs-comment-floating-button =
-    .title = Comment
-    .aria-label = Comment
-pdfjs-comment-floating-button-label = Comment
 pdfjs-editor-comment-button =
     .title = Comment
     .aria-label = Comment
@@ -595,8 +620,6 @@ pdfjs-editor-highlight-editor =
     .aria-label = Highlight editor
 pdfjs-editor-ink-editor =
     .aria-label = Drawing editor
-pdfjs-editor-signature-editor1 =
-    .aria-description = Signature editor: { $description }
 pdfjs-editor-comments-sidebar-title =
     { $count ->
         [one] Comment
@@ -606,24 +629,26 @@ pdfjs-editor-comments-sidebar-close-button =
     .title = Close the sidebar
     .aria-label = Close the sidebar
 pdfjs-editor-comments-sidebar-close-button-label = Close the sidebar
-pdfjs-editor-comments-sidebar-no-comments = Add a comment by selecting text or an annotation.
+pdfjs-editor-comments-sidebar-no-comments1 = See something noteworthy? Highlight it and leave a comment.
+pdfjs-editor-comments-sidebar-no-comments-link = Learn more
 pdfjs-editor-highlight-added-alert = Highlight added
 pdfjs-editor-add-signature-image-no-data-error-title = Can’t convert this image into a signature
 pdfjs-editor-add-signature-image-no-data-error-description = Please try uploading a different image.
-pdfjs-editor-edit-comment-actions-button-label = Actions
-pdfjs-editor-edit-comment-actions-button =
-    .title = Actions
-pdfjs-editor-edit-comment-close-button-label = Close
-pdfjs-editor-edit-comment-close-button =
-    .title = Close
-pdfjs-editor-edit-comment-actions-edit-button-label = Edit
-pdfjs-editor-edit-comment-actions-delete-button-label = Delete
-pdfjs-editor-edit-comment-manager-text-input =
-    .placeholder = Enter your comment
-pdfjs-editor-edit-comment-manager-cancel-button = Cancel
-pdfjs-editor-edit-comment-manager-save-button = Save
-pdfjs-editor-edit-comment-button =
+pdfjs-show-comment-button =
+    .title = Show comment
+pdfjs-editor-edit-comment-popup-button-label = Edit comment
+pdfjs-editor-edit-comment-popup-button =
     .title = Edit comment
+pdfjs-editor-delete-comment-popup-button-label = Remove comment
+pdfjs-editor-delete-comment-popup-button =
+    .title = Remove comment
+pdfjs-editor-edit-comment-dialog-title-when-editing = Edit comment
+pdfjs-editor-edit-comment-dialog-save-button-when-editing = Update
+pdfjs-editor-edit-comment-dialog-title-when-adding = Add comment
+pdfjs-editor-edit-comment-dialog-save-button-when-adding = Add
+pdfjs-editor-edit-comment-dialog-text-input =
+    .placeholder = Start typing…
+pdfjs-editor-edit-comment-dialog-cancel-button = Cancel
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = Match Each Word

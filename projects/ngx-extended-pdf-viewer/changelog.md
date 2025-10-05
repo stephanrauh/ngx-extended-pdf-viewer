@@ -687,4 +687,4 @@
 - 25.6.0-alpha.1 #2939 reduce the maximum resolution during pinch gestures to prevent lagging
 - 25.6.0-alpha.2 updated the stable branch to pdf.js 5.4.149
 - 25.6.0-alpha.3 #3016 activated the sidebar resizer
-- 25.6.0-alpha.4 #2843 stop showing "0%" zoom; #2691 store the initial form values to prevent the annoying message "are you sure you want to reload without saving?" (only works for small forms because of lazy page rendering); #3040 fixed an Ionic bug that sets the body position to fixed, ruining our print functionality; #3039 added some forgotten CSS rules (in particular, the delete annotation button is visible again)
+- 25.6.0-alpha.4 #2843 stop showing "0%" zoom; #2691 store the initial form values to prevent the annoying message "are you sure you want to reload without saving?" (only works for small forms because of lazy page rendering); #3040 fixed an Ionic bug that sets the body position to fixed, ruining our print functionality; #3039 added some forgotten CSS rules (in particular, the delete annotation button is visible again); update the bleeding edge branch to pdf.js 5.4.296

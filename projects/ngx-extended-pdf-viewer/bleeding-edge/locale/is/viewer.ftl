@@ -474,6 +474,11 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Sýna alt-myndatextari
 pdfjs-editor-alt-text-settings-show-dialog-description = Hjálpar þér að tryggja að allar myndirnar þínar séu með alt-myndatexta.
 pdfjs-editor-alt-text-settings-close-button = Loka
 
+## Accessibility labels (announced by screen readers) for objects added to the editor.
+
+pdfjs-editor-stamp-added-alert = Mynd bætt við
+pdfjs-editor-signature-added-alert = Undirritun bætt við
+
 ## "Annotations removed" bar
 
 pdfjs-editor-undo-bar-message-highlight = Áherslulitun fjarlægð
@@ -542,6 +547,8 @@ pdfjs-editor-add-signature-save-checkbox = Vista undirskrift
 pdfjs-editor-add-signature-save-warning-message = Þú hefur náð hámarki 5 vistaðra undirskrifta. Fjarlægðu eina til að geta vistað fleiri.
 pdfjs-editor-add-signature-image-upload-error-title = Ekki tókst að senda inn mynd
 pdfjs-editor-add-signature-image-upload-error-description = Athugaðu nettenginguna þína eða prófaðu aðra mynd.
+pdfjs-editor-add-signature-image-no-data-error-title = Get ekki breytt þessari mynd í undirskrift
+pdfjs-editor-add-signature-image-no-data-error-description = Reyndu að senda inn aðra mynd.
 pdfjs-editor-add-signature-error-close-button = Loka
 
 ## Dialog buttons
@@ -549,6 +556,26 @@ pdfjs-editor-add-signature-error-close-button = Loka
 pdfjs-editor-add-signature-cancel-button = Hætta við
 pdfjs-editor-add-signature-add-button = Bæta við
 pdfjs-editor-edit-signature-update-button = Uppfæra
+
+##  Edit a comment dialog
+
+pdfjs-editor-edit-comment-actions-button-label = Aðgerðir
+pdfjs-editor-edit-comment-actions-button =
+    .title = Aðgerðir
+pdfjs-editor-edit-comment-close-button-label = Loka
+pdfjs-editor-edit-comment-close-button =
+    .title = Loka
+pdfjs-editor-edit-comment-actions-edit-button-label = Breyta
+pdfjs-editor-edit-comment-actions-delete-button-label = Eyða
+pdfjs-editor-edit-comment-manager-text-input =
+    .placeholder = Settu inn athugasemdina þína
+pdfjs-editor-edit-comment-manager-cancel-button = Hætta við
+pdfjs-editor-edit-comment-manager-save-button = Vista
+
+## Edit a comment button in the editor toolbar
+
+pdfjs-editor-edit-comment-button =
+    .title = Breyta athugasemd
 
 ## Main menu for adding/removing signatures
 
@@ -596,28 +623,26 @@ pdfjs-editor-comments-sidebar-close-button =
     .title = Close the sidebar
     .aria-label = Close the sidebar
 pdfjs-editor-comments-sidebar-close-button-label = Close the sidebar
-pdfjs-editor-comments-sidebar-no-comments = Add a comment by selecting text or an annotation.
+pdfjs-editor-comments-sidebar-no-comments1 = See something noteworthy? Highlight it and leave a comment.
+pdfjs-editor-comments-sidebar-no-comments-link = Learn more
 pdfjs-editor-highlight-added-alert = Highlight added
 pdfjs-editor-freetext-added-alert = Text added
 pdfjs-editor-ink-added-alert = Drawing added
-pdfjs-editor-stamp-added-alert = Image added
-pdfjs-editor-signature-added-alert = Signature added
-pdfjs-editor-add-signature-image-no-data-error-title = Can’t convert this image into a signature
-pdfjs-editor-add-signature-image-no-data-error-description = Please try uploading a different image.
-pdfjs-editor-edit-comment-actions-button-label = Actions
-pdfjs-editor-edit-comment-actions-button =
-    .title = Actions
-pdfjs-editor-edit-comment-close-button-label = Close
-pdfjs-editor-edit-comment-close-button =
-    .title = Close
-pdfjs-editor-edit-comment-actions-edit-button-label = Edit
-pdfjs-editor-edit-comment-actions-delete-button-label = Delete
-pdfjs-editor-edit-comment-manager-text-input =
-    .placeholder = Enter your comment
-pdfjs-editor-edit-comment-manager-cancel-button = Cancel
-pdfjs-editor-edit-comment-manager-save-button = Save
-pdfjs-editor-edit-comment-button =
+pdfjs-show-comment-button =
+    .title = Show comment
+pdfjs-editor-edit-comment-popup-button-label = Edit comment
+pdfjs-editor-edit-comment-popup-button =
     .title = Edit comment
+pdfjs-editor-delete-comment-popup-button-label = Remove comment
+pdfjs-editor-delete-comment-popup-button =
+    .title = Remove comment
+pdfjs-editor-edit-comment-dialog-title-when-editing = Edit comment
+pdfjs-editor-edit-comment-dialog-save-button-when-editing = Update
+pdfjs-editor-edit-comment-dialog-title-when-adding = Add comment
+pdfjs-editor-edit-comment-dialog-save-button-when-adding = Add
+pdfjs-editor-edit-comment-dialog-text-input =
+    .placeholder = Start typing…
+pdfjs-editor-edit-comment-dialog-cancel-button = Cancel
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = Match Each Word

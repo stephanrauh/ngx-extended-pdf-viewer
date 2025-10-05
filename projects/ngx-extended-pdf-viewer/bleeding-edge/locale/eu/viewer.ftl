@@ -286,9 +286,13 @@ pdfjs-web-fonts-disabled = Webeko letra-tipoak desgaituta daude: ezin dira kapsu
 
 pdfjs-editor-free-text-button =
     .title = Testua
+pdfjs-editor-color-picker-free-text-input =
+    .title = Aldatu testuaren kolorea
 pdfjs-editor-free-text-button-label = Testua
 pdfjs-editor-ink-button =
     .title = Marrazkia
+pdfjs-editor-color-picker-ink-input =
+    .title = Aldatu marrazteko kolorea
 pdfjs-editor-ink-button-label = Marrazkia
 pdfjs-editor-stamp-button =
     .title = Gehitu edo editatu irudiak
@@ -300,6 +304,10 @@ pdfjs-highlight-floating-button1 =
     .title = Nabarmendu
     .aria-label = Nabarmendu
 pdfjs-highlight-floating-button-label = Nabarmendu
+pdfjs-comment-floating-button =
+    .title = Iruzkina
+    .aria-label = Iruzkina
+pdfjs-comment-floating-button-label = Iruzkina
 pdfjs-editor-signature-button =
     .title = Gehitu sinadura
 pdfjs-editor-signature-button-label = Gehitu sinadura
@@ -492,6 +500,14 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Erakutsi testu alterna
 pdfjs-editor-alt-text-settings-show-dialog-description = Zure irudiek testu alternatiboa duela ziurtatzen laguntzen dizu.
 pdfjs-editor-alt-text-settings-close-button = Itxi
 
+## Accessibility labels (announced by screen readers) for objects added to the editor.
+
+pdfjs-editor-highlight-added-alert = Nabarmentzea gehituta
+pdfjs-editor-freetext-added-alert = Testua gehituta
+pdfjs-editor-ink-added-alert = Marrazkia gehituta
+pdfjs-editor-stamp-added-alert = Irudia gehituta
+pdfjs-editor-signature-added-alert = Sinadura gehituta
+
 ## "Annotations removed" bar
 
 pdfjs-editor-undo-bar-message-highlight = Nabarmentzea kenduta
@@ -564,6 +580,8 @@ pdfjs-editor-add-signature-save-checkbox = Gorde sinadura
 pdfjs-editor-add-signature-save-warning-message = Gordetako sinadura kopuruaren mugara heldu zara (5). Gehiago gorde ahal izateko, ken ezazu bat.
 pdfjs-editor-add-signature-image-upload-error-title = Ezin da irudia igo
 pdfjs-editor-add-signature-image-upload-error-description = Egiaztatu zure sareko konexioa edo saiatu beste irudi batekin.
+pdfjs-editor-add-signature-image-no-data-error-title = Ezin da irudia sinaduran bihurtu
+pdfjs-editor-add-signature-image-no-data-error-description = Saiatu beste irudi bat igotzen.
 pdfjs-editor-add-signature-error-close-button = Itxi
 
 ## Dialog buttons
@@ -571,6 +589,26 @@ pdfjs-editor-add-signature-error-close-button = Itxi
 pdfjs-editor-add-signature-cancel-button = Utzi
 pdfjs-editor-add-signature-add-button = Gehitu
 pdfjs-editor-edit-signature-update-button = Eguneratu
+
+##  Edit a comment dialog
+
+pdfjs-editor-edit-comment-actions-button-label = Ekintzak
+pdfjs-editor-edit-comment-actions-button =
+    .title = Ekintzak
+pdfjs-editor-edit-comment-close-button-label = Itxi
+pdfjs-editor-edit-comment-close-button =
+    .title = Itxi
+pdfjs-editor-edit-comment-actions-edit-button-label = Editatu
+pdfjs-editor-edit-comment-actions-delete-button-label = Ezabatu
+pdfjs-editor-edit-comment-manager-text-input =
+    .placeholder = Idatzi zure iruzkina
+pdfjs-editor-edit-comment-manager-cancel-button = Utzi
+pdfjs-editor-edit-comment-manager-save-button = Gorde
+
+## Edit a comment button in the editor toolbar
+
+pdfjs-editor-edit-comment-button =
+    .title = Editatu iruzkina
 
 ## Main menu for adding/removing signatures
 
@@ -587,14 +625,6 @@ pdfjs-editor-add-signature-edit-button-label = Editatu azalpena
 pdfjs-editor-edit-signature-dialog-title = Editatu azalpena
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-editor-color-picker-free-text-input =
-    .title = Change text color
-pdfjs-editor-color-picker-ink-input =
-    .title = Change drawing color
-pdfjs-comment-floating-button =
-    .title = Comment
-    .aria-label = Comment
-pdfjs-comment-floating-button-label = Comment
 pdfjs-editor-comment-button =
     .title = Comment
     .aria-label = Comment
@@ -608,28 +638,23 @@ pdfjs-editor-comments-sidebar-close-button =
     .title = Close the sidebar
     .aria-label = Close the sidebar
 pdfjs-editor-comments-sidebar-close-button-label = Close the sidebar
-pdfjs-editor-comments-sidebar-no-comments = Add a comment by selecting text or an annotation.
-pdfjs-editor-highlight-added-alert = Highlight added
-pdfjs-editor-freetext-added-alert = Text added
-pdfjs-editor-ink-added-alert = Drawing added
-pdfjs-editor-stamp-added-alert = Image added
-pdfjs-editor-signature-added-alert = Signature added
-pdfjs-editor-add-signature-image-no-data-error-title = Can’t convert this image into a signature
-pdfjs-editor-add-signature-image-no-data-error-description = Please try uploading a different image.
-pdfjs-editor-edit-comment-actions-button-label = Actions
-pdfjs-editor-edit-comment-actions-button =
-    .title = Actions
-pdfjs-editor-edit-comment-close-button-label = Close
-pdfjs-editor-edit-comment-close-button =
-    .title = Close
-pdfjs-editor-edit-comment-actions-edit-button-label = Edit
-pdfjs-editor-edit-comment-actions-delete-button-label = Delete
-pdfjs-editor-edit-comment-manager-text-input =
-    .placeholder = Enter your comment
-pdfjs-editor-edit-comment-manager-cancel-button = Cancel
-pdfjs-editor-edit-comment-manager-save-button = Save
-pdfjs-editor-edit-comment-button =
+pdfjs-editor-comments-sidebar-no-comments1 = See something noteworthy? Highlight it and leave a comment.
+pdfjs-editor-comments-sidebar-no-comments-link = Learn more
+pdfjs-show-comment-button =
+    .title = Show comment
+pdfjs-editor-edit-comment-popup-button-label = Edit comment
+pdfjs-editor-edit-comment-popup-button =
     .title = Edit comment
+pdfjs-editor-delete-comment-popup-button-label = Remove comment
+pdfjs-editor-delete-comment-popup-button =
+    .title = Remove comment
+pdfjs-editor-edit-comment-dialog-title-when-editing = Edit comment
+pdfjs-editor-edit-comment-dialog-save-button-when-editing = Update
+pdfjs-editor-edit-comment-dialog-title-when-adding = Add comment
+pdfjs-editor-edit-comment-dialog-save-button-when-adding = Add
+pdfjs-editor-edit-comment-dialog-text-input =
+    .placeholder = Start typing…
+pdfjs-editor-edit-comment-dialog-cancel-button = Cancel
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = Match Each Word
