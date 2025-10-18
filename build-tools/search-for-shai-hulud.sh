@@ -74,6 +74,9 @@ ALLOW_FILES='(node_modules/esbuild/install\.js|node_modules/nice-napi/.*)'
 # esbuild allowed download hosts (Regex)
 ESBUILD_ALLOWED_DOMAINS='(registry\.npmjs\.org|github\.com/evanw/esbuild|github\.com/esbuild/|objects\.githubusercontent\.com)'
 
+# CI allowed URLs (Regex) - legitimate URLs in GitHub Actions/CI configs
+CI_ALLOWED_URLS='(registry\.npmjs\.org|github\.com|docs\.github\.com|npmjs\.com|githubusercontent\.com)'
+
 ##### --- Temp / Cache --- #####
 CACHE_DIR="$(mktemp -d 2>/dev/null || mktemp -d -t npmcheck)"
 trap 'rm -rf "$CACHE_DIR"' EXIT
@@ -350,10 +353,18 @@ check_workflows() {
   fi
 
   # use rg if available for speed, fallback to grep
+  tmpout="$CACHE_DIR/ci.raw.$(sanitize "$dir").txt"
+  : >"$tmpout"
+
   if command -v rg >/dev/null 2>&1; then
-    rg -n --no-ignore -e "$RISKY_CMD_REGEX|$SUSP_DOMAINS|$HTTP_IN_SCRIPT_REGEX|$B64_OBFUSC_REGEX" $targets 2>/dev/null >"$out" || true
+    rg -n --no-ignore -e "$RISKY_CMD_REGEX|$SUSP_DOMAINS|$HTTP_IN_SCRIPT_REGEX|$B64_OBFUSC_REGEX" $targets 2>/dev/null >"$tmpout" || true
   else
-    grep -RInE "$RISKY_CMD_REGEX|$SUSP_DOMAINS|$HTTP_IN_SCRIPT_REGEX|$B64_OBFUSC_REGEX" -- $targets 2>/dev/null >"$out" || true
+    grep -RInE "$RISKY_CMD_REGEX|$SUSP_DOMAINS|$HTTP_IN_SCRIPT_REGEX|$B64_OBFUSC_REGEX" -- $targets 2>/dev/null >"$tmpout" || true
+  fi
+
+  # Filter out allowed URLs from CI findings
+  if [ -s "$tmpout" ]; then
+    grep -Ev "$CI_ALLOWED_URLS" "$tmpout" >"$out" || true
   fi
 
   if [ -s "$out" ]; then
