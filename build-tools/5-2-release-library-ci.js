@@ -179,9 +179,17 @@ if (foundSuspiciousScripts.length > 0) {
 console.log('✓ No suspicious lifecycle scripts in dist package.json');
 
 // Publish to npm with provenance
-console.log('\n📤 Publishing to npm with provenance...');
+console.log('\n📤 Final checks before publishing');
 process.chdir(distPath);
+runCommand('echo "GITHUB_REPOSITORY=$GITHUB_REPOSITORY"');
+runCommand('echo "GITHUB_WORKFLOW_REF=$GITHUB_WORKFLOW_REF"');
+
+console.log('\n📤 Publishing to npm with provenance...');
 runCommand('npm publish --provenance --access public', 'Error 55: npm publish failed', 55);
+const distPkg = require('../dist/ngx-extended-pdf-viewer/package.json');
+console.log('dist name:', distPkg.name);
+
+runCommand('npm config get registry');
 process.chdir(path.join('..', '..'));
 
 console.log('\n✅ Library published successfully with provenance!');
