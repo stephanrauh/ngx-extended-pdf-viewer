@@ -40,6 +40,9 @@ jobs:
           cache: 'npm'
           cache-dependency-path: workspace/ngx-extended-pdf-viewer/package-lock.json
 
+      - name: Ensure npm 11.5.1+ for trusted publishing
+        run: npm install -g npm@latest
+
       - name: Install dependencies
         working-directory: workspace/ngx-extended-pdf-viewer
         run: npm ci --ignore-scripts && ./build-tools/search-for-shai-hulud.sh --full && npm rebuild esbuild

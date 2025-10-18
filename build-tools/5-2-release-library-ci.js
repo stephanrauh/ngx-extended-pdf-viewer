@@ -183,6 +183,12 @@ console.log('\n📤 Final checks before publishing');
 process.chdir(distPath);
 runCommand('echo "GITHUB_REPOSITORY=$GITHUB_REPOSITORY"');
 runCommand('echo "GITHUB_WORKFLOW_REF=$GITHUB_WORKFLOW_REF"');
+runCommand('[ -n "$ACTIONS_ID_TOKEN_REQUEST_URL" ] && echo "OIDC URL: set" || echo "OIDC URL: NOT SET"');
+runCommand('[ -n "$ACTIONS_ID_TOKEN_REQUEST_TOKEN" ] && echo "OIDC Token: set" || echo "OIDC Token: NOT SET"');
+
+// Check npm version
+runCommand('npm --version', 'Error: failed to get npm version', 90);
+
 // 1) print package name from dist
 runCommand("node -e \"console.log('name in dist:', require('./package.json').name)\"", 'Error: failed to read dist package name', 91);
 
