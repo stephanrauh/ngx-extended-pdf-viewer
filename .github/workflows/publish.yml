@@ -28,7 +28,7 @@ jobs:
       - name: Checkout mypdf.js repository
         uses: actions/checkout@v5
         with:
-          repository: stephanrauh/mypdf.js
+          repository: stephanrauh/pdf.js
           path: workspace/mypdf.js
           fetch-depth: 0
 
