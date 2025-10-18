@@ -1,0 +1,70 @@
+name: Publish to npm with provenance
+
+on:
+  push:
+    tags:
+      - '*.*.*'
+      - '*.*.*-alpha.*'
+      - '*.*.*-beta.*'
+      - '*.*.*-rc.*'
+
+permissions:
+  contents: write # Required for creating GitHub releases
+  id-token: write # Required for npm provenance
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: release-${{ github.ref }}
+      cancel-in-progress: false
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          path: workspace/ngx-extended-pdf-viewer
+          fetch-depth: 0
+
+      - name: Checkout mypdf.js repository
+        uses: actions/checkout@v5
+        with:
+          repository: stephanrauh/mypdf.js
+          path: workspace/mypdf.js
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
+          cache-dependency-path: workspace/ngx-extended-pdf-viewer/package-lock.json
+
+      - name: Install dependencies
+        working-directory: workspace/ngx-extended-pdf-viewer
+        run: npm ci --ignore-scripts && ./build-tools/search-for-shai-hulud.sh --full && npm rebuild esbuild
+
+      - name: Verify tag matches package.json version
+        working-directory: workspace/ngx-extended-pdf-viewer
+        run: |
+          TAG_VERSION=${GITHUB_REF#refs/tags/}
+          PACKAGE_VERSION=$(node -p "require('./projects/ngx-extended-pdf-viewer/package.json').version")
+          if [ "$TAG_VERSION" != "$PACKAGE_VERSION" ]; then
+            echo "Error: Tag version ($TAG_VERSION) does not match package.json version ($PACKAGE_VERSION)"
+            exit 1
+          fi
+          echo "✓ Version verified: $PACKAGE_VERSION"
+
+      - name: Build and publish library
+        working-directory: workspace/ngx-extended-pdf-viewer
+        run: npm run release:lib
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          generate_release_notes: true
+          files: |
+            workspace/ngx-extended-pdf-viewer/dist/ngx-extended-pdf-viewer/*.tgz
+            workspace/ngx-extended-pdf-viewer/sbom.json
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
