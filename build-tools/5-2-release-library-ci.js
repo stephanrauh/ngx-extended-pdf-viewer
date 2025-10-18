@@ -184,11 +184,7 @@ process.chdir(distPath);
 runCommand('echo "GITHUB_REPOSITORY=$GITHUB_REPOSITORY"');
 runCommand('echo "GITHUB_WORKFLOW_REF=$GITHUB_WORKFLOW_REF"');
 // 1) print package name from dist
-runCommand(
-  "node -e \"console.log('name in dist:', require('./dist/ngx-extended-pdf-viewer/package.json').name)\"",
-  'Error: failed to read dist package name',
-  91,
-);
+runCommand("node -e \"console.log('name in dist:', require('./ngx-extended-pdf-viewer/package.json').name)\"", 'Error: failed to read dist package name', 91);
 
 // 2) show the registry
 runCommand('npm config get registry', 'Error: failed to read npm registry', 92);
