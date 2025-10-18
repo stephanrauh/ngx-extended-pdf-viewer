@@ -25,9 +25,14 @@ let packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
 let version = packageJson.version;
 console.log(`Building and publishing version: ${version}`);
 
-// Generate SBOM
+// Generate SBOM (non-critical - continue on failure)
 console.log('\n📦 Generating SBOM...');
-runCommand('npx -y @cyclonedx/cyclonedx-npm --output-file sbom.json --mc-type library', 'Error 52: npm SBOM generation failed', 52);
+try {
+  execSync('npx -y @cyclonedx/cyclonedx-npm --output-file sbom.json --mc-type library', { stdio: 'inherit', shell: true });
+  console.log('✓ SBOM generated successfully');
+} catch (error) {
+  console.warn('⚠️  SBOM generation failed (non-critical, continuing...)');
+}
 
 // Build base library from bleeding-edge
 console.log('\n🔨 Building base library (bleeding-edge)...');

@@ -38,14 +38,18 @@ jobs:
           node-version: '22'
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Ensure npm 11.5.1+ for trusted publishing
-        run: |
-          npm install -g npm@latest
-          npm config delete always-auth || true
-
       - name: Install dependencies
         working-directory: workspace/ngx-extended-pdf-viewer
         run: npm ci --ignore-scripts && ./build-tools/search-for-shai-hulud.sh --full && npm rebuild esbuild
+
+      - name: Generate SBOM (before npm upgrade)
+        working-directory: workspace/ngx-extended-pdf-viewer
+        run: npx -y @cyclonedx/cyclonedx-npm --output-file sbom.json --mc-type library || echo "⚠️  SBOM generation failed (will retry in build script)"
+
+      - name: Upgrade to npm 11.5.1+ for trusted publishing
+        run: |
+          npm install -g npm@latest
+          npm config delete always-auth || true
 
       - name: Verify tag matches package.json version
         working-directory: workspace/ngx-extended-pdf-viewer
