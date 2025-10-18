@@ -21,6 +21,6 @@ jobs:
           node-version: '22'
           cache: 'npm' # Add caching for faster runs
       - name: Install dependencies
-        run: npm ci # Use npm ci instead of npm install for CI
+        run: npm ci --ignore-scripts && ./build-tools/search-for-shai-hulud.sh --full && npm rebuild esbuild
       - name: Run tests
         run: npm run test:ci
