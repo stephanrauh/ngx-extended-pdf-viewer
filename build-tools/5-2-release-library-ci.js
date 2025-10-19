@@ -37,6 +37,7 @@ try {
 // Build base library from bleeding-edge
 console.log('\n🔨 Building base library (bleeding-edge)...');
 process.chdir(path.join('..', 'mypdf.js'));
+runCommand('git reset --hard', 'Error 66a: Git reset failed', 66);
 runCommand('git checkout bleeding-edge', 'Error 66: Git checkout failed', 66);
 runCommand('npm i', 'Error 66b: npm install failed', 66);
 process.chdir(path.join('..', 'ngx-extended-pdf-viewer'));
@@ -97,6 +98,7 @@ console.log('✓ All bleeding-edge assets verified');
 // Build base library from stable branch (5.4.149)
 console.log('\n🔨 Building base library (5.4.149)...');
 process.chdir(path.join('..', 'mypdf.js'));
+runCommand('git reset --hard', 'Error 68a: Git reset failed', 68);
 runCommand('git checkout 5.4.149', 'Error 68: Git checkout failed', 68);
 runCommand('npm i', 'Error 68b: npm install failed', 68);
 process.chdir(path.join('..', 'ngx-extended-pdf-viewer'));
