@@ -66,10 +66,15 @@ jobs:
         working-directory: workspace/ngx-extended-pdf-viewer
         run: npm run release:lib
 
+      - name: Create package tarball
+        working-directory: workspace/ngx-extended-pdf-viewer/dist/ngx-extended-pdf-viewer
+        run: npm pack
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           generate_release_notes: true
+          repository: stephanrauh/ngx-extended-pdf-viewer
           files: |
             workspace/ngx-extended-pdf-viewer/dist/ngx-extended-pdf-viewer/*.tgz
             workspace/ngx-extended-pdf-viewer/sbom.json
