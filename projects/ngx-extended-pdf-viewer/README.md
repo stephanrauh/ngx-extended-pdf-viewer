@@ -82,6 +82,8 @@ bootstrapApplication(AppComponent, {
 
 ## 🔐 Security Notice
 
+Don't be bothered by the flood of alpha version in 25.6.0: migrating from traditional publishing to publishing as a trusted publisher with provenance didn't work immediately. It "burned" many version numbers.
+
 Version `20.0.2` fixes a critical security vulnerability (CVE-2024-4367). Update to this version or newer to stay safe from exploits via malicious PDF files.
 
 Thanks to GitHub users ScratchPDX and Deepak Shakya for reporting the issue promptly.
