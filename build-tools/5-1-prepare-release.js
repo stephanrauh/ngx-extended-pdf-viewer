@@ -38,45 +38,29 @@ packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
 let newVersion = packageJson.version;
 console.log(`New version: ${newVersion}`);
 
-// Update version number in mypdf.js 5.4.149 branch
+// Build base library from bleeding-edge to update pdf-default-options.ts
+console.log('\n🔨 Building base library (bleeding-edge) to update version numbers...');
 process.chdir(path.join('..', 'mypdf.js'));
-runCommand('git checkout 5.4.149', 'Error 59: Git checkout failed', 59);
-
-runCommand(
-  'node ../ngx-extended-pdf-viewer/build-tools/base-library/write-version-number-to-base-library.js',
-  'Error 62: write-version-number-to-base-library failed at version 5.4.149',
-  62,
-);
-
-// Commit changes in mypdf.js 5.4.149
-runCommand(`git commit . -m "bumped the version number to ${newVersion}"`, 'Error 61: Git commit in mypdf.js failed', 61);
-
-// Update version number in mypdf.js bleeding-edge branch
 runCommand('git checkout bleeding-edge', 'Error 63: Git checkout failed', 63);
 
+// Update version number
 runCommand(
   'node ../ngx-extended-pdf-viewer/build-tools/base-library/write-version-number-to-base-library.js',
   'Error 64: write-version-number-to-base-library failed at bleeding-edge',
   64,
 );
 
-// Commit changes in mypdf.js bleeding-edge
+// Commit version number changes
 runCommand(`git commit . -m "bumped the version number to ${newVersion}"`, 'Error 65: Git commit in mypdf.js failed', 65);
 
-// Back to ngx-extended-pdf-viewer
-process.chdir(path.join('..', 'ngx-extended-pdf-viewer'));
-
-// Build base library from bleeding-edge to update pdf-default-options.ts
-console.log('\n🔨 Building base library (bleeding-edge) to update version numbers...');
-process.chdir(path.join('..', 'mypdf.js'));
-runCommand('git checkout bleeding-edge', 'Error 66: Git checkout failed', 66);
+// Install dependencies and build
 runCommand('rm -rf node_modules', 'Error 66a: Removing node_modules failed', 66);
 runCommand('npm ci --ignore-scripts', 'Error 66b: npm install failed', 66);
 runCommand('npm audit fix --ignore-scripts || true', 'Error 66c: npm audit fix failed', 66);
 runCommand('../ngx-extended-pdf-viewer/build-tools/search-for-shai-hulud.sh --full', 'Error 66d: shai-hulud scan failed', 66);
 runCommand('npm rebuild', 'Error 66e: npm rebuild failed', 66);
 process.chdir(path.join('..', 'ngx-extended-pdf-viewer'));
-runCommand('node ./build-tools/1-build-base-library.js', 'Error 67: build-base-library.js failed for bleeding-edge', 67);
+runCommand('node ./build-tools/1-build-base-library.js --quick', 'Error 67: build-base-library.js failed for bleeding-edge', 67);
 
 // Clean up package-lock.json changes from audit fix before switching branches
 process.chdir(path.join('..', 'mypdf.js'));
@@ -84,14 +68,26 @@ runCommand('git reset --hard', 'Error 67a: Git reset failed', 67);
 
 // Build base library from stable branch (5.4.149) to update pdf-default-options.ts
 console.log('\n🔨 Building base library (5.4.149) to update version numbers...');
-runCommand('git checkout 5.4.149', 'Error 68: Git checkout failed', 68);
+runCommand('git checkout 5.4.149', 'Error 59: Git checkout failed', 59);
+
+// Update version number
+runCommand(
+  'node ../ngx-extended-pdf-viewer/build-tools/base-library/write-version-number-to-base-library.js',
+  'Error 62: write-version-number-to-base-library failed at version 5.4.149',
+  62,
+);
+
+// Commit version number changes
+runCommand(`git commit . -m "bumped the version number to ${newVersion}"`, 'Error 61: Git commit in mypdf.js failed', 61);
+
+// Install dependencies and build
 runCommand('rm -rf node_modules', 'Error 68a: Removing node_modules failed', 68);
 runCommand('npm ci --ignore-scripts', 'Error 68b: npm install failed', 68);
 runCommand('npm audit fix --ignore-scripts || true', 'Error 68c: npm audit fix failed', 68);
 runCommand('../ngx-extended-pdf-viewer/build-tools/search-for-shai-hulud.sh --full', 'Error 68d: shai-hulud scan failed', 68);
 runCommand('npm rebuild', 'Error 68e: npm rebuild failed', 68);
 process.chdir(path.join('..', 'ngx-extended-pdf-viewer'));
-runCommand('node ./build-tools/1-build-base-library.js', 'Error 69: build-base-library.js failed for 5.4.149', 69);
+runCommand('node ./build-tools/1-build-base-library.js --quick', 'Error 69: build-base-library.js failed for 5.4.149', 69);
 
 // Clean up package-lock.json changes from audit fix
 process.chdir(path.join('..', 'mypdf.js'));

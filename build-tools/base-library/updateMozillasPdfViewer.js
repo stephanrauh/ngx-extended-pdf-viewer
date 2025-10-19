@@ -39,25 +39,26 @@ if (BRANCH === 'bleeding-edge') {
 }
 
 // Build based on argument
-if (process.argv[2] === 'quick') {
+const quickMode = process.argv[2] === 'quick';
+if (quickMode) {
   runCommand('gulp generic', 'Gulp generic failed');
 } else {
   runCommand('gulp generic && gulp minified && gulp generic-legacy', 'Gulp build failed');
+
+  // Rename files (only in full mode)
+  const renameOperations = [
+    ['build/generic-legacy/build/pdf.sandbox.mjs', 'build/generic-legacy/build/pdf.sandbox-es5.mjs'],
+    ['build/generic-legacy/build/pdf.worker.mjs', 'build/generic-legacy/build/pdf.worker-es5.mjs'],
+    ['build/generic-legacy/web/viewer.mjs', 'build/generic-legacy/web/viewer-es5.mjs'],
+    // ['build/minified/build/pdf.sandbox.min.mjs', 'build/minified/build/pdf.sandbox.min.mjs'],
+    // ['build/minified/build/pdf.worker.min.mjs', 'build/minified/build/pdf.worker.min.mjs'],
+    ['build/minified/web/viewer.mjs', 'build/minified/web/viewer.min.mjs'],
+  ];
+
+  renameOperations.forEach(([oldPath, newPath]) => {
+    fs.moveSync(oldPath, newPath, { overwrite: true });
+  });
 }
-
-// Rename files
-const renameOperations = [
-  ['build/generic-legacy/build/pdf.sandbox.mjs', 'build/generic-legacy/build/pdf.sandbox-es5.mjs'],
-  ['build/generic-legacy/build/pdf.worker.mjs', 'build/generic-legacy/build/pdf.worker-es5.mjs'],
-  ['build/generic-legacy/web/viewer.mjs', 'build/generic-legacy/web/viewer-es5.mjs'],
-  // ['build/minified/build/pdf.sandbox.min.mjs', 'build/minified/build/pdf.sandbox.min.mjs'],
-  // ['build/minified/build/pdf.worker.min.mjs', 'build/minified/build/pdf.worker.min.mjs'],
-  ['build/minified/web/viewer.mjs', 'build/minified/web/viewer.min.mjs'],
-];
-
-renameOperations.forEach(([oldPath, newPath]) => {
-  fs.moveSync(oldPath, newPath, { overwrite: true });
-});
 
 // Navigate back to ngx-extended-pdf-viewer
 process.chdir(path.join('..', 'ngx-extended-pdf-viewer'));
@@ -69,17 +70,27 @@ pdfFiles.forEach((file) => fs.removeSync(file));
 const viewerFiles = glob.sync(path.join(targetDir, 'viewer*.mjs'));
 viewerFiles.forEach((file) => fs.removeSync(file));
 
-fs.copySync(path.join('..', 'mypdf.js', 'build', 'minified', 'web', 'locale'), path.join(targetDir, 'locale'));
-copyFilesWithoutRecursion(path.join('..', 'mypdf.js', 'build', 'minified', 'web', 'cmaps'), path.join(targetDir, 'cmaps'));
-copyFilesWithoutRecursion(path.join('..', 'mypdf.js', 'build', 'minified', 'web', 'standard_fonts'), path.join(targetDir, 'standard_fonts'));
+// Copy locale, cmaps, standard_fonts, and wasm from appropriate source
+const localeSource = quickMode ? path.join('..', 'mypdf.js', 'build', 'generic', 'web', 'locale') : path.join('..', 'mypdf.js', 'build', 'minified', 'web', 'locale');
+const cmapsSource = quickMode ? path.join('..', 'mypdf.js', 'build', 'generic', 'web', 'cmaps') : path.join('..', 'mypdf.js', 'build', 'minified', 'web', 'cmaps');
+const fontsSource = quickMode ? path.join('..', 'mypdf.js', 'build', 'generic', 'web', 'standard_fonts') : path.join('..', 'mypdf.js', 'build', 'minified', 'web', 'standard_fonts');
+
+fs.copySync(localeSource, path.join(targetDir, 'locale'));
+copyFilesWithoutRecursion(cmapsSource, path.join(targetDir, 'cmaps'));
+copyFilesWithoutRecursion(fontsSource, path.join(targetDir, 'standard_fonts'));
 fs.copySync(path.join('..', 'mypdf.js', 'build', 'generic', 'web', 'wasm'), path.join(targetDir, 'wasm'));
 
+// Copy build files
 copyFilesWithoutRecursion(path.join('..', 'mypdf.js', 'build', 'generic', 'build'), targetDir);
 copyFilesWithoutRecursion(path.join('..', 'mypdf.js', 'build', 'generic', 'web'), targetDir);
-copyFilesWithoutRecursion(path.join('..', 'mypdf.js', 'build', 'minified', 'build'), targetDir);
-copyFilesWithoutRecursion(path.join('..', 'mypdf.js', 'build', 'minified', 'web'), targetDir);
-copyFilesWithoutRecursion(path.join('..', 'mypdf.js', 'build', 'generic-legacy', 'build'), targetDir);
-copyFilesWithoutRecursion(path.join('..', 'mypdf.js', 'build', 'generic-legacy', 'web'), targetDir);
+
+// In full mode, also copy minified and legacy builds
+if (!quickMode) {
+  copyFilesWithoutRecursion(path.join('..', 'mypdf.js', 'build', 'minified', 'build'), targetDir);
+  copyFilesWithoutRecursion(path.join('..', 'mypdf.js', 'build', 'minified', 'web'), targetDir);
+  copyFilesWithoutRecursion(path.join('..', 'mypdf.js', 'build', 'generic-legacy', 'build'), targetDir);
+  copyFilesWithoutRecursion(path.join('..', 'mypdf.js', 'build', 'generic-legacy', 'web'), targetDir);
+}
 
 console.log(targetDir);
 fs.removeSync(path.join(targetDir, 'debugger.mjs'));
