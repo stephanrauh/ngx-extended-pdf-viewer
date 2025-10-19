@@ -205,8 +205,18 @@ runCommand('npm config get registry', 'Error: failed to read npm registry', 92);
 // 3) ping npm
 runCommand('npm ping', 'Error: npm ping failed', 93);
 
-console.log('\n📤 Publishing to npm with provenance...');
-runCommand('npm publish --provenance --access public', 'Error 55: npm publish failed', 55);
+// Determine the npm tag based on version (alpha/beta/rc/latest)
+let npmTag = 'latest';
+if (version.includes('-alpha')) {
+  npmTag = 'alpha';
+} else if (version.includes('-beta')) {
+  npmTag = 'beta';
+} else if (version.includes('-rc')) {
+  npmTag = 'rc';
+}
+
+console.log(`\n📤 Publishing to npm with provenance (tag: ${npmTag})...`);
+runCommand(`npm publish --provenance --access public --tag ${npmTag}`, 'Error 55: npm publish failed', 55);
 process.chdir(path.join('..', '..'));
 
 console.log('\n✅ Library published successfully with provenance!');
