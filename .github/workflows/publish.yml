@@ -74,6 +74,7 @@ jobs:
         working-directory: workspace/ngx-extended-pdf-viewer
         run: |
           TAG_VERSION=${GITHUB_REF#refs/tags/}
+          SOURCE_DIR=$(pwd)
           mkdir -p /tmp/ngx-extended-pdf-viewer-source
           cp -r projects/ngx-extended-pdf-viewer /tmp/ngx-extended-pdf-viewer-source/
           cp -r build-tools /tmp/ngx-extended-pdf-viewer-source/
@@ -82,7 +83,7 @@ jobs:
           cp README.md LICENSE .editorconfig .prettierrc /tmp/ngx-extended-pdf-viewer-source/
           cd /tmp
           tar -czf ngx-extended-pdf-viewer-${TAG_VERSION}-source.tar.gz ngx-extended-pdf-viewer-source
-          mv ngx-extended-pdf-viewer-${TAG_VERSION}-source.tar.gz workspace/ngx-extended-pdf-viewer/
+          mv ngx-extended-pdf-viewer-${TAG_VERSION}-source.tar.gz "${SOURCE_DIR}/"
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1

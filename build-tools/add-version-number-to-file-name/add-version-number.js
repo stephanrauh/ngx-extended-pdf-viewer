@@ -31,25 +31,27 @@ function fixVersionNumber(folder = 'assets', suffix = '.mjs') {
     }
 
     fs.renameSync(f + 'pdf.sandbox' + suffix, f + `pdf.sandbox-${pdfjsVersion}${suffix}`);
-    try {
+    if (fs.existsSync(f + 'pdf.sandbox.min' + suffix)) {
       fs.renameSync(f + 'pdf.sandbox.min' + suffix, f + `pdf.sandbox-${pdfjsVersion}.min${suffix}`);
+    }
+    if (fs.existsSync(f + 'pdf.sandbox-es5' + suffix)) {
       fs.renameSync(f + 'pdf.sandbox-es5' + suffix, f + `pdf.sandbox-${pdfjsVersion}-es5${suffix}`);
-    } catch (e) {}
+    }
 
     fs.renameSync(f + 'pdf.worker' + suffix, f + `pdf.worker-${pdfjsVersion}${suffix}`);
-    try {
+    if (fs.existsSync(f + 'pdf.worker.min' + suffix)) {
       fs.renameSync(f + 'pdf.worker.min' + suffix, f + `pdf.worker-${pdfjsVersion}.min${suffix}`);
+    }
+    if (fs.existsSync(f + 'pdf.worker-es5' + suffix)) {
       fs.renameSync(f + 'pdf.worker-es5' + suffix, f + `pdf.worker-${pdfjsVersion}-es5${suffix}`);
-    } catch (e) {
-      console.log('ES5 files are missing', e);
     }
 
     fs.renameSync(f + 'viewer' + suffix, f + `viewer-${pdfjsVersion}${suffix}`);
-    try {
+    if (fs.existsSync(f + 'viewer.min' + suffix)) {
       fs.renameSync(f + 'viewer.min' + suffix, f + `viewer-${pdfjsVersion}.min${suffix}`);
+    }
+    if (fs.existsSync(f + 'viewer-es5' + suffix)) {
       fs.renameSync(f + 'viewer-es5' + suffix, f + `viewer-${pdfjsVersion}-es5${suffix}`);
-    } catch (e) {
-      console.log('ES5 files are missing', e);
     }
 
     if (folder === 'assets') {

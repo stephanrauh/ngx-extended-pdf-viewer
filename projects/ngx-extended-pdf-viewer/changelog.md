@@ -689,5 +689,4 @@
 - 25.6.0-alpha.3 #3016 activated the sidebar resizer
 - 25.6.0-alpha.4 - 25.6.0-alpha.22 #3036 migrated to trusted publishing with provenance; added an scanner protecting against attacks like the Shai Hulud work; start publishing releases on GitHub; note that many version number never landed on npm - setting up the new publishing mechanism was painful
 - 25.6.0-alpha.23 #2843 stop showing "0%" zoom; #2691 store the initial form values to prevent the annoying message "are you sure you want to reload without saving?" (only works for small forms because of lazy page rendering); #3040 fixed an Ionic bug that sets the body position to fixed, ruining our print functionality; #3039 added some forgotten CSS rules (in particular, the delete annotation button is visible again); update the bleeding edge branch to pdf.js 5.4.296; #3055 fix scrolling when paging in horizontal view mode
-- 25.6.0-alpha.24 #3036 reduce the size of the source files in the GitHub release
-- 25.6.0-alpha.35 #3036 optimized the local build when releasing a new version
+- 25.6.0-alpha.24-25 #3036 reduce the size of the source files in the GitHub release; optimized the local build when releasing a new version
