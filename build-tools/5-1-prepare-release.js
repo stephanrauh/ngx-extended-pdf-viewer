@@ -70,7 +70,10 @@ process.chdir(path.join('..', 'ngx-extended-pdf-viewer'));
 console.log('\n🔨 Building base library (bleeding-edge) to update version numbers...');
 process.chdir(path.join('..', 'mypdf.js'));
 runCommand('git checkout bleeding-edge', 'Error 66: Git checkout failed', 66);
-runCommand('npm i', 'Error 66b: npm install failed', 66);
+runCommand('rm -rf node_modules', 'Error 66a: Removing node_modules failed', 66);
+runCommand('npm ci --ignore-scripts', 'Error 66b: npm install failed', 66);
+runCommand('../ngx-extended-pdf-viewer/build-tools/search-for-shai-hulud.sh --full', 'Error 66c: shai-hulud scan failed', 66);
+runCommand('npm rebuild', 'Error 66d: npm rebuild failed', 66);
 process.chdir(path.join('..', 'ngx-extended-pdf-viewer'));
 runCommand('node ./build-tools/1-build-base-library.js', 'Error 67: build-base-library.js failed for bleeding-edge', 67);
 
@@ -78,7 +81,10 @@ runCommand('node ./build-tools/1-build-base-library.js', 'Error 67: build-base-l
 console.log('\n🔨 Building base library (5.4.149) to update version numbers...');
 process.chdir(path.join('..', 'mypdf.js'));
 runCommand('git checkout 5.4.149', 'Error 68: Git checkout failed', 68);
-runCommand('npm i', 'Error 68b: npm install failed', 68);
+runCommand('rm -rf node_modules', 'Error 68a: Removing node_modules failed', 68);
+runCommand('npm ci --ignore-scripts', 'Error 68b: npm install failed', 68);
+runCommand('../ngx-extended-pdf-viewer/build-tools/search-for-shai-hulud.sh --full', 'Error 68c: shai-hulud scan failed', 68);
+runCommand('npm rebuild', 'Error 68d: npm rebuild failed', 68);
 process.chdir(path.join('..', 'ngx-extended-pdf-viewer'));
 runCommand('node ./build-tools/1-build-base-library.js', 'Error 69: build-base-library.js failed for 5.4.149', 69);
 

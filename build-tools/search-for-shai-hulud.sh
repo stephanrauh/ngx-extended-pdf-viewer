@@ -66,10 +66,10 @@ SUSP_DOMAINS='(webhook\.site|requestbin|oast|ngrok|pastebin|transfer\.sh|bin\.st
 
 # Allowlist: bekannte legitime package+hook Kombinationen (Regex on "name:hook")
 # Note: These are known safe packages with legitimate install scripts
-ALLOW_HOOKS='^(esbuild:postinstall|nice-napi:install|mime:prepare)$'
+ALLOW_HOOKS='^(esbuild:postinstall|nice-napi:install|mime:prepare|core-js:postinstall|@puppeteer/browsers:postinstall)$'
 
 # Files that are safe to have download/install scripts (full paths relative to package)
-ALLOW_FILES='(node_modules/esbuild/install\.js|node_modules/nice-napi/.*)'
+ALLOW_FILES='(node_modules/esbuild/install\.js|node_modules/nice-napi/.*|node_modules/@puppeteer/browsers/.*|node_modules/core-js/postinstall\.js)'
 
 # esbuild allowed download hosts (Regex)
 ESBUILD_ALLOWED_DOMAINS='(registry\.npmjs\.org|github\.com/evanw/esbuild|github\.com/esbuild/|objects\.githubusercontent\.com)'
