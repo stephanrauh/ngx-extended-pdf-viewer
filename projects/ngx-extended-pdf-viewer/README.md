@@ -82,7 +82,7 @@ bootstrapApplication(AppComponent, {
 
 ## 🔐 Security Notice
 
-Don't be bothered by the flood of alpha version in 25.6.0: migrating from traditional publishing to publishing as a trusted publisher with provenance didn't work immediately. It "burned" many version numbers.
+Don't be bothered by the flood of alpha versions in 25.6.0. I know that's considered a warning signal of a Shai Hulud infection. However, in this particular case, it was the exact opposite: adding protection against Shai Hulud and migrating from traditional publishing to publishing as a trusted publisher with provenance didn't work immediately. It "burned" 20 version numbers until I finally found the correct configuration.
 
 Version `20.0.2` fixes a critical security vulnerability (CVE-2024-4367). Update to this version or newer to stay safe from exploits via malicious PDF files.
 
@@ -94,7 +94,7 @@ Thanks to GitHub users ScratchPDX and Deepak Shakya for reporting the issue prom
 
 ### Upcoming in Version 26
 
-Originally, these features where announced for version 25. But an unexpected breaking changed forced me to add an intermediate major version.
+Originally, these features were announced for version 25. But an unexpected breaking changed forced me to add an intermediate major version.
 
 - Migration to Angular Signals
 - Support for standalone components
@@ -125,7 +125,7 @@ Expect some breaking changes — but better performance and modern Angular suppo
 - 🔗 **Direct pdf.js API access** - Full TypeScript support for low-level operations
 - 🔒 **Security features** - CSP compatibility, XSS protection
 
-Regarding security: I'm not perfect - it's always a best-effort approach without guarantees. I'm 100% committed, but I need your help, and even so, in the long run, errors are invevitable. The art is to close vulnerabilities before a hacker can exploit then - and that's a joint effort. Together, we'll manage. Don't hesitate to report bugs and vulnerabilities as soon as possible!
+Regarding security: I'm not perfect - it's always a best-effort approach without guarantees. I'm 100% committed, but I need your help, and even so, in the long run, errors are inevitable. The art is to close vulnerabilities before a hacker can exploit them - and that's a joint effort. Together, we'll manage. Don't hesitate to report bugs and vulnerabilities as soon as possible!
 
 <sub>See the full list of [features on the showcase site](https://pdfviewer.net).</sub>
 
@@ -150,7 +150,7 @@ For the exact terms, please refer to the LICENSE file — that is the legally bi
   - `pdfDefaultOptions.enableCatalogAAJavaScript` — allows JavaScript that runs when printing, saving, or closing a PDF file. Requires `pdfDefaultOptions.enableScripting = true`.
 
 Security note: Embedded JavaScript in PDFs runs inside a sandboxed JavaScript interpreter (written in C and transpiled to JavaScript) and does not use functions like eval(). These measures reduce — but do not eliminate — potential security risks. For that reason, all related options are disabled by default, and enabling them is at your own risk. While these features can be useful, be aware that no software can guarantee complete protection against malicious content.
-Read more about the [JavaScript sandbox here](href="https://attackanddefense.dev/firefox-internals/2021/10/14/implementing-form-filling-and-accessibility-in-the-firefox-pdf-viewer.html").
+Read more about the [JavaScript sandbox here](https://attackanddefense.dev/firefox-internals/2021/10/14/implementing-form-filling-and-accessibility-in-the-firefox-pdf-viewer.html).
 
 ### Version 24
 
@@ -158,15 +158,15 @@ Read more about the [JavaScript sandbox here](href="https://attackanddefense.dev
 - Version 24.2.0 and above:
   - **Showcase Application Modernization**: The showcase application has been converted to standalone components, demonstrating modern Angular patterns and best practices for integration.
   - **Page Reordering Feature**: New `enablePageReordering` option allows users to reorder PDF pages by dragging thumbnails. Enable it with `pdfDefaultOptions.enablePageReordering = true;`.
-  - **Translations of ngx-extendeded-pdf-viewer extensions**: I had my AI translate the labels of the buttons to 20 European languages. That's an experiment. If it works well, I'll add translations for all 112 languages supported by pdf.js. But let's start small - I don't speak non-European languages, which means I can't verify the AI generates the correct translation!
+  - **Translations of ngx-extended-pdf-viewer extensions**: I had my AI translate the labels of the buttons to 20 European languages. That's an experiment. If it works well, I'll add translations for all 112 languages supported by pdf.js. But let's start small - I don't speak non-European languages, which means I can't verify the AI generates the correct translation!
 
-- Version 24.1.0 and above: improved accessability by showing a hover effect when the mouse is over a button and by adding a blue ring to the active element, thus restoring the implementation we used to have a long time ago. Thanks to Megan for contributing this pull request!
+- Version 24.1.0 and above: improved accessibility by showing a hover effect when the mouse is over a button and by adding a blue ring to the active element, thus restoring the implementation we used to have a long time ago. Thanks to Megan for contributing this pull request!
 
 Version 24.0.0:
 
 - Upgraded to `pdf.js 5.3`
 - Minor breaking change: Every Acroform field with the same name is now updated by the two-way binding `[(formData)]`. In earlier versions, only the first field was changed. Kudos to Sebastien Fauvart for submitting this pull request!
-- There a new "signature editor". Disabled by default, you can opt in with `pdfDefaultOptions.enableSignatureEditor = true;`. Caveat: these signature are not cyptographic PDF signatures. At the time of writing (July 07, 2025), they're merely "stamp annotations".
+- There's a new "signature editor". Disabled by default, you can opt in with `pdfDefaultOptions.enableSignatureEditor = true;`. Caveat: these signatures are not cryptographic PDF signatures. At the time of writing (July 07, 2025), they're merely "stamp annotations".
 
 ### Version 23
 

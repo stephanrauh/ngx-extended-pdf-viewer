@@ -6,10 +6,11 @@ This document describes the two-stage release process for ngx-extended-pdf-viewe
 
 The release process has been split into two stages:
 
-1. **Local preparation** (`npm run prepare:release`) - Bumps versions, commits, and pushes changes
-2. **CI publishing** (`npm run release:lib`) - Builds and publishes to npm with provenance
+1. **Local preparation** (`npm run release:lib`) - Bumps versions, commits, and pushes changes
+2. **CI publishing** (`npm run do-release:lib`) - Builds and publishes to npm with provenance
 
 This separation enables:
+
 - ✅ npm trusted publishing with provenance attestations
 - ✅ Automated builds in CI with proper permissions
 - ✅ Secure token handling via GitHub Actions OIDC
@@ -35,6 +36,7 @@ You need to configure your npm package for trusted publishing:
 No npm token needs to be stored in GitHub Secrets when using trusted publishing! The workflow uses OIDC (OpenID Connect) to authenticate directly with npm.
 
 However, you need:
+
 - `GITHUB_TOKEN` - Automatically provided by GitHub Actions
 - Access to the mypdf.js repository (if private, configure PAT)
 
@@ -45,10 +47,11 @@ However, you need:
 Run the preparation script locally:
 
 ```bash
-npm run prepare:release
+npm run release:lib
 ```
 
 This script will:
+
 1. ✓ Check that all changes are committed (clean git status)
 2. ✓ Increment the version number in `projects/ngx-extended-pdf-viewer/package.json`
 3. ✓ Update version in mypdf.js (both 5.4.149 and bleeding-edge branches)
@@ -64,7 +67,7 @@ The GitHub Actions workflow triggers automatically when you push a tag:
 1. Workflow detects the new tag (e.g., `25.6.1`)
 2. Checks out both ngx-extended-pdf-viewer and mypdf.js
 3. Verifies tag version matches package.json
-4. Runs `npm run release:lib` which:
+4. Runs `npm run do-release:lib` which:
    - Generates SBOM (Software Bill of Materials)
    - Builds base library from mypdf.js bleeding-edge
    - Verifies bleeding-edge assets
@@ -97,22 +100,22 @@ If any verification fails, the publish will abort with a specific error code.
 
 ## Error Codes
 
-| Code | Description |
-|------|-------------|
-| 51   | Git commit state check failed |
-| 52   | SBOM generation failed |
-| 53   | Base library build failed |
-| 54   | Angular library build failed |
-| 55   | npm publish failed |
-| 57   | Version number increase failed |
-| 58-65| Git commit/push failed in various repos |
-| 66-80| Git operations failed (checkout, push, tags) |
-| 81   | Bleeding-edge assets verification failed |
-| 82   | Stable assets verification failed |
-| 83   | Dist folder not created |
-| 84   | package.json missing from dist |
-| 85   | Version mismatch in dist |
-| 86   | Suspicious lifecycle scripts found in dist |
+| Code  | Description                                  |
+| ----- | -------------------------------------------- |
+| 51    | Git commit state check failed                |
+| 52    | SBOM generation failed                       |
+| 53    | Base library build failed                    |
+| 54    | Angular library build failed                 |
+| 55    | npm publish failed                           |
+| 57    | Version number increase failed               |
+| 58-65 | Git commit/push failed in various repos      |
+| 66-80 | Git operations failed (checkout, push, tags) |
+| 81    | Bleeding-edge assets verification failed     |
+| 82    | Stable assets verification failed            |
+| 83    | Dist folder not created                      |
+| 84    | package.json missing from dist               |
+| 85    | Version mismatch in dist                     |
+| 86    | Suspicious lifecycle scripts found in dist   |
 
 ## Rollback
 
@@ -127,14 +130,6 @@ git push origin :refs/tags/X.Y.Z
 
 # If already published to npm
 npm deprecate ngx-extended-pdf-viewer@X.Y.Z "Version retracted due to [reason]"
-```
-
-## Manual Override
-
-If you need to run the old single-script release process:
-
-```bash
-npm run release:lib:old
 ```
 
 This runs the original `5-release-library.js` which does everything in one script.
@@ -160,20 +155,24 @@ To test the workflow without publishing:
 ## Troubleshooting
 
 ### Tag pushed but workflow didn't trigger
+
 - Check that the tag format matches the pattern in `.github/workflows/publish.yml`
 - Verify workflows are enabled in repository settings
 
 ### Workflow runs but publish fails
+
 - Check that npm trusted publishing is configured correctly
 - Verify the workflow has `id-token: write` permission
 - Review the workflow logs for specific error codes
 
 ### Version mismatch errors
-- Ensure `prepare:release` completed successfully
+
+- Ensure `release:lib` completed successfully
 - Verify the tag name matches the version in package.json
 - Check that all git commits were pushed
 
 ### mypdf.js checkout fails
+
 - Verify the repository path is correct
 - Check if mypdf.js is private (may need PAT token)
 - Ensure both repositories are at the correct branches

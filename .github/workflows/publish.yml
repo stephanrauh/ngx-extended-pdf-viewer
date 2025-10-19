@@ -64,11 +64,25 @@ jobs:
 
       - name: Build and publish library
         working-directory: workspace/ngx-extended-pdf-viewer
-        run: npm run release:lib
+        run: npm run do-release:lib
 
       - name: Create package tarball
         working-directory: workspace/ngx-extended-pdf-viewer/dist/ngx-extended-pdf-viewer
         run: npm pack
+
+      - name: Create minimal source archive
+        working-directory: workspace/ngx-extended-pdf-viewer
+        run: |
+          TAG_VERSION=${GITHUB_REF#refs/tags/}
+          mkdir -p /tmp/ngx-extended-pdf-viewer-source
+          cp -r projects/ngx-extended-pdf-viewer /tmp/ngx-extended-pdf-viewer-source/
+          cp -r build-tools /tmp/ngx-extended-pdf-viewer-source/
+          cp angular.json package.json package-lock.json /tmp/ngx-extended-pdf-viewer-source/
+          cp tsconfig*.json tslint.json jest.config.ts setup-jest.ts /tmp/ngx-extended-pdf-viewer-source/
+          cp README.md LICENSE .editorconfig .prettierrc /tmp/ngx-extended-pdf-viewer-source/
+          cd /tmp
+          tar -czf ngx-extended-pdf-viewer-${TAG_VERSION}-source.tar.gz ngx-extended-pdf-viewer-source
+          mv ngx-extended-pdf-viewer-${TAG_VERSION}-source.tar.gz workspace/ngx-extended-pdf-viewer/
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
@@ -77,6 +91,7 @@ jobs:
           repository: stephanrauh/ngx-extended-pdf-viewer
           files: |
             workspace/ngx-extended-pdf-viewer/dist/ngx-extended-pdf-viewer/*.tgz
+            workspace/ngx-extended-pdf-viewer/*-source.tar.gz
             workspace/ngx-extended-pdf-viewer/sbom.json
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
