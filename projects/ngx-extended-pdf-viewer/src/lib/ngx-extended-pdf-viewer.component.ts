@@ -1671,6 +1671,16 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         }
       });
     });
+    // #2673 Listen for pageViewMode changes to restore height when leaving infinite-scroll
+    PDFViewerApplication.eventBus.on('pageviewmodechanged', (x: any) => {
+      if (x.mode === 'single') {
+        // Restore height after switching away from infinite-scroll
+        setTimeout(() => {
+          this.dynamicCSSComponent.removeScrollbarInInfiniteScrollMode(true, this.pageViewMode, this.primaryMenuVisible, this, this.logLevel);
+        });
+      }
+    });
+    // #2673 end of modification
     PDFViewerApplication.eventBus.on('progress', (x: ProgressBarEvent) => {
       queueMicrotask(() => this.progress.emit(x));
     });
