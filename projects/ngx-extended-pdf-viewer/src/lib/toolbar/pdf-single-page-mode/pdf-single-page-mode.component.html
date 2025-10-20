@@ -1,5 +1,5 @@
 <pdf-shy-button
-  [cssClass]="show | responsiveCSSClass : 'always-in-secondary-menu'"
+  [cssClass]="show | responsiveCSSClass: 'always-in-secondary-menu'"
   title="Use Page Scrolling"
   primaryToolbarId="scrollPage"
   [toggled]="scrollMode == 3"
@@ -7,7 +7,7 @@
   [action]="onClick"
   l10nLabel="pdfjs-scroll-page-button-label"
   [order]="3000"
-  [closeOnClick]="false"
+  [closeOnClick]="true"
   image="<svg aria-hidden='true' focusable='false' width='24px' height='24px' viewBox='0 0 24 24'><path fill='currentColor' d='M10,7V9H12V17H14V7H10Z' /></svg>"
 >
 </pdf-shy-button>

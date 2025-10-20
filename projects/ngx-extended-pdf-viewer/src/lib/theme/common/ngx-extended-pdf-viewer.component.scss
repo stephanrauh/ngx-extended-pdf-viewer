@@ -2,14 +2,12 @@ ngx-extended-pdf-viewer {
   .invisible {
     display: none !important;
   }
-  
+
   // Sidebar styles from PDF.js sidebar.css
   .sidebar {
     --sidebar-bg-color: light-dark(#fff, #23222b);
-    --sidebar-border-color: light-dark(
-      rgb(21 20 26 / 0.1),
-      rgb(251 251 254 / 0.1)
-    );
+    --sidebar-border-color: light-dark(rgb(21 20 26 / 0.1),
+        rgb(251 251 254 / 0.1));
     --sidebar-box-shadow:
       0 0.25px 0.75px light-dark(rgb(0 0 0 / 0.05), rgb(0 0 0 / 0.2)),
       0 2px 6px 0 light-dark(rgb(0 0 0 / 0.1), rgb(0 0 0 / 0.4));
@@ -43,6 +41,10 @@ html[dir='ltr'] ngx-extended-pdf-viewer .toolbarButton:last-child,
 html[dir='rtl'] ngx-extended-pdf-viewer .toolbarButton:first-child {
   margin-right: 0;
   margin-left: 0;
+}
+
+pdf-toggle-secondary-toolbar {
+  height: 25px;
 }
 
 html[dir='ltr'] ngx-extended-pdf-viewer #secondaryToolbarToggle {
@@ -92,6 +94,7 @@ ngx-extended-pdf-viewer {
 }
 
 ngx-extended-pdf-viewer {
+
   button.secondaryToolbarButton:focus,
   button:focus,
   a:focus,
@@ -304,10 +307,8 @@ ngx-extended-pdf-viewer {
   /* Comment manager dialog styles (for individual comment editing) */
   #commentManagerDialog {
     --comment-dialog-bg: light-dark(#fff, #23222b);
-    --comment-dialog-border: light-dark(
-      rgb(21 20 26 / 0.1),
-      rgb(251 251 254 / 0.1)
-    );
+    --comment-dialog-border: light-dark(rgb(21 20 26 / 0.1),
+        rgb(251 251 254 / 0.1));
     --comment-dialog-text: light-dark(#15141a, #fbfbfe);
     --comment-dialog-header-bg: light-dark(#f0f0f4, #2b2a33);
     --comment-button-hover-bg-dialog: light-dark(#e0e0e6, #52525e);
