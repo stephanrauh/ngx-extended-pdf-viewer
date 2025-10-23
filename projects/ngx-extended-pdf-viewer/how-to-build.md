@@ -79,7 +79,7 @@ I've noticed that the test often fail due to minor shifts of the UI. These shift
 
 ## I'm in a hurry, and my changes only affect the Angular code of the library
 
-If you haven't modified pdf.js, you don't have to recompile it every time. The scripts `npm run both:old` or `npm run both` compile the library and start the showcase.
+If you haven't modified pdf.js, you don't have to recompile it every time. The scripts `npm run run:both:old` or `npm run run:both` compile the library and start the showcase.
 
 # The build pipeline
 
