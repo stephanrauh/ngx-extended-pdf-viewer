@@ -42,7 +42,15 @@ export class AnnotationEditorUIManager {
     setMainHighlightColorPicker(colorPicker: any): void;
     editAltText(editor: any, firstTime?: boolean): void;
     hasCommentManager(): boolean;
-    editComment(editor: any, position: any): void;
+    editComment(editor: any, posX: any, posY: any, options: any): void;
+    selectComment(pageIndex: any, uid: any): void;
+    updateComment(editor: any): void;
+    updatePopupColor(editor: any): void;
+    removeComment(editor: any): void;
+    toggleComment(editor: any, isSelected: any, visibility?: undefined): void;
+    makeCommentColor(color: any, opacity: any): any;
+    getCommentDialogElement(): any;
+    waitForEditorsRendered(pageNumber: any): Promise<void>;
     getSignature(editor: any): void;
     get signatureManager(): null;
     switchToMode(mode: any, callback: any): void;
@@ -67,6 +75,15 @@ export class AnnotationEditorUIManager {
     }): void;
     highlightSelection(methodOfCreation?: string, comment?: boolean): void;
     commentSelection(methodOfCreation?: string): void;
+    /**
+     * Some annotations may have been modified in the annotation layer
+     * (e.g. comments added or modified).
+     * So this function retrieves the data from the storage and removes
+     * them from the storage in order to be able to save them later.
+     * @param {string} annotationId
+     * @returns {Object|null} The data associated to the annotation or null.
+     */
+    getAndRemoveDataFromAnnotationStorage(annotationId: string): Object | null;
     /**
      * Add an editor in the annotation storage.
      * @param {AnnotationEditor} editor
@@ -174,9 +191,9 @@ export class AnnotationEditorUIManager {
     /**
      * Get all the editors belonging to a given page.
      * @param {number} pageIndex
-     * @returns {Array<AnnotationEditor>}
+     * @yields {AnnotationEditor}
      */
-    getEditors(pageIndex: number): Array<AnnotationEditor>;
+    getEditors(pageIndex: number): Generator<any, void, unknown>;
     /**
      * Get an editor with the given id.
      * @param {string} id
@@ -310,6 +327,7 @@ export class AnnotationEditorUIManager {
      * @returns {number}
      */
     getMode(): number;
+    isEditingMode(): boolean;
     get imageManager(): any;
     removeEditors(filterFunction?: () => boolean): void;
     getSelectionBoxes(textLayer: any): {

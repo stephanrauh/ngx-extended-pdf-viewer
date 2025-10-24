@@ -110,6 +110,8 @@ export class AnnotationEditor {
     annotationElementId: any;
     _willKeepAspectRatio: boolean;
     _structTreeParentId: any;
+    creationDate: any;
+    modificationDate: any;
     rotation: number;
     pageRotation: number;
     pageDimensions: any[];
@@ -128,6 +130,7 @@ export class AnnotationEditor {
     get propertiesToUpdate(): any[];
     set _isDraggable(value: boolean);
     get _isDraggable(): boolean;
+    get uid(): any;
     /**
      * @returns {boolean} true if the editor handles the Enter key itself.
      */
@@ -236,11 +239,8 @@ export class AnnotationEditor {
     get parentDimensions(): number[];
     /**
      * Set the dimensions of this editor.
-     * @param {number} width
-     * @param {number} height
      */
-    setDims(width: number, height: number): void;
-    fixDims(): void;
+    setDims(): void;
     /**
      * Get the translation used to position this editor when it's created.
      * @returns {Array<number>}
@@ -268,6 +268,8 @@ export class AnnotationEditor {
      * @returns {Promise<EditorToolbar|null>}
      */
     addEditToolbar(): Promise<EditorToolbar | null>;
+    addCommentButtonInToolbar(): void;
+    removeCommentButtonFromToolbar(): void;
     removeEditToolbar(): void;
     addContainer(container: any): void;
     getClientDimensions(): DOMRect;
@@ -286,24 +288,46 @@ export class AnnotationEditor {
     serializeAltText(isForCopying: any): any;
     hasAltText(): boolean;
     hasAltTextData(): any;
+    focusCommentButton(): void;
     addCommentButton(): Comment;
-    get commentColor(): null;
+    addStandaloneCommentButton(): void;
+    removeStandaloneCommentButton(): void;
+    hideStandaloneCommentButton(): void;
     set comment(text: {
         text: any;
+        richText: any;
         date: any;
         deleted: any;
-        color: null;
+        color: any;
+        opacity: any;
     });
     get comment(): {
         text: any;
+        richText: any;
         date: any;
         deleted: any;
-        color: null;
+        color: any;
+        opacity: any;
     };
-    setCommentData(text: any): void;
+    setCommentData({ comment, popupRef, richText }: {
+        comment: any;
+        popupRef: any;
+        richText: any;
+    }): void;
     get hasEditedComment(): any;
-    editComment(): Promise<void>;
+    get hasDeletedComment(): any;
+    get hasComment(): boolean;
+    editComment(options: any): Promise<void>;
+    toggleComment(isSelected: any, visibility?: undefined): void;
+    setSelectedCommentButton(selected: any): void;
     addComment(serialized: any): void;
+    updateFromAnnotationLayer({ popup: { contents, deleted } }: {
+        popup: {
+            contents: any;
+            deleted: any;
+        };
+    }): void;
+    get parentBoundingClientRect(): DOMRect;
     /**
      * Render this editor in a div.
      * @returns {HTMLDivElement | null}
@@ -332,6 +356,25 @@ export class AnnotationEditor {
      * @returns {Array<number>}
      */
     getPDFRect(): Array<number>;
+    getNonHCMColor(): any;
+    /**
+     * The color has been changed.
+     */
+    onUpdatedColor(): void;
+    getData(): {
+        id: any;
+        pageIndex: number;
+        rect: number[];
+        richText: any;
+        contentsObj: {
+            str: any;
+        };
+        creationDate: any;
+        modificationDate: any;
+        popupRef: boolean;
+        color: any;
+        opacity: any;
+    };
     /**
      * Executed once this editor has been rendered.
      * @param {boolean} focus - true if the editor should be focused.
@@ -421,6 +464,19 @@ export class AnnotationEditor {
     makeResizable(): void;
     get toolbarPosition(): null;
     /**
+     * Get the position of the comment button.
+     * @returns {Array<number>|null}
+     */
+    get commentButtonPosition(): Array<number> | null;
+    get commentButtonPositionInPage(): number[];
+    get commentButtonColor(): any;
+    set commentPopupPosition(pos: any);
+    get commentPopupPosition(): any;
+    hasDefaultPopupPosition(): any;
+    get commentButtonWidth(): any;
+    get elementBeforePopup(): HTMLDivElement | null;
+    setCommentButtonStates(options: any): void;
+    /**
      * onkeydown callback.
      * @param {KeyboardEvent} event
      */
@@ -431,6 +487,7 @@ export class AnnotationEditor {
      * Select this editor.
      */
     select(): void;
+    focus(): void;
     /**
      * Unselect this editor.
      */
@@ -487,12 +544,6 @@ export class AnnotationEditor {
      */
     get isEditing(): boolean;
     /**
-     * Set the aspect ratio to use when resizing.
-     * @param {number} width
-     * @param {number} height
-     */
-    setAspectRatio(width: number, height: number): void;
-    /**
      * Get the data to report to the telemetry when the editor is added.
      * @returns {Object}
      */
@@ -510,6 +561,7 @@ export class AnnotationEditor {
     show(visible?: boolean | undefined): void;
     enable(): void;
     disable(): void;
+    updateFakeAnnotationElement(annotationLayer: any): void;
     /**
      * Render an annotation in the annotation layer.
      * @param {Object} annotation

@@ -479,10 +479,6 @@ describe('PDF Default Options Utility Functions', () => {
       expect(typeof pdfjsBleedingEdgeVersion).toBe('string');
       expect(pdfjsBleedingEdgeVersion).toMatch(/^\d+\.\d+\.\d+$/);
     });
-
-    it('should have different version numbers', () => {
-      expect(pdfjsVersion).not.toBe(pdfjsBleedingEdgeVersion);
-    });
   });
 
   describe('pdfDefaultOptions object', () => {

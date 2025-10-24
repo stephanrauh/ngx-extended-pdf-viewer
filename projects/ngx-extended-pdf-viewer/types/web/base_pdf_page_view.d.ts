@@ -7,7 +7,7 @@ export class BasePDFPageView {
     eventBus: null;
     id: null;
     pageColors: null;
-    recordedGroups: null;
+    recordedBBoxes: null;
     renderingQueue: null;
     renderTask: null;
     resume: null;

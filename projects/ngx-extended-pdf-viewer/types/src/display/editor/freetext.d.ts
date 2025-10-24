@@ -22,6 +22,7 @@ export class FreeTextEditor extends AnnotationEditor {
     static deserialize(data: any, parent: any, uiManager: any): Promise<AnnotationEditor | null>;
     constructor(params: any);
     _colorPicker: null;
+    color: any;
     /** @inheritdoc */
     updateParams(type: any, value: any): void;
     /** @inheritdoc */
@@ -29,7 +30,6 @@ export class FreeTextEditor extends AnnotationEditor {
     /** @inheritdoc */
     get toolbarButtons(): (string | null)[][];
     get colorType(): number;
-    get colorValue(): any;
     /**
      * Helper to translate the editor with the keyboard when it's empty.
      * @param {number} x in page units.

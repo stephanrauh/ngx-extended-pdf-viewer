@@ -113,6 +113,7 @@ export class AnnotationEditorLayer {
      * @param {AnnotationEditor} editor
      */
     addUndoableEditor(editor: AnnotationEditor): void;
+    getEditorByUID(uid: any): any;
     /**
      * Get an id for an editor.
      * @returns {string}
@@ -129,9 +130,9 @@ export class AnnotationEditorLayer {
     /**
      * Create a new editor
      * @param {Object} data
-     * @returns {AnnotationEditor | null}
+     * @returns {Promise<AnnotationEditor | null>}
      */
-    deserialize(data: Object): AnnotationEditor | null;
+    deserialize(data: Object): Promise<AnnotationEditor | null>;
     /**
      * Create and add a new editor.
      * @param {PointerEvent} event
@@ -140,6 +141,7 @@ export class AnnotationEditorLayer {
      * @returns {AnnotationEditor}
      */
     createAndAddNewEditor(event: PointerEvent, isCentered: boolean, data?: {}): AnnotationEditor;
+    get boundingClientRect(): DOMRect;
     /**
      * Create and add a new editor.
      */

@@ -112,14 +112,6 @@ pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) }
 #   $mb (Number) - the PDF file size in megabytes
 #   $b (Number) - the PDF file size in bytes
 pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } מ״ב ({ $b } בתים)
-# Variables:
-#   $size_kb (Number) - the PDF file size in kilobytes
-#   $size_b (Number) - the PDF file size in bytes
-pdfjs-document-properties-kb = { $size_kb } ק״ב ({ $size_b } בתים)
-# Variables:
-#   $size_mb (Number) - the PDF file size in megabytes
-#   $size_b (Number) - the PDF file size in bytes
-pdfjs-document-properties-mb = { $size_mb } מ״ב ({ $size_b } בתים)
 pdfjs-document-properties-title = כותרת:
 pdfjs-document-properties-author = מחבר:
 pdfjs-document-properties-subject = נושא:
@@ -129,10 +121,6 @@ pdfjs-document-properties-modification-date = תאריך שינוי:
 # Variables:
 #   $dateObj (Date) - the creation/modification date and time of the PDF file
 pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
-# Variables:
-#   $date (Date) - the creation/modification date of the PDF file
-#   $time (Time) - the creation/modification time of the PDF file
-pdfjs-document-properties-date-string = { $date }, { $time }
 pdfjs-document-properties-creator = יוצר:
 pdfjs-document-properties-producer = יצרן PDF:
 pdfjs-document-properties-version = גרסת PDF:
@@ -275,10 +263,6 @@ pdfjs-rendering-error = אירעה שגיאה בעת עיבוד הדף.
 
 ## Annotations
 
-# Variables:
-#   $date (Date) - the modification date of the annotation
-#   $time (Time) - the modification time of the annotation
-pdfjs-annotation-date-string = { $date }, { $time }
 # .alt: This is used as a tooltip.
 # Variables:
 #   $type (String) - an annotation type from a list defined in the PDF spec
@@ -386,20 +370,12 @@ pdfjs-editor-add-saved-signature-button =
 pdfjs-free-text2 =
     .aria-label = עורך טקסט
     .default-content = נא להתחיל להקליד…
-pdfjs-free-text =
-    .aria-label = עורך טקסט
-pdfjs-free-text-default-content = להתחיל להקליד…
-pdfjs-ink =
-    .aria-label = עורך ציור
-pdfjs-ink-canvas =
-    .aria-label = תמונה שנוצרה על־ידי משתמש
 
 ## Alt-text dialog
 
 pdfjs-editor-alt-text-button-label = טקסט חלופי
 pdfjs-editor-alt-text-edit-button =
     .aria-label = עריכת טקסט חלופי
-pdfjs-editor-alt-text-edit-button-label = עריכת טקסט חלופי
 pdfjs-editor-alt-text-dialog-label = בחירת אפשרות
 pdfjs-editor-alt-text-dialog-description = טקסט חלופי עוזר כשאנשים לא יכולים לראות את התמונה או כשהיא לא נטענת.
 pdfjs-editor-alt-text-add-description-label = הוספת תיאור
@@ -419,14 +395,6 @@ pdfjs-editor-alt-text-button =
 ## Editor resizers
 ## This is used in an aria label to help to understand the role of the resizer.
 
-pdfjs-editor-resizer-label-top-left = פינה שמאלית עליונה - שינוי גודל
-pdfjs-editor-resizer-label-top-middle = למעלה באמצע - שינוי גודל
-pdfjs-editor-resizer-label-top-right = פינה ימנית עליונה - שינוי גודל
-pdfjs-editor-resizer-label-middle-right = ימינה באמצע - שינוי גודל
-pdfjs-editor-resizer-label-bottom-right = פינה ימנית תחתונה - שינוי גודל
-pdfjs-editor-resizer-label-bottom-middle = למטה באמצע - שינוי גודל
-pdfjs-editor-resizer-label-bottom-left = פינה שמאלית תחתונה - שינוי גודל
-pdfjs-editor-resizer-label-middle-left = שמאלה באמצע - שינוי גודל
 pdfjs-editor-resizer-top-left =
     .aria-label = פינה שמאלית עליונה - שינוי גודל
 pdfjs-editor-resizer-top-middle =
@@ -666,15 +634,6 @@ pdfjs-editor-comments-sidebar-close-button =
     .title = Close the sidebar
     .aria-label = Close the sidebar
 pdfjs-editor-comments-sidebar-close-button-label = Close the sidebar
-pdfjs-editor-comments-sidebar-no-comments = Add a comment by selecting text or an annotation.
-unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
-pdfjs-infinite-scroll-button-label = Infinite scroll
-pdfjs-find-multiple-checkbox-label = Match Each Word
-pdfjs-find-regexp-checkbox-label = Regular Expression
-pdfjs-editor-movePageUp-button = Move Page Up
-pdfjs-editor-movePageUp-button-label = Move Page Up
-pdfjs-editor-movePageDown-button = Move Page Down
-pdfjs-editor-movePageDown-button-label = Move Page Down
 pdfjs-editor-comments-sidebar-no-comments1 = See something noteworthy? Highlight it and leave a comment.
 pdfjs-editor-comments-sidebar-no-comments-link = Learn more
 pdfjs-show-comment-button =
@@ -692,3 +651,11 @@ pdfjs-editor-edit-comment-dialog-save-button-when-adding = Add
 pdfjs-editor-edit-comment-dialog-text-input =
     .placeholder = Start typing…
 pdfjs-editor-edit-comment-dialog-cancel-button = Cancel
+unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
+pdfjs-infinite-scroll-button-label = Infinite scroll
+pdfjs-find-multiple-checkbox-label = Match Each Word
+pdfjs-find-regexp-checkbox-label = Regular Expression
+pdfjs-editor-movePageUp-button = Move Page Up
+pdfjs-editor-movePageUp-button-label = Move Page Up
+pdfjs-editor-movePageDown-button = Move Page Down
+pdfjs-editor-movePageDown-button-label = Move Page Down

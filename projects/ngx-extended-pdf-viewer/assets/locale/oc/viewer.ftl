@@ -104,24 +104,12 @@ pdfjs-document-properties-button =
 pdfjs-document-properties-button-label = Proprietats del document…
 pdfjs-document-properties-file-name = Nom del fichièr :
 pdfjs-document-properties-file-size = Talha del fichièr :
-# Variables:
-#   $size_kb (Number) - the PDF file size in kilobytes
-#   $size_b (Number) - the PDF file size in bytes
-pdfjs-document-properties-kb = { $size_kb } Ko ({ $size_b } octets)
-# Variables:
-#   $size_mb (Number) - the PDF file size in megabytes
-#   $size_b (Number) - the PDF file size in bytes
-pdfjs-document-properties-mb = { $size_mb } Mo ({ $size_b } octets)
 pdfjs-document-properties-title = Títol :
 pdfjs-document-properties-author = Autor :
 pdfjs-document-properties-subject = Subjècte :
 pdfjs-document-properties-keywords = Mots claus :
 pdfjs-document-properties-creation-date = Data de creacion :
 pdfjs-document-properties-modification-date = Data de modificacion :
-# Variables:
-#   $date (Date) - the creation/modification date of the PDF file
-#   $time (Time) - the creation/modification time of the PDF file
-pdfjs-document-properties-date-string = { $date }, a { $time }
 pdfjs-document-properties-creator = Creator :
 pdfjs-document-properties-producer = Aisina de conversion PDF :
 pdfjs-document-properties-version = Version PDF :
@@ -264,10 +252,6 @@ pdfjs-rendering-error = Una error s'es producha pendent l'afichatge de la pagina
 
 ## Annotations
 
-# Variables:
-#   $date (Date) - the modification date of the annotation
-#   $time (Time) - the modification time of the annotation
-pdfjs-annotation-date-string = { $date } a { $time }
 # .alt: This is used as a tooltip.
 # Variables:
 #   $type (String) - an annotation type from a list defined in the PDF spec
@@ -334,18 +318,10 @@ pdfjs-editor-free-highlight-thickness-input = Espessor
 pdfjs-free-text2 =
     .aria-label = Editor de tèxte
     .default-content = Començatz de picar…
-pdfjs-free-text =
-    .aria-label = Editor de tèxte
-pdfjs-free-text-default-content = Començatz d’escriure…
-pdfjs-ink =
-    .aria-label = Editor de dessenh
-pdfjs-ink-canvas =
-    .aria-label = Imatge creat per l’utilizaire
 
 ## Alt-text dialog
 
 pdfjs-editor-alt-text-button-label = Tèxt alternatiu
-pdfjs-editor-alt-text-edit-button-label = Modificar lo tèxt alternatiu
 pdfjs-editor-alt-text-dialog-label = Causir una opcion
 pdfjs-editor-alt-text-add-description-label = Apondre una descripcion
 pdfjs-editor-alt-text-cancel-button = Anullar
@@ -451,7 +427,10 @@ pdfjs-editor-comments-sidebar-close-button =
     .title = Close the sidebar
     .aria-label = Close the sidebar
 pdfjs-editor-comments-sidebar-close-button-label = Close the sidebar
-pdfjs-editor-comments-sidebar-no-comments = Add a comment by selecting text or an annotation.
+pdfjs-editor-comments-sidebar-no-comments1 = See something noteworthy? Highlight it and leave a comment.
+pdfjs-editor-comments-sidebar-no-comments-link = Learn more
+pdfjs-editor-alt-text-edit-button =
+    .aria-label = Edit alt text
 pdfjs-editor-alt-text-dialog-description = Alt text (alternative text) helps when people can’t see the image or when it doesn’t load.
 pdfjs-editor-alt-text-add-description-description = Aim for 1-2 sentences that describe the subject, setting, or actions.
 pdfjs-editor-alt-text-mark-decorative-label = Mark as decorative
@@ -562,30 +541,6 @@ pdfjs-editor-delete-signature-button-label1 = Remove saved signature
 pdfjs-editor-add-signature-edit-button-label = Edit description
 pdfjs-editor-edit-signature-dialog-title = Edit description
 pdfjs-editor-edit-signature-update-button = Update
-pdfjs-editor-edit-comment-actions-button-label = Actions
-pdfjs-editor-edit-comment-actions-button =
-    .title = Actions
-pdfjs-editor-edit-comment-close-button-label = Close
-pdfjs-editor-edit-comment-close-button =
-    .title = Close
-pdfjs-editor-edit-comment-actions-edit-button-label = Edit
-pdfjs-editor-edit-comment-actions-delete-button-label = Delete
-pdfjs-editor-edit-comment-manager-text-input =
-    .placeholder = Enter your comment
-pdfjs-editor-edit-comment-manager-cancel-button = Cancel
-pdfjs-editor-edit-comment-manager-save-button = Save
-pdfjs-editor-edit-comment-button =
-    .title = Edit comment
-unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
-pdfjs-infinite-scroll-button-label = Infinite scroll
-pdfjs-find-multiple-checkbox-label = Match Each Word
-pdfjs-find-regexp-checkbox-label = Regular Expression
-pdfjs-editor-movePageUp-button = Move Page Up
-pdfjs-editor-movePageUp-button-label = Move Page Up
-pdfjs-editor-movePageDown-button = Move Page Down
-pdfjs-editor-movePageDown-button-label = Move Page Down
-pdfjs-editor-comments-sidebar-no-comments1 = See something noteworthy? Highlight it and leave a comment.
-pdfjs-editor-comments-sidebar-no-comments-link = Learn more
 pdfjs-show-comment-button =
     .title = Show comment
 pdfjs-editor-edit-comment-popup-button-label = Edit comment
@@ -601,3 +556,13 @@ pdfjs-editor-edit-comment-dialog-save-button-when-adding = Add
 pdfjs-editor-edit-comment-dialog-text-input =
     .placeholder = Start typing…
 pdfjs-editor-edit-comment-dialog-cancel-button = Cancel
+pdfjs-editor-edit-comment-button =
+    .title = Edit comment
+unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
+pdfjs-infinite-scroll-button-label = Infinite scroll
+pdfjs-find-multiple-checkbox-label = Match Each Word
+pdfjs-find-regexp-checkbox-label = Regular Expression
+pdfjs-editor-movePageUp-button = Move Page Up
+pdfjs-editor-movePageUp-button-label = Move Page Up
+pdfjs-editor-movePageDown-button = Move Page Down
+pdfjs-editor-movePageDown-button-label = Move Page Down

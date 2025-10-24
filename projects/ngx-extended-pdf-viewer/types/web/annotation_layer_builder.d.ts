@@ -6,6 +6,7 @@ export type IPDFLinkService = import("./interfaces").IPDFLinkService;
 export type StructTreeLayerBuilder = import("./struct_tree_layer_builder.js").StructTreeLayerBuilder;
 export type TextAccessibilityManager = import("./text_accessibility.js").TextAccessibilityManager;
 export type AnnotationEditorUIManager = import("../src/display/editor/tools.js").AnnotationEditorUIManager;
+export type CommentManager = import("./comment_manager.js").CommentManager;
 export type AnnotationLayerBuilderOptions = {
     pdfPage: PDFPageProxy;
     annotationStorage?: import("../src/display/annotation_storage").AnnotationStorage | undefined;
@@ -27,6 +28,7 @@ export type AnnotationLayerBuilderOptions = {
     accessibilityManager?: import("./text_accessibility.js").TextAccessibilityManager | undefined;
     annotationEditorUIManager?: import("../src/pdf").AnnotationEditorUIManager | undefined;
     onAppend?: Function | undefined;
+    commentManager?: import("./comment_manager.js").CommentManager | undefined;
 };
 export type AnnotationLayerBuilderRenderOptions = {
     viewport: PageViewport;
@@ -34,11 +36,6 @@ export type AnnotationLayerBuilderRenderOptions = {
      * - The default value is "display".
      */
     intent?: string | undefined;
-    structTreeLayer?: import("./struct_tree_layer_builder.js").StructTreeLayerBuilder | undefined;
-};
-export type InjectLinkAnnotationsOptions = {
-    inferredLinks: Array<Object>;
-    viewport: PageViewport;
     structTreeLayer?: import("./struct_tree_layer_builder.js").StructTreeLayerBuilder | undefined;
 };
 /**
@@ -59,6 +56,7 @@ export type InjectLinkAnnotationsOptions = {
  * @property {TextAccessibilityManager} [accessibilityManager]
  * @property {AnnotationEditorUIManager} [annotationEditorUIManager]
  * @property {function} [onAppend]
+ * @property {CommentManager} [commentManager]
  */
 /**
  * @typedef {Object} AnnotationLayerBuilderRenderOptions
@@ -66,17 +64,11 @@ export type InjectLinkAnnotationsOptions = {
  * @property {string} [intent] - The default value is "display".
  * @property {StructTreeLayerBuilder} [structTreeLayer]
  */
-/**
- * @typedef {Object} InjectLinkAnnotationsOptions
- * @property {Array<Object>} inferredLinks
- * @property {PageViewport} viewport
- * @property {StructTreeLayerBuilder} [structTreeLayer]
- */
 export class AnnotationLayerBuilder {
     /**
      * @param {AnnotationLayerBuilderOptions} options
      */
-    constructor({ pdfPage, linkService, downloadManager, annotationStorage, imageResourcesPath, renderForms, enableComment, enableScripting, hasJSActionsPromise, fieldObjectsPromise, annotationCanvasMap, accessibilityManager, annotationEditorUIManager, onAppend, }: AnnotationLayerBuilderOptions);
+    constructor({ pdfPage, linkService, downloadManager, annotationStorage, imageResourcesPath, renderForms, enableComment, commentManager, enableScripting, hasJSActionsPromise, fieldObjectsPromise, annotationCanvasMap, accessibilityManager, annotationEditorUIManager, onAppend, }: AnnotationLayerBuilderOptions);
     pdfPage: import("../src/display/api").PDFPageProxy;
     linkService: import("./interfaces").IPDFLinkService;
     downloadManager: import("./interfaces").IDownloadManager | undefined;
@@ -106,11 +98,11 @@ export class AnnotationLayerBuilder {
     hide(internal?: boolean): void;
     hasEditableAnnotations(): boolean;
     /**
-     * @param {InjectLinkAnnotationsOptions} options
+     * @param {Array<Object>} inferredLinks
      * @returns {Promise<void>} A promise that is resolved when the inferred links
      *   are added to the annotation layer.
      */
-    injectLinkAnnotations({ inferredLinks, viewport, structTreeLayer, }: InjectLinkAnnotationsOptions): Promise<void>;
+    injectLinkAnnotations(inferredLinks: Array<Object>): Promise<void>;
     #private;
 }
 import { AnnotationLayer } from "../src/pdf";

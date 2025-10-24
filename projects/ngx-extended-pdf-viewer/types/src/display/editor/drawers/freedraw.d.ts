@@ -1,5 +1,6 @@
 export class FreeDrawOutline extends Outline {
     constructor(outline: any, points: any, box: any, scaleFactor: any, innerMargin: any, isLTR: any);
+    firstPoint: number[];
     lastPoint: number[];
     serialize([blX, blY, trX, trY]: [any, any, any, any], rotation: any): {
         outline: any[];

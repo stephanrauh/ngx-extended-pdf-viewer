@@ -45,7 +45,7 @@ export class CanvasGraphics {
     }): void;
     compositeCtx: any;
     transparentCanvas: any;
-    executeOperatorList(operatorList: any, executionStartIdx: any, continueCallback: any, stepper: any, filteredOperationIndexes: any): any;
+    executeOperatorList(operatorList: any, executionStartIdx: any, continueCallback: any, stepper: any, operationsFilter: any): any;
     endDrawing(): void;
     _scaleImage(img: any, inverseTransform: any): {
         img: any;

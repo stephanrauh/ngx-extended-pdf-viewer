@@ -8,10 +8,12 @@ export class EditorToolbar {
     show(): void;
     addDeleteButton(): void;
     addAltText(altText: any): Promise<void>;
-    addComment(comment: any): void;
+    addComment(comment: any, beforeElement?: null): void;
     addColorPicker(colorPicker: any): void;
     addEditSignatureButton(signatureManager: any): Promise<void>;
+    removeButton(name: any): void;
     addButton(name: any, tool: any): Promise<void>;
+    addButtonBefore(name: any, tool: any, beforeSelector: any): Promise<void>;
     updateEditSignatureButton(description: any): void;
     remove(): void;
     #private;

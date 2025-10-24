@@ -1,24 +1,20 @@
 export class CommentManager {
-    constructor({ dialog, toolbar, actions, menu, editMenuItem, deleteMenuItem, closeButton, textInput, textView, cancelButton, saveButton, }: {
-        dialog: any;
-        toolbar: any;
-        actions: any;
-        menu: any;
-        editMenuItem: any;
-        deleteMenuItem: any;
-        closeButton: any;
-        textInput: any;
-        textView: any;
-        cancelButton: any;
-        saveButton: any;
-    }, sidebar: any, eventBus: any, linkService: any, overlayManager: any);
+    static #hasForcedColors: null;
+    static _makeCommentColor(color: any, opacity: any): string | null;
+    constructor(commentDialog: any, sidebar: any, eventBus: any, linkService: any, overlayManager: any, ltr: any, hasForcedColors: any);
+    dialogElement: any;
+    setSidebarUiManager(uiManager: any): void;
     showSidebar(annotations: any): void;
     hideSidebar(): void;
     removeComments(ids: any): void;
     selectComment(id: any): void;
     addComment(annotation: any): void;
-    open(uiManager: any, editor: any, position: any): Promise<void>;
-    get _dialogWidth(): any;
+    updateComment(annotation: any): void;
+    toggleCommentPopup(editor: any, isSelected: any, visibility: any, isEditable: any): void;
+    destroyPopup(): void;
+    updatePopupColor(editor: any): void;
+    showDialog(uiManager: any, editor: any, posX: any, posY: any, options: any): Promise<void>;
+    makeCommentColor(color: any, opacity: any): string | null;
     destroy(): void;
     #private;
 }

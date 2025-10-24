@@ -1,10 +1,10 @@
-export type SimpleDependency = "lineWidth" | "lineCap" | "lineJoin" | "miterLimit" | "dash" | "strokeAlpha" | "fillColor" | "fillAlpha" | "globalCompositeOperation" | "path" | "filter";
+export type SimpleDependency = "lineWidth" | "lineCap" | "lineJoin" | "miterLimit" | "dash" | "strokeAlpha" | "fillColor" | "fillAlpha" | "globalCompositeOperation" | "path" | "filter" | "font" | "fontObj";
 export type IncrementalDependency = "transform" | "moveText" | "sameLineText";
 export type InternalIncrementalDependency = IncrementalDependency | typeof FORCED_DEPENDENCY_LABEL;
 /**
  * @typedef {"lineWidth" | "lineCap" | "lineJoin" | "miterLimit" | "dash" |
  * "strokeAlpha" | "fillColor" | "fillAlpha" | "globalCompositeOperation" |
- * "path" | "filter"} SimpleDependency
+ * "path" | "filter" | "font" | "fontObj"} SimpleDependency
  */
 /**
  * @typedef {"transform" | "moveText" | "sameLineText"} IncrementalDependency
@@ -14,7 +14,8 @@ export type InternalIncrementalDependency = IncrementalDependency | typeof FORCE
  * typeof FORCED_DEPENDENCY_LABEL} InternalIncrementalDependency
  */
 export class CanvasDependencyTracker {
-    constructor(canvas: any);
+    constructor(canvas: any, operationsCount: any, recordDebugMetadata?: boolean);
+    growOperationsCount(operationsCount: any): void;
     save(opIdx: any): this;
     restore(opIdx: any): this;
     /**
@@ -22,7 +23,7 @@ export class CanvasDependencyTracker {
      */
     recordOpenMarker(idx: number): this;
     getOpenMarker(): any;
-    recordCloseMarker(idx: any): this;
+    recordCloseMarker(opIdx: any): this;
     beginMarkedContent(opIdx: any): this;
     endMarkedContent(opIdx: any): this;
     pushBaseTransform(ctx: any): this;
@@ -43,35 +44,34 @@ export class CanvasDependencyTracker {
      */
     resetIncrementalData(name: IncrementalDependency, idx: number): this;
     recordNamedData(name: any, idx: any): this;
+    /**
+     * @param {SimpleDependency} name
+     * @param {string} depName
+     * @param {number} fallbackIdx
+     */
+    recordSimpleDataFromNamed(name: SimpleDependency, depName: string, fallbackIdx: number): void;
     recordFutureForcedDependency(name: any, idx: any): this;
     inheritSimpleDataAsFutureForcedDependencies(names: any): this;
     inheritPendingDependenciesAsFutureForcedDependencies(): this;
     resetBBox(idx: any): this;
-    get hasPendingBBox(): boolean;
     recordClipBox(idx: any, ctx: any, minX: any, maxX: any, minY: any, maxY: any): this;
     recordBBox(idx: any, ctx: any, minX: any, maxX: any, minY: any, maxY: any): this;
     recordCharacterBBox(idx: any, ctx: any, font: any, scale: number | undefined, x: number | undefined, y: number | undefined, getMeasure: any): this;
     recordFullPageBBox(idx: any): this;
     getSimpleIndex(dependencyName: any): any;
     recordDependencies(idx: any, dependencyNames: any): this;
-    copyDependenciesFromIncrementalOperation(idx: any, name: any): this;
     recordNamedDependency(idx: any, name: any): this;
     /**
      * @param {number} idx
      */
-    recordOperation(idx: number, preserveBbox?: boolean): this;
-    bboxToClipBoxDropOperation(idx: any): this;
+    recordOperation(idx: number, preserve?: boolean): this;
+    recordShowTextOperation(idx: any, preserve?: boolean): this;
+    bboxToClipBoxDropOperation(idx: any, preserve?: boolean): this;
     _takePendingDependencies(): Set<any>;
     _extractOperation(idx: any): any;
     _pushPendingDependencies(dependencies: any): void;
-    take(): {
-        minX: number;
-        maxX: number;
-        minY: number;
-        maxY: number;
-        dependencies: any[];
-        idx: any;
-    }[];
+    take(): BBoxReader;
+    takeDebugMetadata(): Map<any, any> | undefined;
     #private;
 }
 /**
@@ -82,7 +82,8 @@ export class CanvasDependencyTracker {
  * @implements {CanvasDependencyTracker}
  */
 export class CanvasNestedDependencyTracker implements CanvasDependencyTracker {
-    constructor(dependencyTracker: any, opIdx: any);
+    constructor(dependencyTracker: any, opIdx: any, ignoreBBoxes: any);
+    growOperationsCount(): void;
     save(opIdx: any): this;
     restore(opIdx: any): this;
     recordOpenMarker(idx: any): this;
@@ -108,27 +109,32 @@ export class CanvasNestedDependencyTracker implements CanvasDependencyTracker {
      */
     resetIncrementalData(name: IncrementalDependency, idx: number): this;
     recordNamedData(name: any, idx: any): this;
+    /**
+     * @param {SimpleDependency} name
+     * @param {string} depName
+     * @param {number} fallbackIdx
+     */
+    recordSimpleDataFromNamed(name: SimpleDependency, depName: string, fallbackIdx: number): this;
     recordFutureForcedDependency(name: any, idx: any): this;
     inheritSimpleDataAsFutureForcedDependencies(names: any): this;
     inheritPendingDependenciesAsFutureForcedDependencies(): this;
     resetBBox(idx: any): this;
-    get hasPendingBBox(): boolean;
     recordClipBox(idx: any, ctx: any, minX: any, maxX: any, minY: any, maxY: any): this;
     recordBBox(idx: any, ctx: any, minX: any, maxX: any, minY: any, maxY: any): this;
     recordCharacterBBox(idx: any, ctx: any, font: any, scale: any, x: any, y: any, getMeasure: any): this;
     recordFullPageBBox(idx: any): this;
     getSimpleIndex(dependencyName: any): any;
     recordDependencies(idx: any, dependencyNames: any): this;
-    copyDependenciesFromIncrementalOperation(idx: any, name: any): this;
     recordNamedDependency(idx: any, name: any): this;
     /**
      * @param {number} idx
      * @param {SimpleDependency[]} dependencyNames
      */
     recordOperation(idx: number): this;
+    recordShowTextOperation(idx: any): this;
     bboxToClipBoxDropOperation(idx: any): this;
-    recordNestedDependencies(): void;
     take(): void;
+    takeDebugMetadata(): void;
     #private;
 }
 export namespace Dependencies {
@@ -141,4 +147,14 @@ export namespace Dependencies {
     let transformAndFill: string[];
 }
 declare const FORCED_DEPENDENCY_LABEL: "__forcedDependency";
+declare class BBoxReader {
+    constructor(bboxes: any, coords: any);
+    get length(): any;
+    isEmpty(i: any): boolean;
+    minX(i: any): number;
+    minY(i: any): number;
+    maxX(i: any): number;
+    maxY(i: any): number;
+    #private;
+}
 export {};

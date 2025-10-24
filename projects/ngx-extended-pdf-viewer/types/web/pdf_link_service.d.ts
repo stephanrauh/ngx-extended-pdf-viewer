@@ -105,8 +105,9 @@ export class PDFLinkService implements IPDFLinkService {
      * @param {number} pageNumber - The page number to scroll to.
      * @param {number} x - The x-coordinate to scroll to in page coordinates.
      * @param {number} y - The y-coordinate to scroll to in page coordinates.
+     * @param {Object} [options]
      */
-    goToXY(pageNumber: number, x: number, y: number): void;
+    goToXY(pageNumber: number, x: number, y: number, options?: Object): void;
     /**
      * Adds various attributes (href, title, target, rel) to hyperlinks.
      * @param {HTMLAnchorElement} link

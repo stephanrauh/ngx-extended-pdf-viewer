@@ -414,12 +414,15 @@ export class PDFViewer {
      *   The default value is `false`.
      * @property {boolean} [ignoreDestinationZoom] - Ignore the zoom argument in
      *   the destination array. The default value is `false`.
+     * @property {string} [center] - Center the view on the specified coordinates.
+     *   The default value is `null`. Possible values are: `null` (don't center),
+     *  `horizontal`, `vertical` and `both`.
      */
     /**
      * Scrolls page into view.
      * @param {ScrollPageIntoViewParameters} params
      */
-    scrollPageIntoView({ pageNumber, destArray, allowNegativeOffset, ignoreDestinationZoom, }: {
+    scrollPageIntoView({ pageNumber, destArray, allowNegativeOffset, ignoreDestinationZoom, center, }: {
         /**
          * - The page number.
          */
@@ -439,6 +442,12 @@ export class PDFViewer {
          * the destination array. The default value is `false`.
          */
         ignoreDestinationZoom?: boolean | undefined;
+        /**
+         * - Center the view on the specified coordinates.
+         * The default value is `null`. Possible values are: `null` (don't center),
+         * `horizontal`, `vertical` and `both`.
+         */
+        center?: string | undefined;
     }): void;
     _updateLocation(firstPage: any): void;
     update(noScroll?: boolean): void;

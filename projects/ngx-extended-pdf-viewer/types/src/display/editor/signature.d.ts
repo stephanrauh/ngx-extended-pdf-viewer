@@ -66,15 +66,10 @@ export class SignatureEditor extends DrawingEditor {
     _drawingOptions: any;
     /** @inheritdoc */
     serialize(isForCopying?: boolean): {
-        annotationType: number;
         isSignature: boolean;
         areContours: boolean;
         color: number[];
         thickness: any;
-        pageIndex: number;
-        rect: any;
-        rotation: number;
-        structTreeParentId: any;
     } | null;
     #private;
 }

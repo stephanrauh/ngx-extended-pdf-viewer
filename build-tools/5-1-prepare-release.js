@@ -66,14 +66,14 @@ runCommand('node ./build-tools/1-build-base-library.js --quick', 'Error 67: buil
 process.chdir(path.join('..', 'mypdf.js'));
 runCommand('git reset --hard', 'Error 67a: Git reset failed', 67);
 
-// Build base library from stable branch (5.4.149) to update pdf-default-options.ts
-console.log('\n🔨 Building base library (5.4.149) to update version numbers...');
-runCommand('git checkout 5.4.149', 'Error 59: Git checkout failed', 59);
+// Build base library from stable branch (5.4.296) to update pdf-default-options.ts
+console.log('\n🔨 Building base library (5.4.296) to update version numbers...');
+runCommand('git checkout 5.4.296', 'Error 59: Git checkout failed', 59);
 
 // Update version number
 runCommand(
   'node ../ngx-extended-pdf-viewer/build-tools/base-library/write-version-number-to-base-library.js',
-  'Error 62: write-version-number-to-base-library failed at version 5.4.149',
+  'Error 62: write-version-number-to-base-library failed at version 5.4.296',
   62,
 );
 
@@ -87,7 +87,7 @@ runCommand('npm audit fix --ignore-scripts || true', 'Error 68c: npm audit fix f
 runCommand('../ngx-extended-pdf-viewer/build-tools/search-for-shai-hulud.sh --full', 'Error 68d: shai-hulud scan failed', 68);
 runCommand('npm rebuild', 'Error 68e: npm rebuild failed', 68);
 process.chdir(path.join('..', 'ngx-extended-pdf-viewer'));
-runCommand('node ./build-tools/1-build-base-library.js --quick', 'Error 69: build-base-library.js failed for 5.4.149', 69);
+runCommand('node ./build-tools/1-build-base-library.js --quick', 'Error 69: build-base-library.js failed for 5.4.296', 69);
 
 // Clean up package-lock.json changes from audit fix
 process.chdir(path.join('..', 'mypdf.js'));
@@ -107,11 +107,11 @@ runCommand('git push origin --tags', 'Error 72: Pushing tags failed', 72);
 // Push mypdf.js changes and create tags
 process.chdir(path.join('..', 'mypdf.js'));
 
-// Push 5.4.149 branch
-runCommand('git checkout 5.4.149', 'Error 73: Git checkout failed', 73);
-runCommand('git push', 'Error 74: Git push in mypdf.js 5.4.149 failed', 74);
-runCommand(`git tag -a "ngx-extended-pdf-viewer-${newVersion}" -m "ngx-extended-pdf-viewer ${newVersion}"`, 'Error 75: Creating 5.4.149 tag failed', 75);
-runCommand('git push origin --tags', 'Error 76: Pushing 5.4.149 tags failed', 76);
+// Push 5.4.296 branch
+runCommand('git checkout 5.4.296', 'Error 73: Git checkout failed', 73);
+runCommand('git push', 'Error 74: Git push in mypdf.js 5.4.296 failed', 74);
+runCommand(`git tag -a "ngx-extended-pdf-viewer-${newVersion}" -m "ngx-extended-pdf-viewer ${newVersion}"`, 'Error 75: Creating 5.4.296 tag failed', 75);
+runCommand('git push origin --tags', 'Error 76: Pushing 5.4.296 tags failed', 76);
 
 // Push bleeding-edge branch
 runCommand('git checkout bleeding-edge', 'Error 77: Git checkout failed', 77);

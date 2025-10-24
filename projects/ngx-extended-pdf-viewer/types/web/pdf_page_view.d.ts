@@ -4,6 +4,7 @@ export type EventBus = import("./event_utils").EventBus;
 export type IL10n = import("./interfaces").IL10n;
 export type IRenderableView = import("./interfaces").IRenderableView;
 export type PDFRenderingQueue = import("./pdf_rendering_queue").PDFRenderingQueue;
+export type CommentManager = import("./comment_manager.js").CommentManager;
 export type PDFPageViewOptions = {
     /**
      * - The viewer element.
@@ -108,6 +109,10 @@ export type PDFPageViewOptions = {
      * text that look like URLs. The default value is `true`.
      */
     enableAutoLinking?: boolean | undefined;
+    /**
+     * - The comment manager instance.
+     */
+    commentManager?: import("./comment_manager.js").CommentManager | undefined;
 };
 /**
  * @implements {IRenderableView}
@@ -207,7 +212,7 @@ export class PDFPageView extends BasePDFPageView implements IRenderableView {
     get height(): number;
     getPagePoint(x: any, y: any): any[];
     _ensureCanvasWrapper(): null;
-    _getRenderingContext(canvas: any, transform: any): {
+    _getRenderingContext(canvas: any, transform: any, recordOperations: any): {
         canvas: any;
         transform: any;
         viewport: import("../src/display/display_utils").PageViewport;
@@ -217,7 +222,7 @@ export class PDFPageView extends BasePDFPageView implements IRenderableView {
         pageColors: null;
         isEditing: boolean;
         background: any;
-        recordOperations: boolean;
+        recordOperations: any;
     };
     draw(): Promise<void>;
     /**

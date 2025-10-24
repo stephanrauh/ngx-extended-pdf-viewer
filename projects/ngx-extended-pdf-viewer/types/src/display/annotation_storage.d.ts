@@ -56,6 +56,8 @@ export class AnnotationStorage {
     };
     get editorStats(): any;
     resetModifiedIds(): void;
+    updateEditor(annotationId: any, data: any): boolean;
+    getEditor(annotationId: any): any;
     /**
      * @returns {{ids: Set<string>, hash: string}}
      */

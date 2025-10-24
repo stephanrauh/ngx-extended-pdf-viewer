@@ -98,11 +98,11 @@ if (!allBleedingEdgeFilesValid) {
 }
 console.log('✓ All bleeding-edge assets verified');
 
-// Build base library from stable branch (5.4.149)
-console.log('\n🔨 Building base library (5.4.149)...');
+// Build base library from stable branch (5.4.296)
+console.log('\n🔨 Building base library (5.4.296)...');
 process.chdir(path.join('..', 'mypdf.js'));
 runCommand('git reset --hard', 'Error 68a: Git reset failed', 68);
-runCommand('git checkout 5.4.149', 'Error 68: Git checkout failed', 68);
+runCommand('git checkout 5.4.296', 'Error 68: Git checkout failed', 68);
 runCommand('npm ci --ignore-scripts', 'Error 68b: npm install failed', 68);
 runCommand('npm audit fix --ignore-scripts || true', 'Error 68c: npm audit fix failed', 68);
 runCommand('../ngx-extended-pdf-viewer/build-tools/search-for-shai-hulud.sh --full', 'Error 68d: shai-hulud scan failed', 68);

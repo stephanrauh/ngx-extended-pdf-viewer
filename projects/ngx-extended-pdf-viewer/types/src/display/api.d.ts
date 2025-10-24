@@ -498,11 +498,12 @@ export type RenderParameters = {
      */
     recordOperations?: boolean | undefined;
     /**
-     * - If provided, only run
-     * the PDF operations that are included in this set.
+     * - If provided, only
+     * run for which this function returns `true`.
      */
-    filteredOperationIndexes?: Set<number> | undefined;
+    operationsFilter?: OperationsFilter | undefined;
 };
+export type OperationsFilter = (index: number) => boolean;
 /**
  * Page getOperatorList parameters.
  */
@@ -1284,8 +1285,13 @@ export class PDFDocumentProxy {
  * @property {boolean} [isEditing] - Render the page in editing mode.
  * @property {boolean} [recordOperations] - Record the dependencies and bounding
  *   boxes of all PDF operations that render onto the canvas.
- * @property {Set<number>} [filteredOperationIndexes] - If provided, only run
- *   the PDF operations that are included in this set.
+ * @property {OperationsFilter} [operationsFilter] - If provided, only
+ *   run for which this function returns `true`.
+ */
+/**
+ * @callback OperationsFilter
+ * @param {number} index - The index of the operation.
+ * @returns {boolean} If false, the operation is ignored.
  */
 /**
  * Page getOperatorList parameters.
@@ -1348,7 +1354,7 @@ export class PDFPageProxy {
     objs: PDFObjects;
     _intentStates: Map<any, any>;
     destroyed: boolean;
-    recordedGroups: any;
+    recordedBBoxes: any;
     /**
      * @type {number} Page number of the page. First page is 1.
      */
@@ -1409,7 +1415,7 @@ export class PDFPageProxy {
      * @returns {RenderTask} An object that contains a promise that is
      *   resolved when the page finishes rendering.
      */
-    render({ canvasContext, canvas, viewport, intent, annotationMode, transform, background, optionalContentConfigPromise, annotationCanvasMap, pageColors, printAnnotationStorage, isEditing, recordOperations, filteredOperationIndexes, }: RenderParameters): RenderTask;
+    render({ canvasContext, canvas, viewport, intent, annotationMode, transform, background, optionalContentConfigPromise, annotationCanvasMap, pageColors, printAnnotationStorage, isEditing, recordOperations, operationsFilter, }: RenderParameters): RenderTask;
     /**
      * @param {GetOperatorListParameters} params - Page getOperatorList
      *   parameters.

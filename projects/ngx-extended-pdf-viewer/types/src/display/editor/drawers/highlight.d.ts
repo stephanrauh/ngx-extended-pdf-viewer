@@ -19,7 +19,8 @@ export class HighlightOutliner {
 }
 import { FreeDrawOutliner } from "./freedraw.js";
 declare class HighlightOutline extends Outline {
-    constructor(outlines: any, box: any, lastPoint: any);
+    constructor(outlines: any, box: any, firstPoint: any, lastPoint: any);
+    firstPoint: any;
     lastPoint: any;
     /**
      * Serialize the outlines into the PDF page coordinate system.

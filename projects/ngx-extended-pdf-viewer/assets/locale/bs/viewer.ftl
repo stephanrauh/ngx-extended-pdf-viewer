@@ -112,14 +112,6 @@ pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) }
 #   $mb (Number) - the PDF file size in megabytes
 #   $b (Number) - the PDF file size in bytes
 pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } bajtova)
-# Variables:
-#   $size_kb (Number) - the PDF file size in kilobytes
-#   $size_b (Number) - the PDF file size in bytes
-pdfjs-document-properties-kb = { $size_kb } KB ({ $size_b } bajta)
-# Variables:
-#   $size_mb (Number) - the PDF file size in megabytes
-#   $size_b (Number) - the PDF file size in bytes
-pdfjs-document-properties-mb = { $size_mb } MB ({ $size_b } bajta)
 pdfjs-document-properties-title = Naslov:
 pdfjs-document-properties-author = Autor:
 pdfjs-document-properties-subject = Predmet:
@@ -129,10 +121,6 @@ pdfjs-document-properties-modification-date = Datum promjene:
 # Variables:
 #   $dateObj (Date) - the creation/modification date and time of the PDF file
 pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
-# Variables:
-#   $date (Date) - the creation/modification date of the PDF file
-#   $time (Time) - the creation/modification time of the PDF file
-pdfjs-document-properties-date-string = { $date }, { $time }
 pdfjs-document-properties-creator = Kreator:
 pdfjs-document-properties-producer = PDF stvaratelj:
 pdfjs-document-properties-version = PDF verzija:
@@ -277,10 +265,6 @@ pdfjs-rendering-error = Došlo je do greške prilikom renderiranja strane.
 
 ## Annotations
 
-# Variables:
-#   $date (Date) - the modification date of the annotation
-#   $time (Time) - the modification time of the annotation
-pdfjs-annotation-date-string = { $date }, { $time }
 # .alt: This is used as a tooltip.
 # Variables:
 #   $type (String) - an annotation type from a list defined in the PDF spec
@@ -380,20 +364,12 @@ pdfjs-editor-add-saved-signature-button =
 pdfjs-free-text2 =
     .aria-label = Uređivač teksta
     .default-content = Počnite kucati…
-pdfjs-free-text =
-    .aria-label = Uređivač teksta
-pdfjs-free-text-default-content = Počnite kucati…
-pdfjs-ink =
-    .aria-label = Uređivač crtanja
-pdfjs-ink-canvas =
-    .aria-label = Slika koju je kreirao korisnik
 
 ## Alt-text dialog
 
 pdfjs-editor-alt-text-button-label = Alternativni tekst
 pdfjs-editor-alt-text-edit-button =
     .aria-label = Uredi alternativni tekst
-pdfjs-editor-alt-text-edit-button-label = Uredi alternativni tekst
 pdfjs-editor-alt-text-dialog-label = Odaberite opciju
 pdfjs-editor-alt-text-dialog-description = Alternativni tekst (Alt tekst) pomaže kada ljudi ne mogu vidjeti sliku ili kada se ona ne učitava.
 pdfjs-editor-alt-text-add-description-label = Dodajte opis
@@ -413,14 +389,6 @@ pdfjs-editor-alt-text-button =
 ## Editor resizers
 ## This is used in an aria label to help to understand the role of the resizer.
 
-pdfjs-editor-resizer-label-top-left = Gornji lijevi ugao — promjena veličine
-pdfjs-editor-resizer-label-top-middle = Gore u sredini — promijeni veličinu
-pdfjs-editor-resizer-label-top-right = Gornji desni ugao — promijeni veličinu
-pdfjs-editor-resizer-label-middle-right = Sredina desno — promijeni veličinu
-pdfjs-editor-resizer-label-bottom-right = Donji desni ugao — promijeni veličinu
-pdfjs-editor-resizer-label-bottom-middle = Donji srednji dio — promijeni veličinu
-pdfjs-editor-resizer-label-bottom-left = Donji lijevi ugao — promijeni veličinu
-pdfjs-editor-resizer-label-middle-left = Sredina lijevo — promijeni veličinu
 pdfjs-editor-resizer-top-left =
     .aria-label = Gornji lijevi ugao — promjena veličine
 pdfjs-editor-resizer-top-middle =
@@ -661,22 +629,13 @@ pdfjs-editor-comments-sidebar-close-button =
     .title = Close the sidebar
     .aria-label = Close the sidebar
 pdfjs-editor-comments-sidebar-close-button-label = Close the sidebar
-pdfjs-editor-comments-sidebar-no-comments = Add a comment by selecting text or an annotation.
+pdfjs-editor-comments-sidebar-no-comments1 = See something noteworthy? Highlight it and leave a comment.
+pdfjs-editor-comments-sidebar-no-comments-link = Learn more
 pdfjs-editor-highlight-added-alert = Highlight added
 pdfjs-editor-freetext-added-alert = Text added
 pdfjs-editor-ink-added-alert = Drawing added
 pdfjs-editor-stamp-added-alert = Image added
 pdfjs-editor-signature-added-alert = Signature added
-unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
-pdfjs-infinite-scroll-button-label = Infinite scroll
-pdfjs-find-multiple-checkbox-label = Match Each Word
-pdfjs-find-regexp-checkbox-label = Regular Expression
-pdfjs-editor-movePageUp-button = Move Page Up
-pdfjs-editor-movePageUp-button-label = Move Page Up
-pdfjs-editor-movePageDown-button = Move Page Down
-pdfjs-editor-movePageDown-button-label = Move Page Down
-pdfjs-editor-comments-sidebar-no-comments1 = See something noteworthy? Highlight it and leave a comment.
-pdfjs-editor-comments-sidebar-no-comments-link = Learn more
 pdfjs-show-comment-button =
     .title = Show comment
 pdfjs-editor-edit-comment-popup-button-label = Edit comment
@@ -692,3 +651,11 @@ pdfjs-editor-edit-comment-dialog-save-button-when-adding = Add
 pdfjs-editor-edit-comment-dialog-text-input =
     .placeholder = Start typing…
 pdfjs-editor-edit-comment-dialog-cancel-button = Cancel
+unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
+pdfjs-infinite-scroll-button-label = Infinite scroll
+pdfjs-find-multiple-checkbox-label = Match Each Word
+pdfjs-find-regexp-checkbox-label = Regular Expression
+pdfjs-editor-movePageUp-button = Move Page Up
+pdfjs-editor-movePageUp-button-label = Move Page Up
+pdfjs-editor-movePageDown-button = Move Page Down
+pdfjs-editor-movePageDown-button-label = Move Page Down

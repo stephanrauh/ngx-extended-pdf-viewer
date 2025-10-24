@@ -18,7 +18,7 @@ export class TilingPattern {
     ctx: any;
     canvasGraphicsFactory: any;
     baseTransform: any;
-    createPatternCanvas(owner: any): {
+    createPatternCanvas(owner: any, opIdx: any): {
         canvas: any;
         scaleX: any;
         scaleY: any;
@@ -32,7 +32,7 @@ export class TilingPattern {
     clipBbox(graphics: any, x0: any, y0: any, x1: any, y1: any): void;
     setFillAndStrokeStyleToContext(graphics: any, paintType: any, color: any): void;
     isModifyingCurrentTransform(): boolean;
-    getPattern(ctx: any, owner: any, inverse: any, pathType: any): any;
+    getPattern(ctx: any, owner: any, inverse: any, pathType: any, opIdx: any): any;
 }
 declare class RadialAxialShadingPattern extends BaseShadingPattern {
     constructor(IR: any);
