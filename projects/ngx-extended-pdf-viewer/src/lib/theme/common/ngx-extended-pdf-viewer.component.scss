@@ -3,6 +3,11 @@ ngx-extended-pdf-viewer {
     display: none !important;
   }
 
+  // #3061 Prevent annotation popup from flashing during programmatic annotation addition
+  .ngx-keep-hidden {
+    display: none !important;
+  }
+
   // Sidebar styles from PDF.js sidebar.css
   .sidebar {
     --sidebar-bg-color: light-dark(#fff, #23222b);

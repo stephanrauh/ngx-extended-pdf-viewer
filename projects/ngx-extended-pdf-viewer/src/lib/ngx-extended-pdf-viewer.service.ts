@@ -597,7 +597,23 @@ export class NgxExtendedPdfViewerService {
   }
 
   public async addEditorAnnotation(serializedAnnotation: string | EditorAnnotation): Promise<void> {
+    // #3061 When the editor mode is NONE, PDF.js internally switches to FREETEXT mode temporarily,
+    // which causes the FreeText popup to flash. Prevent this by hiding the popup during the operation.
+    const currentMode = this.PDFViewerApplication?.pdfViewer.annotationEditorMode;
+    const popup = document.getElementById('editorFreeTextParamsToolbar');
+    const wasHidden = popup?.classList.contains('hidden') ?? true;
+
+    // If mode is NONE and popup was hidden, keep it hidden during the temporary mode switch
+    if (currentMode === 0 && wasHidden && popup) {
+      this.renderer.addClass(popup, 'ngx-keep-hidden');
+    }
+
     await this.PDFViewerApplication?.pdfViewer.addEditorAnnotation(serializedAnnotation);
+
+    // #3061 Remove the temporary hiding class after the operation
+    if (currentMode === 0 && wasHidden && popup) {
+      this.renderer.removeClass(popup, 'ngx-keep-hidden');
+    }
   }
 
   public removeEditorAnnotations(filter?: (serialized: object) => boolean): void {
@@ -632,6 +648,16 @@ export class NgxExtendedPdfViewerService {
       pageToModify = this.currentPageIndex() ?? 0;
     }
     const previousAnnotationEditorMode = this.PDFViewerApplication.pdfViewer.annotationEditorMode;
+
+    // #3061 Check if the stamp popup is currently hidden to prevent flashing
+    const popup = document.getElementById('editorStampParamsToolbar');
+    const wasHidden = popup?.classList.contains('hidden') ?? true;
+
+    // If the popup was hidden, add a CSS class to keep it hidden during mode switch
+    if (wasHidden && popup) {
+      this.renderer.addClass(popup, 'ngx-keep-hidden');
+    }
+
     this.switchAnnotationEdtorMode(13);
     const dataUrl = await this.loadImageAsDataURL(urlOrDataUrl);
     const pageSize = this.PDFViewerApplication.pdfViewer._pages[pageToModify].pdfPage.view;
@@ -659,6 +685,11 @@ export class NgxExtendedPdfViewerService {
     this.addEditorAnnotation(stampAnnotation);
     await this.sleep(10);
     this.switchAnnotationEdtorMode(previousAnnotationEditorMode);
+
+    // #3061 Remove the temporary hiding class after switching back
+    if (wasHidden && popup) {
+      this.renderer.removeClass(popup, 'ngx-keep-hidden');
+    }
   }
 
   public async addHighlightToAnnotationLayer(
@@ -688,6 +719,16 @@ export class NgxExtendedPdfViewerService {
     }
 
     const previousAnnotationEditorMode = this.PDFViewerApplication.pdfViewer.annotationEditorMode;
+
+    // #3061 Check if the popup is currently hidden to prevent flashing
+    const popup = document.getElementById('editorHighlightParamsToolbar');
+    const wasHidden = popup?.classList.contains('hidden') ?? true;
+
+    // If the popup was hidden, add a CSS class to keep it hidden during mode switch
+    if (wasHidden && popup) {
+      this.renderer.addClass(popup, 'ngx-keep-hidden');
+    }
+
     this.switchAnnotationEdtorMode(9); // AnnotationEditorType.HIGHLIGHT
 
     const pageSize = this.PDFViewerApplication.pdfViewer._pages[pageToModify].pdfPage.view;
@@ -744,6 +785,11 @@ export class NgxExtendedPdfViewerService {
     this.addEditorAnnotation(highlightAnnotation);
     await this.sleep(10);
     this.switchAnnotationEdtorMode(previousAnnotationEditorMode);
+
+    // #3061 Remove the temporary hiding class after switching back
+    if (wasHidden && popup) {
+      this.renderer.removeClass(popup, 'ngx-keep-hidden');
+    }
   }
 
   public currentPageIndex(): number | undefined {
