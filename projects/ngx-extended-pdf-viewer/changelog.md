@@ -693,3 +693,4 @@
 - 25.6.0-alpha.26 stephanrauh/ngx-extended-pdf-viewer#2673 recalculate the div height when switching from infinite scroll to single-page mode; dependency update; faster compilation when developing; fixed layout glitches in the toolbar and the secondary menu; close the secondary menu when changing the page view mode
 - 25.6.0-rc.1 improved publishing automation; updated stable branch to pdf.js version 5.4.296
 - 25.6.0-rc.2 #3061 prevent annotation editor popup toolbars from flashing when programmatically adding annotations via `addHighlightToAnnotationLayer()`, `addImageToAnnotationLayer()`, or `addEditorAnnotation()`
+- 25.6.0-rc.3 #3065 fixed `getPageAsLines()` omitting the final text chunk when it has an end-of-line flag

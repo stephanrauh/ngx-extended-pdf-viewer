@@ -273,23 +273,24 @@ export class NgxExtendedPdfViewerService {
       let lines = new Array<Line>();
       for (let i = 0; i < snippets.length; i++) {
         const currentSnippet = snippets[i];
-        if (!currentSnippet.hasEOL) {
-          const x = currentSnippet.transform[4];
-          const y = -currentSnippet.transform[5];
-          const width = currentSnippet.width;
-          const height = currentSnippet.height;
-          minX = Math.min(minX, x);
-          minY = Math.min(minY, y);
-          maxX = Math.max(maxX, x + width);
-          maxY = Math.max(maxY, y + height);
-          text += currentSnippet.str;
-          if (currentSnippet.dir === 'rtl') {
-            countRTL++;
-          }
-          if (currentSnippet.dir === 'ltr') {
-            countLTR++;
-          }
+        // #3065 modified by ngx-extended-pdf-viewer
+        // Always process the current snippet's text and bounds, regardless of hasEOL
+        const x = currentSnippet.transform[4];
+        const y = -currentSnippet.transform[5];
+        const width = currentSnippet.width;
+        const height = currentSnippet.height;
+        minX = Math.min(minX, x);
+        minY = Math.min(minY, y);
+        maxX = Math.max(maxX, x + width);
+        maxY = Math.max(maxY, y + height);
+        text += currentSnippet.str;
+        if (currentSnippet.dir === 'rtl') {
+          countRTL++;
         }
+        if (currentSnippet.dir === 'ltr') {
+          countLTR++;
+        }
+        // #3065 end of modification by ngx-extended-pdf-viewer
 
         let addIt = i === snippets.length - 1 || currentSnippet.hasEOL;
         if (addIt) {
