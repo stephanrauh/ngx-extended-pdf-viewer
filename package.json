@@ -49,7 +49,7 @@
     "@angular/platform-browser-dynamic": "^17.3.12",
     "@angular/router": "^17.3.12",
     "angular2-smart-table": "^3.8.0",
-    "marked": "^15.0.12",
+    "marked": "^17.0.0",
     "prismjs": "^1.30.0",
     "rxjs": "^7.8.2",
     "ts-node": "^10.9.2",
