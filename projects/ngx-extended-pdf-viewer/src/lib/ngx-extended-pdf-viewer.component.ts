@@ -79,6 +79,9 @@ interface ElementAndPosition {
   element: HTMLElement;
   x: number;
   y: number;
+  // #3074 modified by ngx-extended-pdf-viewer
+  popupElements?: Array<HTMLElement>; // Elements from aria-controls popup to insert after this element
+  // #3074 end of modification by ngx-extended-pdf-viewer
 }
 
 export interface FormDataType {
@@ -1214,9 +1217,21 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         return a.x - b.x;
       };
       const sorted = [...elements].sort(topRightGreaterThanBottomLeftComparator);
+
+      // #3074 modified by ngx-extended-pdf-viewer
+      // Assign tab indexes, inserting popup elements immediately after their trigger buttons
+      let tabIndex = this.startTabindex;
       for (let i = 0; i < sorted.length; i++) {
-        sorted[i].element.tabIndex = this.startTabindex + i;
+        sorted[i].element.tabIndex = tabIndex++;
+
+        // If this element controls a popup, assign tab indexes to popup elements next
+        if (sorted[i].popupElements && sorted[i].popupElements!.length > 0) {
+          for (const popupElement of sorted[i].popupElements!) {
+            popupElement.tabIndex = tabIndex++;
+          }
+        }
       }
+      // #3074 end of modification by ngx-extended-pdf-viewer
     }
   }
 
@@ -1253,6 +1268,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   }
 
   private collectElementPositions(copy: Element, original: Element, elements: Array<ElementAndPosition>): Array<ElementAndPosition> {
+    // #3074 modified by ngx-extended-pdf-viewer
+    // Skip elements inside editor params toolbars - they'll be collected via aria-controls
+    if (copy.classList.contains('editorParamsToolbar')) {
+      return elements;
+    }
+    // #3074 end of modification by ngx-extended-pdf-viewer
+
     if (copy instanceof HTMLButtonElement || copy instanceof HTMLAnchorElement || copy instanceof HTMLInputElement || copy instanceof HTMLSelectElement) {
       const rect = copy.getBoundingClientRect();
       const elementAndPos = {
@@ -1260,6 +1282,18 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         x: Math.round(rect.left),
         y: Math.round(rect.top),
       } as ElementAndPosition;
+
+      // #3074 modified by ngx-extended-pdf-viewer
+      // If this element controls a popup (aria-controls), collect popup elements
+      const ariaControls = (original as HTMLElement).getAttribute('aria-controls');
+      if (ariaControls) {
+        const popupElements = this.collectPopupElements(ariaControls);
+        if (popupElements.length > 0) {
+          elementAndPos.popupElements = popupElements;
+        }
+      }
+      // #3074 end of modification by ngx-extended-pdf-viewer
+
       elements.push(elementAndPos);
     } else if (copy.childElementCount > 0) {
       for (let i = 0; i < copy.childElementCount; i++) {
@@ -1272,6 +1306,24 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     }
     return elements;
   }
+
+  // #3074 modified by ngx-extended-pdf-viewer
+  /**
+   * Collect focusable elements from a popup identified by aria-controls ID
+   * These elements should appear in tab order immediately after the trigger button
+   */
+  private collectPopupElements(ariaControls: string): Array<HTMLElement> {
+    const popup = this.root.nativeElement.querySelector(`#${ariaControls}`);
+    if (!popup) {
+      return [];
+    }
+
+    const selector = 'button:not([tabindex="-1"]), a:not([tabindex="-1"]), input:not([tabindex="-1"]), select:not([tabindex="-1"])';
+    const focusableElements = popup.querySelectorAll(selector);
+    const elementsArray = Array.from(focusableElements) as Array<HTMLElement>;
+    return elementsArray;
+  }
+  // #3074 end of modification by ngx-extended-pdf-viewer
 
   private readonly afterPrintListener = () => {
     this.afterPrint.emit();

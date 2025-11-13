@@ -694,3 +694,4 @@
 - 25.6.0-rc.1 improved publishing automation; updated stable branch to pdf.js version 5.4.296
 - 25.6.0-rc.2 #3061 prevent annotation editor popup toolbars from flashing when programmatically adding annotations via `addHighlightToAnnotationLayer()`, `addImageToAnnotationLayer()`, or `addEditorAnnotation()`
 - 25.6.0-rc.3 #3065 fixed `getPageAsLines()` omitting the final text chunk when it has an end-of-line flag
+- 25.6.0-rc.4 #3074 improved keyboard accessibility for editor params toolbars - Escape key now closes popups and Tab key navigates into open popups
