@@ -51,6 +51,15 @@ export class PdfShyButtonComponent implements OnInit, OnChanges, AfterViewInit, 
   @Input()
   public onlySecondaryMenu: boolean = false;
 
+  @Input()
+  public ariaHasPopup: boolean | 'true' | 'menu' | 'dialog' = false;
+
+  @Input()
+  public ariaControls: string | undefined;
+
+  @Input()
+  public role: string | undefined;
+
   private PDFViewerApplication: IPDFViewerApplication | undefined;
 
   public renderContent = false;

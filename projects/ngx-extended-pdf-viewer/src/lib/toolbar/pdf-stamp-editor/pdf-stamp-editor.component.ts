@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, Input, effect } from '@angular/core';
 import { PositioningService } from '../../dynamic-css/positioning.service';
 import { AnnotationEditorEditorModeChangedEvent } from '../../events/annotation-editor-mode-changed-event';
+import { FocusManagementService } from '../../focus-management.service';
 import { AnnotationEditorType } from '../../options/editor-annotations';
 import { getVersionSuffix, pdfDefaultOptions } from '../../options/pdf-default-options';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
@@ -28,6 +29,7 @@ export class PdfStampEditorComponent {
     notificationService: PDFNotificationService,
     private cdr: ChangeDetectorRef,
     private positioningService: PositioningService,
+    private focusManagement: FocusManagementService,
   ) {
     effect(() => {
       this.PDFViewerApplication = notificationService.onPDFJSInitSignal();
@@ -40,7 +42,18 @@ export class PdfStampEditorComponent {
   private onPdfJsInit() {
     this.PDFViewerApplication?.eventBus.on('annotationeditormodechanged', ({ mode }: AnnotationEditorEditorModeChangedEvent) => {
       setTimeout(() => {
+        const wasSelected = this.isSelected;
         this.isSelected = mode === 13;
+
+        // Focus management
+        if (!wasSelected && this.isSelected) {
+          // Dialog just opened
+          this.focusManagement.moveFocusToDialog('editorStampParamsToolbar', 'Stamp editor toolbar opened', 'primaryEditorStamp');
+        } else if (wasSelected && !this.isSelected) {
+          // Dialog just closed
+          this.focusManagement.returnFocusToPrevious('Stamp editor toolbar closed');
+        }
+
         this.cdr.detectChanges();
       });
     });

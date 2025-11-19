@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, Input, effect } from '@angular/core';
 import { PositioningService } from '../../dynamic-css/positioning.service';
 import { AnnotationEditorEditorModeChangedEvent } from '../../events/annotation-editor-mode-changed-event';
+import { FocusManagementService } from '../../focus-management.service';
 import { AnnotationEditorType } from '../../options/editor-annotations';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { PDFNotificationService } from '../../pdf-notification-service';
@@ -21,6 +22,7 @@ export class PdfCommentEditorComponent {
   constructor(
     notificationService: PDFNotificationService,
     private cdr: ChangeDetectorRef,
+    private focusManagement: FocusManagementService,
   ) {
     effect(() => {
       this.PDFViewerApplication = notificationService.onPDFJSInitSignal();
@@ -33,7 +35,18 @@ export class PdfCommentEditorComponent {
   private onPdfJsInit() {
     this.PDFViewerApplication?.eventBus.on('annotationeditormodechanged', ({ mode }: AnnotationEditorEditorModeChangedEvent) => {
       setTimeout(() => {
+        const wasSelected = this.isSelected;
         this.isSelected = mode === AnnotationEditorType.POPUP;
+
+        // Focus management
+        if (!wasSelected && this.isSelected) {
+          // Dialog just opened
+          this.focusManagement.moveFocusToDialog('editorCommentParamsToolbar', 'Comment editor toolbar opened', 'editorCommentButton');
+        } else if (wasSelected && !this.isSelected) {
+          // Dialog just closed
+          this.focusManagement.returnFocusToPrevious('Comment editor toolbar closed');
+        }
+
         this.cdr.detectChanges();
       });
     });

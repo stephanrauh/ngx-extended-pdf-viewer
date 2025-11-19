@@ -2,6 +2,7 @@
  * Public API Surface of ngx-extended-pdf-viewer
  */
 export * from './lib/dynamic-css/positioning.service';
+export * from './lib/focus-management.service';
 export * from './lib/events/annotation-editor-layer-event';
 export * from './lib/events/annotation-editor-layer-rendered-event';
 export * from './lib/events/annotation-editor-mode-changed-event';
