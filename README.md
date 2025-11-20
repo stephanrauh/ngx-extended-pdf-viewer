@@ -5,7 +5,7 @@
   <a href="https://badge.fury.io/js/ngx-extended-pdf-viewer">
     <img src="https://badge.fury.io/js/ngx-extended-pdf-viewer.svg" alt="npm version">
   </a>
-  <a href="https://github.com/stephanrauh/ngx-extended-pdf-viewer/blob/main/projects/ngx-extended-pdf-viewer/LICENSE"><img src="https://img.shields.io/badge/License-Apache%202.0%20with%20Commons%20Clause-brightgreen.svg"></a>
+  <a href="https://opensource.org/licenses/Apache-2.0"><img src="https://img.shields.io/badge/License-Apache%202.0-brightgreen.svg"></a>
   </p>
   <p>
   CDN: <a href="https://unpkg.com/browse/ngx-extended-pdf-viewer/">unpkg.com</a>
