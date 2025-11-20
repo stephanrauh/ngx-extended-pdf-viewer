@@ -1986,9 +1986,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
           if (currentPage !== this.page) {
             this.pageChange.emit(currentPage);
+            this._page = currentPage;
           }
           if (currentPageLabel !== this.pageLabel) {
             this.pageLabelChange.emit(currentPageLabel);
+            this.pageLabel = currentPageLabel;
           }
         });
       }
