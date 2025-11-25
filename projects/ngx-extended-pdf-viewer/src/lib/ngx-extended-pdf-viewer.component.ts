@@ -395,7 +395,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   public showStampEditor: ResponsiveVisibility = 'xxl';
 
   @Input()
-  public showCommentEditor: ResponsiveVisibility = 'xxl';
+  public showCommentEditor: ResponsiveVisibility = pdfDefaultOptions.enableComment ? 'xxl' : false;
 
   @Input()
   public showDrawEditor: ResponsiveVisibility = 'xxl';
@@ -1159,10 +1159,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
           this.formSupport.cdr = this.cdr;
         }
         this.pdfScriptLoaderService.PDFViewerApplication.cspPolicyService = this.cspPolicyService;
-        
+
         // Initialize iOS canvas optimization service with PDFViewerApplication
         this.iosCanvasService.initialize(this.pdfScriptLoaderService.PDFViewerApplication);
-        
+
         this.ngZone.runOutsideAngular(() => this.doInitPDFViewer());
       }
     } catch (error) {
@@ -1800,6 +1800,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       });
     });
     PDFViewerApplication.eventBus.on('scalechanging', (x: ScaleChangingEvent) => {
+      // #3060 modified by ngx-extended-pdf-viewer - diagnostic logging for iOS scale bug
+      if (x.scale < 0.15 || (x.previousScale && x.previousScale < 0.15)) {
+        console.log(
+          `[#3060 DEBUG] scalechanging event: scale=${x.scale}, previousScale=${x.previousScale}, presetValue=${x.presetValue}, this.zoom=${this.zoom}, source=${x.source?.constructor?.name}`,
+        );
+      }
+      // #3060 end of modification by ngx-extended-pdf-viewer
       setTimeout(() => {
         this.currentZoomFactor.emit(x.scale);
         this.cdr.markForCheck();

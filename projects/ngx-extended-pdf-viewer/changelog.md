@@ -695,4 +695,6 @@
 - 25.6.0-rc.2 #3061 prevent annotation editor popup toolbars from flashing when programmatically adding annotations via `addHighlightToAnnotationLayer()`, `addImageToAnnotationLayer()`, or `addEditorAnnotation()`
 - 25.6.0-rc.3 #3065 fixed `getPageAsLines()` omitting the final text chunk when it has an end-of-line flag
 - 25.6.0-rc.4 #3074 improved keyboard accessibility for editor params toolbars - Escape key now closes popups and Tab key navigates into open popups; #3083 fixed a bug that prevented the secondary toolbar from closing when clicking in the background
+- 25.6.0-rc.5 #3060 added diagnostic logging to investigate intermittent 0.1 scale values during iOS pinch-to-zoom
 - 25.6.0 #3053 reverted the license back to Apache 2.0; #3077 fixed pageChange event not emitting when navigating back to the initial page
+- 25.6.1 #3092 disable the comment editor until pdf.js releases it officially

@@ -39,16 +39,16 @@ export function getSafeCanvasSize(): number {
   if (typeof window === 'undefined' || typeof document === 'undefined' || isTestEnvironment()) {
     return 4096;
   }
-  
+
   // Use PDF.js defaults for maximum compatibility
   // The IOSCanvasOptimizationService handles dynamic optimization
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !('MSStream' in window);
   const isMobile = /Android|iPhone|iPad|iPod/.test(navigator.userAgent);
-  
+
   if (isIOS || isMobile) {
     return 5242880; // PDF.js iOS/Android limit (5 megapixels)
   }
-  
+
   return 33554432; // PDF.js desktop default (32 megapixels)
 }
 
@@ -63,6 +63,7 @@ export const pdfDefaultOptions = {
   defaultZoomValue: '',
   disableHistory: false,
   disablePageLabels: false,
+  enableComment: false,
   enablePermissions: false,
   docBaseUrl: '',
   enablePrintAutoRotate: true,
