@@ -68,7 +68,7 @@ export class HighlightEditor extends AnnotationEditor {
     pointerleave(): void;
     _moveCaret(direction: any): void;
     /** @inheritdoc */
-    serialize(isForCopying?: boolean): Object | null;
+    serialize(isForCopying?: boolean, context?: null, includeId?: boolean): Object | null;
     /** @inheritdoc */
     renderAnnotationElement(annotation: any): null;
     #private;

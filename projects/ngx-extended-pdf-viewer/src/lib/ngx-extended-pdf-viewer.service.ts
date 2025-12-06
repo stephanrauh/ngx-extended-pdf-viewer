@@ -597,6 +597,16 @@ export class NgxExtendedPdfViewerService {
     return this.PDFViewerApplication?.pdfViewer.getSerializedAnnotations();
   }
 
+  // #3076 added by ngx-extended-pdf-viewer
+  public getSerializedAnnotation(id: string): EditorAnnotation | null | undefined {
+    const annotations = this.PDFViewerApplication?.pdfViewer.getSerializedAnnotations();
+    if (!annotations || !Array.isArray(annotations)) {
+      return null;
+    }
+    return annotations.find((annotation) => annotation.id === id) || null;
+  }
+  // #3076 end of modification by ngx-extended-pdf-viewer
+
   public async addEditorAnnotation(serializedAnnotation: string | EditorAnnotation): Promise<void> {
     // #3061 When the editor mode is NONE, PDF.js internally switches to FREETEXT mode temporarily,
     // which causes the FreeText popup to flash. Prevent this by hiding the popup during the operation.

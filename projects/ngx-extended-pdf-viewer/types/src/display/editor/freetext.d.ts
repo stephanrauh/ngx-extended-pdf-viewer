@@ -55,7 +55,7 @@ export class FreeTextEditor extends AnnotationEditor {
     /** @inheritdoc */
     getPDFRect(): any[];
     /** @inheritdoc */
-    serialize(isForCopying?: boolean): Object | null;
+    serialize(isForCopying?: boolean, context?: null, includeId?: boolean): Object | null;
     /** @inheritdoc */
     renderAnnotationElement(annotation: any): HTMLElement | null;
     #private;

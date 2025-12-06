@@ -51,6 +51,7 @@ export type InkEditorAnnotation = {
   rect: Array<number>; // [left, bottom, right, top]
   rotation: 0 | 90 | 180 | 270; // in degrees
   isCopy?: boolean;
+  id?: string; // #3076 added by ngx-extended-pdf-viewer
 };
 
 export type FreeTextEditorAnnotation = {
@@ -62,6 +63,7 @@ export type FreeTextEditorAnnotation = {
   rect: Array<number>; // rect[1] is the y position; rect[2] is the x position
   rotation: 0 | 90 | 180 | 270; // in degrees
   isCopy?: boolean;
+  id?: string; // #3076 added by ngx-extended-pdf-viewer
 };
 
 export type StampEditorAnnotation = {
@@ -71,6 +73,7 @@ export type StampEditorAnnotation = {
   rect: Array<number>; // [left, bottom, right, top]
   rotation: 0 | 90 | 180 | 270; // in degrees
   isCopy?: boolean;
+  id?: string; // #3076 added by ngx-extended-pdf-viewer
 };
 
 export type HighlightEditorAnnotation = {
@@ -84,6 +87,7 @@ export type HighlightEditorAnnotation = {
   rect: Array<number>; // [left, bottom, right, top]
   rotation: 0 | 90 | 180 | 270; // in degrees
   isCopy?: boolean;
+  id?: string; // #3076 added by ngx-extended-pdf-viewer
 };
 
 export type PopupEditorAnnotation = {
@@ -93,6 +97,7 @@ export type PopupEditorAnnotation = {
   rect: Array<number>; // [left, bottom, right, top]
   rotation: 0 | 90 | 180 | 270; // in degrees
   isCopy?: boolean;
+  id?: string; // #3076 added by ngx-extended-pdf-viewer
 };
 
 export type EditorAnnotation = InkEditorAnnotation | FreeTextEditorAnnotation | StampEditorAnnotation | HighlightEditorAnnotation | PopupEditorAnnotation;

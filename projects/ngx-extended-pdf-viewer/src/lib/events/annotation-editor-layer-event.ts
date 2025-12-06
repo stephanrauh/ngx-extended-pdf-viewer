@@ -11,8 +11,10 @@ export interface AnnotationEditorEvent {
     | 'opacityChanged'
     | 'bezierPathChanged'
     | 'moved'
-    | 'imageAdded';
+    | 'imageAdded'
+    | 'added'; // #3076 added by ngx-extended-pdf-viewer
   editorType: string;
   value: any;
   previousValue?: any;
+  id?: string; // #3076 added by ngx-extended-pdf-viewer - Unique identifier for the annotation
 }

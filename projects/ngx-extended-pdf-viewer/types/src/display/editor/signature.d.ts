@@ -65,7 +65,7 @@ export class SignatureEditor extends DrawingEditor {
     }): void;
     _drawingOptions: any;
     /** @inheritdoc */
-    serialize(isForCopying?: boolean): {
+    serialize(isForCopying?: boolean, context?: null, includeId?: boolean): {
         isSignature: boolean;
         areContours: boolean;
         color: number[];
