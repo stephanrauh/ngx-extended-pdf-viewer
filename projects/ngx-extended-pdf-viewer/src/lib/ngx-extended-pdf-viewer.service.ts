@@ -593,11 +593,45 @@ export class NgxExtendedPdfViewerService {
     viewer?.scrollPagePosIntoView(pageNumber, pageSpot);
   }
 
+  /**
+   * Returns all editor annotations (drawings, text, images, highlights) in serialized format.
+   *
+   * **IMPORTANT - ID Behavior:**
+   * - Each annotation includes an `id` field for real-time event tracking via `annotationEditorEvent`
+   * - When re-applying annotations using `addEditorAnnotation()`, **new IDs are always assigned**
+   * - IDs are **not persistent** across sessions - they are temporary identifiers
+   * - If you need to store annotations for later use, you can safely **omit the `id` field**
+   *
+   * **Example - Storing and Re-applying Annotations:**
+   * ```typescript
+   * // Save annotations (IDs are optional to store)
+   * const annotations = pdfService.getSerializedAnnotations();
+   * const toStore = annotations.map(({ id, ...rest }) => rest); // Remove IDs
+   * localStorage.setItem('annotations', JSON.stringify(toStore));
+   *
+   * // Re-apply annotations (new IDs will be assigned automatically)
+   * const stored = JSON.parse(localStorage.getItem('annotations'));
+   * await pdfService.addEditorAnnotation(stored);
+   * ```
+   *
+   * @returns Array of serialized annotations with temporary IDs, or null if no annotations exist
+   */
   public getSerializedAnnotations(): EditorAnnotation[] | null | undefined {
     return this.PDFViewerApplication?.pdfViewer.getSerializedAnnotations();
   }
 
   // #3076 added by ngx-extended-pdf-viewer
+  /**
+   * Returns a single editor annotation by its ID.
+   *
+   * **IMPORTANT - ID Behavior:**
+   * - IDs are temporary and only valid during the current session
+   * - Useful for responding to `annotationEditorEvent` events
+   * - Do not rely on IDs to persist across document reloads or sessions
+   *
+   * @param id The temporary unique identifier of the annotation (from `annotationEditorEvent` or `getSerializedAnnotations()`)
+   * @returns The serialized annotation matching the ID, or null if not found
+   */
   public getSerializedAnnotation(id: string): EditorAnnotation | null | undefined {
     const annotations = this.PDFViewerApplication?.pdfViewer.getSerializedAnnotations();
     if (!annotations || !Array.isArray(annotations)) {
@@ -607,6 +641,37 @@ export class NgxExtendedPdfViewerService {
   }
   // #3076 end of modification by ngx-extended-pdf-viewer
 
+  /**
+   * Programmatically adds one or more editor annotations to the PDF.
+   *
+   * **IMPORTANT - ID Behavior:**
+   * - Any `id` fields in the provided annotations are **ignored**
+   * - New unique IDs are always assigned automatically
+   * - This ensures no ID conflicts occur
+   * - The `id` field is optional when calling this method
+   *
+   * **Supported Annotation Types:**
+   * - Ink (drawings)
+   * - FreeText (text boxes)
+   * - Stamp (images)
+   * - Highlight
+   * - Popup (comments)
+   *
+   * @param serializedAnnotation A single annotation object, array of annotations, or JSON string
+   * @returns Promise that resolves when the annotation(s) have been added
+   *
+   * @example
+   * // Add a single annotation (with or without ID - both work the same)
+   * await pdfService.addEditorAnnotation({
+   *   annotationType: 3,
+   *   color: [255, 0, 0],
+   *   value: 'Hello',
+   *   pageIndex: 0,
+   *   rect: [100, 100, 200, 150],
+   *   rotation: 0
+   *   // id field is optional and will be ignored if provided
+   * });
+   */
   public async addEditorAnnotation(serializedAnnotation: string | EditorAnnotation): Promise<void> {
     // #3061 When the editor mode is NONE, PDF.js internally switches to FREETEXT mode temporarily,
     // which causes the FreeText popup to flash. Prevent this by hiding the popup during the operation.
