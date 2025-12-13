@@ -40,7 +40,7 @@ jobs:
 
       - name: Install dependencies (ngx-extended-pdf-viewer)
         working-directory: workspace/ngx-extended-pdf-viewer
-        run: npm ci --ignore-scripts && npm audit fix --ignore-scripts && ./build-tools/search-for-shai-hulud.sh --full && npm rebuild esbuild
+        run: npm ci --ignore-scripts && ./build-tools/search-for-shai-hulud.sh --full && npm rebuild esbuild
 
       - name: Generate SBOM (before npm upgrade)
         working-directory: workspace/ngx-extended-pdf-viewer
