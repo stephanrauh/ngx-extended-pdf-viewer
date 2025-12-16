@@ -32,11 +32,19 @@ export class DynamicCssComponent implements OnDestroy {
 
   public xxl = 830;
 
+  public toolbarWidth = 0;
+
   public get style(): string {
     return `
 #toolbarContainer .always-in-secondary-menu {
   display: none;
 }
+
+/* #3105 fixed the layout of the find bar */
+.findbar {
+  max-width: ${this.toolbarWidth > 0 ? this.toolbarWidth + 'px' : '100%'};
+}
+/* #3105 end of fix */
 
 #secondaryToolbar .always-in-secondary-menu {
   display: inline-flex;
@@ -191,6 +199,11 @@ export class DynamicCssComponent implements OnDestroy {
       return;
     }
     const toolbarWidthInPixels = container.clientWidth;
+
+    // #3105 fixed the layout of the find bar
+    // Store the toolbar width for findbar max-width calculation
+    this.toolbarWidth = toolbarWidthInPixels;
+    // #3105 end of fix
 
     const fullWith = this.document.body.clientWidth;
     const partialViewScale = fullWith / toolbarWidthInPixels;

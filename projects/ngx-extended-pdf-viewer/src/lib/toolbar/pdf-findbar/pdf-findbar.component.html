@@ -10,12 +10,24 @@
 
 <ng-template #defaultFindbarButtons>
   <pdf-find-input-area [customFindbarInputArea]="customFindbarInputArea"></pdf-find-input-area>
-  <pdf-find-highlight-all [class.hidden]="!showFindHighlightAll"></pdf-find-highlight-all>
-  <pdf-find-match-case [class.hidden]="!showFindMatchCase"></pdf-find-match-case>
-  <pdf-match-diacritics [class.hidden]="!showFindMatchDiacritics"></pdf-match-diacritics>
-  <pdf-find-entire-word [class.hidden]="!showFindEntireWord"></pdf-find-entire-word>
-  <pdf-find-multiple [class.hidden]="!showFindMultiple"></pdf-find-multiple>
-  <pdf-find-regexp [class.hidden]="!showFindRegexp"></pdf-find-regexp>
-  <pdf-find-results-count [class.hidden]="!showFindResultsCount"></pdf-find-results-count>
-  <pdf-findbar-message-container [class.hidden]="!showFindMessages"></pdf-findbar-message-container>
+
+  <div id="findbarOptionsOneContainer" class="toolbarHorizontalGroup">
+    <pdf-find-highlight-all [class.hidden]="!showFindHighlightAll"></pdf-find-highlight-all>
+    <pdf-find-match-case [class.hidden]="!showFindMatchCase"></pdf-find-match-case>
+  </div>
+
+  <div id="findbarOptionsTwoContainer" class="toolbarHorizontalGroup">
+    <pdf-match-diacritics [class.hidden]="!showFindMatchDiacritics"></pdf-match-diacritics>
+    <pdf-find-entire-word [class.hidden]="!showFindEntireWord"></pdf-find-entire-word>
+  </div>
+
+  <div id="findbarOptionsThreeContainer" class="toolbarHorizontalGroup" [class.hidden]="!showFindMultiple && !showFindRegexp">
+    <pdf-find-multiple [class.hidden]="!showFindMultiple"></pdf-find-multiple>
+    <pdf-find-regexp [class.hidden]="!showFindRegexp"></pdf-find-regexp>
+  </div>
+
+  <div id="findbarMessageContainer" class="toolbarHorizontalGroup" aria-live="polite">
+    <pdf-find-results-count [class.hidden]="!showFindResultsCount"></pdf-find-results-count>
+    <pdf-findbar-message-container [class.hidden]="!showFindMessages"></pdf-findbar-message-container>
+  </div>
 </ng-template>

@@ -679,13 +679,25 @@ ngx-extended-pdf-viewer {
     cursor: default;
   }
 
+  // #3105 fixed the layout of the find bar
   .findbar {
     min-width: 300px;
+    width: max-content;
+    min-height: 32px;
+    height: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    box-sizing: border-box;
   }
 
-  .findbar>div {
+  .findbar > * {
     height: 32px;
+    padding: 2px;
   }
+  // #3105 end of fix
 
   .findbar.wrapContainers>div {
     clear: both;
@@ -937,16 +949,14 @@ html[dir='ltr'] ngx-extended-pdf-viewer #toolbarViewerRight>* {
 }
 
 html[dir="ltr"] #toolbarSidebarLeft *,
-html[dir="ltr"] #toolbarSidebarRight *,
-html[dir="ltr"] .findbar * {
+html[dir="ltr"] #toolbarSidebarRight * {
   position: relative;
   float: left;
 }
 
 html[dir='rtl'] ngx-extended-pdf-viewer #toolbarViewerLeft>*,
 html[dir='rtl'] ngx-extended-pdf-viewer #toolbarViewerMiddle>*,
-html[dir='rtl'] ngx-extended-pdf-viewer #toolbarViewerRight>*,
-html[dir='rtl'] ngx-extended-pdf-viewer .findbar * {
+html[dir='rtl'] ngx-extended-pdf-viewer #toolbarViewerRight>* {
   position: relative;
   float: right;
 }
@@ -965,6 +975,16 @@ ngx-extended-pdf-viewer {
     margin-right: 8px !important;
     height: 25px;
   }
+
+  // #3105 fixed the layout of the find bar
+  /* Specific styling for findbar buttons to fix vertical alignment */
+  .findbar button.toolbarButton {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  // #3105 end of fix
 
   .dialogButton {
     border: 0 none;
@@ -1081,6 +1101,17 @@ html[dir='rtl'] ngx-extended-pdf-viewer .dialogButton {
   margin: 3px 0 4px 2px;
 }
 
+// #3105 fixed the layout of the find bar
+/* Remove vertical margins for findbar buttons only */
+html[dir='ltr'] ngx-extended-pdf-viewer .findbar .toolbarButton {
+  margin: 0 2px 0 0;
+}
+
+html[dir='rtl'] ngx-extended-pdf-viewer .findbar .toolbarButton {
+  margin: 0 0 0 2px;
+}
+// #3105 end of fix
+
 ngx-extended-pdf-viewer {
   .dialogButton {
     background-color: $window-background;
@@ -1178,6 +1209,50 @@ html[dir='rtl'] ngx-extended-pdf-viewer .toolbarButton.pdfSidebarNotification::a
 
 
 ngx-extended-pdf-viewer .html {
+  // #3105 fixed the layout of the find bar
+  .toolbarHorizontalGroup {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1px;
+    box-sizing: border-box;
+  }
+
+  .splitToolbarButtonSeparator {
+    width: 0;
+    height: 62%;
+    border-left: 1px solid $border-dark;
+    border-right: none;
+  }
+
+  #findbarInputContainer {
+    margin-inline-start: 2px;
+  }
+  // #3105 end of fix
+
+  .toggleButton {
+    display: inline;
+
+    &:has(> input:checked) {
+      color: light-dark(rgb(0 0 0), rgb(255 255 255));
+      background-color: rgb(0 0 0 / 0.3);
+    }
+
+    &:is(:hover, :has(> input:focus-visible)) {
+      color: light-dark(rgb(0 0 0), rgb(255 255 255));
+      background-color: color-mix(in srgb, currentColor 17%, transparent);
+    }
+
+    & > input {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+  }
+
   .toolbarField {
     padding: 3px 6px;
     margin: 4px 0 4px 0;

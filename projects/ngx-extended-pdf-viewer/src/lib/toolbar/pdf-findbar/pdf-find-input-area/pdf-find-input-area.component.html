@@ -1,8 +1,11 @@
 @if (!customFindbarInputArea) {
-  <div id="findbarInputContainer">
+  <div id="findbarInputContainer" class="toolbarHorizontalGroup">
     <pdf-search-input-field></pdf-search-input-field>
-    <pdf-find-previous></pdf-find-previous>
-    <pdf-find-next></pdf-find-next>
+    <div class="toolbarHorizontalGroup">
+      <pdf-find-previous></pdf-find-previous>
+      <div class="splitToolbarButtonSeparator"></div>
+      <pdf-find-next></pdf-find-next>
+    </div>
   </div>
 }
 

@@ -698,4 +698,7 @@
 - 25.6.0-rc.5 #3060 added diagnostic logging to investigate intermittent 0.1 scale values during iOS pinch-to-zoom
 - 25.6.0 #3053 reverted the license back to Apache 2.0; #3077 fixed pageChange event not emitting when navigating back to the initial page
 - 25.6.1 #3092 disable the comment editor until pdf.js releases it officially; #3093 support Angular 21 officially
-- 25.6.2 #3076 Added annotation IDs to `getSerializedAnnotations()` export and `annotationEditorEvent`. Added new method `getSerializedAnnotation(id: string)` to retrieve a single annotation by ID from NgxExtendedPdfViewerService; #3100 fixed automatic "Save as" dialog appearing when changing documents after modifying PDFs
+- 25.6.2 (skipped)
+- 25.6.3 (skipped)
+- 25.6.4 #3076 Added annotation IDs to `getSerializedAnnotations()` export and `annotationEditorEvent`. Added new method `getSerializedAnnotation(id: string)` to retrieve a single annotation by ID from NgxExtendedPdfViewerService; #3100 fixed automatic "Save as" dialog appearing when changing documents after modifying PDFs
+- 26.0.0-alpha.0 #3105 fix the layout of the findbar; that's a breaking change because it drops the old checkboxes
