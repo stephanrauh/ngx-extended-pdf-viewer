@@ -7,9 +7,10 @@ import { PdfBreakpoints } from '../responsive-visibility';
 import { UnitToPx } from '../unit-to-px';
 
 @Component({
-  selector: 'pdf-dynamic-css',
-  templateUrl: './dynamic-css.component.html',
-  styleUrls: ['./dynamic-css.component.css'],
+    selector: 'pdf-dynamic-css',
+    templateUrl: './dynamic-css.component.html',
+    styleUrls: ['./dynamic-css.component.css'],
+    standalone: false
 })
 export class DynamicCssComponent implements OnDestroy {
   @Input()

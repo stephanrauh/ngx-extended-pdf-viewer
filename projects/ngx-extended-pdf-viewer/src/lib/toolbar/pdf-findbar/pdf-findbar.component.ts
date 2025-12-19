@@ -2,9 +2,10 @@ import { Component, Input, TemplateRef } from '@angular/core';
 import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
-  selector: 'pdf-findbar',
-  templateUrl: './pdf-findbar.component.html',
-  styleUrls: ['./pdf-findbar.component.css'],
+    selector: 'pdf-findbar',
+    templateUrl: './pdf-findbar.component.html',
+    styleUrls: ['./pdf-findbar.component.css'],
+    standalone: false
 })
 export class PdfFindbarComponent {
   @Input()

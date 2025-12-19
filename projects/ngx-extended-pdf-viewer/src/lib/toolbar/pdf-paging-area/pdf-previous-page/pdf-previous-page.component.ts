@@ -5,9 +5,10 @@ import { PDFNotificationService } from '../../../pdf-notification-service';
 import { ResponsiveVisibility } from '../../../responsive-visibility';
 
 @Component({
-  selector: 'pdf-previous-page',
-  templateUrl: './pdf-previous-page.component.html',
-  styleUrls: ['./pdf-previous-page.component.css'],
+    selector: 'pdf-previous-page',
+    templateUrl: './pdf-previous-page.component.html',
+    styleUrls: ['./pdf-previous-page.component.css'],
+    standalone: false
 })
 export class PdfPreviousPageComponent {
   @Input()

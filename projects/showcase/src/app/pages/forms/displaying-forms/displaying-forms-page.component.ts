@@ -12,20 +12,19 @@ import { SetDefaultViewerHeightDirective } from '../../../shared/directives/set-
 import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-default-zoom-level.directive';
 
 @Component({
-  selector: 'pvs-displaying-forms-page',
-  standalone: true,
-  imports: [
-    ContentPageComponent,
-    MarkdownContentComponent,
-    NgxExtendedPdfViewerModule,
-    SplitViewComponent,
-    SetMinifiedLibraryUsageDirective,
-    FormsModule,
-    ReactiveFormsModule,
-    SetDefaultViewerHeightDirective,
-    SetDefaultZoomLevelDirective,
-  ],
-  template: `<pvs-content-page [demoTemplate]="demo">
+    selector: 'pvs-displaying-forms-page',
+    imports: [
+        ContentPageComponent,
+        MarkdownContentComponent,
+        NgxExtendedPdfViewerModule,
+        SplitViewComponent,
+        SetMinifiedLibraryUsageDirective,
+        FormsModule,
+        ReactiveFormsModule,
+        SetDefaultViewerHeightDirective,
+        SetDefaultZoomLevelDirective,
+    ],
+    template: `<pvs-content-page [demoTemplate]="demo">
     <pvs-markdown src="/assets/pages/forms/displaying-forms/text.md" />
     <ng-template #demo>
       <pvs-split-view>
@@ -119,7 +118,7 @@ import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-def
         />
       </pvs-split-view>
     </ng-template>
-  </pvs-content-page>`,
+  </pvs-content-page>`
 })
 export class DisplayingFormsPageComponent {
   private formBuilder = inject(FormBuilder);

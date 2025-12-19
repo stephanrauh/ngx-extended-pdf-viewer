@@ -4,9 +4,10 @@ import { PDFNotificationService } from '../../pdf-notification-service';
 import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
-  selector: 'pdf-open-file',
-  templateUrl: './pdf-open-file.component.html',
-  styleUrls: ['./pdf-open-file.component.css'],
+    selector: 'pdf-open-file',
+    templateUrl: './pdf-open-file.component.html',
+    styleUrls: ['./pdf-open-file.component.css'],
+    standalone: false
 })
 export class PdfOpenFileComponent {
   @Input()

@@ -5,10 +5,9 @@ import { versions } from '../../../../shared/constants/versions';
 import { OctocatComponent } from '../../../components/octocat.component';
 
 @Component({
-  selector: 'pvs-header',
-  standalone: true,
-  imports: [OctocatComponent],
-  templateUrl: './header.component.html',
+    selector: 'pvs-header',
+    imports: [OctocatComponent],
+    templateUrl: './header.component.html'
 })
 export class HeaderComponent {
   private sidebarService = inject(SidebarService);

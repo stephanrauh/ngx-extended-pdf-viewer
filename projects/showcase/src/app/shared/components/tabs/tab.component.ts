@@ -6,10 +6,9 @@ import { TabPanelComponent } from './tab-panel.component';
 import { TabService } from './services/tab.service';
 
 @Component({
-  selector: 'pvs-tab',
-  standalone: true,
-  imports: [TabButtonIdPipe, TabIndexPipe],
-  template: ` <button
+    selector: 'pvs-tab',
+    imports: [TabButtonIdPipe, TabIndexPipe],
+    template: ` <button
     #tab
     [id]="tabKey() | tabButtonId"
     type="button"
@@ -21,7 +20,7 @@ import { TabService } from './services/tab.service';
     class="aria-selected:text-primary-light dark:aria-selected:text-primary-dark font-semibold p aria-selected:border-b aria-selected:border-b-primary-variant-light dark:aria-selected:border-b-primary-variant-dark pb-2 pt-2 ps-4 pe-4"
   >
     <span>{{ header() }}</span>
-  </button>`,
+  </button>`
 })
 export class TabComponent implements FocusableOption {
   private tabService = inject(TabService);

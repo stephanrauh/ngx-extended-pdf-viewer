@@ -106,10 +106,11 @@ export function isIOS(): boolean {
 }
 
 @Component({
-  selector: 'ngx-extended-pdf-viewer',
-  templateUrl: './ngx-extended-pdf-viewer.component.html',
-  styleUrls: ['./ngx-extended-pdf-viewer.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'ngx-extended-pdf-viewer',
+    templateUrl: './ngx-extended-pdf-viewer.component.html',
+    styleUrls: ['./ngx-extended-pdf-viewer.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestroy, NgxHasHeight {
   private readonly formSupport = new NgxFormSupport();

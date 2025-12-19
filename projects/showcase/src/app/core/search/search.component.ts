@@ -10,10 +10,9 @@ import { ActiveDescendantKeyManager } from '@angular/cdk/a11y';
 import { WINDOW } from '../../shared/helper/window.token';
 
 @Component({
-  selector: 'pvs-search',
-  standalone: true,
-  imports: [ReactiveFormsModule, RouterLink, SearchResultDirective],
-  template: `
+    selector: 'pvs-search',
+    imports: [ReactiveFormsModule, RouterLink, SearchResultDirective],
+    template: `
     <dialog #searchDialog class="bg-transparent backdrop:bg-black/50 backdrop:backdrop-blur-md">
       <div
         class="w-[750px] max-w-[90vw] bg-surface text-on-surface dark:bg-surface-dark dark:text-on-surface-dark border-solid border-[1px] rounded p-2"
@@ -54,10 +53,10 @@ import { WINDOW } from '../../shared/helper/window.token';
       </div>
     </dialog>
   `,
-  host: {
-    class: 'relative w-72',
-    role: 'search',
-  },
+    host: {
+        class: 'relative w-72',
+        role: 'search',
+    }
 })
 export class SearchComponent implements AfterViewInit, OnDestroy {
   @ViewChildren(SearchResultDirective) results: QueryList<SearchResultDirective>;

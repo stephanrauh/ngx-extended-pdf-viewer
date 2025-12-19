@@ -4,9 +4,10 @@ import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { PDFNotificationService } from '../../pdf-notification-service';
 
 @Component({
-  selector: 'pdf-move-down',
-  templateUrl: './pdf-move-down.component.html',
-  styleUrls: ['./pdf-move-down.component.css'],
+    selector: 'pdf-move-down',
+    templateUrl: './pdf-move-down.component.html',
+    styleUrls: ['./pdf-move-down.component.css'],
+    standalone: false
 })
 export class PdfMoveDownComponent {
   @Input()

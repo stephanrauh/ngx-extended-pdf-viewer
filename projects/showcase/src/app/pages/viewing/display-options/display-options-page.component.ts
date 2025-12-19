@@ -9,19 +9,18 @@ import { SetDefaultViewerHeightDirective } from '../../../shared/directives/set-
 import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-default-zoom-level.directive';
 
 @Component({
-  selector: 'pvs-display-options-page',
-  standalone: true,
-  imports: [
-    ContentPageComponent,
-    MarkdownContentComponent,
-    NgxExtendedPdfViewerModule,
-    SplitViewComponent,
-    SetMinifiedLibraryUsageDirective,
-    FormsModule,
-    SetDefaultViewerHeightDirective,
-    SetDefaultZoomLevelDirective,
-  ],
-  template: `<pvs-content-page [demoTemplate]="demo">
+    selector: 'pvs-display-options-page',
+    imports: [
+        ContentPageComponent,
+        MarkdownContentComponent,
+        NgxExtendedPdfViewerModule,
+        SplitViewComponent,
+        SetMinifiedLibraryUsageDirective,
+        FormsModule,
+        SetDefaultViewerHeightDirective,
+        SetDefaultZoomLevelDirective,
+    ],
+    template: `<pvs-content-page [demoTemplate]="demo">
     <pvs-markdown src="/assets/pages/viewing/display-options/text.md" />
     <ng-template #demo>
       <pvs-split-view>
@@ -147,7 +146,7 @@ import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-def
         />
       </pvs-split-view>
     </ng-template>
-  </pvs-content-page>`,
+  </pvs-content-page>`
 })
 export class DisplayOptionsPageComponent {
   showBorders = false;

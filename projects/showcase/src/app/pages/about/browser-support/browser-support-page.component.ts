@@ -3,9 +3,8 @@ import { ContentPageComponent } from '../../../shared/components/content-page/co
 import { MarkdownContentComponent } from '../../../shared/components/markdown-content.component';
 
 @Component({
-  selector: 'pvs-browser-support-page',
-  standalone: true,
-  imports: [ContentPageComponent, MarkdownContentComponent],
-  template: ` <pvs-content-page> <pvs-markdown src="/assets/pages/about/browser-support/text.md" /> </pvs-content-page> `,
+    selector: 'pvs-browser-support-page',
+    imports: [ContentPageComponent, MarkdownContentComponent],
+    template: ` <pvs-content-page> <pvs-markdown src="/assets/pages/about/browser-support/text.md" /> </pvs-content-page> `
 })
 export class BrowserSupportPageComponent {}

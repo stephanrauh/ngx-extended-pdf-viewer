@@ -3,7 +3,8 @@ import { IPDFViewerApplication } from './options/pdf-viewer-application';
 import { PDFNotificationService } from './pdf-notification-service';
 
 @Pipe({
-  name: 'translate',
+    name: 'translate',
+    standalone: false
 })
 export class TranslatePipe implements PipeTransform {
   private PDFViewerApplication: IPDFViewerApplication | undefined;

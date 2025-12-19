@@ -11,11 +11,10 @@ import { map } from 'rxjs';
 import { IS_BROWSER } from './shared/helper/is-browser-token';
 
 @Component({
-  selector: 'pvs-root',
-  standalone: true,
-  imports: [RouterOutlet, LayoutComponent, SearchComponent],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
+    selector: 'pvs-root',
+    imports: [RouterOutlet, LayoutComponent, SearchComponent],
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.css'
 })
 export class AppComponent implements OnInit {
   private document = inject(DOCUMENT);

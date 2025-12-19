@@ -8,17 +8,16 @@ import { PdfViewerDialogComponent } from './pdf-viewer-dialog/pdf-viewer-dialog.
 import { ButtonDirective } from '../../../shared/directives/button.directive';
 
 @Component({
-  selector: 'pvs-modal-dialogs-page',
-  standalone: true,
-  imports: [ContentPageComponent, MarkdownContentComponent, NgxExtendedPdfViewerModule, SplitViewComponent, ButtonDirective],
-  template: `<pvs-content-page [demoTemplate]="demo">
+    selector: 'pvs-modal-dialogs-page',
+    imports: [ContentPageComponent, MarkdownContentComponent, NgxExtendedPdfViewerModule, SplitViewComponent, ButtonDirective],
+    template: `<pvs-content-page [demoTemplate]="demo">
     <pvs-markdown src="/assets/pages/configuration/modal-dialogs/text.md" />
     <ng-template #demo>
       <pvs-split-view>
         <button pvsButton (click)="openDialog()">open modal</button>
       </pvs-split-view>
     </ng-template>
-  </pvs-content-page>`,
+  </pvs-content-page>`
 })
 export class ModalDialogsPageComponent {
   dialog = inject(Dialog);

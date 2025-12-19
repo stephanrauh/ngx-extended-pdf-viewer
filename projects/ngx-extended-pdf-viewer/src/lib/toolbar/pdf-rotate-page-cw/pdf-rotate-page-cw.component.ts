@@ -5,10 +5,11 @@ import { PDFNotificationService } from '../../pdf-notification-service';
 import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
-  selector: 'pdf-rotate-page-cw',
-  templateUrl: './pdf-rotate-page-cw.component.html',
-  styleUrls: ['./pdf-rotate-page-cw.component.css'],
-  encapsulation: ViewEncapsulation.None,
+    selector: 'pdf-rotate-page-cw',
+    templateUrl: './pdf-rotate-page-cw.component.html',
+    styleUrls: ['./pdf-rotate-page-cw.component.css'],
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class PdfRotatePageCwComponent {
   @Input()

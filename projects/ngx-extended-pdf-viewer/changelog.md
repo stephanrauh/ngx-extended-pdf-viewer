@@ -701,4 +701,4 @@
 - 25.6.2 (skipped)
 - 25.6.3 (skipped)
 - 25.6.4 #3076 Added annotation IDs to `getSerializedAnnotations()` export and `annotationEditorEvent`. Added new method `getSerializedAnnotation(id: string)` to retrieve a single annotation by ID from NgxExtendedPdfViewerService; #3100 fixed automatic "Save as" dialog appearing when changing documents after modifying PDFs
-- 26.0.0-alpha.0 #3105 fix the layout of the findbar; that's a breaking change because it drops the old checkboxes
+- 26.0.0-alpha.0 **BREAKING CHANGE**: Updated to Angular 19 and TypeScript 5.6. Angular 18 exited its LTS phase, and CVE-2025-66035 won't be fixed in Angular 17 or 18. This update ensures continued security support. All components have been migrated to explicitly set `standalone: false` to maintain NgModule compatibility. Removed deprecated `async` testing utility (now synchronous in Angular 19). Updated zone.js to ~0.15.0. If you're using Angular 17 or 18, please stay on version 25.6.4 or earlier. #3105 fix the layout of the findbar; that's a breaking change because it drops the old checkboxes

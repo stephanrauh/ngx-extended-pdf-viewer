@@ -9,20 +9,19 @@ import { SetDefaultViewerHeightDirective } from '../../../shared/directives/set-
 import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-default-zoom-level.directive';
 
 @Component({
-  selector: 'pvs-toolbar-page',
-  standalone: true,
-  imports: [
-    ContentPageComponent,
-    MarkdownContentComponent,
-    NgxExtendedPdfViewerModule,
-    SplitViewComponent,
-    SetMinifiedLibraryUsageDirective,
-    ReactiveFormsModule,
-    FormsModule,
-    SetDefaultViewerHeightDirective,
-    SetDefaultZoomLevelDirective,
-  ],
-  template: ` <pvs-content-page [demoTemplate]="demo">
+    selector: 'pvs-toolbar-page',
+    imports: [
+        ContentPageComponent,
+        MarkdownContentComponent,
+        NgxExtendedPdfViewerModule,
+        SplitViewComponent,
+        SetMinifiedLibraryUsageDirective,
+        ReactiveFormsModule,
+        FormsModule,
+        SetDefaultViewerHeightDirective,
+        SetDefaultZoomLevelDirective,
+    ],
+    template: ` <pvs-content-page [demoTemplate]="demo">
     <pvs-markdown src="/assets/pages/customization/toolbar/text.md" />
     <ng-template #demo>
       <pvs-split-view>
@@ -157,7 +156,7 @@ import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-def
         </ng-template>
       </pvs-split-view>
     </ng-template>
-  </pvs-content-page>`,
+  </pvs-content-page>`
 })
 export class ToolbarPageComponent {
   layout = 'additional';

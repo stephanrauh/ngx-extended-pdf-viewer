@@ -8,9 +8,10 @@ import { PDFNotificationService } from '../../pdf-notification-service';
 import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
-  selector: 'pdf-editor-signature',
-  templateUrl: './pdf-editor-signature.component.html',
-  styleUrl: './pdf-editor-signature.component.css',
+    selector: 'pdf-editor-signature',
+    templateUrl: './pdf-editor-signature.component.html',
+    styleUrl: './pdf-editor-signature.component.css',
+    standalone: false
 })
 export class PdfEditorSignatureComponent {
   @Input()

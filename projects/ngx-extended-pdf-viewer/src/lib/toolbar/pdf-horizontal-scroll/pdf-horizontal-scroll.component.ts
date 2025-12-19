@@ -6,9 +6,10 @@ import { PDFNotificationService } from '../../pdf-notification-service';
 import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
-  selector: 'pdf-horizontal-scroll',
-  templateUrl: './pdf-horizontal-scroll.component.html',
-  styleUrls: ['./pdf-horizontal-scroll.component.css'],
+    selector: 'pdf-horizontal-scroll',
+    templateUrl: './pdf-horizontal-scroll.component.html',
+    styleUrls: ['./pdf-horizontal-scroll.component.css'],
+    standalone: false
 })
 export class PdfHorizontalScrollComponent implements OnDestroy {
   @Input()

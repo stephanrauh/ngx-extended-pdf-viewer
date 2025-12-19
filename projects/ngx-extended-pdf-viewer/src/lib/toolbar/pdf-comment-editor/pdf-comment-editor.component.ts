@@ -8,9 +8,10 @@ import { PDFNotificationService } from '../../pdf-notification-service';
 import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
-  selector: 'pdf-comment-editor',
-  templateUrl: './pdf-comment-editor.component.html',
-  styleUrls: ['./pdf-comment-editor.component.css'],
+    selector: 'pdf-comment-editor',
+    templateUrl: './pdf-comment-editor.component.html',
+    styleUrls: ['./pdf-comment-editor.component.css'],
+    standalone: false
 })
 export class PdfCommentEditorComponent {
   @Input()

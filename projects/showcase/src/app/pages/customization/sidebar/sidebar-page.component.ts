@@ -9,20 +9,19 @@ import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-def
 import { SetMinifiedLibraryUsageDirective } from '../../../shared/directives/set-minified-library-usage.directive';
 
 @Component({
-  selector: 'pvs-sidebar-page',
-  standalone: true,
-  imports: [
-    ContentPageComponent,
-    MarkdownContentComponent,
-    NgxExtendedPdfViewerModule,
-    SplitViewComponent,
-    SetMinifiedLibraryUsageDirective,
-    ReactiveFormsModule,
-    FormsModule,
-    SetDefaultViewerHeightDirective,
-    SetDefaultZoomLevelDirective,
-  ],
-  template: `<pvs-content-page [demoTemplate]="demo">
+    selector: 'pvs-sidebar-page',
+    imports: [
+        ContentPageComponent,
+        MarkdownContentComponent,
+        NgxExtendedPdfViewerModule,
+        SplitViewComponent,
+        SetMinifiedLibraryUsageDirective,
+        ReactiveFormsModule,
+        FormsModule,
+        SetDefaultViewerHeightDirective,
+        SetDefaultZoomLevelDirective,
+    ],
+    template: `<pvs-content-page [demoTemplate]="demo">
     <pvs-markdown src="/assets/pages/customization/sidebar/text.md" />
     <ng-template #demo>
       <pvs-split-view>
@@ -97,7 +96,7 @@ import { SetMinifiedLibraryUsageDirective } from '../../../shared/directives/set
         </div>
       </ng-template>
     </ng-template>
-  </pvs-content-page>`,
+  </pvs-content-page>`
 })
 export class SidebarPageComponent {
   layout = 'without';

@@ -12,21 +12,20 @@ import { SetDefaultViewerHeightDirective } from '../../../../shared/directives/s
 import { SetDefaultZoomLevelDirective } from '../../../../shared/directives/set-default-zoom-level.directive';
 
 @Component({
-  selector: 'pvs-blobs-page',
-  standalone: true,
-  imports: [
-    ContentPageComponent,
-    MarkdownContentComponent,
-    NgxExtendedPdfViewerModule,
-    SplitViewComponent,
-    SetMinifiedLibraryUsageDirective,
-    ReactiveFormsModule,
-    FormsModule,
-    ButtonDirective,
-    SetDefaultViewerHeightDirective,
-    SetDefaultZoomLevelDirective,
-  ],
-  template: `<pvs-content-page [demoTemplate]="demo">
+    selector: 'pvs-blobs-page',
+    imports: [
+        ContentPageComponent,
+        MarkdownContentComponent,
+        NgxExtendedPdfViewerModule,
+        SplitViewComponent,
+        SetMinifiedLibraryUsageDirective,
+        ReactiveFormsModule,
+        FormsModule,
+        ButtonDirective,
+        SetDefaultViewerHeightDirective,
+        SetDefaultZoomLevelDirective,
+    ],
+    template: `<pvs-content-page [demoTemplate]="demo">
     <pvs-markdown src="/assets/pages/basics/file-sources/blobs/text.md" />
     <pvs-markdown src="/assets/pages/basics/file-sources/shared.md" />
     <ng-template #demo>
@@ -58,7 +57,7 @@ import { SetDefaultZoomLevelDirective } from '../../../../shared/directives/set-
         />
       </pvs-split-view>
     </ng-template>
-  </pvs-content-page>`,
+  </pvs-content-page>`
 })
 export class BLOBsPageComponent {
   private ngxService = inject(NgxExtendedPdfViewerService);

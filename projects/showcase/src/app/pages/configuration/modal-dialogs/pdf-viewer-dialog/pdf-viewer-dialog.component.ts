@@ -7,10 +7,9 @@ import { SetDefaultViewerHeightDirective } from '../../../../shared/directives/s
 import { SetDefaultZoomLevelDirective } from '../../../../shared/directives/set-default-zoom-level.directive';
 
 @Component({
-  selector: 'pvs-pdf-viewer-dialog',
-  standalone: true,
-  imports: [NgxExtendedPdfViewerModule, SetMinifiedLibraryUsageDirective, ButtonDirective, SetDefaultViewerHeightDirective, SetDefaultZoomLevelDirective],
-  template: `
+    selector: 'pvs-pdf-viewer-dialog',
+    imports: [NgxExtendedPdfViewerModule, SetMinifiedLibraryUsageDirective, ButtonDirective, SetDefaultViewerHeightDirective, SetDefaultZoomLevelDirective],
+    template: `
     <div class="grid">
       <button pvsButton (click)="onClose()">Close</button>
       <ngx-extended-pdf-viewer
@@ -21,7 +20,7 @@ import { SetDefaultZoomLevelDirective } from '../../../../shared/directives/set-
         pvsSetDefaultZoomLevel
       ></ngx-extended-pdf-viewer>
     </div>
-  `,
+  `
 })
 export class PdfViewerDialogComponent implements OnInit {
   private dialogRef = inject<DialogRef<void>>(DialogRef<void>);

@@ -5,9 +5,10 @@ import { PDFNotificationService } from '../../../pdf-notification-service';
 import { ResponsiveVisibility } from '../../../responsive-visibility';
 
 @Component({
-  selector: 'pdf-zoom-in',
-  templateUrl: './pdf-zoom-in.component.html',
-  styleUrls: ['./pdf-zoom-in.component.css'],
+    selector: 'pdf-zoom-in',
+    templateUrl: './pdf-zoom-in.component.html',
+    styleUrls: ['./pdf-zoom-in.component.css'],
+    standalone: false
 })
 export class PdfZoomInComponent implements OnDestroy {
   @Input()

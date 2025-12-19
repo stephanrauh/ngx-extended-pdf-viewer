@@ -2,9 +2,10 @@ import { Component, Input } from '@angular/core';
 import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
-  selector: 'pdf-editor',
-  templateUrl: './pdf-editor.component.html',
-  styleUrls: ['./pdf-editor.component.css'],
+    selector: 'pdf-editor',
+    templateUrl: './pdf-editor.component.html',
+    styleUrls: ['./pdf-editor.component.css'],
+    standalone: false
 })
 export class PdfEditorComponent {
   @Input()

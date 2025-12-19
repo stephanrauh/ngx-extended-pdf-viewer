@@ -5,9 +5,10 @@ import { ResponsiveVisibility } from '../../../responsive-visibility';
 import { PDFNotificationService } from './../../../pdf-notification-service';
 
 @Component({
-  selector: 'pdf-last-page',
-  templateUrl: './pdf-last-page.component.html',
-  styleUrls: ['./pdf-last-page.component.css'],
+    selector: 'pdf-last-page',
+    templateUrl: './pdf-last-page.component.html',
+    styleUrls: ['./pdf-last-page.component.css'],
+    standalone: false
 })
 export class PdfLastPageComponent {
   @Input()

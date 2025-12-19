@@ -40,7 +40,10 @@ export type ResponsiveCSSClassInSecondaryToolbar =
   | 'always-visible'
   | 'always-in-secondary-menu';
 
-@Pipe({ name: 'responsiveCSSClass' })
+@Pipe({
+    name: 'responsiveCSSClass',
+    standalone: false
+})
 export class ResponsiveCSSClassPipe implements PipeTransform {
   transform(visible: ResponsiveVisibility | undefined, defaultClass: ResponsiveCSSClass = 'always-visible'): ResponsiveCSSClass {
     switch (visible) {
@@ -72,7 +75,10 @@ export class ResponsiveCSSClassPipe implements PipeTransform {
   }
 }
 
-@Pipe({ name: 'invertForSecondaryToolbar' })
+@Pipe({
+    name: 'invertForSecondaryToolbar',
+    standalone: false
+})
 export class NegativeResponsiveCSSClassPipe implements PipeTransform {
   transform(visible: ResponsiveCSSClass | ResponsiveVisibility): ResponsiveCSSClassInSecondaryToolbar {
     switch (visible) {

@@ -3,9 +3,10 @@ import { PdfThumbnailDrawnEvent } from '../../events/pdf-thumbnail-drawn-event';
 import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
-  selector: 'pdf-sidebar',
-  templateUrl: './pdf-sidebar.component.html',
-  styleUrls: ['./pdf-sidebar.component.css'],
+    selector: 'pdf-sidebar',
+    templateUrl: './pdf-sidebar.component.html',
+    styleUrls: ['./pdf-sidebar.component.css'],
+    standalone: false
 })
 export class PdfSidebarComponent {
   @Input()

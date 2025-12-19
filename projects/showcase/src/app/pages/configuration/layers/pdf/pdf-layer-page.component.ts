@@ -11,21 +11,20 @@ import { NgClass } from '@angular/common';
 import { ButtonDirective } from '../../../../shared/directives/button.directive';
 
 @Component({
-  selector: 'pvs-layers-page',
-  standalone: true,
-  imports: [
-    NgxExtendedPdfViewerModule,
-    FormsModule,
-    SetMinifiedLibraryUsageDirective,
-    SetDefaultViewerHeightDirective,
-    SetDefaultZoomLevelDirective,
-    ContentPageComponent,
-    MarkdownContentComponent,
-    SplitViewComponent,
-    NgClass,
-    ButtonDirective,
-  ],
-  template: ` <pvs-content-page [demoTemplate]="demo">
+    selector: 'pvs-layers-page',
+    imports: [
+        NgxExtendedPdfViewerModule,
+        FormsModule,
+        SetMinifiedLibraryUsageDirective,
+        SetDefaultViewerHeightDirective,
+        SetDefaultZoomLevelDirective,
+        ContentPageComponent,
+        MarkdownContentComponent,
+        SplitViewComponent,
+        NgClass,
+        ButtonDirective,
+    ],
+    template: ` <pvs-content-page [demoTemplate]="demo">
     <pvs-markdown src="/assets/pages/configuration/layers/pdf/text.md" />
     <ng-template #demo>
       <pvs-split-view>
@@ -54,7 +53,7 @@ import { ButtonDirective } from '../../../../shared/directives/button.directive'
         />
       </pvs-split-view>
     </ng-template>
-  </pvs-content-page>`,
+  </pvs-content-page>`
 })
 export class PdfLayerPageComponent {
   private pdfService = inject(NgxExtendedPdfViewerService);

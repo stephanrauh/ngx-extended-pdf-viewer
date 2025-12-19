@@ -8,9 +8,10 @@ import { PDFNotificationService } from '../../pdf-notification-service';
 import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
-  selector: 'pdf-highlight-editor',
-  templateUrl: './pdf-highlight-editor.component.html',
-  styleUrls: ['./pdf-highlight-editor.component.css'],
+    selector: 'pdf-highlight-editor',
+    templateUrl: './pdf-highlight-editor.component.html',
+    styleUrls: ['./pdf-highlight-editor.component.css'],
+    standalone: false
 })
 export class PdfHighlightEditorComponent {
   @Input()

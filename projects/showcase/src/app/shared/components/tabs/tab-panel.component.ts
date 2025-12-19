@@ -4,15 +4,14 @@ import { TabService } from './services/tab.service';
 import { NgClass } from '@angular/common';
 
 @Component({
-  selector: 'pvs-tab-panel',
-  standalone: true,
-  imports: [TabButtonIdPipe, NgClass],
-  template: `
+    selector: 'pvs-tab-panel',
+    imports: [TabButtonIdPipe, NgClass],
+    template: `
     <div [id]="key()" [ngClass]="{ hidden: !isActive() }" class="ps-1 pe-1" role="tabpanel" tabindex="0" [attr.aria-labelledby]="key() | tabButtonId">
       <ng-content />
     </div>
   `,
-  styles: ``,
+    styles: ``
 })
 export class TabPanelComponent {
   private tabService = inject(TabService);

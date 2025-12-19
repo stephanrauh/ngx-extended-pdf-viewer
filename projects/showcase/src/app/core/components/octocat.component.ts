@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'pvs-octocat',
-  standalone: true,
-  imports: [],
-  template: `<!-- GitHub ribbon found at https://tholman.com/github-corners/ -->
+    selector: 'pvs-octocat',
+    imports: [],
+    template: `<!-- GitHub ribbon found at https://tholman.com/github-corners/ -->
     <a
       href="https://github.com/stephanrauh/ngx-extended-pdf-viewer"
       class="github-corner absolute top-0 right-0 border-0 fill-primary-light text-surface dark:fill-primary-dark dark:text-surface-dark"
@@ -24,7 +23,7 @@ import { Component } from '@angular/core';
           class="octo-body"
         ></path></svg
     ></a> `,
-  styles: `
+    styles: `
     .github-corner:hover .octo-arm {
       animation: octocat-wave 560ms ease-in-out;
     }
@@ -51,6 +50,6 @@ import { Component } from '@angular/core';
         animation: octocat-wave 560ms ease-in-out;
       }
     }
-  `,
+  `
 })
 export class OctocatComponent {}

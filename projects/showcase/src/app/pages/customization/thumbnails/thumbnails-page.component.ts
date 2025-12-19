@@ -8,18 +8,17 @@ import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-def
 import { SetMinifiedLibraryUsageDirective } from '../../../shared/directives/set-minified-library-usage.directive';
 
 @Component({
-  selector: 'pvs-thumbnails-page',
-  standalone: true,
-  imports: [
-    ContentPageComponent,
-    MarkdownContentComponent,
-    NgxExtendedPdfViewerModule,
-    SplitViewComponent,
-    SetMinifiedLibraryUsageDirective,
-    SetDefaultViewerHeightDirective,
-    SetDefaultZoomLevelDirective,
-  ],
-  template: `<pvs-content-page [demoTemplate]="demo">
+    selector: 'pvs-thumbnails-page',
+    imports: [
+        ContentPageComponent,
+        MarkdownContentComponent,
+        NgxExtendedPdfViewerModule,
+        SplitViewComponent,
+        SetMinifiedLibraryUsageDirective,
+        SetDefaultViewerHeightDirective,
+        SetDefaultZoomLevelDirective,
+    ],
+    template: `<pvs-content-page [demoTemplate]="demo">
     <pvs-markdown src="/assets/pages/customization/thumbnails/text.md" />
     <ng-template #demo>
       <pvs-split-view>
@@ -66,7 +65,7 @@ import { SetMinifiedLibraryUsageDirective } from '../../../shared/directives/set
       </ng-template>
     </ng-template>
   </pvs-content-page>`,
-  styles: `
+    styles: `
     .thumbnail-radiobutton {
       top: -76px;
       right: 10px;
@@ -92,7 +91,7 @@ import { SetMinifiedLibraryUsageDirective } from '../../../shared/directives/set
       left: 10px;
       top: 70px;
     }
-  `,
+  `
 })
 export class ThumbnailsPageComponent {
   private notificationService = inject(PDFNotificationService);

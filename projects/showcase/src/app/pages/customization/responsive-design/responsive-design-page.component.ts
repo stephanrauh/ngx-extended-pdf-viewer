@@ -3,11 +3,10 @@ import { ContentPageComponent } from '../../../shared/components/content-page/co
 import { MarkdownContentComponent } from '../../../shared/components/markdown-content.component';
 
 @Component({
-  selector: 'pvs-responsive-design-page',
-  standalone: true,
-  imports: [ContentPageComponent, MarkdownContentComponent, ],
-  template: `<pvs-content-page>
+    selector: 'pvs-responsive-design-page',
+    imports: [ContentPageComponent, MarkdownContentComponent,],
+    template: `<pvs-content-page>
     <pvs-markdown src="/assets/pages/customization/responsive-design/text.md" />
-  </pvs-content-page>`,
+  </pvs-content-page>`
 })
 export class ResponsiveDesignPageComponent {}

@@ -5,9 +5,10 @@ import { PDFNotificationService } from '../../../pdf-notification-service';
 import { ResponsiveVisibility } from '../../../responsive-visibility';
 
 @Component({
-  selector: 'pdf-zoom-out',
-  templateUrl: './pdf-zoom-out.component.html',
-  styleUrls: ['./pdf-zoom-out.component.css'],
+    selector: 'pdf-zoom-out',
+    templateUrl: './pdf-zoom-out.component.html',
+    styleUrls: ['./pdf-zoom-out.component.css'],
+    standalone: false
 })
 export class PdfZoomOutComponent implements OnDestroy {
   @Input()

@@ -2,10 +2,9 @@ import { Component, computed, input } from '@angular/core';
 import { TreeNode } from './tree-node.type';
 
 @Component({
-  selector: 'pvs-tree',
-  standalone: true,
-  imports: [],
-  template: `
+    selector: 'pvs-tree',
+    imports: [],
+    template: `
     <ul class="list-none p-0 m-0">
       @for (node of treeData(); track node.name) {
         <li>
@@ -45,7 +44,7 @@ import { TreeNode } from './tree-node.type';
         </li>
       }
     </ul>
-  `,
+  `
 })
 export class TreeComponent {
   readonly idTooltip =

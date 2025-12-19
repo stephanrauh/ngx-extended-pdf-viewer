@@ -8,17 +8,16 @@ import { VersionSwitcherComponent } from './components/version-switcher/version-
 import { ThemeSwitcherComponent } from './components/theme-switcher/theme-switcher.component';
 
 @Component({
-  selector: 'pvs-layout',
-  standalone: true,
-  imports: [
-    HeaderComponent,
-    SidenavComponent,
-    CloseSidebarDirective,
-    VisibleOnOpenSidebarDirective,
-    BlockOnOpenSidebarDirective,
-    VersionSwitcherComponent,
-    ThemeSwitcherComponent,
-  ],
-  templateUrl: './layout.component.html',
+    selector: 'pvs-layout',
+    imports: [
+        HeaderComponent,
+        SidenavComponent,
+        CloseSidebarDirective,
+        VisibleOnOpenSidebarDirective,
+        BlockOnOpenSidebarDirective,
+        VersionSwitcherComponent,
+        ThemeSwitcherComponent,
+    ],
+    templateUrl: './layout.component.html'
 })
 export class LayoutComponent {}

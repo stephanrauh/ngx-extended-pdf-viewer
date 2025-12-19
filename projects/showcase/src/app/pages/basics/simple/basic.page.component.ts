@@ -10,19 +10,18 @@ import { SetMinifiedLibraryUsageDirective } from '../../../shared/directives/set
 import { BROWSER_STORAGE } from '../../../shared/helper/browser-storage.token';
 
 @Component({
-  selector: 'pvs-basic-page',
-  standalone: true,
-  imports: [
-    ContentPageComponent,
-    NgxExtendedPdfViewerModule,
-    MarkdownContentComponent,
-    SetMinifiedLibraryUsageDirective,
-    SplitViewComponent,
-    FormsModule,
-    DecimalPipe,
-    SetDefaultZoomLevelDirective,
-  ],
-  template: `
+    selector: 'pvs-basic-page',
+    imports: [
+        ContentPageComponent,
+        NgxExtendedPdfViewerModule,
+        MarkdownContentComponent,
+        SetMinifiedLibraryUsageDirective,
+        SplitViewComponent,
+        FormsModule,
+        DecimalPipe,
+        SetDefaultZoomLevelDirective,
+    ],
+    template: `
     <pvs-content-page [demoTemplate]="demo">
       <pvs-markdown src="/assets/pages/basics/simple/text.md" />
     </pvs-content-page>
@@ -109,7 +108,7 @@ import { BROWSER_STORAGE } from '../../../shared/helper/browser-storage.token';
         />
       </pvs-split-view>
     </ng-template>
-  `,
+  `
 })
 export class BasicPageComponent {
   private localStorage = inject(BROWSER_STORAGE);

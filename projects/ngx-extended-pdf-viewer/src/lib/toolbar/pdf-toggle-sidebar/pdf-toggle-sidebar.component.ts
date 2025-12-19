@@ -4,9 +4,10 @@ import { PDFNotificationService } from '../../pdf-notification-service';
 import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
-  selector: 'pdf-toggle-sidebar',
-  templateUrl: './pdf-toggle-sidebar.component.html',
-  styleUrls: ['./pdf-toggle-sidebar.component.css'],
+    selector: 'pdf-toggle-sidebar',
+    templateUrl: './pdf-toggle-sidebar.component.html',
+    styleUrls: ['./pdf-toggle-sidebar.component.css'],
+    standalone: false
 })
 export class PdfToggleSidebarComponent implements OnDestroy {
   @Input()

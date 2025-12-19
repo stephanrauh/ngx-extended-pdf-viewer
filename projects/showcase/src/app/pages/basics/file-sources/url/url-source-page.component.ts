@@ -11,20 +11,19 @@ import { SetDefaultViewerHeightDirective } from '../../../../shared/directives/s
 import { SetDefaultZoomLevelDirective } from '../../../../shared/directives/set-default-zoom-level.directive';
 
 @Component({
-  selector: 'pvs-file-sources-page',
-  standalone: true,
-  imports: [
-    ContentPageComponent,
-    MarkdownContentComponent,
-    NgxExtendedPdfViewerModule,
-    ReactiveFormsModule,
-    SetMinifiedLibraryUsageDirective,
-    SplitViewComponent,
-    FormsModule,
-    SetDefaultViewerHeightDirective,
-    SetDefaultZoomLevelDirective,
-  ],
-  template: `<pvs-content-page [demoTemplate]="demo">
+    selector: 'pvs-file-sources-page',
+    imports: [
+        ContentPageComponent,
+        MarkdownContentComponent,
+        NgxExtendedPdfViewerModule,
+        ReactiveFormsModule,
+        SetMinifiedLibraryUsageDirective,
+        SplitViewComponent,
+        FormsModule,
+        SetDefaultViewerHeightDirective,
+        SetDefaultZoomLevelDirective,
+    ],
+    template: `<pvs-content-page [demoTemplate]="demo">
     <pvs-markdown src="/assets/pages/basics/file-sources/url/text.md" />
     <pvs-markdown src="/assets/pages/basics/file-sources/shared.md" />
 
@@ -69,7 +68,7 @@ import { SetDefaultZoomLevelDirective } from '../../../../shared/directives/set-
         />
       </pvs-split-view>
     </ng-template>
-  </pvs-content-page>`,
+  </pvs-content-page>`
 })
 export class UrlSourcePageComponent {
   private isBrowser = inject(IS_BROWSER);

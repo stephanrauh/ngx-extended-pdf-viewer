@@ -6,9 +6,10 @@ import { PDFNotificationService } from '../../pdf-notification-service';
 import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
-  selector: 'pdf-infinite-scroll',
-  templateUrl: './pdf-infinite-scroll.component.html',
-  styleUrls: ['./pdf-infinite-scroll.component.css'],
+    selector: 'pdf-infinite-scroll',
+    templateUrl: './pdf-infinite-scroll.component.html',
+    styleUrls: ['./pdf-infinite-scroll.component.css'],
+    standalone: false
 })
 export class PdfInfiniteScrollComponent implements OnDestroy {
   @Input()

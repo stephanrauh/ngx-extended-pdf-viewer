@@ -11,19 +11,18 @@ import { BROWSER_STORAGE } from '../../../shared/helper/browser-storage.token';
 import { WINDOW } from '../../../shared/helper/window.token';
 
 @Component({
-  selector: 'pvs-javascript-page',
-  standalone: true,
-  imports: [
-    ContentPageComponent,
-    MarkdownContentComponent,
-    NgxExtendedPdfViewerModule,
-    SplitViewComponent,
-    SetMinifiedLibraryUsageDirective,
-    FormsModule,
-    SetDefaultViewerHeightDirective,
-    SetDefaultZoomLevelDirective,
-  ],
-  template: `<pvs-content-page [demoTemplate]="demo">
+    selector: 'pvs-javascript-page',
+    imports: [
+        ContentPageComponent,
+        MarkdownContentComponent,
+        NgxExtendedPdfViewerModule,
+        SplitViewComponent,
+        SetMinifiedLibraryUsageDirective,
+        FormsModule,
+        SetDefaultViewerHeightDirective,
+        SetDefaultZoomLevelDirective,
+    ],
+    template: `<pvs-content-page [demoTemplate]="demo">
     <pvs-markdown src="/assets/pages/configuration/javascript/text.md" />
     <ng-template #demo>
       <pvs-split-view>
@@ -55,7 +54,7 @@ import { WINDOW } from '../../../shared/helper/window.token';
         />
       </pvs-split-view>
     </ng-template>
-  </pvs-content-page>`,
+  </pvs-content-page>`
 })
 export class JavaScriptPageComponent {
   private localStorage = inject(BROWSER_STORAGE);

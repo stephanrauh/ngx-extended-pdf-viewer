@@ -5,12 +5,11 @@ import { Angular2SmartTableModule } from 'angular2-smart-table';
 import { availableCssRules, cssRulesSettings } from './css-table.data';
 
 @Component({
-  selector: 'pvs-css-rules-page',
-  standalone: true,
-  imports: [ContentPageComponent, Angular2SmartTableModule],
-  template: ` <pvs-content-page>
+    selector: 'pvs-css-rules-page',
+    imports: [ContentPageComponent, Angular2SmartTableModule],
+    template: ` <pvs-content-page>
     <angular2-smart-table [settings]="settings" [source]="data" />
-  </pvs-content-page>`,
+  </pvs-content-page>`
 })
 export class CSSRulesPageComponent {
   protected readonly data = availableCssRules;

@@ -6,10 +6,9 @@ import { pdfDefaultOptions } from 'ngx-extended-pdf-viewer';
 import { BROWSER_STORAGE } from '../../../../shared/helper/browser-storage.token';
 
 @Component({
-  selector: 'pvs-version-switcher',
-  standalone: true,
-  imports: [ReactiveFormsModule, FormsModule],
-  template: `
+    selector: 'pvs-version-switcher',
+    imports: [ReactiveFormsModule, FormsModule],
+    template: `
     <div class="input-wrapper flex flex-wrap gap-2 items-center justify-end">
       <label for="version">PDF Viewer Version</label>
       <select id="version" [formControl]="viewer">
@@ -17,7 +16,7 @@ import { BROWSER_STORAGE } from '../../../../shared/helper/browser-storage.token
         <option [value]="bleedingEdgeVersion">Bleeding Edge (preview of pdf.js 5.3++)</option>
       </select>
     </div>
-  `,
+  `
 })
 export class VersionSwitcherComponent {
   private localStorage = inject(BROWSER_STORAGE);

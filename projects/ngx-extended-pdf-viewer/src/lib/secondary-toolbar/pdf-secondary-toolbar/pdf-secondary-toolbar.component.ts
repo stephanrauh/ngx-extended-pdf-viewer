@@ -21,9 +21,10 @@ import { PdfShyButtonService } from '../../toolbar/pdf-shy-button/pdf-shy-button
 import { PDFNotificationService } from './../../pdf-notification-service';
 
 @Component({
-  selector: 'pdf-secondary-toolbar',
-  templateUrl: './pdf-secondary-toolbar.component.html',
-  styleUrls: ['./pdf-secondary-toolbar.component.css'],
+    selector: 'pdf-secondary-toolbar',
+    templateUrl: './pdf-secondary-toolbar.component.html',
+    styleUrls: ['./pdf-secondary-toolbar.component.css'],
+    standalone: false
 })
 export class PdfSecondaryToolbarComponent implements OnChanges, AfterViewInit, OnDestroy {
   @Input()

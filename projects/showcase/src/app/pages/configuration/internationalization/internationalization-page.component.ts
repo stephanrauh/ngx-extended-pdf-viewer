@@ -6,10 +6,9 @@ import { MarkdownContentComponent } from '../../../shared/components/markdown-co
 import { SplitViewComponent } from '../../../shared/components/split-view.component';
 
 @Component({
-  selector: 'pvs-internationalization-page',
-  standalone: true,
-  imports: [ContentPageComponent, FormsModule, MarkdownContentComponent, NgxExtendedPdfViewerModule, SplitViewComponent],
-  template: `<pvs-content-page [demoTemplate]="demo">
+    selector: 'pvs-internationalization-page',
+    imports: [ContentPageComponent, FormsModule, MarkdownContentComponent, NgxExtendedPdfViewerModule, SplitViewComponent],
+    template: `<pvs-content-page [demoTemplate]="demo">
     <pvs-markdown src="/assets/pages/configuration/internationalization/text.md" />
     <ng-template #demo>
       <pvs-split-view>
@@ -39,7 +38,7 @@ import { SplitViewComponent } from '../../../shared/components/split-view.compon
         }
       </pvs-split-view>
     </ng-template>
-  </pvs-content-page>`,
+  </pvs-content-page>`
 })
 export class InternationalizationPageComponent {
   public hidePdfViewer = false;

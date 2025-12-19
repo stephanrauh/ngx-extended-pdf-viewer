@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'pdf-find-previous',
-  templateUrl: './pdf-find-previous.component.html',
-  styleUrls: ['./pdf-find-previous.component.css'],
+    selector: 'pdf-find-previous',
+    templateUrl: './pdf-find-previous.component.html',
+    styleUrls: ['./pdf-find-previous.component.css'],
+    standalone: false
 })
 export class PdfFindPreviousComponent {}

@@ -14,7 +14,10 @@ jest.mock('../../dynamic-css/positioning.service', () => ({
 }));
 
 // Mock pipe
-@Pipe({ name: 'responsiveCSSClass' })
+@Pipe({
+    name: 'responsiveCSSClass',
+    standalone: false
+})
 class MockResponsiveCSSClassPipe implements PipeTransform {
   transform(value: any): any {
     return value;
@@ -23,9 +26,10 @@ class MockResponsiveCSSClassPipe implements PipeTransform {
 
 // Mock pdf-shy-button component
 @Component({
-  selector: 'pdf-shy-button',
-  template: '<ng-content></ng-content>',
-  inputs: ['title', 'primaryToolbarId', 'cssClass', 'l10nId', 'l10nLabel', 'order', 'action', 'toggled', 'closeOnClick', 'image']
+    selector: 'pdf-shy-button',
+    template: '<ng-content></ng-content>',
+    inputs: ['title', 'primaryToolbarId', 'cssClass', 'l10nId', 'l10nLabel', 'order', 'action', 'toggled', 'closeOnClick', 'image'],
+    standalone: false
 })
 class MockPdfShyButtonComponent {
   title: any;

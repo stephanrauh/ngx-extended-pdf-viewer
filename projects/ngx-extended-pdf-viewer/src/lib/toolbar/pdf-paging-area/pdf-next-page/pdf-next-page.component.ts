@@ -5,9 +5,10 @@ import { PDFNotificationService } from '../../../pdf-notification-service';
 import { ResponsiveVisibility } from '../../../responsive-visibility';
 
 @Component({
-  selector: 'pdf-next-page',
-  templateUrl: './pdf-next-page.component.html',
-  styleUrls: ['./pdf-next-page.component.css'],
+    selector: 'pdf-next-page',
+    templateUrl: './pdf-next-page.component.html',
+    styleUrls: ['./pdf-next-page.component.css'],
+    standalone: false
 })
 export class PdfNextPageComponent {
   @Input()

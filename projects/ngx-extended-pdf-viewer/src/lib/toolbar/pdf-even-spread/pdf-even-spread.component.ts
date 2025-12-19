@@ -6,9 +6,10 @@ import { PDFNotificationService } from '../../pdf-notification-service';
 import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
-  selector: 'pdf-even-spread',
-  templateUrl: './pdf-even-spread.component.html',
-  styleUrls: ['./pdf-even-spread.component.css'],
+    selector: 'pdf-even-spread',
+    templateUrl: './pdf-even-spread.component.html',
+    styleUrls: ['./pdf-even-spread.component.css'],
+    standalone: false
 })
 export class PdfEvenSpreadComponent {
   @Input()

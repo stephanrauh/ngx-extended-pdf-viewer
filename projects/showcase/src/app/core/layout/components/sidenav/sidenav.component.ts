@@ -10,13 +10,12 @@ import { navigationConfig } from './navigation-config';
 import { isNavigationGroup, isNavigationTarget } from './navigation-config.types';
 
 @Component({
-  selector: 'pvs-sidenav',
-  standalone: true,
-  imports: [CloseSidebarDirective, NavigationGroupComponent, NavigationTargetComponent, CdkTrapFocus],
-  templateUrl: './sidenav.component.html',
-  host: {
-    '(document:keydown)': 'onKeydown($event)',
-  },
+    selector: 'pvs-sidenav',
+    imports: [CloseSidebarDirective, NavigationGroupComponent, NavigationTargetComponent, CdkTrapFocus],
+    templateUrl: './sidenav.component.html',
+    host: {
+        '(document:keydown)': 'onKeydown($event)',
+    }
 })
 export class SidenavComponent {
   private sidebarService = inject(SidebarService);

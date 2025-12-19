@@ -2,9 +2,10 @@ import { Component, Input } from '@angular/core';
 import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
-  selector: 'pdf-presentation-mode',
-  templateUrl: './pdf-presentation-mode.component.html',
-  styleUrls: ['./pdf-presentation-mode.component.css'],
+    selector: 'pdf-presentation-mode',
+    templateUrl: './pdf-presentation-mode.component.html',
+    styleUrls: ['./pdf-presentation-mode.component.css'],
+    standalone: false
 })
 export class PdfPresentationModeComponent {
   @Input()

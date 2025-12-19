@@ -9,9 +9,10 @@ interface ZoomLevel {
   displayValue: string;
 }
 @Component({
-  selector: 'pdf-zoom-dropdown',
-  templateUrl: './pdf-zoom-dropdown.component.html',
-  styleUrls: ['./pdf-zoom-dropdown.component.css'],
+    selector: 'pdf-zoom-dropdown',
+    templateUrl: './pdf-zoom-dropdown.component.html',
+    styleUrls: ['./pdf-zoom-dropdown.component.css'],
+    standalone: false
 })
 export class PdfZoomDropdownComponent {
   @Input()

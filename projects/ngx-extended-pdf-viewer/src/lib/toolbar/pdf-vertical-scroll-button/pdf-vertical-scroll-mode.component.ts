@@ -6,9 +6,10 @@ import { PDFNotificationService } from '../../pdf-notification-service';
 import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
-  selector: 'pdf-vertical-scroll-mode',
-  templateUrl: './pdf-vertical-scroll-mode.component.html',
-  styleUrls: ['./pdf-vertical-scroll-mode.component.css'],
+    selector: 'pdf-vertical-scroll-mode',
+    templateUrl: './pdf-vertical-scroll-mode.component.html',
+    styleUrls: ['./pdf-vertical-scroll-mode.component.css'],
+    standalone: false
 })
 export class PdfVerticalScrollModeComponent implements OnDestroy {
   @Input()

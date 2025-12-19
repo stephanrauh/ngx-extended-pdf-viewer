@@ -9,9 +9,10 @@ import { PDFNotificationService } from '../../pdf-notification-service';
 import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
-  selector: 'pdf-stamp-editor',
-  templateUrl: './pdf-stamp-editor.component.html',
-  styleUrls: ['./pdf-stamp-editor.component.css'],
+    selector: 'pdf-stamp-editor',
+    templateUrl: './pdf-stamp-editor.component.html',
+    styleUrls: ['./pdf-stamp-editor.component.css'],
+    standalone: false
 })
 export class PdfStampEditorComponent {
   @Input()

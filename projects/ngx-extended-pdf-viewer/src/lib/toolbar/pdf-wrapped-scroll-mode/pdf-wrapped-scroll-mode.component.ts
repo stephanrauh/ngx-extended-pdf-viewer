@@ -6,9 +6,10 @@ import { PDFNotificationService } from '../../pdf-notification-service';
 import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
-  selector: 'pdf-wrapped-scroll-mode',
-  templateUrl: './pdf-wrapped-scroll-mode.component.html',
-  styleUrls: ['./pdf-wrapped-scroll-mode.component.css'],
+    selector: 'pdf-wrapped-scroll-mode',
+    templateUrl: './pdf-wrapped-scroll-mode.component.html',
+    styleUrls: ['./pdf-wrapped-scroll-mode.component.css'],
+    standalone: false
 })
 export class PdfWrappedScrollModeComponent implements OnDestroy {
   @Input()

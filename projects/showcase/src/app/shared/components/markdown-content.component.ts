@@ -3,10 +3,9 @@ import { MarkdownComponent } from 'ngx-markdown';
 import { APP_BASE_HREF, isPlatformBrowser } from '@angular/common';
 
 @Component({
-  selector: 'pvs-markdown',
-  standalone: true,
-  imports: [MarkdownComponent],
-  template: ` <markdown [src]="fullSrc()" [data]="data()"></markdown> `,
+    selector: 'pvs-markdown',
+    imports: [MarkdownComponent],
+    template: ` <markdown [src]="fullSrc()" [data]="data()"></markdown> `
 })
 export class MarkdownContentComponent {
   private baseHref = inject(APP_BASE_HREF);

@@ -13,22 +13,21 @@ import { SetDefaultViewerHeightDirective } from '../../../shared/directives/set-
 import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-default-zoom-level.directive';
 
 @Component({
-  selector: 'pvs-keyboard-page',
-  standalone: true,
-  imports: [
-    NgxExtendedPdfViewerModule,
-    ReactiveFormsModule,
-    FormsModule,
-    LanguagePipe,
-    KeyValuePipe,
-    MarkdownContentComponent,
-    ContentPageComponent,
-    SplitViewComponent,
-    SetMinifiedLibraryUsageDirective,
-    SetDefaultViewerHeightDirective,
-    SetDefaultZoomLevelDirective,
-  ],
-  template: ` <pvs-content-page [demoTemplate]="demo">
+    selector: 'pvs-keyboard-page',
+    imports: [
+        NgxExtendedPdfViewerModule,
+        ReactiveFormsModule,
+        FormsModule,
+        LanguagePipe,
+        KeyValuePipe,
+        MarkdownContentComponent,
+        ContentPageComponent,
+        SplitViewComponent,
+        SetMinifiedLibraryUsageDirective,
+        SetDefaultViewerHeightDirective,
+        SetDefaultZoomLevelDirective,
+    ],
+    template: ` <pvs-content-page [demoTemplate]="demo">
     <pvs-markdown src="/assets/pages/configuration/keyboard/text.md" />
     <ng-template #demo>
       <pvs-split-view>
@@ -99,7 +98,7 @@ import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-def
         />
       </pvs-split-view>
     </ng-template>
-  </pvs-content-page>`,
+  </pvs-content-page>`
 })
 export class KeyboardPageComponent implements OnInit {
   private formBuilder = inject(FormBuilder);

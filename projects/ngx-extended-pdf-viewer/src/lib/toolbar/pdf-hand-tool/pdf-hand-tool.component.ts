@@ -6,9 +6,10 @@ import { ResponsiveVisibility } from '../../responsive-visibility';
 import { PdfCursorTools } from './../../options/pdf-cursor-tools';
 
 @Component({
-  selector: 'pdf-hand-tool',
-  templateUrl: './pdf-hand-tool.component.html',
-  styleUrls: ['./pdf-hand-tool.component.css'],
+    selector: 'pdf-hand-tool',
+    templateUrl: './pdf-hand-tool.component.html',
+    styleUrls: ['./pdf-hand-tool.component.css'],
+    standalone: false
 })
 export class PdfHandToolComponent {
   @Input()

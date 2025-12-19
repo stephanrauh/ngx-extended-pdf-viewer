@@ -10,20 +10,19 @@ import { SetMinifiedLibraryUsageDirective } from '../../../shared/directives/set
 import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-default-zoom-level.directive';
 
 @Component({
-  selector: 'pvs-find-programmatically-page',
-  standalone: true,
-  imports: [
-    NgxExtendedPdfViewerModule,
-    FormsModule,
-    ContentPageComponent,
-    MarkdownContentComponent,
-    SplitViewComponent,
-    ButtonDirective,
-    SetDefaultViewerHeightDirective,
-    SetMinifiedLibraryUsageDirective,
-    SetDefaultZoomLevelDirective,
-  ],
-  template: `<pvs-content-page [demoTemplate]="demo">
+    selector: 'pvs-find-programmatically-page',
+    imports: [
+        NgxExtendedPdfViewerModule,
+        FormsModule,
+        ContentPageComponent,
+        MarkdownContentComponent,
+        SplitViewComponent,
+        ButtonDirective,
+        SetDefaultViewerHeightDirective,
+        SetMinifiedLibraryUsageDirective,
+        SetDefaultZoomLevelDirective,
+    ],
+    template: `<pvs-content-page [demoTemplate]="demo">
     <pvs-markdown src="/assets/pages/finding/find-programmatically/text.md" />
     <ng-template #demo>
       <pvs-split-view>
@@ -224,7 +223,7 @@ import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-def
         />
       </pvs-split-view>
     </ng-template>
-  </pvs-content-page>`,
+  </pvs-content-page>`
 })
 export class FindProgrammaticallyPageComponent {
   private ngxExtendedPdfViewerService = inject(NgxExtendedPdfViewerService);

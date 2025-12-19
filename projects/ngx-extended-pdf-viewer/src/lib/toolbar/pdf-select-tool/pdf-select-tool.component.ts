@@ -6,9 +6,10 @@ import { ResponsiveVisibility } from '../../responsive-visibility';
 import { PdfCursorTools } from './../../options/pdf-cursor-tools';
 
 @Component({
-  selector: 'pdf-select-tool',
-  templateUrl: './pdf-select-tool.component.html',
-  styleUrls: ['./pdf-select-tool.component.css'],
+    selector: 'pdf-select-tool',
+    templateUrl: './pdf-select-tool.component.html',
+    styleUrls: ['./pdf-select-tool.component.css'],
+    standalone: false
 })
 export class PdfSelectToolComponent {
   @Input()

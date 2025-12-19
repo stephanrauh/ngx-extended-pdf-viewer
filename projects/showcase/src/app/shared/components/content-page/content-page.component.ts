@@ -9,23 +9,22 @@ import { TabPanelComponent } from '../tabs/tab-panel.component';
 import { Tab } from '../../types/tab.type';
 
 @Component({
-  selector: 'pvs-content-page',
-  standalone: true,
-  imports: [
-    RouterOutlet,
-    AsyncPipe,
-    MarkdownContentComponent,
-    MarkdownContentComponent,
-    NgxExtendedPdfViewerModule,
-    TabsComponent,
-    TabPanelComponent,
-    TabsComponent,
-    TabPanelComponent,
-    NgTemplateOutlet,
-    LowerCasePipe,
-  ],
-  templateUrl: './content-page.component.html',
-  preserveWhitespaces: true,
+    selector: 'pvs-content-page',
+    imports: [
+        RouterOutlet,
+        AsyncPipe,
+        MarkdownContentComponent,
+        MarkdownContentComponent,
+        NgxExtendedPdfViewerModule,
+        TabsComponent,
+        TabPanelComponent,
+        TabsComponent,
+        TabPanelComponent,
+        NgTemplateOutlet,
+        LowerCasePipe,
+    ],
+    templateUrl: './content-page.component.html',
+    preserveWhitespaces: true
 })
 export class ContentPageComponent {
   private activatedRoute = inject(ActivatedRoute);

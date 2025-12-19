@@ -2,9 +2,10 @@ import { Component, Input } from '@angular/core';
 import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
-  selector: 'pdf-zoom-toolbar',
-  templateUrl: './pdf-zoom-toolbar.component.html',
-  styleUrls: ['./pdf-zoom-toolbar.component.css'],
+    selector: 'pdf-zoom-toolbar',
+    templateUrl: './pdf-zoom-toolbar.component.html',
+    styleUrls: ['./pdf-zoom-toolbar.component.css'],
+    standalone: false
 })
 export class PdfZoomToolbarComponent {
   @Input()

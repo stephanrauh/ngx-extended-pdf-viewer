@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'pdf-find-highlight-all',
-  templateUrl: './pdf-find-highlight-all.component.html',
-  styleUrls: ['./pdf-find-highlight-all.component.css'],
+    selector: 'pdf-find-highlight-all',
+    templateUrl: './pdf-find-highlight-all.component.html',
+    styleUrls: ['./pdf-find-highlight-all.component.css'],
+    standalone: false
 })
 export class PdfFindHighlightAllComponent {}

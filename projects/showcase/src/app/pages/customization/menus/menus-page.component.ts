@@ -5,10 +5,9 @@ import { TreeComponent } from './tree/tree.component';
 import { FINDBAR, SECONDARY_TOOLBAR, TOOLBAR } from './tree-data';
 
 @Component({
-  selector: 'pvs-menus-page',
-  standalone: true,
-  imports: [ContentPageComponent, MarkdownContentComponent, TreeComponent],
-  template: `<pvs-content-page>
+    selector: 'pvs-menus-page',
+    imports: [ContentPageComponent, MarkdownContentComponent, TreeComponent],
+    template: `<pvs-content-page>
     <pvs-markdown src="/assets/pages/customization/menus/text.md" />
 
     <pvs-markdown src="/assets/pages/customization/menus/toolbar.md" />
@@ -21,7 +20,7 @@ import { FINDBAR, SECONDARY_TOOLBAR, TOOLBAR } from './tree-data';
 
     <pvs-markdown src="/assets/pages/customization/menus/secondary-menu-pre-v18.md" />
     <pvs-tree [initialData]="SECONDARY_TOOLBAR" />
-  </pvs-content-page>`,
+  </pvs-content-page>`
 })
 export class MenusPageComponent {
   protected readonly TOOLBAR = TOOLBAR;

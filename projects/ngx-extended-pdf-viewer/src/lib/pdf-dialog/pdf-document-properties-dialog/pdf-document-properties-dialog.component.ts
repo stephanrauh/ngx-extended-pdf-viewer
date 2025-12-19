@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'pdf-document-properties-dialog',
-  templateUrl: './pdf-document-properties-dialog.component.html',
+    selector: 'pdf-document-properties-dialog',
+    templateUrl: './pdf-document-properties-dialog.component.html',
+    standalone: false
 })
 export class PdfDocumentPropertiesDialogComponent {}

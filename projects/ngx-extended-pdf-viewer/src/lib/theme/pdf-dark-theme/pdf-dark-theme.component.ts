@@ -1,9 +1,10 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 
 @Component({
-  selector: 'pdf-dark-theme',
-  templateUrl: './pdf-dark-theme.component.html',
-  styleUrls: ['./colors.css'],
-  encapsulation: ViewEncapsulation.None,
+    selector: 'pdf-dark-theme',
+    templateUrl: './pdf-dark-theme.component.html',
+    styleUrls: ['./colors.css'],
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class PdfDarkThemeComponent {}

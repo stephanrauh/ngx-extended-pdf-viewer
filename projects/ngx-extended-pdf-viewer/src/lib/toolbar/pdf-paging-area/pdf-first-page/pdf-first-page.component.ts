@@ -5,9 +5,10 @@ import { ResponsiveVisibility } from '../../../responsive-visibility';
 import { PDFNotificationService } from './../../../pdf-notification-service';
 
 @Component({
-  selector: 'pdf-first-page',
-  templateUrl: './pdf-first-page.component.html',
-  styleUrls: ['./pdf-first-page.component.css'],
+    selector: 'pdf-first-page',
+    templateUrl: './pdf-first-page.component.html',
+    styleUrls: ['./pdf-first-page.component.css'],
+    standalone: false
 })
 export class PdfFirstPageComponent {
   @Input()

@@ -6,9 +6,10 @@ import { PDFNotificationService } from '../../pdf-notification-service';
 import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
-  selector: 'pdf-single-page-mode',
-  templateUrl: './pdf-single-page-mode.component.html',
-  styleUrls: ['./pdf-single-page-mode.component.css'],
+    selector: 'pdf-single-page-mode',
+    templateUrl: './pdf-single-page-mode.component.html',
+    styleUrls: ['./pdf-single-page-mode.component.css'],
+    standalone: false
 })
 export class PdfSinglePageModeComponent implements OnDestroy {
   @Input()

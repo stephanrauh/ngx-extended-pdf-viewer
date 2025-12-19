@@ -4,9 +4,10 @@ import { SpreadType } from '../../options/spread-type';
 import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
-  selector: 'pdf-toolbar',
-  templateUrl: './pdf-toolbar.component.html',
-  styleUrls: ['./pdf-toolbar.component.css'],
+    selector: 'pdf-toolbar',
+    templateUrl: './pdf-toolbar.component.html',
+    styleUrls: ['./pdf-toolbar.component.css'],
+    standalone: false
 })
 export class PdfToolbarComponent implements AfterViewInit {
   @Input()

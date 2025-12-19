@@ -3,9 +3,10 @@ import { PageViewModeType, ScrollModeType } from '../../options/pdf-viewer';
 import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
-  selector: 'pdf-book-mode',
-  templateUrl: './pdf-book-mode.component.html',
-  styleUrls: ['./pdf-book-mode.component.css'],
+    selector: 'pdf-book-mode',
+    templateUrl: './pdf-book-mode.component.html',
+    styleUrls: ['./pdf-book-mode.component.css'],
+    standalone: false
 })
 export class PdfBookModeComponent implements OnDestroy {
   @Input()

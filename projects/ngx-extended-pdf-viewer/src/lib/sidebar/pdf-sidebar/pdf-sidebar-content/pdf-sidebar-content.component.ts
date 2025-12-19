@@ -25,9 +25,10 @@ declare class PDFLinkService {
 }
 
 @Component({
-  selector: 'pdf-sidebar-content',
-  templateUrl: './pdf-sidebar-content.component.html',
-  styleUrls: ['./pdf-sidebar-content.component.css'],
+    selector: 'pdf-sidebar-content',
+    templateUrl: './pdf-sidebar-content.component.html',
+    styleUrls: ['./pdf-sidebar-content.component.css'],
+    standalone: false
 })
 export class PdfSidebarContentComponent implements OnDestroy {
   @Input()

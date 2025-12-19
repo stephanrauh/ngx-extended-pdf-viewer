@@ -119,8 +119,9 @@ const requiredIds = [
 ];
 
 @Component({
-  selector: 'pdf-dummy-components',
-  templateUrl: './pdf-dummy-components.component.html',
+    selector: 'pdf-dummy-components',
+    templateUrl: './pdf-dummy-components.component.html',
+    standalone: false
 })
 export class PdfDummyComponentsComponent {
   private dummyComponentsContainer: Element;

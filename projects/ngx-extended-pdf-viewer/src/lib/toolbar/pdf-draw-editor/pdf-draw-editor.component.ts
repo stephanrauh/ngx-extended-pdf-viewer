@@ -8,9 +8,10 @@ import { PDFNotificationService } from '../../pdf-notification-service';
 import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
-  selector: 'pdf-draw-editor',
-  templateUrl: './pdf-draw-editor.component.html',
-  styleUrls: ['./pdf-draw-editor.component.css'],
+    selector: 'pdf-draw-editor',
+    templateUrl: './pdf-draw-editor.component.html',
+    styleUrls: ['./pdf-draw-editor.component.css'],
+    standalone: false
 })
 export class PdfDrawEditorComponent {
   @Input()

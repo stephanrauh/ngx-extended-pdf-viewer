@@ -6,9 +6,10 @@ import { PDFNotificationService } from '../../pdf-notification-service';
 import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
-  selector: 'pdf-no-spread',
-  templateUrl: './pdf-no-spread.component.html',
-  styleUrls: ['./pdf-no-spread.component.css'],
+    selector: 'pdf-no-spread',
+    templateUrl: './pdf-no-spread.component.html',
+    styleUrls: ['./pdf-no-spread.component.css'],
+    standalone: false
 })
 export class PdfNoSpreadComponent {
   @Input()

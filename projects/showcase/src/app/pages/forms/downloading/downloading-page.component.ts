@@ -3,11 +3,10 @@ import { ContentPageComponent } from '../../../shared/components/content-page/co
 import { MarkdownContentComponent } from '../../../shared/components/markdown-content.component';
 
 @Component({
-  selector: 'pvs-downloading-page',
-  standalone: true,
-  imports: [ContentPageComponent, MarkdownContentComponent],
-  template: `<pvs-content-page>
+    selector: 'pvs-downloading-page',
+    imports: [ContentPageComponent, MarkdownContentComponent],
+    template: `<pvs-content-page>
     <pvs-markdown src="/assets/pages/forms/downloading/text.md" />
-  </pvs-content-page>`,
+  </pvs-content-page>`
 })
 export class DownloadingPageComponent {}

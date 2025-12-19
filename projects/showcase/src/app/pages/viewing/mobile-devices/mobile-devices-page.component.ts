@@ -8,18 +8,17 @@ import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-def
 import { SetMinifiedLibraryUsageDirective } from '../../../shared/directives/set-minified-library-usage.directive';
 
 @Component({
-  selector: 'pvs-mobile-devices-page',
-  standalone: true,
-  imports: [
-    NgxExtendedPdfViewerModule,
-    ContentPageComponent,
-    MarkdownContentComponent,
-    SplitViewComponent,
-    SetMinifiedLibraryUsageDirective,
-    SetDefaultViewerHeightDirective,
-    SetDefaultZoomLevelDirective,
-  ],
-  template: `<pvs-content-page [demoTemplate]="demo">
+    selector: 'pvs-mobile-devices-page',
+    imports: [
+        NgxExtendedPdfViewerModule,
+        ContentPageComponent,
+        MarkdownContentComponent,
+        SplitViewComponent,
+        SetMinifiedLibraryUsageDirective,
+        SetDefaultViewerHeightDirective,
+        SetDefaultZoomLevelDirective,
+    ],
+    template: `<pvs-content-page [demoTemplate]="demo">
     <pvs-markdown src="/assets/pages/viewing/mobile-devices/text.md" />
     <ng-template #demo>
       <pvs-split-view>
@@ -50,8 +49,8 @@ import { SetMinifiedLibraryUsageDirective } from '../../../shared/directives/set
       </pvs-split-view>
     </ng-template>
   </pvs-content-page>`,
-  styleUrls: ['./devices.min.css'],
-  styles: `
+    styleUrls: ['./devices.min.css'],
+    styles: `
     ::ng-deep button#print,
     ::ng-deep button#print * {
       display: block !important;
@@ -74,6 +73,6 @@ import { SetMinifiedLibraryUsageDirective } from '../../../shared/directives/set
     .distance-top {
       padding-top: 8px;
     }
-  `,
+  `
 })
 export class MobileDevicesPageComponent {}

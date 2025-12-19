@@ -15,9 +15,11 @@ Built on Mozilla’s pdf.js and extended with dozens of enhancements, it's ideal
 
 ### 0. Prerequisites
 
-The library requires Angular 17+. Older versions are not supported.
+⚠️ **Version 26 requires Angular 19.** If you're using Angular 17 or 18, please continue using version 25.6.4 or earlier.
 
-In general, I aim to support the last four Angular versions (roughly two years of updates), but this may not always be feasible. For example, the upcoming version 26 might raise the minimum required Angular version significantly: I plan to support modern Angular (and I know many of you are waiting for that). You can't have an omelette without breaking an egg.
+**Why this breaking change?** Angular 18 exited its Long-Term Support (LTS) phase, and security vulnerability CVE-2025-66035 will not be fixed in Angular 17 or 18. Updating to Angular 19 ensures your application continues to receive critical security patches.
+
+In general, I aim to support the last four Angular versions (roughly two years of updates), but this may not always be feasible. Security requirements sometimes necessitate raising the minimum Angular version. You can't have an omelette without breaking an egg.
 
 ### 1. Installation
 
@@ -92,16 +94,25 @@ Thanks to GitHub users ScratchPDX and Deepak Shakya for reporting the issue prom
 
 ## 📣 Roadmap Highlights
 
-### Upcoming in Version 26
+### Version 26
 
-Originally, these features were announced for version 25. But an unexpected breaking changed forced me to add an intermediate major version.
+**Breaking Change: Angular 19 Required**
 
+Version 26 updates to Angular 19 to address security concerns. Angular 18 exited its LTS phase, and CVE-2025-66035 will not be fixed in Angular 17 or 18.
+
+**What's included:**
+- Updated to Angular 19 with all components explicitly set to `standalone: false` for NgModule compatibility
+- Fixed findbar layout (#3105) - dropped old checkboxes for better responsive design
+
+**Migration:**
+- If using Angular 17 or 18, stay on version 25.6.4 or earlier
+- To update your application to Angular 19: `ng update @angular/core@19 @angular/cli@19`
+
+**Future roadmap** (originally planned for version 25, postponed due to this breaking change):
 - Migration to Angular Signals
-- Support for standalone components
+- Full support for standalone components
 - Removal of `zone.js` (maybe)
-- Migration schematics planned (but not promised)
-
-Expect some breaking changes — but better performance and modern Angular support await!
+- Migration schematics (planned but not promised)
 
 ---
 

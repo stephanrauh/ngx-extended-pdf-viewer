@@ -7,10 +7,9 @@ import { TAB_GROUP } from './tab-group.token';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'pvs-tabs',
-  standalone: true,
-  imports: [TabComponent],
-  template: `
+    selector: 'pvs-tabs',
+    imports: [TabComponent],
+    template: `
     <div role="tablist" class="min-w-full inline-flex gap-6 flex-wrap border-b mb-4" (keydown)="onKeydown($event)">
       @for (tab of tabPanels(); track tab; let i = $index) {
         <pvs-tab [tab]="tab" />
@@ -21,17 +20,17 @@ import { ActivatedRoute } from '@angular/router';
       <ng-content />
     </div>
   `,
-  host: {
-    class: 'min-w-full block pt-2 pb-4',
-  },
-  providers: [
-    TabService,
-    {
-      provide: TAB_GROUP,
-      useFactory: (component: TabsComponent) => component.group(),
-      deps: [TabsComponent],
+    host: {
+        class: 'min-w-full block pt-2 pb-4',
     },
-  ],
+    providers: [
+        TabService,
+        {
+            provide: TAB_GROUP,
+            useFactory: (component: TabsComponent) => component.group(),
+            deps: [TabsComponent],
+        },
+    ]
 })
 export class TabsComponent implements AfterViewInit {
   private route = inject(ActivatedRoute);

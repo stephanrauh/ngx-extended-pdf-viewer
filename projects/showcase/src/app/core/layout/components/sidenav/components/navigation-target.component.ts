@@ -7,10 +7,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NgClass } from '@angular/common';
 
 @Component({
-  selector: 'li[pvs-navigation-target]',
-  standalone: true,
-  imports: [RouterLink, RouterLinkActive, NgClass],
-  template: `
+    selector: 'li[pvs-navigation-target]',
+    imports: [RouterLink, RouterLinkActive, NgClass],
+    template: `
     <a
       [ngClass]="{ 'ps-2': !isTopLevelTarget(), 'cursor-pointer font-semibold': isTopLevelTarget() }"
       [routerLink]="target().link"
@@ -20,10 +19,10 @@ import { NgClass } from '@angular/common';
       >{{ target().displayName }}</a
     >
   `,
-  host: {
-    class: 'pt-1 ',
-    '(keydown.enter)': 'onEnter($event)',
-  },
+    host: {
+        class: 'pt-1 ',
+        '(keydown.enter)': 'onEnter($event)',
+    }
 })
 export class NavigationTargetComponent {
   private router = inject(Router);

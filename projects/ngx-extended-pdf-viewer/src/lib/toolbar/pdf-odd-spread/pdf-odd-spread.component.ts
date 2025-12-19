@@ -6,9 +6,10 @@ import { PDFNotificationService } from '../../pdf-notification-service';
 import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
-  selector: 'pdf-odd-spread',
-  templateUrl: './pdf-odd-spread.component.html',
-  styleUrls: ['./pdf-odd-spread.component.css'],
+    selector: 'pdf-odd-spread',
+    templateUrl: './pdf-odd-spread.component.html',
+    styleUrls: ['./pdf-odd-spread.component.css'],
+    standalone: false
 })
 export class PdfOddSpreadComponent {
   @Input()

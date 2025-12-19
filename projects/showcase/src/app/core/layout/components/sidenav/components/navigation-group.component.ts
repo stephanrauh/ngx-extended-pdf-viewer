@@ -5,10 +5,9 @@ import { FormsModule } from '@angular/forms';
 import { NavigationStateService } from '../navigation-state.service';
 
 @Component({
-  selector: 'li[pvs-navigation-group]',
-  standalone: true,
-  imports: [NavigationTargetComponent, FormsModule],
-  template: `
+    selector: 'li[pvs-navigation-group]',
+    imports: [NavigationTargetComponent, FormsModule],
+    template: `
     <input type="checkbox" [id]="groupKey()" [checked]="isOpenSignal()" (change)="toggleGroup()" class="peer hidden" />
     <div class="grid grid-cols-[1fr_minmax(0,auto)] font-semibold">
       <label [for]="groupKey()" class="cursor-pointer">{{ group().displayName }}</label>
@@ -29,10 +28,10 @@ import { NavigationStateService } from '../navigation-state.service';
       }
     </ul>
   `,
-  host: {
-    class: '[&:not(:last-child)]:pb-4 [&:not(#mainList>*)]:pb-0 [&:not(#mainList>*)]:ps-2 [&:not(#mainList>*)]:pt-1',
-    '(keydown.enter)': 'onEnter($event)',
-  },
+    host: {
+        class: '[&:not(:last-child)]:pb-4 [&:not(#mainList>*)]:pb-0 [&:not(#mainList>*)]:ps-2 [&:not(#mainList>*)]:pt-1',
+        '(keydown.enter)': 'onEnter($event)',
+    }
 })
 export class NavigationGroupComponent {
   private navigationStateService = inject(NavigationStateService);

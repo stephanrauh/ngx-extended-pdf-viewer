@@ -5,9 +5,10 @@ import { PDFNotificationService } from '../../pdf-notification-service';
 import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
-  selector: 'pdf-find-button',
-  templateUrl: './pdf-find-button.component.html',
-  styleUrls: ['./pdf-find-button.component.css'],
+    selector: 'pdf-find-button',
+    templateUrl: './pdf-find-button.component.html',
+    styleUrls: ['./pdf-find-button.component.css'],
+    standalone: false
 })
 export class PdfFindButtonComponent {
   @Input()

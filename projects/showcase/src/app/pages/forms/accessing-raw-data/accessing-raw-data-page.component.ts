@@ -10,21 +10,20 @@ import { SetDefaultViewerHeightDirective } from '../../../shared/directives/set-
 import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-default-zoom-level.directive';
 
 @Component({
-  selector: 'pvs-accessing-raw-data-page',
-  standalone: true,
-  imports: [
-    ContentPageComponent,
-    MarkdownContentComponent,
-    NgxExtendedPdfViewerModule,
-    SplitViewComponent,
-    SetMinifiedLibraryUsageDirective,
-    ButtonDirective,
-    JsonPipe,
-    SetDefaultViewerHeightDirective,
-    SetDefaultZoomLevelDirective,
-    ButtonDirective,
-  ],
-  template: `<pvs-content-page [demoTemplate]="demo">
+    selector: 'pvs-accessing-raw-data-page',
+    imports: [
+        ContentPageComponent,
+        MarkdownContentComponent,
+        NgxExtendedPdfViewerModule,
+        SplitViewComponent,
+        SetMinifiedLibraryUsageDirective,
+        ButtonDirective,
+        JsonPipe,
+        SetDefaultViewerHeightDirective,
+        SetDefaultZoomLevelDirective,
+        ButtonDirective,
+    ],
+    template: `<pvs-content-page [demoTemplate]="demo">
     <pvs-markdown src="/assets/pages/forms/accessing-raw-data/text.md" />
     <ng-template #demo>
       <pvs-split-view>
@@ -66,7 +65,7 @@ import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-def
         />
       </pvs-split-view>
     </ng-template>
-  </pvs-content-page>`,
+  </pvs-content-page>`
 })
 export class AccessingRawDataPageComponent {
   private ngxService = inject(NgxExtendedPdfViewerService);
