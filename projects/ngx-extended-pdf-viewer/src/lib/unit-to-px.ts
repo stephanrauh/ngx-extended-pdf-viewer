@@ -43,7 +43,7 @@ export class UnitToPx {
     return this.pxPerUnitCache[unit];
   }
 
-  public static toPx(length): number {
+  public static toPx(length: any): number {
     if (length == null || length === '') {
       throw new TypeError('Error parsing length');
     }

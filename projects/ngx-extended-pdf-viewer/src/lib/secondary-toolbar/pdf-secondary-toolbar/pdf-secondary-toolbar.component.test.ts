@@ -10,7 +10,6 @@ describe('PdfSecondaryToolbarComponent', () => {
   let fixture: ComponentFixture<PdfSecondaryToolbarComponent>;
   let notificationService: jest.Mocked<PDFNotificationService>;
   let ngxExtendedPdfViewerService: jest.Mocked<NgxExtendedPdfViewerService>;
-  let pdfShyButtonService: jest.Mocked<PdfShyButtonService>;
   let mockPDFViewerApplication: any;
 
   // Mock DOM elements
@@ -62,7 +61,6 @@ describe('PdfSecondaryToolbarComponent', () => {
 
     notificationService = TestBed.inject(PDFNotificationService) as jest.Mocked<PDFNotificationService>;
     ngxExtendedPdfViewerService = TestBed.inject(NgxExtendedPdfViewerService) as jest.Mocked<NgxExtendedPdfViewerService>;
-    pdfShyButtonService = TestBed.inject(PdfShyButtonService) as jest.Mocked<PdfShyButtonService>;
 
     // Mock document.getElementById
     jest.spyOn(document, 'getElementById').mockImplementation((id: string) => {
@@ -137,7 +135,7 @@ describe('PdfSecondaryToolbarComponent', () => {
     it('should call updateUIState when pagechanging event is triggered', () => {
       component.onPdfJsInit();
 
-      const pageChangingCallback = mockPDFViewerApplication.eventBus.on.mock.calls.find((call) => call[0] === 'pagechanging')[1];
+      const pageChangingCallback = mockPDFViewerApplication.eventBus.on.mock.calls.find((call: any) => call[0] === 'pagechanging')[1];
 
       pageChangingCallback();
 
@@ -147,7 +145,7 @@ describe('PdfSecondaryToolbarComponent', () => {
     it('should call updateUIState when pagerendered event is triggered', () => {
       component.onPdfJsInit();
 
-      const pageRenderedCallback = mockPDFViewerApplication.eventBus.on.mock.calls.find((call) => call[0] === 'pagerendered')[1];
+      const pageRenderedCallback = mockPDFViewerApplication.eventBus.on.mock.calls.find((call: any) => call[0] === 'pagerendered')[1];
 
       pageRenderedCallback();
 

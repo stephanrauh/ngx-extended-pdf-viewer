@@ -16,13 +16,13 @@ export class PdfOddSpreadComponent {
   public show: ResponsiveVisibility = true;
 
   @Input()
-  public scrollMode: ScrollModeType;
+  public scrollMode!: ScrollModeType;
 
   public spread: SpreadType = 'off';
 
   private PDFViewerApplication: IPDFViewerApplication | undefined;
 
-  constructor(private notificationService: PDFNotificationService) {
+  constructor(notificationService: PDFNotificationService) {
     effect(() => {
       this.PDFViewerApplication = notificationService.onPDFJSInitSignal();
       if (this.PDFViewerApplication) {

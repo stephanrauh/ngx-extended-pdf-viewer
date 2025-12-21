@@ -29,7 +29,7 @@ export class PDFScriptLoaderService implements OnDestroy {
   public PDFViewerApplication!: IPDFViewerApplication;
   public PDFViewerApplicationOptions!: IPDFViewerApplicationOptions;
   // private PDFViewerApplicationConstants: any;
-  public webViewerLoad: (cspPolicyService: PdfCspPolicyService) => void;
+  public webViewerLoad!: (cspPolicyService: PdfCspPolicyService) => void;
 
   public ngxExtendedPdfViewerIncompletelyInitialized = true;
 
@@ -177,8 +177,8 @@ new (function () {
       if (forceReload) {
         viewerPath += '?v=' + new Date().getTime();
       }
-      const listener = (event: CustomEvent) => {
-        const { PDFViewerApplication, PDFViewerApplicationOptions, webViewerLoad } = event.detail;
+      const listener = (event: Event) => {
+        const { PDFViewerApplication, PDFViewerApplicationOptions, webViewerLoad } = (event as CustomEvent).detail;
         this.PDFViewerApplication = PDFViewerApplication;
         this.PDFViewerApplicationOptions = PDFViewerApplicationOptions;
         this.webViewerLoad = webViewerLoad;
@@ -191,20 +191,6 @@ new (function () {
     });
   }
 
-  private addFeatures(): Promise<void> {
-    return new Promise((resolve) => {
-      const script = this.createScriptElement(pdfDefaultOptions.assetsFolder + '/additional-features.js');
-      script.onload = () => {
-        script.remove();
-      };
-      script.onerror = () => {
-        script.remove();
-        resolve();
-      };
-
-      document.body.appendChild(script);
-    });
-  }
 
   public async ensurePdfJsHasBeenLoaded(useInlineScripts: boolean, forceUsingLegacyES5: boolean, forceReload: boolean): Promise<boolean> {
     if (this.PDFViewerApplication) {
@@ -223,12 +209,12 @@ new (function () {
     if (typeof window === 'undefined') {
       return; // fast escape for server side rendering
     }
-    delete globalThis['setNgxExtendedPdfViewerSource'];
+    delete (globalThis as any)['setNgxExtendedPdfViewerSource'];
 
     const w = window as any;
     delete w.pdfjsLib;
-    document.querySelectorAll('.ngx-extended-pdf-viewer-script').forEach((e: HTMLScriptElement) => {
-      e.onload = null;
+    document.querySelectorAll('.ngx-extended-pdf-viewer-script').forEach((e) => {
+      (e as HTMLScriptElement).onload = null;
       e.remove();
     });
   }

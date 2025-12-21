@@ -29,7 +29,6 @@ export class PdfStampEditorComponent {
   constructor(
     notificationService: PDFNotificationService,
     private cdr: ChangeDetectorRef,
-    private positioningService: PositioningService,
     private focusManagement: FocusManagementService,
   ) {
     effect(() => {
@@ -60,12 +59,12 @@ export class PdfStampEditorComponent {
     });
   }
 
-  public onClick(event: PointerEvent): void {
+  public onClick(event?: Event): void {
     const currentMode = this.PDFViewerApplication?.pdfViewer.annotationEditorMode;
     this.PDFViewerApplication?.eventBus.dispatch('switchannotationeditormode', {
       source: this,
       mode: currentMode === AnnotationEditorType.STAMP ? AnnotationEditorType.NONE : AnnotationEditorType.STAMP,
-      isFromKeyboard: event.detail === 0,
+      isFromKeyboard: (event as PointerEvent)?.detail === 0,
     });
     const positioningService = new PositioningService();
     positioningService.positionPopupBelowItsButton('primaryEditorStamp', 'editorStampParamsToolbar');

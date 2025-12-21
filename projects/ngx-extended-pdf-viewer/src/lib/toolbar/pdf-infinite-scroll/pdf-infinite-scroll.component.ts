@@ -16,10 +16,10 @@ export class PdfInfiniteScrollComponent implements OnDestroy {
   public show: ResponsiveVisibility = true;
 
   @Input()
-  public pageViewMode: PageViewModeType;
+  public pageViewMode!: PageViewModeType;
 
   @Input()
-  public scrollMode: ScrollModeType;
+  public scrollMode!: ScrollModeType;
 
   @Output()
   public pageViewModeChange = new EventEmitter<PageViewModeType>();

@@ -22,7 +22,7 @@ export interface ScrollModeChangedEvent {
   mode: ScrollModeType;
 }
 export interface IPDFRenderingQueue {
-  getHighestPriority(visiblePage: Array<any>, pages: Array<any>, scrolledDown: boolean, preRenderExtra: boolean);
+  getHighestPriority(visiblePage: Array<any>, pages: Array<any>, scrolledDown: boolean, preRenderExtra: boolean): any;
   renderView(pageView: any): void; // Added for iOS canvas optimization
 }
 

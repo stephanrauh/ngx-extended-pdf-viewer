@@ -16,10 +16,10 @@ export class PdfSinglePageModeComponent implements OnDestroy {
   public show: ResponsiveVisibility = true;
 
   @Input()
-  public scrollMode: ScrollModeType;
+  public scrollMode!: ScrollModeType;
 
   @Input()
-  public pageViewMode: PageViewModeType;
+  public pageViewMode!: PageViewModeType;
 
   @Output()
   public pageViewModeChange = new EventEmitter<PageViewModeType>();
@@ -28,7 +28,7 @@ export class PdfSinglePageModeComponent implements OnDestroy {
 
   private PDFViewerApplication: IPDFViewerApplication | undefined;
 
-  constructor(private notificationService: PDFNotificationService) {
+  constructor(notificationService: PDFNotificationService) {
     effect(() => {
       this.PDFViewerApplication = notificationService.onPDFJSInitSignal();
       if (this.PDFViewerApplication) {

@@ -110,10 +110,10 @@ describe('NgxExtendedPdfViewerService', () => {
 
     it('should handle find with default options', () => {
       service.ngxExtendedPdfViewerInitialized = true;
-      
+
       // This test focuses on the option handling logic, not PDF.js integration
-      const result = service.find('test');
-      
+      service.find('test');
+
       // The method sets up DOM checkboxes based on options
       expect(document.getElementById).toHaveBeenCalledWith('findHighlightAll');
       expect(document.getElementById).toHaveBeenCalledWith('findMatchCase');

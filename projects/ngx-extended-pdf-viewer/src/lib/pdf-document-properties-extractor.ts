@@ -50,8 +50,8 @@ export class PdfDocumentPropertiesExtractor {
     result.producer = info.Producer;
     result.subject = info.Subject;
     result.title = info.Title;
-    if (md['contentDispositionFilename']) {
-      result.fileName = md['contentDispositionFilename'];
+    if ((md as any)['contentDispositionFilename']) {
+      result.fileName = (md as any)['contentDispositionFilename'];
     }
     result.maybeFileSize = (await pdfDocument.getDownloadInfo()).length;
     return result;

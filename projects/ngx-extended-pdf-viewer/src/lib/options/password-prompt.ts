@@ -15,7 +15,7 @@ export interface PasswordPrompt {
    * 1 = A password is required, but wasn't provided; 2 = the wrong password
    * has been provided, so let's try again
    */
-  setUpdateCallback(updateCallback: (password: string) => void, reason: 1 | 2);
+  setUpdateCallback(updateCallback: (password: string) => void, reason: 1 | 2): void;
 
   close(): void;
 

@@ -276,15 +276,15 @@ export class NgxFormSupport {
 
     for (const key in this.formData) {
       if (this.formData.hasOwnProperty(key)) {
-        const newValue = this.formData[key];
-        if (newValue !== previousFormData[key]) {
+        const newValue = (this.formData as any)[key];
+        if (newValue !== (previousFormData as any)[key]) {
           this.setFieldValueAndUpdateAnnotationStorage(key, newValue);
         }
       }
     }
 
     for (const key in previousFormData) {
-      if (previousFormData.hasOwnProperty(key) && previousFormData[key]) {
+      if (previousFormData.hasOwnProperty(key) && (previousFormData as any)[key]) {
         let hasPreviousValue = this.formData.hasOwnProperty(key);
         if (!hasPreviousValue) {
           const fullKey = Object.keys(this.formData).find((k) => k === key || k.endsWith('.' + key));

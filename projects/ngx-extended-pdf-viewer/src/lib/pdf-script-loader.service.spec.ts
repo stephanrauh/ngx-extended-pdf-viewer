@@ -7,16 +7,8 @@ import { pdfDefaultOptions } from './options/pdf-default-options';
 describe('PDFScriptLoaderService', () => {
   let service: PDFScriptLoaderService;
   let mockCspPolicyService: jest.Mocked<PdfCspPolicyService>;
-  let originalNavigator: Navigator;
-  let originalDocument: Document;
-  let originalWindow: Window & typeof globalThis;
 
   beforeEach(() => {
-    // Store original objects for restoration (check existence first)
-    originalNavigator = typeof navigator !== 'undefined' ? navigator : ({} as any);
-    originalDocument = typeof document !== 'undefined' ? document : ({} as any);
-    originalWindow = typeof window !== 'undefined' ? window : ({} as any);
-
     // Mock CSP policy service
     mockCspPolicyService = {
       addTrustedJavaScript: jest.fn(),

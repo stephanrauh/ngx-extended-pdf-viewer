@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { ResponsiveVisibility } from '../../../responsive-visibility';
 
 interface ZoomLevel {
@@ -26,7 +26,7 @@ export class PdfZoomDropdownComponent {
 
   @ViewChild('sizeSelector') sizeSelector: any;
 
-  constructor(private element: ElementRef) {}
+  constructor() {}
 
   private valueToZoomLevel(value: string | number): ZoomLevel {
     // const new TranslatePipe().transform('pdfjs-page-scale-percent', '{ $scale } %');

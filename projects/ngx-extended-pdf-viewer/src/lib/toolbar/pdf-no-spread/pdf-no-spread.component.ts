@@ -18,11 +18,11 @@ export class PdfNoSpreadComponent {
   public spread: SpreadType = 'off';
 
   @Input()
-  public scrollMode: ScrollModeType;
+  public scrollMode!: ScrollModeType;
 
   private PDFViewerApplication: IPDFViewerApplication | undefined;
 
-  constructor(private notificationService: PDFNotificationService) {
+  constructor(notificationService: PDFNotificationService) {
     effect(() => {
       this.PDFViewerApplication = notificationService.onPDFJSInitSignal();
       if (this.PDFViewerApplication) {

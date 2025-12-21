@@ -23,7 +23,6 @@ import { PdfDocumentLoadedEvent } from './events/document-loaded-event';
 import { FileInputChanged } from './events/file-input-changed';
 import { FindResult, FindResultMatchesCount, FindState } from './events/find-result';
 import { HandtoolChanged } from './events/handtool-changed';
-import { PageNumberChange } from './events/page-number-change';
 import { PageRenderEvent } from './events/page-render-event';
 import { PageRenderedEvent } from './events/page-rendered-event';
 import { PagesLoadedEvent } from './events/pages-loaded-event';
@@ -71,8 +70,8 @@ import { ResponsiveVisibility } from './responsive-visibility';
 
 declare class ResizeObserver {
   constructor(param: () => void);
-  public disconnect();
-  public observe(div: HTMLElement);
+  public disconnect(): void;
+  public observe(div: HTMLElement): void;
 }
 
 interface ElementAndPosition {
@@ -121,10 +120,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
    * initialization code of pdf.js crashes because it assume that every standard widget is there.
    */
   @ViewChild(PdfDummyComponentsComponent)
-  public dummyComponents: PdfDummyComponentsComponent;
+  public dummyComponents!: PdfDummyComponentsComponent;
 
   @ViewChild('root')
-  public root: ElementRef;
+  public root!: ElementRef;
 
   @Output()
   public annotationEditorEvent = new EventEmitter<AnnotationEditorEvent>();
@@ -304,13 +303,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   public progress = new EventEmitter<ProgressBarEvent>();
 
   @ViewChild('pdfSecondaryToolbarComponent')
-  private readonly secondaryToolbarComponent: PdfSecondaryToolbarComponent;
+  private readonly secondaryToolbarComponent!: PdfSecondaryToolbarComponent;
 
   @ViewChild('DynamicCssComponent')
-  private readonly dynamicCSSComponent: DynamicCssComponent;
+  private readonly dynamicCSSComponent!: DynamicCssComponent;
 
   @ViewChild('pdfsidebar')
-  private readonly sidebarComponent: PdfSidebarComponent;
+  private readonly sidebarComponent!: PdfSidebarComponent;
 
   /* regular attributes */
 
@@ -430,7 +429,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   public printResolution = null;
 
   @Input()
-  public rotation: 0 | 90 | 180 | 270;
+  public rotation!: 0 | 90 | 180 | 270;
 
   @Output()
   public rotationChange = new EventEmitter<0 | 90 | 180 | 270>();
@@ -453,7 +452,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   @Output()
   public layersloaded = new EventEmitter<LayersLoadedEvent>();
 
-  public hasSignature: boolean;
+  public hasSignature!: boolean;
 
   @Input()
   public set src(url: string | ArrayBuffer | Blob | Uint8Array | URL | { range: any } | undefined) {
@@ -488,7 +487,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     }
   }
 
-  private async convertBlobToUint8Array(blob): Promise<Uint8Array> {
+  private async convertBlobToUint8Array(blob: Blob): Promise<Uint8Array> {
     // first try the algorithm for modern browsers and node.js
     if (blob.arrayBuffer) {
       const arrayBuffer = await blob.arrayBuffer();
@@ -846,7 +845,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   public showBorders = true;
 
   @Input()
-  public spread: SpreadType;
+  public spread!: SpreadType;
 
   @Input()
   public set showScrollingButtons(show: ResponsiveVisibility) {
@@ -1083,7 +1082,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   }
 
   constructor(
-    @Inject(PLATFORM_ID) private readonly platformId,
+    @Inject(PLATFORM_ID) private readonly platformId: Object,
     private readonly notificationService: PDFNotificationService,
     private readonly elementRef: ElementRef,
     private readonly platformLocation: PlatformLocation,
@@ -1208,7 +1207,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       document.body.appendChild(r);
       const elements = this.collectElementPositions(r, this.root.nativeElement, []);
       document.body.removeChild(r);
-      const topRightGreaterThanBottomLeftComparator = (a, b) => {
+      const topRightGreaterThanBottomLeftComparator = (a: any, b: any) => {
         if (a.y - b.y > 15) {
           return 1;
         }
@@ -1553,11 +1552,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     ];
     for (const key in pdfDefaultOptions) {
       if (!optionsToIgnore.includes(key)) {
-        const option = pdfDefaultOptions[key];
+        const option = (pdfDefaultOptions as any)[key];
         if (key !== 'findController' && typeof option === 'function') {
           options.set(key, option());
         } else {
-          options.set(key, pdfDefaultOptions[key]);
+          options.set(key, (pdfDefaultOptions as any)[key]);
         }
       }
     }
@@ -1643,8 +1642,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
           verbosity: this.logLevel,
           workerSrc,
         };
-        if (this._src['range']) {
-          options.range = this._src['range'];
+        if ((this._src as any)['range']) {
+          options.range = (this._src as any)['range'];
         }
         if (this.httpHeaders) {
           options.httpHeaders = this.httpHeaders;
@@ -1932,7 +1931,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     PDFViewerApplication.eventBus.on('outlineloaded', (event) => queueMicrotask(() => this.outlineLoaded.emit(event)));
     PDFViewerApplication.eventBus.on('attachmentsloaded', (event) => queueMicrotask(() => this.attachmentsloaded.emit(event)));
     PDFViewerApplication.eventBus.on('layersloaded', (event) => queueMicrotask(() => this.layersloaded.emit(event)));
-    PDFViewerApplication.eventBus.on('presentationmodechanged', (event) => {
+    PDFViewerApplication.eventBus.on('presentationmodechanged', () => {
       const PDFViewerApplication: IPDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
       PDFViewerApplication?.pdfViewer?.destroyBookMode();
     });
@@ -1985,7 +1984,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       );
     });
 
-    PDFViewerApplication.eventBus.on('pagechanging', (x: PageNumberChange) => {
+    PDFViewerApplication.eventBus.on('pagechanging', () => {
       if (!this.pdfScriptLoaderService.shuttingDown) {
         // hurried users sometimes reload the PDF before it has finished initializing
         queueMicrotask(() => {
@@ -2046,8 +2045,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       verbosity: this.logLevel,
       workerSrc,
     };
-    if (this._src?.['range']) {
-      options.range = this._src['range'];
+    if ((this._src as any)?.['range']) {
+      options.range = (this._src as any)['range'];
     }
     if (this.httpHeaders) {
       options.httpHeaders = this.httpHeaders;
@@ -2083,7 +2082,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       options.rangeChunkSize = pdfDefaultOptions.rangeChunkSize;
       await PDFViewerApplication.open(options);
     } catch (error) {
-      this.pdfLoadingFailed.emit(error);
+      this.pdfLoadingFailed.emit(error as Error);
     }
   }
 
@@ -2202,8 +2201,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
       // do not run this code on the server
       if (typeof window !== 'undefined') {
-        document.querySelectorAll('.ngx-extended-pdf-viewer-file-input').forEach((e: HTMLInputElement) => {
-          e.remove();
+        document.querySelectorAll('.ngx-extended-pdf-viewer-file-input').forEach((e) => {
+          (e as HTMLElement).remove();
         });
       }
     }

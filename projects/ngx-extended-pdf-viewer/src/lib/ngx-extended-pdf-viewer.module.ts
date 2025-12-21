@@ -82,8 +82,8 @@ import { PdfZoomOutComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-out/pdf
 import { PdfZoomToolbarComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-toolbar.component';
 import { TranslatePipe } from './translate.pipe';
 
-if (!Promise['allSettled']) {
-  if (!!window['Zone'] && !window['__zone_symbol__Promise.allSettled']) {
+if (!(Promise as any)['allSettled']) {
+  if (!!(window as any)['Zone'] && !(window as any)['__zone_symbol__Promise.allSettled']) {
     console.error(
       "Please update zone.js to version 0.10.3 or higher. Otherwise, you'll run the slow ECMAScript 5 version even on modern browser that can run the fast ESMAScript 2015 version.",
     );

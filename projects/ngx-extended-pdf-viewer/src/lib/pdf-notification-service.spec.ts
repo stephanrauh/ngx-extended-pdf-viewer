@@ -127,7 +127,7 @@ describe('PDFNotificationService', () => {
       });
 
       expect(() => {
-        const newService = new PDFNotificationService();
+        new PDFNotificationService();
       }).toThrow('Version parsing error');
     });
   });

@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ChangeDetectorRef, ElementRef, TemplateRef, NO_ERRORS_SCHEMA } from '@angular/core';
 import { PdfSidebarComponent } from './pdf-sidebar.component';
 import { PdfThumbnailDrawnEvent } from '../../events/pdf-thumbnail-drawn-event';
-import { ResponsiveVisibility } from '../../responsive-visibility';
 
 describe('PdfSidebarComponent', () => {
   let component: PdfSidebarComponent;
@@ -284,7 +283,7 @@ describe('PdfSidebarComponent', () => {
         { visible: 5, expected: false }  // show toolbar
       ];
 
-      testCases.forEach(({ visible, expected }, index) => {
+      testCases.forEach(({ visible, expected }) => {
         const buttons = Array.from({ length: visible + 2 }, (_, i) => ({
           hidden: i >= visible
         })) as HTMLButtonElement[];

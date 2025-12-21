@@ -21,7 +21,7 @@ export class PdfOpenFileComponent {
     });
   }
 
-  public onClick = (htmlEvent: Event, secondaryToolbar: boolean) => {
+  public onClick = (_htmlEvent?: Event, secondaryToolbar?: boolean) => {
     if (!secondaryToolbar) {
       this.PDFViewerApplication?.eventBus?.dispatch('openfile', { source: window });
     }

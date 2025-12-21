@@ -1,4 +1,4 @@
-import { PdfDocumentPropertiesExtractor, PdfDocumentInfo } from './pdf-document-properties-extractor';
+import { PdfDocumentPropertiesExtractor } from './pdf-document-properties-extractor';
 
 describe('PdfDocumentPropertiesExtractor', () => {
   let extractor: PdfDocumentPropertiesExtractor;

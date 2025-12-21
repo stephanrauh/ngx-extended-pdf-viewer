@@ -54,12 +54,12 @@ export class PdfEditorSignatureComponent {
     });
   }
 
-  public onClick(event: PointerEvent): void {
+  public onClick(event?: Event): void {
     const currentMode = this.PDFViewerApplication?.pdfViewer.annotationEditorMode;
     this.PDFViewerApplication?.eventBus.dispatch('switchannotationeditormode', {
       source: this,
       mode: currentMode === AnnotationEditorType.SIGNATURE ? AnnotationEditorType.NONE : AnnotationEditorType.SIGNATURE,
-      isFromKeyboard: event.detail === 0,
+      isFromKeyboard: (event as PointerEvent)?.detail === 0,
     });
     const positioningService = new PositioningService();
     positioningService.positionPopupBelowItsButton('primaryEditorSignatureButton', 'editorSignatureParamsToolbar');

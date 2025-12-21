@@ -12,7 +12,7 @@ export class PdfFindbarComponent {
   public showFindButton: ResponsiveVisibility = true;
 
   @Input()
-  public mobileFriendlyZoomScale: number;
+  public mobileFriendlyZoomScale!: number;
 
   @Input()
   public findbarLeft: string | undefined;
@@ -25,7 +25,7 @@ export class PdfFindbarComponent {
   public customFindbarInputArea: TemplateRef<any> | undefined;
 
   @Input()
-  public customFindbar: TemplateRef<any>;
+  public customFindbar!: TemplateRef<any>;
 
   @Input()
   public customFindbarButtons: TemplateRef<any> | undefined;

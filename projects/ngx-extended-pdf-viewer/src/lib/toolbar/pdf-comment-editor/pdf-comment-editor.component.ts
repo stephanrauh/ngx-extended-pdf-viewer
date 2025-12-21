@@ -53,12 +53,12 @@ export class PdfCommentEditorComponent {
     });
   }
 
-  public onClick(event: PointerEvent): void {
+  public onClick(event?: Event): void {
     const currentMode = this.PDFViewerApplication?.pdfViewer.annotationEditorMode;
     this.PDFViewerApplication?.eventBus.dispatch('switchannotationeditormode', {
       source: this,
       mode: currentMode === AnnotationEditorType.POPUP ? AnnotationEditorType.NONE : AnnotationEditorType.POPUP,
-      isFromKeyboard: event.detail === 0,
+      isFromKeyboard: (event as PointerEvent)?.detail === 0,
     });
 
     // Position the comment sidebar

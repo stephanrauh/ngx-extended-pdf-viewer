@@ -6,7 +6,6 @@ import { Injectable } from '@angular/core';
 export class FocusManagementService {
   private previousActiveElement: HTMLElement | null = null;
   private ariaLiveRegion: HTMLDivElement | null = null;
-  private activeDialogId: string | null = null;
   private keydownHandler: ((event: KeyboardEvent) => void) | null = null;
 
   constructor() {
@@ -101,8 +100,7 @@ export class FocusManagementService {
       return;
     }
 
-    // Track active dialog and set up focus cycling
-    this.activeDialogId = dialogId;
+    // Set up focus cycling
     this.setupFocusCycling(dialog);
 
     const firstFocusable = this.findFirstFocusableElement(dialog);
@@ -167,7 +165,6 @@ export class FocusManagementService {
       document.removeEventListener('keydown', this.keydownHandler);
       this.keydownHandler = null;
     }
-    this.activeDialogId = null;
   }
 
   /**

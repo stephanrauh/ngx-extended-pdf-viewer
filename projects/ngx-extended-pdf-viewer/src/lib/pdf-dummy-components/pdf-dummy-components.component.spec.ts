@@ -216,7 +216,7 @@ describe('PdfDummyComponentsComponent', () => {
         { id: 'span', tagName: 'SPAN' },
       ];
 
-      elements.forEach((element, index) => {
+      elements.forEach((element) => {
         getElementByIdSpy.mockReturnValueOnce(element as any);
         const result = (component as any).needsDummyWidget(element.id);
         expect(result).toBe(false);
@@ -314,7 +314,6 @@ describe('PdfDummyComponentsComponent', () => {
     it('should work with a realistic DOM scenario', () => {
       // Set up a scenario where some elements exist and some don't
       const existingElements = ['attachmentsView', 'authorField', 'download'];
-      const missingElements = ['creationDateField', 'creatorField', 'scaleSelect'];
 
       getElementByIdSpy.mockImplementation((id: string) => {
         if (existingElements.includes(id)) {

@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as sass from 'sass';
 
-function removeComments(code) {
+function removeComments(code: string): string {
   // Remove single-line comments
   // code = code.replace(/\/\/.*?$/gm, '');
 
@@ -15,7 +15,7 @@ function removeComments(code) {
 const options = {
   style: 'compressed',
   logger: {
-    xwarn: (message) => {
+    xwarn: (message: string) => {
       if (!message.includes('Deprecation Warning') && !message.includes('More info')) {
         console.warn(message); // Only log non-deprecation warnings
       }

@@ -34,7 +34,7 @@ describe('PdfCspPolicyService', () => {
     };
 
     mockTrustedTypes = {
-      createPolicy: jest.fn((name: string, config: any) => mockPolicy)
+      createPolicy: jest.fn((_name: string, _config: any) => mockPolicy)
     };
 
     // Setup mock window
@@ -484,9 +484,8 @@ describe('PdfCspPolicyService', () => {
 
     it.skip('should handle mixed content types in sequence', () => {
       const html = '<div>Content</div>';
-      const css = 'body { color: red; }';
       const url = 'https://example.com/script.js';
-      
+
       const htmlResult = service.sanitizeHTML(html);
       const trustedHTML = service.createTrustedHTML(html);
       const trustedURL = service.generateTrustedURL(url);

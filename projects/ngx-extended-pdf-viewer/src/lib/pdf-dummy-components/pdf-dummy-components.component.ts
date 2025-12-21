@@ -124,7 +124,7 @@ const requiredIds = [
     standalone: false
 })
 export class PdfDummyComponentsComponent {
-  private dummyComponentsContainer: Element;
+  private dummyComponentsContainer!: Element;
 
   public addMissingStandardWidgets(): void {
     this.dummyComponentsContainer = document.getElementsByClassName('dummy-pdf-viewer-components')[0];

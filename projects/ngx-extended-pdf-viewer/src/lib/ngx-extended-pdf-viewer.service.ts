@@ -259,7 +259,7 @@ export class NgxExtendedPdfViewerService {
 
       const page = await pdfDocument.getPage(pageNumber);
       const textSnippets = (await page.getTextContent()).items //
-        .filter((info) => !info['type']); // ignore the TextMarkedContent items
+        .filter((info) => !(info as any)['type']); // ignore the TextMarkedContent items
 
       const snippets = textSnippets as Array<TextItem>;
 
@@ -341,8 +341,11 @@ export class NgxExtendedPdfViewerService {
       return '';
     }
     return textInfoItems
-      .filter((info) => !info['type'])
-      .map((info: TextItem) => (info.hasEOL ? info.str + '\n' : info.str))
+      .filter((info) => !(info as any)['type'])
+      .map((info) => {
+        const textItem = info as TextItem;
+        return textItem.hasEOL ? textItem.str + '\n' : textItem.str;
+      })
       .join('');
   }
 
@@ -555,8 +558,8 @@ export class NgxExtendedPdfViewerService {
     const optionalContentConfig = await this.PDFViewerApplication?.pdfViewer.optionalContentConfigPromise;
     if (optionalContentConfig) {
       const levelData = optionalContentConfig.getOrder();
-      const layerIds = levelData.filter((groupId) => typeof groupId !== 'object');
-      return layerIds.map((layerId) => {
+      const layerIds = levelData.filter((groupId: any) => typeof groupId !== 'object');
+      return layerIds.map((layerId: any) => {
         const config = optionalContentConfig.getGroup(layerId);
         return {
           layerId: layerId,

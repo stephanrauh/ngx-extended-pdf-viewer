@@ -14,10 +14,10 @@ import { PdfShyButtonService } from './pdf-shy-button-service';
 })
 export class PdfShyButtonComponent implements OnInit, OnChanges, AfterViewInit, AfterContentInit {
   @Input()
-  public primaryToolbarId: string;
+  public primaryToolbarId!: string;
 
   @Input()
-  public secondaryMenuId: string;
+  public secondaryMenuId!: string;
 
   @Input()
   public cssClass: ResponsiveCSSClass = 'invisible';
@@ -26,22 +26,22 @@ export class PdfShyButtonComponent implements OnInit, OnChanges, AfterViewInit, 
   public eventBusName: string | undefined = undefined;
 
   @Input()
-  public l10nId: string;
+  public l10nId!: string;
 
   @Input()
-  public l10nLabel: string;
+  public l10nLabel!: string;
 
   @Input()
-  public title: string;
+  public title!: string;
 
   @Input()
-  public toggled: boolean;
+  public toggled!: boolean;
 
   @Input()
-  public disabled: boolean;
+  public disabled!: boolean;
 
   @Input()
-  public order: number;
+  public order!: number;
 
   @Input()
   public action: ((htmlEvent?: Event, isSecondaryMenue?: boolean) => void) | undefined = undefined;
@@ -65,7 +65,7 @@ export class PdfShyButtonComponent implements OnInit, OnChanges, AfterViewInit, 
 
   public renderContent = false;
 
-  @ViewChild('buttonRef', { static: false }) buttonRef: ElementRef;
+  @ViewChild('buttonRef', { static: false }) buttonRef!: ElementRef;
 
   @ContentChild('nestedContent', { static: false }) nestedContent: ElementRef | null = null;
 
@@ -182,7 +182,7 @@ export class PdfShyButtonComponent implements OnInit, OnChanges, AfterViewInit, 
     this.pdfShyButtonServiceService.add(this);
   }
 
-  public ngOnChanges(changes: any): void {
+  public ngOnChanges(_changes: any): void {
     this.pdfShyButtonServiceService.update(this);
   }
 

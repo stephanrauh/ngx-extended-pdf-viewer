@@ -817,7 +817,7 @@ export interface PDFPageProxy {
    * Destroys the page object.
    * @private
    */
-  _destroy;
+  _destroy: any;
   /**
    * Cleans up resources allocated by the page.
    *
@@ -830,23 +830,23 @@ export interface PDFPageProxy {
    * Attempts to clean up if rendering is in a state where that's possible.
    * @private
    */
-  _tryCleanup;
+  _tryCleanup: any;
   /**
    * @private
    */
-  _startRenderPage;
+  _startRenderPage: any;
   /**
    * @private
    */
-  _renderPageChunk;
+  _renderPageChunk: any;
   /**
    * @private
    */
-  _pumpOperatorList;
+  _pumpOperatorList: any;
   /**
    * @private
    */
-  _abortOperatorList;
+  _abortOperatorList: any;
   /**
    * @type {Object} Returns page stats, if enabled; returns `null` otherwise.
    */

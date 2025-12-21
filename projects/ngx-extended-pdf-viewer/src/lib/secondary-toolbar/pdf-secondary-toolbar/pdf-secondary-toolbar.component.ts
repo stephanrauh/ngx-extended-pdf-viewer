@@ -31,13 +31,13 @@ export class PdfSecondaryToolbarComponent implements OnChanges, AfterViewInit, O
   public customSecondaryToolbar: TemplateRef<any> | undefined;
 
   @Input()
-  public secondaryToolbarTop;
+  public secondaryToolbarTop: any;
 
   @Input()
-  public mobileFriendlyZoomScale: number;
+  public mobileFriendlyZoomScale!: number;
 
   @Input()
-  public localizationInitialized: boolean;
+  public localizationInitialized!: boolean;
 
   @Output()
   public spreadChange = new EventEmitter<'off' | 'even' | 'odd'>();
@@ -94,7 +94,7 @@ export class PdfSecondaryToolbarComponent implements OnChanges, AfterViewInit, O
     this.spreadChange.emit(newSpread);
   }
 
-  public ngOnChanges(changes: SimpleChanges): void {
+  public ngOnChanges(_changes: SimpleChanges): void {
     setTimeout(() => this.checkVisibility());
   }
 
@@ -109,7 +109,7 @@ export class PdfSecondaryToolbarComponent implements OnChanges, AfterViewInit, O
 
       const config = { attributes: true, childList: true, subtree: true };
 
-      this.classMutationObserver = new MutationObserver((mutationList: MutationRecord[], observer) => {
+      this.classMutationObserver = new MutationObserver((mutationList: MutationRecord[], _observer) => {
         for (const mutation of mutationList) {
           if (mutation.type === 'attributes') {
             if (mutation.attributeName === 'class') {

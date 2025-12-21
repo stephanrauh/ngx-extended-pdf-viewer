@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, EventEmitter, NgZone } from '@angular/core';
-import { NgxFormSupport, HtmlFormElement } from './ngx-form-support';
+import { NgxFormSupport } from './ngx-form-support';
 import { FormDataType } from './ngx-extended-pdf-viewer.component';
 import { IPDFViewerApplication } from './options/pdf-viewer-application';
 

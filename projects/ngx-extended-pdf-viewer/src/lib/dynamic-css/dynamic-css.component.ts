@@ -185,7 +185,7 @@ export class DynamicCssComponent implements OnDestroy {
   constructor(
     private readonly renderer: Renderer2,
     @Inject(DOCUMENT) private readonly document: Document,
-    @Inject(PLATFORM_ID) private readonly platformId,
+    @Inject(PLATFORM_ID) private readonly platformId: Object,
     private readonly pdfCspPolicyService: PdfCspPolicyService,
     @Inject(CSP_NONCE) @Optional() private readonly nonce?: string | null
   ) {

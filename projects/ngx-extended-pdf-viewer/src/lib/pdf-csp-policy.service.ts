@@ -1,4 +1,4 @@
-import { CSP_NONCE, Inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { TrustedTypesWindow } from 'trusted-types/lib';
 
 @Injectable({
@@ -6,8 +6,6 @@ import { TrustedTypesWindow } from 'trusted-types/lib';
 })
 export class PdfCspPolicyService {
   private sanitizer: any = undefined; // TrustedTypePolicy;
-
-  @Inject(CSP_NONCE) private csp_nonce: string | null | undefined;
 
   constructor() {}
 
@@ -93,7 +91,7 @@ export class PdfCspPolicyService {
     }
   }
 
-  public generateTrustedURL(sourcePath) {
+  public generateTrustedURL(sourcePath: string) {
     if (typeof window === 'undefined') {
       // server-side rendering
       return;

@@ -4,7 +4,7 @@ export declare class INgxConsole {
   static warn(...args: any[]): void;
   static info(...args: any[]): void;
   static debug(...args: any[]): void;
-  set ngxConsoleFilter(filter: (_level, _message) => boolean);
+  set ngxConsoleFilter(filter: (_level: any, _message: any) => boolean);
 
   reset(): void;
 }
