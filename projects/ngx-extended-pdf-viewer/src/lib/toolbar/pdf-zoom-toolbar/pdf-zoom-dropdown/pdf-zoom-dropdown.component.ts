@@ -47,12 +47,11 @@ export class PdfZoomDropdownComponent {
       };
     }
     const percentage = Math.round(numericalValue * 100);
-    const percentageAsString = isNaN(percentage) ? '' : String(percentage);
     return {
       id: `scale_${percentage}`,
       value: String(numericalValue),
       dataL10nId: 'pdfjs-page-scale-percent',
-      dataL10nArgs: `{ "scale": ${percentageAsString} }`,
+      dataL10nArgs: JSON.stringify({ scale: percentage }),
       displayValue: '',
     };
   }

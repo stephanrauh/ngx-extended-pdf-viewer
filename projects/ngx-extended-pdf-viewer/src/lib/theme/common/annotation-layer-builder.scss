@@ -186,9 +186,20 @@ ngx-extended-pdf-viewer {
     }
 
     .textWidgetAnnotation :is(input, textarea),
-    .choiceWidgetAnnotation select,
     .buttonWidgetAnnotation:is(.checkBox, .radioButton) input {
-      background-color: rgba(0, 54, 255, 0.13) !important;
+      background-image: var(--annotation-unfocused-field-background);
+      border: 2px solid var(--input-unfocused-border-color);
+      box-sizing: border-box !important;
+      font: calc(9px * var(--total-scale-factor)) sans-serif;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      vertical-align: top;
+      width: 100%;
+    }
+
+    .choiceWidgetAnnotation select {
+      background-color: rgba(0, 54, 255, 0.13);
       border: 2px solid var(--input-unfocused-border-color);
       box-sizing: border-box !important;
       font: calc(9px * var(--total-scale-factor)) sans-serif;
