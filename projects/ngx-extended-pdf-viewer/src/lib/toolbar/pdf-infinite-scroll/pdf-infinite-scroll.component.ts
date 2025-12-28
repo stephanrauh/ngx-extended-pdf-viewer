@@ -1,4 +1,4 @@
-import { Component, effect, input, model, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, Component, effect, input, model, OnDestroy } from '@angular/core';
 import { ScrollMode } from '../../options/pdf-scroll-mode';
 import { PageViewModeType, ScrollModeType } from '../../options/pdf-viewer';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
@@ -22,12 +22,12 @@ export class PdfInfiniteScrollComponent implements OnDestroy {
 
   private PDFViewerApplication: IPDFViewerApplication | undefined;
 
-  constructor(public notificationService: PDFNotificationService) {
+  constructor(public notificationService: PDFNotificationService, private cdr: ChangeDetectorRef) {
     effect(() => {
       this.PDFViewerApplication = notificationService.onPDFJSInitSignal();
     });
     this.onClick = () => {
-      queueMicrotask(() => {
+      queueMicrotask(this.asyncWithCD(() => {
         const currentViewMode = this.pageViewMode();
         const currentScrollMode = this.scrollMode();
         if (currentViewMode === 'infinite-scroll') {
@@ -38,7 +38,21 @@ export class PdfInfiniteScrollComponent implements OnDestroy {
           }
           this.pageViewMode.set('infinite-scroll');
         }
-      });
+      }));
+    };
+  }
+
+  private isZoneless(): boolean {
+    const Zone = (globalThis as any).Zone;
+    return typeof Zone === 'undefined' || !Zone?.current;
+  }
+
+  private asyncWithCD(callback: () => void): () => void {
+    return () => {
+      callback();
+      if (this.isZoneless()) {
+        this.cdr.detectChanges();
+      }
     };
   }
 

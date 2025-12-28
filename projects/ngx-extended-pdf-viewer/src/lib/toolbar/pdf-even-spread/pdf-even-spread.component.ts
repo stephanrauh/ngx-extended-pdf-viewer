@@ -1,4 +1,4 @@
-import { Component, input, effect } from '@angular/core';
+import { ChangeDetectorRef, Component, input, effect } from '@angular/core';
 import { ScrollModeType } from '../../options/pdf-viewer';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { SpreadType } from '../../options/spread-type';
@@ -20,7 +20,7 @@ export class PdfEvenSpreadComponent {
 
   private PDFViewerApplication: IPDFViewerApplication | undefined;
 
-  constructor(notificationService: PDFNotificationService) {
+  constructor(notificationService: PDFNotificationService, private cdr: ChangeDetectorRef) {
     effect(() => {
       this.PDFViewerApplication = notificationService.onPDFJSInitSignal();
       if (this.PDFViewerApplication) {
@@ -29,12 +29,26 @@ export class PdfEvenSpreadComponent {
     });
   }
 
+  private isZoneless(): boolean {
+    const Zone = (globalThis as any).Zone;
+    return typeof Zone === 'undefined' || !Zone?.current;
+  }
+
+  private asyncWithCD(callback: () => void): () => void {
+    return () => {
+      callback();
+      if (this.isZoneless()) {
+        this.cdr.detectChanges();
+      }
+    };
+  }
+
   public onPdfJsInit(): void {
     this.PDFViewerApplication?.eventBus.on('spreadmodechanged', (event) => {
-      queueMicrotask(() => {
+      queueMicrotask(this.asyncWithCD(() => {
         const modes = ['off', 'odd', 'even'] as Array<SpreadType>;
         this.spread = modes[event.mode];
-      });
+      }));
     });
   }
 

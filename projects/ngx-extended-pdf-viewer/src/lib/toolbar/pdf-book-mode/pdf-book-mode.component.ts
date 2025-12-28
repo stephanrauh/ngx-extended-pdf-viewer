@@ -1,4 +1,4 @@
-import { Component, input, model, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, Component, input, model, OnDestroy } from '@angular/core';
 import { PageViewModeType, ScrollModeType } from '../../options/pdf-viewer';
 import { ResponsiveVisibility } from '../../responsive-visibility';
 
@@ -17,11 +17,25 @@ export class PdfBookModeComponent implements OnDestroy {
 
   public onClick?: () => void;
 
-  constructor() {
+  constructor(private cdr: ChangeDetectorRef) {
     this.onClick = () => {
-      setTimeout(() => {
+      setTimeout(this.asyncWithCD(() => {
         this.pageViewMode.set('book');
-      });
+      }));
+    };
+  }
+
+  private isZoneless(): boolean {
+    const Zone = (globalThis as any).Zone;
+    return typeof Zone === 'undefined' || !Zone?.current;
+  }
+
+  private asyncWithCD(callback: () => void): () => void {
+    return () => {
+      callback();
+      if (this.isZoneless()) {
+        this.cdr.detectChanges();
+      }
     };
   }
 

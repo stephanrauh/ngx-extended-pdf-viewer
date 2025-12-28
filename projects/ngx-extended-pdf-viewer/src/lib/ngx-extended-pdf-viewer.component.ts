@@ -239,11 +239,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       this.scrollMode.set(ScrollModeType.vertical);
       this.pdfScriptLoaderService.PDFViewerApplication.eventBus.dispatch('switchscrollmode', { mode: Number(this.scrollMode()) });
     }
-    setTimeout(() => {
+    setTimeout(this.asyncWithCD(() => {
       // this timeout is necessary because @Input() is called before the child components are initialized
       // (and the DynamicCssComponent is a child component)
       this.dynamicCSSComponent()?.removeScrollbarInInfiniteScrollMode(false, this.pageViewMode(), this.primaryMenuVisible, this, this.logLevel());
-    });
+    }));
   }
 
   // since pdf.js, our custom single-page-mode has been replaced by the standard scrollMode="page"
@@ -264,11 +264,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     if (this.scrollMode() === ScrollModeType.page) {
       this.scrollMode.set(ScrollModeType.vertical);
     }
-    setTimeout(() => {
+    setTimeout(this.asyncWithCD(() => {
       // this timeout is necessary because @Input() is called before the child components are initialized
       // (and the DynamicCssComponent is a child component)
       this.dynamicCSSComponent()?.removeScrollbarInInfiniteScrollMode(true, this.pageViewMode(), this.primaryMenuVisible, this, this.logLevel());
-    });
+    }));
   }
 
   private redrawViewer(viewMode: PageViewModeType): void {
@@ -569,11 +569,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       this.autoHeight = true;
     }
 
-    setTimeout(() => {
+    setTimeout(this.asyncWithCD(() => {
       // this timeout is necessary because @Input() is called before the child components are initialized
       // (and the DynamicCssComponent is a child component)
       this.dynamicCSSComponent()?.checkHeight(this, this.logLevel());
-    });
+    }));
   });
 
   public backgroundColor = input(undefined);
@@ -1088,7 +1088,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     }
 
     this.hideToolbarIfItIsEmpty();
-    setTimeout(() => this.calcViewerPositionTop());
+    setTimeout(this.asyncWithCD(() => this.calcViewerPositionTop()));
   });
 
   // @ts-ignore TS6133 - Used for side effects only
@@ -1282,6 +1282,41 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     }
   }
 
+  // #TODO Zoneless change detection support - add issue number before committing
+  /**
+   * Detects if the application is running in zoneless mode (Angular 21+)
+   * @returns true if zone.js is not present
+   */
+  private isZoneless(): boolean {
+    const Zone = (globalThis as any).Zone;
+    return typeof Zone === 'undefined' || !Zone?.current;
+  }
+
+  /**
+   * Wraps an async callback to ensure change detection in zoneless mode.
+   * In zone.js mode: Zero overhead - Zone handles change detection automatically
+   * In zoneless mode: Manually triggers change detection after callback
+   *
+   * @param callback The function to execute
+   * @returns Wrapped function that triggers CD in zoneless mode
+   *
+   * @example
+   * // Instead of:
+   * queueMicrotask(() => this.progress.emit(x));
+   *
+   * // Use:
+   * queueMicrotask(this.asyncWithCD(() => this.progress.emit(x)));
+   */
+  private asyncWithCD(callback: () => void): () => void {
+    return () => {
+      callback();
+      if (this.isZoneless()) {
+        this.cdr.detectChanges();
+      }
+    };
+  }
+  // #TODO End of zoneless support
+
   private reportSourceChanges(change: { sourcefile: string }): void {
     this._src = change.sourcefile;
     this.srcChangeTriggeredByUser = true;
@@ -1361,7 +1396,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
         if (this.root()?.nativeElement?.offsetParent) {
           resolve();
         } else {
-          this.checkRootElementTimeout = setTimeout(checkRootElement, 50);
+          this.checkRootElementTimeout = setTimeout(this.asyncWithCD(checkRootElement), 50);
         }
       };
       checkRootElement();
@@ -1539,9 +1574,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     const onLoaded = () => {
       if (!this.pdfScriptLoaderService.PDFViewerApplication.eventBus) {
         console.error("Eventbus is null? Let's try again.");
-        setTimeout(() => {
+        setTimeout(this.asyncWithCD(() => {
           onLoaded();
-        }, 10);
+        }), 10);
       } else {
         this.pdfScriptLoaderService.PDFViewerApplication.eventBus.on('sourcechanged', this.reportSourceChanges.bind(this));
         this.pdfScriptLoaderService.PDFViewerApplication.eventBus.on('afterprint', this.afterPrintListener);
@@ -1563,7 +1598,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
     this.activateTextlayerIfNecessary(null);
 
-    setTimeout(() => {
+    setTimeout(this.asyncWithCD(() => {
       if (!this.pdfScriptLoaderService.shuttingDown) {
         // hurried users sometimes reload the PDF before it has finished initializing
         // This initializes the webviewer, the file may be passed in to it to initialize the viewer with a pdf directly
@@ -1616,7 +1651,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
           document.getElementsByTagName('body')[0].appendChild(pc);
         }
       }
-    }, 0);
+    }), 0);
   }
 
   private addTranslationsUnlessProvidedByTheUser() {
@@ -1646,7 +1681,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       this.originalColorScheme = docStyle.getPropertyValue('color-scheme') || '';
     }
 
-    queueMicrotask(() => this.notificationService.onPDFJSInitSignal.set(this.pdfScriptLoaderService.PDFViewerApplication));
+    queueMicrotask(this.asyncWithCD(() => this.notificationService.onPDFJSInitSignal.set(this.pdfScriptLoaderService.PDFViewerApplication)));
   }
 
   public onSpreadChange(newSpread: 'off' | 'even' | 'odd'): void {
@@ -1668,10 +1703,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       if (!this.handTool()) {
         setTextLayerMode(pdfDefaultOptions.textLayerMode);
         if (this.showFindButton() === undefined) {
-          setTimeout(() => {
+          setTimeout(this.asyncWithCD(() => {
             this.toggleVisibility('viewFind');
             this.toggleVisibility('findbar');
-          });
+          }));
         }
       } else {
         setTextLayerMode(this.showHandToolButton() ? pdfDefaultOptions.textLayerMode : 0);
@@ -1698,10 +1733,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     } else {
       setTextLayerMode(pdfDefaultOptions.textLayerMode);
       if (this.showFindButton() === undefined) {
-        setTimeout(() => {
+        setTimeout(this.asyncWithCD(() => {
           this.toggleVisibility('viewFind');
           this.toggleVisibility('findbar');
-        });
+        }));
       }
     }
   }
@@ -1803,7 +1838,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     if (this._src) {
       this.pdfScriptLoaderService.ngxExtendedPdfViewerIncompletelyInitialized = false;
 
-      setTimeout(async () => this.dynamicCSSComponent()?.checkHeight(this, this.logLevel()), 100);
+      setTimeout(this.asyncWithCD(async () => this.dynamicCSSComponent()?.checkHeight(this, this.logLevel())), 100);
       // open a file in the viewer
       if (!!this._src) {
         let workerSrc: string | (() => string) = pdfDefaultOptions.workerSrc;
@@ -1847,80 +1882,78 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
         await PDFViewerApplication.open(options);
         this.pdfLoadingStarts.emit({});
-        setTimeout(async () => this.setZoom());
+        setTimeout(this.asyncWithCD(async () => this.setZoom()));
       }
-      setTimeout(() => {
+      setTimeout(this.asyncWithCD(() => {
         if (!this.pdfScriptLoaderService.shuttingDown) {
           // hurried users sometimes reload the PDF before it has finished initializing
           if (this.page()) {
             PDFViewerApplication.page = Number(this.page());
           }
         }
-      }, 100);
+      }), 100);
     }
   }
 
   private registerEventListeners(PDFViewerApplication: IPDFViewerApplication) {
     PDFViewerApplication.eventBus.on('annotation-editor-event', (x: AnnotationEditorEvent) => {
-      queueMicrotask(() => {
+      queueMicrotask(this.asyncWithCD(() => {
         if (this.destroyInitialization) return;
         this.annotationEditorEvent.emit(x);
-      });
+      }));
     });
 
     PDFViewerApplication.eventBus.on('toggleSidebar', (x: ToggleSidebarEvent) => {
-      queueMicrotask(() => {
+      queueMicrotask(this.asyncWithCD(() => {
         this.sidebarVisible.set(x.visible);
-      });
+      }));
     });
 
     PDFViewerApplication.eventBus.on('textlayerrendered', (x: TextLayerRenderedEvent) => {
-      queueMicrotask(() => this.textLayerRendered.emit(x));
+      queueMicrotask(this.asyncWithCD(() => this.textLayerRendered.emit(x)));
     });
 
     PDFViewerApplication.eventBus.on('annotationeditormodechanged', (x: AnnotationEditorEditorModeChangedEvent) => {
       // we're using a timeout here to make sure the editor is already visible
       // when the event is caught. Pdf.js fires it a bit early.
-      setTimeout(() => {
+      setTimeout(this.asyncWithCD(() => {
         if (this.destroyInitialization) return;
         this.annotationEditorModeChanged.emit(x);
-      });
+      }));
     });
 
     PDFViewerApplication.eventBus.on('scrollmodechanged', (x: ScrollModeChangedEvent) => {
-      queueMicrotask(() => {
+      queueMicrotask(this.asyncWithCD(() => {
         this.scrollMode.set(x.mode);
         if (x.mode === ScrollModeType.page) {
           if (this.pageViewMode() !== 'single') {
             this.pageViewMode.set('single');
           }
         }
-      });
+      }));
     });
     // #2673 Listen for pageViewMode changes to restore height when leaving infinite-scroll
     PDFViewerApplication.eventBus.on('pageviewmodechanged', (x: any) => {
       if (x.mode === 'single') {
         // Restore height after switching away from infinite-scroll
-        setTimeout(() => {
+        setTimeout(this.asyncWithCD(() => {
           this.dynamicCSSComponent()?.removeScrollbarInInfiniteScrollMode(true, this.pageViewMode(), this.primaryMenuVisible, this, this.logLevel());
-        });
+        }));
       }
     });
     // #2673 end of modification
     PDFViewerApplication.eventBus.on('progress', (x: ProgressBarEvent) => {
-      queueMicrotask(() => this.progress.emit(x));
+      queueMicrotask(this.asyncWithCD(() => this.progress.emit(x)));
     });
     PDFViewerApplication.eventBus.on('findbarclose', () => {
-      queueMicrotask(() => {
+      queueMicrotask(this.asyncWithCD(() => {
         this.findbarVisible.set(false);
-        this.cdr.markForCheck();
-      });
+      }));
     });
     PDFViewerApplication.eventBus.on('findbaropen', () => {
-      queueMicrotask(() => {
+      queueMicrotask(this.asyncWithCD(() => {
         this.findbarVisible.set(true);
-        this.cdr.markForCheck();
-      });
+      }));
     });
     PDFViewerApplication.eventBus.on('propertiesdialogclose', () => {
       this.propertiesDialogVisible.set(false);
@@ -1930,7 +1963,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     });
 
     PDFViewerApplication.eventBus.on('pagesloaded', (x: PagesLoadedEvent) => {
-      queueMicrotask(() => this.pagesLoaded.emit(x));
+      queueMicrotask(this.asyncWithCD(() => this.pagesLoaded.emit(x)));
       this.dynamicCSSComponent()?.removeScrollbarInInfiniteScrollMode(false, this.pageViewMode(), this.primaryMenuVisible, this, this.logLevel());
       if (this.rotation() !== undefined && this.rotation() !== null) {
         const r = Number(this.rotation());
@@ -1938,7 +1971,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
           PDFViewerApplication.pdfViewer.pagesRotation = r;
         }
       }
-      setTimeout(() => {
+      setTimeout(this.asyncWithCD(() => {
         if (!this.pdfScriptLoaderService.shuttingDown) {
           // hurried users sometimes reload the PDF before it has finished initializing
           if (this.nameddest()) {
@@ -1949,25 +1982,25 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
             PDFViewerApplication.pdfViewer.currentPageLabel = this.pageLabel();
           }
         }
-      });
+      }));
       this.setZoom();
     });
     PDFViewerApplication.eventBus.on('pagerendered', (x: PageRenderedEvent) => {
-      queueMicrotask(() => {
+      queueMicrotask(this.asyncWithCD(() => {
         this.pageRendered.emit(x);
         this.dynamicCSSComponent()?.removeScrollbarInInfiniteScrollMode(false, this.pageViewMode(), this.primaryMenuVisible, this, this.logLevel());
-      });
+      }));
     });
     PDFViewerApplication.eventBus.on('pagerender', (x: PageRenderEvent) => {
-      queueMicrotask(() => {
+      queueMicrotask(this.asyncWithCD(() => {
         this.pageRender.emit(x);
-      });
+      }));
     });
 
     PDFViewerApplication.eventBus.on('download', (x: PdfDownloadedEvent) => {
-      queueMicrotask(() => {
+      queueMicrotask(this.asyncWithCD(() => {
         this.pdfDownloaded.emit(x);
-      });
+      }));
     });
     PDFViewerApplication.eventBus.on('scalechanging', (x: ScaleChangingEvent) => {
       // #3060 modified by ngx-extended-pdf-viewer - diagnostic logging for iOS scale bug
@@ -1977,11 +2010,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
         );
       }
       // #3060 end of modification by ngx-extended-pdf-viewer
-      setTimeout(() => {
+      setTimeout(this.asyncWithCD(() => {
         if (this.destroyInitialization) return;
         this.currentZoomFactor.emit(x.scale);
-        this.cdr.markForCheck();
-      });
+      }));
 
       if (x.presetValue !== 'auto' && x.presetValue !== 'page-fit' && x.presetValue !== 'page-actual' && x.presetValue !== 'page-width') {
         // ignore rounding differences
@@ -1995,12 +2027,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     });
 
     PDFViewerApplication.eventBus.on('rotationchanging', (x: PagesRotationEvent) => {
-      queueMicrotask(() => {
+      queueMicrotask(this.asyncWithCD(() => {
         this.rotation.set(x.pagesRotation as 0 | 90 | 180 | 270);
-      });
+      }));
     });
     PDFViewerApplication.eventBus.on('fileinputchange', (x: FileInputChanged) => {
-      queueMicrotask(() => {
+      queueMicrotask(this.asyncWithCD(() => {
         if (x.fileInput.files && x.fileInput.files.length >= 1) {
           // drag and drop
           this.srcChangeTriggeredByUser = true;
@@ -2010,16 +2042,16 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
           const path = x.fileInput?.value?.replace('C:\\fakepath\\', '');
           this.src.set(path);
         }
-      });
+      }));
     });
     PDFViewerApplication.eventBus.on('cursortoolchanged', (x: HandtoolChanged) => {
-      queueMicrotask(() => {
+      queueMicrotask(this.asyncWithCD(() => {
         this.handTool.set(x.tool === PdfCursorTools.HAND);
-      });
+      }));
     });
 
     PDFViewerApplication.eventBus.on('sidebarviewchanged', (x: SidebarviewChange) => {
-      queueMicrotask(() => {
+      queueMicrotask(this.asyncWithCD(() => {
         this.sidebarVisible.set(x.view > 0);
         if (x.view > 0) {
           this.activeSidebarView.set(x.view);
@@ -2027,17 +2059,17 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
         if (this.sidebarComponent) {
           this.sidebarComponent()?.showToolbarWhenNecessary();
         }
-      });
+      }));
     });
 
     PDFViewerApplication.eventBus.on('storedvaluesavailable', (event) => {
-      queueMicrotask(() => {
+      queueMicrotask(this.asyncWithCD(() => {
         this.handleStoredValuesAvailable(event);
-      });
+      }));
     });
 
     PDFViewerApplication.eventBus.on('documentloaded', (pdfLoadedEvent: PdfDocumentLoadedEvent) => {
-      queueMicrotask(async () => {
+      queueMicrotask(this.asyncWithCD(async () => {
         const pages = pdfLoadedEvent.source.pagesCount;
         this.pageLabel.set(undefined);
         if (this.page() && this.page()! >= pages) {
@@ -2057,27 +2089,27 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
         // If initial form data was provided, update the baseline for change detection
         // after the document is loaded and form fields are initialized
         if (this.initialAngularFormData && PDFViewerApplication.setInitialAnnotationValues) {
-          setTimeout(() => {
+          setTimeout(this.asyncWithCD(() => {
             PDFViewerApplication.setInitialAnnotationValues?.();
-          }, 200); // Allow time for form fields to be rendered and initialized
+          }), 200); // Allow time for form fields to be rendered and initialized
         }
         // #2691 end of modification by ngx-extended-pdf-viewer
-      });
+      }));
     });
 
     PDFViewerApplication.eventBus.on('spreadmodechanged', (event) => {
-      queueMicrotask(() => {
+      queueMicrotask(this.asyncWithCD(() => {
         const modes = ['off', 'odd', 'even'] as Array<SpreadType>;
         this.spread.set(modes[event.mode]);
-      });
+      }));
     });
 
     const hideSidebarToolbar = () => {
-      queueMicrotask(() => {
+      queueMicrotask(this.asyncWithCD(() => {
         if (this.sidebarComponent) {
           this.sidebarComponent()?.showToolbarWhenNecessary();
         }
-      });
+      }));
     };
 
     PDFViewerApplication.eventBus.on('outlineloaded', hideSidebarToolbar);
@@ -2088,24 +2120,24 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
     PDFViewerApplication.eventBus.on('annotationlayerrendered', (event: AnnotationLayerRenderedEvent) => {
       const div = event.source.div;
-      queueMicrotask(() => {
+      queueMicrotask(this.asyncWithCD(() => {
         event.initialFormDataStoredInThePDF = this.formSupport.initialFormDataStoredInThePDF;
         this.annotationLayerRendered.emit(event);
         this.enableOrDisableForms(div, true);
-      });
+      }));
     });
-    PDFViewerApplication.eventBus.on('annotationeditorlayerrendered', (event) => queueMicrotask(() => this.annotationEditorLayerRendered.emit(event)));
-    PDFViewerApplication.eventBus.on('xfalayerrendered', (event) => queueMicrotask(() => this.xfaLayerRendered.emit(event)));
-    PDFViewerApplication.eventBus.on('outlineloaded', (event) => queueMicrotask(() => this.outlineLoaded.emit(event)));
-    PDFViewerApplication.eventBus.on('attachmentsloaded', (event) => queueMicrotask(() => this.attachmentsloaded.emit(event)));
-    PDFViewerApplication.eventBus.on('layersloaded', (event) => queueMicrotask(() => this.layersloaded.emit(event)));
+    PDFViewerApplication.eventBus.on('annotationeditorlayerrendered', (event) => queueMicrotask(this.asyncWithCD(() => this.annotationEditorLayerRendered.emit(event))));
+    PDFViewerApplication.eventBus.on('xfalayerrendered', (event) => queueMicrotask(this.asyncWithCD(() => this.xfaLayerRendered.emit(event))));
+    PDFViewerApplication.eventBus.on('outlineloaded', (event) => queueMicrotask(this.asyncWithCD(() => this.outlineLoaded.emit(event))));
+    PDFViewerApplication.eventBus.on('attachmentsloaded', (event) => queueMicrotask(this.asyncWithCD(() => this.attachmentsloaded.emit(event))));
+    PDFViewerApplication.eventBus.on('layersloaded', (event) => queueMicrotask(this.asyncWithCD(() => this.layersloaded.emit(event))));
     PDFViewerApplication.eventBus.on('presentationmodechanged', () => {
       const PDFViewerApplication: IPDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
       PDFViewerApplication?.pdfViewer?.destroyBookMode();
     });
 
     PDFViewerApplication.eventBus.on('updatefindcontrolstate', (x: FindResult) => {
-      queueMicrotask(() => {
+      queueMicrotask(this.asyncWithCD(() => {
         let type = PDFViewerApplication.findController.state?.type ?? 'find';
         if (type === 'again') {
           type = 'findagain';
@@ -2130,12 +2162,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
         if (this.updateFindState) {
           this.updateFindState.emit(x.state);
         }
-      });
+      }));
     });
     PDFViewerApplication.eventBus.on('updatefindmatchescount', (x: FindResult) => {
       x.matchesCount.matches = PDFViewerApplication.findController._pageMatches ?? [];
       x.matchesCount.matchesLength = PDFViewerApplication.findController._pageMatchesLength ?? [];
-      queueMicrotask(() =>
+      queueMicrotask(this.asyncWithCD(() =>
         this.updateFindMatchesCount.emit({
           caseSensitive: PDFViewerApplication.findController.state?.caseSensitive ?? false,
           entireWord: PDFViewerApplication.findController.state?.entireWord ?? false,
@@ -2149,13 +2181,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
           matches: x.matchesCount.matches,
           matchesLength: x.matchesCount.matchesLength,
         }),
-      );
+      ));
     });
 
     PDFViewerApplication.eventBus.on('pagechanging', () => {
       if (!this.pdfScriptLoaderService.shuttingDown) {
         // hurried users sometimes reload the PDF before it has finished initializing
-        queueMicrotask(() => {
+        queueMicrotask(this.asyncWithCD(() => {
           const currentPage = PDFViewerApplication.pdfViewer.currentPageNumber;
           const currentPageLabel = PDFViewerApplication.pdfViewer.currentPageLabel;
 
@@ -2165,7 +2197,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
           if (currentPageLabel !== this.pageLabel()) {
             this.pageLabel.set(currentPageLabel);
           }
-        });
+        }));
       }
     });
   }
@@ -2556,13 +2588,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       }
     }
     if (this.hasSignature) {
-      queueMicrotask(() => {
+      queueMicrotask(this.asyncWithCD(() => {
         // Defer scrolling to ensure it happens after any other UI updates
-        setTimeout(() => {
+        setTimeout(this.asyncWithCD(() => {
           const viewerContainer = document.querySelector('#viewerContainer');
           viewerContainer?.scrollBy(0, -32); // Adjust the scroll position
-        });
-      });
+        }));
+      }));
     }
   }
 

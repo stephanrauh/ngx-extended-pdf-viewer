@@ -21,6 +21,29 @@ Built on Mozilla’s pdf.js and extended with dozens of enhancements, it's ideal
 
 In general, I aim to support the last four Angular versions (roughly two years of updates), but this may not always be feasible. Security requirements sometimes necessitate raising the minimum Angular version. You can't have an omelette without breaking an egg.
 
+✅ **Angular 21+ Zoneless Support**
+
+**ngx-extended-pdf-viewer now fully supports Angular 21+ zoneless change detection!** The library works seamlessly in both zone.js and zoneless applications with zero configuration required.
+
+**Using Zoneless (Default in Angular 21+):**
+Simply use the library as normal - it will automatically detect zoneless mode and trigger change detection appropriately.
+
+**Using Zone.js (Optional):**
+If you prefer to use zone.js in your Angular 21+ application, add this to your `app.config.ts`:
+
+```typescript
+import { provideZoneChangeDetection } from '@angular/core';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true }),
+    // ... other providers
+  ]
+};
+```
+
+Both modes are fully supported with the same API and features. See the [changelog](./changelog.md) for details on the zoneless implementation.
+
 ### 1. Installation
 
 Install via npm:

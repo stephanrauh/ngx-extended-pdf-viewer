@@ -1,4 +1,4 @@
-import { Component, effect, input } from '@angular/core';
+import { ChangeDetectorRef, Component, effect, input } from '@angular/core';
 import { PositioningService } from '../../dynamic-css/positioning.service';
 import { AnnotationEditorEditorModeChangedEvent } from '../../events/annotation-editor-mode-changed-event';
 import { FocusManagementService } from '../../focus-management.service';
@@ -23,6 +23,7 @@ export class PdfHighlightEditorComponent {
   constructor(
     notificationService: PDFNotificationService,
     private focusManagement: FocusManagementService,
+    private cdr: ChangeDetectorRef,
   ) {
     effect(() => {
       this.PDFViewerApplication = notificationService.onPDFJSInitSignal();
@@ -32,9 +33,23 @@ export class PdfHighlightEditorComponent {
     });
   }
 
+  private isZoneless(): boolean {
+    const Zone = (globalThis as any).Zone;
+    return typeof Zone === 'undefined' || !Zone?.current;
+  }
+
+  private asyncWithCD(callback: () => void): () => void {
+    return () => {
+      callback();
+      if (this.isZoneless()) {
+        this.cdr.detectChanges();
+      }
+    };
+  }
+
   private onPdfJsInit() {
     this.PDFViewerApplication?.eventBus.on('annotationeditormodechanged', ({ mode }: AnnotationEditorEditorModeChangedEvent) => {
-      setTimeout(() => {
+      setTimeout(this.asyncWithCD(() => {
         const wasSelected = this.isSelected;
         this.isSelected = mode === 9;
 
@@ -48,7 +63,7 @@ export class PdfHighlightEditorComponent {
         }
 
         // No manual change detection needed - signals handle this automatically
-      });
+      }));
     });
   }
 

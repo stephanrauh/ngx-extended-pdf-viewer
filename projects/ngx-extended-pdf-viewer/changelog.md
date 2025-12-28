@@ -1,4 +1,3 @@
-- 26.0.0-alpha.0 Fixed signal migration bugs: showSecondaryToolbarButton and hideSidebarToolbar not being called as functions. Converted secondaryMenuIsEmpty to a signal and improved visibility detection algorithm to work correctly with hidden popup menus and count all visible buttons (not just the first one). Fixed critical bug in PdfShyButtonService where empty string secondaryMenuId caused all buttons to overwrite each other (changed ?? to || operator to properly handle empty strings). Removed redundant static hidden class from additionalSidebarContainer. Added zoneless mode support to secondary toolbar component.
 - till 0.1.3 initial version based on the embeddable PDF-Viewer https://github.com/legalthings/pdf.js-viewer
 - 0.2.0 use Mozilla's pdf.js (https://github.com/mozilla/pdf.js) directly. Update to pdf.js 2.0.641.
 - 0.2.1 minor bugfixes

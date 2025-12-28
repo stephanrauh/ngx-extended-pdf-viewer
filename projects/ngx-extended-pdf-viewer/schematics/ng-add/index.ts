@@ -50,11 +50,11 @@ function isSupportedAngularVersion(version: AngularVersion | null): boolean {
     return true;
   }
 
-  const isSupported = version.major >= 17 && version.major <= 20;
+  const isSupported = version.major >= 17 && version.major <= 22;
 
   if (!isSupported) {
-    console.log(`Warning: Angular ${version.major}.${version.minor}.${version.patch} may not be fully supported.`);
-    console.log('Supported Angular versions: 17.x - 20.x');
+    console.log(`Warning: Angular ${version.major}.${version.minor}.${version.patch} may not be fully tested.`);
+    console.log('Supported Angular versions: 17.x - 21.x (22.x may work but is untested)');
   }
 
   return true; // Still proceed, but with warning
@@ -95,6 +95,20 @@ export function ngAdd(options: Schema): Rule {
     // Detect and validate Angular version
     const angularVersion = detectAngularVersion(tree);
     isSupportedAngularVersion(angularVersion);
+
+    // Inform users about Angular 21+ zoneless support
+    if (angularVersion && angularVersion.major >= 21) {
+      console.log('');
+      console.log('✅ Angular 21+ detected - Zoneless support enabled!');
+      console.log('  ngx-extended-pdf-viewer fully supports Angular 21+ zoneless change detection.');
+      console.log('  The library will automatically detect and work in both zone.js and zoneless modes.');
+      console.log('');
+      console.log('  No configuration required for zoneless mode (default in Angular 21+).');
+      console.log('');
+      console.log('  Optional: To use zone.js instead, add to your app.config.ts:');
+      console.log('    provideZoneChangeDetection({ eventCoalescing: true })');
+      console.log('');
+    }
 
     // Load workspace config to get default project
     const workspaceConfig = loadWorkspaceConfig(tree);

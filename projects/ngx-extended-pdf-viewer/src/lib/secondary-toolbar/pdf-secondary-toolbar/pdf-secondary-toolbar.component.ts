@@ -1,6 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
 import {
   AfterViewInit,
+  ChangeDetectorRef,
   Component,
   effect,
   ElementRef,
@@ -47,7 +48,8 @@ export class PdfSecondaryToolbarComponent implements AfterViewInit, OnDestroy {
     public notificationService: PDFNotificationService,
     @Inject(PLATFORM_ID) private platformId: Object,
     public pdfShyButtonService: PdfShyButtonService,
-    private ngxExtendedPdfViewerService: NgxExtendedPdfViewerService
+    private ngxExtendedPdfViewerService: NgxExtendedPdfViewerService,
+    private cdr: ChangeDetectorRef
   ) {
     effect(() => {
       this.PDFViewerApplication = notificationService.onPDFJSInitSignal();
@@ -65,8 +67,22 @@ export class PdfSecondaryToolbarComponent implements AfterViewInit, OnDestroy {
       this.localizationInitialized();
 
       // Same logic as ngOnChanges
-      setTimeout(() => this.checkVisibility());
+      setTimeout(this.asyncWithCD(() => this.checkVisibility()));
     });
+  }
+
+  private isZoneless(): boolean {
+    const Zone = (globalThis as any).Zone;
+    return typeof Zone === 'undefined' || !Zone?.current;
+  }
+
+  private asyncWithCD(callback: () => void): () => void {
+    return () => {
+      callback();
+      if (this.isZoneless()) {
+        this.cdr.detectChanges();
+      }
+    };
   }
 
   public onPdfJsInit(): void {
@@ -79,7 +95,7 @@ export class PdfSecondaryToolbarComponent implements AfterViewInit, OnDestroy {
   }
 
   public updateUIState(): void {
-    setTimeout(() => {
+    setTimeout(this.asyncWithCD(() => {
       const currentPage = this.PDFViewerApplication?.pdfViewer.currentPageNumber;
       const previousButton = document.getElementById('previousPage') as HTMLButtonElement;
       if (previousButton) {
@@ -91,7 +107,7 @@ export class PdfSecondaryToolbarComponent implements AfterViewInit, OnDestroy {
         this.disableNextPage = currentPage === this.PDFViewerApplication?.pagesCount;
         nextButton.disabled = this.disableNextPage;
       }
-    });
+    }));
   }
 
   public onSpreadChange(newSpread: 'off' | 'odd' | 'even'): void {
@@ -100,7 +116,7 @@ export class PdfSecondaryToolbarComponent implements AfterViewInit, OnDestroy {
 
   @HostListener('window:resize')
   public onResize() {
-    setTimeout(() => this.checkVisibility());
+    setTimeout(this.asyncWithCD(() => this.checkVisibility()));
   }
 
   public ngAfterViewInit() {

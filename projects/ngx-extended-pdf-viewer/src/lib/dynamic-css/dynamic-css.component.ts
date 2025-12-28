@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { CSP_NONCE, Component, computed, Inject, input, OnDestroy, Optional, Renderer2, signal } from '@angular/core';
+import { ChangeDetectorRef, CSP_NONCE, Component, computed, Inject, input, OnDestroy, Optional, Renderer2, signal } from '@angular/core';
 import { NgxHasHeight } from '../ngx-has-height';
 import { VerbosityLevel } from '../options/verbosity-level';
 import { PdfCspPolicyService } from '../pdf-csp-policy.service';
@@ -184,9 +184,24 @@ export class DynamicCssComponent implements OnDestroy {
     private readonly renderer: Renderer2,
     @Inject(DOCUMENT) private readonly document: Document,
     private readonly pdfCspPolicyService: PdfCspPolicyService,
-    @Inject(CSP_NONCE) @Optional() private readonly nonce?: string | null
+    @Inject(CSP_NONCE) @Optional() private readonly nonce: string | null | undefined,
+    private cdr: ChangeDetectorRef
   ) {
     // Width is now an input signal and will be provided by the parent component
+  }
+
+  private isZoneless(): boolean {
+    const Zone = (globalThis as any).Zone;
+    return typeof Zone === 'undefined' || !Zone?.current;
+  }
+
+  private asyncWithCD(callback: () => void): () => void {
+    return () => {
+      callback();
+      if (this.isZoneless()) {
+        this.cdr.detectChanges();
+      }
+    };
   }
 
   public updateToolbarWidth() {
@@ -239,7 +254,7 @@ export class DynamicCssComponent implements OnDestroy {
       const viewer = document.getElementById('viewer');
       const zoom = document.getElementsByClassName('zoom')[0];
       if (viewer) {
-        setTimeout(() => {
+        setTimeout(this.asyncWithCD(() => {
           if (pageViewMode === 'infinite-scroll') {
             const height = viewer.clientHeight + 17;
             if (primaryMenuVisible) {
@@ -257,7 +272,7 @@ export class DynamicCssComponent implements OnDestroy {
             ngxExtendedPdfViewer.autoHeight = true;
             this.checkHeight(ngxExtendedPdfViewer, logLevel);
           }
-        });
+        }));
       }
     }
   }
