@@ -1,4 +1,4 @@
-import { Component, effect, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import { Component, effect, output, input, OnDestroy } from '@angular/core';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { PDFNotificationService } from '../../pdf-notification-service';
 import { ResponsiveVisibility } from '../../responsive-visibility';
@@ -10,14 +10,11 @@ import { ResponsiveVisibility } from '../../responsive-visibility';
     standalone: false
 })
 export class PdfToggleSidebarComponent implements OnDestroy {
-  @Input()
-  public show: ResponsiveVisibility = true;
+  public show = input<ResponsiveVisibility>(true);
 
-  @Input()
-  public sidebarVisible: boolean | undefined = false;
+  public sidebarVisible = input<boolean | undefined>(false);
 
-  @Output()
-  public showChange = new EventEmitter<boolean>();
+  public showChange = output<boolean>();
 
   public onClick?: () => void;
 

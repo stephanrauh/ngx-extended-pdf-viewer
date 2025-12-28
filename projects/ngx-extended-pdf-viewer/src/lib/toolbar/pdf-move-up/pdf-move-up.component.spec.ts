@@ -24,18 +24,18 @@ describe('PdfDownloadComponent', () => {
   });
 
   it('should have showMoveUpButton default to true', () => {
-    expect(component.showMoveUpButton).toBe(true);
+    expect(component.showMoveUpButton()).toBe(true);
   });
 
   it('should set showMoveUpButton to true', () => {
-    component.showMoveUpButton = true;
-    fixture.detectChanges();
-    expect(component.showMoveUpButton).toBe(true);
+    fixture.componentRef.setInput('showMoveUpButton', true);
+    TestBed.flushEffects();
+    expect(component.showMoveUpButton()).toBe(true);
   });
 
   it('should set showMoveUpButton to false', () => {
-    component.showMoveUpButton = false;
-    fixture.detectChanges();
-    expect(component.showMoveUpButton).toBe(false);
+    fixture.componentRef.setInput('showMoveUpButton', false);
+    TestBed.flushEffects();
+    expect(component.showMoveUpButton()).toBe(false);
   });
 });

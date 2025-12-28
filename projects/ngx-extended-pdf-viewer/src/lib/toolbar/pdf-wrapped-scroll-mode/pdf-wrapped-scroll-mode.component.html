@@ -1,8 +1,8 @@
 <pdf-shy-button
-  [cssClass]="show | responsiveCSSClass: 'always-in-secondary-menu'"
+  [cssClass]="show() | responsiveCSSClass: 'always-in-secondary-menu'"
   title="Wrapped Scrolling"
   primaryToolbarId="scrollWrapped"
-  [toggled]="scrollMode == 2"
+  [toggled]="scrollMode() == 2"
   l10nId="pdfjs-scroll-wrapped-button"
   [action]="onClick"
   l10nLabel="pdfjs-scroll-wrapped-button-label"

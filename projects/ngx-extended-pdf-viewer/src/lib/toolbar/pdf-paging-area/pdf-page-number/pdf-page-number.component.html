@@ -1,4 +1,4 @@
-<span class="loadingInput start" [class]="showPageNumber | responsiveCSSClass : 'hiddenTinyView'">
+<span class="loadingInput start" [class]="showPageNumber() | responsiveCSSClass : 'hiddenTinyView'">
   <input
     type="number"
     id="pageNumber"
@@ -11,4 +11,4 @@
     autocomplete="off"
   />
 </span>
-<span [class]="showPageLabel | responsiveCSSClass : 'hiddenLargeView'" id="numPages" class="toolbarLabel"></span>
+<span [class]="showPageLabel() | responsiveCSSClass : 'hiddenLargeView'" id="numPages" class="toolbarLabel"></span>

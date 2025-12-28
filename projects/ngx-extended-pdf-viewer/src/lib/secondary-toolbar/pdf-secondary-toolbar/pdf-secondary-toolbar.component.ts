@@ -2,18 +2,15 @@ import { isPlatformBrowser } from '@angular/common';
 import {
   AfterViewInit,
   Component,
+  effect,
   ElementRef,
-  EventEmitter,
   HostListener,
   Inject,
-  Input,
-  OnChanges,
+  input,
   OnDestroy,
-  Output,
+  output,
   PLATFORM_ID,
-  SimpleChanges,
   TemplateRef,
-  effect,
 } from '@angular/core';
 import { NgxExtendedPdfViewerService } from '../../ngx-extended-pdf-viewer.service';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
@@ -26,21 +23,16 @@ import { PDFNotificationService } from './../../pdf-notification-service';
     styleUrls: ['./pdf-secondary-toolbar.component.css'],
     standalone: false
 })
-export class PdfSecondaryToolbarComponent implements OnChanges, AfterViewInit, OnDestroy {
-  @Input()
-  public customSecondaryToolbar: TemplateRef<any> | undefined;
+export class PdfSecondaryToolbarComponent implements AfterViewInit, OnDestroy {
+  public customSecondaryToolbar = input<TemplateRef<any> | undefined>(undefined);
 
-  @Input()
-  public secondaryToolbarTop: any;
+  public secondaryToolbarTop = input<any>(undefined);
 
-  @Input()
-  public mobileFriendlyZoomScale!: number;
+  public mobileFriendlyZoomScale = input.required<number>();
 
-  @Input()
-  public localizationInitialized!: boolean;
+  public localizationInitialized = input.required<boolean>();
 
-  @Output()
-  public spreadChange = new EventEmitter<'off' | 'even' | 'odd'>();
+  public spreadChange = output<'off' | 'even' | 'odd'>();
 
   public disablePreviousPage = true;
 
@@ -62,6 +54,18 @@ export class PdfSecondaryToolbarComponent implements OnChanges, AfterViewInit, O
       if (this.PDFViewerApplication) {
         this.onPdfJsInit();
       }
+    });
+
+    // Replace ngOnChanges with effect - check visibility when any input changes
+    effect(() => {
+      // Track all inputs to trigger on any change
+      this.customSecondaryToolbar();
+      this.secondaryToolbarTop();
+      this.mobileFriendlyZoomScale();
+      this.localizationInitialized();
+
+      // Same logic as ngOnChanges
+      setTimeout(() => this.checkVisibility());
     });
   }
 
@@ -94,10 +98,6 @@ export class PdfSecondaryToolbarComponent implements OnChanges, AfterViewInit, O
     this.spreadChange.emit(newSpread);
   }
 
-  public ngOnChanges(_changes: SimpleChanges): void {
-    setTimeout(() => this.checkVisibility());
-  }
-
   @HostListener('window:resize')
   public onResize() {
     setTimeout(() => this.checkVisibility());
@@ -113,17 +113,20 @@ export class PdfSecondaryToolbarComponent implements OnChanges, AfterViewInit, O
         for (const mutation of mutationList) {
           if (mutation.type === 'attributes') {
             if (mutation.attributeName === 'class') {
-              this.checkVisibility();
+              this.asyncWithCD(() => this.checkVisibility())();
               break;
             }
           } else if (mutation.type === 'childList') {
-            this.checkVisibility();
+            this.asyncWithCD(() => this.checkVisibility())();
             break;
           }
         }
       });
 
       this.classMutationObserver.observe(targetNode, config);
+
+      // Perform initial visibility check after view is initialized
+      setTimeout(this.asyncWithCD(() => this.checkVisibility()), 0);
     }
   }
 
@@ -138,13 +141,16 @@ export class PdfSecondaryToolbarComponent implements OnChanges, AfterViewInit, O
     let visibleButtons = 0;
     const e = this.element.nativeElement as HTMLElement;
     const f = e.children.item(0);
+
     if (f) {
       const g = f.children.item(0);
+
       if (g && g instanceof HTMLElement) {
         visibleButtons = this.checkVisibilityRecursively(g);
       }
     }
-    this.ngxExtendedPdfViewerService.secondaryMenuIsEmpty = visibleButtons === 0;
+
+    this.ngxExtendedPdfViewerService.secondaryMenuIsEmpty.set(visibleButtons === 0);
   }
 
   private checkVisibilityRecursively(e: HTMLElement): number {
@@ -152,6 +158,9 @@ export class PdfSecondaryToolbarComponent implements OnChanges, AfterViewInit, O
       // server-side rendering
       return 0;
     }
+    // Only check inline styles and CSS classes, NOT computed styles
+    // because the secondary toolbar is hidden by default (it's a popup)
+    // and all children inherit display:none from the parent
     if (e.style.display === 'none') {
       return 0;
     }
@@ -159,11 +168,6 @@ export class PdfSecondaryToolbarComponent implements OnChanges, AfterViewInit, O
       return 0;
     }
     if (e.classList.contains('invisible')) {
-      return 0;
-    }
-
-    const style = window.getComputedStyle(e);
-    if (style.display === 'none') {
       return 0;
     }
 

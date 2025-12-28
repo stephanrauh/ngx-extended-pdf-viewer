@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, input, viewChild, computed } from '@angular/core';
 import { ResponsiveVisibility } from '../../../responsive-visibility';
 
 interface ZoomLevel {
@@ -15,16 +15,15 @@ interface ZoomLevel {
     standalone: false
 })
 export class PdfZoomDropdownComponent {
-  @Input()
-  public showZoomDropdown: ResponsiveVisibility = true;
-  public _zoomLevels: Array<ZoomLevel> = [];
+  public showZoomDropdown = input<ResponsiveVisibility>(true);
 
-  @Input()
-  public set zoomLevels(levels: Array<string | number>) {
-    this._zoomLevels = levels.map((l) => this.valueToZoomLevel(l));
-  }
+  public zoomLevels = input<Array<string | number>>([]);
 
-  @ViewChild('sizeSelector') sizeSelector: any;
+  public _zoomLevels = computed(() => {
+    return this.zoomLevels().map((l) => this.valueToZoomLevel(l));
+  });
+
+  public sizeSelector = viewChild<any>('sizeSelector');
 
   constructor() {}
 

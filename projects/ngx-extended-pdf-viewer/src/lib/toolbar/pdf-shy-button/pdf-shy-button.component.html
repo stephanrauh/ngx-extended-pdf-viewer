@@ -1,13 +1,13 @@
-@if (!onlySecondaryMenu) {
-@if (nestedContent) {
-<span (click)="onClick($event)" onKeyDown="onClick($event)" [class]="cssClass">
+@if (!onlySecondaryMenu()) {
+@if (nestedContent()) {
+<span (click)="onClick($event)" onKeyDown="onClick($event)" [class]="cssClass()">
   <ng-content></ng-content>
 </span>
 }
 @else {
-<button type="button" [id]="primaryToolbarId" class="toolbarButton" [class]="cssClass" [title]="title"
-  [attr.data-l10n-id]="l10nId" [class.toggled]="toggled" [disabled]="disabled" (click)="onClick($event)"
-  [attr.aria-label]="title" [attr.role]="role" [attr.aria-expanded]="toggled ? 'true' : (ariaHasPopup ? 'false' : null)"
-  [attr.aria-haspopup]="ariaHasPopup" [attr.aria-controls]="ariaControls" #buttonRef></button>
+<button type="button" [id]="primaryToolbarId()" class="toolbarButton" [class]="cssClass()" [title]="title()"
+  [attr.data-l10n-id]="l10nId() || null" [class.toggled]="toggled()" [disabled]="disabled()" (click)="onClick($event)"
+  [attr.aria-label]="title()" [attr.role]="role()" [attr.aria-expanded]="toggled() ? 'true' : (ariaHasPopup() ? 'false' : null)"
+  [attr.aria-haspopup]="ariaHasPopup()" [attr.aria-controls]="ariaControls()" #buttonRef></button>
 }
 }

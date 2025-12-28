@@ -1,4 +1,4 @@
-import { PLATFORM_ID, SimpleChanges, TemplateRef } from '@angular/core';
+import { PLATFORM_ID, signal, TemplateRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NgxExtendedPdfViewerService } from '../../ngx-extended-pdf-viewer.service';
 import { PDFNotificationService } from '../../pdf-notification-service';
@@ -26,7 +26,7 @@ describe('PdfSecondaryToolbarComponent', () => {
     } as unknown as jest.Mocked<Partial<PDFNotificationService>>;
 
     const ngxExtendedPdfViewerServiceMock = {
-      secondaryMenuIsEmpty: false,
+      secondaryMenuIsEmpty: signal(false),
     } as jest.Mocked<Partial<NgxExtendedPdfViewerService>>;
 
     const pdfShyButtonServiceMock = {} as jest.Mocked<Partial<PdfShyButtonService>>;
@@ -59,6 +59,11 @@ describe('PdfSecondaryToolbarComponent', () => {
     fixture = TestBed.createComponent(PdfSecondaryToolbarComponent);
     component = fixture.componentInstance;
 
+    // Set required input signals
+    fixture.componentRef.setInput('mobileFriendlyZoomScale', 1);
+    fixture.componentRef.setInput('localizationInitialized', true);
+    TestBed.flushEffects();
+
     notificationService = TestBed.inject(PDFNotificationService) as jest.Mocked<PDFNotificationService>;
     ngxExtendedPdfViewerService = TestBed.inject(NgxExtendedPdfViewerService) as jest.Mocked<NgxExtendedPdfViewerService>;
 
@@ -88,8 +93,8 @@ describe('PdfSecondaryToolbarComponent', () => {
     it('should initialize with default values', () => {
       expect(component.disablePreviousPage).toBe(true);
       expect(component.disableNextPage).toBe(true);
-      expect(component.customSecondaryToolbar).toBeUndefined();
-      expect(component.localizationInitialized).toBeUndefined();
+      expect(component.customSecondaryToolbar()).toBeUndefined();
+      expect(component.localizationInitialized()).toBe(true); // input.required() has no default; set to true in setup
     });
   });
 
@@ -248,19 +253,7 @@ describe('PdfSecondaryToolbarComponent', () => {
     });
   });
 
-  describe('ngOnChanges', () => {
-    it('should call checkVisibility after timeout', () => {
-      jest.useFakeTimers();
-      const checkVisibilitySpy = jest.spyOn(component, 'checkVisibility');
-      const changes: SimpleChanges = {};
-
-      component.ngOnChanges(changes);
-      jest.runAllTimers();
-
-      expect(checkVisibilitySpy).toHaveBeenCalled();
-      jest.useRealTimers();
-    });
-  });
+  // ngOnChanges has been replaced by effects - no longer needed
 
   describe('onResize', () => {
     it('should call checkVisibility after timeout', () => {
@@ -298,7 +291,7 @@ describe('PdfSecondaryToolbarComponent', () => {
         declarations: [PdfSecondaryToolbarComponent],
         providers: [
           { provide: PDFNotificationService, useValue: { onPDFJSInitSignal: jest.fn().mockReturnValue(null) } },
-          { provide: NgxExtendedPdfViewerService, useValue: { secondaryMenuIsEmpty: false } },
+          { provide: NgxExtendedPdfViewerService, useValue: { secondaryMenuIsEmpty: signal(false) } },
           { provide: PdfShyButtonService, useValue: {} },
           { provide: PLATFORM_ID, useValue: 'server' }, // Server environment
         ],
@@ -361,7 +354,7 @@ describe('PdfSecondaryToolbarComponent', () => {
 
       component.checkVisibility();
 
-      expect(ngxExtendedPdfViewerService.secondaryMenuIsEmpty).toBe(true);
+      expect(ngxExtendedPdfViewerService.secondaryMenuIsEmpty()).toBe(true);
     });
 
     it('should set secondaryMenuIsEmpty to false when visible buttons exist', () => {
@@ -381,7 +374,7 @@ describe('PdfSecondaryToolbarComponent', () => {
 
       component.checkVisibility();
 
-      expect(ngxExtendedPdfViewerService.secondaryMenuIsEmpty).toBe(false);
+      expect(ngxExtendedPdfViewerService.secondaryMenuIsEmpty()).toBe(false);
     });
   });
 
@@ -513,27 +506,31 @@ describe('PdfSecondaryToolbarComponent', () => {
   describe('Input properties', () => {
     it('should accept customSecondaryToolbar input', () => {
       const templateRef = {} as TemplateRef<any>;
-      component.customSecondaryToolbar = templateRef;
+      fixture.componentRef.setInput('customSecondaryToolbar', templateRef);
+      TestBed.flushEffects();
 
-      expect(component.customSecondaryToolbar).toBe(templateRef);
+      expect(component.customSecondaryToolbar()).toBe(templateRef);
     });
 
     it('should accept secondaryToolbarTop input', () => {
-      component.secondaryToolbarTop = '50px';
+      fixture.componentRef.setInput('secondaryToolbarTop', '50px');
+      TestBed.flushEffects();
 
-      expect(component.secondaryToolbarTop).toBe('50px');
+      expect(component.secondaryToolbarTop()).toBe('50px');
     });
 
     it('should accept mobileFriendlyZoomScale input', () => {
-      component.mobileFriendlyZoomScale = 1.5;
+      fixture.componentRef.setInput('mobileFriendlyZoomScale', 1.5);
+      TestBed.flushEffects();
 
-      expect(component.mobileFriendlyZoomScale).toBe(1.5);
+      expect(component.mobileFriendlyZoomScale()).toBe(1.5);
     });
 
     it('should accept localizationInitialized input', () => {
-      component.localizationInitialized = true;
+      fixture.componentRef.setInput('localizationInitialized', true);
+      TestBed.flushEffects();
 
-      expect(component.localizationInitialized).toBe(true);
+      expect(component.localizationInitialized()).toBe(true);
     });
   });
 

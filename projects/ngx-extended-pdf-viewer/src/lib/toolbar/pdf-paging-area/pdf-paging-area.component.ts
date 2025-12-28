@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
@@ -8,18 +8,13 @@ import { ResponsiveVisibility } from '../../responsive-visibility';
     standalone: false
 })
 export class PdfPagingAreaComponent {
-  @Input()
-  public showPagingButtons: ResponsiveVisibility = true;
+  public showPagingButtons = input<ResponsiveVisibility>(true);
 
-  @Input()
-  public showFirstAndLastPageButtons: ResponsiveVisibility = true;
+  public showFirstAndLastPageButtons = input<ResponsiveVisibility>(true);
 
-  @Input()
-  public showPreviousAndNextPageButtons: ResponsiveVisibility = true;
+  public showPreviousAndNextPageButtons = input<ResponsiveVisibility>(true);
 
-  @Input()
-  public showPageNumber: ResponsiveVisibility = true;
+  public showPageNumber = input<ResponsiveVisibility>(true);
 
-  @Input()
-  public showPageLabel: ResponsiveVisibility = true;
+  public showPageLabel = input<ResponsiveVisibility>(true);
 }

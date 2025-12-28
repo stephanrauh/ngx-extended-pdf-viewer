@@ -1,6 +1,6 @@
 <span
   id="scaleSelectContainer"
-  [class]="showZoomDropdown | responsiveCSSClass: 'hiddenTinyView'"
+  [class]="showZoomDropdown() | responsiveCSSClass: 'hiddenTinyView'"
 >
   <select
     id="scaleSelect"
@@ -8,12 +8,12 @@
     data-l10n-id="pdfjs-zoom-select"
     #sizeSelector
   >
-    @for (level of _zoomLevels; track level.id) {
+    @for (level of _zoomLevels(); track level.id) {
       <option
         [id]="level.id"
         [attr.value]="level.value"
-        [attr.data-l10n-id]="level.dataL10nId"
-        [attr.data-l10n-args]="level.dataL10nArgs"
+        [attr.data-l10n-id]="level.dataL10nId || null"
+        [attr.data-l10n-args]="level.dataL10nArgs || null"
       >
         {{ level.displayValue }}
       </option>

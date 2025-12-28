@@ -1,5 +1,4 @@
 import { effect, Injectable } from '@angular/core';
-import { SafeHtml } from '@angular/platform-browser';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { PDFNotificationService } from '../../pdf-notification-service';
 import { ResponsiveCSSClass } from '../../responsive-visibility';
@@ -14,7 +13,7 @@ export interface PdfShyButtonDescription {
   toggled: boolean;
   disabled: boolean;
   order: number;
-  image: string | SafeHtml | undefined;
+  image: string | undefined;
   action?: () => void;
   eventBusName?: string;
   closeOnClick?: boolean;
@@ -35,21 +34,22 @@ export class PdfShyButtonService {
   }
 
   public add(button: PdfShyButtonComponent): void {
-    const id = button.secondaryMenuId ?? this.addDefaultPrefix(button);
+    const secondaryMenuId = button.secondaryMenuId();
+    const id = secondaryMenuId || this.addDefaultPrefix(button);
     const previousDefinition = this.buttons.findIndex((b) => b.id === id);
     const description: PdfShyButtonDescription = {
       id,
-      cssClass: button.cssClass,
-      l10nId: button.l10nId,
-      l10nLabel: button.l10nLabel,
-      title: button.title,
-      toggled: button.toggled,
-      disabled: button.disabled,
-      order: button.order ?? 99999,
-      image: button.imageHtml,
-      action: button.action,
-      eventBusName: button.eventBusName,
-      closeOnClick: button.closeOnClick,
+      cssClass: button.cssClass(),
+      l10nId: button.l10nId(),
+      l10nLabel: button.l10nLabel(),
+      title: button.title(),
+      toggled: button.toggled(),
+      disabled: button.disabled(),
+      order: button.order() ?? 99999,
+      image: button.imageHtml(),
+      action: button.action(),
+      eventBusName: button.eventBusName(),
+      closeOnClick: button.closeOnClick(),
     };
     if (previousDefinition >= 0) {
       this.buttons[previousDefinition] = description;
@@ -69,14 +69,15 @@ export class PdfShyButtonService {
   }
 
   private addDefaultPrefix(button: PdfShyButtonComponent): string {
-    if (button.primaryToolbarId.startsWith('primary')) {
-      return button.primaryToolbarId.replace('primary', 'secondary');
+    const toolbarId = button.primaryToolbarId();
+    if (toolbarId.startsWith('primary')) {
+      return toolbarId.replace('primary', 'secondary');
     }
-    return 'secondary' + button.primaryToolbarId.substring(0, 1).toUpperCase() + button.primaryToolbarId.substring(1);
+    return 'secondary' + toolbarId.substring(0, 1).toUpperCase() + toolbarId.substring(1);
   }
 
   public update(button: PdfShyButtonComponent): void {
-    const id = button.secondaryMenuId ?? this.addDefaultPrefix(button);
+    const id = button.secondaryMenuId() || this.addDefaultPrefix(button);
 
     if (this.buttons.some((b) => b.id === id)) {
       this.add(button);

@@ -1,9 +1,9 @@
 <pdf-shy-button
-  [cssClass]="show | responsiveCSSClass: 'always-in-secondary-menu'"
+  [cssClass]="show() | responsiveCSSClass: 'always-in-secondary-menu'"
   title="Use Horizontal Scrolling"
   primaryToolbarId="scrollHorizontal"
   l10nId="pdfjs-scroll-horizontal-button"
-  [toggled]="scrollMode == 1"
+  [toggled]="scrollMode() == 1"
   [action]="onClick"
   l10nLabel="pdfjs-scroll-horizontal-button-label"
   [order]="3200"

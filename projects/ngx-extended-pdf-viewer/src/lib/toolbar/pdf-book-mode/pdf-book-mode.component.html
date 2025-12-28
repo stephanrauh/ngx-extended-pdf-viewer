@@ -1,8 +1,8 @@
 <pdf-shy-button
-  [cssClass]="show | responsiveCSSClass : 'always-in-secondary-menu'"
+  [cssClass]="show() | responsiveCSSClass : 'always-in-secondary-menu'"
   title="Book mode"
   primaryToolbarId="book-mode"
-  [toggled]="pageViewMode == 'book'"
+  [toggled]="pageViewMode() == 'book'"
   [action]="onClick"
   [order]="3400"
   [closeOnClick]="false"

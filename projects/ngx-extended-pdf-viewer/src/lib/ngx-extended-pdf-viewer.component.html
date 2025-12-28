@@ -1,7 +1,7 @@
-@if (theme === 'dark') {
+@if (theme() === 'dark') {
   <pdf-dark-theme></pdf-dark-theme>
 }
-@if (theme === 'light') {
+@if (theme() === 'light') {
   <pdf-light-theme></pdf-light-theme>
 }
 <pdf-acroform-default-theme></pdf-acroform-default-theme>
@@ -10,31 +10,31 @@
   #DynamicCssComponent
   [zoom]="mobileFriendlyZoomScale"
 ></pdf-dynamic-css>
-<ng-content *ngTemplateOutlet="customPdfViewer ? customPdfViewer : defaultPdfViewer"></ng-content>
+<ng-content *ngTemplateOutlet="customPdfViewer() || defaultPdfViewer"></ng-content>
 
 <ng-template #defaultPdfViewer>
   <div
     class="zoom"
-    [style.height]="minHeight ? minHeight : height"
+    [style.height]="minHeight || height"
     #root
   >
     <div class="html">
       <div
         class="body pdf-js-version-{{ majorMinorPdfJsVersion }}"
-        [style.backgroundColor]="backgroundColor"
+        [style.backgroundColor]="backgroundColor()"
       >
         <div id="outerContainer">
-          @if (showFreeFloatingBar) {
+          @if (showFreeFloatingBar()) {
             <div class="free-floating-bar">
-              <ng-content *ngTemplateOutlet="customFreeFloatingBar ? customFreeFloatingBar : defaultFreeFloatingBar"> </ng-content>
+              <ng-content *ngTemplateOutlet="customFreeFloatingBar() || defaultFreeFloatingBar"> </ng-content>
             </div>
           }
           <pdf-sidebar
             #pdfsidebar
-            [sidebarVisible]="sidebarVisible || false"
-            [showSidebarButton]="showSidebarButton"
-            [customSidebar]="customSidebar"
-            [customThumbnail]="customThumbnail"
+            [sidebarVisible]="sidebarVisible() || false"
+            [showSidebarButton]="showSidebarButton()"
+            [customSidebar]="customSidebar()"
+            [customThumbnail]="customThumbnail()"
             (thumbnailDrawn)="thumbnailDrawn.emit($event)"
             [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
             [sidebarPositionTop]="sidebarPositionTop"
@@ -48,52 +48,52 @@
 
             <pdf-toolbar
               (onToolbarLoaded)="onToolbarLoaded($event)"
-              [sidebarVisible]="sidebarVisible"
+              [sidebarVisible]="sidebarVisible()"
               [class.server-side-rendering]="serverSideRendering"
-              [customToolbar]="customToolbar"
+              [customToolbar]="customToolbar()"
               [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
               [(pageViewMode)]="pageViewMode"
               [primaryMenuVisible]="primaryMenuVisible"
-              [scrollMode]="scrollMode ?? 0"
-              [showPropertiesButton]="showPropertiesButton"
-              [showBookModeButton]="showBookModeButton"
-              [showDownloadButton]="showDownloadButton"
-              [showCommentEditor]="showCommentEditor"
-              [showDrawEditor]="showDrawEditor"
-              [showHighlightEditor]="showHighlightEditor"
-              [showFindButton]="showFindButton"
-              [showHandToolButton]="showHandToolButton"
-              [handTool]="handTool"
-              [showHorizontalScrollButton]="showHorizontalScrollButton"
-              [showInfiniteScrollButton]="showInfiniteScrollButton"
-              [showOpenFileButton]="showOpenFileButton"
-              [showMovePageButton]="showMovePageButton"
-              [showPagingButtons]="showPagingButtons"
-              [showFirstAndLastPageButtons]="showFirstAndLastPageButtons"
-              [showPreviousAndNextPageButtons]="showPreviousAndNextPageButtons"
-              [showPageNumber]="showPageNumber"
-              [showPageLabel]="showPageLabel"
-              [showPresentationModeButton]="showPresentationModeButton && pageViewMode !== 'book'"
-              [showPrintButton]="enablePrint ? showPrintButton : false"
-              [showRotateCwButton]="showRotateCwButton"
-              [showRotateCcwButton]="showRotateCcwButton"
-              [showSecondaryToolbarButton]="showSecondaryToolbarButton && !service.secondaryMenuIsEmpty"
-              [showSidebarButton]="showSidebarButton"
-              [showSinglePageModeButton]="showSinglePageModeButton"
-              [showSignatureEditor]="enableSignatureEditor ? showSignatureEditor : false"
-              [showSpreadButton]="showSpreadButton"
-              [showStampEditor]="showStampEditor"
-              [showTextEditor]="showTextEditor"
-              [showVerticalScrollButton]="showVerticalScrollButton"
-              [showWrappedScrollButton]="showWrappedScrollButton"
-              [showZoomButtons]="showZoomButtons"
-              [showZoomDropdown]="showZoomDropdown"
-              [spread]="spread"
-              [textLayer]="textLayer"
+              [scrollMode]="scrollMode() ?? 0"
+              [showPropertiesButton]="showPropertiesButton()"
+              [showBookModeButton]="showBookModeButton()"
+              [showDownloadButton]="showDownloadButton()"
+              [showCommentEditor]="showCommentEditor()"
+              [showDrawEditor]="showDrawEditor()"
+              [showHighlightEditor]="showHighlightEditor()"
+              [showFindButton]="showFindButton()"
+              [showHandToolButton]="showHandToolButton()"
+              [handTool]="handTool()"
+              [showHorizontalScrollButton]="showHorizontalScrollButton()"
+              [showInfiniteScrollButton]="showInfiniteScrollButton()"
+              [showOpenFileButton]="showOpenFileButton()"
+              [showMovePageButton]="showMovePageButton()"
+              [showPagingButtons]="showPagingButtons()"
+              [showFirstAndLastPageButtons]="showFirstAndLastPageButtons()"
+              [showPreviousAndNextPageButtons]="showPreviousAndNextPageButtons()"
+              [showPageNumber]="showPageNumber()"
+              [showPageLabel]="showPageLabel()"
+              [showPresentationModeButton]="showPresentationModeButton() && pageViewMode() !== 'book'"
+              [showPrintButton]="enablePrint() ? showPrintButton() : false"
+              [showRotateCwButton]="showRotateCwButton()"
+              [showRotateCcwButton]="showRotateCcwButton()"
+              [showSecondaryToolbarButton]="showSecondaryToolbarButton() && !service.secondaryMenuIsEmpty()"
+              [showSidebarButton]="showSidebarButton()"
+              [showSinglePageModeButton]="showSinglePageModeButton()"
+              [showSignatureEditor]="enableSignatureEditor ? showSignatureEditor() : false"
+              [showSpreadButton]="showSpreadButton()"
+              [showStampEditor]="showStampEditor()"
+              [showTextEditor]="showTextEditor()"
+              [showVerticalScrollButton]="showVerticalScrollButton()"
+              [showWrappedScrollButton]="showWrappedScrollButton()"
+              [showZoomButtons]="showZoomButtons()"
+              [showZoomDropdown]="showZoomDropdown()"
+              [spread]="spread()"
+              [textLayer]="textLayer()"
               [toolbarMarginTop]="toolbarMarginTop"
               [toolbarWidth]="toolbarWidth"
-              [zoomLevels]="zoomLevels"
-              [findbarVisible]="findbarVisible"
+              [zoomLevels]="zoomLevels()"
+              [findbarVisible]="findbarVisible()"
               [hasTextLayer]="hasTextLayer"
             ></pdf-toolbar>
 
@@ -337,7 +337,7 @@
             <pdf-secondary-toolbar
               #pdfSecondaryToolbarComponent
               [class.server-side-rendering]="serverSideRendering"
-              [customSecondaryToolbar]="customSecondaryToolbar"
+              [customSecondaryToolbar]="customSecondaryToolbar()"
               [secondaryToolbarTop]="secondaryToolbarTop"
               [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
               (spreadChange)="onSpreadChange($event)"
@@ -350,17 +350,17 @@
               [findbarLeft]="findbarLeft"
               [findbarTop]="findbarTop"
               [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
-              [showFindButton]="showFindButton || false"
-              [customFindbarInputArea]="customFindbarInputArea"
-              [customFindbarButtons]="customFindbarButtons"
-              [showFindEntireWord]="showFindEntireWord"
-              [showFindHighlightAll]="showFindHighlightAll"
-              [showFindMatchDiacritics]="showFindMatchDiacritics"
-              [showFindMatchCase]="showFindMatchCase"
-              [showFindMultiple]="showFindMultiple"
-              [showFindRegexp]="showFindRegexp"
-              [showFindMessages]="showFindMessages"
-              [showFindResultsCount]="showFindResultsCount"
+              [showFindButton]="showFindButton() || false"
+              [customFindbarInputArea]="customFindbarInputArea()"
+              [customFindbarButtons]="customFindbarButtons()"
+              [showFindEntireWord]="showFindEntireWord()"
+              [showFindHighlightAll]="showFindHighlightAll()"
+              [showFindMatchDiacritics]="showFindMatchDiacritics()"
+              [showFindMatchCase]="showFindMatchCase()"
+              [showFindMultiple]="showFindMultiple()"
+              [showFindRegexp]="showFindRegexp()"
+              [showFindMessages]="showFindMessages()"
+              [showFindResultsCount]="showFindResultsCount()"
             >
             </pdf-findbar>
 
@@ -369,9 +369,9 @@
             <div
               id="viewerContainer"
               [style.top]="viewerPositionTop"
-              [style.backgroundColor]="backgroundColor"
+              [style.backgroundColor]="backgroundColor()"
             >
-              @if (hasSignature && showUnverifiedSignatures) {
+              @if (hasSignature && showUnverifiedSignatures()) {
                 <div class="unverified-signature-warning">
                   {{
                     'unverified-signature-warning'
@@ -385,7 +385,7 @@
               <div
                 id="viewer"
                 class="pdfViewer"
-                [style.backgroundColor]="backgroundColor"
+                [style.backgroundColor]="backgroundColor()"
                 (dblclick)="zoomToPageWidth($event)"
               ></div>
             </div>

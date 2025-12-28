@@ -1,4 +1,4 @@
-import { Component, effect, EventEmitter, Input, OnDestroy, Output, TemplateRef, ViewChild } from '@angular/core';
+import { Component, computed, effect, input, OnDestroy, output, TemplateRef, viewChild } from '@angular/core';
 import { PdfThumbnailDrawnEvent } from '../../../events/pdf-thumbnail-drawn-event';
 import { IPDFViewerApplication } from '../../../options/pdf-viewer-application';
 import { PDFNotificationService } from '../../../pdf-notification-service';
@@ -31,37 +31,32 @@ declare class PDFLinkService {
     standalone: false
 })
 export class PdfSidebarContentComponent implements OnDestroy {
-  @Input()
-  public customThumbnail: TemplateRef<any> | undefined;
+  public customThumbnail = input<TemplateRef<any> | undefined>(undefined);
 
-  @Input()
-  public hideSidebarToolbar = false;
+  public hideSidebarToolbar = input<boolean>(false);
 
-  @Input()
-  public mobileFriendlyZoomScale = 1.0;
+  public mobileFriendlyZoomScale = input<number>(1.0);
 
-  @ViewChild('defaultThumbnail', { read: TemplateRef })
-  public defaultThumbnail!: TemplateRef<any>;
+  public defaultThumbnail = viewChild.required<TemplateRef<any>>('defaultThumbnail');
 
   private linkService: PDFLinkService | undefined;
 
-  @Output()
-  public thumbnailDrawn = new EventEmitter<PdfThumbnailDrawnEvent>();
+  public thumbnailDrawn = output<PdfThumbnailDrawnEvent>();
 
   private PDFViewerApplication!: IPDFViewerApplication | undefined;
 
   private thumbnailListener: any;
 
-  public get top(): string {
+  public top = computed(() => {
     let top = 0;
-    if (!this.hideSidebarToolbar) {
-      top = 32 * this.mobileFriendlyZoomScale;
+    if (!this.hideSidebarToolbar()) {
+      top = 32 * this.mobileFriendlyZoomScale();
       if (top === 32) {
         top = 33; // prevent the border of the sidebar toolbar from being cut off
       }
     }
     return `${top}px`;
-  }
+  });
 
   constructor(public notificationService: PDFNotificationService) {
     if (typeof window !== 'undefined') {
@@ -90,7 +85,7 @@ export class PdfSidebarContentComponent implements OnDestroy {
     thumbPageTitlePromiseOrPageL10nArgs,
   }: RenderCustomThumbnailEvent): HTMLImageElement | undefined {
     this.linkService = linkService;
-    const template = this.customThumbnail ?? this.defaultThumbnail;
+    const template = this.customThumbnail() ?? this.defaultThumbnail();
     const view = template.createEmbeddedView(null);
     const newElement = view.rootNodes[0] as HTMLElement;
     newElement.classList.remove('pdf-viewer-template');

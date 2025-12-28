@@ -1,5 +1,5 @@
 <div>
-  <ng-content *ngTemplateOutlet="customSidebar ? customSidebar : defaultSidebar"></ng-content>
+  <ng-content *ngTemplateOutlet="customSidebar() || defaultSidebar"></ng-content>
 </div>
 
 <ng-template #defaultSidebar>
@@ -9,16 +9,15 @@
   >
     <div
       id="additionalSidebarContainer"
-      class="hidden"
-      [class.hidden]="hideSidebarToolbar"
+      [class.hidden]="hideSidebarToolbar()"
     >
-      <pdf-sidebar-toolbar [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"></pdf-sidebar-toolbar>
+      <pdf-sidebar-toolbar [mobileFriendlyZoomScale]="mobileFriendlyZoomScale()"></pdf-sidebar-toolbar>
     </div>
     <pdf-sidebar-content
-      [customThumbnail]="customThumbnail"
+      [customThumbnail]="customThumbnail()"
       (thumbnailDrawn)="thumbnailDrawn.emit($event)"
-      [hideSidebarToolbar]="hideSidebarToolbar"
-      [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
+      [hideSidebarToolbar]="hideSidebarToolbar()"
+      [mobileFriendlyZoomScale]="mobileFriendlyZoomScale()"
     ></pdf-sidebar-content>
     <div id="sidebarResizer"></div>
   </div>

@@ -1,4 +1,4 @@
-import { Component, Input, TemplateRef } from '@angular/core';
+import { Component, input, TemplateRef } from '@angular/core';
 
 @Component({
     selector: 'pdf-find-input-area',
@@ -7,6 +7,5 @@ import { Component, Input, TemplateRef } from '@angular/core';
     standalone: false
 })
 export class PdfFindInputAreaComponent {
-  @Input()
-  public customFindbarInputArea: TemplateRef<any> | undefined;
+  public customFindbarInputArea = input<TemplateRef<any> | undefined>(undefined);
 }

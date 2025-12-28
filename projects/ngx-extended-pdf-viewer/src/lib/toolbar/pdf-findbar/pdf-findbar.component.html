@@ -1,15 +1,15 @@
-<ng-container [ngTemplateOutlet]="customFindbar ? customFindbar : defaultFindbar"> </ng-container>
+<ng-container [ngTemplateOutlet]="customFindbar() || defaultFindbar"> </ng-container>
 
 <ng-template #defaultFindbar>
-  <div class="findbar hidden doorHanger" id="findbar" [style.transform]="'scale(' + mobileFriendlyZoomScale + ')'"
-    [style.transformOrigin]="'left top'" [style.left]="findbarLeft" [style.top]="findbarTop">
-    <ng-container [ngTemplateOutlet]="customFindbarButtons ? customFindbarButtons : defaultFindbarButtons">
+  <div class="findbar hidden doorHanger" id="findbar" [style.transform]="'scale(' + mobileFriendlyZoomScale() + ')'"
+    [style.transformOrigin]="'left top'" [style.left]="findbarLeft()" [style.top]="findbarTop()">
+    <ng-container [ngTemplateOutlet]="customFindbarButtons() || defaultFindbarButtons">
     </ng-container>
   </div>
 </ng-template>
 
 <ng-template #defaultFindbarButtons>
-  <pdf-find-input-area [customFindbarInputArea]="customFindbarInputArea"></pdf-find-input-area>
+  <pdf-find-input-area [customFindbarInputArea]="customFindbarInputArea()"></pdf-find-input-area>
 
   <div id="findbarOptionsOneContainer" class="toolbarHorizontalGroup">
     <pdf-find-highlight-all [class.hidden]="!showFindHighlightAll"></pdf-find-highlight-all>

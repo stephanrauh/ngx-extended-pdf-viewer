@@ -1,9 +1,9 @@
 <pdf-shy-button
-  [cssClass]="show | responsiveCSSClass: 'always-in-secondary-menu'"
+  [cssClass]="show() | responsiveCSSClass: 'always-in-secondary-menu'"
   title="Use Vertical Scrolling"
   primaryToolbarId="scrollVertical"
   l10nId="pdfjs-scroll-vertical-button"
-  [toggled]="scrollMode == 0 && pageViewMode !== 'book'"
+  [toggled]="scrollMode() == 0 && pageViewMode() !== 'book'"
   [action]="onClick"
   l10nLabel="pdfjs-scroll-vertical-button-label"
   [order]="3100"

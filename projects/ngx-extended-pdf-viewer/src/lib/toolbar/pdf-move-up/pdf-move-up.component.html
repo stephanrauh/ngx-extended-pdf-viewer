@@ -1,7 +1,7 @@
 <pdf-shy-button
   primaryToolbarId="primaryMoveUpButton"
   secondaryMenuId="secondaryMoveUpButton"
-  [cssClass]="showMoveUpButton | responsiveCSSClass: 'hiddenSmallView'"
+  [cssClass]="showMoveUpButton() | responsiveCSSClass: 'hiddenSmallView'"
   title="Move Page Up"
   l10nLabel="pdfjs-editor-movePageUp-button-label"
   [action]="movePageUp"

@@ -50,13 +50,13 @@ describe('PdfSidebarComponent', () => {
     });
 
     it('should have correct default values', () => {
-      expect(component.sidebarPositionTop).toBeUndefined();
-      expect(component.sidebarVisible).toBe(true);
-      expect(component.mobileFriendlyZoomScale).toBe(1);
-      expect(component.showSidebarButton).toBe(true);
-      expect(component.customSidebar).toBeUndefined();
-      expect(component.customThumbnail).toBeUndefined();
-      expect(component.hideSidebarToolbar).toBe(true);
+      expect(component.sidebarPositionTop()).toBeUndefined();
+      expect(component.sidebarVisible()).toBe(true);
+      expect(component.mobileFriendlyZoomScale()).toBe(1);
+      expect(component.showSidebarButton()).toBe(true);
+      expect(component.customSidebar()).toBeUndefined();
+      expect(component.customThumbnail()).toBeUndefined();
+      expect(component.hideSidebarToolbar()).toBe(true);
     });
 
     it('should initialize thumbnailDrawn EventEmitter', () => {
@@ -68,55 +68,66 @@ describe('PdfSidebarComponent', () => {
   describe('input properties', () => {
     it('should accept sidebarPositionTop input', () => {
       const topPosition = '50px';
-      component.sidebarPositionTop = topPosition;
-      
-      expect(component.sidebarPositionTop).toBe(topPosition);
+      fixture.componentRef.setInput('sidebarPositionTop', topPosition);
+      TestBed.flushEffects();
+
+      expect(component.sidebarPositionTop()).toBe(topPosition);
     });
 
     it('should accept sidebarVisible input', () => {
-      component.sidebarVisible = false;
-      expect(component.sidebarVisible).toBe(false);
-      
-      component.sidebarVisible = true;
-      expect(component.sidebarVisible).toBe(true);
+      fixture.componentRef.setInput('sidebarVisible', false);
+      TestBed.flushEffects();
+      expect(component.sidebarVisible()).toBe(false);
+
+      fixture.componentRef.setInput('sidebarVisible', true);
+      TestBed.flushEffects();
+      expect(component.sidebarVisible()).toBe(true);
     });
 
     it('should accept mobileFriendlyZoomScale input', () => {
-      component.mobileFriendlyZoomScale = 1.5;
-      expect(component.mobileFriendlyZoomScale).toBe(1.5);
-      
-      component.mobileFriendlyZoomScale = 0.8;
-      expect(component.mobileFriendlyZoomScale).toBe(0.8);
+      fixture.componentRef.setInput('mobileFriendlyZoomScale', 1.5);
+      TestBed.flushEffects();
+      expect(component.mobileFriendlyZoomScale()).toBe(1.5);
+
+      fixture.componentRef.setInput('mobileFriendlyZoomScale', 0.8);
+      TestBed.flushEffects();
+      expect(component.mobileFriendlyZoomScale()).toBe(0.8);
     });
 
     it('should accept showSidebarButton input with boolean values', () => {
-      component.showSidebarButton = false;
-      expect(component.showSidebarButton).toBe(false);
-      
-      component.showSidebarButton = true;
-      expect(component.showSidebarButton).toBe(true);
+      fixture.componentRef.setInput('showSidebarButton', false);
+      TestBed.flushEffects();
+      expect(component.showSidebarButton()).toBe(false);
+
+      fixture.componentRef.setInput('showSidebarButton', true);
+      TestBed.flushEffects();
+      expect(component.showSidebarButton()).toBe(true);
     });
 
     it('should accept showSidebarButton input with ResponsiveVisibility values', () => {
-      component.showSidebarButton = 'xxs';
-      expect(component.showSidebarButton).toBe('xxs');
-      
-      component.showSidebarButton = 'always-visible';
-      expect(component.showSidebarButton).toBe('always-visible');
+      fixture.componentRef.setInput('showSidebarButton', 'xxs');
+      TestBed.flushEffects();
+      expect(component.showSidebarButton()).toBe('xxs');
+
+      fixture.componentRef.setInput('showSidebarButton', 'always-visible');
+      TestBed.flushEffects();
+      expect(component.showSidebarButton()).toBe('always-visible');
     });
 
     it('should accept customSidebar template reference', () => {
       const mockTemplate = {} as TemplateRef<any>;
-      component.customSidebar = mockTemplate;
-      
-      expect(component.customSidebar).toBe(mockTemplate);
+      fixture.componentRef.setInput('customSidebar', mockTemplate);
+      TestBed.flushEffects();
+
+      expect(component.customSidebar()).toBe(mockTemplate);
     });
 
     it('should accept customThumbnail template reference', () => {
       const mockTemplate = {} as TemplateRef<any>;
-      component.customThumbnail = mockTemplate;
-      
-      expect(component.customThumbnail).toBe(mockTemplate);
+      fixture.componentRef.setInput('customThumbnail', mockTemplate);
+      TestBed.flushEffects();
+
+      expect(component.customThumbnail()).toBe(mockTemplate);
     });
   });
 
@@ -135,9 +146,8 @@ describe('PdfSidebarComponent', () => {
       expect(component.thumbnailDrawn.emit).toHaveBeenCalledWith(mockEvent);
     });
 
-    it('should have thumbnailDrawn as EventEmitter instance', () => {
+    it('should have thumbnailDrawn as output reference', () => {
       expect(component.thumbnailDrawn.subscribe).toBeDefined();
-      expect(component.thumbnailDrawn.unsubscribe).toBeDefined();
     });
   });
 
@@ -146,8 +156,7 @@ describe('PdfSidebarComponent', () => {
 
     beforeEach(() => {
       mockButtons = [];
-      // Ensure component has access to our mocked ChangeDetectorRef and ElementRef
-      (component as any).ref = mockChangeDetectorRef;
+      // Ensure component has access to our mocked ElementRef
       (component as any).elementRef = mockElementRef;
     });
 
@@ -155,7 +164,7 @@ describe('PdfSidebarComponent', () => {
       const hiddenButton1 = { hidden: true } as HTMLButtonElement;
       const hiddenButton2 = { hidden: true } as HTMLButtonElement;
       mockButtons = [hiddenButton1, hiddenButton2];
-      
+
       mockNativeElement.querySelectorAll.mockReturnValue({
         length: mockButtons.length,
         item: (index: number) => mockButtons[index]
@@ -163,15 +172,14 @@ describe('PdfSidebarComponent', () => {
 
       component.showToolbarWhenNecessary();
 
-      expect(component.hideSidebarToolbar).toBe(true);
-      expect(mockChangeDetectorRef.markForCheck).toHaveBeenCalled();
+      expect(component.hideSidebarToolbar()).toBe(true);
     });
 
     it('should hide toolbar when only one button is visible', () => {
       const visibleButton = { hidden: false } as HTMLButtonElement;
       const hiddenButton = { hidden: true } as HTMLButtonElement;
       mockButtons = [visibleButton, hiddenButton];
-      
+
       mockNativeElement.querySelectorAll.mockReturnValue({
         length: mockButtons.length,
         item: (index: number) => mockButtons[index]
@@ -179,8 +187,7 @@ describe('PdfSidebarComponent', () => {
 
       component.showToolbarWhenNecessary();
 
-      expect(component.hideSidebarToolbar).toBe(true);
-      expect(mockChangeDetectorRef.markForCheck).toHaveBeenCalled();
+      expect(component.hideSidebarToolbar()).toBe(true);
     });
 
     it('should show toolbar when more than one button is visible', () => {
@@ -188,7 +195,7 @@ describe('PdfSidebarComponent', () => {
       const visibleButton2 = { hidden: false } as HTMLButtonElement;
       const hiddenButton = { hidden: true } as HTMLButtonElement;
       mockButtons = [visibleButton1, visibleButton2, hiddenButton];
-      
+
       mockNativeElement.querySelectorAll.mockReturnValue({
         length: mockButtons.length,
         item: (index: number) => mockButtons[index]
@@ -196,15 +203,14 @@ describe('PdfSidebarComponent', () => {
 
       component.showToolbarWhenNecessary();
 
-      expect(component.hideSidebarToolbar).toBe(false);
-      expect(mockChangeDetectorRef.markForCheck).toHaveBeenCalled();
+      expect(component.hideSidebarToolbar()).toBe(false);
     });
 
     it('should show toolbar when two buttons are visible', () => {
       const visibleButton1 = { hidden: false } as HTMLButtonElement;
       const visibleButton2 = { hidden: false } as HTMLButtonElement;
       mockButtons = [visibleButton1, visibleButton2];
-      
+
       mockNativeElement.querySelectorAll.mockReturnValue({
         length: mockButtons.length,
         item: (index: number) => mockButtons[index]
@@ -212,13 +218,12 @@ describe('PdfSidebarComponent', () => {
 
       component.showToolbarWhenNecessary();
 
-      expect(component.hideSidebarToolbar).toBe(false);
-      expect(mockChangeDetectorRef.markForCheck).toHaveBeenCalled();
+      expect(component.hideSidebarToolbar()).toBe(false);
     });
 
     it('should hide toolbar when no buttons exist', () => {
       mockButtons = [];
-      
+
       mockNativeElement.querySelectorAll.mockReturnValue({
         length: 0,
         item: () => null
@@ -226,8 +231,7 @@ describe('PdfSidebarComponent', () => {
 
       component.showToolbarWhenNecessary();
 
-      expect(component.hideSidebarToolbar).toBe(true);
-      expect(mockChangeDetectorRef.markForCheck).toHaveBeenCalled();
+      expect(component.hideSidebarToolbar()).toBe(true);
     });
 
     it('should call querySelectorAll with correct selector', () => {
@@ -241,17 +245,6 @@ describe('PdfSidebarComponent', () => {
       expect(mockNativeElement.querySelectorAll).toHaveBeenCalledWith('button');
     });
 
-    it('should always call markForCheck', () => {
-      mockNativeElement.querySelectorAll.mockReturnValue({
-        length: 0,
-        item: () => null
-      } as any);
-
-      component.showToolbarWhenNecessary();
-
-      expect(mockChangeDetectorRef.markForCheck).toHaveBeenCalledTimes(1);
-    });
-
     it('should handle mixed button visibility states', () => {
       const buttons = [
         { hidden: false }, // visible
@@ -260,7 +253,7 @@ describe('PdfSidebarComponent', () => {
         { hidden: true },  // hidden
         { hidden: false }  // visible
       ] as HTMLButtonElement[];
-      
+
       mockNativeElement.querySelectorAll.mockReturnValue({
         length: buttons.length,
         item: (index: number) => buttons[index]
@@ -269,8 +262,7 @@ describe('PdfSidebarComponent', () => {
       component.showToolbarWhenNecessary();
 
       // 3 visible buttons should show toolbar
-      expect(component.hideSidebarToolbar).toBe(false);
-      expect(mockChangeDetectorRef.markForCheck).toHaveBeenCalled();
+      expect(component.hideSidebarToolbar()).toBe(false);
     });
 
     it('should work correctly with various button counts', () => {
@@ -287,7 +279,7 @@ describe('PdfSidebarComponent', () => {
         const buttons = Array.from({ length: visible + 2 }, (_, i) => ({
           hidden: i >= visible
         })) as HTMLButtonElement[];
-        
+
         mockNativeElement.querySelectorAll.mockReturnValue({
           length: buttons.length,
           item: (index: number) => buttons[index]
@@ -295,7 +287,7 @@ describe('PdfSidebarComponent', () => {
 
         component.showToolbarWhenNecessary();
 
-        expect(component.hideSidebarToolbar).toBe(expected);
+        expect(component.hideSidebarToolbar()).toBe(expected);
         mockChangeDetectorRef.markForCheck.mockClear();
       });
     });
@@ -307,10 +299,6 @@ describe('PdfSidebarComponent', () => {
       expect((component as any).elementRef.nativeElement).toBeDefined();
     });
 
-    it('should receive ChangeDetectorRef in constructor', () => {
-      expect((component as any).ref).toBeDefined();
-      expect(typeof (component as any).ref.markForCheck).toBe('function');
-    });
 
     it('should access nativeElement through ElementRef and execute method successfully', () => {
       mockNativeElement.querySelectorAll.mockReturnValue({
@@ -319,29 +307,29 @@ describe('PdfSidebarComponent', () => {
       } as any);
 
       expect(() => component.showToolbarWhenNecessary()).not.toThrow();
-      expect(component.hideSidebarToolbar).toBe(true);
+      expect(component.hideSidebarToolbar()).toBe(true);
     });
   });
 
   describe('edge cases and error handling', () => {
     it('should handle null nativeElement gracefully', () => {
       (component as any).elementRef.nativeElement = null;
-      
+
       expect(() => component.showToolbarWhenNecessary()).toThrow();
     });
 
     it('should handle querySelectorAll returning null', () => {
       mockNativeElement.querySelectorAll.mockReturnValue(null as any);
-      
+
       expect(() => component.showToolbarWhenNecessary()).not.toThrow();
       // When querySelectorAll returns null, the toolbar should be hidden
-      expect(component.hideSidebarToolbar).toBe(true);
+      expect(component.hideSidebarToolbar()).toBe(true);
     });
 
     it('should handle buttons with undefined hidden property', () => {
       const buttonWithoutHidden = {} as HTMLButtonElement; // hidden is undefined
       const visibleButton = { hidden: false } as HTMLButtonElement;
-      
+
       mockNativeElement.querySelectorAll.mockReturnValue({
         length: 2,
         item: (index: number) => index === 0 ? buttonWithoutHidden : visibleButton
@@ -351,7 +339,7 @@ describe('PdfSidebarComponent', () => {
 
       // undefined hidden should be treated as visible, but we need to check the actual implementation
       // If the implementation treats undefined as hidden, then it's actually 1 visible button
-      expect(component.hideSidebarToolbar).toBe(true); // Only 1 visible button
+      expect(component.hideSidebarToolbar()).toBe(true); // Only 1 visible button
     });
 
     it('should handle empty NodeList', () => {
@@ -362,7 +350,7 @@ describe('PdfSidebarComponent', () => {
 
       component.showToolbarWhenNecessary();
 
-      expect(component.hideSidebarToolbar).toBe(true);
+      expect(component.hideSidebarToolbar()).toBe(true);
     });
   });
 
@@ -373,10 +361,11 @@ describe('PdfSidebarComponent', () => {
     });
 
     it('should support change detection correctly', () => {
-      component.sidebarVisible = false;
+      fixture.componentRef.setInput('sidebarVisible', false);
+      TestBed.flushEffects();
       fixture.detectChanges();
-      
-      expect(component.sidebarVisible).toBe(false);
+
+      expect(component.sidebarVisible()).toBe(false);
     });
 
     it('should emit events correctly', (done) => {
@@ -402,13 +391,14 @@ describe('PdfSidebarComponent', () => {
     });
 
     it('should handle template properties', () => {
-      component.sidebarPositionTop = '100px';
-      component.hideSidebarToolbar = false;
-      
+      fixture.componentRef.setInput('sidebarPositionTop', '100px');
+      TestBed.flushEffects();
+      component.hideSidebarToolbar.set(false);
+
       fixture.detectChanges();
-      
-      expect(component.sidebarPositionTop).toBe('100px');
-      expect(component.hideSidebarToolbar).toBe(false);
+
+      expect(component.sidebarPositionTop()).toBe('100px');
+      expect(component.hideSidebarToolbar()).toBe(false);
     });
   });
 });

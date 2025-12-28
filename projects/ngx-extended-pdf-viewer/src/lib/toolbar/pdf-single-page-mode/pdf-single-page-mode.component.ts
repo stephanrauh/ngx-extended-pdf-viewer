@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, Output, effect } from '@angular/core';
+import { Component, effect, input, model, OnDestroy } from '@angular/core';
 import { ScrollMode } from '../../options/pdf-scroll-mode';
 import { PageViewModeType, ScrollModeType } from '../../options/pdf-viewer';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
@@ -12,17 +12,11 @@ import { ResponsiveVisibility } from '../../responsive-visibility';
     standalone: false
 })
 export class PdfSinglePageModeComponent implements OnDestroy {
-  @Input()
-  public show: ResponsiveVisibility = true;
+  public show = input<ResponsiveVisibility>(true);
 
-  @Input()
-  public scrollMode!: ScrollModeType;
+  public scrollMode = input.required<ScrollModeType>();
 
-  @Input()
-  public pageViewMode!: PageViewModeType;
-
-  @Output()
-  public pageViewModeChange = new EventEmitter<PageViewModeType>();
+  public pageViewMode = model.required<PageViewModeType>();
 
   public onClick?: () => void;
 
@@ -44,9 +38,9 @@ export class PdfSinglePageModeComponent implements OnDestroy {
   }
 
   public onPdfJsInit(): void {
-    this.PDFViewerApplication?.eventBus.on('switchscrollmode', (event) => {
+    this.PDFViewerApplication?.eventBus.on('switchscrollmode', () => {
       queueMicrotask(() => {
-        this.scrollMode = event.mode;
+        // scrollMode is read-only input, parent component updates it via binding
       });
     });
   }

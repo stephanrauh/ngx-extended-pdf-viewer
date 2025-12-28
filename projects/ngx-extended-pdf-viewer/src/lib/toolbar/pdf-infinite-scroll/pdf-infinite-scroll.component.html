@@ -1,8 +1,8 @@
 <pdf-shy-button
-  [cssClass]="show | responsiveCSSClass: 'always-in-secondary-menu'"
+  [cssClass]="show() | responsiveCSSClass: 'always-in-secondary-menu'"
   title="Infinite scroll"
   primaryToolbarId="infiniteScroll"
-  [toggled]="pageViewMode == 'infinite-scroll'"
+  [toggled]="pageViewMode() == 'infinite-scroll'"
   [action]="onClick"
   l10nLabel="pdfjs-infinite-scroll-button-label"
   [order]="3400"

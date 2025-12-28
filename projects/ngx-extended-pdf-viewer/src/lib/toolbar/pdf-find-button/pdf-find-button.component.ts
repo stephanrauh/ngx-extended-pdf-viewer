@@ -1,4 +1,4 @@
-import { Component, effect, Input } from '@angular/core';
+import { Component, effect, input } from '@angular/core';
 import { PositioningService } from '../../dynamic-css/positioning.service';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { PDFNotificationService } from '../../pdf-notification-service';
@@ -11,18 +11,15 @@ import { ResponsiveVisibility } from '../../responsive-visibility';
     standalone: false
 })
 export class PdfFindButtonComponent {
-  @Input()
-  public showFindButton: ResponsiveVisibility | undefined = undefined;
+  public showFindButton = input<ResponsiveVisibility | undefined>(undefined);
 
   // This is set internally by the viewer after loading a document. If the document has a text layer, the viewer will set this to true.
-  @Input()
-  public hasTextLayer = false;
+  public hasTextLayer = input<boolean>(false);
 
-  @Input()
-  public textLayer: boolean | undefined = undefined;
+  public textLayer = input<boolean | undefined>(undefined);
 
-  @Input()
-  public findbarVisible = false;
+  public findbarVisible = input<boolean>(false);
+
   private PDFViewerApplication!: IPDFViewerApplication | undefined;
 
   constructor(public notificationService: PDFNotificationService) {
@@ -31,14 +28,14 @@ export class PdfFindButtonComponent {
     });
   }
 
-  public onClick() {
+  public onClick = (): void => {
     const PDFViewerApplication: any = this.PDFViewerApplication;
-    if (PDFViewerApplication.findBar.opened) {
+    if (PDFViewerApplication?.findBar.opened) {
       PDFViewerApplication.findBar.close();
-    } else {
+    } else if (PDFViewerApplication) {
       PDFViewerApplication.findBar.open();
       const positioningService = new PositioningService();
       positioningService.positionPopupBelowItsButton('primaryViewFind', 'findbar');
     }
-  }
+  };
 }

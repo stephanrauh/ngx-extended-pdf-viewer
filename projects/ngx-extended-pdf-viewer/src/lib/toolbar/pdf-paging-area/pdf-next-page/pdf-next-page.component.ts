@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, effect, Input } from '@angular/core';
+import { Component, effect, input } from '@angular/core';
 import { UpdateUIStateEvent } from '../../../events/update-ui-state-event';
 import { IPDFViewerApplication } from '../../../options/pdf-viewer-application';
 import { PDFNotificationService } from '../../../pdf-notification-service';
@@ -11,12 +11,11 @@ import { ResponsiveVisibility } from '../../../responsive-visibility';
     standalone: false
 })
 export class PdfNextPageComponent {
-  @Input()
-  public show: ResponsiveVisibility = true;
+  public show = input<ResponsiveVisibility>(true);
   public disableNextPage = true;
   private PDFViewerApplication: IPDFViewerApplication | undefined;
 
-  constructor(notificationService: PDFNotificationService, private changeDetectorRef: ChangeDetectorRef) {
+  constructor(notificationService: PDFNotificationService) {
     effect(() => {
       this.PDFViewerApplication = notificationService.onPDFJSInitSignal();
       if (this.PDFViewerApplication) {
@@ -31,6 +30,5 @@ export class PdfNextPageComponent {
 
   public updateUIState(event: UpdateUIStateEvent): void {
     this.disableNextPage = event.pageNumber === event.pagesCount;
-    this.changeDetectorRef.markForCheck();
   }
 }

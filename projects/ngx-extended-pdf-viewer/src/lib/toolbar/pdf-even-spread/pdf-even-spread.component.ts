@@ -1,4 +1,4 @@
-import { Component, Input, effect } from '@angular/core';
+import { Component, input, effect } from '@angular/core';
 import { ScrollModeType } from '../../options/pdf-viewer';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { SpreadType } from '../../options/spread-type';
@@ -12,13 +12,11 @@ import { ResponsiveVisibility } from '../../responsive-visibility';
     standalone: false
 })
 export class PdfEvenSpreadComponent {
-  @Input()
-  public show: ResponsiveVisibility = true;
+  public show = input<ResponsiveVisibility>(true);
 
   public spread: SpreadType = 'off';
 
-  @Input()
-  public scrollMode!: ScrollModeType;
+  public scrollMode = input.required<ScrollModeType>();
 
   private PDFViewerApplication: IPDFViewerApplication | undefined;
 
@@ -40,9 +38,9 @@ export class PdfEvenSpreadComponent {
     });
   }
 
-  public onClick(): void {
+  public onClick = (): void => {
     if (this.PDFViewerApplication) {
       this.PDFViewerApplication.pdfViewer.spreadMode = 2;
     }
-  }
+  };
 }

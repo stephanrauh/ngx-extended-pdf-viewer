@@ -1,9 +1,9 @@
-@if (clockwise) {
+@if (clockwise()) {
   <pdf-shy-button
     [action]="rotateCW"
     primaryToolbarId="primaryPageRotateCw"
     class="rotateCw"
-    [cssClass]="showRotateCwButton | responsiveCSSClass : 'hiddenXLView'"
+    [cssClass]="showRotateCwButton() | responsiveCSSClass : 'hiddenXLView'"
     title="Rotate Clockwise"
     l10nId="pdfjs-page-rotate-cw-button"
     l10nLabel="pdfjs-page-rotate-cw-button-label"

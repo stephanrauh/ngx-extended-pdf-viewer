@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
@@ -8,12 +8,9 @@ import { ResponsiveVisibility } from '../../responsive-visibility';
     standalone: false
 })
 export class PdfZoomToolbarComponent {
-  @Input()
-  public showZoomButtons: ResponsiveVisibility = true;
+  public showZoomButtons = input<ResponsiveVisibility>(true);
 
-  @Input()
-  public zoomLevels = ['auto', 'page-actual', 'page-fit', 'page-width', 0.5, 0.75, 1, 1.25, 1.5, 2, 3, 4];
+  public zoomLevels = input(['auto', 'page-actual', 'page-fit', 'page-width', 0.5, 0.75, 1, 1.25, 1.5, 2, 3, 4]);
 
-  @Input()
-  public showZoomDropdown: ResponsiveVisibility = true;
+  public showZoomDropdown = input<ResponsiveVisibility>(true);
 }

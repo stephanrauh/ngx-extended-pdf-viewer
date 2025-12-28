@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
@@ -8,21 +8,15 @@ import { ResponsiveVisibility } from '../../responsive-visibility';
     standalone: false
 })
 export class PdfEditorComponent {
-  @Input()
-  public showCommentEditor: ResponsiveVisibility = true;
+  public showCommentEditor = input<ResponsiveVisibility>(true);
 
-  @Input()
-  public showDrawEditor: ResponsiveVisibility = true;
+  public showDrawEditor = input<ResponsiveVisibility>(true);
 
-  @Input()
-  public showHighlightEditor: ResponsiveVisibility = true;
+  public showHighlightEditor = input<ResponsiveVisibility>(true);
 
-  @Input()
-  public showTextEditor: ResponsiveVisibility = true;
+  public showTextEditor = input<ResponsiveVisibility>(true);
 
-  @Input()
-  public showSignatureEditor: ResponsiveVisibility = true;
+  public showSignatureEditor = input<ResponsiveVisibility>(true);
 
-  @Input()
-  public showStampEditor: ResponsiveVisibility = true;
+  public showStampEditor = input<ResponsiveVisibility>(true);
 }

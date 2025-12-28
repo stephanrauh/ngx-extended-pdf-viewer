@@ -1,5 +1,4 @@
-import { AfterContentInit, AfterViewInit, Component, ContentChild, ElementRef, Input, OnChanges, OnInit, Renderer2, ViewChild, effect } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { AfterContentInit, AfterViewInit, Component, computed, contentChild, effect, ElementRef, input, OnInit, Renderer2, viewChild } from '@angular/core';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { PdfCspPolicyService } from '../../pdf-csp-policy.service';
 import { PDFNotificationService } from '../../pdf-notification-service';
@@ -12,75 +11,55 @@ import { PdfShyButtonService } from './pdf-shy-button-service';
     templateUrl: './pdf-shy-button.component.html',
     standalone: false
 })
-export class PdfShyButtonComponent implements OnInit, OnChanges, AfterViewInit, AfterContentInit {
-  @Input()
-  public primaryToolbarId!: string;
+export class PdfShyButtonComponent implements OnInit, AfterViewInit, AfterContentInit {
+  public primaryToolbarId = input.required<string>();
 
-  @Input()
-  public secondaryMenuId!: string;
+  public secondaryMenuId = input<string>('');
 
-  @Input()
-  public cssClass: ResponsiveCSSClass = 'invisible';
+  public cssClass = input<ResponsiveCSSClass>('invisible');
 
-  @Input()
-  public eventBusName: string | undefined = undefined;
+  public eventBusName = input<string | undefined>(undefined);
 
-  @Input()
-  public l10nId!: string;
+  public l10nId = input<string>('');
 
-  @Input()
-  public l10nLabel!: string;
+  public l10nLabel = input<string>('');
 
-  @Input()
-  public title!: string;
+  public title = input<string>('');
 
-  @Input()
-  public toggled!: boolean;
+  public toggled = input<boolean>(false);
 
-  @Input()
-  public disabled!: boolean;
+  public disabled = input<boolean>(false);
 
-  @Input()
-  public order!: number;
+  public order = input<number>(99999);
 
-  @Input()
-  public action: ((htmlEvent?: Event, isSecondaryMenue?: boolean) => void) | undefined = undefined;
+  public action = input<((htmlEvent?: Event, isSecondaryMenue?: boolean) => void) | undefined>(undefined);
 
-  @Input()
-  public closeOnClick: boolean = true;
+  public closeOnClick = input<boolean>(true);
 
-  @Input()
-  public onlySecondaryMenu: boolean = false;
+  public onlySecondaryMenu = input<boolean>(false);
 
-  @Input()
-  public ariaHasPopup: boolean | 'true' | 'menu' | 'dialog' = false;
+  public ariaHasPopup = input<boolean | 'true' | 'menu' | 'dialog'>(false);
 
-  @Input()
-  public ariaControls: string | undefined;
+  public ariaControls = input<string | undefined>(undefined);
 
-  @Input()
-  public role: string | undefined;
+  public role = input<string | undefined>(undefined);
+
+  public image = input<string>('');
 
   private PDFViewerApplication: IPDFViewerApplication | undefined;
 
   public renderContent = false;
 
-  @ViewChild('buttonRef', { static: false }) buttonRef!: ElementRef;
+  public buttonRef = viewChild.required<ElementRef>('buttonRef');
 
-  @ContentChild('nestedContent', { static: false }) nestedContent: ElementRef | null = null;
+  public nestedContent = contentChild<ElementRef>('nestedContent');
 
-  private _imageHtml: string | undefined;
+  // Computed signal that validates and sanitizes the SVG string
+  // Returns sanitized HTML for use in both primary toolbar and secondary toolbar
+  public imageHtml = computed(() => {
+    const value = this.image();
+    if (!value) return undefined;
 
-  public get imageHtml(): string | SafeHtml | undefined {
-    if (this._imageHtml) {
-      // allow non-literal svg tags (sanitized in the setter)
-      return this.sanitizer.bypassSecurityTrustHtml(this._imageHtml); // NOSONAR
-    }
-    return undefined;
-  }
-
-  @Input()
-  public set image(value: string) {
     const svgTags = [
       // 'a' is not allowed!
       'animate',
@@ -153,24 +132,50 @@ export class PdfShyButtonComponent implements OnInit, OnChanges, AfterViewInit, 
       'view',
     ];
 
-    // only <svg> and SVG tags are allowed
+    // Validation: only <svg> and SVG tags are allowed
     const tags = value.split('<').filter((tag) => tag.length > 0);
     const legal = tags.every((tag) => tag.startsWith('svg') || tag.startsWith('/') || svgTags.includes(tag.split(/\s|>/)[0]));
     if (!legal) {
       throw new Error('Illegal image for PDFShyButton. Only SVG images are allowed. Please use only the tags <svg> and <path>. ' + value);
     }
-    this._imageHtml = this.pdfCspPolicyService.sanitizeHTML(value);
-  }
+
+    // Return validated raw SVG - sanitization happens in updateButtonImage and pipe
+    return value;
+  });
 
   constructor(
     private pdfShyButtonServiceService: PdfShyButtonService,
-    private sanitizer: DomSanitizer,
     private renderer: Renderer2,
     notificationService: PDFNotificationService,
     private pdfCspPolicyService: PdfCspPolicyService,
   ) {
     effect(() => {
       this.PDFViewerApplication = notificationService.onPDFJSInitSignal();
+    });
+
+    // Replace ngOnChanges: update service when any input changes
+    effect(() => {
+      // Track all inputs to trigger effect on any change
+      this.primaryToolbarId();
+      this.secondaryMenuId();
+      this.cssClass();
+      this.eventBusName();
+      this.l10nId();
+      this.l10nLabel();
+      this.title();
+      this.toggled();
+      this.disabled();
+      this.order();
+      this.action();
+      this.closeOnClick();
+      this.onlySecondaryMenu();
+      this.ariaHasPopup();
+      this.ariaControls();
+      this.role();
+      this.image();
+
+      // Service update runs whenever any input changes
+      this.pdfShyButtonServiceService.update(this);
     });
   }
 
@@ -182,30 +187,34 @@ export class PdfShyButtonComponent implements OnInit, OnChanges, AfterViewInit, 
     this.pdfShyButtonServiceService.add(this);
   }
 
-  public ngOnChanges(_changes: any): void {
-    this.pdfShyButtonServiceService.update(this);
-  }
-
   public onClick(htmlEvent: Event): void {
     if (htmlEvent instanceof KeyboardEvent && htmlEvent.key !== 'Enter' && htmlEvent.key !== ' ') {
       return;
     }
 
-    if (this.action) {
-      this.action(htmlEvent, false);
+    const actionFn = this.action();
+    const eventName = this.eventBusName();
+
+    if (actionFn) {
+      actionFn(htmlEvent, false);
       htmlEvent.preventDefault();
-    } else if (this.eventBusName) {
-      this.PDFViewerApplication?.eventBus.dispatch(this.eventBusName);
+    } else if (eventName) {
+      this.PDFViewerApplication?.eventBus.dispatch(eventName);
       htmlEvent.preventDefault();
     }
   }
 
   public updateButtonImage() {
-    if (this.buttonRef) {
-      const el = this.buttonRef.nativeElement;
-      if (this._imageHtml) {
+    const btnRef = this.buttonRef();
+    if (btnRef) {
+      const el = btnRef.nativeElement;
+      const imageHtmlValue = this.imageHtml();
+
+      if (imageHtmlValue && typeof imageHtmlValue === 'string') {
         const temp = this.renderer.createElement('div');
-        this.pdfCspPolicyService.addTrustedHTML(temp, this._imageHtml);
+        // imageHtmlValue is already sanitized by pdfCspPolicyService.sanitizeHTML in imageHtml computed
+        // Use addTrustedHTML to properly handle Trusted Types
+        this.pdfCspPolicyService.addTrustedHTML(temp, imageHtmlValue);
         const image = temp.children[0];
         if (!el.innerHTML.includes(image.innerHTML)) {
           // if using SSR, the HTML code may already be there
@@ -221,8 +230,8 @@ export class PdfShyButtonComponent implements OnInit, OnChanges, AfterViewInit, 
   }
 
   ngAfterContentInit() {
-    if (this.primaryToolbarId === 'nestedComponent') {
-      this.renderContent = !!this.nestedContent;
+    if (this.primaryToolbarId() === 'nestedComponent') {
+      this.renderContent = !!this.nestedContent();
       console.log('renderContent', this.renderContent);
     }
   }

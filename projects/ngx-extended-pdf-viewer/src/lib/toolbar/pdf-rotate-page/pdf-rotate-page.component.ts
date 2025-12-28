@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, effect } from '@angular/core';
+import { Component, input, effect } from '@angular/core';
 import { UpdateUIStateEvent } from '../../events/update-ui-state-event';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { ResponsiveVisibility } from '../../responsive-visibility';
@@ -11,20 +11,17 @@ import { PDFNotificationService } from './../../pdf-notification-service';
     standalone: false
 })
 export class PdfRotatePageComponent {
-  @Input()
-  public showRotateButton: ResponsiveVisibility = true;
+  public showRotateButton = input<ResponsiveVisibility>(true);
 
   public disableRotate = true;
 
-  @Input()
-  public clockwise = true;
+  public clockwise = input(true);
 
-  @Input()
-  public counterClockwise = true;
+  public counterClockwise = input(true);
 
   private PDFViewerApplication: IPDFViewerApplication | undefined;
 
-  constructor(notificationService: PDFNotificationService, private changeDetectorRef: ChangeDetectorRef) {
+  constructor(notificationService: PDFNotificationService) {
     effect(() => {
       this.PDFViewerApplication = notificationService.onPDFJSInitSignal();
       if (this.PDFViewerApplication) {
@@ -33,13 +30,13 @@ export class PdfRotatePageComponent {
     });
   }
 
-  public rotateCW(): void {
+  public rotateCW = (): void => {
     this.PDFViewerApplication?.eventBus.dispatch('rotatecw');
-  }
+  };
 
-  public rotateCCW(): void {
+  public rotateCCW = (): void => {
     this.PDFViewerApplication?.eventBus.dispatch('rotateccw');
-  }
+  };
 
   public onPdfJsInit(): void {
     this.PDFViewerApplication?.eventBus.on('updateuistate', (event) => this.updateUIState(event));
@@ -47,6 +44,5 @@ export class PdfRotatePageComponent {
 
   public updateUIState(event: UpdateUIStateEvent): void {
     this.disableRotate = event.pagesCount === 0;
-    this.changeDetectorRef.markForCheck();
   }
 }

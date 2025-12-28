@@ -1,4 +1,4 @@
-import { Component, effect, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import { Component, effect, input, model, OnDestroy } from '@angular/core';
 import { ScrollMode } from '../../options/pdf-scroll-mode';
 import { PageViewModeType, ScrollModeType } from '../../options/pdf-viewer';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
@@ -12,17 +12,11 @@ import { ResponsiveVisibility } from '../../responsive-visibility';
     standalone: false
 })
 export class PdfInfiniteScrollComponent implements OnDestroy {
-  @Input()
-  public show: ResponsiveVisibility = true;
+  public show = input<ResponsiveVisibility>(true);
 
-  @Input()
-  public pageViewMode!: PageViewModeType;
+  public pageViewMode = model.required<PageViewModeType>();
 
-  @Input()
-  public scrollMode!: ScrollModeType;
-
-  @Output()
-  public pageViewModeChange = new EventEmitter<PageViewModeType>();
+  public scrollMode = input.required<ScrollModeType>();
 
   public onClick?: () => void;
 
@@ -32,16 +26,17 @@ export class PdfInfiniteScrollComponent implements OnDestroy {
     effect(() => {
       this.PDFViewerApplication = notificationService.onPDFJSInitSignal();
     });
-    const emitter = this.pageViewModeChange;
     this.onClick = () => {
       queueMicrotask(() => {
-        if (this.pageViewMode === 'infinite-scroll') {
-          emitter.emit('multiple');
+        const currentViewMode = this.pageViewMode();
+        const currentScrollMode = this.scrollMode();
+        if (currentViewMode === 'infinite-scroll') {
+          this.pageViewMode.set('multiple');
         } else {
-          if (this.scrollMode !== ScrollModeType.wrapped && this.scrollMode !== ScrollModeType.vertical) {
+          if (currentScrollMode !== ScrollModeType.wrapped && currentScrollMode !== ScrollModeType.vertical) {
             this.PDFViewerApplication?.eventBus.dispatch('switchscrollmode', { mode: ScrollMode.VERTICAL });
           }
-          emitter.emit('infinite-scroll');
+          this.pageViewMode.set('infinite-scroll');
         }
       });
     };

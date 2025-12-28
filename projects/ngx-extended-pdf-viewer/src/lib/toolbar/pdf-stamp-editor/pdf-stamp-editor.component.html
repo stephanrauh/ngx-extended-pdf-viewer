@@ -1,5 +1,5 @@
 <pdf-shy-button title="Text" primaryToolbarId="primaryEditorStamp"
-  [cssClass]="show | responsiveCSSClass : 'hiddenTinyView'" l10nId="pdfjs-editor-stamp-button"
+  [cssClass]="show() | responsiveCSSClass : 'hiddenTinyView'" l10nId="pdfjs-editor-stamp-button"
   l10nLabel="pdfjs-editor-stamp-button-label" role="radio" ariaHasPopup="true"
   ariaControls="editorStampParamsToolbar" [order]="4200" [action]="onClick" [toggled]="isSelected"
   [closeOnClick]="true"

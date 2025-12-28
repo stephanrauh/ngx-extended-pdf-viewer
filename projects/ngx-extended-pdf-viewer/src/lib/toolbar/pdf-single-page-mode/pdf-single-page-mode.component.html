@@ -1,8 +1,8 @@
 <pdf-shy-button
-  [cssClass]="show | responsiveCSSClass: 'always-in-secondary-menu'"
+  [cssClass]="show() | responsiveCSSClass: 'always-in-secondary-menu'"
   title="Use Page Scrolling"
   primaryToolbarId="scrollPage"
-  [toggled]="scrollMode == 3"
+  [toggled]="scrollMode() == 3"
   l10nId="pdfjs-scroll-page-button"
   [action]="onClick"
   l10nLabel="pdfjs-scroll-page-button-label"

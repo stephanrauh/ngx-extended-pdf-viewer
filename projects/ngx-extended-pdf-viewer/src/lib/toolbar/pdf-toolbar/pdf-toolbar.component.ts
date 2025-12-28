@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, input, model, output, TemplateRef } from '@angular/core';
 import { PageViewModeType, ScrollModeType } from '../../options/pdf-viewer';
 import { SpreadType } from '../../options/spread-type';
 import { ResponsiveVisibility } from '../../responsive-visibility';
@@ -10,152 +10,103 @@ import { ResponsiveVisibility } from '../../responsive-visibility';
     standalone: false
 })
 export class PdfToolbarComponent implements AfterViewInit {
-  @Input()
-  public customToolbar: TemplateRef<any> | undefined;
+  public customToolbar = input<TemplateRef<any> | undefined>(undefined);
 
   // This is set internally by the viewer after loading a document. If the document has a text layer, the viewer will set this to true.
-  @Input()
-  public hasTextLayer = false;
+  public hasTextLayer = input<boolean>(false);
 
-  @Input()
-  public mobileFriendlyZoomScale = 1;
+  public mobileFriendlyZoomScale = input<number>(1);
 
-  @Input()
-  public primaryMenuVisible = true;
+  public primaryMenuVisible = input<boolean>(true);
 
-  @Input()
-  public showDownloadButton: ResponsiveVisibility = true;
+  public showDownloadButton = input<ResponsiveVisibility>(true);
 
-  @Input()
-  public showCommentEditor: ResponsiveVisibility = false;
+  public showCommentEditor = input<ResponsiveVisibility>(false);
 
-  @Input()
-  public showDrawEditor: ResponsiveVisibility = false;
+  public showDrawEditor = input<ResponsiveVisibility>(false);
 
-  @Input()
-  public showHighlightEditor: ResponsiveVisibility = true;
+  public showHighlightEditor = input<ResponsiveVisibility>(true);
 
-  @Input()
-  public showTextEditor: ResponsiveVisibility = false;
+  public showTextEditor = input<ResponsiveVisibility>(false);
 
-  @Input()
-  public showStampEditor: ResponsiveVisibility = false;
+  public showStampEditor = input<ResponsiveVisibility>(false);
 
-  @Input()
-  public showFindButton: ResponsiveVisibility | undefined = undefined;
+  public showFindButton = input<ResponsiveVisibility | undefined>(undefined);
 
-  @Input()
-  public showHandToolButton: ResponsiveVisibility = true;
+  public showHandToolButton = input<ResponsiveVisibility>(true);
 
-  @Input()
-  public showZoomDropdown: ResponsiveVisibility = true;
+  public showZoomDropdown = input<ResponsiveVisibility>(true);
 
-  @Input()
-  public handTool = false;
+  public handTool = input<boolean>(false);
 
-  @Input()
-  public showOpenFileButton: ResponsiveVisibility = true;
+  public showOpenFileButton = input<ResponsiveVisibility>(true);
 
-  @Input()
-  public showPrintButton: ResponsiveVisibility = true;
+  public showPrintButton = input<ResponsiveVisibility>(true);
 
-  @Input()
-  public showPagingButtons: ResponsiveVisibility = true;
+  public showPagingButtons = input<ResponsiveVisibility>(true);
 
-  @Input()
-  public showFirstAndLastPageButtons: ResponsiveVisibility = true;
+  public showFirstAndLastPageButtons = input<ResponsiveVisibility>(true);
 
-  @Input()
-  public showMovePageButton: ResponsiveVisibility = true;
+  public showMovePageButton = input<ResponsiveVisibility>(true);
 
-  @Input()
-  public showPreviousAndNextPageButtons: ResponsiveVisibility = true;
+  public showPreviousAndNextPageButtons = input<ResponsiveVisibility>(true);
 
-  @Input()
-  public showPageNumber: ResponsiveVisibility = true;
+  public showPageNumber = input<ResponsiveVisibility>(true);
 
-  @Input()
-  public showPageLabel: ResponsiveVisibility = true;
+  public showPageLabel = input<ResponsiveVisibility>(true);
 
-  @Input()
-  public showPresentationModeButton: ResponsiveVisibility = false;
+  public showPresentationModeButton = input<ResponsiveVisibility>(false);
 
-  @Input()
-  public showRotateCwButton: ResponsiveVisibility = true;
+  public showRotateCwButton = input<ResponsiveVisibility>(true);
 
-  @Input()
-  public showRotateCcwButton: ResponsiveVisibility = true;
+  public showRotateCcwButton = input<ResponsiveVisibility>(true);
 
-  @Input()
-  public showSecondaryToolbarButton: ResponsiveVisibility = true;
+  public showSecondaryToolbarButton = input<ResponsiveVisibility>(true);
 
-  @Input()
-  public showSidebarButton: ResponsiveVisibility = true;
+  public showSidebarButton = input<ResponsiveVisibility>(true);
 
-  @Input()
-  public showSignatureEditor: ResponsiveVisibility = false;
+  public showSignatureEditor = input<ResponsiveVisibility>(false);
 
-  @Input()
-  public sidebarVisible: boolean | undefined = false;
+  public sidebarVisible = input<boolean | undefined>(false);
 
-  @Input()
-  public showZoomButtons: ResponsiveVisibility = true;
+  public showZoomButtons = input<ResponsiveVisibility>(true);
 
-  @Input()
-  public textLayer: boolean | undefined = undefined;
+  public textLayer = input<boolean | undefined>(undefined);
 
-  @Input()
-  public toolbarMarginTop = '0px';
+  public toolbarMarginTop = input<string>('0px');
 
-  @Input()
-  public toolbarWidth = '100%';
+  public toolbarWidth = input<string>('100%');
 
-  @Input()
-  public zoomLevels = ['auto', 'page-actual', 'page-fit', 'page-width', 0.5, 0.75, 1, 1.25, 1.5, 2, 3, 4];
+  public zoomLevels = input<(string | number)[]>(['auto', 'page-actual', 'page-fit', 'page-width', 0.5, 0.75, 1, 1.25, 1.5, 2, 3, 4]);
 
-  @Input()
-  public pageViewMode!: PageViewModeType;
+  public pageViewMode = model.required<PageViewModeType>();
 
-  @Output()
-  public pageViewModeChange = new EventEmitter<PageViewModeType>();
+  public spread = input.required<SpreadType>();
 
-  @Input()
-  public spread!: SpreadType;
+  public scrollMode = input.required<ScrollModeType>();
 
-  @Input()
-  public scrollMode!: ScrollModeType;
+  public showPropertiesButton = input<ResponsiveVisibility>(true);
 
-  @Input()
-  public showPropertiesButton: ResponsiveVisibility = true;
+  public showSpreadButton = input<ResponsiveVisibility>(true);
 
-  @Input()
-  public showSpreadButton: ResponsiveVisibility = true;
+  public showSinglePageModeButton = input<ResponsiveVisibility>(true);
 
-  @Input()
-  public showSinglePageModeButton: ResponsiveVisibility = true;
+  public showVerticalScrollButton = input<ResponsiveVisibility>(true);
 
-  @Input()
-  public showVerticalScrollButton: ResponsiveVisibility = true;
+  public showHorizontalScrollButton = input<ResponsiveVisibility>(true);
 
-  @Input()
-  public showHorizontalScrollButton: ResponsiveVisibility = true;
+  public showWrappedScrollButton = input<ResponsiveVisibility>(true);
 
-  @Input()
-  public showWrappedScrollButton: ResponsiveVisibility = true;
+  public showInfiniteScrollButton = input<ResponsiveVisibility>(true);
 
-  @Input()
-  public showInfiniteScrollButton: ResponsiveVisibility = true;
+  public showBookModeButton = input<ResponsiveVisibility>(true);
 
-  @Input()
-  public showBookModeButton: ResponsiveVisibility = true;
+  public onToolbarLoaded = output<HTMLElement>();
 
-  @Output()
-  public onToolbarLoaded = new EventEmitter<HTMLElement>();
+  public findbarVisible = input<boolean>(false);
 
-  @Input()
-  public findbarVisible = false;
-
-  constructor(private elementRef: ElementRef) {}
+  constructor(private elementRef: ElementRef) {
+  }
 
   ngAfterViewInit(): void {
     this.onToolbarLoaded.emit(this.elementRef.nativeElement.getElementsByClassName('toolbar')[0] as HTMLElement);
@@ -163,8 +114,7 @@ export class PdfToolbarComponent implements AfterViewInit {
 
   public updatePageViewMode(pageViewMode: PageViewModeType): void {
     if (pageViewMode) {
-      this.pageViewModeChange.emit(pageViewMode);
-      this.pageViewMode = pageViewMode;
+      this.pageViewMode.set(pageViewMode);
     }
   }
 }

@@ -32,6 +32,10 @@ describe('PdfEvenSpreadComponent', () => {
     component = fixture.componentInstance;
     pdfNotificationService = TestBed.inject(PDFNotificationService);
 
+    // Set required input signals
+    fixture.componentRef.setInput('scrollMode', 'vertical');
+    TestBed.flushEffects();
+
     // Assign the mock object to the PDFViewerApplication
     pdfNotificationService.onPDFJSInitSignal.set(mockPDFViewerApplication);
 

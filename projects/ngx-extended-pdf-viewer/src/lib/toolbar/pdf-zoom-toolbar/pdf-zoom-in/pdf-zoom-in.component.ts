@@ -1,4 +1,4 @@
-import { Component, effect, Input, OnDestroy } from '@angular/core';
+import { Component, effect, input, OnDestroy } from '@angular/core';
 import { ScaleChangingEvent } from '../../../events/scale-changing-event';
 import { IPDFViewerApplication } from '../../../options/pdf-viewer-application';
 import { PDFNotificationService } from '../../../pdf-notification-service';
@@ -11,8 +11,7 @@ import { ResponsiveVisibility } from '../../../responsive-visibility';
     standalone: false
 })
 export class PdfZoomInComponent implements OnDestroy {
-  @Input()
-  public showZoomButtons: ResponsiveVisibility = true;
+  public showZoomButtons = input<ResponsiveVisibility>(true);
 
   public disabled = true;
   PDFViewerApplication: IPDFViewerApplication | undefined;

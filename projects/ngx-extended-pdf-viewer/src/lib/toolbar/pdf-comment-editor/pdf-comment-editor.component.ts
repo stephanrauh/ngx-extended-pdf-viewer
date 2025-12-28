@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, effect } from '@angular/core';
+import { Component, effect, input } from '@angular/core';
 import { PositioningService } from '../../dynamic-css/positioning.service';
 import { AnnotationEditorEditorModeChangedEvent } from '../../events/annotation-editor-mode-changed-event';
 import { FocusManagementService } from '../../focus-management.service';
@@ -14,15 +14,13 @@ import { ResponsiveVisibility } from '../../responsive-visibility';
     standalone: false
 })
 export class PdfCommentEditorComponent {
-  @Input()
-  public show: ResponsiveVisibility = true;
+  public show = input<ResponsiveVisibility>(true);
 
   public isSelected = false;
   private PDFViewerApplication: IPDFViewerApplication | undefined;
 
   constructor(
     notificationService: PDFNotificationService,
-    private cdr: ChangeDetectorRef,
     private focusManagement: FocusManagementService,
   ) {
     effect(() => {
@@ -48,12 +46,12 @@ export class PdfCommentEditorComponent {
           this.focusManagement.returnFocusToPrevious('Comment editor toolbar closed');
         }
 
-        this.cdr.detectChanges();
+        // No manual change detection needed - signals handle this automatically
       });
     });
   }
 
-  public onClick(event?: Event): void {
+  public onClick = (event?: Event): void => {
     const currentMode = this.PDFViewerApplication?.pdfViewer.annotationEditorMode;
     this.PDFViewerApplication?.eventBus.dispatch('switchannotationeditormode', {
       source: this,
@@ -64,5 +62,5 @@ export class PdfCommentEditorComponent {
     // Position the comment sidebar
     const positioningService = new PositioningService();
     positioningService.positionPopupBelowItsButton('editorCommentButton', 'editorCommentParamsToolbar');
-  }
+  };
 }

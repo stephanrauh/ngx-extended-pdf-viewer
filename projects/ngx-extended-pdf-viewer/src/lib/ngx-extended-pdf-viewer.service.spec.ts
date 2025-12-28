@@ -61,7 +61,7 @@ describe('NgxExtendedPdfViewerService', () => {
 
     it('should initialize with default values', () => {
       expect(service.ngxExtendedPdfViewerInitialized).toBe(false);
-      expect(service.secondaryMenuIsEmpty).toBe(false);
+      expect(service.secondaryMenuIsEmpty()).toBe(false);
     });
 
     it('should create renderer from factory', () => {
@@ -371,10 +371,10 @@ describe('NgxExtendedPdfViewerService', () => {
     });
 
     it('should handle secondary menu state', () => {
-      expect(service.secondaryMenuIsEmpty).toBe(false);
-      
-      service.secondaryMenuIsEmpty = true;
-      expect(service.secondaryMenuIsEmpty).toBe(true);
+      expect(service.secondaryMenuIsEmpty()).toBe(false);
+
+      service.secondaryMenuIsEmpty.set(true);
+      expect(service.secondaryMenuIsEmpty()).toBe(true);
     });
 
     it('should maintain renderer reference', () => {

@@ -41,9 +41,9 @@ if (BRANCH === 'bleeding-edge') {
 // Build based on argument
 const quickMode = process.argv[2] === 'quick';
 if (quickMode) {
-  runCommand('gulp generic', 'Gulp generic failed');
+  runCommand('npx gulp generic', 'Gulp generic failed');
 } else {
-  runCommand('gulp generic && gulp minified && gulp generic-legacy', 'Gulp build failed');
+  runCommand('npx gulp generic && npx gulp minified && npx gulp generic-legacy', 'Gulp build failed');
 
   // Rename files (only in full mode)
   const renameOperations = [
@@ -116,7 +116,7 @@ runCommand('node build-tools/add-version-number-to-file-name/add-version-number.
 if (BRANCH !== 'bleeding-edge') {
   console.log('Generating types');
   process.chdir(path.join('..', 'mypdf.js'));
-  runCommand('gulp types', 'Generating types failed');
+  runCommand('npx gulp types', 'Generating types failed');
   process.chdir(path.join('..', 'ngx-extended-pdf-viewer'));
   fs.copySync(path.join('..', 'mypdf.js', 'build', 'types'), path.join('projects', 'ngx-extended-pdf-viewer', 'types'));
 }

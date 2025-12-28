@@ -1,4 +1,4 @@
-import { Component, Input, TemplateRef } from '@angular/core';
+import { Component, input, TemplateRef } from '@angular/core';
 import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
@@ -8,49 +8,34 @@ import { ResponsiveVisibility } from '../../responsive-visibility';
     standalone: false
 })
 export class PdfFindbarComponent {
-  @Input()
-  public showFindButton: ResponsiveVisibility = true;
+  public showFindButton = input<ResponsiveVisibility>(true);
 
-  @Input()
-  public mobileFriendlyZoomScale!: number;
+  public mobileFriendlyZoomScale = input.required<number>();
 
-  @Input()
-  public findbarLeft: string | undefined;
+  public findbarLeft = input<string | undefined>(undefined);
 
-  @Input()
-  public findbarTop: string | undefined;
+  public findbarTop = input<string | undefined>(undefined);
 
   /* UI templates */
-  @Input()
-  public customFindbarInputArea: TemplateRef<any> | undefined;
+  public customFindbarInputArea = input<TemplateRef<any> | undefined>(undefined);
 
-  @Input()
-  public customFindbar!: TemplateRef<any>;
+  public customFindbar = input<TemplateRef<any> | undefined>(undefined);
 
-  @Input()
-  public customFindbarButtons: TemplateRef<any> | undefined;
+  public customFindbarButtons = input<TemplateRef<any> | undefined>(undefined);
 
-  @Input()
-  public showFindHighlightAll = true;
+  public showFindHighlightAll = input<boolean>(true);
 
-  @Input()
-  public showFindMatchCase = true;
+  public showFindMatchCase = input<boolean>(true);
 
-  @Input()
-  public showFindEntireWord = true;
+  public showFindEntireWord = input<boolean>(true);
 
-  @Input()
-  public showFindMatchDiacritics = true;
+  public showFindMatchDiacritics = input<boolean>(true);
 
-  @Input()
-  public showFindResultsCount = true;
+  public showFindResultsCount = input<boolean>(true);
 
-  @Input()
-  public showFindMessages = true;
+  public showFindMessages = input<boolean>(true);
 
-  @Input()
-  public showFindMultiple: boolean = true;
+  public showFindMultiple = input<boolean>(true);
 
-  @Input()
-  public showFindRegexp: boolean = true;
+  public showFindRegexp = input<boolean>(true);
 }

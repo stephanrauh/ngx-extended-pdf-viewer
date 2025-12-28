@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
+import { Component, ElementRef, input, output, signal, TemplateRef } from '@angular/core';
 import { PdfThumbnailDrawnEvent } from '../../events/pdf-thumbnail-drawn-event';
 import { ResponsiveVisibility } from '../../responsive-visibility';
 
@@ -9,30 +9,23 @@ import { ResponsiveVisibility } from '../../responsive-visibility';
     standalone: false
 })
 export class PdfSidebarComponent {
-  @Input()
-  public sidebarPositionTop: string | undefined;
+  public sidebarPositionTop = input<string | undefined>(undefined);
 
-  @Input()
-  public sidebarVisible = true;
+  public sidebarVisible = input<boolean>(true);
 
-  @Input()
-  public mobileFriendlyZoomScale = 1;
+  public mobileFriendlyZoomScale = input<number>(1);
 
-  @Input()
-  public showSidebarButton: ResponsiveVisibility = true;
+  public showSidebarButton = input<ResponsiveVisibility>(true);
 
-  @Input()
-  public customSidebar: TemplateRef<any> | undefined;
+  public customSidebar = input<TemplateRef<any> | undefined>(undefined);
 
-  @Input()
-  public customThumbnail: TemplateRef<any> | undefined;
+  public customThumbnail = input<TemplateRef<any> | undefined>(undefined);
 
-  @Output()
-  public thumbnailDrawn = new EventEmitter<PdfThumbnailDrawnEvent>();
+  public thumbnailDrawn = output<PdfThumbnailDrawnEvent>();
 
-  public hideSidebarToolbar = true;
+  public hideSidebarToolbar = signal(true);
 
-  constructor(private elementRef: ElementRef, private ref: ChangeDetectorRef) {}
+  constructor(private elementRef: ElementRef) {}
 
   public showToolbarWhenNecessary(): void {
     const element = this.elementRef.nativeElement as HTMLElement;
@@ -44,7 +37,7 @@ export class PdfSidebarComponent {
         visible++;
       }
     }
-    this.hideSidebarToolbar = visible <= 1;
-    this.ref.markForCheck();
+    this.hideSidebarToolbar.set(visible <= 1);
+    // Signals automatically trigger change detection, no need for markForCheck()
   }
 }

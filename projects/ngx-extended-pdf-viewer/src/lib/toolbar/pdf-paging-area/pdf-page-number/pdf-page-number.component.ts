@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { ResponsiveVisibility } from '../../../responsive-visibility';
 
 @Component({
@@ -8,8 +8,6 @@ import { ResponsiveVisibility } from '../../../responsive-visibility';
     standalone: false
 })
 export class PdfPageNumberComponent {
-  @Input()
-  public showPageNumber: ResponsiveVisibility = true;
-  @Input()
-  public showPageLabel: ResponsiveVisibility = true;
+  public showPageNumber = input<ResponsiveVisibility>(true);
+  public showPageLabel = input<ResponsiveVisibility>(true);
 }

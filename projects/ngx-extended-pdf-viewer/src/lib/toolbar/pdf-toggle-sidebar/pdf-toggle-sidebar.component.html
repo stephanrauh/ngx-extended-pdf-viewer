@@ -1,8 +1,8 @@
 <pdf-shy-button
   title="Toggle Sidebar"
   primaryToolbarId="primarySidebarToggle"
-  [cssClass]="show | responsiveCSSClass : 'always-visible'"
-  [toggled]="sidebarVisible === true"
+  [cssClass]="show() | responsiveCSSClass : 'always-visible'"
+  [toggled]="sidebarVisible() === true"
   l10nId="pdfjs-toggle-sidebar-button"
   l10nLabel="pdfjs-toggle-sidebar-button-label"
   [order]="4500"

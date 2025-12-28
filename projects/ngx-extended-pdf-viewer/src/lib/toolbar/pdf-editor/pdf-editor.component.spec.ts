@@ -44,18 +44,18 @@ describe('PdfEditorComponent', () => {
   });
 
   it('should have showTextEditor default to true', () => {
-    expect(component.showTextEditor).toBe(true);
+    expect(component.showTextEditor()).toBe(true);
   });
 
   it('should set showTextEditor to true', () => {
-    component.showTextEditor = true;
-    fixture.detectChanges();
-    expect(component.showTextEditor).toBe(true);
+    fixture.componentRef.setInput('showTextEditor', true);
+    TestBed.flushEffects();
+    expect(component.showTextEditor()).toBe(true);
   });
 
   it('should set showTextEditor to false', () => {
-    component.showTextEditor = false;
-    fixture.detectChanges();
-    expect(component.showTextEditor).toBe(false);
+    fixture.componentRef.setInput('showTextEditor', false);
+    TestBed.flushEffects();
+    expect(component.showTextEditor()).toBe(false);
   });
 });

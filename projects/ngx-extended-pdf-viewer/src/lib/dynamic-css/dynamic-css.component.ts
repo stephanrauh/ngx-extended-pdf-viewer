@@ -1,5 +1,5 @@
-import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { CSP_NONCE, Component, Inject, Input, OnDestroy, Optional, PLATFORM_ID, Renderer2 } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { CSP_NONCE, Component, computed, Inject, input, OnDestroy, Optional, Renderer2, signal } from '@angular/core';
 import { NgxHasHeight } from '../ngx-has-height';
 import { VerbosityLevel } from '../options/verbosity-level';
 import { PdfCspPolicyService } from '../pdf-csp-policy.service';
@@ -13,29 +13,27 @@ import { UnitToPx } from '../unit-to-px';
     standalone: false
 })
 export class DynamicCssComponent implements OnDestroy {
-  @Input()
-  public zoom = 1.0;
+  public zoom = input<number>(1.0);
 
-  @Input()
-  public width = 3.14159265359;
+  public width = input<number>(3.14159265359);
 
-  public xxs = 455;
+  public xxs = signal(455);
 
-  public xs = 490;
+  public xs = signal(490);
 
-  public sm = 560;
+  public sm = signal(560);
 
-  public md = 610;
+  public md = signal(610);
 
-  public lg = 660;
+  public lg = signal(660);
 
-  public xl = 740;
+  public xl = signal(740);
 
-  public xxl = 830;
+  public xxl = signal(830);
 
-  public toolbarWidth = 0;
+  public toolbarWidth = signal(0);
 
-  public get style(): string {
+  public style = computed(() => {
     return `
 #toolbarContainer .always-in-secondary-menu {
   display: none;
@@ -43,7 +41,7 @@ export class DynamicCssComponent implements OnDestroy {
 
 /* #3105 fixed the layout of the find bar */
 .findbar {
-  max-width: ${this.toolbarWidth > 0 ? this.toolbarWidth + 'px' : '100%'};
+  max-width: ${this.toolbarWidth() > 0 ? this.toolbarWidth() + 'px' : '100%'};
 }
 /* #3105 end of fix */
 
@@ -69,7 +67,7 @@ export class DynamicCssComponent implements OnDestroy {
   margin-top: -2px;
 }
 
-@media all and (max-width: ${this.xxl}) {
+@media all and (max-width: ${this.xxl()}) {
   #sidebarContent {
     background-color: rgba(0, 0, 0, 0.7);
   }
@@ -87,7 +85,7 @@ export class DynamicCssComponent implements OnDestroy {
   }
 }
 
-@media all and (max-width: ${this.lg}px) {
+@media all and (max-width: ${this.lg()}px) {
   .toolbarButtonSpacer {
     width: 15px;
   }
@@ -100,7 +98,7 @@ export class DynamicCssComponent implements OnDestroy {
   }
 }
 
-@media all and (max-width: ${this.md}px) {
+@media all and (max-width: ${this.md()}px) {
   .toolbarButtonSpacer {
     display: none;
   }
@@ -112,7 +110,7 @@ export class DynamicCssComponent implements OnDestroy {
   }
 }
 
-@media all and (max-width: ${this.sm}px) {
+@media all and (max-width: ${this.sm()}px) {
   #outerContainer .hiddenSmallView,
   #outerContainer .hiddenSmallView * {
     display: none;
@@ -142,7 +140,7 @@ export class DynamicCssComponent implements OnDestroy {
   display: unset;
 }
 
-@media all and (max-width: ${this.xl}px) {
+@media all and (max-width: ${this.xl()}px) {
   #outerContainer .hiddenXLView {
     display: none;
   }
@@ -151,7 +149,7 @@ export class DynamicCssComponent implements OnDestroy {
   }
 }
 
-@media all and (max-width: ${this.xxl}px) {
+@media all and (max-width: ${this.xxl()}px) {
   #outerContainer .hiddenXXLView {
     display: none;
   }
@@ -160,7 +158,7 @@ export class DynamicCssComponent implements OnDestroy {
   }
 }
 
-@media all and (max-width: ${this.xs}px) {
+@media all and (max-width: ${this.xs()}px) {
   #outerContainer .hiddenTinyView,
   #outerContainer .hiddenTinyView * {
     display: none;
@@ -170,7 +168,7 @@ export class DynamicCssComponent implements OnDestroy {
   }
 }
 
-@media all and (max-width: ${this.xxs}px) {
+@media all and (max-width: ${this.xxs()}px) {
   #outerContainer .hiddenXXSView,
   #outerContainer .hiddenXXSView * {
     display: none;
@@ -180,18 +178,15 @@ export class DynamicCssComponent implements OnDestroy {
   }
 }
   `;
-  }
+  });
 
   constructor(
     private readonly renderer: Renderer2,
     @Inject(DOCUMENT) private readonly document: Document,
-    @Inject(PLATFORM_ID) private readonly platformId: Object,
     private readonly pdfCspPolicyService: PdfCspPolicyService,
     @Inject(CSP_NONCE) @Optional() private readonly nonce?: string | null
   ) {
-    if (isPlatformBrowser(this.platformId)) {
-      this.width = document.body.clientWidth;
-    }
+    // Width is now an input signal and will be provided by the parent component
   }
 
   public updateToolbarWidth() {
@@ -203,25 +198,25 @@ export class DynamicCssComponent implements OnDestroy {
 
     // #3105 fixed the layout of the find bar
     // Store the toolbar width for findbar max-width calculation
-    this.toolbarWidth = toolbarWidthInPixels;
+    this.toolbarWidth.set(toolbarWidthInPixels);
     // #3105 end of fix
 
     const fullWith = this.document.body.clientWidth;
     const partialViewScale = fullWith / toolbarWidthInPixels;
-    const scaleFactor = partialViewScale * (this.zoom ? this.zoom : 1);
+    const scaleFactor = partialViewScale * (this.zoom() ? this.zoom() : 1);
 
-    this.xs = scaleFactor * PdfBreakpoints.xs;
-    this.sm = scaleFactor * PdfBreakpoints.sm;
-    this.md = scaleFactor * PdfBreakpoints.md;
-    this.lg = scaleFactor * PdfBreakpoints.lg;
-    this.xl = scaleFactor * PdfBreakpoints.xl;
-    this.xxl = scaleFactor * PdfBreakpoints.xxl;
+    this.xs.set(scaleFactor * PdfBreakpoints.xs);
+    this.sm.set(scaleFactor * PdfBreakpoints.sm);
+    this.md.set(scaleFactor * PdfBreakpoints.md);
+    this.lg.set(scaleFactor * PdfBreakpoints.lg);
+    this.xl.set(scaleFactor * PdfBreakpoints.xl);
+    this.xxl.set(scaleFactor * PdfBreakpoints.xxl);
 
     let styles = this.document.getElementById('pdf-dynamic-css') as HTMLStyleElement;
     if (!styles) {
       styles = this.document.createElement('STYLE') as HTMLStyleElement;
       styles.id = 'pdf-dynamic-css';
-      this.pdfCspPolicyService.addTrustedCSS(styles, this.style);
+      this.pdfCspPolicyService.addTrustedCSS(styles, this.style());
 
       if (this.nonce) {
         styles.nonce = this.nonce;
@@ -229,7 +224,7 @@ export class DynamicCssComponent implements OnDestroy {
 
       this.renderer.appendChild(this.document.head, styles);
     } else {
-      this.pdfCspPolicyService.addTrustedCSS(styles, this.style);
+      this.pdfCspPolicyService.addTrustedCSS(styles, this.style());
     }
   }
 

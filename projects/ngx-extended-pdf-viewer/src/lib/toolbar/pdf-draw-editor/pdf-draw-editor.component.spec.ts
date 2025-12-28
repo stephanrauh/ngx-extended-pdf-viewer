@@ -100,7 +100,7 @@ describe('PdfDrawEditorComponent', () => {
     });
 
     it('should have default values', () => {
-      expect(component.show).toBe(true);
+      expect(component.show()).toBe(true);
       expect(component.isSelected).toBe(false);
     });
 
@@ -141,45 +141,41 @@ describe('PdfDrawEditorComponent', () => {
 
     it('should set isSelected to true when mode is 15', (done) => {
       jest.useFakeTimers();
-      
-      // Clear previous calls for detectChanges and call onPdfJsInit to register the event listener
-      mockChangeDetectorRef.detectChanges.mockClear();
+
+      // Clear previous calls and call onPdfJsInit to register the event listener
       (mockPDFViewerApplication.eventBus.on as jest.MockedFunction<any>).mockClear();
       (component as any).onPdfJsInit();
-      
+
       // Get the event handler that was registered
       const eventHandler = (mockPDFViewerApplication.eventBus.on as jest.MockedFunction<any>).mock.calls[0][1];
-      
+
       // Call the event handler with mode 15
       eventHandler({ mode: 15 });
-      
+
       // Fast-forward the setTimeout
       jest.advanceTimersByTime(1);
-      
+
       expect(component.isSelected).toBe(true);
-      expect(mockChangeDetectorRef.detectChanges).toHaveBeenCalled();
-      
+
       jest.useRealTimers();
       done();
     });
 
     it('should set isSelected to false when mode is not 15', (done) => {
       jest.useFakeTimers();
-      
-      // Clear previous calls for detectChanges and call onPdfJsInit to register the event listener
-      mockChangeDetectorRef.detectChanges.mockClear();
+
+      // Clear previous calls and call onPdfJsInit to register the event listener
       (mockPDFViewerApplication.eventBus.on as jest.MockedFunction<any>).mockClear();
       (component as any).onPdfJsInit();
-      
+
       const eventHandler = (mockPDFViewerApplication.eventBus.on as jest.MockedFunction<any>).mock.calls[0][1];
-      
+
       eventHandler({ mode: 10 });
-      
+
       jest.advanceTimersByTime(1);
-      
+
       expect(component.isSelected).toBe(false);
-      expect(mockChangeDetectorRef.detectChanges).toHaveBeenCalled();
-      
+
       jest.useRealTimers();
       done();
     });
@@ -263,13 +259,15 @@ describe('PdfDrawEditorComponent', () => {
 
   describe('input properties', () => {
     it('should accept show input with boolean value', () => {
-      component.show = false;
-      expect(component.show).toBe(false);
+      fixture.componentRef.setInput('show', false);
+      TestBed.flushEffects();
+      expect(component.show()).toBe(false);
     });
 
     it('should accept show input with ResponsiveVisibility value', () => {
-      component.show = 'xxs';
-      expect(component.show).toBe('xxs');
+      fixture.componentRef.setInput('show', 'xxs');
+      TestBed.flushEffects();
+      expect(component.show()).toBe('xxs');
     });
   });
 

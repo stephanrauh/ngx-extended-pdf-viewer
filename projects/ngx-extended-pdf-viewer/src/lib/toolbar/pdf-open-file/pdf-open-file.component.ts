@@ -1,4 +1,4 @@
-import { Component, effect, Input } from '@angular/core';
+import { Component, effect, input } from '@angular/core';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { PDFNotificationService } from '../../pdf-notification-service';
 import { ResponsiveVisibility } from '../../responsive-visibility';
@@ -10,8 +10,7 @@ import { ResponsiveVisibility } from '../../responsive-visibility';
     standalone: false
 })
 export class PdfOpenFileComponent {
-  @Input()
-  public showOpenFileButton: ResponsiveVisibility = true;
+  public showOpenFileButton = input<ResponsiveVisibility>(true);
 
   private PDFViewerApplication: IPDFViewerApplication | undefined;
 

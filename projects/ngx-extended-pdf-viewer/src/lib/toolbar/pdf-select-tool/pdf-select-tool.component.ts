@@ -1,4 +1,4 @@
-import { Component, Input, effect } from '@angular/core';
+import { Component, input, effect } from '@angular/core';
 import { HandtoolChanged } from '../../events/handtool-changed';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { PDFNotificationService } from '../../pdf-notification-service';
@@ -12,15 +12,11 @@ import { PdfCursorTools } from './../../options/pdf-cursor-tools';
     standalone: false
 })
 export class PdfSelectToolComponent {
-  @Input()
-  public showSelectToolButton: ResponsiveVisibility = true;
+  public showSelectToolButton = input<ResponsiveVisibility>(true);
 
   public isSelected = true;
 
-  @Input()
-  public set handTool(value: boolean) {
-    this.isSelected = !value;
-  }
+  public handTool = input(false);
 
   private PDFViewerApplication: IPDFViewerApplication | undefined;
 
@@ -31,13 +27,17 @@ export class PdfSelectToolComponent {
         this.onPdfJsInit();
       }
     });
+
+    effect(() => {
+      this.isSelected = !this.handTool();
+    });
   }
 
   private onPdfJsInit() {
     this.PDFViewerApplication?.eventBus.on('cursortoolchanged', ({ tool }: HandtoolChanged) => (this.isSelected = tool === PdfCursorTools.SELECT));
   }
 
-  public onClick(): void {
+  public onClick = (): void => {
     this.PDFViewerApplication?.eventBus.dispatch('switchcursortool', { tool: PdfCursorTools.SELECT });
-  }
+  };
 }

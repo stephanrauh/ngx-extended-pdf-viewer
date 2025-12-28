@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 
 @Component({
     selector: 'pdf-sidebar-toolbar',
@@ -8,11 +8,10 @@ import { Component, Input } from '@angular/core';
 })
 export class PdfSidebarToolbarComponent {
 
-  @Input()
-  public mobileFriendlyZoomScale = 1;
+  public mobileFriendlyZoomScale = input<number>(1);
 
-  public get height(): string {
-    const h = 32 * this.mobileFriendlyZoomScale;
+  public height = computed(() => {
+    const h = 32 * this.mobileFriendlyZoomScale();
     return `${h}px`;
-  }
+  });
 }

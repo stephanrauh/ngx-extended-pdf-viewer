@@ -1,12 +1,12 @@
 <button
   type="button"
-  [class]="showSecondaryToolbarButton | responsiveCSSClass : 'always-visible'"
+  [class]="showSecondaryToolbarButton() | responsiveCSSClass : 'always-visible'"
   id="secondaryToolbarToggle"
   class="toolbarButton"
   title="Tools"
   data-l10n-id="pdfjs-tools-button"
   aria-label="Tools"
-  [class.hidden]="service.secondaryMenuIsEmpty"
+  [class.hidden]="service.secondaryMenuIsEmpty()"
 >
   <svg aria-hidden="true" focusable="false" width="27px" height="27px" viewBox="0 0 24 24" (click)="onClick($event)">
     <path fill="currentColor" d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" />

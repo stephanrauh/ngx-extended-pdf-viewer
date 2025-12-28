@@ -103,14 +103,14 @@ describe('DynamicCssComponent', () => {
     });
 
     it('should initialize with default values', () => {
-      expect(component.zoom).toBe(1.0);
-      expect(component.width).toBe(1024);
+      expect(component.zoom()).toBe(1.0);
+      expect(component.width()).toBe(3.14159265359);
     });
   });
 
   describe('style getter', () => {
     it('should generate CSS with media queries', () => {
-      const style = component.style;
+      const style = component.style();
       expect(style).toContain('@media');
       expect(style).toContain('always-in-secondary-menu');
     });
@@ -148,13 +148,15 @@ describe('DynamicCssComponent', () => {
 
   describe('input properties', () => {
     it('should accept zoom input', () => {
-      component.zoom = 1.5;
-      expect(component.zoom).toBe(1.5);
+      fixture.componentRef.setInput('zoom', 1.5);
+      TestBed.flushEffects();
+      expect(component.zoom()).toBe(1.5);
     });
 
     it('should accept width input', () => {
-      component.width = 800;
-      expect(component.width).toBe(800);
+      fixture.componentRef.setInput('width', 800);
+      TestBed.flushEffects();
+      expect(component.width()).toBe(800);
     });
   });
 

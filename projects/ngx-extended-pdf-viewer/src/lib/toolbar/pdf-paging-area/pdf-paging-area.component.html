@@ -1,13 +1,13 @@
-<div [class]="showPagingButtons | responsiveCSSClass : 'hiddenXXSView'" class="paging-left">
-  <pdf-first-page class="margin-right-correct" [show]="showFirstAndLastPageButtons"></pdf-first-page>
-  <pdf-previous-page class="margin-left-correct" [show]="showPreviousAndNextPageButtons"></pdf-previous-page>
+<div [class]="showPagingButtons() | responsiveCSSClass : 'hiddenXXSView'" class="paging-left">
+  <pdf-first-page class="margin-right-correct" [show]="showFirstAndLastPageButtons()"></pdf-first-page>
+  <pdf-previous-page class="margin-left-correct" [show]="showPreviousAndNextPageButtons()"></pdf-previous-page>
 </div>
 <pdf-page-number
-  [class]="showPagingButtons | responsiveCSSClass : 'hiddenXXSView'"
-  [showPageNumber]="showPageNumber"
-  [showPageLabel]="showPageLabel"
+  [class]="showPagingButtons() | responsiveCSSClass : 'hiddenXXSView'"
+  [showPageNumber]="showPageNumber()"
+  [showPageLabel]="showPageLabel()"
 ></pdf-page-number>
-<div [class]="showPagingButtons | responsiveCSSClass : 'hiddenXXSView'" class="paging-right">
-  <pdf-next-page class="margin-right-correct margin-left-correct" [show]="showPreviousAndNextPageButtons"></pdf-next-page>
-  <pdf-last-page class="margin-left-correct" [show]="showFirstAndLastPageButtons"></pdf-last-page>
+<div [class]="showPagingButtons() | responsiveCSSClass : 'hiddenXXSView'" class="paging-right">
+  <pdf-next-page class="margin-right-correct margin-left-correct" [show]="showPreviousAndNextPageButtons()"></pdf-next-page>
+  <pdf-last-page class="margin-left-correct" [show]="showFirstAndLastPageButtons()"></pdf-last-page>
 </div>

@@ -1,7 +1,7 @@
 <pdf-shy-button
   primaryToolbarId="primaryMoveDownButton"
   secondaryMenuId="secondaryMoveDownButton"
-  [cssClass]="showMoveDownButton | responsiveCSSClass: 'hiddenSmallView'"
+  [cssClass]="showMoveDownButton() | responsiveCSSClass: 'hiddenSmallView'"
   title="Move Page Down"
   l10nLabel="pdfjs-editor-movePageDown-button-label"
   [action]="movePageDown"

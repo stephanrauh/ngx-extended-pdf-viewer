@@ -1,4 +1,4 @@
-import { effect, Injectable, Renderer2, RendererFactory2 } from '@angular/core';
+import { effect, Injectable, Renderer2, RendererFactory2, signal } from '@angular/core';
 import { AnnotationEditorParamsType, AnnotationMode, EditorAnnotation, HighlightEditorAnnotation, StampEditorAnnotation } from './options/editor-annotations';
 import { PdfLayer } from './options/optional_content_config';
 import { PDFPrintRange } from './options/pdf-print-range';
@@ -63,7 +63,7 @@ export interface Section {
 export class NgxExtendedPdfViewerService {
   public ngxExtendedPdfViewerInitialized = false;
 
-  public secondaryMenuIsEmpty = false;
+  public secondaryMenuIsEmpty = signal(false);
 
   private readonly renderer: Renderer2;
   private PDFViewerApplication?: IPDFViewerApplication;

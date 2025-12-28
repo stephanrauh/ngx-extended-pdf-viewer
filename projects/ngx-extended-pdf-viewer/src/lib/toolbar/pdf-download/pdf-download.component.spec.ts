@@ -24,18 +24,18 @@ describe('PdfDownloadComponent', () => {
   });
 
   it('should have showDownloadButton default to true', () => {
-    expect(component.showDownloadButton).toBe(true);
+    expect(component.showDownloadButton()).toBe(true);
   });
 
   it('should set showDownloadButton to true', () => {
-    component.showDownloadButton = true;
-    fixture.detectChanges();
-    expect(component.showDownloadButton).toBe(true);
+    fixture.componentRef.setInput('showDownloadButton', true);
+    TestBed.flushEffects();
+    expect(component.showDownloadButton()).toBe(true);
   });
 
   it('should set showDownloadButton to false', () => {
-    component.showDownloadButton = false;
-    fixture.detectChanges();
-    expect(component.showDownloadButton).toBe(false);
+    fixture.componentRef.setInput('showDownloadButton', false);
+    TestBed.flushEffects();
+    expect(component.showDownloadButton()).toBe(false);
   });
 });

@@ -1,4 +1,4 @@
-import { Component, Input, effect } from '@angular/core';
+import { Component, input, effect } from '@angular/core';
 import { ResponsiveVisibility } from '../../responsive-visibility';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { PDFNotificationService } from '../../pdf-notification-service';
@@ -10,8 +10,7 @@ import { PDFNotificationService } from '../../pdf-notification-service';
     standalone: false
 })
 export class PdfMoveDownComponent {
-  @Input()
-  public showMoveDownButton: ResponsiveVisibility = true;
+  public showMoveDownButton = input<ResponsiveVisibility>(true);
 
   private PDFViewerApplication: IPDFViewerApplication | undefined;
 
