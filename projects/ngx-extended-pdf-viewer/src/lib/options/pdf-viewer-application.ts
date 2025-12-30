@@ -1177,7 +1177,9 @@ export interface IPDFViewerApplication {
   pdfLinkService: any /* PDFLinkService;*/;
   printService: PDFPrintService;
   PDFPrintServiceFactory: any;
-  pdfSidebar: any;
+  // PDF.js v5.4.530 renamed pdfSidebar to viewsManager
+  viewsManager: any;
+  overlayManager: any;
   pdfViewer: IPDFViewer;
   printKeyDownListener: undefined | ((this: Window, ev: KeyboardEvent) => any);
   sidebarViewOnLoad: 0 | 1;

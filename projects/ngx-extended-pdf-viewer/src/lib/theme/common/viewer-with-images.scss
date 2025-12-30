@@ -266,7 +266,7 @@ ngx-extended-pdf-viewer {
   }
 
   .body,
-  .body :is(.toolbar, .editorParamsToolbar, .findbar, #sidebarContainer) :is(input, button, select),
+  .body :is(.toolbar, .editorParamsToolbar, .findbar, #viewsManager) :is(input, button, select),
   .body .secondaryToolbar :is(input, button, a, select) {
     outline: none;
     font-family: message-box, sans-serif;
@@ -406,7 +406,7 @@ ngx-extended-pdf-viewer {
     position: relative;
   }
 
-  #sidebarContainer {
+  #viewsManager {
     position: absolute;
     top: 32px;
     bottom: 0;
@@ -418,22 +418,27 @@ ngx-extended-pdf-viewer {
     // #2984 modified by ngx-extended-pdf-viewer to improve the light and dark mode
     border-right: solid 1px $sidebar-border;
     // #2984 end of modification by ngx-extended-pdf-viewer to improve the light and dark mode
+    // #3111 modified by ngx-extended-pdf-viewer
+    // PDF.js v5.4.530+ requires flex container for proper thumbnail scrolling
+    display: flex;
+    flex-direction: column;
+    // #3111 end of modification by ngx-extended-pdf-viewer
   }
 }
 
-html[dir='ltr'] ngx-extended-pdf-viewer #sidebarContainer {
+html[dir='ltr'] ngx-extended-pdf-viewer #viewsManager {
   transition-property: left;
   left: calc(-1 * var(--sidebar-width));
   left: calc(0px - var(--sidebar-width));
 }
 
-html[dir='rtl'] ngx-extended-pdf-viewer #sidebarContainer {
+html[dir='rtl'] ngx-extended-pdf-viewer #viewsManager {
   transition-property: right;
   right: calc(0px - var(--sidebar-width));
 }
 
 ngx-extended-pdf-viewer {
-  #outerContainer.sidebarResizing #sidebarContainer {
+  #outerContainer.viewsManagerResizing #viewsManager {
     /* Improve responsiveness and avoid visual glitches when the sidebar is resized. */
     transition-duration: 0s;
     /* Prevent e.g. the thumbnails being selected when the sidebar is resized. */
@@ -443,17 +448,17 @@ ngx-extended-pdf-viewer {
     user-select: none;
   }
 
-  #outerContainer.sidebarMoving #sidebarContainer,
-  #outerContainer.sidebarOpen #sidebarContainer {
+  #outerContainer.viewsManagerMoving #viewsManager,
+  #outerContainer.viewsManagerOpen #viewsManager {
     visibility: visible;
   }
 }
 
-html[dir='ltr'] ngx-extended-pdf-viewer #outerContainer.sidebarOpen #sidebarContainer {
+html[dir='ltr'] ngx-extended-pdf-viewer #outerContainer.viewsManagerOpen #viewsManager {
   left: 0;
 }
 
-html[dir='rtl'] ngx-extended-pdf-viewer #outerContainer.sidebarOpen #sidebarContainer {
+html[dir='rtl'] ngx-extended-pdf-viewer #outerContainer.viewsManagerOpen #viewsManager {
   right: 0;
 }
 
@@ -511,18 +516,18 @@ ngx-extended-pdf-viewer {
 }
 
 ngx-extended-pdf-viewer {
-  #outerContainer.sidebarResizing #viewerContainer {
+  #outerContainer.viewsManagerResizing #viewerContainer {
     /* Improve responsiveness and avoid visual glitches when the sidebar is resized. */
     transition-duration: 0s;
   }
 }
 
-html[dir='ltr'] ngx-extended-pdf-viewer #outerContainer.sidebarOpen #viewerContainer:not(.pdfPresentationMode) {
+html[dir='ltr'] ngx-extended-pdf-viewer #outerContainer.viewsManagerOpen #viewerContainer:not(.pdfPresentationMode) {
   transition-property: left;
   left: var(--sidebar-width);
 }
 
-html[dir='rtl'] ngx-extended-pdf-viewer #outerContainer.sidebarOpen #viewerContainer:not(.pdfPresentationMode) {
+html[dir='rtl'] ngx-extended-pdf-viewer #outerContainer.viewsManagerOpen #viewerContainer:not(.pdfPresentationMode) {
   transition-property: right;
   right: var(--sidebar-width);
 }
@@ -1320,46 +1325,73 @@ ngx-extended-pdf-viewer .html {
     cursor: default;
   }
 
-  #thumbnailView {
-    position: absolute;
-    width: calc(100% - 60px);
-    top: 0;
-    bottom: 0;
-    padding: 10px 30px 0;
-    overflow: auto;
-    -webkit-overflow-scrolling: touch;
+  // #3111 modified by ngx-extended-pdf-viewer
+  // PDF.js v5.4.530+ changed #thumbnailsView from absolute positioned scrollable to flex layout
+  #thumbnailsView {
+    // Removed: position: absolute; top: 0; bottom: 0; overflow: auto;
+    // The parent #viewsManagerContent is now the scrollable container
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100%;
+    padding: 20px 32px;
+    gap: 16px;
+    box-sizing: border-box;
   }
+  // #3111 end of modification
 
-  #thumbnailView>a:active {
+  // #3111 modified by ngx-extended-pdf-viewer
+  // PDF.js v5.4.530+ uses direct div elements, not anchors
+  #thumbnailsView>.thumbnail:active {
     outline: 0;
   }
+  // #3111 end of modification
 
-  // #2984 modified by ngx-extended-pdf-viewer to improve the light and dark mode
-  #thumbnailView>a {
-    display: inline-block;
+  // #2984 modified by ngx-extended-pdf-viewer
+  // PDF.js v5.4.530+ uses #viewsManagerContent as the scrollable container
+  #viewsManagerContent {
+    width: 100%;
+    flex: 1 1 0%;
+    overflow: auto;
   }
 
-  // #2984 end of modification by ngx-extended-pdf-viewer to improve the light and dark mode
-
-  #thumbnailView img.thumbnailImage {
-    display: none;
+  // PDF.js v5.4.530+ uses .missingThumbnailImage class instead of data-loaded attribute
+  #thumbnailsView img.thumbnailImage.missingThumbnailImage {
+    content-visibility: hidden;
   }
+  // #2984 end of modification by ngx-extended-pdf-viewer
 
-  #thumbnailView div[data-loaded="true"] img.thumbnailImage {
-    display: unset;
+  // #3111 modified by ngx-extended-pdf-viewer
+  // PDF.js v5.4.530+ requires --thumbnail-width to be set on #thumbnailsView
+  #thumbnailsView {
+    --thumbnail-width: 126px;
   }
+  // #3111 end of modification
 
   .thumbnail {
-    /* Define these variables here, and not in :root, since the individual
-     thumbnails may have different sizes. */
-    /* --thumbnail-width: 0; */
-    /* --thumbnail-height: 0; */
-    width: var(--thumbnail-width);
-    height: var(--thumbnail-height);
+    // #3111 modified by ngx-extended-pdf-viewer
+    // PDF.js v5.4.530+ uses inline-flex and sizes are set inline on the image
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: auto;
+    height: auto;
+    position: relative;
+    scroll-margin-top: 20px;
+    gap: 16px;
+    // #3111 end of modification
     margin: 0 10px 5px 10px;
     padding: 1px;
     border: 7px solid transparent;
     border-radius: 2px;
+
+    // #3111 modified by ngx-extended-pdf-viewer
+    // Hide the checkbox input element (used for selection in PDF.js)
+    > input[type="checkbox"] {
+      display: none;
+    }
+    // #3111 end of modification
 
     // #2984 modified by ngx-extended-pdf-viewer to improve the light and dark mode
     &:hover {
@@ -1370,22 +1402,22 @@ ngx-extended-pdf-viewer .html {
   }
 }
 
-html[dir='ltr'] ngx-extended-pdf-viewer .thumbnail {
-  float: left;
-}
-
-html[dir='rtl'] ngx-extended-pdf-viewer .thumbnail {
-  float: right;
-}
+// #3111 modified by ngx-extended-pdf-viewer
+// PDF.js v5.4.530+ uses flex layout, not floats
+// Removed: float: left/right
+// #3111 end of modification
 
 ngx-extended-pdf-viewer {
-  #thumbnailView>a:last-of-type>.thumbnail {
+  // #3111 modified by ngx-extended-pdf-viewer
+  // PDF.js v5.4.530+ uses direct div elements, not anchors
+  #thumbnailsView>.thumbnail:last-of-type {
     margin-bottom: 10px;
   }
 
-  #thumbnailView>a:last-of-type>.thumbnail:not([data-loaded]) {
+  #thumbnailsView>.thumbnail:last-of-type:not([data-loaded]) {
     margin-bottom: 9px;
   }
+  // #3111 end of modification
 
   .thumbnail:not([data-loaded]) {
     margin: -1px 9px 4px 9px;
@@ -1394,7 +1426,10 @@ ngx-extended-pdf-viewer {
   .thumbnailImage {
     border: 1px solid $fullscreen-background;
     width: var(--thumbnail-width);
-    height: var(--thumbnail-height);
+    // #3111 modified by ngx-extended-pdf-viewer
+    // PDF.js v5.4.530+ sets height inline via image.style.height, don't use undefined CSS variable
+    // height: var(--thumbnail-height); // REMOVED - this variable is never set!
+    // #3111 end of modification
     opacity: 0.8;
     z-index: 1;
     background-color: $page-background;
@@ -1431,11 +1466,15 @@ ngx-extended-pdf-viewer {
 
   .thumbnail:not([data-loaded])>.thumbnailImage {
     width: calc(var(--thumbnail-width) - 2px);
-    height: calc(var(--thumbnail-height) - 2px);
+    // #3111 modified by ngx-extended-pdf-viewer
+    // PDF.js v5.4.530+ sets height via image.style.height before removing [data-loaded]
+    // Placeholder height is set by #updateDims(), don't override with undefined variable
+    // height: calc(var(--thumbnail-height) - 2px); // REMOVED
+    // #3111 end of modification
     border: 1px dashed rgba(132, 132, 132, 1);
   }
 
-  #outlineView,
+  #outlinesView,
   #attachmentsView,
   #layersView {
     position: absolute;
@@ -1450,7 +1489,7 @@ ngx-extended-pdf-viewer {
     user-select: none;
   }
 
-  #outlineView {
+  #outlinesView {
     padding: 4px 4px 0;
   }
 

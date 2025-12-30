@@ -662,17 +662,18 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   private _sidebarVisibleEffect = effect(() => {
     const value = this.sidebarVisible();
     const PDFViewerApplication: IPDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
-    if (PDFViewerApplication?.pdfSidebar) {
+    // PDF.js v5.4.530 renamed pdfSidebar to viewsManager
+    if (PDFViewerApplication?.viewsManager) {
       if (value) {
-        PDFViewerApplication.pdfSidebar.open();
+        PDFViewerApplication.viewsManager.open();
         const view = Number(this.activeSidebarView());
         if (view === 1 || view === 2 || view === 3 || view === 4) {
-          PDFViewerApplication.pdfSidebar.switchView(view, true);
+          PDFViewerApplication.viewsManager.switchView(view, true);
         } else {
           console.error('[activeSidebarView] must be an integer value between 1 and 4');
         }
       } else {
-        PDFViewerApplication.pdfSidebar.close();
+        PDFViewerApplication.viewsManager.close();
       }
     }
   });
@@ -972,9 +973,15 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
     const PDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
     if (visible) {
-      PDFViewerApplication.findBar.open();
+      // Only open if not already open (prevents circular dependency with findbaropen event)
+      if (!PDFViewerApplication.findBar.opened) {
+        PDFViewerApplication.findBar.open();
+      }
     } else {
-      PDFViewerApplication.findBar.close();
+      // Only close if actually open
+      if (PDFViewerApplication.findBar.opened) {
+        PDFViewerApplication.findBar.close();
+      }
     }
   });
 
@@ -986,9 +993,15 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
     const PDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
     if (visible) {
-      PDFViewerApplication.pdfDocumentProperties.open();
+      // Only open if not already open (prevents circular dependency with propertiesdialogopen event)
+      if (PDFViewerApplication.overlayManager.active !== PDFViewerApplication.pdfDocumentProperties.dialog) {
+        PDFViewerApplication.pdfDocumentProperties.open();
+      }
     } else {
-      PDFViewerApplication.pdfDocumentProperties.close();
+      // Only close if actually open
+      if (PDFViewerApplication.overlayManager.active === PDFViewerApplication.pdfDocumentProperties.dialog) {
+        PDFViewerApplication.pdfDocumentProperties.close();
+      }
     }
   });
 
@@ -1031,16 +1044,17 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     if (!this.service.ngxExtendedPdfViewerInitialized) return;
 
     const PDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
+    // PDF.js v5.4.530 renamed pdfSidebar to viewsManager
     if (sidebarVisible) {
-      PDFViewerApplication.pdfSidebar.open();
+      PDFViewerApplication.viewsManager.open();
       const view = Number(activeSidebarView);
       if (view === 1 || view === 2 || view === 3 || view === 4) {
-        PDFViewerApplication.pdfSidebar.switchView(view, true);
+        PDFViewerApplication.viewsManager.switchView(view, true);
       } else {
         console.error('[activeSidebarView] must be an integer value between 1 and 4');
       }
     } else {
-      PDFViewerApplication.pdfSidebar.close();
+      PDFViewerApplication.viewsManager.close();
     }
   });
 
@@ -1598,7 +1612,32 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
     this.activateTextlayerIfNecessary(null);
 
-    setTimeout(this.asyncWithCD(() => {
+    // #2984 modified by ngx-extended-pdf-viewer
+    // Wait for Angular to render critical DOM elements before initializing PDF.js
+    // This ensures viewsManager and thumbnailView are available when webViewerLoad() executes
+    const waitForDOMElements = (callback: () => void, maxAttempts = 50, delay = 10) => {
+      let attempts = 0;
+      const checkElements = () => {
+        const thumbnailsView = document.getElementById('thumbnailsView');
+        const viewsManagerContent = document.getElementById('viewsManagerContent');
+
+        if (thumbnailsView && viewsManagerContent) {
+          // Elements are ready, proceed with initialization
+          callback();
+        } else if (attempts < maxAttempts) {
+          // Elements not ready yet, try again
+          attempts++;
+          setTimeout(checkElements, delay);
+        } else {
+          // Max attempts reached, proceed anyway (fallback)
+          console.warn('ngx-extended-pdf-viewer: DOM elements not ready after', maxAttempts * delay, 'ms. Proceeding with initialization anyway.');
+          callback();
+        }
+      };
+      checkElements();
+    };
+
+    waitForDOMElements(this.asyncWithCD(() => {
       if (!this.pdfScriptLoaderService.shuttingDown) {
         // hurried users sometimes reload the PDF before it has finished initializing
         // This initializes the webviewer, the file may be passed in to it to initialize the viewer with a pdf directly
@@ -1651,7 +1690,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
           document.getElementsByTagName('body')[0].appendChild(pc);
         }
       }
-    }), 0);
+    }));
+    // #2984 end of modification by ngx-extended-pdf-viewer
   }
 
   private addTranslationsUnlessProvidedByTheUser() {

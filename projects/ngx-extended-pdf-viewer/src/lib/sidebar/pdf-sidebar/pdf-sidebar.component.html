@@ -4,7 +4,7 @@
 
 <ng-template #defaultSidebar>
   <div
-    id="sidebarContainer"
+    id="viewsManager"
     [style.top]="sidebarPositionTop"
   >
     <div
@@ -19,6 +19,6 @@
       [hideSidebarToolbar]="hideSidebarToolbar()"
       [mobileFriendlyZoomScale]="mobileFriendlyZoomScale()"
     ></pdf-sidebar-content>
-    <div id="sidebarResizer"></div>
+    <div id="viewsManagerResizer" class="sidebarResizer"></div>
   </div>
 </ng-template>

@@ -1,14 +1,20 @@
-<div id="sidebarContent" [style.top]="top">
-  <div id="thumbnailView" (keydown)="onKeyDown($event)"></div>
-  <div id="outlineView" class="hidden"></div>
+<!-- #2984 modified by ngx-extended-pdf-viewer -->
+<!-- PDF.js v5.4.530+ uses #viewsManagerContent as the scrollable container -->
+<div id="viewsManagerContent" tabindex="-1">
+  <div id="thumbnailsView" (keydown)="onKeyDown($event)"></div>
+  <div id="outlinesView" class="hidden"></div>
   <div id="attachmentsView" class="hidden"></div>
   <div id="layersView" class="hidden"></div>
 </div>
+<!-- #2984 end of modification by ngx-extended-pdf-viewer -->
 
+<!-- #3111 modified by ngx-extended-pdf-viewer -->
+<!-- Updated to match PDF.js v5.4.530+ structure: direct div with checkbox + img (no anchor wrapper) -->
+<!-- Note: page-number attribute (not data-page-number) is used by PDF.js v5.4.530+ -->
 <ng-template #defaultThumbnail>
-  <a class="pdf-viewer-template">
-    <div class="thumbnail" data-page-number="PAGE_NUMBER">
-      <img class="thumbnailImage" alt="miniature of the page" />
-    </div>
-  </a>
+  <div class="thumbnail pdf-viewer-template" page-number="PAGE_NUMBER">
+    <input type="checkbox" tabindex="-1" />
+    <img class="thumbnailImage" role="button" tabindex="-1" alt="miniature of the page" />
+  </div>
 </ng-template>
+<!-- #3111 end of modification by ngx-extended-pdf-viewer -->

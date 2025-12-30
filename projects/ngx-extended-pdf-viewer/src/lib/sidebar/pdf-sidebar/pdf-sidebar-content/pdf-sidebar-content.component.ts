@@ -2,13 +2,18 @@ import { Component, computed, effect, input, OnDestroy, output, TemplateRef, vie
 import { PdfThumbnailDrawnEvent } from '../../../events/pdf-thumbnail-drawn-event';
 import { IPDFViewerApplication } from '../../../options/pdf-viewer-application';
 import { PDFNotificationService } from '../../../pdf-notification-service';
+// #3111 modified by ngx-extended-pdf-viewer
+// Updated to include new PDF.js v5.4.530+ properties
 declare class PDFThumbnailView {
   anchor: HTMLAnchorElement;
   div: HTMLElement;
   ring: HTMLElement;
   canvasWidth: number;
   canvasHeight: number;
+  image: HTMLImageElement;
+  checkbox: HTMLInputElement;
 }
+// #3111 end of modification by ngx-extended-pdf-viewer
 
 interface RenderCustomThumbnailEvent {
   pdfThumbnailView: PDFThumbnailView;
@@ -78,7 +83,7 @@ export class PdfSidebarContentComponent implements OnDestroy {
   }
 
   private createThumbnail({
-    pdfThumbnailView,
+    pdfThumbnailView: _pdfThumbnailView, // #3111: Not used - PDF.js v5.4.530+ populates this after we append the element
     linkService,
     id,
     container,
@@ -90,25 +95,31 @@ export class PdfSidebarContentComponent implements OnDestroy {
     const newElement = view.rootNodes[0] as HTMLElement;
     newElement.classList.remove('pdf-viewer-template');
 
-    const anchor = newElement as HTMLAnchorElement;
-    anchor.href = linkService.getAnchorUrl(`#page=${id}`);
-    anchor.className = `thumbnail${id}`;
-
-    anchor.setAttribute('data-l10n-id', 'pdfjs-thumb-page-title');
-    anchor.setAttribute('data-l10n-args', thumbPageTitlePromiseOrPageL10nArgs);
+    // #3111 modified by ngx-extended-pdf-viewer
+    // PDF.js v5.4.530+ uses direct div structure without anchor wrapper
+    // Add the thumbnail ID class (e.g., "thumbnail1") while keeping existing "thumbnail" class
+    newElement.classList.add(`thumbnail${id}`);
+    newElement.setAttribute('data-l10n-id', 'pdfjs-thumb-page-title');
+    newElement.setAttribute('data-l10n-args', thumbPageTitlePromiseOrPageL10nArgs);
 
     this.replacePageNumberEverywhere(newElement, id.toString());
 
-    anchor.onclick = () => {
+    // Handle click on the thumbnail div itself
+    newElement.onclick = () => {
       linkService.page = id;
       return false;
     };
-    pdfThumbnailView.anchor = anchor;
 
-    const img: HTMLImageElement | undefined = newElement.getElementsByTagName('img')[0];
-    pdfThumbnailView.div = newElement.getElementsByClassName('thumbnail')[0] as HTMLElement;
+    // PDF.js will find this element and set pdfThumbnailView.div = this element
+    // We don't need to set it here as PDF.js does it via querySelector(`.thumbnail${id}`)
+    // #3111 end of modification
 
+    // #3111 modified by ngx-extended-pdf-viewer
+    // PDF.js v5.4.530+ will query for image and checkbox itself after the element is appended
     container.appendChild(newElement);
+    // After appending, PDF.js will find this element by class `.thumbnail${id}` and set div/image/checkbox properties
+    const img: HTMLImageElement | undefined = newElement.getElementsByTagName('img')[0];
+    // #3111 end of modification by ngx-extended-pdf-viewer
 
     const thumbnailDrawnEvent: PdfThumbnailDrawnEvent = {
       thumbnail: newElement,

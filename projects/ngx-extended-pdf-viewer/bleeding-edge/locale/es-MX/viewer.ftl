@@ -286,9 +286,13 @@ pdfjs-web-fonts-disabled = Las fuentes web están desactivadas: es imposible usa
 
 pdfjs-editor-free-text-button =
     .title = Texto
+pdfjs-editor-color-picker-free-text-input =
+    .title = Cambiar el color del texto
 pdfjs-editor-free-text-button-label = Texto
 pdfjs-editor-ink-button =
     .title = Dibujar
+pdfjs-editor-color-picker-ink-input =
+    .title = Cambiar el color del dibujo
 pdfjs-editor-ink-button-label = Dibujar
 pdfjs-editor-stamp-button =
     .title = Agregar o editar imágenes
@@ -300,9 +304,33 @@ pdfjs-highlight-floating-button1 =
     .title = Destacados
     .aria-label = Destacados
 pdfjs-highlight-floating-button-label = Destacados
+pdfjs-comment-floating-button =
+    .title = Comentario
+    .aria-label = Comentario
+pdfjs-comment-floating-button-label = Comentario
+pdfjs-editor-comment-button =
+    .title = Comentario
+    .aria-label = Comentario
+pdfjs-editor-comment-button-label = Comentario
 pdfjs-editor-signature-button =
     .title = Agregar firma
 pdfjs-editor-signature-button-label = Añadir firma
+
+## Default editor aria labels
+
+# “Highlight” is a noun, the string is used on the editor for highlights.
+pdfjs-editor-highlight-editor =
+    .aria-label = Editor de destacados
+# “Drawing” is a noun, the string is used on the editor for drawings.
+pdfjs-editor-ink-editor =
+    .aria-label = Editor de dibujos
+# Used when a signature editor is selected/hovered.
+# Variables:
+#   $description (String) - a string describing/labeling the signature.
+pdfjs-editor-signature-editor1 =
+    .aria-description = Editor de firmas: { $description }
+pdfjs-editor-stamp-editor =
+    .aria-label = Editor de imágenes
 
 ## Remove button for the various kind of editor.
 
@@ -332,13 +360,35 @@ pdfjs-editor-stamp-add-image-button-label = Agregar imagen
 pdfjs-editor-free-highlight-thickness-input = Espesor
 pdfjs-editor-free-highlight-thickness-title =
     .title = Cambiar el grosor al resaltar elementos que no sean texto
+pdfjs-editor-add-signature-container =
+    .aria-label = Controles de firma y firmas guardadas
 pdfjs-editor-signature-add-signature-button =
     .title = Agregar nueva firma
 pdfjs-editor-signature-add-signature-button-label = Agregar nueva firma
+# Used on the button to use an already saved signature.
+# Variables:
+#   $description (String) - a string describing/labeling the signature.
+pdfjs-editor-add-saved-signature-button =
+    .title = Firma guardada: { $description }
 # .default-content is used as a placeholder in an empty text editor.
 pdfjs-free-text2 =
     .aria-label = Editor de texto
     .default-content = Comenzar a escribir…
+# Used to show how many comments are present in the pdf file.
+# Variables:
+#   $count (Number) - the number of comments.
+pdfjs-editor-comments-sidebar-title =
+    { $count ->
+        [one] Comentario
+       *[other] Comentarios
+    }
+pdfjs-editor-comments-sidebar-close-button =
+    .title = Cerrar la barra lateral
+    .aria-label = Cerrar la barra lateral
+pdfjs-editor-comments-sidebar-close-button-label = Cerrar la barra lateral
+# Instructional copy to add a comment by selecting text or an annotations.
+pdfjs-editor-comments-sidebar-no-comments1 = ¿Ves algo interesante? Resáltalo y deja un comentario.
+pdfjs-editor-comments-sidebar-no-comments-link = Saber más
 
 ## Alt-text dialog
 
@@ -469,6 +519,14 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Mostrar el editor de t
 pdfjs-editor-alt-text-settings-show-dialog-description = Te ayuda a asegurarte de que todas tus imágenes tengan texto alternativo.
 pdfjs-editor-alt-text-settings-close-button = Cerrar
 
+## Accessibility labels (announced by screen readers) for objects added to the editor.
+
+pdfjs-editor-highlight-added-alert = Destacado añadido
+pdfjs-editor-freetext-added-alert = Texto agregado
+pdfjs-editor-ink-added-alert = Dibujo agregado
+pdfjs-editor-stamp-added-alert = Imagen agregada
+pdfjs-editor-signature-added-alert = Firma agregada
+
 ## "Annotations removed" bar
 
 pdfjs-editor-undo-bar-message-highlight = Resaltado eliminado
@@ -492,6 +550,7 @@ pdfjs-editor-undo-bar-close-button-label = Cerrar
 
 ## Add a signature dialog
 
+pdfjs-editor-add-signature-dialog-label = Este modal permite al usuario crear una firma para añadirla a un documento PDF. El usuario puede editar el nombre (que también sirve como texto alternativo) y, opcionalmente, guardar la firma para utilizarla en otras ocasiones.
 pdfjs-editor-add-signature-dialog-title = Agregar una firma
 
 ## Tab names
@@ -512,6 +571,16 @@ pdfjs-editor-add-signature-type-input =
     .placeholder = Escribe tu firma
 pdfjs-editor-add-signature-draw-placeholder = Dibuja tu firma
 pdfjs-editor-add-signature-draw-thickness-range-label = Grossor
+# Variables:
+#   $thickness (Number) - the thickness (in pixels) of the line used to draw a signature.
+pdfjs-editor-add-signature-draw-thickness-range =
+    .title = Grosor del dibujo: { $thickness }
+pdfjs-editor-add-signature-image-placeholder = Arrastra un archivo aquí para cargarlo
+pdfjs-editor-add-signature-image-browse-link =
+    { PLATFORM() ->
+        [macos] O elegir archivos de imagen
+       *[other] O buscar archivos de imagen
+    }
 
 ## Controls
 
@@ -526,12 +595,49 @@ pdfjs-editor-add-signature-save-checkbox = Guardar firma
 pdfjs-editor-add-signature-save-warning-message = Has alcanzado el límite de 5 firmas guardadas. Elimina una para guardar más.
 pdfjs-editor-add-signature-image-upload-error-title = No se pudo cargar la imagen
 pdfjs-editor-add-signature-image-upload-error-description = Verifica tu conexión de red o prueba con otra imagen.
+pdfjs-editor-add-signature-image-no-data-error-title = No se puede convertir esta imagen en una firma
+pdfjs-editor-add-signature-image-no-data-error-description = Intenta cargar una imagen diferente.
 pdfjs-editor-add-signature-error-close-button = Cerrar
 
 ## Dialog buttons
 
 pdfjs-editor-add-signature-cancel-button = Cancelar
 pdfjs-editor-add-signature-add-button = Agregar
+pdfjs-editor-edit-signature-update-button = Actualizar
+
+## Comment popup
+
+pdfjs-editor-edit-comment-popup-button-label = Editar comentario
+pdfjs-editor-edit-comment-popup-button =
+    .title = Editar comentario
+pdfjs-editor-delete-comment-popup-button-label = Eliminar comentario
+pdfjs-editor-delete-comment-popup-button =
+    .title = Eliminar comentario
+pdfjs-show-comment-button =
+    .title = Mostrar comentario
+
+##  Edit a comment dialog
+
+# An existing comment is edited
+pdfjs-editor-edit-comment-dialog-title-when-editing = Editar comentario
+pdfjs-editor-edit-comment-dialog-save-button-when-editing = Actualizar
+# No existing comment
+pdfjs-editor-edit-comment-dialog-title-when-adding = Agregar comentario
+pdfjs-editor-edit-comment-dialog-save-button-when-adding = Agregar
+pdfjs-editor-edit-comment-dialog-text-input =
+    .placeholder = Empieza a escribir…
+pdfjs-editor-edit-comment-dialog-cancel-button = Cancelar
+
+## Edit a comment button in the editor toolbar
+
+pdfjs-editor-add-comment-button =
+    .title = Añadir comentario
+
+## Main menu for adding/removing signatures
+
+pdfjs-editor-delete-signature-button1 =
+    .title = Eliminar la firma guardada
+pdfjs-editor-delete-signature-button-label1 = Eliminar la firma guardada
 
 ## Editor toolbar
 
@@ -551,73 +657,60 @@ pdfjs-editor-movePageUp-button-label = Mover página hacia arriba
 pdfjs-editor-movePageDown-button = Mover página hacia abajo
 pdfjs-editor-movePageDown-button-label = Mover página hacia abajo
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-editor-color-picker-free-text-input =
-    .title = Change text color
-pdfjs-editor-color-picker-ink-input =
-    .title = Change drawing color
-pdfjs-comment-floating-button =
-    .title = Comment
-    .aria-label = Comment
-pdfjs-comment-floating-button-label = Comment
-pdfjs-editor-comment-button =
-    .title = Comment
-    .aria-label = Comment
-pdfjs-editor-comment-button-label = Comment
-pdfjs-editor-highlight-editor =
-    .aria-label = Highlight editor
-pdfjs-editor-ink-editor =
-    .aria-label = Drawing editor
-pdfjs-editor-signature-editor1 =
-    .aria-description = Signature editor: { $description }
-pdfjs-editor-stamp-editor =
-    .aria-label = Image editor
-pdfjs-editor-add-signature-container =
-    .aria-label = Signature controls and saved signatures
-pdfjs-editor-add-saved-signature-button =
-    .title = Saved signature: { $description }
-pdfjs-editor-comments-sidebar-title =
+pdfjs-toggle-views-manager-button =
+    .title = Toggle Sidebar
+pdfjs-toggle-views-manager-notification-button =
+    .title = Toggle Sidebar (document contains thumbnails/outline/attachments/layers)
+pdfjs-toggle-views-manager-button-label = Toggle Sidebar
+pdfjs-views-manager-sidebar =
+    .aria-label = Sidebar
+pdfjs-views-manager-view-selector-button =
+    .title = Views
+pdfjs-views-manager-view-selector-button-label = Views
+pdfjs-views-manager-pages-title = Pages
+pdfjs-views-manager-outlines-title = Document outline
+pdfjs-views-manager-attachments-title = Attachments
+pdfjs-views-manager-layers-title = Layers
+pdfjs-views-manager-pages-option-label = Pages
+pdfjs-views-manager-outlines-option-label = Document outline
+pdfjs-views-manager-attachments-option-label = Attachments
+pdfjs-views-manager-layers-option-label = Layers
+pdfjs-views-manager-add-file-button =
+    .title = Add file
+pdfjs-views-manager-add-file-button-label = Add file
+pdfjs-views-manager-pages-status-action-label =
     { $count ->
-        [one] Comment
-       *[other] Comments
+        [one] { $count } selected
+        *[other] { $count } selected
     }
-pdfjs-editor-comments-sidebar-close-button =
-    .title = Close the sidebar
-    .aria-label = Close the sidebar
-pdfjs-editor-comments-sidebar-close-button-label = Close the sidebar
-pdfjs-editor-comments-sidebar-no-comments1 = See something noteworthy? Highlight it and leave a comment.
-pdfjs-editor-comments-sidebar-no-comments-link = Learn more
-pdfjs-editor-highlight-added-alert = Highlight added
-pdfjs-editor-freetext-added-alert = Text added
-pdfjs-editor-ink-added-alert = Drawing added
-pdfjs-editor-stamp-added-alert = Image added
-pdfjs-editor-signature-added-alert = Signature added
-pdfjs-editor-add-signature-dialog-label = This modal allows the user to create a signature to add to a PDF document. The user can edit the name (which also serves as the alt text), and optionally save the signature for repeated use.
-pdfjs-editor-add-signature-image-placeholder = Drag a file here to upload
-pdfjs-editor-add-signature-image-browse-link =
-    { PLATFORM() ->
-        [macos] Or choose image files
-       *[other] Or browse image files
+pdfjs-views-manager-pages-status-none-action-label = Select pages
+pdfjs-views-manager-pages-status-action-button-label = Manage
+pdfjs-views-manager-pages-status-copy-button-label = Copy
+pdfjs-views-manager-pages-status-cut-button-label = Cut
+pdfjs-views-manager-pages-status-delete-button-label = Delete
+pdfjs-views-manager-pages-status-save-as-button-label = Save as…
+pdfjs-views-manager-status-undo-cut-label =
+    { $count ->
+        [one] 1 page cut
+        *[other] { $count } pages cut
     }
-pdfjs-editor-add-signature-image-no-data-error-title = Can’t convert this image into a signature
-pdfjs-editor-add-signature-image-no-data-error-description = Please try uploading a different image.
-pdfjs-editor-delete-signature-button1 =
-    .title = Remove saved signature
-pdfjs-editor-delete-signature-button-label1 = Remove saved signature
-pdfjs-editor-edit-signature-update-button = Update
-pdfjs-show-comment-button =
-    .title = Show comment
-pdfjs-editor-edit-comment-popup-button-label = Edit comment
-pdfjs-editor-edit-comment-popup-button =
-    .title = Edit comment
-pdfjs-editor-delete-comment-popup-button-label = Remove comment
-pdfjs-editor-delete-comment-popup-button =
-    .title = Remove comment
-pdfjs-editor-edit-comment-dialog-title-when-editing = Edit comment
-pdfjs-editor-edit-comment-dialog-save-button-when-editing = Update
-pdfjs-editor-edit-comment-dialog-title-when-adding = Add comment
-pdfjs-editor-edit-comment-dialog-save-button-when-adding = Add
-pdfjs-editor-edit-comment-dialog-text-input =
-    .placeholder = Start typing…
-pdfjs-editor-edit-comment-dialog-cancel-button = Cancel
-pdfjs-editor-edit-comment-button =
-    .title = Edit comment
+pdfjs-views-manager-pages-status-undo-copy-label =
+    { $count ->
+        [one] 1 page copied
+        *[other] { $count } pages copied
+    }
+pdfjs-views-manager-pages-status-undo-delete-label =
+    { $count ->
+        [one] 1 page deleted
+        *[other] { $count } pages deleted
+    }
+pdfjs-views-manager-pages-status-waiting-ready-label = Getting your file ready…
+pdfjs-views-manager-pages-status-waiting-uploading-label = Uploading file…
+pdfjs-views-manager-status-warning-cut-label = Couldn’t cut. Refresh page and try again.
+pdfjs-views-manager-status-warning-copy-label = Couldn’t copy. Refresh page and try again.
+pdfjs-views-manager-status-warning-delete-label = Couldn’t delete. Refresh page and try again.
+pdfjs-views-manager-status-warning-save-label = Couldn’t save. Refresh page and try again.
+pdfjs-views-manager-status-undo-button-label = Undo
+pdfjs-views-manager-status-close-button =
+    .title = Close
+pdfjs-views-manager-status-close-button-label = Close

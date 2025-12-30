@@ -1,0 +1,10 @@
+/* #3111 modified by ngx-extended-pdf-viewer */
+/* PDF.js v5.4.530+ requires this component to be a flex container
+   so that #viewsManagerContent can properly use flex: 1 1 0% and get a defined height */
+:host {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0%;
+  overflow: hidden;
+}
+/* #3111 end of modification by ngx-extended-pdf-viewer */

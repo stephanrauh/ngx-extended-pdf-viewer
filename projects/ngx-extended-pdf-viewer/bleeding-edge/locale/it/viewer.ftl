@@ -290,10 +290,10 @@ pdfjs-editor-color-picker-free-text-input =
     .title = Cambia colore del testo
 pdfjs-editor-free-text-button-label = Testo
 pdfjs-editor-ink-button =
-    .title = Disegno
+    .title = Disegna
 pdfjs-editor-color-picker-ink-input =
     .title = Cambia colore del disegno
-pdfjs-editor-ink-button-label = Disegno
+pdfjs-editor-ink-button-label = Disegna
 pdfjs-editor-stamp-button =
     .title = Aggiungi o rimuovi immagine
 pdfjs-editor-stamp-button-label = Aggiungi o rimuovi immagine
@@ -308,6 +308,10 @@ pdfjs-comment-floating-button =
     .title = Commenta
     .aria-label = Commenta
 pdfjs-comment-floating-button-label = Commenta
+pdfjs-editor-comment-button =
+    .title = Commenta
+    .aria-label = Commenta
+pdfjs-editor-comment-button-label = Commenta
 pdfjs-editor-signature-button =
     .title = Aggiungi firma
 pdfjs-editor-signature-button-label = Aggiungi firma
@@ -370,6 +374,21 @@ pdfjs-editor-add-saved-signature-button =
 pdfjs-free-text2 =
     .aria-label = Editor di testo
     .default-content = Inizia a digitare…
+# Used to show how many comments are present in the pdf file.
+# Variables:
+#   $count (Number) - the number of comments.
+pdfjs-editor-comments-sidebar-title =
+    { $count ->
+        [one] Commento
+       *[other] Commenti
+    }
+pdfjs-editor-comments-sidebar-close-button =
+    .title = Chiudi la barra laterale
+    .aria-label = Chiudi la barra laterale
+pdfjs-editor-comments-sidebar-close-button-label = Chiudi la barra laterale
+# Instructional copy to add a comment by selecting text or an annotations.
+pdfjs-editor-comments-sidebar-no-comments1 = Hai notato qualcosa di interessante? Evidenzialo e aggiungi un commento.
+pdfjs-editor-comments-sidebar-no-comments-link = Ulteriori informazioni
 
 ## Alt-text dialog
 
@@ -586,25 +605,33 @@ pdfjs-editor-add-signature-cancel-button = Annulla
 pdfjs-editor-add-signature-add-button = Aggiungi
 pdfjs-editor-edit-signature-update-button = Aggiorna
 
+## Comment popup
+
+pdfjs-editor-edit-comment-popup-button-label = Modifica commento
+pdfjs-editor-edit-comment-popup-button =
+    .title = Modifica commento
+pdfjs-editor-delete-comment-popup-button-label = Elimina commento
+pdfjs-editor-delete-comment-popup-button =
+    .title = Elimina commento
+pdfjs-show-comment-button =
+    .title = Mostra commento
+
 ##  Edit a comment dialog
 
-pdfjs-editor-edit-comment-actions-button-label = Azioni
-pdfjs-editor-edit-comment-actions-button =
-    .title = Azioni
-pdfjs-editor-edit-comment-close-button-label = Chiudi
-pdfjs-editor-edit-comment-close-button =
-    .title = Chiudi
-pdfjs-editor-edit-comment-actions-edit-button-label = Modifica
-pdfjs-editor-edit-comment-actions-delete-button-label = Elimina
-pdfjs-editor-edit-comment-manager-text-input =
-    .placeholder = Inserisci il tuo commento
-pdfjs-editor-edit-comment-manager-cancel-button = Annulla
-pdfjs-editor-edit-comment-manager-save-button = Salva
+# An existing comment is edited
+pdfjs-editor-edit-comment-dialog-title-when-editing = Modifica commento
+pdfjs-editor-edit-comment-dialog-save-button-when-editing = Aggiorna
+# No existing comment
+pdfjs-editor-edit-comment-dialog-title-when-adding = Aggiungi commento
+pdfjs-editor-edit-comment-dialog-save-button-when-adding = Aggiungi
+pdfjs-editor-edit-comment-dialog-text-input =
+    .placeholder = Inizia a digitare…
+pdfjs-editor-edit-comment-dialog-cancel-button = Annulla
 
 ## Edit a comment button in the editor toolbar
 
-pdfjs-editor-edit-comment-button =
-    .title = Modifica commento
+pdfjs-editor-add-comment-button =
+    .title = Aggiungi commento
 
 ## Main menu for adding/removing signatures
 
@@ -630,33 +657,60 @@ pdfjs-editor-movePageUp-button-label = Sposta pagina in alto
 pdfjs-editor-movePageDown-button = Sposta pagina in basso
 pdfjs-editor-movePageDown-button-label = Sposta pagina in basso
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-editor-comment-button =
-    .title = Comment
-    .aria-label = Comment
-pdfjs-editor-comment-button-label = Comment
-pdfjs-editor-comments-sidebar-title =
+pdfjs-toggle-views-manager-button =
+    .title = Toggle Sidebar
+pdfjs-toggle-views-manager-notification-button =
+    .title = Toggle Sidebar (document contains thumbnails/outline/attachments/layers)
+pdfjs-toggle-views-manager-button-label = Toggle Sidebar
+pdfjs-views-manager-sidebar =
+    .aria-label = Sidebar
+pdfjs-views-manager-view-selector-button =
+    .title = Views
+pdfjs-views-manager-view-selector-button-label = Views
+pdfjs-views-manager-pages-title = Pages
+pdfjs-views-manager-outlines-title = Document outline
+pdfjs-views-manager-attachments-title = Attachments
+pdfjs-views-manager-layers-title = Layers
+pdfjs-views-manager-pages-option-label = Pages
+pdfjs-views-manager-outlines-option-label = Document outline
+pdfjs-views-manager-attachments-option-label = Attachments
+pdfjs-views-manager-layers-option-label = Layers
+pdfjs-views-manager-add-file-button =
+    .title = Add file
+pdfjs-views-manager-add-file-button-label = Add file
+pdfjs-views-manager-pages-status-action-label =
     { $count ->
-        [one] Comment
-       *[other] Comments
+        [one] { $count } selected
+        *[other] { $count } selected
     }
-pdfjs-editor-comments-sidebar-close-button =
-    .title = Close the sidebar
-    .aria-label = Close the sidebar
-pdfjs-editor-comments-sidebar-close-button-label = Close the sidebar
-pdfjs-editor-comments-sidebar-no-comments1 = See something noteworthy? Highlight it and leave a comment.
-pdfjs-editor-comments-sidebar-no-comments-link = Learn more
-pdfjs-show-comment-button =
-    .title = Show comment
-pdfjs-editor-edit-comment-popup-button-label = Edit comment
-pdfjs-editor-edit-comment-popup-button =
-    .title = Edit comment
-pdfjs-editor-delete-comment-popup-button-label = Remove comment
-pdfjs-editor-delete-comment-popup-button =
-    .title = Remove comment
-pdfjs-editor-edit-comment-dialog-title-when-editing = Edit comment
-pdfjs-editor-edit-comment-dialog-save-button-when-editing = Update
-pdfjs-editor-edit-comment-dialog-title-when-adding = Add comment
-pdfjs-editor-edit-comment-dialog-save-button-when-adding = Add
-pdfjs-editor-edit-comment-dialog-text-input =
-    .placeholder = Start typing…
-pdfjs-editor-edit-comment-dialog-cancel-button = Cancel
+pdfjs-views-manager-pages-status-none-action-label = Select pages
+pdfjs-views-manager-pages-status-action-button-label = Manage
+pdfjs-views-manager-pages-status-copy-button-label = Copy
+pdfjs-views-manager-pages-status-cut-button-label = Cut
+pdfjs-views-manager-pages-status-delete-button-label = Delete
+pdfjs-views-manager-pages-status-save-as-button-label = Save as…
+pdfjs-views-manager-status-undo-cut-label =
+    { $count ->
+        [one] 1 page cut
+        *[other] { $count } pages cut
+    }
+pdfjs-views-manager-pages-status-undo-copy-label =
+    { $count ->
+        [one] 1 page copied
+        *[other] { $count } pages copied
+    }
+pdfjs-views-manager-pages-status-undo-delete-label =
+    { $count ->
+        [one] 1 page deleted
+        *[other] { $count } pages deleted
+    }
+pdfjs-views-manager-pages-status-waiting-ready-label = Getting your file ready…
+pdfjs-views-manager-pages-status-waiting-uploading-label = Uploading file…
+pdfjs-views-manager-status-warning-cut-label = Couldn’t cut. Refresh page and try again.
+pdfjs-views-manager-status-warning-copy-label = Couldn’t copy. Refresh page and try again.
+pdfjs-views-manager-status-warning-delete-label = Couldn’t delete. Refresh page and try again.
+pdfjs-views-manager-status-warning-save-label = Couldn’t save. Refresh page and try again.
+pdfjs-views-manager-status-undo-button-label = Undo
+pdfjs-views-manager-status-close-button =
+    .title = Close
+pdfjs-views-manager-status-close-button-label = Close
