@@ -402,7 +402,7 @@ ngx-extended-pdf-viewer {
           }
         }
 
-        .commentButton {
+        .commentButton, .comment {
           width: var(--editor-toolbar-height);
 
           &::before {
@@ -1487,5 +1487,12 @@ ngx-extended-pdf-viewer {
   /* #2282 improved compatibility to ng-zorro-antd */
   .annotationEditorLayer button {
     font-size: 13px;
+  }
+
+  .page:has(.annotationEditorLayer.nonEditing)
+  .annotationLayer
+  .editorAnnotation {
+    position: absolute;
+    pointer-events: none;
   }
 }

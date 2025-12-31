@@ -66,6 +66,7 @@ export * from './lib/pdf-csp-policy.service';
 export * from './lib/pdf-dialog/pdf-add-signature-dialog/pdf-add-signature-dialog.component';
 export * from './lib/pdf-dialog/pdf-alt-text-dialog/pdf-alt-text-dialog.component';
 export * from './lib/pdf-dialog/pdf-alt-text-settings-dialog/pdf-alt-text-settings-dialog.component';
+export * from './lib/pdf-dialog/pdf-comment-manager-dialog/pdf-comment-manager-dialog.component';
 export * from './lib/pdf-dialog/pdf-document-properties-dialog/pdf-document-properties-dialog.component';
 export * from './lib/pdf-dialog/pdf-edit-signature-dialog/pdf-edit-signature-dialog.component';
 export * from './lib/pdf-dialog/pdf-error-message/pdf-error-message.component';

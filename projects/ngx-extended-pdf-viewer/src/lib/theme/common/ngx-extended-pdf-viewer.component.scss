@@ -1,4 +1,6 @@
 ngx-extended-pdf-viewer {
+  --main-color: light-dark(rgb(12 12 13), rgb(249 249 250));
+
   .invisible {
     display: none !important;
   }
@@ -16,17 +18,59 @@ ngx-extended-pdf-viewer {
     --sidebar-box-shadow:
       0 0.25px 0.75px light-dark(rgb(0 0 0 / 0.05), rgb(0 0 0 / 0.2)),
       0 2px 6px 0 light-dark(rgb(0 0 0 / 0.1), rgb(0 0 0 / 0.4));
-
-    border-radius: 8px;
-    box-shadow: var(--sidebar-box-shadow);
-    border: 1px solid var(--sidebar-border-color);
-    background-color: var(--sidebar-bg-color);
-    inset-block-start: calc(100% + var(--doorhanger-height) - 2px);
+    --sidebar-border-radius: 8px;
+    --sidebar-padding: 5px;
+    --sidebar-min-width: 180px;
+    --sidebar-max-width: 632px;
+    --sidebar-width: 239px;
+    --resizer-width: 4px;
+    --resizer-hover-bg-color: light-dark(#0062fa, #00cadb);
 
     @media screen and (forced-colors: active) {
       --sidebar-bg-color: Canvas;
       --sidebar-border-color: CanvasText;
       --sidebar-box-shadow: none;
+      --resizer-hover-bg-color: CanvasText;
+    }
+
+    border-radius: var(--sidebar-border-radius);
+    box-shadow: var(--sidebar-box-shadow);
+    border: 1px solid var(--sidebar-border-color);
+    background-color: var(--sidebar-bg-color);
+    padding-block: var(--sidebar-padding);
+    width: var(--sidebar-width);
+    min-width: var(--sidebar-min-width);
+    max-width: var(--sidebar-max-width);
+
+    .sidebarResizer {
+      width: var(--resizer-width);
+      background-color: transparent;
+      forced-color-adjust: none;
+      cursor: ew-resize;
+      position: absolute;
+      inset-block: calc(var(--sidebar-padding) + var(--sidebar-border-radius));
+      inset-inline-start: calc(0px - var(--resizer-width) / 2);
+      transition: background-color 0.5s ease-in-out;
+      box-sizing: border-box;
+      border: 1px solid transparent;
+      border-block-width: 0;
+      background-clip: content-box;
+
+      &:hover {
+        background-color: var(--resizer-hover-bg-color);
+      }
+
+      pointer-events: none;
+      display: none;
+    }
+
+    &.resizing {
+      cursor: ew-resize;
+      user-select: none;
+
+      :not(.sidebarResizer) {
+        pointer-events: none;
+      }
     }
   }
 }
@@ -132,6 +176,11 @@ ngx-extended-pdf-viewer div.zoom * {
 }
 
 ngx-extended-pdf-viewer {
+  --comment-edit-button-icon: url("data:image/svg+xml;charset=UTF-8,<svg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'><g><path d='M10.75 7H12.25V5.5H10.75V7Z' fill='black'/><path d='M7.5 7H9V5.5H7.5V7Z' fill='black'/><path d='M4.25 7H5.75V5.5H4.25V7Z' fill='black'/><path fill-rule='evenodd' clip-rule='evenodd' d='M2 0C0.895786 0 0 0.895786 0 2V10.5C0 11.6042 0.895786 12.5 2 12.5H3V15.25C3 15.5405 3.16778 15.805 3.43066 15.9287C3.6937 16.0523 4.00473 16.0126 4.22852 15.8271L8.27051 12.4775L13.9941 12.4961C15.1007 12.4991 15.9999 11.6033 16 10.4961V2C16 0.895786 15.1042 0 14 0H2ZM14 1.5C14.2758 1.5 14.5 1.72421 14.5 2V10.4961C14.4999 10.7727 14.2753 10.9969 13.998 10.9961L8.00195 10.9775L7.87207 10.9893C7.74389 11.0115 7.62281 11.0664 7.52148 11.1504L4.5 13.6543V11.75C4.5 11.3358 4.16421 11 3.75 11H2C1.72421 11 1.5 10.7758 1.5 10.5V2C1.5 1.72421 1.72421 1.5 2 1.5H14Z' fill='black'/></g></svg>");
+  --comment-close-button-icon: url("data:image/svg+xml;charset=UTF-8,<svg width='25' height='24' viewBox='0 0 25 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M13.6241 11.7759L18.3331 7.06694C18.4423 6.94811 18.5015 6.79167 18.4981 6.63028C18.4948 6.46889 18.4292 6.31502 18.3152 6.20081C18.2011 6.0866 18.0473 6.02088 17.8859 6.01736C17.7245 6.01384 17.568 6.0728 17.4491 6.18194L12.7601 10.8709H12.2721L7.58306 6.18294C7.52495 6.12489 7.45598 6.07886 7.38008 6.04747C7.30418 6.01609 7.22284 5.99995 7.14071 6C7.05857 6.00005 6.97725 6.01627 6.90139 6.04774C6.82553 6.07922 6.75661 6.12533 6.69856 6.18344C6.64052 6.24155 6.59449 6.31052 6.5631 6.38642C6.53171 6.46232 6.51558 6.54366 6.51563 6.62579C6.51572 6.79167 6.5817 6.95071 6.69906 7.06794L11.3861 11.7539V12.2449L6.69906 16.9319C6.5898 17.0508 6.53066 17.2072 6.53399 17.3686C6.53732 17.53 6.60288 17.6839 6.71696 17.7981C6.83104 17.9123 6.98483 17.978 7.14622 17.9815C7.3076 17.985 7.46411 17.9261 7.58306 17.8169L12.2701 13.1299H12.7611L17.4481 17.8169C17.5656 17.934 17.7247 17.9997 17.8906 17.9997C18.0564 17.9997 18.2155 17.934 18.3331 17.8169C18.4504 17.6996 18.5163 17.5404 18.5163 17.3744C18.5163 17.2085 18.4504 17.0493 18.3331 16.9319L13.6241 12.2229V11.7759Z' fill='black'/></svg>");
+  --comment-popup-edit-button-icon: url("data:image/svg+xml;charset=UTF-8,<svg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'>  <path d='M0.0189877 13.6645L0.612989 10.4635C0.687989 10.0545 0.884989 9.6805 1.18099 9.3825L9.98199 0.5805C10.756 -0.1925 12.015 -0.1945 12.792 0.5805L14.42 2.2085C15.194 2.9835 15.194 4.2435 14.42 5.0185L5.61599 13.8215C5.31999 14.1165 4.94599 14.3125 4.53799 14.3875L1.33599 14.9815C1.26599 14.9935 1.19799 15.0005 1.12999 15.0005C0.832989 15.0005 0.544988 14.8835 0.330988 14.6695C0.0679874 14.4055 -0.0490122 14.0305 0.0189877 13.6645ZM12.472 5.1965L13.632 4.0365L13.631 3.1885L11.811 1.3675L10.963 1.3685L9.80299 2.5285L12.472 5.1965ZM4.31099 13.1585C4.47099 13.1285 4.61799 13.0515 4.73399 12.9345L11.587 6.0815L8.91899 3.4135L2.06599 10.2655C1.94899 10.3835 1.87199 10.5305 1.84099 10.6915L1.36699 13.2485L1.75199 13.6335L4.31099 13.1585Z' fill='black'/></svg>");
+  --comment-popup-delete-button-icon: url("data:image/svg+xml;charset=UTF-8,<svg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M11 3H13.6C14 3 14.3 3.3 14.3 3.6C14.3 3.9 14 4.2 13.7 4.2H13.3V14C13.3 15.1 12.4 16 11.3 16H4.80005C3.70005 16 2.80005 15.1 2.80005 14V4.2H2.40005C2.00005 4.2 1.80005 4 1.80005 3.6C1.80005 3.2  2.00005 3 2.40005 3H5.00005V2C5.00005 0.9 5.90005 0 7.00005 0H9.00005C10.1 0 11 0.9 11 2V3ZM6.90005 1.2L6.30005 1.8V3H9.80005V1.8L9.20005 1.2H6.90005ZM11.4 14.7L12 14.1V4.2H4.00005V14.1L4.60005  14.7H11.4ZM7.00005 12.4C7.00005 12.7 6.70005 13 6.40005 13C6.10005 13 5.80005 12.7 5.80005 12.4V7.6C5.70005 7.3 6.00005 7 6.40005 7C6.80005 7 7.00005 7.3 7.00005 7.6V12.4ZM10.2001 12.4C10.2001 12.7  9.90006 13 9.60006 13C9.30006 13 9.00006 12.7 9.00006 12.4V7.6C9.00006 7.3 9.30006 7 9.60006 7C9.90006 7 10.2001 7.3 10.2001 7.6V12.4Z' fill='black' /></svg>");
+
   #movePageUpButton::before {
     mask-image: var(--toolbarButton-pageUp-icon);
   }
@@ -155,6 +204,8 @@ ngx-extended-pdf-viewer {
   .annotationLayer,
   .annotationEditorLayer {
     .annotationCommentButton {
+      // color-scheme: light dark;
+
       --comment-button-bg: light-dark(white, #1c1b22);
       --comment-button-fg: light-dark(#5b5b66, #fbfbfe);
       --comment-button-active-bg: light-dark(#0041a4, #a6ecf4);
@@ -174,57 +225,85 @@ ngx-extended-pdf-viewer {
         0 2px 6px 0 light-dark(rgb(0 0 0 / 0.1), rgb(0 0 0 / 0.4));
       --comment-button-focus-outline-color: light-dark(#0062fa, #00cadb);
 
-      background-color: var(--comment-button-bg);
-      color: var(--comment-button-fg);
-      border: 1px solid var(--comment-button-border-color);
-      border-radius: calc(var(--comment-button-dim) / 2);
-      box-shadow: var(--comment-button-box-shadow);
-      cursor: pointer;
-      inset-inline-end: calc(-1 * var(--comment-button-dim) / 2);
-      inset-block-start: calc(-1 * var(--comment-button-dim) / 2);
+      @media screen and (forced-colors: active) {
+        --comment-button-bg: ButtonFace;
+        --comment-button-fg: ButtonText;
+        --comment-button-hover-bg: SelectedItemText;
+        --comment-button-hover-fg: SelectedItem;
+        --comment-button-active-bg: SelectedItemText;
+        --comment-button-active-fg: SelectedItem;
+        --comment-button-border-color: ButtonBorder;
+        --comment-button-active-border-color: ButtonBorder;
+        --comment-button-hover-border-color: SelectedItem;
+        --comment-button-box-shadow: none;
+        --comment-button-focus-outline-color: CanvasText;
+        --comment-button-selected-bg: ButtonBorder;
+        --comment-button-selected-fg: ButtonFace;
+      }
+
+      position: absolute;
       width: var(--comment-button-dim);
       height: var(--comment-button-dim);
-      position: absolute;
+      background-color: var(--comment-button-bg);
+      border-radius: 6px 6px 6px 0;
+      border: 1px solid var(--comment-button-border-color);
+      box-shadow: var(--comment-button-box-shadow);
+      cursor: auto;
       z-index: 1;
+      padding: 4px;
+      margin: 0;
+      box-sizing: border-box;
+      pointer-events: auto;
 
-      @media screen and (forced-colors: active) {
-        --comment-button-bg: Canvas;
-        --comment-button-fg: CanvasText;
-        --comment-button-active-bg: Highlight;
-        --comment-button-active-fg: HighlightText;
-        --comment-button-hover-bg: Highlight;
-        --comment-button-hover-fg: HighlightText;
-        --comment-button-selected-bg: Highlight;
-        --comment-button-selected-fg: HighlightText;
-        --comment-button-border-color: CanvasText;
-        --comment-button-active-border-color: HighlightText;
-        --comment-button-focus-border-color: CanvasText;
-        --comment-button-hover-border-color: HighlightText;
-        --comment-button-selected-border-color: HighlightText;
+      &:dir(rtl) {
+        border-radius: 6px 6px 0;
       }
 
-      &:hover {
-        background-color: var(--comment-button-hover-bg);
-        color: var(--comment-button-hover-fg);
-        border-color: var(--comment-button-hover-border-color);
-      }
-
-      &:active {
-        background-color: var(--comment-button-active-bg);
-        color: var(--comment-button-active-fg);
-        border-color: var(--comment-button-active-border-color);
+      &::before {
+        content: "";
+        display: inline-block;
+        width: 100%;
+        height: 100%;
+        mask-repeat: no-repeat;
+        mask-size: cover;
+        mask-image: var(--comment-edit-button-icon);
+        background-color: var(--comment-button-fg);
+        margin: 0;
+        padding: 0;
+        transform: scaleX(var(--dir-factor));
       }
 
       &:focus-visible {
-        border-color: var(--comment-button-focus-border-color);
         outline: 2px solid var(--comment-button-focus-outline-color);
-        outline-offset: 2px;
+        outline-offset: 1px;
+        border-color: var(--comment-button-focus-border-color);
+      }
+
+      &:hover {
+        background-color: var(--comment-button-hover-bg) !important;
+        border-color: var(--comment-button-hover-border-color);
+
+        &::before {
+          background-color: var(--comment-button-hover-fg);
+        }
+      }
+
+      &:active {
+        background-color: var(--comment-button-active-bg) !important;
+        border-color: var(--comment-button-active-border-color);
+
+        &::before {
+          background-color: var(--comment-button-active-fg);
+        }
       }
 
       &.selected {
-        background-color: var(--comment-button-selected-bg);
-        color: var(--comment-button-selected-fg);
+        background-color: var(--comment-button-selected-bg) !important;
         border-color: var(--comment-button-selected-border-color);
+
+        &::before {
+          background-color: var(--comment-button-selected-fg);
+        }
       }
     }
   }
@@ -241,29 +320,117 @@ ngx-extended-pdf-viewer {
   }
 
   #editorCommentsSidebar {
-    .menuContainer {
-      width: 100%;
-      height: auto;
-      display: flex;
-      flex-direction: column;
-      box-sizing: border-box;
-      padding: 10px;
-    }
+    display: flex;
+    height: auto;
+    padding-bottom: 16px;
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   #editorCommentsSidebarHeader {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 16px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: 8px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--sidebar-border-color);
+    justify-content: space-between;
+
+    .commentCount {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      user-select: none;
+
+      #editorCommentsSidebarTitle {
+        font: menu;
+        font-style: normal;
+        font-weight: 590;
+        line-height: normal;
+        font-size: 17px;
+        color: var(--comment-fg-color);
+      }
+
+      #editorCommentsSidebarCount {
+        padding: 0 4px;
+        border-radius: 4px;
+        background-color: var(--comment-count-bg-color);
+
+        color: var(--comment-fg-color);
+        text-align: center;
+
+        font: menu;
+        font-size: 13px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+      }
+    }
   }
 
-  #editorCommentsSidebarTitle {
-    font-weight: 600;
-    font-size: 13px;
-    color: var(--main-color, #000);
+  #editorCommentsSidebar,
+  .commentPopup,
+  .annotationLayer {
+  }
+
+  #editorCommentsSidebar,
+  .commentPopup {
+    --comment-date-fg-color: light-dark(
+        rgb(21 20 26 / 0.69),
+        rgb(251 251 254 / 0.69)
+    );
+    --comment-bg-color: light-dark(#f9f9fb, #1c1b22);
+    --comment-hover-bg-color: light-dark(#e0e0e6, #2c2b33);
+    --comment-active-bg-color: light-dark(#d1d1d9, #3a3944);
+    --comment-hover-brightness: 0.89;
+    --comment-hover-filter: brightness(var(--comment-hover-brightness));
+    --comment-active-brightness: 0.825;
+    --comment-active-filter: brightness(var(--comment-active-brightness));
+    --comment-border-color: light-dark(#f0f0f4, #52525e);
+    --comment-focus-outline-color: light-dark(#0062fa, #00cadb);
+    --comment-fg-color: light-dark(#15141a, #fbfbfe);
+    --comment-count-bg-color: light-dark(#e2f7ff, #00317e);
+    --comment-indicator-active-fg-color: light-dark(#0041a4, #a6ecf4);
+    --comment-indicator-active-filter: brightness(
+        calc(1 / var(--comment-active-brightness))
+    );
+    --comment-indicator-focus-fg-color: light-dark(#5b5b66, #fbfbfe);
+    --comment-indicator-hover-fg-color: light-dark(#0053cb, #61dce9);
+    --comment-indicator-hover-filter: brightness(
+        calc(1 / var(--comment-hover-brightness))
+    );
+    --comment-indicator-selected-fg-color: light-dark(#0062fa, #00cadb);
+
+    --button-comment-bg: transparent;
+    --button-comment-color: var(--main-color);
+    --button-comment-active-bg: light-dark(#cfcfd8, #5b5b66);
+    --button-comment-active-border: none;
+    --button-comment-active-color: var(--button-comment-color);
+    --button-comment-border: none;
+    --button-comment-hover-bg: light-dark(#e0e0e6, #52525e);
+    --button-comment-hover-color: var(--button-comment-color);
+
+    @media screen and (forced-colors: active) {
+      --comment-date-fg-color: CanvasText;
+      --comment-bg-color: Canvas;
+      --comment-hover-bg-color: Canvas;
+      --comment-hover-filter: none;
+      --comment-active-bg-color: Canvas;
+      --comment-active-filter: none;
+      --comment-border-color: CanvasText;
+      --comment-fg-color: CanvasText;
+      --comment-count-bg-color: Canvas;
+      --comment-indicator-active-fg-color: SelectedItem;
+      --comment-indicator-focus-fg-color: CanvasText;
+      --comment-indicator-hover-fg-color: CanvasText;
+      --comment-indicator-selected-fg-color: SelectedItem;
+      --button-comment-bg: ButtonFace;
+      --button-comment-color: ButtonText;
+      --button-comment-active-bg: ButtonText;
+      --button-comment-active-color: HighlightText;
+      --button-comment-border: 1px solid ButtonText;
+      --button-comment-hover-bg: Highlight;
+      --button-comment-hover-color: HighlightText;
+    }
   }
 
   #editorCommentsSidebarCloseButton {
@@ -301,12 +468,332 @@ ngx-extended-pdf-viewer {
     }
   }
 
-  #editorCommentsSidebarList {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    max-height: 300px;
-    overflow-y: auto;
+  #editorCommentsSidebarListContainer {
+    overflow: auto;
+    width: 100%;
+
+    #editorCommentsSidebarList {
+      display: flex;
+      width: auto;
+      padding: 4px 16px;
+      gap: 10px;
+      align-items: flex-start;
+      flex-direction: column;
+      list-style-type: none;
+
+      .sidebarComment {
+        display: flex;
+        width: auto;
+        padding: 8px 16px 16px;
+        flex-direction: column;
+        align-items: flex-start;
+        align-self: stretch;
+        gap: 4px;
+
+        border-radius: 8px;
+        border: 0.5px solid var(--comment-border-color);
+        background-color: var(--comment-bg-color);
+
+        &:not(.noComments) {
+          &:hover {
+            @media screen and (forced-colors: active) {
+              background-color: var(--comment-hover-bg-color);
+            }
+            filter: var(--comment-hover-filter);
+
+            time::after {
+              display: inline-block;
+              background-color: var(--comment-indicator-hover-fg-color);
+              filter: var(--comment-indicator-hover-filter);
+            }
+          }
+
+          &:active {
+            @media screen and (forced-colors: active) {
+              background-color: var(--comment-active-bg-color);
+            }
+            filter: var(--comment-active-filter);
+
+            time::after {
+              display: inline-block;
+              background-color: var(--comment-indicator-active-fg-color);
+              filter: var(--comment-indicator-active-filter);
+            }
+          }
+
+          &:is(:focus, :focus-visible) time::after {
+            display: inline-block;
+            background-color: var(--comment-indicator-focus-fg-color);
+          }
+
+          &:focus-visible {
+            outline: 2px solid var(--comment-focus-outline-color);
+            outline-offset: 2px;
+          }
+
+          &.selected {
+            .sidebarCommentText {
+              max-height: fit-content;
+              -webkit-line-clamp: unset;
+            }
+
+            time::after {
+              display: inline-block;
+              background-color: var(--comment-indicator-selected-fg-color);
+            }
+          }
+        }
+
+        .sidebarCommentText {
+          font: menu;
+          font-style: normal;
+          font-weight: 400;
+          line-height: normal;
+          font-size: 15px;
+          width: 100%;
+          height: fit-content;
+          max-height: 80px;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+          overflow: hidden;
+          overflow-wrap: break-word;
+
+          .richText {
+            --total-scale-factor: 1.5;
+          }
+        }
+
+        &.noComments {
+          .sidebarCommentText {
+            max-height: fit-content;
+            -webkit-line-clamp: unset;
+            user-select: none;
+          }
+
+          a {
+            font: menu;
+            font-style: normal;
+            font-weight: 400;
+            line-height: normal;
+            font-size: 15px;
+            width: 100%;
+            height: auto;
+            overflow-wrap: break-word;
+            margin-block-start: 15px;
+
+            &:focus-visible {
+              outline: var(--focus-ring-outline);
+            }
+          }
+        }
+
+        time {
+          width: 100%;
+          display: inline-flex;
+          align-items: center;
+          justify-content: space-between;
+
+          font: menu;
+          font-style: normal;
+          font-weight: 400;
+          line-height: normal;
+          font-size: 13px;
+
+          &::after {
+            content: "";
+            display: none;
+            width: 16px;
+            height: 16px;
+            mask-repeat: no-repeat;
+            mask-position: center;
+            mask-image: var(--comment-edit-button-icon);
+            transform: scaleX(var(--dir-factor));
+          }
+        }
+      }
+    }
+  }
+
+  .commentPopup {
+    width: 360px;
+    max-width: 100%;
+    min-width: 200px;
+    position: absolute;
+    padding: 8px 16px 16px;
+    margin-left: 0;
+    margin-top: 0;
+    box-sizing: border-box;
+
+    border-radius: 8px;
+  }
+
+
+  .commentPopup {
+    //color-scheme: light dark;
+
+    --divider-color: light-dark(#cfcfd8, #3a3944);
+    --comment-shadow:
+      0 0.5px 2px 0 light-dark(rgb(0 0 0 / 0.05), rgb(0 0 0 / 0.2)),
+      0 4px 16px 0 light-dark(rgb(0 0 0 / 0.1), rgb(0 0 0 / 0.4));
+
+    @media screen and (forced-colors: active) {
+      --divider-color: CanvasText;
+      --comment-shadow: none;
+    }
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    z-index: 100001; /* above selected annotation editor */
+    pointer-events: auto;
+    margin-top: 2px;
+
+    border: 0.5px solid var(--comment-border-color);
+    background: var(--comment-bg-color);
+    box-shadow: var(--comment-shadow);
+
+    &:focus-visible {
+      outline: none;
+    }
+
+    &.dragging {
+      cursor: move !important;
+
+      * {
+        cursor: move !important;
+      }
+
+      button {
+        pointer-events: none !important;
+      }
+    }
+
+    &:not(.selected) .commentPopupButtons {
+      visibility: hidden !important;
+    }
+
+    hr {
+      width: 100%;
+      height: 1px;
+      border: none;
+      border-top: 1px solid var(--divider-color);
+      margin: 0;
+      padding: 0;
+    }
+
+    .commentPopupTop {
+      display: flex;
+      width: 100%;
+      height: auto;
+      padding-bottom: 4px;
+      justify-content: space-between;
+      align-items: center;
+      align-self: stretch;
+      cursor: move;
+      user-select: none;
+
+      .commentPopupTime {
+        font: menu;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        font-size: 13px;
+        color: var(--comment-date-fg-color);
+      }
+
+      .commentPopupButtons {
+        display: flex;
+        align-items: center;
+        gap: 2px;
+        cursor: default;
+
+        > button {
+          width: 32px;
+          height: 32px;
+          padding: 8px;
+          border: var(--button-comment-border);
+          border-radius: 4px;
+          background-color: var(--button-comment-bg);
+          color: var(--button-comment-color);
+
+          &:hover {
+            background-color: var(--button-comment-hover-bg);
+
+            &::before {
+              background-color: var(--button-comment-hover-color);
+            }
+          }
+
+          &:active {
+            border: var(--button-comment-active-border);
+            background-color: var(--button-comment-active-bg);
+            color: var(--button-comment-active-color);
+
+            &::before {
+              background-color: var(--button-comment-active-color);
+            }
+          }
+
+          &:focus-visible {
+            background-color: var(--button-comment-hover-bg);
+            outline: 2px solid var(--comment-focus-outline-color);
+            outline-offset: 0;
+          }
+
+          &::before {
+            content: "";
+            display: inline-block;
+            width: 100%;
+            height: 100%;
+            mask-repeat: no-repeat;
+            mask-position: center;
+            mask-size: cover;
+            background-color: var(--button-comment-color);
+          }
+
+          &.commentPopupEdit::before {
+            mask-image: var(--comment-popup-edit-button-icon);
+          }
+
+          &.commentPopupDelete::before {
+            mask-image: var(--comment-popup-delete-button-icon);
+          }
+        }
+      }
+    }
+
+    .commentPopupText {
+      width: 100%;
+      height: auto;
+
+      font: menu;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+      font-size: 15px;
+      color: var(--comment-fg-color);
+    }
+  }
+
+  .commentPopupText,
+  .sidebarCommentText .richText {
+    margin-block: 0;
+
+    p:first-of-type {
+      margin-block: 0;
+    }
+
+    > * {
+      white-space: pre-wrap;
+      font-size: max(15px, calc(10px * var(--total-scale-factor)));
+      overflow-wrap: break-word;
+    }
+
+    span {
+      color: var(--comment-fg-color) !important;
+    }
   }
 
   /* Comment manager dialog styles (for individual comment editing) */

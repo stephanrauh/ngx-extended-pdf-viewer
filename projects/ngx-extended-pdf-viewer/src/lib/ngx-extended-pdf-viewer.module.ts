@@ -82,6 +82,7 @@ import { PdfZoomInComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-in/pdf-z
 import { PdfZoomOutComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-out/pdf-zoom-out.component';
 import { PdfZoomToolbarComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-toolbar.component';
 import { TranslatePipe } from './translate.pipe';
+import { PdfCommentManagerDialogComponent } from "./pdf-dialog/pdf-comment-manager-dialog/pdf-comment-manager-dialog.component";
 
 if (!(Promise as any)['allSettled']) {
   if (!!(window as any)['Zone'] && !(window as any)['__zone_symbol__Promise.allSettled']) {
@@ -102,6 +103,7 @@ if (!(Promise as any)['allSettled']) {
     PdfAddSignatureDialogComponent,
     PdfBookModeComponent,
     PdfCommentEditorComponent,
+    PdfCommentManagerDialogComponent,
     PdfContextMenuComponent,
     PdfDarkThemeComponent,
     PdfDrawEditorComponent,
@@ -184,6 +186,7 @@ if (!(Promise as any)['allSettled']) {
     PdfAltTextSettingsDialogComponent,
     PdfBookModeComponent,
     PdfCommentEditorComponent,
+    PdfCommentManagerDialogComponent,
     PdfContextMenuComponent,
     PdfDarkThemeComponent,
     PdfDocumentPropertiesComponent,

@@ -97,12 +97,13 @@
               [hasTextLayer]="hasTextLayer"
             ></pdf-toolbar>
 
-            <div 
-              class="editorParamsToolbar sidebar hidden menu" 
+            <div
+              class="editorParamsToolbar sidebar hidden menu doorHangerRight"
               id="editorCommentParamsToolbar"
               [style.transform]="'scale(' + mobileFriendlyZoomScale + ')'"
             >
-              <div id="editorCommentsSidebar" class="menuContainer" role="landmark" aria-labelledby="editorCommentsSidebarHeader">
+              <div id="editorCommentsSidebar" class="menuContainer sidebar" role="landmark" aria-labelledby="editorCommentsSidebarHeader">
+                <div id="editorCommentsSidebarResizer" class="sidebarResizer"></div>
                 <div id="editorCommentsSidebarHeader" role="heading" aria-level="2">
                   <span class="commentCount">
                     <span id="editorCommentsSidebarTitle">Comments</span>
@@ -401,6 +402,7 @@
             <pdf-prepare-printing-dialog></pdf-prepare-printing-dialog>
             <pdf-add-signature-dialog></pdf-add-signature-dialog>
             <pdf-edit-signature-dialog></pdf-edit-signature-dialog>
+            <pdf-comment-manager-dialog></pdf-comment-manager-dialog>
           </div>
           <!-- dialogContainer -->
         </div>
