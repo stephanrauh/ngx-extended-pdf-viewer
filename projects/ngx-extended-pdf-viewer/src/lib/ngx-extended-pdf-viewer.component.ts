@@ -2052,7 +2052,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       // #3060 end of modification by ngx-extended-pdf-viewer
       setTimeout(this.asyncWithCD(() => {
         if (this.destroyInitialization) return;
-        this.currentZoomFactor.emit(x.scale);
+        // Round to 4 decimal places (0.01% precision) to avoid floating-point artifacts
+        // This precision is sufficient even for theoretical 80K displays and far exceeds human visual acuity
+        const roundedScale = Math.round(x.scale * 10000) / 10000;
+        this.currentZoomFactor.emit(roundedScale);
       }));
 
       if (x.presetValue !== 'auto' && x.presetValue !== 'page-fit' && x.presetValue !== 'page-actual' && x.presetValue !== 'page-width') {

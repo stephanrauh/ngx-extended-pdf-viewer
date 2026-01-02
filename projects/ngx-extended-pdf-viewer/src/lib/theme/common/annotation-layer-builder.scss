@@ -15,15 +15,22 @@
 
 ngx-extended-pdf-viewer {
   .annotationLayer {
-    color-scheme: only light;
+    // #3111 modified by ngx-extended-pdf-viewer
+    // Changed from "only light" to adapt to dark mode for better checkbox visibility
+    color-scheme: light dark;
 
-    --annotation-unfocused-field-background: url("data:image/svg+xml;charset=UTF-8,<svg width='1px' height='1px' xmlns='http://www.w3.org/2000/svg'><rect width='100%' height='100%' style='fill:rgba(0, 54, 255, 0.13);'/></svg>");
+    // Use light-dark() to adapt form control colors to the viewer theme
+    --annotation-unfocused-field-background: light-dark(
+      url("data:image/svg+xml;charset=UTF-8,<svg width='1px' height='1px' xmlns='http://www.w3.org/2000/svg'><rect width='100%' height='100%' style='fill:rgba(0, 54, 255, 0.13);'/></svg>"),
+      url("data:image/svg+xml;charset=UTF-8,<svg width='1px' height='1px' xmlns='http://www.w3.org/2000/svg'><rect width='100%' height='100%' style='fill:rgba(0, 102, 204, 0.2);'/></svg>")
+    );
     --input-focus-border-color: Highlight;
     --input-focus-outline: 1px solid Canvas;
     --input-unfocused-border-color: transparent;
     --input-disabled-border-color: transparent;
-    --input-hover-border-color: black;
+    --input-hover-border-color: light-dark(black, white);
     --link-outline: none;
+    // #3111 end of modification by ngx-extended-pdf-viewer
 
     @media screen and (forced-colors: active) {
       --input-focus-border-color: CanvasText;

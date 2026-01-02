@@ -1140,6 +1140,20 @@ ngx-extended-pdf-viewer {
     }
   }
 
+  // #3111 modified by ngx-extended-pdf-viewer
+  // Modern PDF.js v5.4.530+ uses 'selected' class instead of 'toggled' for sidebar view buttons
+  .toolbarButton.selected,
+  .toolbarButton[aria-selected="true"] {
+    background-color: $icon-background-selected;
+    color: $icon-selected-color;
+    border-color: $border-dark;
+
+    &:hover {
+      background-color: $icon-background-hover;
+    }
+  }
+  // #3111 end of modification by ngx-extended-pdf-viewer
+
   // #2984 end of modification by ngx-extended-pdf-viewer to improve the light and dark mode
 }
 
@@ -1337,7 +1351,7 @@ ngx-extended-pdf-viewer .html {
     width: 100%;
     padding: 20px 32px;
     gap: 16px;
-    box-sizing: border-box;
+    box-sizing: border-box !important; // Force border-box to include padding in width
   }
   // #3111 end of modification
 
@@ -1369,9 +1383,86 @@ ngx-extended-pdf-viewer .html {
   }
   // #3111 end of modification
 
+  // #3111 modified by ngx-extended-pdf-viewer
+  // Updated to modern PDF.js v5.4.938+ thumbnail styling with box-shadow approach
+  // Scoped to #thumbnailsView > .thumbnail for default thumbnails only
+  // Custom thumbnails wrapped in other elements won't be affected
+  #thumbnailsView > .thumbnail {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    width: auto;
+    height: auto;
+    position: relative;
+    scroll-margin-top: 20px;
+
+    > input[type="checkbox"] {
+      display: none;
+    }
+
+    // Page number overlay badge (modern PDF.js approach)
+    &::after {
+      content: attr(page-number);
+      border-radius: 8px;
+      background-color: $thumbnail-page-number-bg;
+      color: $thumbnail-page-number-fg;
+      position: absolute;
+      bottom: 5px;
+      right: calc(var(--thumbnail-width) / 2);
+      min-width: 32px;
+      height: 16px;
+      text-align: center;
+      translate: 50%;
+
+      font: menu;
+      font-size: 13px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+      pointer-events: none;
+    }
+
+    > .thumbnailImage {
+      width: var(--thumbnail-width);
+      border: none;
+      border-radius: 8px;
+      box-shadow: $thumbnail-shadow;
+      box-sizing: content-box;
+      outline: $thumbnail-outline;
+
+      &.missingThumbnailImage {
+        content-visibility: hidden;
+      }
+
+      &:hover {
+        cursor: pointer;
+        box-shadow: $thumbnail-hover-shadow;
+      }
+
+      &:focus-visible {
+        &:not([aria-current="page"]) {
+          box-shadow: $thumbnail-hover-shadow;
+          outline: none;
+        }
+
+        &[aria-current="page"] {
+          outline: $thumbnail-border-width solid $thumbnail-current-focused-outline;
+          outline-offset: $thumbnail-border-width;
+        }
+      }
+
+      &[aria-current="page"] {
+        box-shadow: $thumbnail-current-shadow;
+      }
+    }
+  }
+  // #3111 end of modification by ngx-extended-pdf-viewer
+
+  // #3111 modified by ngx-extended-pdf-viewer
+  // Legacy thumbnail support for custom thumbnails not wrapped in #thumbnailsView
+  // Custom thumbnails may use their own structure and styling
   .thumbnail {
-    // #3111 modified by ngx-extended-pdf-viewer
-    // PDF.js v5.4.530+ uses inline-flex and sizes are set inline on the image
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -1380,26 +1471,20 @@ ngx-extended-pdf-viewer .html {
     position: relative;
     scroll-margin-top: 20px;
     gap: 16px;
-    // #3111 end of modification
     margin: 0 10px 5px 10px;
     padding: 1px;
     border: 7px solid transparent;
     border-radius: 2px;
 
-    // #3111 modified by ngx-extended-pdf-viewer
-    // Hide the checkbox input element (used for selection in PDF.js)
     > input[type="checkbox"] {
       display: none;
     }
-    // #3111 end of modification
 
-    // #2984 modified by ngx-extended-pdf-viewer to improve the light and dark mode
     &:hover {
       border: 7px solid $thumbnail-hover-color;
     }
-
-    // #2984 end of modification by ngx-extended-pdf-viewer to improve the light and dark mode
   }
+  // #3111 end of modification by ngx-extended-pdf-viewer
 }
 
 // #3111 modified by ngx-extended-pdf-viewer
@@ -1423,19 +1508,18 @@ ngx-extended-pdf-viewer {
     margin: -1px 9px 4px 9px;
   }
 
+  // #3111 modified by ngx-extended-pdf-viewer
+  // Legacy support for custom thumbnails that don't use the modern box-shadow approach
   .thumbnailImage {
-    border: 1px solid $fullscreen-background;
     width: var(--thumbnail-width);
-    // #3111 modified by ngx-extended-pdf-viewer
-    // PDF.js v5.4.530+ sets height inline via image.style.height, don't use undefined CSS variable
-    // height: var(--thumbnail-height); // REMOVED - this variable is never set!
-    // #3111 end of modification
     opacity: 0.8;
     z-index: 1;
     background-color: $page-background;
     background-clip: content-box;
   }
 
+  // Legacy .thumbnailSelectionRing support for backward compatibility
+  // Modern PDF.js v5.4.938+ no longer uses this wrapper element
   .thumbnailSelectionRing {
     border-radius: 2px;
     padding: 7px;
@@ -1446,23 +1530,19 @@ ngx-extended-pdf-viewer {
   }
 
   .thumbnail.selected>.thumbnailSelectionRing {
-    // #2984 modified by ngx-extended-pdf-viewer to improve the light and dark mode
     background-color: $thumbnail-selection-color;
-    // #2984 end of modification by ngx-extended-pdf-viewer to improve the light and dark mode
     background-clip: padding-box;
     color: $page-background;
   }
 
   .thumbnail.selected {
-    // #2984 modified by ngx-extended-pdf-viewer to improve the light and dark mode
     border-color: $thumbnail-selection-color;
 
     &:hover {
       border-color: $thumbnail-hover-color;
     }
   }
-
-  // #2984 end of modification by ngx-extended-pdf-viewer to improve the light and dark mode
+  // #3111 end of modification by ngx-extended-pdf-viewer
 
   .thumbnail:not([data-loaded])>.thumbnailImage {
     width: calc(var(--thumbnail-width) - 2px);
@@ -1474,20 +1554,23 @@ ngx-extended-pdf-viewer {
     border: 1px dashed rgba(132, 132, 132, 1);
   }
 
+  // #3111 modified by ngx-extended-pdf-viewer
+  // PDF.js v5.4.530+ moved these views inside #viewsManagerContent
+  // They are no longer absolutely positioned, but flex container children
   #outlinesView,
   #attachmentsView,
   #layersView {
-    position: absolute;
-    width: calc(100% - 8px);
-    top: 0;
-    bottom: 0;
+    width: 100%;
+    height: 100%;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    box-sizing: border-box;
   }
+  // #3111 end of modification by ngx-extended-pdf-viewer
 
   #outlinesView {
     padding: 4px 4px 0;

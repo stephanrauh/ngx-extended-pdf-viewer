@@ -39,10 +39,33 @@ ngx-extended-pdf-viewer {
       transform-origin: 0% 0%;
     }
 
+    // #3111 modified by ngx-extended-pdf-viewer
+    // Added missing CSS variables and transforms from modern PDF.js to fix text layer span sizing
+    /* We multiply the font size by --min-font-size, and then scale the text
+     * elements by 1/--min-font-size. This allows us to effectively ignore the
+     * minimum font size enforced by the browser, so that the text layer <span>s
+     * can always match the size of the text in the canvas. */
+    --min-font-size: 1;
+    --text-scale-factor: calc(var(--total-scale-factor) * var(--min-font-size));
+    --min-font-size-inv: calc(1 / var(--min-font-size));
+
     > :not(.markedContent),
     .markedContent span:not(.markedContent) {
       z-index: 1;
+
+      --font-height: 0; /* set by text_layer.js */
+      font-size: calc(var(--text-scale-factor) * var(--font-height));
+
+      --scale-x: 1;
+      --rotate: 0deg;
+      transform: rotate(var(--rotate)) scaleX(var(--scale-x))
+        scale(var(--min-font-size-inv));
     }
+
+    .markedContent {
+      display: contents;
+    }
+    // #3111 end of modification by ngx-extended-pdf-viewer
 
     /* Only necessary in Google Chrome, see issue 14205, and most unfortunately
  * the problem doesn't show up in "text" reference tests. */

@@ -30,6 +30,34 @@ $thumbnail-selection-color: #a9a9ac;
 
 $thumbnail-hover-color: #bebec1;
 
+// #3111 modified by ngx-extended-pdf-viewer
+// Modern PDF.js v5.4.938+ thumbnail variables (box-shadow approach)
+$thumbnail-border-width: 4px;
+$thumbnail-border-color: #cfcfd8;
+$thumbnail-hover-border-color: #cfcfd8;
+$thumbnail-current-border-color: #0062fa; // Focus outline color for light mode
+$thumbnail-current-focused-outline: $thumbnail-hover-border-color;
+$thumbnail-outline: none;
+$thumbnail-page-number-bg: #f0f0f4;
+$thumbnail-page-number-fg: $text-color;
+
+// Box-shadow definitions for modern thumbnails
+$thumbnail-shadow:
+  0 0.375px 1.5px 0 rgba(0, 0, 0, 0.05),
+  0 0 0 1px $thumbnail-border-color,
+  0 3px 12px 0 rgba(0, 0, 0, 0.1);
+
+$thumbnail-hover-shadow:
+  0 0.375px 1.5px 0 rgba(0, 0, 0, 0.05),
+  0 0 0 $thumbnail-border-width $thumbnail-hover-border-color,
+  0 3px 12px 0 rgba(0, 0, 0, 0.1);
+
+$thumbnail-current-shadow:
+  0 0.375px 1.5px 0 rgba(0, 0, 0, 0.05),
+  0 0 0 $thumbnail-border-width $thumbnail-current-border-color,
+  0 3px 12px 0 rgba(0, 0, 0, 0.1);
+// #3111 end of modification by ngx-extended-pdf-viewer
+
 $sidebar-toolbar-background: $toolbar-background;
 
 $sidebar-toolbar-border: #afafb1;
@@ -119,7 +147,10 @@ $outline-active-bg-color: #aaaaac; // Here
 :root {
   --scrollbar-color: auto;
   --scrollbar-bg-color: auto;
-  --sidebar-width: 200px;
+  // #3111 modified by ngx-extended-pdf-viewer
+  // Updated to match modern PDF.js v5.4.938+ sidebar width
+  --sidebar-width: 230px;
+  // #3111 end of modification by ngx-extended-pdf-viewer
   --sidebar-transition-duration: 200ms;
   --sidebar-transition-timing-function: ease;
 }
