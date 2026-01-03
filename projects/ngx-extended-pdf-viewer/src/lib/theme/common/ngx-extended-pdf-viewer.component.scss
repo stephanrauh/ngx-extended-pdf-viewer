@@ -1,5 +1,8 @@
 ngx-extended-pdf-viewer {
   --main-color: light-dark(rgb(12 12 13), rgb(249 249 250));
+  // #3113 modified by ngx-extended-pdf-viewer - Add toolbar icon color for mask-image based icons
+  --toolbar-icon-bg-color: light-dark(rgb(0 0 0), rgb(255 255 255));
+  // #3113 end of modification by ngx-extended-pdf-viewer
 
   .invisible {
     display: none !important;
@@ -180,6 +183,10 @@ ngx-extended-pdf-viewer {
   --comment-close-button-icon: url("data:image/svg+xml;charset=UTF-8,<svg width='25' height='24' viewBox='0 0 25 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M13.6241 11.7759L18.3331 7.06694C18.4423 6.94811 18.5015 6.79167 18.4981 6.63028C18.4948 6.46889 18.4292 6.31502 18.3152 6.20081C18.2011 6.0866 18.0473 6.02088 17.8859 6.01736C17.7245 6.01384 17.568 6.0728 17.4491 6.18194L12.7601 10.8709H12.2721L7.58306 6.18294C7.52495 6.12489 7.45598 6.07886 7.38008 6.04747C7.30418 6.01609 7.22284 5.99995 7.14071 6C7.05857 6.00005 6.97725 6.01627 6.90139 6.04774C6.82553 6.07922 6.75661 6.12533 6.69856 6.18344C6.64052 6.24155 6.59449 6.31052 6.5631 6.38642C6.53171 6.46232 6.51558 6.54366 6.51563 6.62579C6.51572 6.79167 6.5817 6.95071 6.69906 7.06794L11.3861 11.7539V12.2449L6.69906 16.9319C6.5898 17.0508 6.53066 17.2072 6.53399 17.3686C6.53732 17.53 6.60288 17.6839 6.71696 17.7981C6.83104 17.9123 6.98483 17.978 7.14622 17.9815C7.3076 17.985 7.46411 17.9261 7.58306 17.8169L12.2701 13.1299H12.7611L17.4481 17.8169C17.5656 17.934 17.7247 17.9997 17.8906 17.9997C18.0564 17.9997 18.2155 17.934 18.3331 17.8169C18.4504 17.6996 18.5163 17.5404 18.5163 17.3744C18.5163 17.2085 18.4504 17.0493 18.3331 16.9319L13.6241 12.2229V11.7759Z' fill='black'/></svg>");
   --comment-popup-edit-button-icon: url("data:image/svg+xml;charset=UTF-8,<svg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'>  <path d='M0.0189877 13.6645L0.612989 10.4635C0.687989 10.0545 0.884989 9.6805 1.18099 9.3825L9.98199 0.5805C10.756 -0.1925 12.015 -0.1945 12.792 0.5805L14.42 2.2085C15.194 2.9835 15.194 4.2435 14.42 5.0185L5.61599 13.8215C5.31999 14.1165 4.94599 14.3125 4.53799 14.3875L1.33599 14.9815C1.26599 14.9935 1.19799 15.0005 1.12999 15.0005C0.832989 15.0005 0.544988 14.8835 0.330988 14.6695C0.0679874 14.4055 -0.0490122 14.0305 0.0189877 13.6645ZM12.472 5.1965L13.632 4.0365L13.631 3.1885L11.811 1.3675L10.963 1.3685L9.80299 2.5285L12.472 5.1965ZM4.31099 13.1585C4.47099 13.1285 4.61799 13.0515 4.73399 12.9345L11.587 6.0815L8.91899 3.4135L2.06599 10.2655C1.94899 10.3835 1.87199 10.5305 1.84099 10.6915L1.36699 13.2485L1.75199 13.6335L4.31099 13.1585Z' fill='black'/></svg>");
   --comment-popup-delete-button-icon: url("data:image/svg+xml;charset=UTF-8,<svg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M11 3H13.6C14 3 14.3 3.3 14.3 3.6C14.3 3.9 14 4.2 13.7 4.2H13.3V14C13.3 15.1 12.4 16 11.3 16H4.80005C3.70005 16 2.80005 15.1 2.80005 14V4.2H2.40005C2.00005 4.2 1.80005 4 1.80005 3.6C1.80005 3.2  2.00005 3 2.40005 3H5.00005V2C5.00005 0.9 5.90005 0 7.00005 0H9.00005C10.1 0 11 0.9 11 2V3ZM6.90005 1.2L6.30005 1.8V3H9.80005V1.8L9.20005 1.2H6.90005ZM11.4 14.7L12 14.1V4.2H4.00005V14.1L4.60005  14.7H11.4ZM7.00005 12.4C7.00005 12.7 6.70005 13 6.40005 13C6.10005 13 5.80005 12.7 5.80005 12.4V7.6C5.70005 7.3 6.00005 7 6.40005 7C6.80005 7 7.00005 7.3 7.00005 7.6V12.4ZM10.2001 12.4C10.2001 12.7  9.90006 13 9.60006 13C9.30006 13 9.00006 12.7 9.00006 12.4V7.6C9.00006 7.3 9.30006 7 9.60006 7C9.90006 7 10.2001 7.3 10.2001 7.6V12.4Z' fill='black' /></svg>");
+  // #3113 modified by ngx-extended-pdf-viewer - Add tree chevron icons at root level for proper CSS variable scoping
+  --treeitem-expanded-icon: url("data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16'><path d='M10 13l4-7H6z'/></svg>");
+  --treeitem-collapsed-icon: url("data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16'><path d='M13 9L6 5v8z'/></svg>");
+  // #3113 end of modification by ngx-extended-pdf-viewer
 
   #movePageUpButton::before {
     mask-image: var(--toolbarButton-pageUp-icon);
@@ -188,6 +195,21 @@ ngx-extended-pdf-viewer {
   #movePageDownButton::before {
     mask-image: var(--toolbarButton-pageDown-icon);
   }
+
+  // #3113 modified by ngx-extended-pdf-viewer - Reduce width and margins of pagination and zoom buttons
+  #primaryPrevious,
+  #primaryNext,
+  #primaryFirstPage,
+  #primaryLastPage {
+    margin-right: 2px !important;
+  }
+
+  #primaryZoomIn,
+  #primaryZoomOut {
+    margin-left: -2px !important;
+    margin-right: -2px !important;
+  }
+  // #3113 end of modification by ngx-extended-pdf-viewer
 
   /* #2943 modified by ngx-extended-pdf-viewer */
   .dotted-line {
@@ -320,6 +342,10 @@ ngx-extended-pdf-viewer {
   }
 
   #editorCommentsSidebar {
+    // #3113 modified by ngx-extended-pdf-viewer
+    // Enable color-scheme for proper light-dark() function support in comments sidebar
+    color-scheme: light dark;
+    // #3113 end of modification by ngx-extended-pdf-viewer
     display: flex;
     height: auto;
     padding-bottom: 16px;
@@ -630,7 +656,10 @@ ngx-extended-pdf-viewer {
 
 
   .commentPopup {
-    //color-scheme: light dark;
+    // #3113 modified by ngx-extended-pdf-viewer
+    // Enable color-scheme for proper light-dark() function support in comment popups
+    color-scheme: light dark;
+    // #3113 end of modification by ngx-extended-pdf-viewer
 
     --divider-color: light-dark(#cfcfd8, #3a3944);
     --comment-shadow:
@@ -798,6 +827,11 @@ ngx-extended-pdf-viewer {
 
   /* Comment manager dialog styles (for individual comment editing) */
   #commentManagerDialog {
+    // #3113 modified by ngx-extended-pdf-viewer
+    // Enable color-scheme for proper light-dark() function support in comment dialog
+    color-scheme: light dark;
+    // #3113 end of modification by ngx-extended-pdf-viewer
+
     --comment-dialog-bg: light-dark(#fff, #23222b);
     --comment-dialog-border: light-dark(rgb(21 20 26 / 0.1),
         rgb(251 251 254 / 0.1));
@@ -819,6 +853,35 @@ ngx-extended-pdf-viewer {
       --comment-dialog-header-bg: Canvas;
       --comment-button-hover-bg-dialog: Highlight;
     }
+
+    // #3113 modified by ngx-extended-pdf-viewer
+    // Add missing .mainContainer, #commentManagerToolbar, and #commentManagerTextInput styles from mypdf.js
+    .mainContainer {
+      width: 100%;
+      height: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+
+      #commentManagerToolbar {
+        width: 100%;
+        height: 32px;
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 8px;
+        align-self: stretch;
+        cursor: move;
+      }
+
+      #commentManagerTextInput {
+        width: 100%;
+        min-height: 132px;
+        margin-bottom: 12px;
+      }
+    }
+    // #3113 end of modification by ngx-extended-pdf-viewer
   }
 
   .commentManagerHeader {

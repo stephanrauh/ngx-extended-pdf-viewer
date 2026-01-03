@@ -1578,132 +1578,120 @@ ngx-extended-pdf-viewer {
 }
 
 
-html[dir='ltr'] ngx-extended-pdf-viewer .treeWithDeepNesting>.treeItem,
-html[dir='ltr'] ngx-extended-pdf-viewer .treeItem>.treeItems {
-  margin-left: 20px;
-}
-
-html[dir='rtl'] ngx-extended-pdf-viewer .treeWithDeepNesting>.treeItem,
-html[dir='rtl'] ngx-extended-pdf-viewer .treeItem>.treeItems {
-  margin-right: 20px;
-}
-
+// #3113 modified by ngx-extended-pdf-viewer
+// Modernized tree view CSS from PDF.js 5.4.530+ (web/tree.css)
+// Replaces old tree CSS with proper theming support and mask-image chevrons
 ngx-extended-pdf-viewer {
-  .treeItem>a {
-    text-decoration: none;
-    display: inline-block;
-    min-width: 95%;
-    /* Subtract the right padding (left, in RTL mode) of the container: */
-    min-width: calc(100% - 4px);
-    height: auto;
-    margin-bottom: 1px;
-    border-radius: 2px;
-    color: $tree-text-color;
-    font-size: 13px;
-    line-height: 15px;
-    user-select: none;
-    white-space: normal;
-    cursor: pointer;
+  .treeView {
+    color-scheme: light dark;
+    --treeitem-color: light-dark(rgb(0 0 0 / 0.8), rgb(255 255 255 / 0.8));
+    --treeitem-bg-color: light-dark(rgb(0 0 0 / 0.15), rgb(255 255 255 / 0.15));
+    --treeitem-hover-color: light-dark(rgb(0 0 0 / 0.9), rgb(255 255 255 / 0.9));
+    --treeitem-selected-color: light-dark(
+      rgb(0 0 0 / 0.9),
+      rgb(255 255 255 / 0.9)
+    );
+    --treeitem-selected-bg-color: light-dark(
+      rgb(0 0 0 / 0.25),
+      rgb(255 255 255 / 0.25)
+    );
 
-    // #2984 modified by ngx-extended-pdf-viewer to improve the light and dark mode
-    &:hover {
-      background-color: $thumbnail-hover-color;
+    &.withNesting {
+      .treeItemToggler {
+        &::before {
+          /* All matching images have a size of 16x16
+           * All relevant containers have a size of 28x28 */
+          position: absolute;
+          display: inline-block;
+          width: 16px;
+          height: 16px;
+          inset-inline-end: 4px;
+          content: "";
+          background-color: var(--toolbar-icon-bg-color);
+          mask-image: var(--treeitem-expanded-icon);
+          mask-size: cover;
+        }
+
+        position: relative;
+        float: var(--inline-start);
+        height: 0;
+        width: 0;
+        color: rgb(255 255 255 / 0.5);
+
+        &.treeItemsHidden {
+          &::before {
+            mask-image: var(--treeitem-collapsed-icon);
+            transform: scaleX(var(--dir-factor));
+          }
+
+          ~ .treeItems {
+            display: none;
+          }
+        }
+
+        &:hover + a,
+        &:hover ~ .treeItems {
+          background-color: var(--treeitem-bg-color);
+          background-clip: padding-box;
+          border-radius: 2px;
+          color: var(--treeitem-hover-color);
+        }
+      }
+
+      > .treeItem,
+      .treeItem > .treeItems {
+        margin-inline-start: 20px;
+      }
     }
 
-    // #2984 end of modification by ngx-extended-pdf-viewer to improve the light and dark mode
+    &#layersView .treeItem > a {
+      * {
+        cursor: pointer;
+      }
+
+      > label {
+        display: flex;
+        align-items: center;
+        padding-inline-start: 4px;
+        > input {
+          margin-top: 1px;
+        }
+      }
+    }
+
+    .treeItem {
+      > a {
+        text-decoration: none;
+        display: inline-block;
+        /* Subtract the right padding (left, in RTL mode) of the container: */
+        min-width: calc(100% - 4px);
+        height: auto;
+        margin-bottom: 1px;
+        padding: 2px 0 5px;
+        padding-inline-start: 4px;
+        border-radius: 2px;
+        color: var(--treeitem-color);
+        font-size: 13px;
+        line-height: 15px;
+        user-select: none;
+        white-space: normal;
+        cursor: default;
+
+        &:hover {
+          background-color: var(--treeitem-bg-color);
+          background-clip: padding-box;
+          border-radius: 2px;
+          color: var(--treeitem-hover-color);
+        }
+      }
+
+      &.selected > a {
+        background-color: var(--treeitem-selected-bg-color);
+        color: var(--treeitem-selected-color);
+      }
+    }
   }
-}
-
-html[dir='ltr'] ngx-extended-pdf-viewer .treeItem>a {
-  padding: 2px 0 5px 4px;
-}
-
-html[dir='rtl'] ngx-extended-pdf-viewer .treeItem>a {
-  padding: 2px 4px 5px 0;
-}
-
-ngx-extended-pdf-viewer {
-  #layersView .treeItem>a * {
-    cursor: pointer;
-  }
-
-  #layersView .treeItem>a>label>input {
-    float: inline-start;
-    margin-top: 1px;
-  }
-
-}
-
-html[dir='ltr'] ngx-extended-pdf-viewer #layersView .treeItem>a>label {
-  padding-left: 4px;
-}
-
-html[dir='rtl'] ngx-extended-pdf-viewer #layersView .treesItem>a>label {
-  padding-right: 4px;
-}
-
-ngx-extended-pdf-viewer {
-  .treeItemToggler {
-    position: relative;
-    height: 0;
-    width: 0;
-    // #2984 end of modified by ngx-extended-pdf-viewer to improve the light and dark mode
-    color: $text-color;
-    // #2984 end of modification by ngx-extended-pdf-viewer to improve the light and dark mode
-  }
-
-  .treeItemToggler::before {
-    content: url("data:image/svg+xml; utf8, <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16'><path d='M10 13l4-7H6z'/></svg>");
-    display: inline-block;
-    position: absolute;
-    max-width: 16px;
-  }
-
-  .treeItemToggler.treeItemsHidden::before {
-    content: url("data:image/svg+xml; utf8, <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16'><path d='M13 9L6 5v8z'/></svg>");
-    max-width: 16px;
-  }
-}
-
-html[dir='rtl'] ngx-extended-pdf-viewer .treeItemToggler.treeItemsHidden::before {
-  transform: scaleX(-1);
-}
-
-ngx-extended-pdf-viewer {
-  .treeItemToggler.treeItemsHidden~.treeItems {
-    display: none;
-  }
-}
-
-html[dir='ltr'] ngx-extended-pdf-viewer .treeItemToggler {
-  float: left;
-}
-
-html[dir='rtl'] ngx-extended-pdf-viewer .treeItemToggler {
-  float: right;
-}
-
-html[dir='ltr'] ngx-extended-pdf-viewer .treeItemToggler::before {
-  right: 4px;
-}
-
-html[dir='rtl'] ngx-extended-pdf-viewer .treeItemToggler::before {
-  left: 4px;
-}
-
-ngx-extended-pdf-viewer {
-
-  .treeItemToggler:hover,
-  .treeItemToggler:hover+a,
-  .treeItemToggler:hover~.treeItems,
-  .treeItem>a:hover {
-    background-clip: padding-box;
-    border-radius: 2px;
-  }
-
-  .treeItem.selected {
-    background-clip: padding-box;
-  }
+  // #3113 end of modification by ngx-extended-pdf-viewer
 
   /* TODO: file FF bug to support ::-moz-selection:window-inactive
    so we can override the opaque grey background when the window is inactive;

@@ -2,9 +2,11 @@
 <!-- PDF.js v5.4.530+ uses #viewsManagerContent as the scrollable container -->
 <div id="viewsManagerContent" tabindex="-1">
   <div id="thumbnailsView" (keydown)="onKeyDown($event)"></div>
-  <div id="outlinesView" class="hidden"></div>
+  <!-- #3113 modified by ngx-extended-pdf-viewer - Add treeView class for proper outline/layers tree styling -->
+  <div id="outlinesView" class="treeView hidden"></div>
   <div id="attachmentsView" class="hidden"></div>
-  <div id="layersView" class="hidden"></div>
+  <div id="layersView" class="treeView hidden"></div>
+  <!-- #3113 end of modification by ngx-extended-pdf-viewer -->
 </div>
 <!-- #2984 end of modification by ngx-extended-pdf-viewer -->
 
