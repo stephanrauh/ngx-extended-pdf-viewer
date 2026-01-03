@@ -12,7 +12,9 @@ export interface AnnotationEditorEvent {
     | 'bezierPathChanged'
     | 'moved'
     | 'imageAdded'
-    | 'added'; // #3076 added by ngx-extended-pdf-viewer
+    | 'added' // #3076 added by ngx-extended-pdf-viewer
+    | 'commented' // # 3095 added by ngx-extended-pdf-viewer
+    | 'commentRemoved'; // # 3095 added by ngx-extended-pdf-viewer
   editorType: string;
   value: any;
   previousValue?: any;
