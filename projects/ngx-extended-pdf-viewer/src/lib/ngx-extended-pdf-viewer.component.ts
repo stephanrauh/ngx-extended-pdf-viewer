@@ -309,7 +309,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   // @ts-ignore TS6133 - Used for side effects only
   private _srcEffect = effect(() => {
     const url = this.src();
-    console.log('[_srcEffect] src signal changed, url =', url, 'type =', typeof url);
     if (typeof window === 'undefined') return;
 
     // Skip processing if change was triggered by user
@@ -875,6 +874,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
   public sidebarPositionTop: string | undefined = undefined;
 
+  public editorParamsToolbarTop: string | undefined = undefined;
+
   // dirty IE11 hack - temporary solution
   public findbarTop: string | undefined = undefined;
 
@@ -1267,6 +1268,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     }
     this.secondaryToolbarTop = (33 + 38 * (factor - 1)).toString() + 'px';
     this.findbarTop = (33 + 38 * (factor - 1)).toString() + 'px';
+    this.editorParamsToolbarTop = (33 + 38 * (factor - 1)).toString() + 'px';
 
     const findButton = document.getElementById('primaryViewFind');
     if (findButton) {
@@ -1874,7 +1876,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   }
 
   private async openPDF(): Promise<void> {
-    console.log('[openPDF] called, this._src =', this._src, 'type =', typeof this._src);
     const PDFViewerApplication: IPDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
     PDFViewerApplication.serviceWorkerOptions.showUnverifiedSignatures = this.showUnverifiedSignatures();
     PDFViewerApplication.enablePrint = this.enablePrint();
