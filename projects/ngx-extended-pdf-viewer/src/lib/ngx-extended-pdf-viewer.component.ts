@@ -814,6 +814,15 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     } else {
       this._page = undefined;
     }
+
+    // Navigate to the page if PDF viewer is initialized
+    if (typeof window === 'undefined') return;
+    if (!this.service.ngxExtendedPdfViewerInitialized) return;
+
+    const PDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
+    if (newPageNumber && PDFViewerApplication?.pdfViewer) {
+      PDFViewerApplication.page = Number(newPageNumber);
+    }
   });
 
   private _page: number | undefined = undefined;
@@ -1190,7 +1199,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
           scale: (Number(this.zoom()) | 100) / 100,
           presetValue: this.zoom(),
         } as ScaleChangingEvent;
-        PDFViewerApplication.eventBus.dispatch('scalechanging', zoomEvent);
+        PDFViewerApplication.eventBus?.dispatch('scalechanging', zoomEvent);
       }
     }
   });
