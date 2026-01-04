@@ -4,7 +4,9 @@ Welcome to `ngx-extended-pdf-viewer` – a powerful, full-featured PDF viewer fo
 
 Built on Mozilla’s pdf.js and extended with dozens of enhancements, it's ideal for serious applications that demand more than just basic PDF display.
 
-[![npm](https://img.shields.io/npm/dm/ngx-extended-pdf-viewer.svg?style=flat)](https://www.npmjs.com/package/ngx-extended-pdf-viewer)
+[![npm weekly downloads](https://img.shields.io/npm/dw/ngx-extended-pdf-viewer.svg)](https://www.npmjs.com/package/ngx-extended-pdf-viewer)
+[![npm monthly downloads](https://img.shields.io/npm/dm/ngx-extended-pdf-viewer.svg?style=flat)](https://www.npmjs.com/package/ngx-extended-pdf-viewer)
+[![npm all-time downloads](https://img.shields.io/npm/dt/ngx-extended-pdf-viewer.svg)](https://www.npmjs.com/package/ngx-extended-pdf-viewer)
 [![showcase](https://img.shields.io/badge/showcase-pdfviewer.net-blue)](https://pdfviewer.net)
 [![version](https://badge.fury.io/js/ngx-extended-pdf-viewer.svg)](https://badge.fury.io/js/ngx-extended-pdf-viewer)
 [![license](https://img.shields.io/badge/License-Apache%202.0%20with%20Commons%20Clause-brightgreen.svg)](https://github.com/stephanrauh/ngx-extended-pdf-viewer/blob/main/projects/ngx-extended-pdf-viewer/LICENSE)
@@ -38,7 +40,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     // ... other providers
-  ]
+  ],
 };
 ```
 
@@ -124,14 +126,17 @@ Thanks to GitHub users ScratchPDX and Deepak Shakya for reporting the issue prom
 Version 26 updates to Angular 19 to address security concerns. Angular 18 exited its LTS phase, and CVE-2025-66035 will not be fixed in Angular 17 or 18.
 
 **What's included:**
+
 - Updated to Angular 19 with all components explicitly set to `standalone: false` for NgModule compatibility
 - Fixed findbar layout (#3105) - dropped old checkboxes for better responsive design
 
 **Migration:**
+
 - If using Angular 17 or 18, stay on version 25.6.4 or earlier
 - To update your application to Angular 19: `ng update @angular/core@19 @angular/cli@19`
 
 **Future roadmap** (originally planned for version 25, postponed due to this breaking change):
+
 - Migration to Angular Signals
 - Full support for standalone components
 - Removal of `zone.js` (maybe)

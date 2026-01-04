@@ -680,6 +680,11 @@ ngx-extended-pdf-viewer {
     cursor: default;
   }
 
+  #secondaryToolbarButtonContainer,
+  .editorParamsToolbar {
+    overflow-y: auto;
+  }
+
   // #3105 fixed the layout of the find bar
   .findbar {
     min-width: 300px;

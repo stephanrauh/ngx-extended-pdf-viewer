@@ -39,6 +39,26 @@ export class PdfSecondaryToolbarComponent implements AfterViewInit, OnDestroy {
 
   public disableNextPage = true;
 
+  public get secondaryToolbarMaxHeight(): string {
+    if (typeof window === 'undefined') {
+      return 'auto';
+    }
+    const topValue = this.secondaryToolbarTop() || '33px';
+    const topPx = parseFloat(topValue.toString());
+    const scale = this.mobileFriendlyZoomScale();
+
+    // Find the nearest .zoom container
+    const secondaryToolbar = this.element.nativeElement.querySelector('#secondaryToolbar');
+    const zoomContainer = secondaryToolbar?.closest('.zoom') as HTMLElement;
+    const containerHeight = zoomContainer?.clientHeight || window.innerHeight;
+
+    // Calculate available space in the container, then convert to unscaled coordinates
+    // since the parent has transform: scale() applied
+    const availableHeight = containerHeight - topPx - 20; // 20px for margins and spacing
+    const unscaledMaxHeight = availableHeight / scale;
+    return `${unscaledMaxHeight}px`;
+  }
+
   private classMutationObserver: MutationObserver | undefined;
 
   private PDFViewerApplication: IPDFViewerApplication | undefined;

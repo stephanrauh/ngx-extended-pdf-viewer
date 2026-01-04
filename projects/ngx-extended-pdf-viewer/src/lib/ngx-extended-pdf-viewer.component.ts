@@ -1304,7 +1304,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     }
   }
 
-  // #TODO Zoneless change detection support - add issue number before committing
   /**
    * Detects if the application is running in zoneless mode (Angular 21+)
    * @returns true if zone.js is not present
