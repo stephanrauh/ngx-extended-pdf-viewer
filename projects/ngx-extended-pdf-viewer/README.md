@@ -9,7 +9,7 @@ Built on Mozilla’s pdf.js and extended with dozens of enhancements, it's ideal
 [![npm all-time downloads](https://img.shields.io/npm/dt/ngx-extended-pdf-viewer.svg)](https://www.npmjs.com/package/ngx-extended-pdf-viewer)
 [![showcase](https://img.shields.io/badge/showcase-pdfviewer.net-blue)](https://pdfviewer.net)
 [![version](https://badge.fury.io/js/ngx-extended-pdf-viewer.svg)](https://badge.fury.io/js/ngx-extended-pdf-viewer)
-[![license](https://img.shields.io/badge/License-Apache%202.0%20with%20Commons%20Clause-brightgreen.svg)](https://github.com/stephanrauh/ngx-extended-pdf-viewer/blob/main/projects/ngx-extended-pdf-viewer/LICENSE)
+[![license](https://img.shields.io/badge/License-Apache%202.0-brightgreen.svg)](https://github.com/stephanrauh/ngx-extended-pdf-viewer/blob/main/projects/ngx-extended-pdf-viewer/LICENSE)
 
 ---
 
@@ -301,8 +301,7 @@ Just keep it respectful — the ngx-extended-pdf-viewer community is a friendly 
 
 ## 📜 License & Acknowledgments
 
-- Apache 2.0 License with Common Clause, which allows free use, modification, and distribution while preventing commercial sale or
-  paid services without permission.
+- Apache 2.0 License.
 - Based on Mozilla’s [pdf.js](https://github.com/mozilla/pdf.js) (also published under a friendly Apache 2.0 license)
 - Icons from [MaterialDesignIcons.com](https://materialdesignicons.com/) and Google
 - Thanks to all users, contributors, and bug reporters! You rock! Just counting the people contributing pull requests - that's already [several dozen developers:](https://github.com/stephanrauh/ngx-extended-pdf-viewer/graphs/contributors)
