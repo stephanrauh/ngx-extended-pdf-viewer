@@ -17,18 +17,20 @@ Built on Mozilla’s pdf.js and extended with dozens of enhancements, it's ideal
 
 ### 0. Prerequisites
 
-⚠️ **Version 26 requires Angular 19.** If you're using Angular 17 or 18, please continue using version 25.6.4 or earlier.
+⚠️ **Version 26 requires Angular 19.** If you're using Angular 17 or 18, please continue using version 25.6.4.
 
-**Why this breaking change?** Angular 18 exited its Long-Term Support (LTS) phase, and security vulnerability CVE-2025-66035 will not be fixed in Angular 17 or 18. Updating to Angular 19 ensures your application continues to receive critical security patches.
+**Why this breaking change?** There are many reason: Version 26 supports zone-less Angular and migrates to signals. And Angular 18 exited its Long-Term Support (LTS) phase, and security vulnerability CVE-2025-66035 will not be fixed in Angular 17 or 18. Updating to Angular 19 ensures your application continues to receive critical security patches.
 
 In general, I aim to support the last four Angular versions (roughly two years of updates), but this may not always be feasible. Security requirements sometimes necessitate raising the minimum Angular version. You can't have an omelette without breaking an egg.
 
+**Is there a migration schematics?** No - because migrating to to ngx-extended-pdf-viewer shouldn't be a big deal. The libraries uses signal internally, but that hardly ever shows in your application, unless you're using `@ViewChild` to access properties of ngx-extended-pdf-viewer. Even then, solving the error messages should be easy. Adopting zone-less Angular was also surprisingly easy, at least im my showcase. I hope you'll experience a similarly smooth transition!
+
 ✅ **Angular 21+ Zoneless Support**
 
-**ngx-extended-pdf-viewer now fully supports Angular 21+ zoneless change detection!** The library works seamlessly in both zone.js and zoneless applications with zero configuration required.
+**ngx-extended-pdf-viewer 26 now fully supports Angular 21+ zoneless change detection!** The library works seamlessly in both zone.js and zoneless applications with zero configuration required.
 
 **Using Zoneless (Default in Angular 21+):**
-Simply use the library as normal - it will automatically detect zoneless mode and trigger change detection appropriately.
+Simply use the library as normal - it will automatically detect zoneless mode and trigger change detection appropriately. You'll have to use `cdr.markForCheck()` every once in a while, but I assume you're already familiar with that pattern.
 
 **Using Zone.js (Optional):**
 If you prefer to use zone.js in your Angular 21+ application, add this to your `app.config.ts`:
@@ -123,7 +125,7 @@ Thanks to GitHub users ScratchPDX and Deepak Shakya for reporting the issue prom
 
 **Breaking Change: Angular 19 Required**
 
-Version 26 updates to Angular 19 to address security concerns. Angular 18 exited its LTS phase, and CVE-2025-66035 will not be fixed in Angular 17 or 18.
+Version 26 updates to Angular 19 to address security concerns (and to support both signals and zone-less Angular). Angular 18 exited its LTS phase, and CVE-2025-66035 will not be fixed in Angular 17 or 18.
 
 **What's included:**
 
@@ -134,13 +136,6 @@ Version 26 updates to Angular 19 to address security concerns. Angular 18 exited
 
 - If using Angular 17 or 18, stay on version 25.6.4 or earlier
 - To update your application to Angular 19: `ng update @angular/core@19 @angular/cli@19`
-
-**Future roadmap** (originally planned for version 25, postponed due to this breaking change):
-
-- Migration to Angular Signals
-- Full support for standalone components
-- Removal of `zone.js` (maybe)
-- Migration schematics (planned but not promised)
 
 ---
 
@@ -172,12 +167,19 @@ Regarding security: I'm not perfect - it's always a best-effort approach without
 
 ## 📦 Version Highlights
 
+### Version 26
+
+This version migrates to signals, allows for zone-less Angular, and updates to pdf.js 5.4.530. The latter is a major internal refactoring. I assume it's not the last major refactoring, so brace yourself for more breaking changes. There's hope: the breaking changes are about the internal DOM structure of the viewer. As long as you don't manipulate that, you're safe. Otherwise, brace yourself for CSS changes. Version 26 is hit by such changes. In particular, the sidebar and the thumbails are affected.
+
+Version 26 also activates the comment editor. The base project, pdf.js, didn't activate it yet, so please consider it a preview. Right now, it works, but it's possible Mozilla's going to implement breaking changes over the next few months.
+
 ### Version 25
 
-#### ❗ License change notice
+#### ❗ License change notice (and its reversal)
 
-The license has changed from Apache 2.0 to Apache 2.0 with Commons Clause, which allows free use, modification, and distribution while preventing commercial sale or paid services without permission. You can still use ngx-extended-pdf-viewer in your commercial or closed-source products, and you can distribute it with your software, provided you keep the copyright notice intact.
-For the exact terms, please refer to the LICENSE file — that is the legally binding document.
+For a short time, the license had changed from Apache 2.0 to Apache 2.0 with Commons Clause, which allows free use, modification, and distribution while preventing commercial sale or paid services without permission.
+
+But as it turned out, that license was more restrictive than I wanted it to be. So now the library is back to Apache 2.0.
 
 #### ❗ Breaking changes:
 
