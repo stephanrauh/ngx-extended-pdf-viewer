@@ -4,7 +4,7 @@
  * Automates the migration of the mypdf.js stable branch version
  *
  * Usage: node migrate-stable-version.js <old-version> <new-version>
- * Example: node migrate-stable-version.js 5.4.149 5.4.296
+ * Example: node migrate-stable-version.js 5.4.149 5.4.530
  */
 
 const fs = require('fs');
@@ -15,7 +15,7 @@ const { execSync } = require('child_process');
 const args = process.argv.slice(2);
 if (args.length !== 2) {
   console.error('Usage: node migrate-stable-version.js <old-version> <new-version>');
-  console.error('Example: node migrate-stable-version.js 5.4.149 5.4.296');
+  console.error('Example: node migrate-stable-version.js 5.4.149 5.4.530');
   process.exit(1);
 }
 
@@ -38,20 +38,20 @@ console.log(`\n🔄 Migrating stable version from ${oldVersion} to ${newVersion}
 const filesToUpdate = [
   {
     path: 'build-tools/5-1-prepare-release.js',
-    description: 'Release preparation script'
+    description: 'Release preparation script',
   },
   {
     path: 'build-tools/5-2-release-library-ci.js',
-    description: 'CI release script'
+    description: 'CI release script',
   },
   {
     path: 'build-tools/release/createTag.js',
-    description: 'Tag creation script'
+    description: 'Tag creation script',
   },
   {
     path: 'build-tools/RELEASE-PROCESS.md',
-    description: 'Release documentation'
-  }
+    description: 'Release documentation',
+  },
 ];
 
 let filesUpdated = 0;
@@ -136,7 +136,12 @@ try {
 
   if (result.trim()) {
     console.log(`   ⚠️  Warning: Found remaining references to ${oldVersion}:`);
-    console.log(result.split('\n').map(line => `      ${line}`).join('\n'));
+    console.log(
+      result
+        .split('\n')
+        .map((line) => `      ${line}`)
+        .join('\n'),
+    );
   } else {
     console.log(`   ✅ No remaining references to ${oldVersion} found in build-tools/`);
   }

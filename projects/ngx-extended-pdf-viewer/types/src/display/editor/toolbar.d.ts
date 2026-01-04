@@ -1,6 +1,6 @@
 export class EditorToolbar {
-    static #l10nRemove: null;
-    static #pointerDown(e: any): void;
+    static "__#private@#l10nRemove": null;
+    static "__#private@#pointerDown"(e: any): void;
     constructor(editor: any);
     render(): HTMLDivElement;
     get div(): null;

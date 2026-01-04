@@ -12,9 +12,9 @@ export class FreeDrawOutline extends Outline {
     #private;
 }
 export class FreeDrawOutliner {
-    static #MIN_DIST: number;
-    static #MIN_DIFF: number;
-    static #MIN: number;
+    static "__#private@#MIN_DIST": number;
+    static "__#private@#MIN_DIFF": number;
+    static "__#private@#MIN": number;
     constructor({ x, y }: {
         x: any;
         y: any;

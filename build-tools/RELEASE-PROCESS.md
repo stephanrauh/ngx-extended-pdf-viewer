@@ -54,7 +54,7 @@ This script will:
 
 1. ✓ Check that all changes are committed (clean git status)
 2. ✓ Increment the version number in `projects/ngx-extended-pdf-viewer/package.json`
-3. ✓ Update version in mypdf.js (both 5.4.296 and bleeding-edge branches)
+3. ✓ Update version in mypdf.js (both 5.4.530 and bleeding-edge branches)
 4. ✓ Commit all changes with message "bumped the version number to X.Y.Z"
 5. ✓ Push commits to both repositories
 6. ✓ Create and push git tag (e.g., `25.6.1`)
@@ -71,7 +71,7 @@ The GitHub Actions workflow triggers automatically when you push a tag:
    - Generates SBOM (Software Bill of Materials)
    - Builds base library from mypdf.js bleeding-edge
    - Verifies bleeding-edge assets
-   - Builds base library from mypdf.js 5.4.296
+   - Builds base library from mypdf.js 5.4.530
    - Verifies stable assets
    - Builds Angular library
    - Verifies dist output and version
@@ -86,7 +86,7 @@ The CI script includes multiple verification steps:
   - `pdf.sandbox-{version}-es5.mjs`, `pdf.sandbox-{version}.min.mjs`, `pdf.sandbox-{version}.mjs`
   - `pdf.worker-{version}-es5.mjs`, `pdf.worker-{version}.min.mjs`, `pdf.worker-{version}.mjs`
   - `viewer-{version}-es5.mjs`, `viewer-{version}.min.mjs`, `viewer-{version}.mjs`
-- ✅ **Stable (5.4.296) assets** - Verifies same 9 critical files exist and are >= 700 KB each
+- ✅ **Stable (5.4.530) assets** - Verifies same 9 critical files exist and are >= 700 KB each
 - ✅ Dist folder is created
 - ✅ package.json exists in dist
 - ✅ Version in dist matches expected version

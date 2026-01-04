@@ -133,6 +133,9 @@ export class AnnotationLayer {
     getEditableAnnotations(): any[];
     getEditableAnnotation(id: any): any;
     addFakeAnnotation(editor: any): EditorAnnotationElement;
+    removeAnnotation(id: any): void;
+    updateFakeAnnotations(editors: any): void;
+    togglePointerEvents(enabled?: boolean): void;
     #private;
 }
 export class FreeTextAnnotationElement extends AnnotationElement {
@@ -193,6 +196,8 @@ declare class AnnotationElement {
     hasJSActions: any;
     _fieldObjects: any;
     parent: any;
+    hasOwnCommentButton: boolean;
+    contentElement: HTMLElement | undefined;
     container: HTMLElement | undefined;
     get _isEditable(): any;
     get hasPopupData(): any;

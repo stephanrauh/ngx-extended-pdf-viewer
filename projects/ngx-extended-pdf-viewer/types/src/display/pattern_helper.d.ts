@@ -44,7 +44,9 @@ declare class RadialAxialShadingPattern extends BaseShadingPattern {
     _r0: any;
     _r1: any;
     matrix: any;
-    _createGradient(ctx: any): any;
+    isOriginBased(): boolean;
+    isRadial(): boolean;
+    _createGradient(ctx: any, transform?: null): any;
     getPattern(ctx: any, owner: any, inverse: any, pathType: any): any;
 }
 declare class MeshShadingPattern extends BaseShadingPattern {

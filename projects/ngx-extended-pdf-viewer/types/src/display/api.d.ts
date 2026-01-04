@@ -822,7 +822,7 @@ export class PDFDataRangeTransport {
  * after which individual pages can be rendered.
  */
 export class PDFDocumentLoadingTask {
-    static #docId: number;
+    static "__#private@#docId": number;
     /**
      * @private
      */
@@ -1100,6 +1100,30 @@ export class PDFDocumentProxy {
      *   {Uint8Array} containing the full data of the saved document.
      */
     saveDocument(pageOrder?: null): Promise<Uint8Array>;
+    /**
+     * @typedef {Object} PageInfo
+     * @property {null|Uint8Array} document
+     * @property {Array<Array<number>|number>} [includePages]
+     *  included ranges or indices.
+     * @property {Array<Array<number>|number>} [excludePages]
+     *  excluded ranges or indices.
+     */
+    /**
+     * @param {Array<PageInfo>} pageInfos - The pages to extract.
+     * @returns {Promise<Uint8Array>} A promise that is resolved with a
+     *   {Uint8Array} containing the full data of the saved document.
+     */
+    extractPages(pageInfos: Array<{
+        document: null | Uint8Array;
+        /**
+         * included ranges or indices.
+         */
+        includePages?: (number | number[])[] | undefined;
+        /**
+         * excluded ranges or indices.
+         */
+        excludePages?: (number | number[])[] | undefined;
+    }>): Promise<Uint8Array>;
     /**
      * @returns {Promise<{ length: number }>} A promise that is resolved when the
      *   document's data is loaded. It is resolved with an {Object} that contains
@@ -1498,9 +1522,9 @@ export class PDFPageProxy {
  * @param {PDFWorkerParameters} params - The worker initialization parameters.
  */
 export class PDFWorker {
-    static #fakeWorkerId: number;
-    static #isWorkerDisabled: boolean;
-    static #workerPorts: WeakMap<object, any>;
+    static "__#private@#fakeWorkerId": number;
+    static "__#private@#isWorkerDisabled": boolean;
+    static "__#private@#workerPorts": WeakMap<object, any>;
     /**
      * @param {PDFWorkerParameters} params - The worker initialization parameters.
      * @returns {PDFWorker}
@@ -1511,7 +1535,7 @@ export class PDFWorker {
      * @type {string}
      */
     static get workerSrc(): string;
-    static get #mainThreadWorkerMessageHandler(): any;
+    static get "__#private@#mainThreadWorkerMessageHandler"(): any;
     static get _setupFakeWorkerGlobal(): any;
     constructor({ name, port, verbosity, cspPolicyService, }?: {
         name?: null | undefined;

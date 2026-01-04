@@ -37,10 +37,10 @@ export type TextLayerBuilderRenderOptions = {
  * contain text that matches the PDF text they are overlaying.
  */
 export class TextLayerBuilder {
-    static #textLayers: Map<any, any>;
-    static #selectionChangeAbortController: null;
-    static #removeGlobalSelectionListener(textLayerDiv: any): void;
-    static #enableGlobalSelectionListener(): void;
+    static "__#private@#textLayers": Map<any, any>;
+    static "__#private@#selectionChangeAbortController": null;
+    static "__#private@#removeGlobalSelectionListener"(textLayerDiv: any): void;
+    static "__#private@#enableGlobalSelectionListener"(): void;
     /**
      * @param {TextLayerBuilderOptions} options
      */

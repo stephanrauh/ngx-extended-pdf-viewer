@@ -79,6 +79,7 @@ export class PDFThumbnailViewer {
      * @param {PDFThumbnailViewerOptions} options
      */
     constructor({ container, eventBus, linkService, renderingQueue, maxCanvasPixels, maxCanvasDim, pageColors, abortSignal, enableHWA, }: PDFThumbnailViewerOptions);
+    scrollableContainer: HTMLElement | null;
     container: HTMLDivElement;
     eventBus: import("./event_utils").EventBus;
     linkService: import("./interfaces").IPDFLinkService;

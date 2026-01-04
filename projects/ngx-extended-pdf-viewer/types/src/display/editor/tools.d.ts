@@ -164,6 +164,8 @@ export class AnnotationEditorUIManager {
      * Change the editor mode (None, FreeText, Ink, ...)
      * @param {number} mode
      * @param {string|null} editId
+     * @param {boolean} [isFromUser] - true if the mode change is due to a
+     *   user action.
      * @param {boolean} [isFromKeyboard] - true if the mode change is due to a
      *   keyboard action.
      * @param {boolean} [mustEnterInEditMode] - true if the editor must enter in
@@ -171,7 +173,7 @@ export class AnnotationEditorUIManager {
      * @param {boolean} [editComment] - true if the mode change is due to a
      *   comment edit.
      */
-    updateMode(mode: number, editId?: string | null, isFromKeyboard?: boolean, mustEnterInEditMode?: boolean, editComment?: boolean): Promise<void>;
+    updateMode(mode: number, editId?: string | null, isFromUser?: boolean, isFromKeyboard?: boolean, mustEnterInEditMode?: boolean, editComment?: boolean): Promise<void>;
     addNewEditorFromKeyboard(): void;
     /**
      * Update the toolbar if it's required to reflect the tool currently used.
@@ -423,6 +425,28 @@ export class CommandManager {
     destroy(): void;
     reset(): void;
     #private;
+}
+/**
+ * Class to store current pointers used by the editor to be able to handle
+ * multiple pointers (e.g. two fingers, a pen, a mouse, ...).
+ */
+export class CurrentPointers {
+    static "__#private@#pointerId": number;
+    static "__#private@#pointerIds": null;
+    static "__#private@#moveTimestamp": number;
+    static "__#private@#pointerType": null;
+    static initializeAndAddPointerId(pointerId: any): void;
+    static setPointer(pointerType: any, pointerId: any): void;
+    static setTimeStamp(timeStamp: any): void;
+    static isSamePointerId(pointerId: any): boolean;
+    static isSamePointerIdOrRemove(pointerId: any): boolean;
+    static isSamePointerType(pointerType: any): boolean;
+    static isInitializedAndDifferentPointerType(pointerType: any): boolean;
+    static isSameTimeStamp(timeStamp: any): boolean;
+    static isUsingMultiplePointers(): boolean;
+    static clearPointerType(): void;
+    static clearPointerIds(): void;
+    static clearTimeStamp(): void;
 }
 /**
  * Class to handle the different keyboards shortcuts we can have on mac or

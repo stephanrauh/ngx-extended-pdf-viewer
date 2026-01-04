@@ -4,7 +4,7 @@
  * to select a color for the annotation.
  */
 export class BasicColorPicker {
-    static #l10nColor: null;
+    static "__#private@#l10nColor": null;
     constructor(editor: any);
     renderButton(): HTMLInputElement;
     update(value: any): void;
@@ -18,7 +18,7 @@ export class BasicColorPicker {
  * to select a color for the annotation.
  */
 export class ColorPicker {
-    static #l10nColor: null;
+    static "__#private@#l10nColor": null;
     static get _keyboardManager(): any;
     constructor({ editor, uiManager }: {
         editor?: null | undefined;

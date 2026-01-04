@@ -8,6 +8,7 @@ export class FontFaceObject {
     getPathGenerator(objs: any, character: any): any;
     get black(): any;
     get bold(): any;
+    set disableFontFace(value: any);
     get disableFontFace(): any;
     get fontExtraProperties(): any;
     get isInvalidPDFjsFont(): any;
@@ -19,6 +20,7 @@ export class FontFaceObject {
     get ascent(): any;
     get defaultWidth(): any;
     get descent(): any;
+    set bbox(bbox: any);
     get bbox(): any;
     get fontMatrix(): any;
     get fallbackName(): any;

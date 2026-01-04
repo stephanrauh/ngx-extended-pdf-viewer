@@ -79,7 +79,9 @@ export class PDFThumbnailView implements IRenderableView {
     renderTask: any;
     renderingState: number;
     resume: (() => void) | null;
-    _placeholderImg: Element | null | undefined;
+    div: Element | undefined;
+    image: Element | null | undefined;
+    checkbox: Element | null | undefined;
     _dragStartHandler(event: any): void;
     _dragOverHandler(event: any): void;
     _dropHandler(event: any): void;
@@ -87,9 +89,6 @@ export class PDFThumbnailView implements IRenderableView {
     _showDottedLine(target: any, height: any, insertAbove: any): void;
     _removeDottedLine(): void;
     _movePage(draggedId: any, targetId: any): void;
-    createThumbnail(pdfThumbnailView: any, linkService: any, id: any, container: any, pageL10nArgs: any): void;
-    anchor: HTMLAnchorElement | undefined;
-    div: HTMLDivElement | undefined;
     canvasWidth: number | undefined;
     canvasHeight: number | undefined;
     scale: number | undefined;
@@ -98,12 +97,12 @@ export class PDFThumbnailView implements IRenderableView {
     update({ rotation }: {
         rotation?: null | undefined;
     }): void;
+    toggleCurrent(isCurrent: any): void;
     /**
      * PLEASE NOTE: Most likely you want to use the `this.reset()` method,
      *              rather than calling this one directly.
      */
     cancelRendering(): void;
-    image: HTMLImageElement | undefined;
     draw(): Promise<void>;
     setImage(pageView: any): void;
     /**
@@ -111,30 +110,4 @@ export class PDFThumbnailView implements IRenderableView {
      */
     setPageLabel(label: string | null): void;
     #private;
-}
-/**
- * @typedef {Object} PDFThumbnailViewOptions
- * @property {HTMLDivElement} container - The viewer element.
- * @property {EventBus} eventBus - The application event bus.
- * @property {number} id - The thumbnail's unique ID (normally its number).
- * @property {PageViewport} defaultViewport - The page viewport.
- * @property {Promise<OptionalContentConfig>} [optionalContentConfigPromise] -
- *   A promise that is resolved with an {@link OptionalContentConfig} instance.
- *   The default value is `null`.
- * @property {IPDFLinkService} linkService - The navigation/linking service.
- * @property {PDFRenderingQueue} renderingQueue - The rendering queue object.
- * @property {number} [maxCanvasPixels] - The maximum supported canvas size in
- *   total pixels, i.e. width * height. Use `-1` for no limit, or `0` for
- *   CSS-only zooming. The default value is 4096 * 8192 (32 mega-pixels).
- * @property {number} [maxCanvasDim] - The maximum supported canvas dimension,
- *   in either width or height. Use `-1` for no limit.
- *   The default value is 32767.
- * @property {Object} [pageColors] - Overwrites background and foreground colors
- *   with user defined ones in order to improve readability in high contrast
- *   mode.
- */
-export class TempImageFactory {
-    static #tempCanvas: null;
-    static getCanvas(width: any, height: any): (HTMLCanvasElement | CanvasRenderingContext2D | null)[];
-    static destroyCanvas(): void;
 }

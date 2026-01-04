@@ -73,7 +73,7 @@ export class AnnotationEditor {
      * @param {AnnotationEditorLayer} parent
      */
     static paste(item: DataTransferItem, parent: AnnotationEditorLayer): void;
-    static #rotatePoint(x: any, y: any, angle: any): any[];
+    static "__#private@#rotatePoint"(x: any, y: any, angle: any): any[];
     static _round(x: any): number;
     /**
      * Deserialize the editor.
@@ -112,6 +112,7 @@ export class AnnotationEditor {
     _structTreeParentId: any;
     creationDate: any;
     modificationDate: any;
+    canAddComment: boolean;
     rotation: number;
     pageRotation: number;
     pageDimensions: any[];
@@ -289,7 +290,7 @@ export class AnnotationEditor {
     hasAltText(): boolean;
     hasAltTextData(): any;
     focusCommentButton(): void;
-    addCommentButton(): Comment;
+    addCommentButton(): Comment | null;
     addStandaloneCommentButton(): void;
     removeStandaloneCommentButton(): void;
     hideStandaloneCommentButton(): void;
@@ -309,10 +310,11 @@ export class AnnotationEditor {
         color: any;
         opacity: any;
     };
-    setCommentData({ comment, popupRef, richText }: {
+    setCommentData({ comment, popupRef, richText, commentDate }: {
         comment: any;
         popupRef: any;
         richText: any;
+        commentDate: any;
     }): void;
     get hasEditedComment(): any;
     get hasDeletedComment(): any;
@@ -492,6 +494,7 @@ export class AnnotationEditor {
      * Unselect this editor.
      */
     unselect(): void;
+    hideCommentPopup(): void;
     /**
      * Update some parameters which have been changed through the UI.
      * @param {number} type

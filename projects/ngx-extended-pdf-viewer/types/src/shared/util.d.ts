@@ -164,6 +164,7 @@ export namespace DrawOPS {
     let moveTo: number;
     let lineTo: number;
     let curveTo: number;
+    let quadraticCurveTo: number;
     let closePath: number;
 }
 export class FeatureTest {
@@ -171,6 +172,8 @@ export class FeatureTest {
     static get isEvalSupported(): any;
     static get isOffscreenCanvasSupported(): any;
     static get isImageDecoderSupported(): any;
+    static get isFloat16ArraySupported(): any;
+    static get isSanitizerSupported(): any;
     static get platform(): any;
     static get isCSSRoundSupported(): any;
 }
@@ -204,6 +207,11 @@ export const isNodeJS: any;
 export const LINE_DESCENT_FACTOR: 0.35;
 export const LINE_FACTOR: 1.35;
 export function MathClamp(v: any, min: any, max: any): number;
+export namespace MeshFigureType {
+    let TRIANGLES: number;
+    let LATTICE: number;
+    let PATCH: number;
+}
 export function normalizeUnicode(str: any): any;
 export function objectSize(obj: any): number;
 export namespace OPS {
@@ -402,8 +410,8 @@ export class Util {
     static intersect(rect1: any, rect2: any): number[] | null;
     static pointBoundingBox(x: any, y: any, minMax: any): void;
     static rectBoundingBox(x0: any, y0: any, x1: any, y1: any, minMax: any): void;
-    static #getExtremumOnCurve(x0: any, x1: any, x2: any, x3: any, y0: any, y1: any, y2: any, y3: any, t: any, minMax: any): void;
-    static #getExtremum(x0: any, x1: any, x2: any, x3: any, y0: any, y1: any, y2: any, y3: any, a: any, b: any, c: any, minMax: any): void;
+    static "__#private@#getExtremumOnCurve"(x0: any, x1: any, x2: any, x3: any, y0: any, y1: any, y2: any, y3: any, t: any, minMax: any): void;
+    static "__#private@#getExtremum"(x0: any, x1: any, x2: any, x3: any, y0: any, y1: any, y2: any, y3: any, a: any, b: any, c: any, minMax: any): void;
     static bezierBoundingBox(x0: any, y0: any, x1: any, y1: any, x2: any, y2: any, x3: any, y3: any, minMax: any): void;
 }
 export namespace VerbosityLevel {

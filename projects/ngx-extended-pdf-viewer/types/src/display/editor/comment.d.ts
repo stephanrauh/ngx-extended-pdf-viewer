@@ -41,6 +41,7 @@ export class Comment {
         deleted: boolean;
     };
     setInitialText(text: any, richText?: null): void;
+    setDate(date: any): void;
     shown(): void;
     destroy(): void;
     #private;

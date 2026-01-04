@@ -106,6 +106,7 @@ export function getXfaPageViewport(xfaPage: any, { scale, rotation }: {
 export function isDataScheme(url: any): boolean;
 export function isPdfFile(filename: any): boolean;
 export function isValidFetchUrl(url: any, baseUrl: any): boolean;
+export function makePathFromDrawOPS(data: any): Path2D;
 /**
  * Event handler to suppress context menu.
  */
@@ -225,7 +226,7 @@ export class PageViewport {
     convertToPdfPoint(x: number, y: number): any[];
 }
 export class PDFDateString {
-    static #regex: any;
+    static "__#private@#regex": any;
     /**
      * Convert a PDF date string to a JavaScript `Date` object.
      *

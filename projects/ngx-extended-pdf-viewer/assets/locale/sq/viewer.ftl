@@ -277,9 +277,13 @@ pdfjs-web-fonts-disabled = Shkronjat Web janë të çaktivizuara: s’arrihet t�
 
 pdfjs-editor-free-text-button =
     .title = Tekst
+pdfjs-editor-color-picker-free-text-input =
+    .title = Ndryshoni ngjyrë teksti
 pdfjs-editor-free-text-button-label = Tekst
 pdfjs-editor-ink-button =
     .title = Vizatoni
+pdfjs-editor-color-picker-ink-input =
+    .title = Ndryshoni ngjyrë vizatimi
 pdfjs-editor-ink-button-label = Vizatoni
 pdfjs-editor-stamp-button =
     .title = Shtoni ose përpunoni figura
@@ -291,6 +295,14 @@ pdfjs-highlight-floating-button1 =
     .title = Theksim
     .aria-label = Theksim
 pdfjs-highlight-floating-button-label = Theksim
+pdfjs-comment-floating-button =
+    .title = Komentoni
+    .aria-label = Komentoni
+pdfjs-comment-floating-button-label = Komentoni
+pdfjs-editor-comment-button =
+    .title = Koment
+    .aria-label = Koment
+pdfjs-editor-comment-button-label = Komentoni
 pdfjs-editor-signature-button =
     .title = Shtoni nënshkrim
 pdfjs-editor-signature-button-label = Shtoni nënshkrim
@@ -353,6 +365,21 @@ pdfjs-editor-add-saved-signature-button =
 pdfjs-free-text2 =
     .aria-label = Përpunues Tekstesh
     .default-content = Filloni të shtypni…
+# Used to show how many comments are present in the pdf file.
+# Variables:
+#   $count (Number) - the number of comments.
+pdfjs-editor-comments-sidebar-title =
+    { $count ->
+        [one] Koment
+       *[other] Komente
+    }
+pdfjs-editor-comments-sidebar-close-button =
+    .title = Mbylleni anështyllën
+    .aria-label = Mbylleni anështyllën
+pdfjs-editor-comments-sidebar-close-button-label = Mbylleni anështyllën
+# Instructional copy to add a comment by selecting text or an annotations.
+pdfjs-editor-comments-sidebar-no-comments1 = Shihni diçka që ia vlen. Theksojeni dhe lini një koment.
+pdfjs-editor-comments-sidebar-no-comments-link = Mësoni më tepër
 
 ## Alt-text dialog
 
@@ -483,6 +510,14 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Shfaq menjëherë për
 pdfjs-editor-alt-text-settings-show-dialog-description = Ju ndihmon të siguroheni se krejt figurat tuaja kanë tekst alternativ.
 pdfjs-editor-alt-text-settings-close-button = Mbylle
 
+## Accessibility labels (announced by screen readers) for objects added to the editor.
+
+pdfjs-editor-highlight-added-alert = U shtua theksim
+pdfjs-editor-freetext-added-alert = U shtua tekst
+pdfjs-editor-ink-added-alert = U shtua vizatim
+pdfjs-editor-stamp-added-alert = U shtua figurë
+pdfjs-editor-signature-added-alert = U shtua nënshkrim
+
 ## "Annotations removed" bar
 
 pdfjs-editor-undo-bar-message-highlight = U hoq theksimi
@@ -551,6 +586,8 @@ pdfjs-editor-add-signature-save-checkbox = Ruaje nënshkrimin
 pdfjs-editor-add-signature-save-warning-message = Keni mbërritur në kufirin e 5 nënshkrimeve të ruajtura. Që të ruani tjetër, hiqni një.
 pdfjs-editor-add-signature-image-upload-error-title = S’u ngarkua dot figurë
 pdfjs-editor-add-signature-image-upload-error-description = Kontrolloni lidhjen tuaj në rrjet, ose provoni figurë tjetër.
+pdfjs-editor-add-signature-image-no-data-error-title = S’shndërrohet dot kjo figurë në një nënshkrim
+pdfjs-editor-add-signature-image-no-data-error-description = Ju lutemi, provoni të ngarkoni një figurë tjetër.
 pdfjs-editor-add-signature-error-close-button = Mbylle
 
 ## Dialog buttons
@@ -558,6 +595,34 @@ pdfjs-editor-add-signature-error-close-button = Mbylle
 pdfjs-editor-add-signature-cancel-button = Anuloje
 pdfjs-editor-add-signature-add-button = Shtoje
 pdfjs-editor-edit-signature-update-button = Përditësoje
+
+## Comment popup
+
+pdfjs-editor-edit-comment-popup-button-label = Përpunoni koment
+pdfjs-editor-edit-comment-popup-button =
+    .title = Përpunoni koment
+pdfjs-editor-delete-comment-popup-button-label = Hiqe komentin
+pdfjs-editor-delete-comment-popup-button =
+    .title = Hiqe komentin
+pdfjs-show-comment-button =
+    .title = Shfaqe komentin
+
+##  Edit a comment dialog
+
+# An existing comment is edited
+pdfjs-editor-edit-comment-dialog-title-when-editing = Përpunoni koment
+pdfjs-editor-edit-comment-dialog-save-button-when-editing = Përditësojeni
+# No existing comment
+pdfjs-editor-edit-comment-dialog-title-when-adding = Shtoni koment
+pdfjs-editor-edit-comment-dialog-save-button-when-adding = Shtoje
+pdfjs-editor-edit-comment-dialog-text-input =
+    .placeholder = Filloni të shtypni…
+pdfjs-editor-edit-comment-dialog-cancel-button = Anuloje
+
+## Edit a comment button in the editor toolbar
+
+pdfjs-editor-add-comment-button =
+    .title = Shtoni koment
 
 ## Main menu for adding/removing signatures
 
@@ -583,53 +648,63 @@ pdfjs-spread-odd-button-label = Odd Spreads
 pdfjs-spread-even-button =
     .title = Join page spreads starting with even-numbered pages
 pdfjs-spread-even-button-label = Even Spreads
-pdfjs-editor-color-picker-free-text-input =
-    .title = Change text color
-pdfjs-editor-color-picker-ink-input =
-    .title = Change drawing color
-pdfjs-comment-floating-button =
-    .title = Comment
-    .aria-label = Comment
-pdfjs-comment-floating-button-label = Comment
-pdfjs-editor-comment-button =
-    .title = Comment
-    .aria-label = Comment
-pdfjs-editor-comment-button-label = Comment
-pdfjs-editor-comments-sidebar-title =
+pdfjs-toggle-views-manager-button =
+    .title = Toggle Sidebar
+pdfjs-toggle-views-manager-notification-button =
+    .title = Toggle Sidebar (document contains thumbnails/outline/attachments/layers)
+pdfjs-toggle-views-manager-button-label = Toggle Sidebar
+pdfjs-views-manager-sidebar =
+    .aria-label = Sidebar
+pdfjs-views-manager-view-selector-button =
+    .title = Views
+pdfjs-views-manager-view-selector-button-label = Views
+pdfjs-views-manager-pages-title = Pages
+pdfjs-views-manager-outlines-title = Document outline
+pdfjs-views-manager-attachments-title = Attachments
+pdfjs-views-manager-layers-title = Layers
+pdfjs-views-manager-pages-option-label = Pages
+pdfjs-views-manager-outlines-option-label = Document outline
+pdfjs-views-manager-attachments-option-label = Attachments
+pdfjs-views-manager-layers-option-label = Layers
+pdfjs-views-manager-add-file-button =
+    .title = Add file
+pdfjs-views-manager-add-file-button-label = Add file
+pdfjs-views-manager-pages-status-action-label =
     { $count ->
-        [one] Comment
-       *[other] Comments
+        [one] { $count } selected
+        *[other] { $count } selected
     }
-pdfjs-editor-comments-sidebar-close-button =
-    .title = Close the sidebar
-    .aria-label = Close the sidebar
-pdfjs-editor-comments-sidebar-close-button-label = Close the sidebar
-pdfjs-editor-comments-sidebar-no-comments1 = See something noteworthy? Highlight it and leave a comment.
-pdfjs-editor-comments-sidebar-no-comments-link = Learn more
-pdfjs-editor-highlight-added-alert = Highlight added
-pdfjs-editor-freetext-added-alert = Text added
-pdfjs-editor-ink-added-alert = Drawing added
-pdfjs-editor-stamp-added-alert = Image added
-pdfjs-editor-signature-added-alert = Signature added
-pdfjs-editor-add-signature-image-no-data-error-title = Can’t convert this image into a signature
-pdfjs-editor-add-signature-image-no-data-error-description = Please try uploading a different image.
-pdfjs-show-comment-button =
-    .title = Show comment
-pdfjs-editor-edit-comment-popup-button-label = Edit comment
-pdfjs-editor-edit-comment-popup-button =
-    .title = Edit comment
-pdfjs-editor-delete-comment-popup-button-label = Remove comment
-pdfjs-editor-delete-comment-popup-button =
-    .title = Remove comment
-pdfjs-editor-edit-comment-dialog-title-when-editing = Edit comment
-pdfjs-editor-edit-comment-dialog-save-button-when-editing = Update
-pdfjs-editor-edit-comment-dialog-title-when-adding = Add comment
-pdfjs-editor-edit-comment-dialog-save-button-when-adding = Add
-pdfjs-editor-edit-comment-dialog-text-input =
-    .placeholder = Start typing…
-pdfjs-editor-edit-comment-dialog-cancel-button = Cancel
-pdfjs-editor-edit-comment-button =
-    .title = Edit comment
+pdfjs-views-manager-pages-status-none-action-label = Select pages
+pdfjs-views-manager-pages-status-action-button-label = Manage
+pdfjs-views-manager-pages-status-copy-button-label = Copy
+pdfjs-views-manager-pages-status-cut-button-label = Cut
+pdfjs-views-manager-pages-status-delete-button-label = Delete
+pdfjs-views-manager-pages-status-save-as-button-label = Save as…
+pdfjs-views-manager-status-undo-cut-label =
+    { $count ->
+        [one] 1 page cut
+        *[other] { $count } pages cut
+    }
+pdfjs-views-manager-pages-status-undo-copy-label =
+    { $count ->
+        [one] 1 page copied
+        *[other] { $count } pages copied
+    }
+pdfjs-views-manager-pages-status-undo-delete-label =
+    { $count ->
+        [one] 1 page deleted
+        *[other] { $count } pages deleted
+    }
+pdfjs-views-manager-pages-status-waiting-ready-label = Getting your file ready…
+pdfjs-views-manager-pages-status-waiting-uploading-label = Uploading file…
+pdfjs-views-manager-status-warning-cut-label = Couldn’t cut. Refresh page and try again.
+pdfjs-views-manager-status-warning-copy-label = Couldn’t copy. Refresh page and try again.
+pdfjs-views-manager-status-warning-delete-label = Couldn’t delete. Refresh page and try again.
+pdfjs-views-manager-status-warning-save-label = Couldn’t save. Refresh page and try again.
+pdfjs-views-manager-status-undo-button-label = Undo
+pdfjs-views-manager-status-close-button =
+    .title = Close
+pdfjs-views-manager-status-close-button-label = Close
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = Match Each Word

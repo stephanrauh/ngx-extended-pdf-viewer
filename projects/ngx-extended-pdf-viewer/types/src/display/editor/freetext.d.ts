@@ -16,8 +16,8 @@ export class FreeTextEditor extends AnnotationEditor {
     static updateDefaultParams(type: any, value: any): void;
     /** @inheritdoc */
     static get defaultPropertiesToUpdate(): any[][];
-    static #getNodeContent(node: any): any;
-    static #deserializeContent(content: any): any;
+    static "__#private@#getNodeContent"(node: any): any;
+    static "__#private@#deserializeContent"(content: any): any;
     /** @inheritdoc */
     static deserialize(data: any, parent: any, uiManager: any): Promise<AnnotationEditor | null>;
     constructor(params: any);
