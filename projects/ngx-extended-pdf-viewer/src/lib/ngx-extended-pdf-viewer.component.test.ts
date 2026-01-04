@@ -59,12 +59,13 @@ describe('NgxExtendedPdfViewerComponent', () => {
             forceUsingLegacyES5: false
           }
         },
-        { 
-          provide: NgxExtendedPdfViewerService, 
-          useValue: { 
+        {
+          provide: NgxExtendedPdfViewerService,
+          useValue: {
             addImageToAnnotationLayer: jest.fn(),
-            addHighlightToAnnotationLayer: jest.fn()
-          } 
+            addHighlightToAnnotationLayer: jest.fn(),
+            secondaryMenuIsEmpty: jest.fn(() => false)
+          }
         },
         NgxKeyboardManagerService,
         { 
@@ -103,9 +104,10 @@ describe('NgxExtendedPdfViewerComponent', () => {
   it('should set formData and initialize initialAngularFormData', () => {
     const formData = { key: 'value' } as FormDataType;
     fixture.componentRef.setInput('formData', formData);
+    fixture.detectChanges();
     TestBed.flushEffects();
-    expect(component['formSupport'].formData).toBe(formData);
-    expect(component['initialAngularFormData']).toBe(formData);
+    expect(component['formSupport'].formData).toEqual(formData);
+    expect(component['initialAngularFormData']).toEqual(formData);
   });
 
   /* Skip: Requires complex Angular component mocking and event bus setup
@@ -136,11 +138,13 @@ describe('NgxExtendedPdfViewerComponent', () => {
   });
   */
 
-  it('should set base64Src and convert to Uint8Array', () => {
+  it('should set base64Src and convert to ArrayBuffer via src model', () => {
     const base64 = btoa('test');
     fixture.componentRef.setInput('base64Src', base64);
+    fixture.detectChanges();
     TestBed.flushEffects();
-    expect(component['_src']).toBeInstanceOf(ArrayBuffer);
+    // base64SrcEffect sets src model with ArrayBuffer
+    expect(component.src()).toBeInstanceOf(ArrayBuffer);
   });
 
   // Skip: Requires complex Angular component mocking and event bus setup
@@ -153,8 +157,11 @@ describe('NgxExtendedPdfViewerComponent', () => {
 
   it('should set mobileFriendlyZoom and update related properties', () => {
     fixture.componentRef.setInput('mobileFriendlyZoom', '150%');
+    fixture.detectChanges();
     TestBed.flushEffects();
     expect(component.mobileFriendlyZoom()).toBe('150%');
+    expect(component['_mobileFriendlyZoom']).toBe('150%');
+    expect(component.mobileFriendlyZoomScale).toBe(1.5);
     expect(component.toolbarWidth).toBe('66.66666666666667%');
     expect(component.toolbarMarginTop).toBe('8px');
   });
