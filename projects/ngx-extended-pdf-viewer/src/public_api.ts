@@ -27,6 +27,7 @@ export * from './lib/events/scale-changing-event';
 export * from './lib/events/sidebarview-changed';
 export * from './lib/events/textlayer-rendered';
 export * from './lib/events/toggle-sidebar-event';
+export * from './lib/events/update-ui-state-event';
 export * from './lib/events/xfa-layer-rendered-event';
 export * from './lib/ngx-extended-pdf-viewer.component';
 export * from './lib/services/ios-canvas-optimization.service';
