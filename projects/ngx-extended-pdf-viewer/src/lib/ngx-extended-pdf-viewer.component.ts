@@ -326,7 +326,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       (async () => {
         const converted = await this.convertBlobToUint8Array(url);
         this._src = converted.buffer;
-        if (this.service.ngxExtendedPdfViewerInitialized) {
+        if (this.service.ngxExtendedPdfViewerInitialized && this._src !== this._lastOpenedSrc) { // #3131
           // Close book mode if needed
           if (this.pageViewMode() === 'book') {
             const PDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
@@ -366,7 +366,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
         PDFViewerApplication?.pdfThumbnailViewer?.stopRendering();
       }
 
-      if (this._src) {
+      if (this._src && this._src !== this._lastOpenedSrc) { // #3131
         if (this.pdfScriptLoaderService.ngxExtendedPdfViewerIncompletelyInitialized) {
           this.openPDF();
         } else {
@@ -375,8 +375,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
             (async () => this.openPDF2())();
           }
         }
-      } else {
+      } else if (!this._src) {
         // Close document when src is cleared
+        this._lastOpenedSrc = undefined; // #3131
         const PDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
         (async () => this.closeDocument(PDFViewerApplication))();
       }
@@ -384,6 +385,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   });
 
   private _src: string | ArrayBuffer | Uint8Array | { range: any } | undefined;
+
+  /** #3131 Tracks the last _src value that was actually opened, to avoid redundant re-opens when the effect re-fires. */
+  private _lastOpenedSrc: string | ArrayBuffer | Uint8Array | { range: any } | undefined;
 
   public scrollMode = model<ScrollModeType>(ScrollModeType.vertical);
 
@@ -1937,9 +1941,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
         if (typeof this._src === 'string') {
           options.url = this._src;
         } else if (this._src instanceof ArrayBuffer) {
-          options.data = this._src;
+          // #3131 Clone the buffer so the original survives pdf.js transferring it to the worker thread.
+          options.data = this._src.slice(0);
         } else if (this._src instanceof Uint8Array) {
-          options.data = this._src;
+          // #3131 Clone the buffer so the original survives pdf.js transferring it to the worker thread.
+          options.data = new Uint8Array(this._src);
         }
         options.rangeChunkSize = pdfDefaultOptions.rangeChunkSize;
         options.cspPolicyService = this.cspPolicyService;
@@ -1947,6 +1953,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
         PDFViewerApplication.secondaryToolbar?.close();
         PDFViewerApplication.eventBus.dispatch('annotationeditormodechanged', { mode: 0 });
 
+        this._lastOpenedSrc = this._src; // #3131
         await PDFViewerApplication.open(options);
         this.pdfLoadingStarts.emit({});
         setTimeout(this.asyncWithCD(async () => this.setZoom()));
@@ -2329,6 +2336,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   }
 
   public async openPDF2(): Promise<void> {
+    // #3131 Guard against detached ArrayBuffers — can happen if a previous open() already transferred the buffer to the worker.
+    // The 'detached' property is available in modern browsers (Chrome 114+, Firefox 122+, Safari 17.4+).
+    // In older browsers the property is undefined (falsy), so the check is safely skipped.
+    if (this._src instanceof ArrayBuffer && (this._src as any).detached) {
+      return;
+    }
+
     const PDFViewerApplication: IPDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
 
     PDFViewerApplication.findBar?.close();
@@ -2389,21 +2403,24 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       if (typeof this._src === 'string') {
         options.url = this._src;
       } else if (this._src instanceof ArrayBuffer) {
-        options.data = this._src;
         if (this._src.byteLength === 0) {
           // sometimes ngOnInit() calls openPdf2 too early
           // so let's ignore empty arrays
           return;
         }
+        // #3131 Clone the buffer so the original survives pdf.js transferring it to the worker thread.
+        options.data = this._src.slice(0);
       } else if (this._src instanceof Uint8Array) {
-        options.data = this._src;
         if (this._src.length === 0) {
           // sometimes ngOnInit() calls openPdf2 too early
           // so let's ignore empty arrays
           return;
         }
+        // #3131 Clone the buffer so the original survives pdf.js transferring it to the worker thread.
+        options.data = new Uint8Array(this._src);
       }
       options.rangeChunkSize = pdfDefaultOptions.rangeChunkSize;
+      this._lastOpenedSrc = this._src; // #3131
       await PDFViewerApplication.open(options);
     } catch (error) {
       this.pdfLoadingFailed.emit(error as Error);
