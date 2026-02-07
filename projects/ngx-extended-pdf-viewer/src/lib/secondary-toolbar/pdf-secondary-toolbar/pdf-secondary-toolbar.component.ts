@@ -63,6 +63,10 @@ export class PdfSecondaryToolbarComponent implements AfterViewInit, OnDestroy {
 
   private PDFViewerApplication: IPDFViewerApplication | undefined;
 
+  // #3135 modified by ngx-extended-pdf-viewer
+  private eventBusAbortController: AbortController | null = null;
+  // #3135 end of modification by ngx-extended-pdf-viewer
+
   constructor(
     private element: ElementRef,
     public notificationService: PDFNotificationService,
@@ -106,12 +110,17 @@ export class PdfSecondaryToolbarComponent implements AfterViewInit, OnDestroy {
   }
 
   public onPdfJsInit(): void {
+    // #3135 modified by ngx-extended-pdf-viewer
+    this.eventBusAbortController?.abort();
+    this.eventBusAbortController = new AbortController();
+    const opts = { signal: this.eventBusAbortController.signal };
+    // #3135 end of modification by ngx-extended-pdf-viewer
     this.PDFViewerApplication?.eventBus.on('pagechanging', () => {
       this.updateUIState();
-    });
+    }, opts);
     this.PDFViewerApplication?.eventBus.on('pagerendered', () => {
       this.updateUIState();
-    });
+    }, opts);
   }
 
   public updateUIState(): void {
@@ -171,6 +180,9 @@ export class PdfSecondaryToolbarComponent implements AfterViewInit, OnDestroy {
       this.classMutationObserver.disconnect();
       this.classMutationObserver = undefined;
     }
+    // #3135 modified by ngx-extended-pdf-viewer
+    this.eventBusAbortController?.abort();
+    // #3135 end of modification by ngx-extended-pdf-viewer
   }
 
   public checkVisibility(): void {

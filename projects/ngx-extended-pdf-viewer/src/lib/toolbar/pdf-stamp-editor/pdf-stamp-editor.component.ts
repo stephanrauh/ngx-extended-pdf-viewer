@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, input, effect } from '@angular/core';
+import { ChangeDetectorRef, Component, input, effect, OnDestroy } from '@angular/core';
 import { PositioningService } from '../../dynamic-css/positioning.service';
 import { AnnotationEditorEditorModeChangedEvent } from '../../events/annotation-editor-mode-changed-event';
 import { FocusManagementService } from '../../focus-management.service';
@@ -14,12 +14,16 @@ import { ResponsiveVisibility } from '../../responsive-visibility';
     styleUrls: ['./pdf-stamp-editor.component.css'],
     standalone: false
 })
-export class PdfStampEditorComponent {
+export class PdfStampEditorComponent implements OnDestroy {
   public show = input<ResponsiveVisibility>(true);
 
   public isSelected = false;
 
   private PDFViewerApplication: IPDFViewerApplication | undefined;
+
+  // #3135 modified by ngx-extended-pdf-viewer
+  private eventBusAbortController: AbortController | null = null;
+  // #3135 end of modification by ngx-extended-pdf-viewer
 
   public get pdfJsVersion(): string {
     return getVersionSuffix(pdfDefaultOptions.assetsFolder);
@@ -53,6 +57,11 @@ export class PdfStampEditorComponent {
   }
 
   private onPdfJsInit() {
+    // #3135 modified by ngx-extended-pdf-viewer
+    this.eventBusAbortController?.abort();
+    this.eventBusAbortController = new AbortController();
+    const opts = { signal: this.eventBusAbortController.signal };
+    // #3135 end of modification by ngx-extended-pdf-viewer
     this.PDFViewerApplication?.eventBus.on('annotationeditormodechanged', ({ mode }: AnnotationEditorEditorModeChangedEvent) => {
       setTimeout(this.asyncWithCD(() => {
         const wasSelected = this.isSelected;
@@ -67,8 +76,14 @@ export class PdfStampEditorComponent {
           this.focusManagement.returnFocusToPrevious('Stamp editor toolbar closed');
         }
       }));
-    });
+    }, opts);
   }
+
+  // #3135 modified by ngx-extended-pdf-viewer
+  public ngOnDestroy(): void {
+    this.eventBusAbortController?.abort();
+  }
+  // #3135 end of modification by ngx-extended-pdf-viewer
 
   public onClick = (event?: Event): void => {
     const currentMode = this.PDFViewerApplication?.pdfViewer.annotationEditorMode;

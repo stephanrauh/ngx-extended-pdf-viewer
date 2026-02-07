@@ -135,7 +135,8 @@ describe('PdfDrawEditorComponent', () => {
       
       expect(mockPDFViewerApplication.eventBus.on).toHaveBeenCalledWith(
         'annotationeditormodechanged',
-        expect.any(Function)
+        expect.any(Function),
+        expect.objectContaining({ signal: expect.any(AbortSignal) })
       );
     });
 

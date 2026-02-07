@@ -16,6 +16,10 @@ export class PdfZoomInComponent implements OnDestroy {
   public disabled = true;
   PDFViewerApplication: IPDFViewerApplication | undefined;
 
+  // #3135 modified by ngx-extended-pdf-viewer
+  private eventBusAbortController: AbortController | null = null;
+  // #3135 end of modification by ngx-extended-pdf-viewer
+
   private eventListener = ({ source, scale }: ScaleChangingEvent) => {
     const maxZoom = source.maxZoom;
     if (maxZoom) {
@@ -35,11 +39,18 @@ export class PdfZoomInComponent implements OnDestroy {
   }
 
   private onPdfJsInit() {
-    this.PDFViewerApplication?.eventBus.on('scalechanging', this.eventListener);
+    // #3135 modified by ngx-extended-pdf-viewer
+    this.eventBusAbortController?.abort();
+    this.eventBusAbortController = new AbortController();
+    const opts = { signal: this.eventBusAbortController.signal };
+    this.PDFViewerApplication?.eventBus.on('scalechanging', this.eventListener, opts);
+    // #3135 end of modification by ngx-extended-pdf-viewer
   }
 
+  // #3135 modified by ngx-extended-pdf-viewer
   public ngOnDestroy() {
-    this.PDFViewerApplication?.eventBus.off('scalechanging', this.eventListener);
+    this.eventBusAbortController?.abort();
     this.PDFViewerApplication = undefined;
   }
+  // #3135 end of modification by ngx-extended-pdf-viewer
 }

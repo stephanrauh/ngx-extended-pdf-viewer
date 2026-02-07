@@ -128,13 +128,13 @@ describe('PdfSecondaryToolbarComponent', () => {
     it('should register pagechanging event listener', () => {
       component.onPdfJsInit();
 
-      expect(mockPDFViewerApplication.eventBus.on).toHaveBeenCalledWith('pagechanging', expect.any(Function));
+      expect(mockPDFViewerApplication.eventBus.on).toHaveBeenCalledWith('pagechanging', expect.any(Function), expect.objectContaining({ signal: expect.any(AbortSignal) }));
     });
 
     it('should register pagerendered event listener', () => {
       component.onPdfJsInit();
 
-      expect(mockPDFViewerApplication.eventBus.on).toHaveBeenCalledWith('pagerendered', expect.any(Function));
+      expect(mockPDFViewerApplication.eventBus.on).toHaveBeenCalledWith('pagerendered', expect.any(Function), expect.objectContaining({ signal: expect.any(AbortSignal) }));
     });
 
     it('should call updateUIState when pagechanging event is triggered', () => {

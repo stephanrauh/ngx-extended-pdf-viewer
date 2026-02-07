@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, input, effect } from '@angular/core';
+import { ChangeDetectorRef, Component, input, effect, OnDestroy } from '@angular/core';
 import { ScrollModeType } from '../../options/pdf-viewer';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { SpreadType } from '../../options/spread-type';
@@ -11,7 +11,7 @@ import { ResponsiveVisibility } from '../../responsive-visibility';
     styleUrls: ['./pdf-odd-spread.component.css'],
     standalone: false
 })
-export class PdfOddSpreadComponent {
+export class PdfOddSpreadComponent implements OnDestroy {
   public show = input<ResponsiveVisibility>(true);
 
   public scrollMode = input.required<ScrollModeType>();
@@ -19,6 +19,10 @@ export class PdfOddSpreadComponent {
   public spread: SpreadType = 'off';
 
   private PDFViewerApplication: IPDFViewerApplication | undefined;
+
+  // #3135 modified by ngx-extended-pdf-viewer
+  private eventBusAbortController: AbortController | null = null;
+  // #3135 end of modification by ngx-extended-pdf-viewer
 
   constructor(notificationService: PDFNotificationService, private cdr: ChangeDetectorRef) {
     effect(() => {
@@ -44,13 +48,24 @@ export class PdfOddSpreadComponent {
   }
 
   public onPdfJsInit(): void {
+    // #3135 modified by ngx-extended-pdf-viewer
+    this.eventBusAbortController?.abort();
+    this.eventBusAbortController = new AbortController();
+    const opts = { signal: this.eventBusAbortController.signal };
+    // #3135 end of modification by ngx-extended-pdf-viewer
     this.PDFViewerApplication?.eventBus.on('spreadmodechanged', (event) => {
       queueMicrotask(this.asyncWithCD(() => {
         const modes = ['off', 'odd', 'even'] as Array<SpreadType>;
         this.spread = modes[event.mode];
       }));
-    });
+    }, opts);
   }
+
+  // #3135 modified by ngx-extended-pdf-viewer
+  public ngOnDestroy(): void {
+    this.eventBusAbortController?.abort();
+  }
+  // #3135 end of modification by ngx-extended-pdf-viewer
 
   public onClick = (): void => {
     if (this.PDFViewerApplication) {

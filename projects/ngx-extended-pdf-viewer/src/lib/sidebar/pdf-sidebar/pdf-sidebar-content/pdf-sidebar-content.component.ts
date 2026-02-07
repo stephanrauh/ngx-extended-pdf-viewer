@@ -50,7 +50,9 @@ export class PdfSidebarContentComponent implements OnDestroy {
 
   private PDFViewerApplication!: IPDFViewerApplication | undefined;
 
-  private thumbnailListener: any;
+  // #3135 modified by ngx-extended-pdf-viewer
+  private eventBusAbortController: AbortController | null = null;
+  // #3135 end of modification by ngx-extended-pdf-viewer
 
   public top = computed(() => {
     let top = 0;
@@ -68,8 +70,12 @@ export class PdfSidebarContentComponent implements OnDestroy {
       effect(() => {
         this.PDFViewerApplication = notificationService.onPDFJSInitSignal();
         if (this.PDFViewerApplication) {
-          this.thumbnailListener = this.createThumbnail.bind(this);
-          this.PDFViewerApplication.eventBus.on('rendercustomthumbnail', this.thumbnailListener);
+          // #3135 modified by ngx-extended-pdf-viewer
+          this.eventBusAbortController?.abort();
+          this.eventBusAbortController = new AbortController();
+          const opts = { signal: this.eventBusAbortController.signal };
+          // #3135 end of modification by ngx-extended-pdf-viewer
+          this.PDFViewerApplication.eventBus.on('rendercustomthumbnail', this.createThumbnail.bind(this), opts);
         }
       });
     }
@@ -77,9 +83,9 @@ export class PdfSidebarContentComponent implements OnDestroy {
 
   public ngOnDestroy(): void {
     this.linkService = undefined;
-    if (this.thumbnailListener) {
-      this.PDFViewerApplication?.eventBus.off('rendercustomthumbnail', this.thumbnailListener);
-    }
+    // #3135 modified by ngx-extended-pdf-viewer
+    this.eventBusAbortController?.abort();
+    // #3135 end of modification by ngx-extended-pdf-viewer
   }
 
   private createThumbnail({

@@ -22,6 +22,10 @@ export class PdfSinglePageModeComponent implements OnDestroy {
 
   private PDFViewerApplication: IPDFViewerApplication | undefined;
 
+  // #3135 modified by ngx-extended-pdf-viewer
+  private eventBusAbortController: AbortController | null = null;
+  // #3135 end of modification by ngx-extended-pdf-viewer
+
   constructor(notificationService: PDFNotificationService, private cdr: ChangeDetectorRef) {
     effect(() => {
       this.PDFViewerApplication = notificationService.onPDFJSInitSignal();
@@ -52,14 +56,22 @@ export class PdfSinglePageModeComponent implements OnDestroy {
   }
 
   public onPdfJsInit(): void {
+    // #3135 modified by ngx-extended-pdf-viewer
+    this.eventBusAbortController?.abort();
+    this.eventBusAbortController = new AbortController();
+    const opts = { signal: this.eventBusAbortController.signal };
+    // #3135 end of modification by ngx-extended-pdf-viewer
     this.PDFViewerApplication?.eventBus.on('switchscrollmode', () => {
       queueMicrotask(this.asyncWithCD(() => {
         // scrollMode is read-only input, parent component updates it via binding
       }));
-    });
+    }, opts);
   }
 
   public ngOnDestroy(): void {
     this.onClick = undefined;
+    // #3135 modified by ngx-extended-pdf-viewer
+    this.eventBusAbortController?.abort();
+    // #3135 end of modification by ngx-extended-pdf-viewer
   }
 }
