@@ -123,6 +123,9 @@ export function isIOS(): boolean {
 export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasHeight {
   private readonly formSupport = new NgxFormSupport();
 
+  /** #3131 AbortController to unregister all eventBus listeners on destroy. */
+  private eventBusAbortController: AbortController | null = null;
+
   /**
    * The dummy components are inserted automatically when the user customizes the toolbar
    * without adding every original toolbar item. Without the dummy components, the
@@ -1615,9 +1618,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
           10,
         );
       } else {
-        this.pdfScriptLoaderService.PDFViewerApplication.eventBus.on('sourcechanged', this.reportSourceChanges.bind(this));
-        this.pdfScriptLoaderService.PDFViewerApplication.eventBus.on('afterprint', this.afterPrintListener);
-        this.pdfScriptLoaderService.PDFViewerApplication.eventBus.on('beforeprint', this.beforePrintListener);
         this.localizationInitialized = true;
         if (!this.pdfScriptLoaderService.shuttingDown) {
           // hurried users sometimes reload the PDF before it has finished initializing
@@ -1973,6 +1973,16 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   }
 
   private registerEventListeners(PDFViewerApplication: IPDFViewerApplication) {
+    // #3131 Use AbortController to unregister all listeners on destroy in one call.
+    this.eventBusAbortController?.abort();
+    this.eventBusAbortController = new AbortController();
+    const { signal } = this.eventBusAbortController;
+    const opts = { signal };
+
+    PDFViewerApplication.eventBus.on('sourcechanged', this.reportSourceChanges.bind(this), opts);
+    PDFViewerApplication.eventBus.on('afterprint', this.afterPrintListener, opts);
+    PDFViewerApplication.eventBus.on('beforeprint', this.beforePrintListener, opts);
+
     PDFViewerApplication.eventBus.on('annotation-editor-event', (x: AnnotationEditorEvent) => {
       queueMicrotask(
         this.asyncWithCD(() => {
@@ -1980,7 +1990,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
           this.annotationEditorEvent.emit(x);
         }),
       );
-    });
+    }, opts);
 
     PDFViewerApplication.eventBus.on('toggleSidebar', (x: ToggleSidebarEvent) => {
       queueMicrotask(
@@ -1988,11 +1998,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
           this.sidebarVisible.set(x.visible);
         }),
       );
-    });
+    }, opts);
 
     PDFViewerApplication.eventBus.on('textlayerrendered', (x: TextLayerRenderedEvent) => {
       queueMicrotask(this.asyncWithCD(() => this.textLayerRendered.emit(x)));
-    });
+    }, opts);
 
     PDFViewerApplication.eventBus.on('annotationeditormodechanged', (x: AnnotationEditorEditorModeChangedEvent) => {
       // we're using a timeout here to make sure the editor is already visible
@@ -2003,7 +2013,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
           this.annotationEditorModeChanged.emit(x);
         }),
       );
-    });
+    }, opts);
 
     PDFViewerApplication.eventBus.on('scrollmodechanged', (x: ScrollModeChangedEvent) => {
       queueMicrotask(
@@ -2016,7 +2026,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
           }
         }),
       );
-    });
+    }, opts);
     // #2673 Listen for pageViewMode changes to restore height when leaving infinite-scroll
     PDFViewerApplication.eventBus.on('pageviewmodechanged', (x: any) => {
       if (x.mode === 'single') {
@@ -2027,31 +2037,31 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
           }),
         );
       }
-    });
+    }, opts);
     // #2673 end of modification
     PDFViewerApplication.eventBus.on('progress', (x: ProgressBarEvent) => {
       queueMicrotask(this.asyncWithCD(() => this.progress.emit(x)));
-    });
+    }, opts);
     PDFViewerApplication.eventBus.on('findbarclose', () => {
       queueMicrotask(
         this.asyncWithCD(() => {
           this.findbarVisible.set(false);
         }),
       );
-    });
+    }, opts);
     PDFViewerApplication.eventBus.on('findbaropen', () => {
       queueMicrotask(
         this.asyncWithCD(() => {
           this.findbarVisible.set(true);
         }),
       );
-    });
+    }, opts);
     PDFViewerApplication.eventBus.on('propertiesdialogclose', () => {
       this.propertiesDialogVisible.set(false);
-    });
+    }, opts);
     PDFViewerApplication.eventBus.on('propertiesdialogopen', () => {
       this.propertiesDialogVisible.set(true);
-    });
+    }, opts);
 
     PDFViewerApplication.eventBus.on('pagesloaded', (x: PagesLoadedEvent) => {
       queueMicrotask(this.asyncWithCD(() => this.pagesLoaded.emit(x)));
@@ -2077,7 +2087,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
         }),
       );
       this.setZoom();
-    });
+    }, opts);
     PDFViewerApplication.eventBus.on('pagerendered', (x: PageRenderedEvent) => {
       queueMicrotask(
         this.asyncWithCD(() => {
@@ -2085,14 +2095,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
           this.dynamicCSSComponent()?.removeScrollbarInInfiniteScrollMode(false, this.pageViewMode(), this.primaryMenuVisible, this, this.logLevel());
         }),
       );
-    });
+    }, opts);
     PDFViewerApplication.eventBus.on('pagerender', (x: PageRenderEvent) => {
       queueMicrotask(
         this.asyncWithCD(() => {
           this.pageRender.emit(x);
         }),
       );
-    });
+    }, opts);
 
     PDFViewerApplication.eventBus.on('download', (x: PdfDownloadedEvent) => {
       queueMicrotask(
@@ -2100,7 +2110,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
           this.pdfDownloaded.emit(x);
         }),
       );
-    });
+    }, opts);
     PDFViewerApplication.eventBus.on('scalechanging', (x: ScaleChangingEvent) => {
       // #3060 modified by ngx-extended-pdf-viewer - diagnostic logging for iOS scale bug
       if (x.scale < 0.15 || (x.previousScale && x.previousScale < 0.15)) {
@@ -2128,7 +2138,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
         // called when the user selects one of the text values of the zoom select dropdown
         this.zoom.set(x.presetValue);
       }
-    });
+    }, opts);
 
     PDFViewerApplication.eventBus.on('rotationchanging', (x: PagesRotationEvent) => {
       queueMicrotask(
@@ -2136,7 +2146,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
           this.rotation.set(x.pagesRotation as 0 | 90 | 180 | 270);
         }),
       );
-    });
+    }, opts);
     PDFViewerApplication.eventBus.on('fileinputchange', (x: FileInputChanged) => {
       queueMicrotask(
         this.asyncWithCD(() => {
@@ -2151,14 +2161,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
           }
         }),
       );
-    });
+    }, opts);
     PDFViewerApplication.eventBus.on('cursortoolchanged', (x: HandtoolChanged) => {
       queueMicrotask(
         this.asyncWithCD(() => {
           this.handTool.set(x.tool === PdfCursorTools.HAND);
         }),
       );
-    });
+    }, opts);
 
     PDFViewerApplication.eventBus.on('sidebarviewchanged', (x: SidebarviewChange) => {
       queueMicrotask(
@@ -2172,7 +2182,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
           }
         }),
       );
-    });
+    }, opts);
 
     PDFViewerApplication.eventBus.on('storedvaluesavailable', (event) => {
       queueMicrotask(
@@ -2180,7 +2190,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
           this.handleStoredValuesAvailable(event);
         }),
       );
-    });
+    }, opts);
 
     PDFViewerApplication.eventBus.on('documentloaded', (pdfLoadedEvent: PdfDocumentLoadedEvent) => {
       queueMicrotask(
@@ -2214,7 +2224,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
           // #2691 end of modification by ngx-extended-pdf-viewer
         }),
       );
-    });
+    }, opts);
 
     PDFViewerApplication.eventBus.on('spreadmodechanged', (event) => {
       queueMicrotask(
@@ -2223,7 +2233,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
           this.spread.set(modes[event.mode]);
         }),
       );
-    });
+    }, opts);
 
     const hideSidebarToolbar = () => {
       queueMicrotask(
@@ -2235,33 +2245,37 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       );
     };
 
-    PDFViewerApplication.eventBus.on('outlineloaded', hideSidebarToolbar);
+    PDFViewerApplication.eventBus.on('outlineloaded', hideSidebarToolbar, opts);
 
-    PDFViewerApplication.eventBus.on('attachmentsloaded', hideSidebarToolbar);
+    PDFViewerApplication.eventBus.on('attachmentsloaded', hideSidebarToolbar, opts);
 
-    PDFViewerApplication.eventBus.on('layersloaded', hideSidebarToolbar);
+    PDFViewerApplication.eventBus.on('layersloaded', hideSidebarToolbar, opts);
 
     PDFViewerApplication.eventBus.on('annotationlayerrendered', (event: AnnotationLayerRenderedEvent) => {
       const div = event.source.div;
       queueMicrotask(
         this.asyncWithCD(() => {
+          // #3131 formSupport can be undefined if the component was destroyed before this microtask runs
+          if (!this.formSupport) {
+            return;
+          }
           event.initialFormDataStoredInThePDF = this.formSupport.initialFormDataStoredInThePDF;
           this.annotationLayerRendered.emit(event);
           this.enableOrDisableForms(div, true);
         }),
       );
-    });
+    }, opts);
     PDFViewerApplication.eventBus.on('annotationeditorlayerrendered', (event) =>
       queueMicrotask(this.asyncWithCD(() => this.annotationEditorLayerRendered.emit(event))),
-    );
-    PDFViewerApplication.eventBus.on('xfalayerrendered', (event) => queueMicrotask(this.asyncWithCD(() => this.xfaLayerRendered.emit(event))));
-    PDFViewerApplication.eventBus.on('outlineloaded', (event) => queueMicrotask(this.asyncWithCD(() => this.outlineLoaded.emit(event))));
-    PDFViewerApplication.eventBus.on('attachmentsloaded', (event) => queueMicrotask(this.asyncWithCD(() => this.attachmentsloaded.emit(event))));
-    PDFViewerApplication.eventBus.on('layersloaded', (event) => queueMicrotask(this.asyncWithCD(() => this.layersloaded.emit(event))));
+    opts);
+    PDFViewerApplication.eventBus.on('xfalayerrendered', (event) => queueMicrotask(this.asyncWithCD(() => this.xfaLayerRendered.emit(event))), opts);
+    PDFViewerApplication.eventBus.on('outlineloaded', (event) => queueMicrotask(this.asyncWithCD(() => this.outlineLoaded.emit(event))), opts);
+    PDFViewerApplication.eventBus.on('attachmentsloaded', (event) => queueMicrotask(this.asyncWithCD(() => this.attachmentsloaded.emit(event))), opts);
+    PDFViewerApplication.eventBus.on('layersloaded', (event) => queueMicrotask(this.asyncWithCD(() => this.layersloaded.emit(event))), opts);
     PDFViewerApplication.eventBus.on('presentationmodechanged', () => {
       const PDFViewerApplication: IPDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
       PDFViewerApplication?.pdfViewer?.destroyBookMode();
-    });
+    }, opts);
 
     PDFViewerApplication.eventBus.on('updatefindcontrolstate', (x: FindResult) => {
       queueMicrotask(
@@ -2292,7 +2306,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
           }
         }),
       );
-    });
+    }, opts);
     PDFViewerApplication.eventBus.on('updatefindmatchescount', (x: FindResult) => {
       x.matchesCount.matches = PDFViewerApplication.findController._pageMatches ?? [];
       x.matchesCount.matchesLength = PDFViewerApplication.findController._pageMatchesLength ?? [];
@@ -2313,7 +2327,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
           }),
         ),
       );
-    });
+    }, opts);
 
     PDFViewerApplication.eventBus.on('pagechanging', () => {
       if (!this.pdfScriptLoaderService.shuttingDown) {
@@ -2332,7 +2346,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
           }),
         );
       }
-    });
+    }, opts);
   }
 
   public async openPDF2(): Promise<void> {
@@ -2496,9 +2510,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       PDFViewerApplication.pdfThumbnailViewer?.stopRendering();
       delete PDFViewerApplication.ngxKeyboardManager;
       delete PDFViewerApplication.cspPolicyService;
-      PDFViewerApplication.eventBus?.off('afterprint', this.afterPrintListener);
-      PDFViewerApplication.eventBus?.off('beforeprint', this.beforePrintListener);
-      PDFViewerApplication.eventBus?.off('sourcechanged', this.reportSourceChanges.bind(this));
+      // #3131 Unregister all eventBus listeners in one call via AbortController.
+      this.eventBusAbortController?.abort();
+      this.eventBusAbortController = null;
 
       // #802 clear the form data; otherwise the "download" dialogs opens
       PDFViewerApplication.pdfDocument?.annotationStorage?.resetModified();
