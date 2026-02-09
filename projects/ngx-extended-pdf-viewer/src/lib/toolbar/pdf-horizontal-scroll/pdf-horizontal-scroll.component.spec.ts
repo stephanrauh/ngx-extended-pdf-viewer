@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ChangeDetectorRef, Component, Pipe, PipeTransform, signal } from '@angular/core';
-import { PdfEvenSpreadComponent } from './pdf-even-spread.component';
+import { PdfHorizontalScrollComponent } from './pdf-horizontal-scroll.component';
 import { PDFNotificationService } from '../../pdf-notification-service';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { ScrollModeType } from '../../options/pdf-viewer';
@@ -26,9 +26,9 @@ class MockResponsiveCSSClassPipe implements PipeTransform {
 })
 class MockPdfShyButtonComponent {}
 
-describe('PdfEvenSpreadComponent', () => {
-  let component: PdfEvenSpreadComponent;
-  let fixture: ComponentFixture<PdfEvenSpreadComponent>;
+describe('PdfHorizontalScrollComponent', () => {
+  let component: PdfHorizontalScrollComponent;
+  let fixture: ComponentFixture<PdfHorizontalScrollComponent>;
   let mockChangeDetectorRef: jest.Mocked<ChangeDetectorRef>;
   let mockPDFViewerApplication: any;
   let eventBus: SignalAwareEventBus;
@@ -37,10 +37,7 @@ describe('PdfEvenSpreadComponent', () => {
   beforeEach(() => {
     eventBus = createSignalAwareEventBus();
     mockPDFViewerApplication = {
-      eventBus,
-      pdfViewer: {
-        spreadMode: 1
-      }
+      eventBus
     } as any;
 
     pdfAppSignal = signal<IPDFViewerApplication | undefined>(undefined);
@@ -55,7 +52,7 @@ describe('PdfEvenSpreadComponent', () => {
 
     TestBed.configureTestingModule({
       declarations: [
-        PdfEvenSpreadComponent,
+        PdfHorizontalScrollComponent,
         MockResponsiveCSSClassPipe,
         MockPdfShyButtonComponent
       ],
@@ -65,10 +62,10 @@ describe('PdfEvenSpreadComponent', () => {
       ]
     });
 
-    fixture = TestBed.createComponent(PdfEvenSpreadComponent);
+    fixture = TestBed.createComponent(PdfHorizontalScrollComponent);
     component = fixture.componentInstance;
-    // scrollMode is a required input
     fixture.componentRef.setInput('scrollMode', ScrollModeType.vertical);
+    fixture.componentRef.setInput('pageViewMode', 'multiple');
   });
 
   afterEach(() => {
@@ -97,16 +94,15 @@ describe('PdfEvenSpreadComponent', () => {
 
     it('should have default values', () => {
       expect(component.show()).toBe(true);
-      expect(component.spread).toBe('off');
     });
   });
 
   describe('AbortController lifecycle (#3135)', () => {
-    it('should register spreadmodechanged via the real effect/signal path', () => {
+    it('should register switchscrollmode via the real effect/signal path', () => {
       initPdfViewer();
 
       expect(eventBus.on).toHaveBeenCalledWith(
-        'spreadmodechanged',
+        'switchscrollmode',
         expect.any(Function),
         expect.objectContaining({ signal: expect.any(AbortSignal) })
       );
@@ -115,47 +111,41 @@ describe('PdfEvenSpreadComponent', () => {
     it('should unsubscribe handler on ngOnDestroy so it stops firing', async () => {
       initPdfViewer();
 
-      eventBus.dispatch('spreadmodechanged', { mode: 2 });
+      // Dispatch fires the handler
+      eventBus.dispatch('switchscrollmode', {});
       await new Promise<void>(r => queueMicrotask(r));
-      expect(component.spread).toBe('even');
+
+      expect(eventBus.getListenerCount('switchscrollmode')).toBe(1);
 
       component.ngOnDestroy();
 
-      // Reset to a known state
-      component.spread = 'off';
-      eventBus.dispatch('spreadmodechanged', { mode: 1 });
-      await new Promise<void>(r => queueMicrotask(r));
+      expect(eventBus.getListenerCount('switchscrollmode')).toBe(0);
 
-      // Handler should not have fired since listener was removed
-      expect(component.spread).toBe('off');
+      // Dispatching after destroy should not invoke any handler
+      eventBus.dispatch('switchscrollmode', {});
+      await new Promise<void>(r => queueMicrotask(r));
     });
 
     it('should replace the listener on re-init (no duplicates)', () => {
       initPdfViewer();
-      expect(eventBus.getListenerCount('spreadmodechanged')).toBe(1);
+      expect(eventBus.getListenerCount('switchscrollmode')).toBe(1);
 
       reInitPdfViewer();
-      expect(eventBus.getListenerCount('spreadmodechanged')).toBe(1);
+      expect(eventBus.getListenerCount('switchscrollmode')).toBe(1);
     });
 
     it('should not fire old handler after re-init', async () => {
       initPdfViewer();
 
-      // Dispatch before re-init to confirm the handler works
-      eventBus.dispatch('spreadmodechanged', { mode: 2 });
-      await new Promise<void>(r => queueMicrotask(r));
-      expect(component.spread).toBe('even');
-
       // Re-init replaces the handler
       reInitPdfViewer();
 
-      // Dispatch after re-init: only the new handler should fire
-      eventBus.dispatch('spreadmodechanged', { mode: 1 });
-      await new Promise<void>(r => queueMicrotask(r));
-      expect(component.spread).toBe('odd');
+      // Only 1 listener should be active
+      expect(eventBus.getListenerCount('switchscrollmode')).toBe(1);
 
-      // Confirm only 1 listener is active
-      expect(eventBus.getListenerCount('spreadmodechanged')).toBe(1);
+      // Dispatching should work without error
+      eventBus.dispatch('switchscrollmode', {});
+      await new Promise<void>(r => queueMicrotask(r));
     });
 
     it('should not throw on ngOnDestroy when controller is null', () => {
@@ -164,48 +154,10 @@ describe('PdfEvenSpreadComponent', () => {
     });
   });
 
-  describe('spreadmodechanged handler', () => {
-    beforeEach(() => {
-      initPdfViewer();
-    });
-
-    it('should set spread to "off" for mode 0', async () => {
-      eventBus.dispatch('spreadmodechanged', { mode: 0 });
-      await new Promise<void>(r => queueMicrotask(r));
-
-      expect(component.spread).toBe('off');
-    });
-
-    it('should set spread to "odd" for mode 1', async () => {
-      eventBus.dispatch('spreadmodechanged', { mode: 1 });
-      await new Promise<void>(r => queueMicrotask(r));
-
-      expect(component.spread).toBe('odd');
-    });
-
-    it('should set spread to "even" for mode 2', async () => {
-      eventBus.dispatch('spreadmodechanged', { mode: 2 });
-      await new Promise<void>(r => queueMicrotask(r));
-
-      expect(component.spread).toBe('even');
-    });
-  });
-
-  describe('onClick', () => {
-    beforeEach(() => {
-      initPdfViewer();
-    });
-
-    it('should set spreadMode to 2', () => {
-      component.onClick();
-
-      expect(mockPDFViewerApplication.pdfViewer.spreadMode).toBe(2);
-    });
-
-    it('should not throw when PDFViewerApplication is undefined', () => {
-      (component as any).PDFViewerApplication = undefined;
-
-      expect(() => component.onClick()).not.toThrow();
+  describe('ngOnDestroy', () => {
+    it('should set onClick to undefined', () => {
+      component.ngOnDestroy();
+      expect(component.onClick).toBeUndefined();
     });
   });
 
@@ -228,8 +180,9 @@ describe('PdfEvenSpreadComponent', () => {
       pdfAppSignal.set(undefined);
 
       expect(() => {
-        const newFixture = TestBed.createComponent(PdfEvenSpreadComponent);
+        const newFixture = TestBed.createComponent(PdfHorizontalScrollComponent);
         newFixture.componentRef.setInput('scrollMode', ScrollModeType.vertical);
+        newFixture.componentRef.setInput('pageViewMode', 'multiple');
         TestBed.flushEffects();
       }).not.toThrow();
     });

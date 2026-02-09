@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Pipe, PipeTransform, signal } from '@angular/core';
 import { Component } from '@angular/core';
-import { PdfDrawEditorComponent } from './pdf-draw-editor.component';
+import { PdfTextEditorComponent } from './pdf-text-editor.component';
 import { PDFNotificationService } from '../../pdf-notification-service';
 import { AnnotationEditorType } from '../../options/editor-annotations';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
@@ -46,9 +46,9 @@ class MockPdfShyButtonComponent {
   image: any;
 }
 
-describe('PdfDrawEditorComponent', () => {
-  let component: PdfDrawEditorComponent;
-  let fixture: ComponentFixture<PdfDrawEditorComponent>;
+describe('PdfTextEditorComponent', () => {
+  let component: PdfTextEditorComponent;
+  let fixture: ComponentFixture<PdfTextEditorComponent>;
   let mockPDFViewerApplication: any;
   let eventBus: SignalAwareEventBus;
   let pdfAppSignal: ReturnType<typeof signal<IPDFViewerApplication | undefined>>;
@@ -66,7 +66,7 @@ describe('PdfDrawEditorComponent', () => {
 
     TestBed.configureTestingModule({
       declarations: [
-        PdfDrawEditorComponent,
+        PdfTextEditorComponent,
         MockResponsiveCSSClassPipe,
         MockPdfShyButtonComponent
       ],
@@ -76,7 +76,7 @@ describe('PdfDrawEditorComponent', () => {
       ]
     });
 
-    fixture = TestBed.createComponent(PdfDrawEditorComponent);
+    fixture = TestBed.createComponent(PdfTextEditorComponent);
     component = fixture.componentInstance;
   });
 
@@ -100,23 +100,6 @@ describe('PdfDrawEditorComponent', () => {
     TestBed.flushEffects();
   }
 
-  describe('component initialization', () => {
-    it('should create', () => {
-      expect(component).toBeTruthy();
-    });
-
-    it('should have default values', () => {
-      expect(component.show()).toBe(true);
-      expect(component.isSelected).toBe(false);
-    });
-
-    it('should set up effect for PDF viewer initialization', () => {
-      fixture.detectChanges();
-      // The signal should be readable (not throw)
-      expect(pdfAppSignal()).toBeUndefined();
-    });
-  });
-
   describe('AbortController lifecycle (#3135)', () => {
     it('should register annotationeditormodechanged via the real effect/signal path', () => {
       initPdfViewer();
@@ -132,7 +115,7 @@ describe('PdfDrawEditorComponent', () => {
       initPdfViewer();
 
       // Dispatch matching mode -> isSelected becomes true
-      eventBus.dispatch('annotationeditormodechanged', { mode: 15 });
+      eventBus.dispatch('annotationeditormodechanged', { mode: 3 });
       jest.advanceTimersByTime(1);
       expect(component.isSelected).toBe(true);
 
@@ -141,7 +124,7 @@ describe('PdfDrawEditorComponent', () => {
       component.isSelected = false;
 
       // Dispatch again -> handler should NOT fire
-      eventBus.dispatch('annotationeditormodechanged', { mode: 15 });
+      eventBus.dispatch('annotationeditormodechanged', { mode: 3 });
       jest.advanceTimersByTime(1);
       expect(component.isSelected).toBe(false);
     });
@@ -160,7 +143,7 @@ describe('PdfDrawEditorComponent', () => {
 
       reInitPdfViewer();
 
-      eventBus.dispatch('annotationeditormodechanged', { mode: 15 });
+      eventBus.dispatch('annotationeditormodechanged', { mode: 3 });
       jest.advanceTimersByTime(1);
       expect(component.isSelected).toBe(true);
 
@@ -175,20 +158,21 @@ describe('PdfDrawEditorComponent', () => {
   });
 
   describe('annotationeditormodechanged handler', () => {
-    it('should set isSelected to true when mode is 15', () => {
+    it('should set isSelected when mode matches FREETEXT (3)', () => {
       jest.useFakeTimers();
       initPdfViewer();
 
-      eventBus.dispatch('annotationeditormodechanged', { mode: 15 });
+      eventBus.dispatch('annotationeditormodechanged', { mode: 3 });
       jest.advanceTimersByTime(1);
       expect(component.isSelected).toBe(true);
     });
 
-    it('should set isSelected to false when mode is not 15', () => {
+    it('should unset isSelected when mode does not match', () => {
       jest.useFakeTimers();
       initPdfViewer();
+      component.isSelected = true;
 
-      eventBus.dispatch('annotationeditormodechanged', { mode: 10 });
+      eventBus.dispatch('annotationeditormodechanged', { mode: 0 });
       jest.advanceTimersByTime(1);
       expect(component.isSelected).toBe(false);
     });
@@ -199,113 +183,21 @@ describe('PdfDrawEditorComponent', () => {
       initPdfViewer();
     });
 
-    it('should dispatch switchannotationeditormode event', () => {
-      const mockEvent = { detail: 1 } as PointerEvent;
-
-      component.onClick(mockEvent);
-
+    it('should dispatch switchannotationeditormode', () => {
+      component.onClick({ detail: 1 } as any);
       expect(eventBus.dispatch).toHaveBeenCalledWith(
         'switchannotationeditormode',
-        {
-          source: component,
-          mode: AnnotationEditorType.INK,
-          isFromKeyboard: false
-        }
+        expect.objectContaining({ mode: AnnotationEditorType.FREETEXT })
       );
     });
 
-    it('should toggle from INK mode to NONE mode', () => {
-      mockPDFViewerApplication.pdfViewer.annotationEditorMode = AnnotationEditorType.INK;
-      const mockEvent = { detail: 1 } as PointerEvent;
-
-      component.onClick(mockEvent);
-
-      expect(eventBus.dispatch).toHaveBeenCalledWith(
-        'switchannotationeditormode',
-        expect.objectContaining({
-          mode: AnnotationEditorType.NONE
-        })
-      );
-    });
-
-    it('should toggle from other mode to INK mode', () => {
+    it('should toggle to NONE when already in FREETEXT mode', () => {
       mockPDFViewerApplication.pdfViewer.annotationEditorMode = AnnotationEditorType.FREETEXT;
-      const mockEvent = { detail: 1 } as PointerEvent;
-
-      component.onClick(mockEvent);
-
+      component.onClick({ detail: 1 } as any);
       expect(eventBus.dispatch).toHaveBeenCalledWith(
         'switchannotationeditormode',
-        expect.objectContaining({
-          mode: AnnotationEditorType.INK
-        })
+        expect.objectContaining({ mode: AnnotationEditorType.NONE })
       );
-    });
-
-    it('should set isFromKeyboard to true when event.detail is 0', () => {
-      const mockEvent = { detail: 0 } as PointerEvent;
-
-      component.onClick(mockEvent);
-
-      expect(eventBus.dispatch).toHaveBeenCalledWith(
-        'switchannotationeditormode',
-        expect.objectContaining({
-          isFromKeyboard: true
-        })
-      );
-    });
-
-    it('should set isFromKeyboard to false when event.detail is not 0', () => {
-      const mockEvent = { detail: 2 } as PointerEvent;
-
-      component.onClick(mockEvent);
-
-      expect(eventBus.dispatch).toHaveBeenCalledWith(
-        'switchannotationeditormode',
-        expect.objectContaining({
-          isFromKeyboard: false
-        })
-      );
-    });
-  });
-
-  describe('input properties', () => {
-    it('should accept show input with boolean value', () => {
-      fixture.componentRef.setInput('show', false);
-      TestBed.flushEffects();
-      expect(component.show()).toBe(false);
-    });
-
-    it('should accept show input with ResponsiveVisibility value', () => {
-      fixture.componentRef.setInput('show', 'xxs');
-      TestBed.flushEffects();
-      expect(component.show()).toBe('xxs');
-    });
-  });
-
-  describe('edge cases', () => {
-    it('should handle PDF viewer application being undefined', () => {
-      // pdfAppSignal is already undefined by default, just flush effects
-      fixture.detectChanges();
-      TestBed.flushEffects();
-      expect(component.isSelected).toBe(false);
-    });
-
-    it('should handle onClick when PDF viewer application is undefined', () => {
-      // Don't call initPdfViewer, so PDFViewerApplication is undefined
-      const mockEvent = { detail: 1 } as PointerEvent;
-
-      expect(() => component.onClick(mockEvent)).not.toThrow();
-    });
-
-    it('should handle missing eventBus by throwing (no optional chaining on eventBus)', () => {
-      initPdfViewer();
-      mockPDFViewerApplication.eventBus = undefined as any;
-      const mockEvent = { detail: 1 } as PointerEvent;
-
-      // The component uses `this.PDFViewerApplication?.eventBus.dispatch(...)`,
-      // which guards PDFViewerApplication but not eventBus itself.
-      expect(() => component.onClick(mockEvent)).toThrow();
     });
   });
 });

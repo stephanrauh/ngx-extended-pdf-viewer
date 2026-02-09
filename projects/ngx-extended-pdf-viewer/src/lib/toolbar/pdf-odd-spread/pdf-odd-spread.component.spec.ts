@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ChangeDetectorRef, Component, Pipe, PipeTransform, signal } from '@angular/core';
-import { PdfEvenSpreadComponent } from './pdf-even-spread.component';
+import { PdfOddSpreadComponent } from './pdf-odd-spread.component';
 import { PDFNotificationService } from '../../pdf-notification-service';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { ScrollModeType } from '../../options/pdf-viewer';
@@ -26,9 +26,9 @@ class MockResponsiveCSSClassPipe implements PipeTransform {
 })
 class MockPdfShyButtonComponent {}
 
-describe('PdfEvenSpreadComponent', () => {
-  let component: PdfEvenSpreadComponent;
-  let fixture: ComponentFixture<PdfEvenSpreadComponent>;
+describe('PdfOddSpreadComponent', () => {
+  let component: PdfOddSpreadComponent;
+  let fixture: ComponentFixture<PdfOddSpreadComponent>;
   let mockChangeDetectorRef: jest.Mocked<ChangeDetectorRef>;
   let mockPDFViewerApplication: any;
   let eventBus: SignalAwareEventBus;
@@ -55,7 +55,7 @@ describe('PdfEvenSpreadComponent', () => {
 
     TestBed.configureTestingModule({
       declarations: [
-        PdfEvenSpreadComponent,
+        PdfOddSpreadComponent,
         MockResponsiveCSSClassPipe,
         MockPdfShyButtonComponent
       ],
@@ -65,7 +65,7 @@ describe('PdfEvenSpreadComponent', () => {
       ]
     });
 
-    fixture = TestBed.createComponent(PdfEvenSpreadComponent);
+    fixture = TestBed.createComponent(PdfOddSpreadComponent);
     component = fixture.componentInstance;
     // scrollMode is a required input
     fixture.componentRef.setInput('scrollMode', ScrollModeType.vertical);
@@ -115,15 +115,15 @@ describe('PdfEvenSpreadComponent', () => {
     it('should unsubscribe handler on ngOnDestroy so it stops firing', async () => {
       initPdfViewer();
 
-      eventBus.dispatch('spreadmodechanged', { mode: 2 });
+      eventBus.dispatch('spreadmodechanged', { mode: 1 });
       await new Promise<void>(r => queueMicrotask(r));
-      expect(component.spread).toBe('even');
+      expect(component.spread).toBe('odd');
 
       component.ngOnDestroy();
 
       // Reset to a known state
       component.spread = 'off';
-      eventBus.dispatch('spreadmodechanged', { mode: 1 });
+      eventBus.dispatch('spreadmodechanged', { mode: 2 });
       await new Promise<void>(r => queueMicrotask(r));
 
       // Handler should not have fired since listener was removed
@@ -142,17 +142,17 @@ describe('PdfEvenSpreadComponent', () => {
       initPdfViewer();
 
       // Dispatch before re-init to confirm the handler works
-      eventBus.dispatch('spreadmodechanged', { mode: 2 });
+      eventBus.dispatch('spreadmodechanged', { mode: 1 });
       await new Promise<void>(r => queueMicrotask(r));
-      expect(component.spread).toBe('even');
+      expect(component.spread).toBe('odd');
 
       // Re-init replaces the handler
       reInitPdfViewer();
 
       // Dispatch after re-init: only the new handler should fire
-      eventBus.dispatch('spreadmodechanged', { mode: 1 });
+      eventBus.dispatch('spreadmodechanged', { mode: 2 });
       await new Promise<void>(r => queueMicrotask(r));
-      expect(component.spread).toBe('odd');
+      expect(component.spread).toBe('even');
 
       // Confirm only 1 listener is active
       expect(eventBus.getListenerCount('spreadmodechanged')).toBe(1);
@@ -196,10 +196,10 @@ describe('PdfEvenSpreadComponent', () => {
       initPdfViewer();
     });
 
-    it('should set spreadMode to 2', () => {
+    it('should set spreadMode to 1', () => {
       component.onClick();
 
-      expect(mockPDFViewerApplication.pdfViewer.spreadMode).toBe(2);
+      expect(mockPDFViewerApplication.pdfViewer.spreadMode).toBe(1);
     });
 
     it('should not throw when PDFViewerApplication is undefined', () => {
@@ -228,7 +228,7 @@ describe('PdfEvenSpreadComponent', () => {
       pdfAppSignal.set(undefined);
 
       expect(() => {
-        const newFixture = TestBed.createComponent(PdfEvenSpreadComponent);
+        const newFixture = TestBed.createComponent(PdfOddSpreadComponent);
         newFixture.componentRef.setInput('scrollMode', ScrollModeType.vertical);
         TestBed.flushEffects();
       }).not.toThrow();

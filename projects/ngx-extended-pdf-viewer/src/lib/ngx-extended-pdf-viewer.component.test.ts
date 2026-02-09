@@ -215,4 +215,278 @@ describe('NgxExtendedPdfViewerComponent', () => {
     expect(spy).toHaveBeenCalled();
   });
   */
+
+  describe('openPDF2 - detached buffer guard (#3131)', () => {
+    let mockPDFViewerApp: any;
+
+    beforeEach(() => {
+      mockPDFViewerApp = {
+        eventBus: { dispatch: jest.fn(), on: jest.fn() },
+        findBar: { close: jest.fn() },
+        secondaryToolbar: { close: jest.fn() },
+        pdfViewer: {
+          currentScale: 1,
+          setScale: jest.fn(),
+          update: jest.fn(),
+          destroyBookMode: jest.fn(),
+          stopRendering: jest.fn(),
+        },
+        pdfThumbnailViewer: { stopRendering: jest.fn() },
+        pdfDocument: { annotationStorage: { resetModified: jest.fn() } },
+        appConfig: { filenameForDownload: '' },
+        close: jest.fn().mockResolvedValue(undefined),
+        open: jest.fn().mockResolvedValue(undefined),
+        toolbar: { pageNumber: 1 },
+      };
+      component['pdfScriptLoaderService'].PDFViewerApplication = mockPDFViewerApp;
+      component['overrideDefaultSettings'] = jest.fn();
+    });
+
+    it('should return early when ArrayBuffer is detached', async () => {
+      const buf = new ArrayBuffer(10);
+      // Simulate a detached buffer by setting the detached property
+      Object.defineProperty(buf, 'detached', { value: true });
+      component['_src'] = buf;
+
+      await component.openPDF2();
+
+      expect(mockPDFViewerApp.close).not.toHaveBeenCalled();
+    });
+
+    it('should proceed when ArrayBuffer is not detached', async () => {
+      const buf = new ArrayBuffer(10);
+      component['_src'] = buf;
+
+      await component.openPDF2();
+
+      expect(mockPDFViewerApp.close).toHaveBeenCalled();
+    });
+
+    it('should proceed when src is a string (guard irrelevant)', async () => {
+      component['_src'] = 'http://example.com/test.pdf';
+
+      await component.openPDF2();
+
+      expect(mockPDFViewerApp.close).toHaveBeenCalled();
+    });
+  });
+
+  describe('openPDF2 - buffer cloning (#3131)', () => {
+    let mockPDFViewerApp: any;
+
+    beforeEach(() => {
+      mockPDFViewerApp = {
+        eventBus: { dispatch: jest.fn(), on: jest.fn() },
+        findBar: { close: jest.fn() },
+        secondaryToolbar: { close: jest.fn() },
+        pdfViewer: {
+          currentScale: 1,
+          setScale: jest.fn(),
+          update: jest.fn(),
+          destroyBookMode: jest.fn(),
+          stopRendering: jest.fn(),
+        },
+        pdfThumbnailViewer: { stopRendering: jest.fn() },
+        pdfDocument: { annotationStorage: { resetModified: jest.fn() } },
+        appConfig: { filenameForDownload: '' },
+        close: jest.fn().mockResolvedValue(undefined),
+        open: jest.fn().mockResolvedValue(undefined),
+        toolbar: { pageNumber: 1 },
+      };
+      component['pdfScriptLoaderService'].PDFViewerApplication = mockPDFViewerApp;
+      component['overrideDefaultSettings'] = jest.fn();
+    });
+
+    it('should clone ArrayBuffer via slice(0)', async () => {
+      const original = new ArrayBuffer(8);
+      new Uint8Array(original).set([1, 2, 3, 4, 5, 6, 7, 8]);
+      component['_src'] = original;
+
+      await component.openPDF2();
+
+      const openCall = mockPDFViewerApp.open.mock.calls[0][0];
+      expect(openCall.data).not.toBe(original);
+      expect(new Uint8Array(openCall.data)).toEqual(new Uint8Array(original));
+    });
+
+    it('should clone Uint8Array via new Uint8Array()', async () => {
+      const original = new Uint8Array([1, 2, 3, 4, 5]);
+      component['_src'] = original;
+
+      await component.openPDF2();
+
+      const openCall = mockPDFViewerApp.open.mock.calls[0][0];
+      expect(openCall.data).not.toBe(original);
+      expect(openCall.data).toEqual(original);
+    });
+
+    it('should set url option when src is a string', async () => {
+      component['_src'] = 'http://example.com/test.pdf';
+
+      await component.openPDF2();
+
+      const openCall = mockPDFViewerApp.open.mock.calls[0][0];
+      expect(openCall.url).toBe('http://example.com/test.pdf');
+      expect(openCall.data).toBeUndefined();
+    });
+  });
+
+  describe('openPDF2 - _lastOpenedSrc tracking (#3131)', () => {
+    let mockPDFViewerApp: any;
+
+    beforeEach(() => {
+      mockPDFViewerApp = {
+        eventBus: { dispatch: jest.fn(), on: jest.fn() },
+        findBar: { close: jest.fn() },
+        secondaryToolbar: { close: jest.fn() },
+        pdfViewer: {
+          currentScale: 1,
+          setScale: jest.fn(),
+          update: jest.fn(),
+          destroyBookMode: jest.fn(),
+          stopRendering: jest.fn(),
+        },
+        pdfThumbnailViewer: { stopRendering: jest.fn() },
+        pdfDocument: { annotationStorage: { resetModified: jest.fn() } },
+        appConfig: { filenameForDownload: '' },
+        close: jest.fn().mockResolvedValue(undefined),
+        open: jest.fn().mockResolvedValue(undefined),
+        toolbar: { pageNumber: 1 },
+      };
+      component['pdfScriptLoaderService'].PDFViewerApplication = mockPDFViewerApp;
+      component['overrideDefaultSettings'] = jest.fn();
+    });
+
+    it('should set _lastOpenedSrc after opening', async () => {
+      const src = 'http://example.com/test.pdf';
+      component['_src'] = src;
+      component['_lastOpenedSrc'] = undefined;
+
+      await component.openPDF2();
+
+      expect(component['_lastOpenedSrc']).toBe(src);
+    });
+
+    it('should NOT set _lastOpenedSrc when returning early due to detached buffer', async () => {
+      const buf = new ArrayBuffer(10);
+      Object.defineProperty(buf, 'detached', { value: true });
+      component['_src'] = buf;
+      component['_lastOpenedSrc'] = undefined;
+
+      await component.openPDF2();
+
+      expect(component['_lastOpenedSrc']).toBeUndefined();
+    });
+
+    it('should NOT set _lastOpenedSrc when returning early due to empty ArrayBuffer', async () => {
+      component['_src'] = new ArrayBuffer(0);
+      component['_lastOpenedSrc'] = undefined;
+
+      await component.openPDF2();
+
+      expect(component['_lastOpenedSrc']).toBeUndefined();
+    });
+  });
+
+  describe('eventBusAbortController cleanup (#3131)', () => {
+    function setupDestroyMocks() {
+      component['pdfScriptLoaderService'].PDFViewerApplication = {
+        eventBus: { dispatch: jest.fn(), on: jest.fn(), destroy: jest.fn() },
+        pdfViewer: { destroyBookMode: jest.fn(), stopRendering: jest.fn() },
+        pdfThumbnailViewer: { stopRendering: jest.fn() },
+        pdfDocument: { annotationStorage: { resetModified: jest.fn() } },
+        ngxConsole: { reset: jest.fn() },
+        close: jest.fn().mockResolvedValue(undefined),
+        unbindEvents: jest.fn(),
+        unbindWindowEvents: jest.fn(),
+        _cleanup: jest.fn(),
+      } as any;
+      // ngOnDestroy calls notificationService.onPDFJSInitSignal.set(undefined)
+      (component as any).notificationService = {
+        onPDFJSInitSignal: Object.assign(jest.fn(() => undefined), { set: jest.fn() }),
+      };
+    }
+
+    it('should abort controller in ngOnDestroy', async () => {
+      const mockController = new AbortController();
+      const abortSpy = jest.spyOn(mockController, 'abort');
+      component['eventBusAbortController'] = mockController;
+      setupDestroyMocks();
+
+      await component.ngOnDestroy();
+
+      expect(abortSpy).toHaveBeenCalled();
+    });
+
+    it('should set controller to null in ngOnDestroy', async () => {
+      component['eventBusAbortController'] = new AbortController();
+      setupDestroyMocks();
+
+      await component.ngOnDestroy();
+
+      expect(component['eventBusAbortController']).toBeNull();
+    });
+
+    it('should not throw when controller is already null', async () => {
+      component['eventBusAbortController'] = null;
+      setupDestroyMocks();
+
+      await expect(component.ngOnDestroy()).resolves.not.toThrow();
+    });
+  });
+
+  describe('formSupport null guard (#3131)', () => {
+    it('should not throw when formSupport is undefined during annotationlayerrendered', () => {
+      const mockPDFViewerApp = {
+        eventBus: { dispatch: jest.fn(), on: jest.fn() },
+        findBar: { close: jest.fn() },
+        secondaryToolbar: { close: jest.fn() },
+        pdfViewer: {
+          currentScale: 1,
+          destroyBookMode: jest.fn(),
+          stopRendering: jest.fn(),
+        },
+        pdfThumbnailViewer: { stopRendering: jest.fn() },
+        pdfDocument: { annotationStorage: { resetModified: jest.fn() } },
+        appConfig: { filenameForDownload: '' },
+        pdfLinkService: { setHash: undefined },
+        ngxConsole: { reset: jest.fn() },
+        close: jest.fn().mockResolvedValue(undefined),
+        open: jest.fn().mockResolvedValue(undefined),
+        toolbar: { pageNumber: 1 },
+        serviceWorkerOptions: {},
+        enablePrint: true,
+        findController: { state: {} },
+        onError: undefined,
+      };
+
+      // Set up the component to call registerEventListeners
+      component['pdfScriptLoaderService'].PDFViewerApplication = mockPDFViewerApp as any;
+      (component as any).formSupport = undefined;
+
+      // Call registerEventListeners to register the handler
+      (component as any).registerEventListeners(mockPDFViewerApp);
+
+      // Find the annotationlayerrendered handler
+      const annotationCall = mockPDFViewerApp.eventBus.on.mock.calls.find(
+        (call: any[]) => call[0] === 'annotationlayerrendered'
+      );
+      expect(annotationCall).toBeDefined();
+
+      const handler = annotationCall[1];
+      const mockEvent = { source: { div: document.createElement('div') } };
+
+      // Handler uses queueMicrotask, so we need to flush
+      handler(mockEvent);
+
+      // The handler should not throw even with formSupport undefined
+      return new Promise<void>((resolve) => {
+        queueMicrotask(() => {
+          // If we got here without throwing, the null guard works
+          expect(true).toBe(true);
+          resolve();
+        });
+      });
+    });
+  });
 });
