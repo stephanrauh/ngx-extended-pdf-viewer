@@ -14,7 +14,9 @@ export interface AnnotationEditorEvent {
     | 'imageAdded'
     | 'added' // #3076 added by ngx-extended-pdf-viewer
     | 'commented' // # 3095 added by ngx-extended-pdf-viewer
-    | 'commentRemoved'; // # 3095 added by ngx-extended-pdf-viewer
+    | 'commentRemoved' // # 3095 added by ngx-extended-pdf-viewer
+    | 'drawingStarted' // #3136 added by ngx-extended-pdf-viewer
+    | 'drawingStopped'; // #3136 added by ngx-extended-pdf-viewer
   editorType: string;
   value: any;
   previousValue?: any;
