@@ -50,7 +50,7 @@ export class PdfShyButtonComponent implements OnInit, AfterViewInit, AfterConten
 
   public renderContent = false;
 
-  public buttonRef = viewChild.required<ElementRef>('buttonRef');
+  public buttonRef = viewChild<ElementRef>('buttonRef');
 
   public nestedContent = contentChild<ElementRef>('nestedContent');
 
