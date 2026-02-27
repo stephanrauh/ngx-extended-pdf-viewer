@@ -59,7 +59,7 @@
     "@angular-devkit/build-angular": "^19.2.21",
     "@angular/cli": "^19.2.21",
     "@angular/compiler-cli": "^19.2.19",
-    "@schematics/angular": "^19.0.0",
+    "@schematics/angular": "^19.2.22",
     "@types/estree": "^1.0.5",
     "@types/jest": "^29.5.14",
     "@types/node": "^24.10.13",
