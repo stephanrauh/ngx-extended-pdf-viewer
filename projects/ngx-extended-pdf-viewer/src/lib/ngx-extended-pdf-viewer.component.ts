@@ -1956,7 +1956,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
         this._lastOpenedSrc = this._src; // #3131
         await PDFViewerApplication.open(options);
         this.pdfLoadingStarts.emit({});
-        setTimeout(this.asyncWithCD(async () => this.setZoom()));
+        // #3131 Set zoom synchronously (awaited) instead of via setTimeout to avoid
+        // a timing window where the zoom change could cancel in-progress first page rendering.
+        await this.setZoom();
       }
       setTimeout(
         this.asyncWithCD(() => {
