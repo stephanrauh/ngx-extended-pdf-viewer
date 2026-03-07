@@ -11,6 +11,6 @@ export class SetMinifiedLibraryUsageDirective implements OnInit {
   private pdfViewer = inject(NgxExtendedPdfViewerComponent);
 
   ngOnInit() {
-    this.pdfViewer.minifiedJSLibraries = this.environment.get('minifiedJSLibraries');
+    this.pdfViewer.minifiedJSLibraries.set(this.environment.get('minifiedJSLibraries'));
   }
 }

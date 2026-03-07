@@ -460,7 +460,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   public logLevel = input(VerbosityLevel.WARNINGS);
 
   /** Use the minified (minifiedJSLibraries="true", which is the default) or the user-readable pdf.js library (minifiedJSLibraries="false") */
-  public minifiedJSLibraries = input<boolean>(pdfDefaultOptions._internalFilenameSuffix === '.min');
+  public minifiedJSLibraries = model<boolean>(pdfDefaultOptions._internalFilenameSuffix === '.min');
 
   // @ts-ignore TS6133 - Used for side effects only
   private _minifiedJSLibrariesEffect = effect(() => {
