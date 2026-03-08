@@ -2504,6 +2504,23 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     const PDFViewerApplication: IPDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
 
     if (PDFViewerApplication) {
+      // #3131 Capture the eventBus reference before any await, so we can later
+      // check whether a new component has replaced it during async cleanup.
+      const bus = PDFViewerApplication.eventBus;
+      // #3131 Capture globalThis function references before the await, so we can
+      // check whether a new component has replaced them during async cleanup.
+      const w = globalThis as any;
+      const savedGlobals = {
+        getFormValueFromAngular: w.getFormValueFromAngular,
+        registerAcroformAnnotations: w.registerAcroformAnnotations,
+        getFormValue: w.getFormValue,
+        setFormValue: w.setFormValue,
+        assignFormIdAndFieldName: w.assignFormIdAndFieldName,
+        registerAcroformField: w.registerAcroformField,
+        registerXFAField: w.registerXFAField,
+        updateAngularFormValue: w.updateAngularFormValue,
+      };
+
       if (PDFViewerApplication.ngxConsole) {
         PDFViewerApplication.ngxConsole.reset();
       }
@@ -2532,25 +2549,26 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       if (PDFViewerApplication.printKeyDownListener) {
         removeEventListener('keydown', PDFViewerApplication.printKeyDownListener, true);
       }
-      const w = globalThis as any;
-      delete w.getFormValueFromAngular;
-      delete w.registerAcroformAnnotations;
-      delete w.getFormValue;
-      delete w.setFormValue;
-      delete w.assignFormIdAndFieldName;
-      delete w.registerAcroformField;
-      delete w.registerXFAField;
-      delete w.assignFormIdAndFieldName;
-      delete w.updateAngularFormValue;
+      // #3131 Only delete globalThis functions if they haven't been replaced
+      // by a new component's registerFormSupportWithPdfjs() during the await above.
+      for (const [key, savedRef] of Object.entries(savedGlobals)) {
+        if (w[key] === savedRef) {
+          delete w[key];
+        }
+      }
 
-      const bus = PDFViewerApplication.eventBus;
       if (bus) {
         PDFViewerApplication.unbindEvents();
         bus.destroy();
       }
       PDFViewerApplication.unbindWindowEvents();
       PDFViewerApplication?._cleanup();
-      (PDFViewerApplication.eventBus as any) = undefined;
+      // #3131 Only clear eventBus if it hasn't been replaced by a new component's
+      // initialization during the await above. Otherwise we destroy the new
+      // component's eventBus, causing "Cannot read properties of undefined" errors.
+      if (PDFViewerApplication.eventBus === bus || !PDFViewerApplication.eventBus) {
+        (PDFViewerApplication.eventBus as any) = undefined;
+      }
       delete w.PDFViewerApplication;
       delete w.PDFViewerApplicationOptions;
       delete w.PDFViewerApplicationConstants;
