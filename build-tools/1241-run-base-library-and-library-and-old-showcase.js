@@ -1,5 +1,5 @@
 // Add --quick flag to process.argv so 1-build-base-library.js runs in quick mode
-process.argv.push('--quick');
+// process.argv.push('--quick');
 
 require('./1-build-base-library');
 
