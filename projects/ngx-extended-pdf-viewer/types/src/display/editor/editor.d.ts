@@ -322,7 +322,7 @@ export class AnnotationEditor {
     editComment(options: any): Promise<void>;
     toggleComment(isSelected: any, visibility?: undefined): void;
     setSelectedCommentButton(selected: any): void;
-    addComment(serialized: any): void;
+    addComment(serialized: any, addUnconditionally?: boolean): void;
     updateFromAnnotationLayer({ popup: { contents, deleted } }: {
         popup: {
             contents: any;
