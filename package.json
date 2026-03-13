@@ -45,7 +45,7 @@
     "@angular/compiler": "^19.0.0",
     "@angular/core": "^19.0.0",
     "@angular/forms": "^19.2.19",
-    "@angular/platform-browser": "^19.0.0",
+    "@angular/platform-browser": "^19.2.20",
     "@angular/platform-browser-dynamic": "^19.2.19",
     "@angular/router": "^19.2.19",
     "angular2-smart-table": "^4.1.1",
