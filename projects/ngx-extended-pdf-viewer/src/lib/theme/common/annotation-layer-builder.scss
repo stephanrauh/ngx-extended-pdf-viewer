@@ -229,7 +229,16 @@ ngx-extended-pdf-viewer {
 
     .buttonWidgetAnnotation.radioButton input {
       border-radius: 50%;
+      // #3158 modified by ngx-extended-pdf-viewer
+      border-color: light-dark(black, white);
+      // #3158 end of modification by ngx-extended-pdf-viewer
     }
+
+    // #3158 modified by ngx-extended-pdf-viewer
+    .buttonWidgetAnnotation.checkBox input {
+      border-color: light-dark(black, white);
+    }
+    // #3158 end of modification by ngx-extended-pdf-viewer
 
     .textWidgetAnnotation textarea {
       resize: none;
