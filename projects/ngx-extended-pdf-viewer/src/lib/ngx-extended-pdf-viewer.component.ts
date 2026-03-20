@@ -55,6 +55,7 @@ import { AnnotationEditorEvent } from './events/annotation-editor-layer-event';
 import { AnnotationEditorLayerRenderedEvent } from './events/annotation-editor-layer-rendered-event';
 import { AnnotationEditorEditorModeChangedEvent } from './events/annotation-editor-mode-changed-event';
 import { AnnotationLayerRenderedEvent } from './events/annotation-layer-rendered-event';
+import { LinkAnnotationsAddedEvent } from './events/link-annotations-added-event';
 import { AttachmentLoadedEvent } from './events/attachment-loaded-event';
 import { LayersLoadedEvent } from './events/layers-loaded-event';
 import { OutlineLoadedEvent } from './events/outline-loaded-event';
@@ -477,6 +478,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   public rotation = model<0 | 90 | 180 | 270>(0);
 
   public annotationLayerRendered = output<AnnotationLayerRenderedEvent>();
+
+  public linkAnnotationsAdded = output<LinkAnnotationsAddedEvent>();
 
   public annotationEditorLayerRendered = output<AnnotationEditorLayerRenderedEvent>();
 
@@ -2267,6 +2270,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
         }),
       );
     }, opts);
+    PDFViewerApplication.eventBus.on('linkannotationsadded', (event: LinkAnnotationsAddedEvent) =>
+      queueMicrotask(this.asyncWithCD(() => this.linkAnnotationsAdded.emit(event))),
+    opts);
     PDFViewerApplication.eventBus.on('annotationeditorlayerrendered', (event) =>
       queueMicrotask(this.asyncWithCD(() => this.annotationEditorLayerRendered.emit(event))),
     opts);

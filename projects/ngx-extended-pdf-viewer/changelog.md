@@ -707,3 +707,4 @@
 - 26.0.0-rc.3 #3138 updated the libraries to get rid of the security alert; note that the security alert almost certainly is a false positive. It affects a library used when compiling the library, but not a library that's used at runtime.
 - 26.0.0-rc.3 #3131 fixed intermittent blank first page; reduce the probability that the destructor of the old component destroys the data structures of the new component when switching between two instances of ngx-extended-pdf-viewer quickly
 - 26.0.0-rc.4 #3158 now radio button inherited their tooltip from the radio button group (unless they have a tooltip of their own); added a dark rim to radiobuttons because unchecked radio buttons were almost invisible in some documents
+- 26.0.0-rc.5 #3134 added `(linkAnnotationsAdded)` event that fires after auto-detected links (URLs found in text) are injected into the annotation layer
