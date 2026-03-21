@@ -815,6 +815,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
   public page: ModelSignal<number | undefined> = model();
 
+  // #3157 Guard flag to prevent the page effect from navigating
+  // when the page signal is updated by the 'pagechanging' event (i.e. user scrolling).
+  private _pageSetFromScroll = false;
+
   // @ts-ignore TS6133 - Used for side effects only
   private _pageEffect = effect(() => {
     const newPageNumber = this.page();
@@ -823,6 +827,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       this._page = Number(newPageNumber);
     } else {
       this._page = undefined;
+    }
+
+    // Don't navigate if this update came from scrolling
+    if (this._pageSetFromScroll) {
+      this._pageSetFromScroll = false;
+      return;
     }
 
     // Navigate to the page if PDF viewer is initialized
@@ -2346,6 +2356,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
             const currentPageLabel = PDFViewerApplication.pdfViewer.currentPageLabel;
 
             if (currentPage !== this.page()) {
+              // #3157 Set guard flag so the page effect doesn't navigate back
+              // (which would snap to the top of the page during scrolling)
+              this._pageSetFromScroll = true;
               this.page.set(currentPage);
             }
             if (currentPageLabel !== this.pageLabel()) {
