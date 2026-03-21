@@ -1646,7 +1646,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
         );
       } else {
         this.localizationInitialized = true;
-        if (!this.pdfScriptLoaderService.shuttingDown) {
+        if (!this.destroyInitialization) {
           // hurried users sometimes reload the PDF before it has finished initializing
           this.calcViewerPositionTop();
           this.afterLibraryInit();
@@ -1689,7 +1689,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
     waitForDOMElements(
       this.asyncWithCD(() => {
-        if (!this.pdfScriptLoaderService.shuttingDown) {
+        if (!this.destroyInitialization) {
           // hurried users sometimes reload the PDF before it has finished initializing
           // This initializes the webviewer, the file may be passed in to it to initialize the viewer with a pdf directly
           this.initResizeObserver();
@@ -1989,7 +1989,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       }
       setTimeout(
         this.asyncWithCD(() => {
-          if (!this.pdfScriptLoaderService.shuttingDown) {
+          if (!this.destroyInitialization) {
             // hurried users sometimes reload the PDF before it has finished initializing
             if (this.page()) {
               PDFViewerApplication.page = Number(this.page());
@@ -2103,7 +2103,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       }
       setTimeout(
         this.asyncWithCD(() => {
-          if (!this.pdfScriptLoaderService.shuttingDown) {
+          if (!this.destroyInitialization) {
             // hurried users sometimes reload the PDF before it has finished initializing
             if (this.nameddest()) {
               PDFViewerApplication.pdfLinkService.goToDestination(this.nameddest());
@@ -2362,7 +2362,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     }, opts);
 
     PDFViewerApplication.eventBus.on('pagechanging', () => {
-      if (!this.pdfScriptLoaderService.shuttingDown) {
+      if (!this.destroyInitialization) {
         // hurried users sometimes reload the PDF before it has finished initializing
         queueMicrotask(
           this.asyncWithCD(() => {

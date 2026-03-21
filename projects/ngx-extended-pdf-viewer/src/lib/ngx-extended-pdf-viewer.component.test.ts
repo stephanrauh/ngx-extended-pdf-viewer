@@ -54,7 +54,6 @@ describe('NgxExtendedPdfViewerComponent', () => {
               set: jest.fn()
             },
             webViewerLoad: jest.fn(),
-            shuttingDown: false,
             ngxExtendedPdfViewerIncompletelyInitialized: true,
             forceUsingLegacyES5: false
           }

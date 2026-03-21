@@ -43,7 +43,6 @@ describe('PDFScriptLoaderService', () => {
     delete (globalThis as any).pdfjsLib;
 
     // Reset service state
-    service.shuttingDown = false;
     service.ngxExtendedPdfViewerIncompletelyInitialized = true;
     (service as any)._needsES5 = undefined;
     (service as any)._forceUsingLegacyES5 = false;
@@ -56,7 +55,6 @@ describe('PDFScriptLoaderService', () => {
 
     it('should initialize with default values', () => {
       expect(service.forceUsingLegacyES5).toBe(false);
-      expect(service.shuttingDown).toBe(false);
       expect(service.ngxExtendedPdfViewerIncompletelyInitialized).toBe(true);
       expect(service.pdfjsVersion).toBeDefined();
     });
@@ -430,7 +428,6 @@ describe('PDFScriptLoaderService', () => {
 
       service.ngOnDestroy();
 
-      expect(service.shuttingDown).toBe(true);
       expect((globalThis as any).setNgxExtendedPdfViewerSource).toBeUndefined();
       expect((globalThis as any).pdfjsLib).toBeUndefined();
       
@@ -444,7 +441,6 @@ describe('PDFScriptLoaderService', () => {
       delete (global as any).window;
 
       expect(() => service.ngOnDestroy()).not.toThrow();
-      expect(service.shuttingDown).toBe(true);
 
       // Restore window
       (global as any).window = originalWindow;

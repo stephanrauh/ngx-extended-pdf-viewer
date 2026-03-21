@@ -22,8 +22,6 @@ export class PDFScriptLoaderService implements OnDestroy {
 
   public pdfjsVersion = getVersionSuffix(pdfDefaultOptions.assetsFolder);
 
-  public shuttingDown = false;
-
   private _needsES5: boolean | undefined = undefined;
 
   public PDFViewerApplication!: IPDFViewerApplication;
@@ -205,7 +203,6 @@ new (function () {
   }
 
   public ngOnDestroy() {
-    this.shuttingDown = true;
     if (typeof window === 'undefined') {
       return; // fast escape for server side rendering
     }
