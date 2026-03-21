@@ -680,10 +680,12 @@ ngx-extended-pdf-viewer {
     cursor: default;
   }
 
-  #secondaryToolbarButtonContainer,
-  .editorParamsToolbar {
+  // #3084 modified by ngx-extended-pdf-viewer
+  // overflow-y on editorParamsToolbar was clipping the doorhanger triangle
+  #secondaryToolbarButtonContainer {
     overflow-y: auto;
   }
+  // #3084 end of modification by ngx-extended-pdf-viewer
 
   // #3105 fixed the layout of the find bar
   .findbar {
@@ -784,6 +786,20 @@ ngx-extended-pdf-viewer {
     padding-top: 5px;
     padding-bottom: 5px;
   }
+
+  // #3084 modified by ngx-extended-pdf-viewer
+  #editorStampAddImage {
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 4px 10px;
+  }
+  // #3084 end of modification by ngx-extended-pdf-viewer
 
   .editorParamsToolbarContainer>.editorParamsSetter {
     min-height: 26px;
