@@ -595,6 +595,20 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
   public pdfBackgroundColor = input(undefined);
 
+  // @ts-ignore TS6133 - Used for side effects only
+  private _pdfBackgroundColorEffect = effect(() => {
+    const color = this.pdfBackgroundColor();
+    // Skip during initialization — the initial value is set in the init code path
+    if (!this.service.ngxExtendedPdfViewerInitialized) return;
+
+    const PDFViewerApplicationOptions = this.pdfScriptLoaderService.PDFViewerApplicationOptions;
+    const PDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
+    if (PDFViewerApplicationOptions && PDFViewerApplication?.pdfViewer) {
+      PDFViewerApplicationOptions.set('pdfBackgroundColor', color);
+      PDFViewerApplication.pdfViewer.refresh();
+    }
+  });
+
   /** Allows the user to define the name of the file after clicking "download" */
   public filenameForDownload = input<string | undefined>(undefined);
 

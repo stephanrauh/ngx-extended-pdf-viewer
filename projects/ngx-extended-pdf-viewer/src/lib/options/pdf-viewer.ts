@@ -53,4 +53,5 @@ export interface IPDFViewer {
   getPageView(index: number): PDFPageView;
   destroyBookMode(): void;
   stopRendering(): void;
+  refresh(noUpdate?: boolean, updateArgs?: object): void;
 }
