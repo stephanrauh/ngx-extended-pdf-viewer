@@ -713,3 +713,4 @@
 - 26.0.0-rc.9 #3084 only one popover can be open at a time — opening the findbar, secondary toolbar, or an editor params toolbar now closes any other open popover; fix layout glitches of the annotation editors
 - 26.0.0-rc.10 update the GitHub actions to node 24;
 - 26.0.0-rc.11 #3155 added `[readingDirection]` input (`'ltr'` | `'rtl'`) for RTL reading support — in RTL mode, spread pages display right-to-left and arrow key navigation is reversed. Note that this only affects the PDF file, not the UI. The reading direction of the UI is determined by the UI language.
+- 26.0.0-rc.12 #3155 added `[readingDirection]` input (`'ltr'` | `'rtl'`| `'auto'`)
