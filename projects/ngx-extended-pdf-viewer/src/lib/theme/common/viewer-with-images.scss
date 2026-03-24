@@ -210,9 +210,10 @@ ngx-extended-pdf-viewer {
   }
 
   // #3155 RTL reading direction support
-  // Prevent UI language (html[dir="rtl"]) from affecting page ordering.
-  // The [readingDirection] attribute is the sole authority for page layout direction.
-  .pdfViewer {
+  // When readingDirection is explicitly set to "ltr", override any inherited
+  // RTL direction from the UI language. When set to "auto" (default), the
+  // original behavior is preserved — direction is inherited from html[dir].
+  .pdfViewer.readingDirection-ltr {
     direction: ltr;
   }
 

@@ -613,9 +613,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   private _readingDirectionEffect = effect(() => {
     const direction = this.readingDirection();
     const isRtl = direction === 'rtl';
+    const isLtr = direction === 'ltr';
     const viewer = document.getElementById('viewer');
     if (viewer) {
       viewer.classList.toggle('readingDirection-rtl', isRtl);
+      viewer.classList.toggle('readingDirection-ltr', isLtr);
     }
     const viewerContainer = document.getElementById('viewerContainer');
     if (viewerContainer) {
@@ -844,7 +846,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
   public spread = model<SpreadType>('off');
 
-  public readingDirection = input<'ltr' | 'rtl'>('ltr');
+  public readingDirection = input<'ltr' | 'rtl' | 'auto'>('auto');
 
   public thumbnailDrawn = output<PdfThumbnailDrawnEvent>();
 
