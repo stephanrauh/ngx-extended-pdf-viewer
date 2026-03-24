@@ -609,6 +609,25 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     }
   });
 
+  // @ts-ignore TS6133 - Used for side effects only
+  private _readingDirectionEffect = effect(() => {
+    const direction = this.readingDirection();
+    const isRtl = direction === 'rtl';
+    const viewer = document.getElementById('viewer');
+    if (viewer) {
+      viewer.classList.toggle('readingDirection-rtl', isRtl);
+    }
+    const viewerContainer = document.getElementById('viewerContainer');
+    if (viewerContainer) {
+      viewerContainer.classList.toggle('readingDirection-rtl', isRtl);
+    }
+    if (!this.service.ngxExtendedPdfViewerInitialized) return;
+    const PDFViewerApplicationOptions = this.pdfScriptLoaderService.PDFViewerApplicationOptions;
+    if (PDFViewerApplicationOptions) {
+      PDFViewerApplicationOptions.set('readingDirection', direction);
+    }
+  });
+
   /** Allows the user to define the name of the file after clicking "download" */
   public filenameForDownload = input<string | undefined>(undefined);
 
@@ -824,6 +843,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   public showBorders = input(true);
 
   public spread = model<SpreadType>('off');
+
+  public readingDirection = input<'ltr' | 'rtl'>('ltr');
 
   public thumbnailDrawn = output<PdfThumbnailDrawnEvent>();
 
@@ -1904,6 +1925,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       }
       this.onSpreadChange('off');
     }
+    options.set('readingDirection', this.readingDirection());
     if (this.printResolution()) {
       options.set('printResolution', this.printResolution());
     }

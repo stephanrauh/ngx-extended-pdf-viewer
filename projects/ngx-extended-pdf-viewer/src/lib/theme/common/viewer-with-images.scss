@@ -209,6 +209,34 @@ ngx-extended-pdf-viewer {
     display: none;
   }
 
+  // #3155 RTL reading direction support
+  // Prevent UI language (html[dir="rtl"]) from affecting page ordering.
+  // The [readingDirection] attribute is the sole authority for page layout direction.
+  .pdfViewer {
+    direction: ltr;
+  }
+
+  .pdfViewer.readingDirection-rtl:not(.scrollHorizontal):not(.scrollWrapped) .spread {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    align-items: center;
+    white-space: normal;
+  }
+
+  // For horizontal/wrapped modes, use direction: rtl to reverse the inline flow.
+  // Both the container and viewer need RTL so that leftward overflow is scrollable.
+  // pdf.js already handles RTL containers via _isContainerRtl in _getVisiblePages.
+  .pdfViewer.readingDirection-rtl:is(.scrollHorizontal, .scrollWrapped) {
+    direction: rtl;
+  }
+
+  #viewerContainer.readingDirection-rtl {
+    direction: rtl;
+  }
+
+  // #3155 end of RTL reading direction support
+
   .pdfPresentationMode .pdfViewer {
     margin-left: 0;
     margin-right: 0;

@@ -460,6 +460,33 @@ export class PDFViewer {
     get isHorizontalScrollbarEnabled(): boolean;
     get isVerticalScrollbarEnabled(): boolean;
     _getVisiblePages(): Object;
+    _getVisiblePagesRtl(views: any): {
+        first: {
+            id: any;
+            x: number;
+            y: number;
+            view: any;
+            percent: number;
+            widthPercent: number;
+        };
+        last: {
+            id: any;
+            x: number;
+            y: number;
+            view: any;
+            percent: number;
+            widthPercent: number;
+        } | undefined;
+        views: {
+            id: any;
+            x: number;
+            y: number;
+            view: any;
+            percent: number;
+            widthPercent: number;
+        }[];
+        ids: Set<any>;
+    };
     cleanup(): void;
     /**
      * @private
