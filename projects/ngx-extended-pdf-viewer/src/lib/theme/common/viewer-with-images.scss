@@ -232,7 +232,7 @@ ngx-extended-pdf-viewer {
     direction: rtl;
   }
 
-  #viewerContainer.readingDirection-rtl {
+  #viewerContainer:has(.pdfViewer.readingDirection-rtl:is(.scrollHorizontal, .scrollWrapped)) {
     direction: rtl;
   }
 
