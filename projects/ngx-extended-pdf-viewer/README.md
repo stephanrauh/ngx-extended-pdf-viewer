@@ -75,7 +75,7 @@ import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 export class AppModule {}
 ```
 
-**For standalone components (Angular 17+):**
+**For standalone components (Angular 19+):**
 
 ```ts
 import { Component } from '@angular/core';
@@ -130,7 +130,11 @@ Version 26 updates to Angular 19 to address security concerns (and to support bo
 **What's included:**
 
 - Updated to Angular 19 with all components explicitly set to `standalone: false` for NgModule compatibility
-- Fixed findbar layout (#3105) - dropped old checkboxes for better responsive design
+- Migrated to Angular signals with zone-less support
+- Updated to pdf.js 5.4.530
+- RTL reading direction, drawing events, link annotation events, Experimental comment editor
+- Lazy rendering in infinite-scroll mode
+- Numerous stability and performance fixes (see Version Highlights below)
 
 **Migration:**
 
@@ -169,9 +173,26 @@ Regarding security: I'm not perfect - it's always a best-effort approach without
 
 ### Version 26
 
-This version migrates to signals, allows for zone-less Angular, and updates to pdf.js 5.4.530. The latter is a major internal refactoring. I assume it's not the last major refactoring, so brace yourself for more breaking changes. There's hope: the breaking changes are about the internal DOM structure of the viewer. As long as you don't manipulate that, you're safe. Otherwise, brace yourself for CSS changes. Version 26 is hit by such changes. In particular, the sidebar and the thumbails are affected.
+This version migrates to signals, allows for zone-less Angular, and updates to pdf.js 5.4.530. The latter is a major internal refactoring. I assume it's not the last major refactoring, so brace yourself for more breaking changes. There's hope: the breaking changes are about the internal DOM structure of the viewer. As long as you don't manipulate that, you're safe. Otherwise, brace yourself for CSS changes. Version 26 is hit by such changes. In particular, the sidebar and the thumbnails are affected.
 
-Version 26 also activates the comment editor. The base project, pdf.js, didn't activate it yet, so please consider it a preview. Right now, it works, but it's possible Mozilla's going to implement breaking changes over the next few months.
+**New features:**
+
+- **Comment editor** (preview): The base project, pdf.js, didn't activate it yet, so please consider it a preview. Right now, it works, but it's possible Mozilla's going to implement breaking changes over the next few months.
+- **RTL reading direction**: New `[readingDirection]` input (`'auto'` | `'ltr'` | `'rtl'`). In RTL mode, spread pages display right-to-left, arrow key navigation is reversed, and horizontal/wrapped scroll modes display pages right-to-left.
+- **Drawing events**: `drawingStarted` and `drawingStopped` annotation editor events fire when the user starts and stops actively drawing (ink/pencil) or highlighting.
+- **Link annotation events**: `(linkAnnotationsAdded)` event fires after auto-detected links are injected into the annotation layer.
+- **Lazy rendering in infinite-scroll mode**: Only visible pages are rendered, with on-demand rendering as the user scrolls. Previously, all pages were rendered upfront, causing severe performance issues with large documents.
+
+**Stability improvements:**
+
+- Fixed intermittent blank first page caused by pdf.js detaching the ArrayBuffer
+- Fixed listener leaks on component destroy (AbortController-based cleanup)
+- Fixed pinch-zoom drift in both normal and infinite-scroll modes
+- Fixed page navigation in infinite-scroll mode (page number input, next/prev buttons)
+- Fixed unsmooth page scrolling caused by the signals migration
+- Fixed table of contents navigation in book mode
+- Fixed Firefox print preview showing grey placeholders
+- Only one popover can be open at a time
 
 ### Version 25
 
