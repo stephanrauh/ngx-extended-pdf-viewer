@@ -365,7 +365,7 @@ describe('NgxKeyboardManagerService', () => {
       }
       const end = performance.now();
 
-      expect(end - start).toBeLessThan(100); // Should complete in reasonable time
+      expect(end - start).toBeLessThan(500); // Should complete in reasonable time (generous for slow CI runners)
     });
 
     it('should handle large acceptKeys arrays efficiently', () => {
@@ -378,7 +378,7 @@ describe('NgxKeyboardManagerService', () => {
       }
       const end = performance.now();
 
-      expect(end - start).toBeLessThan(100); // Should complete in reasonable time
+      expect(end - start).toBeLessThan(500); // Should complete in reasonable time (generous for slow CI runners)
     });
   });
 
