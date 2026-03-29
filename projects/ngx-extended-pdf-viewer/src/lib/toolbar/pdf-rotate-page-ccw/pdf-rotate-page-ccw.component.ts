@@ -14,6 +14,10 @@ import { ResponsiveVisibility } from '../../responsive-visibility';
 export class PdfRotatePageCcwComponent implements OnDestroy {
   public showRotateCcwButton = input<ResponsiveVisibility>(true);
 
+  // #2818 modified by ngx-extended-pdf-viewer
+  public disable = input<boolean>(false);
+  // #2818 end of modification by ngx-extended-pdf-viewer
+
   public disableRotate = true;
 
   public counterClockwise = input(true);

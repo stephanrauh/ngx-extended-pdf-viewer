@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  computed,
   effect,
   ElementRef,
   HostListener,
@@ -444,17 +445,55 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   /** Force reloading of the JavaScript code. Useful for testing and micro-frontends */
   public forceFullReloadOfJavaScriptCode = input(false);
 
+  // #2818 modified by ngx-extended-pdf-viewer
+  public showEditorButtons = input<ResponsiveVisibility>(true);
+
+  public disableEditorButtons = input<boolean>(false);
+  // #2818 end of modification by ngx-extended-pdf-viewer
+
   public showTextEditor = input<ResponsiveVisibility>('xxl');
+
+  // #2818 modified by ngx-extended-pdf-viewer
+  public disableTextEditor = input<boolean>(false);
+  // #2818 end of modification by ngx-extended-pdf-viewer
 
   public showStampEditor = input<ResponsiveVisibility>('xxl');
 
+  // #2818 modified by ngx-extended-pdf-viewer
+  public disableStampEditor = input<boolean>(false);
+  // #2818 end of modification by ngx-extended-pdf-viewer
+
   public showCommentEditor = input<ResponsiveVisibility>(pdfDefaultOptions.enableComment ? 'always-in-secondary-menu' : false);
+
+  // #2818 modified by ngx-extended-pdf-viewer
+  public disableCommentEditor = input<boolean>(false);
+  // #2818 end of modification by ngx-extended-pdf-viewer
 
   public showDrawEditor = input<ResponsiveVisibility>('xxl');
 
+  // #2818 modified by ngx-extended-pdf-viewer
+  public disableDrawEditor = input<boolean>(false);
+  // #2818 end of modification by ngx-extended-pdf-viewer
+
   public showHighlightEditor = input<ResponsiveVisibility>('xxl');
 
+  // #2818 modified by ngx-extended-pdf-viewer
+  public disableHighlightEditor = input<boolean>(false);
+  // #2818 end of modification by ngx-extended-pdf-viewer
+
   public showSignatureEditor = input<ResponsiveVisibility>('xxl');
+
+  // #2818 modified by ngx-extended-pdf-viewer
+  public disableSignatureEditor = input<boolean>(false);
+
+  // Computed signals for effective show values when showEditorButtons group is used
+  public effectiveShowTextEditor = computed(() => this.showEditorButtons() === false ? false : this.showTextEditor());
+  public effectiveShowStampEditor = computed(() => this.showEditorButtons() === false ? false : this.showStampEditor());
+  public effectiveShowCommentEditor = computed(() => this.showEditorButtons() === false ? false : this.showCommentEditor());
+  public effectiveShowDrawEditor = computed(() => this.showEditorButtons() === false ? false : this.showDrawEditor());
+  public effectiveShowHighlightEditor = computed(() => this.showEditorButtons() === false ? false : this.showHighlightEditor());
+  public effectiveShowSignatureEditor = computed(() => this.showEditorButtons() === false ? false : this.showSignatureEditor());
+  // #2818 end of modification by ngx-extended-pdf-viewer
 
   /** How many log messages should be printed?
    * Legal values: VerbosityLevel.INFOS (= 5), VerbosityLevel.WARNINGS (= 1), VerbosityLevel.ERRORS (= 0) */
@@ -683,6 +722,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
   public showSidebarButton = input<ResponsiveVisibility>(true);
 
+  // #2818 modified by ngx-extended-pdf-viewer
+  public disableSidebarButton = input<boolean>(false);
+  // #2818 end of modification by ngx-extended-pdf-viewer
+
   // @ts-ignore TS6133 - Used for side effects only
   private _showSidebarButtonEffect = effect(() => {
     const show = this.showSidebarButton();
@@ -736,6 +779,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
   public showFindButton = input<ResponsiveVisibility | undefined>(undefined);
 
+  // #2818 modified by ngx-extended-pdf-viewer
+  public disableFindButton = input<boolean>(false);
+  // #2818 end of modification by ngx-extended-pdf-viewer
+
   public showFindHighlightAll = input(true);
 
   public showFindMatchCase = input(true);
@@ -754,33 +801,79 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
   public showMovePageButton = input<ResponsiveVisibility>(false);
 
+  // #2818 modified by ngx-extended-pdf-viewer
+  public disableMovePageButton = input<boolean>(false);
+  // #2818 end of modification by ngx-extended-pdf-viewer
+
   public showPagingButtons = input<ResponsiveVisibility>(true);
+
+  // #2818 modified by ngx-extended-pdf-viewer
+  public disablePagingButtons = input<boolean>(false);
+  // #2818 end of modification by ngx-extended-pdf-viewer
 
   public showFirstAndLastPageButtons = input<ResponsiveVisibility>(true);
 
+  // #2818 modified by ngx-extended-pdf-viewer
+  public disableFirstAndLastPageButtons = input<boolean>(false);
+  // #2818 end of modification by ngx-extended-pdf-viewer
+
   public showPreviousAndNextPageButtons = input<ResponsiveVisibility>(true);
 
+  // #2818 modified by ngx-extended-pdf-viewer
+  public disablePreviousAndNextPageButtons = input<boolean>(false);
+  // #2818 end of modification by ngx-extended-pdf-viewer
+
   public showPageNumber = input<ResponsiveVisibility>(true);
+  // #2818 modified by ngx-extended-pdf-viewer
+  public disablePageNumber = input<boolean>(false);
+  // #2818 end of modification by ngx-extended-pdf-viewer
 
   public showPageLabel = input<ResponsiveVisibility>(true);
 
   public showZoomButtons = input<ResponsiveVisibility>(true);
 
+  // #2818 modified by ngx-extended-pdf-viewer
+  public disableZoomButtons = input<boolean>(false);
+  // #2818 end of modification by ngx-extended-pdf-viewer
+
   public showZoomDropdown = input<ResponsiveVisibility>(true);
+  // #2818 modified by ngx-extended-pdf-viewer
+  public disableZoomDropdown = input<boolean>(false);
+  // #2818 end of modification by ngx-extended-pdf-viewer
 
   public showPresentationModeButton = input<ResponsiveVisibility>(false);
 
+  // #2818 modified by ngx-extended-pdf-viewer
+  public disablePresentationModeButton = input<boolean>(false);
+  // #2818 end of modification by ngx-extended-pdf-viewer
+
   public showOpenFileButton = input<ResponsiveVisibility>(true);
+
+  // #2818 modified by ngx-extended-pdf-viewer
+  public disableOpenFileButton = input<boolean>(false);
+  // #2818 end of modification by ngx-extended-pdf-viewer
 
   public showPrintButton = input<ResponsiveVisibility>(true);
 
+  // #2818 modified by ngx-extended-pdf-viewer
+  public disablePrintButton = input<boolean>(false);
+  // #2818 end of modification by ngx-extended-pdf-viewer
+
   public showDownloadButton = input<ResponsiveVisibility>(true);
+
+  // #2818 modified by ngx-extended-pdf-viewer
+  public disableDownloadButton = input<boolean>(false);
+  // #2818 end of modification by ngx-extended-pdf-viewer
 
   public theme = input<'dark' | 'light' | 'custom' | string>('light');
 
   public showToolbar = input(true);
 
   public showSecondaryToolbarButton = input<ResponsiveVisibility>(true);
+
+  // #2818 modified by ngx-extended-pdf-viewer
+  public disableSecondaryToolbarButton = input<boolean>(false);
+  // #2818 end of modification by ngx-extended-pdf-viewer
 
   // Individual button visibility controls (use model for writability via meta-inputs)
   public showSinglePageModeButton = model<ResponsiveVisibility>(true);
@@ -789,6 +882,15 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   public showWrappedScrollButton = model<ResponsiveVisibility>(true);
   public showInfiniteScrollButton = model<ResponsiveVisibility>(true);
   public showBookModeButton = model<ResponsiveVisibility>(true);
+
+  // #2818 modified by ngx-extended-pdf-viewer
+  public disableSinglePageModeButton = input<boolean>(false);
+  public disableVerticalScrollButton = input<boolean>(false);
+  public disableHorizontalScrollButton = input<boolean>(false);
+  public disableWrappedScrollButton = input<boolean>(false);
+  public disableInfiniteScrollButton = input<boolean>(false);
+  public disableBookModeButton = input<boolean>(false);
+  // #2818 end of modification by ngx-extended-pdf-viewer
 
   // Meta-input for convenience (sets all scrolling buttons at once)
   public showScrollingButtons = input<ResponsiveVisibility | undefined>(undefined);
@@ -809,6 +911,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   // Rotate button controls (use model for writability via meta-input)
   public showRotateCwButton = model<ResponsiveVisibility>(true);
   public showRotateCcwButton = model<ResponsiveVisibility>(true);
+
+  // #2818 modified by ngx-extended-pdf-viewer
+  public disableRotateCwButton = input<boolean>(false);
+  public disableRotateCcwButton = input<boolean>(false);
+  // #2818 end of modification by ngx-extended-pdf-viewer
 
   // Meta-input for convenience (sets both rotate buttons at once)
   public showRotateButton = input<ResponsiveVisibility | undefined>(undefined);
@@ -838,9 +945,21 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
   public showHandToolButton = input<ResponsiveVisibility>(false);
 
+  // #2818 modified by ngx-extended-pdf-viewer
+  public disableHandToolButton = input<boolean>(false);
+  // #2818 end of modification by ngx-extended-pdf-viewer
+
   public showSpreadButton = input<ResponsiveVisibility>(true);
 
+  // #2818 modified by ngx-extended-pdf-viewer
+  public disableSpreadButton = input<boolean>(false);
+  // #2818 end of modification by ngx-extended-pdf-viewer
+
   public showPropertiesButton = input<ResponsiveVisibility>(true);
+
+  // #2818 modified by ngx-extended-pdf-viewer
+  public disablePropertiesButton = input<boolean>(false);
+  // #2818 end of modification by ngx-extended-pdf-viewer
 
   public showBorders = input(true);
 

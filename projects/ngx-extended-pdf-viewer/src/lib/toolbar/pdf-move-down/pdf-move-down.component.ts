@@ -12,6 +12,10 @@ import { PDFNotificationService } from '../../pdf-notification-service';
 export class PdfMoveDownComponent {
   public showMoveDownButton = input<ResponsiveVisibility>(true);
 
+  // #2818 modified by ngx-extended-pdf-viewer
+  public disable = input<boolean>(false);
+  // #2818 end of modification by ngx-extended-pdf-viewer
+
   private PDFViewerApplication: IPDFViewerApplication | undefined;
 
   constructor(notificationService: PDFNotificationService) {

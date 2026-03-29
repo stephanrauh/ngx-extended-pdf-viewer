@@ -13,6 +13,10 @@ import { ResponsiveVisibility } from '../../responsive-visibility';
 export class PdfFindButtonComponent {
   public showFindButton = input<ResponsiveVisibility | undefined>(undefined);
 
+  // #2818 modified by ngx-extended-pdf-viewer
+  public disable = input<boolean>(false);
+  // #2818 end of modification by ngx-extended-pdf-viewer
+
   // This is set internally by the viewer after loading a document. If the document has a text layer, the viewer will set this to true.
   public hasTextLayer = input<boolean>(false);
 

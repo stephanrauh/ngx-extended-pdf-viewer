@@ -9,6 +9,7 @@
     min="1"
     data-l10n-id="pdfjs-page-input"
     autocomplete="off"
+    [disabled]="disablePageNumber()"
   />
 </span>
 <span [class]="showPageLabel() | responsiveCSSClass : 'hiddenLargeView'" id="numPages" class="toolbarLabel"></span>

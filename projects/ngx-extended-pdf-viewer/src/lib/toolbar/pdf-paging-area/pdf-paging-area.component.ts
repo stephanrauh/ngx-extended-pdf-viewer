@@ -17,4 +17,11 @@ export class PdfPagingAreaComponent {
   public showPageNumber = input<ResponsiveVisibility>(true);
 
   public showPageLabel = input<ResponsiveVisibility>(true);
+
+  // #2818 modified by ngx-extended-pdf-viewer
+  public disablePagingButtons = input<boolean>(false);
+  public disableFirstAndLastPageButtons = input<boolean>(false);
+  public disablePreviousAndNextPageButtons = input<boolean>(false);
+  public disablePageNumber = input<boolean>(false);
+  // #2818 end of modification by ngx-extended-pdf-viewer
 }

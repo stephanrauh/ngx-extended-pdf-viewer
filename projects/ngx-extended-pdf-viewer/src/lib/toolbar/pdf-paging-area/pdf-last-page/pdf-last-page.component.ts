@@ -12,6 +12,11 @@ import { PDFNotificationService } from './../../../pdf-notification-service';
 })
 export class PdfLastPageComponent implements OnDestroy {
   public show = input<ResponsiveVisibility>(true);
+
+  // #2818 modified by ngx-extended-pdf-viewer
+  public disable = input<boolean>(false);
+  // #2818 end of modification by ngx-extended-pdf-viewer
+
   public disableLastPage = true;
 
   private PDFViewerApplication: IPDFViewerApplication | undefined;

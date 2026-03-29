@@ -36,6 +36,9 @@ export class PdfToolbarComponent implements AfterViewInit {
   public showHandToolButton = input<ResponsiveVisibility>(true);
 
   public showZoomDropdown = input<ResponsiveVisibility>(true);
+  // #2818 modified by ngx-extended-pdf-viewer
+  public disableZoomDropdown = input<boolean>(false);
+  // #2818 end of modification by ngx-extended-pdf-viewer
 
   public handTool = input<boolean>(false);
 
@@ -52,6 +55,9 @@ export class PdfToolbarComponent implements AfterViewInit {
   public showPreviousAndNextPageButtons = input<ResponsiveVisibility>(true);
 
   public showPageNumber = input<ResponsiveVisibility>(true);
+  // #2818 modified by ngx-extended-pdf-viewer
+  public disablePageNumber = input<boolean>(false);
+  // #2818 end of modification by ngx-extended-pdf-viewer
 
   public showPageLabel = input<ResponsiveVisibility>(true);
 
@@ -100,6 +106,38 @@ export class PdfToolbarComponent implements AfterViewInit {
   public showInfiniteScrollButton = input<ResponsiveVisibility>(true);
 
   public showBookModeButton = input<ResponsiveVisibility>(true);
+
+  // #2818 modified by ngx-extended-pdf-viewer
+  public disableSidebarButton = input<boolean>(false);
+  public disableFindButton = input<boolean>(false);
+  public disablePagingButtons = input<boolean>(false);
+  public disableFirstAndLastPageButtons = input<boolean>(false);
+  public disablePreviousAndNextPageButtons = input<boolean>(false);
+  public disableZoomButtons = input<boolean>(false);
+  public disablePropertiesButton = input<boolean>(false);
+  public disableSpreadButton = input<boolean>(false);
+  public disableSinglePageModeButton = input<boolean>(false);
+  public disableVerticalScrollButton = input<boolean>(false);
+  public disableHorizontalScrollButton = input<boolean>(false);
+  public disableWrappedScrollButton = input<boolean>(false);
+  public disableInfiniteScrollButton = input<boolean>(false);
+  public disableBookModeButton = input<boolean>(false);
+  public disableHandToolButton = input<boolean>(false);
+  public disableRotateCwButton = input<boolean>(false);
+  public disableRotateCcwButton = input<boolean>(false);
+  public disablePresentationModeButton = input<boolean>(false);
+  public disableOpenFileButton = input<boolean>(false);
+  public disablePrintButton = input<boolean>(false);
+  public disableDownloadButton = input<boolean>(false);
+  public disableMovePageButton = input<boolean>(false);
+  public disableTextEditor = input<boolean>(false);
+  public disableStampEditor = input<boolean>(false);
+  public disableCommentEditor = input<boolean>(false);
+  public disableDrawEditor = input<boolean>(false);
+  public disableHighlightEditor = input<boolean>(false);
+  public disableSignatureEditor = input<boolean>(false);
+  public disableSecondaryToolbarButton = input<boolean>(false);
+  // #2818 end of modification by ngx-extended-pdf-viewer
 
   public onToolbarLoaded = output<HTMLElement>();
 

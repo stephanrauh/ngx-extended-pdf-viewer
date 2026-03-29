@@ -1,5 +1,7 @@
+<!-- #2818 modified by ngx-extended-pdf-viewer -->
 <div id="toolbarViewerMiddle" [class]="showZoomButtons() | responsiveCSSClass : 'always-visible'">
-  <pdf-zoom-out [showZoomButtons]="showZoomButtons()"></pdf-zoom-out>
-  <pdf-zoom-in [showZoomButtons]="showZoomButtons()"></pdf-zoom-in>
-  <pdf-zoom-dropdown class="reset-width-padding" [zoomLevels]="zoomLevels()" [showZoomDropdown]="showZoomDropdown()"> </pdf-zoom-dropdown>
+  <pdf-zoom-out [showZoomButtons]="showZoomButtons()" [disable]="disableZoomButtons()"></pdf-zoom-out>
+  <pdf-zoom-in [showZoomButtons]="showZoomButtons()" [disable]="disableZoomButtons()"></pdf-zoom-in>
+  <pdf-zoom-dropdown class="reset-width-padding" [zoomLevels]="zoomLevels()" [showZoomDropdown]="showZoomDropdown()" [disableZoomDropdown]="disableZoomDropdown()"> </pdf-zoom-dropdown>
 </div>
+<!-- #2818 end of modification by ngx-extended-pdf-viewer -->

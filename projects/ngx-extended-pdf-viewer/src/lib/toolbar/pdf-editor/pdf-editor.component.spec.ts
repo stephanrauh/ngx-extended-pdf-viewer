@@ -58,4 +58,51 @@ describe('PdfEditorComponent', () => {
     TestBed.flushEffects();
     expect(component.showTextEditor()).toBe(false);
   });
+
+  describe('disable inputs (#2818)', () => {
+    it('should default all disable inputs to false', () => {
+      expect(component.disableCommentEditor()).toBe(false);
+      expect(component.disableDrawEditor()).toBe(false);
+      expect(component.disableHighlightEditor()).toBe(false);
+      expect(component.disableTextEditor()).toBe(false);
+      expect(component.disableSignatureEditor()).toBe(false);
+      expect(component.disableStampEditor()).toBe(false);
+    });
+
+    it('should accept disableTextEditor input set to true', () => {
+      fixture.componentRef.setInput('disableTextEditor', true);
+      TestBed.flushEffects();
+      expect(component.disableTextEditor()).toBe(true);
+    });
+
+    it('should accept disableDrawEditor input set to true', () => {
+      fixture.componentRef.setInput('disableDrawEditor', true);
+      TestBed.flushEffects();
+      expect(component.disableDrawEditor()).toBe(true);
+    });
+
+    it('should accept disableHighlightEditor input set to true', () => {
+      fixture.componentRef.setInput('disableHighlightEditor', true);
+      TestBed.flushEffects();
+      expect(component.disableHighlightEditor()).toBe(true);
+    });
+
+    it('should accept disableCommentEditor input set to true', () => {
+      fixture.componentRef.setInput('disableCommentEditor', true);
+      TestBed.flushEffects();
+      expect(component.disableCommentEditor()).toBe(true);
+    });
+
+    it('should accept disableSignatureEditor input set to true', () => {
+      fixture.componentRef.setInput('disableSignatureEditor', true);
+      TestBed.flushEffects();
+      expect(component.disableSignatureEditor()).toBe(true);
+    });
+
+    it('should accept disableStampEditor input set to true', () => {
+      fixture.componentRef.setInput('disableStampEditor', true);
+      TestBed.flushEffects();
+      expect(component.disableStampEditor()).toBe(true);
+    });
+  });
 });

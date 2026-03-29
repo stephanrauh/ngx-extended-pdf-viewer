@@ -6,6 +6,7 @@
     id="scaleSelect"
     title="Zoom"
     data-l10n-id="pdfjs-zoom-select"
+    [disabled]="disableZoomDropdown()"
     #sizeSelector
   >
     @for (level of _zoomLevels(); track level.id) {

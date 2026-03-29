@@ -434,6 +434,126 @@ describe('NgxExtendedPdfViewerComponent', () => {
     });
   });
 
+  describe('effectiveShow computed signals (#2818)', () => {
+    it('should return individual value when showEditorButtons is true and individual is true', () => {
+      fixture.componentRef.setInput('showEditorButtons', true);
+      fixture.componentRef.setInput('showTextEditor', true);
+      TestBed.flushEffects();
+      expect(component.effectiveShowTextEditor()).toBe(true);
+    });
+
+    it('should return responsive string when showEditorButtons is true and individual is a responsive value', () => {
+      fixture.componentRef.setInput('showEditorButtons', true);
+      fixture.componentRef.setInput('showStampEditor', 'xxl');
+      TestBed.flushEffects();
+      expect(component.effectiveShowStampEditor()).toBe('xxl');
+    });
+
+    it('should return false when showEditorButtons is true and individual is false', () => {
+      fixture.componentRef.setInput('showEditorButtons', true);
+      fixture.componentRef.setInput('showDrawEditor', false);
+      TestBed.flushEffects();
+      expect(component.effectiveShowDrawEditor()).toBe(false);
+    });
+
+    it('should return false when showEditorButtons is false and individual is true (group hides all)', () => {
+      fixture.componentRef.setInput('showEditorButtons', false);
+      fixture.componentRef.setInput('showHighlightEditor', true);
+      TestBed.flushEffects();
+      expect(component.effectiveShowHighlightEditor()).toBe(false);
+    });
+
+    it('should return false when showEditorButtons is false and individual is a responsive value (group hides all)', () => {
+      fixture.componentRef.setInput('showEditorButtons', false);
+      fixture.componentRef.setInput('showCommentEditor', 'xxl');
+      TestBed.flushEffects();
+      expect(component.effectiveShowCommentEditor()).toBe(false);
+    });
+
+    it('should return individual value when showEditorButtons is a responsive string (group only hides when strictly false)', () => {
+      fixture.componentRef.setInput('showEditorButtons', 'xxl');
+      fixture.componentRef.setInput('showSignatureEditor', true);
+      TestBed.flushEffects();
+      expect(component.effectiveShowSignatureEditor()).toBe(true);
+    });
+
+    it('should apply to all six editor types consistently', () => {
+      fixture.componentRef.setInput('showEditorButtons', false);
+      fixture.componentRef.setInput('showTextEditor', true);
+      fixture.componentRef.setInput('showStampEditor', 'xxl');
+      fixture.componentRef.setInput('showCommentEditor', true);
+      fixture.componentRef.setInput('showDrawEditor', 'lg');
+      fixture.componentRef.setInput('showHighlightEditor', true);
+      fixture.componentRef.setInput('showSignatureEditor', 'sm');
+      TestBed.flushEffects();
+
+      expect(component.effectiveShowTextEditor()).toBe(false);
+      expect(component.effectiveShowStampEditor()).toBe(false);
+      expect(component.effectiveShowCommentEditor()).toBe(false);
+      expect(component.effectiveShowDrawEditor()).toBe(false);
+      expect(component.effectiveShowHighlightEditor()).toBe(false);
+      expect(component.effectiveShowSignatureEditor()).toBe(false);
+    });
+  });
+
+  describe('disableEditorButtons group attribute (#2818)', () => {
+    it('should default to false', () => {
+      expect(component.disableEditorButtons()).toBe(false);
+    });
+
+    it('should accept true', () => {
+      fixture.componentRef.setInput('disableEditorButtons', true);
+      TestBed.flushEffects();
+      expect(component.disableEditorButtons()).toBe(true);
+    });
+
+    it('should default individual disable inputs to false', () => {
+      expect(component.disableTextEditor()).toBe(false);
+      expect(component.disableStampEditor()).toBe(false);
+      expect(component.disableCommentEditor()).toBe(false);
+      expect(component.disableDrawEditor()).toBe(false);
+      expect(component.disableHighlightEditor()).toBe(false);
+      expect(component.disableSignatureEditor()).toBe(false);
+    });
+
+    it('should accept individual disable inputs', () => {
+      fixture.componentRef.setInput('disableTextEditor', true);
+      fixture.componentRef.setInput('disableDrawEditor', true);
+      TestBed.flushEffects();
+      expect(component.disableTextEditor()).toBe(true);
+      expect(component.disableDrawEditor()).toBe(true);
+      expect(component.disableStampEditor()).toBe(false);
+    });
+  });
+
+  describe('disable toolbar button inputs (#2818)', () => {
+    it('should default all disable inputs to false', () => {
+      expect(component.disableSidebarButton()).toBe(false);
+      expect(component.disableFindButton()).toBe(false);
+      expect(component.disablePagingButtons()).toBe(false);
+      expect(component.disableFirstAndLastPageButtons()).toBe(false);
+      expect(component.disablePreviousAndNextPageButtons()).toBe(false);
+      expect(component.disablePageNumber()).toBe(false);
+      expect(component.disableZoomButtons()).toBe(false);
+      expect(component.disableZoomDropdown()).toBe(false);
+      expect(component.disablePresentationModeButton()).toBe(false);
+      expect(component.disableOpenFileButton()).toBe(false);
+      expect(component.disablePrintButton()).toBe(false);
+      expect(component.disableDownloadButton()).toBe(false);
+      expect(component.disableSecondaryToolbarButton()).toBe(false);
+    });
+
+    it('should accept true for disable inputs', () => {
+      fixture.componentRef.setInput('disablePrintButton', true);
+      fixture.componentRef.setInput('disableZoomDropdown', true);
+      fixture.componentRef.setInput('disablePagingButtons', true);
+      TestBed.flushEffects();
+      expect(component.disablePrintButton()).toBe(true);
+      expect(component.disableZoomDropdown()).toBe(true);
+      expect(component.disablePagingButtons()).toBe(true);
+    });
+  });
+
   describe('formSupport null guard (#3131)', () => {
     it('should not throw when formSupport is undefined during annotationlayerrendered', () => {
       const mockPDFViewerApp = {

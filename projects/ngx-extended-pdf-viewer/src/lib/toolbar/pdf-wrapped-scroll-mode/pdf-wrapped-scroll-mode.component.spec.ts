@@ -176,6 +176,55 @@ describe('PdfWrappedScrollModeComponent', () => {
     });
   });
 
+  describe('onClick', () => {
+    it('should dispatch switchscrollmode with WRAPPED mode', async () => {
+      initPdfViewer();
+
+      component.onClick!();
+      await new Promise<void>(r => queueMicrotask(r));
+
+      expect(eventBus.dispatch).toHaveBeenCalledWith('switchscrollmode', { mode: 2 });
+    });
+
+    it('should not throw when PDFViewerApplication is undefined', async () => {
+      expect(() => component.onClick!()).not.toThrow();
+      await new Promise<void>(r => queueMicrotask(r));
+    });
+
+    it('should set pageViewMode to "multiple" when current mode is "book"', async () => {
+      initPdfViewer();
+      fixture.componentRef.setInput('pageViewMode', 'book');
+      TestBed.flushEffects();
+
+      component.onClick!();
+      await new Promise<void>(r => queueMicrotask(r));
+
+      expect(component.pageViewMode()).toBe('multiple');
+    });
+
+    it('should keep pageViewMode as "multiple" when already "multiple"', async () => {
+      initPdfViewer();
+      fixture.componentRef.setInput('pageViewMode', 'multiple');
+      TestBed.flushEffects();
+
+      component.onClick!();
+      await new Promise<void>(r => queueMicrotask(r));
+
+      expect(component.pageViewMode()).toBe('multiple');
+    });
+
+    it('should keep pageViewMode as "infinite-scroll" when already "infinite-scroll"', async () => {
+      initPdfViewer();
+      fixture.componentRef.setInput('pageViewMode', 'infinite-scroll');
+      TestBed.flushEffects();
+
+      component.onClick!();
+      await new Promise<void>(r => queueMicrotask(r));
+
+      expect(component.pageViewMode()).toBe('infinite-scroll');
+    });
+  });
+
   describe('edge cases', () => {
     it('should handle PDF viewer application being undefined', () => {
       pdfAppSignal.set(undefined);

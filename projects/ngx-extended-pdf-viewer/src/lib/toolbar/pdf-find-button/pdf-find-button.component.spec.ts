@@ -72,4 +72,30 @@ describe('PdfFindButtonComponent', () => {
     // Assert that the open function is not called
     expect(mockPDFViewerApplication.findBar.open).not.toHaveBeenCalled();
   });
+
+  describe('disable input (#2818)', () => {
+    it('should default disable to false', () => {
+      expect(component.disable()).toBe(false);
+    });
+
+    it('should accept disable input set to true', () => {
+      fixture.componentRef.setInput('disable', true);
+      TestBed.flushEffects();
+      expect(component.disable()).toBe(true);
+    });
+
+    it('should pass disabled to pdf-shy-button when disable is true', () => {
+      fixture.componentRef.setInput('disable', true);
+      fixture.detectChanges();
+      const shyButton = fixture.debugElement.children[0].componentInstance;
+      expect(shyButton.disabled()).toBe(true);
+    });
+
+    it('should pass disabled=false to pdf-shy-button when disable is false', () => {
+      fixture.componentRef.setInput('disable', false);
+      fixture.detectChanges();
+      const shyButton = fixture.debugElement.children[0].componentInstance;
+      expect(shyButton.disabled()).toBe(false);
+    });
+  });
 });

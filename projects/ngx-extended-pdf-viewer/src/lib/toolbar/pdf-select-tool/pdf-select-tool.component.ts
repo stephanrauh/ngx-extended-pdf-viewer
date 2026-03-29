@@ -14,6 +14,10 @@ import { PdfCursorTools } from './../../options/pdf-cursor-tools';
 export class PdfSelectToolComponent implements OnDestroy {
   public showSelectToolButton = input<ResponsiveVisibility>(true);
 
+  // #2818 modified by ngx-extended-pdf-viewer
+  public disable = input<boolean>(false);
+  // #2818 end of modification by ngx-extended-pdf-viewer
+
   public isSelected = true;
 
   public handTool = input(false);

@@ -19,99 +19,122 @@
 <ng-template #defaultToolbar>
   <div id="toolbarViewer">
     <div id="toolbarViewerLeft">
+      <!-- #2818 modified by ngx-extended-pdf-viewer -->
       <pdf-toggle-sidebar
         [show]="showSidebarButton()"
         [sidebarVisible]="sidebarVisible()"
+        [disable]="disableSidebarButton()"
       ></pdf-toggle-sidebar>
       <pdf-find-button
         [showFindButton]="showFindButton()"
         [textLayer]="textLayer()"
         [findbarVisible]="findbarVisible()"
         [hasTextLayer]="hasTextLayer()"
+        [disable]="disableFindButton()"
       ></pdf-find-button>
       <pdf-paging-area
         [showPagingButtons]="showPagingButtons()"
         [showFirstAndLastPageButtons]="showFirstAndLastPageButtons()"
         [showPreviousAndNextPageButtons]="showPreviousAndNextPageButtons()"
         [showPageNumber]="showPageNumber()"
+        [disablePageNumber]="disablePageNumber()"
         [showPageLabel]="showPageLabel()"
+        [disablePagingButtons]="disablePagingButtons()"
+        [disableFirstAndLastPageButtons]="disableFirstAndLastPageButtons()"
+        [disablePreviousAndNextPageButtons]="disablePreviousAndNextPageButtons()"
       ></pdf-paging-area>
+      <!-- #2818 end of modification by ngx-extended-pdf-viewer -->
     </div>
+    <!-- #2818 modified by ngx-extended-pdf-viewer -->
     <pdf-zoom-toolbar
       id="toolbarViewerMiddleContainer"
       [showZoomButtons]="showZoomButtons()"
       [showZoomDropdown]="showZoomDropdown()"
+      [disableZoomDropdown]="disableZoomDropdown()"
       [zoomLevels]="zoomLevels()"
+      [disableZoomButtons]="disableZoomButtons()"
     ></pdf-zoom-toolbar>
+    <!-- #2818 end of modification by ngx-extended-pdf-viewer -->
     <div id="toolbarViewerRight">
-      <pdf-document-properties [show]="showPropertiesButton()"></pdf-document-properties>
+      <!-- #2818 modified by ngx-extended-pdf-viewer -->
+      <pdf-document-properties [show]="showPropertiesButton()" [disable]="disablePropertiesButton()"></pdf-document-properties>
       <pdf-no-spread
         [scrollMode]="scrollMode()"
         [show]="showSpreadButton()"
+        [disable]="disableSpreadButton()"
       ></pdf-no-spread>
       <pdf-odd-spread
         [scrollMode]="scrollMode()"
         [show]="showSpreadButton()"
+        [disable]="disableSpreadButton()"
       ></pdf-odd-spread>
       <pdf-even-spread
         [scrollMode]="scrollMode()"
         [show]="showSpreadButton()"
+        [disable]="disableSpreadButton()"
       ></pdf-even-spread>
       <pdf-single-page-mode
         [show]="showSinglePageModeButton()"
         [pageViewMode]="pageViewMode()"
         (pageViewModeChange)="updatePageViewMode($event)"
         [scrollMode]="scrollMode()"
+        [disable]="disableSinglePageModeButton()"
       ></pdf-single-page-mode>
       <pdf-vertical-scroll-mode
         [show]="showVerticalScrollButton()"
         [pageViewMode]="pageViewMode()"
         (pageViewModeChange)="updatePageViewMode($event)"
         [scrollMode]="scrollMode()"
+        [disable]="disableVerticalScrollButton()"
       ></pdf-vertical-scroll-mode>
       <pdf-horizontal-scroll
         [show]="showHorizontalScrollButton()"
         [pageViewMode]="pageViewMode()"
         (pageViewModeChange)="updatePageViewMode($event)"
         [scrollMode]="scrollMode()"
+        [disable]="disableHorizontalScrollButton()"
       ></pdf-horizontal-scroll>
       <pdf-wrapped-scroll-mode
         [show]="showWrappedScrollButton()"
         [pageViewMode]="pageViewMode()"
         (pageViewModeChange)="updatePageViewMode($event)"
         [scrollMode]="scrollMode()"
+        [disable]="disableWrappedScrollButton()"
       ></pdf-wrapped-scroll-mode>
       <pdf-infinite-scroll
         [show]="showInfiniteScrollButton()"
         [pageViewMode]="pageViewMode()"
         (pageViewModeChange)="updatePageViewMode($event)"
         [scrollMode]="scrollMode()"
+        [disable]="disableInfiniteScrollButton()"
       ></pdf-infinite-scroll>
       <pdf-book-mode
         [show]="showBookModeButton()"
         [pageViewMode]="pageViewMode()"
         (pageViewModeChange)="updatePageViewMode($event)"
         [scrollMode]="scrollMode()"
+        [disable]="disableBookModeButton()"
       ></pdf-book-mode>
       <pdf-hand-tool
         [showHandToolButton]="showHandToolButton()"
         [handTool]="handTool()"
+        [disable]="disableHandToolButton()"
       ></pdf-hand-tool>
       <pdf-select-tool
         [showSelectToolButton]="showHandToolButton()"
         [handTool]="handTool()"
+        [disable]="disableHandToolButton()"
       ></pdf-select-tool>
-      <pdf-rotate-page-cw [showRotateCwButton]="showRotateCwButton()"> </pdf-rotate-page-cw>
-      <pdf-rotate-page-ccw [showRotateCcwButton]="showRotateCcwButton()"> </pdf-rotate-page-ccw>
-      <pdf-presentation-mode [showPresentationModeButton]="showPresentationModeButton()"></pdf-presentation-mode>
-      <pdf-open-file [showOpenFileButton]="showOpenFileButton()"></pdf-open-file>
-      <pdf-print [showPrintButton]="showPrintButton()"></pdf-print>
-      <pdf-download [showDownloadButton]="showDownloadButton()"></pdf-download>
+      <pdf-rotate-page-cw [showRotateCwButton]="showRotateCwButton()" [disable]="disableRotateCwButton()"> </pdf-rotate-page-cw>
+      <pdf-rotate-page-ccw [showRotateCcwButton]="showRotateCcwButton()" [disable]="disableRotateCcwButton()"> </pdf-rotate-page-ccw>
+      <pdf-presentation-mode [showPresentationModeButton]="showPresentationModeButton()" [disable]="disablePresentationModeButton()"></pdf-presentation-mode>
+      <pdf-open-file [showOpenFileButton]="showOpenFileButton()" [disable]="disableOpenFileButton()"></pdf-open-file>
+      <pdf-print [showPrintButton]="showPrintButton()" [disable]="disablePrintButton()"></pdf-print>
+      <pdf-download [showDownloadButton]="showDownloadButton()" [disable]="disableDownloadButton()"></pdf-download>
 
       <!-- #2943 modified by ngx-extended-pdf-viewer -->
-      <pdf-move-down [showMoveDownButton]="showMovePageButton()"></pdf-move-down>
-      <pdf-move-up [showMoveUpButton]="showMovePageButton()"></pdf-move-up>
-
+      <pdf-move-down [showMoveDownButton]="showMovePageButton()" [disable]="disableMovePageButton()"></pdf-move-down>
+      <pdf-move-up [showMoveUpButton]="showMovePageButton()" [disable]="disableMovePageButton()"></pdf-move-up>
       <!-- #2943 end of modification by ngx-extended-pdf-viewer -->
 
       <pdf-editor
@@ -121,8 +144,15 @@
         [showTextEditor]="showTextEditor()"
         [showStampEditor]="showStampEditor()"
         [showSignatureEditor]="showSignatureEditor()"
+        [disableCommentEditor]="disableCommentEditor()"
+        [disableDrawEditor]="disableDrawEditor()"
+        [disableHighlightEditor]="disableHighlightEditor()"
+        [disableTextEditor]="disableTextEditor()"
+        [disableStampEditor]="disableStampEditor()"
+        [disableSignatureEditor]="disableSignatureEditor()"
       ></pdf-editor>
-      <pdf-toggle-secondary-toolbar [showSecondaryToolbarButton]="showSecondaryToolbarButton()"> </pdf-toggle-secondary-toolbar>
+      <pdf-toggle-secondary-toolbar [showSecondaryToolbarButton]="showSecondaryToolbarButton()" [disable]="disableSecondaryToolbarButton()"> </pdf-toggle-secondary-toolbar>
+      <!-- #2818 end of modification by ngx-extended-pdf-viewer -->
     </div>
   </div>
 </ng-template>

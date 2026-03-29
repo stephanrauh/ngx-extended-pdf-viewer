@@ -16,6 +16,9 @@ interface ZoomLevel {
 })
 export class PdfZoomDropdownComponent {
   public showZoomDropdown = input<ResponsiveVisibility>(true);
+  // #2818 modified by ngx-extended-pdf-viewer
+  public disableZoomDropdown = input<boolean>(false);
+  // #2818 end of modification by ngx-extended-pdf-viewer
 
   public zoomLevels = input<Array<string | number>>([]);
 

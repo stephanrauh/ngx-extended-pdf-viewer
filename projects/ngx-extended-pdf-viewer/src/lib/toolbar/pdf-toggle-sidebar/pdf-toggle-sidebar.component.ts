@@ -12,6 +12,10 @@ import { ResponsiveVisibility } from '../../responsive-visibility';
 export class PdfToggleSidebarComponent implements OnDestroy {
   public show = input<ResponsiveVisibility>(true);
 
+  // #2818 modified by ngx-extended-pdf-viewer
+  public disable = input<boolean>(false);
+  // #2818 end of modification by ngx-extended-pdf-viewer
+
   public sidebarVisible = input<boolean | undefined>(false);
 
   public showChange = output<boolean>();

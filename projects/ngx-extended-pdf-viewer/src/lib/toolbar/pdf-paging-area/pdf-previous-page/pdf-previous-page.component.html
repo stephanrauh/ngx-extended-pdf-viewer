@@ -5,7 +5,7 @@
   secondaryMenuId="secondaryPreviousPage"
   l10nId="pdfjs-previous-button"
   l10nLabel="pdfjs-previous-button-label"
-  [disabled]="disablePreviousPage"
+  [disabled]="disablePreviousPage || disable()"
   [order]="600"
   eventBusName="previouspage"
   [closeOnClick]="false"

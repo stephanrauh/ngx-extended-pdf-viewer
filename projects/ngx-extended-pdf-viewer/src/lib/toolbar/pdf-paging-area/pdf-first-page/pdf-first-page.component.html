@@ -4,7 +4,7 @@
   primaryToolbarId="primaryFirstPage"
   l10nId="pdfjs-first-page-button"
   (click)="firstPage()"
-  [disabled]="disableFirstPage"
+  [disabled]="disableFirstPage || disable()"
   l10nLabel="pdfjs-first-page-button-label"
   [order]="500"
   eventBusName="firstpage"

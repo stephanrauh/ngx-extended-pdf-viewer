@@ -30,7 +30,7 @@ class MockResponsiveCSSClassPipe implements PipeTransform {
 @Component({
     selector: 'pdf-shy-button',
     template: '<ng-content></ng-content>',
-    inputs: ['title', 'primaryToolbarId', 'cssClass', 'l10nId', 'l10nLabel', 'order', 'action', 'toggled', 'closeOnClick', 'image'],
+    inputs: ['title', 'primaryToolbarId', 'cssClass', 'l10nId', 'l10nLabel', 'order', 'action', 'toggled', 'closeOnClick', 'image', 'disabled'],
     standalone: false
 })
 class MockPdfShyButtonComponent {
@@ -44,6 +44,7 @@ class MockPdfShyButtonComponent {
   toggled: any;
   closeOnClick: any;
   image: any;
+  disabled: any;
 }
 
 describe('PdfEditorSignatureComponent', () => {
@@ -198,6 +199,33 @@ describe('PdfEditorSignatureComponent', () => {
         'switchannotationeditormode',
         expect.objectContaining({ mode: AnnotationEditorType.NONE })
       );
+    });
+  });
+
+  describe('disable input (#2818)', () => {
+    it('should default disable to false', () => {
+      expect(component.disable()).toBe(false);
+    });
+
+    it('should accept disable input set to true', () => {
+      fixture.componentRef.setInput('disable', true);
+      TestBed.flushEffects();
+      expect(component.disable()).toBe(true);
+    });
+
+    it('should pass disabled to the template when disable is true', () => {
+      fixture.componentRef.setInput('disable', true);
+      fixture.detectChanges();
+      // The template binds [disabled]="disable()" on pdf-shy-button
+      const shyButton = fixture.debugElement.children[0].componentInstance;
+      expect(shyButton.disabled).toBe(true);
+    });
+
+    it('should pass disabled=false when disable is false', () => {
+      fixture.componentRef.setInput('disable', false);
+      fixture.detectChanges();
+      const shyButton = fixture.debugElement.children[0].componentInstance;
+      expect(shyButton.disabled).toBe(false);
     });
   });
 });

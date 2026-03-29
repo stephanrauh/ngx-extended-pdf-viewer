@@ -9,4 +9,8 @@ import { ResponsiveVisibility } from '../../responsive-visibility';
 })
 export class PdfPrintComponent {
   public showPrintButton = input<ResponsiveVisibility>(true);
+
+  // #2818 modified by ngx-extended-pdf-viewer
+  public disable = input<boolean>(false);
+  // #2818 end of modification by ngx-extended-pdf-viewer
 }

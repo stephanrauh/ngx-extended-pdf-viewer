@@ -1,13 +1,16 @@
+<!-- #2818 modified by ngx-extended-pdf-viewer -->
 <div [class]="showPagingButtons() | responsiveCSSClass : 'hiddenXXSView'" class="paging-left">
-  <pdf-first-page class="margin-right-correct" [show]="showFirstAndLastPageButtons()"></pdf-first-page>
-  <pdf-previous-page class="margin-left-correct" [show]="showPreviousAndNextPageButtons()"></pdf-previous-page>
+  <pdf-first-page class="margin-right-correct" [show]="showFirstAndLastPageButtons()" [disable]="disablePagingButtons() || disableFirstAndLastPageButtons()"></pdf-first-page>
+  <pdf-previous-page class="margin-left-correct" [show]="showPreviousAndNextPageButtons()" [disable]="disablePagingButtons() || disablePreviousAndNextPageButtons()"></pdf-previous-page>
 </div>
 <pdf-page-number
   [class]="showPagingButtons() | responsiveCSSClass : 'hiddenXXSView'"
   [showPageNumber]="showPageNumber()"
+  [disablePageNumber]="disablePageNumber()"
   [showPageLabel]="showPageLabel()"
 ></pdf-page-number>
 <div [class]="showPagingButtons() | responsiveCSSClass : 'hiddenXXSView'" class="paging-right">
-  <pdf-next-page class="margin-right-correct margin-left-correct" [show]="showPreviousAndNextPageButtons()"></pdf-next-page>
-  <pdf-last-page class="margin-left-correct" [show]="showFirstAndLastPageButtons()"></pdf-last-page>
+  <pdf-next-page class="margin-right-correct margin-left-correct" [show]="showPreviousAndNextPageButtons()" [disable]="disablePagingButtons() || disablePreviousAndNextPageButtons()"></pdf-next-page>
+  <pdf-last-page class="margin-left-correct" [show]="showFirstAndLastPageButtons()" [disable]="disablePagingButtons() || disableFirstAndLastPageButtons()"></pdf-last-page>
 </div>
+<!-- #2818 end of modification by ngx-extended-pdf-viewer -->

@@ -5,7 +5,7 @@
   l10nId="pdfjs-last-page-button"
   l10nLabel="pdfjs-last-page-button-label"
   (click)="lastPage()"
-  [disabled]="disableLastPage"
+  [disabled]="disableLastPage || disable()"
   [order]="800"
   eventBusName="lastpage"
   [closeOnClick]="false"

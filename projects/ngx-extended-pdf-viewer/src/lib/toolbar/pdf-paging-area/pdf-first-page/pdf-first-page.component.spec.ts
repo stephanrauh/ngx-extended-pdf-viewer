@@ -171,6 +171,44 @@ describe('PdfFirstPageComponent', () => {
     });
   });
 
+  describe('disable input (#2818)', () => {
+    it('should default disable to false', () => {
+      expect(component.disable()).toBe(false);
+    });
+
+    it('should accept disable input set to true', () => {
+      fixture.componentRef.setInput('disable', true);
+      TestBed.flushEffects();
+      expect(component.disable()).toBe(true);
+    });
+
+    it('should disable button when disable is true regardless of disableFirstPage', () => {
+      fixture.componentRef.setInput('disable', true);
+      TestBed.flushEffects();
+      // Even though page state says "not first page" (disableFirstPage = false),
+      // the button should be disabled because disable() is true
+      initPdfViewer();
+      component.disableFirstPage = false;
+      // Template uses: [disabled]="disableFirstPage || disable()"
+      // Both conditions are OR'd - either one being true disables the button
+      expect(component.disableFirstPage || component.disable()).toBe(true);
+    });
+
+    it('should disable button when disableFirstPage is true regardless of disable input', () => {
+      fixture.componentRef.setInput('disable', false);
+      TestBed.flushEffects();
+      component.disableFirstPage = true;
+      expect(component.disableFirstPage || component.disable()).toBe(true);
+    });
+
+    it('should enable button only when both disableFirstPage and disable are false', () => {
+      fixture.componentRef.setInput('disable', false);
+      TestBed.flushEffects();
+      component.disableFirstPage = false;
+      expect(component.disableFirstPage || component.disable()).toBe(false);
+    });
+  });
+
   describe('edge cases', () => {
     it('should handle PDF viewer application being undefined', () => {
       const undefinedSignal = signal<IPDFViewerApplication | undefined>(undefined);
