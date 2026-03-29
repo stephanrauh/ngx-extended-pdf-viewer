@@ -173,12 +173,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   public formData = input<FormDataType | undefined>(undefined);
 
   // @ts-ignore TS6133 - Used for side effects only
-  // @ts-ignore TS6133 - Used for side effects only
   private _formDataEffect = effect(() => {
     const data = this.formData();
     if (data !== undefined) {
+      const previousFormData = { ...this.formSupport.formData };
       this.initialAngularFormData ??= data;
       this.formSupport.formData = data;
+      this.formSupport.updateFormFieldsInPdfCalledByNgOnChanges(previousFormData);
     }
   });
 
