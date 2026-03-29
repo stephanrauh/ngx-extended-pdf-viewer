@@ -1123,6 +1123,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     requestAnimationFrame(() => {
       this.calcViewerPositionTop();
 
+      // #2675 Recalculate responsive breakpoints so the toolbar buttons
+      // show/hide correctly for the new effective viewport width.
+      this.dynamicCSSComponent()?.updateToolbarWidth();
+
       // Reposition any open popups (findbar, secondary toolbar, editor toolbars)
       // so they move to the correct position after the zoom change.
       const positioningService = new PositioningService();
