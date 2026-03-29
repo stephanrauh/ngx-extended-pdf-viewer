@@ -81,6 +81,7 @@ export type HighlightEditorAnnotation = {
   color: Array<number>; // an array of three integer numbers
   opacity: number;
   thickness: number;
+  boxes?: Array<{ x: number; y: number; width: number; height: number }>; // page-relative coords (0-1 range)
   quadPoints?: any; // Object with numeric keys containing text bounds
   outlines?: Array<Array<number>>; // Array of coordinate arrays for highlight shapes
   pageIndex: number;
