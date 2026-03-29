@@ -643,22 +643,22 @@ describe('NgxExtendedPdfViewerService', () => {
 
     it('should dispatch editorHighlightDefaultColor', () => {
       service.editorHighlightDefaultColor = '#0000ff';
-      expect(mockPDFViewerApplication.eventBus.dispatch).toHaveBeenCalledWith('switchannotationeditorparams', { type: 32, value: '#0000ff' });
+      expect(mockPDFViewerApplication.eventBus.dispatch).toHaveBeenCalledWith('switchannotationeditorparams', { type: 35, value: '#0000ff' });
     });
 
     it('should dispatch editorHighlightShowAll', () => {
       service.editorHighlightShowAll = true;
-      expect(mockPDFViewerApplication.eventBus.dispatch).toHaveBeenCalledWith('switchannotationeditorparams', { type: 35, value: true });
+      expect(mockPDFViewerApplication.eventBus.dispatch).toHaveBeenCalledWith('switchannotationeditorparams', { type: 34, value: true });
     });
 
     it('should dispatch editorHighlightShowAll with false', () => {
       service.editorHighlightShowAll = false;
-      expect(mockPDFViewerApplication.eventBus.dispatch).toHaveBeenCalledWith('switchannotationeditorparams', { type: 35, value: false });
+      expect(mockPDFViewerApplication.eventBus.dispatch).toHaveBeenCalledWith('switchannotationeditorparams', { type: 34, value: false });
     });
 
     it('should dispatch editorHighlightThickness', () => {
       service.editorHighlightThickness = 8;
-      expect(mockPDFViewerApplication.eventBus.dispatch).toHaveBeenCalledWith('switchannotationeditorparams', { type: 33, value: 8 });
+      expect(mockPDFViewerApplication.eventBus.dispatch).toHaveBeenCalledWith('switchannotationeditorparams', { type: 32, value: 8 });
     });
 
     it('should not throw when PDFViewerApplication is undefined', () => {
