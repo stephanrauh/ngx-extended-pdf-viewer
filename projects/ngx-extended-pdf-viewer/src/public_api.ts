@@ -140,3 +140,6 @@ export * from './lib/toolbar/pdf-zoom-toolbar/pdf-zoom-dropdown/pdf-zoom-dropdow
 export * from './lib/toolbar/pdf-zoom-toolbar/pdf-zoom-in/pdf-zoom-in.component';
 export * from './lib/toolbar/pdf-zoom-toolbar/pdf-zoom-out/pdf-zoom-out.component';
 export * from './lib/toolbar/pdf-zoom-toolbar/pdf-zoom-toolbar.component';
+export * from './lib/utils/blob-conversion';
+export * from './lib/utils/print-range';
+export * from './lib/utils/text-conversion';

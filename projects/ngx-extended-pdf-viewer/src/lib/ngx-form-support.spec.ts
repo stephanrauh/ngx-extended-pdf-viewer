@@ -51,9 +51,10 @@ describe('NgxFormSupport', () => {
       expect(formSupport.initialFormDataStoredInThePDF).toEqual({});
     });
 
-    it.skip('should have formDataChange event emitter', () => {
-      // Skip: Mock EventEmitter is not recognized as instanceof EventEmitter - incorrect test expectation
-      expect(formSupport.formDataChange).toBeInstanceOf(EventEmitter);
+    it('should have formDataChange event emitter', () => {
+      // The formDataChange is replaced by a mock in beforeEach, so test a fresh instance
+      const freshFormSupport = new NgxFormSupport();
+      expect(freshFormSupport.formDataChange).toBeInstanceOf(EventEmitter);
     });
   });
 
@@ -108,13 +109,11 @@ describe('NgxFormSupport', () => {
       expect(formSupport.initialFormDataStoredInThePDF['testField']).toBe('initial value from PDF');
     });
 
-    it.skip('should register a radio button field', () => {
-      // Skip: Radio button field registration logic expects 'option1' as value but receives boolean 'true' - incorrect test setup or implementation logic mismatch
-      const radioElement = {
-        setAttribute: jest.fn(),
-        name: 'radioGroup',
-        type: 'radio'
-      } as unknown as jest.Mocked<HTMLInputElement>;
+    it('should register a radio button field', () => {
+      const radioElement = document.createElement('input');
+      radioElement.type = 'radio';
+      radioElement.name = 'radioGroup';
+      jest.spyOn(radioElement, 'setAttribute');
 
       (formSupport as any).registerAcroformField(
         'radio1',
@@ -289,13 +288,13 @@ describe('NgxFormSupport', () => {
       expect(result).toBe(true);
     });
 
-    it.skip('should handle checkbox field with export value', () => {
-      // Skip: Checkbox field logic expects export value but receives string 'true' - incorrect implementation logic for checkbox handling
-      mockField.type = 'checkbox';
-      mockField.getAttribute.mockReturnValue('exportValue123');
+    it('should handle checkbox field with export value', () => {
+      const checkboxField = document.createElement('input');
+      checkboxField.type = 'checkbox';
+      checkboxField.setAttribute('exportvalue', 'exportValue123');
 
       const result = (formSupport as any).doUpdateAngularFormValue(
-        mockField,
+        checkboxField,
         { value: 'true' },
         'checkboxField'
       );
@@ -304,13 +303,13 @@ describe('NgxFormSupport', () => {
       expect(result).toBe(true);
     });
 
-    it.skip('should handle unchecked checkbox', () => {
-      // Skip: Unchecked checkbox logic expects boolean false but receives empty string - incorrect implementation logic for unchecked checkbox handling
-      mockField.type = 'checkbox';
-      mockField.getAttribute.mockReturnValue('exportValue123');
+    it('should handle unchecked checkbox', () => {
+      const checkboxField = document.createElement('input');
+      checkboxField.type = 'checkbox';
+      checkboxField.setAttribute('exportvalue', 'exportValue123');
 
       const result = (formSupport as any).doUpdateAngularFormValue(
-        mockField,
+        checkboxField,
         { value: '' },
         'checkboxField'
       );
@@ -319,13 +318,13 @@ describe('NgxFormSupport', () => {
       expect(result).toBe(true);
     });
 
-    it.skip('should handle radio button selection', () => {
-      // Skip: Radio button selection logic expects radio option value but receives string 'true' - incorrect implementation logic for radio button handling
-      mockField.type = 'radio';
-      mockField.getAttribute.mockReturnValue('radioOption1');
+    it('should handle radio button selection', () => {
+      const radioField = document.createElement('input');
+      radioField.type = 'radio';
+      radioField.setAttribute('exportvalue', 'radioOption1');
 
       const result = (formSupport as any).doUpdateAngularFormValue(
-        mockField,
+        radioField,
         { value: 'true' },
         'radioGroup'
       );
@@ -416,18 +415,25 @@ describe('NgxFormSupport', () => {
       expect(result).toBe('foundXfaName');
     });
 
-    it.skip('should build full XFA name path', () => {
-      // Skip: XFA name path building throws "Couldn't find the xfaname of the field" error - incorrect test setup missing proper DOM structure
-      const grandParent = { getAttribute: jest.fn(), parentElement: null };
-      const parent = { getAttribute: jest.fn(), parentElement: grandParent };
-      const element = { getAttribute: jest.fn(), parentElement: parent };
+    it('should build full XFA name path', () => {
+      // Use real DOM elements since findFullXFAName checks instanceof HTMLElement
+      // Attach to document.body so that grandParent has a parentElement (body)
+      const grandParent = document.createElement('div');
+      grandParent.setAttribute('xfaname', 'root');
+      const parent = document.createElement('div');
+      parent.setAttribute('xfaname', 'parent');
+      const element = document.createElement('div');
+      element.setAttribute('xfaname', 'field');
 
-      grandParent.getAttribute.mockImplementation((attr: string) => attr === 'xfaname' ? 'root' : null);
-      parent.getAttribute.mockImplementation((attr: string) => attr === 'xfaname' ? 'parent' : null);
-      element.getAttribute.mockImplementation((attr: string) => attr === 'xfaname' ? 'field' : null);
+      document.body.appendChild(grandParent);
+      grandParent.appendChild(parent);
+      parent.appendChild(element);
 
       const result = (formSupport as any).findFullXFAName(element);
       expect(result).toBe('root.parent.field');
+
+      // Clean up
+      document.body.removeChild(grandParent);
     });
   });
 

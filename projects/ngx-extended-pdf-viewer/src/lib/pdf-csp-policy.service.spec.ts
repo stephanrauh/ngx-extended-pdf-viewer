@@ -1,501 +1,328 @@
-import { TestBed } from '@angular/core/testing';
-import { CSP_NONCE } from '@angular/core';
 import { PdfCspPolicyService } from './pdf-csp-policy.service';
 
-// Mock trusted types
-interface MockTrustedTypePolicy {
-  createHTML: (input: string) => string;
-  createScriptURL: (input: string) => string;
-}
-
-interface MockTrustedTypes {
-  createPolicy: (name: string, config: any) => MockTrustedTypePolicy;
-}
-
-interface MockWindow extends Window {
-  trustedTypes?: MockTrustedTypes;
-}
+// Note: SSR guards (typeof window === 'undefined') cannot be tested in jsdom
+// because window is always defined. Those branches are covered by manual/e2e SSR testing.
 
 describe('PdfCspPolicyService', () => {
   let service: PdfCspPolicyService;
-  let mockWindow: MockWindow;
-  let originalWindow: any;
-  let mockTrustedTypes: MockTrustedTypes;
-  let mockPolicy: MockTrustedTypePolicy;
+  let originalTrustedTypes: any;
 
   beforeEach(() => {
-    // Store original window
-    originalWindow = (global as any).window;
-
-    // Create mock trusted types
-    mockPolicy = {
-      createHTML: jest.fn((input: string) => `trusted-${input}`),
-      createScriptURL: jest.fn((input: string) => `trusted-script-${input}`)
-    };
-
-    mockTrustedTypes = {
-      createPolicy: jest.fn((_name: string, _config: any) => mockPolicy)
-    };
-
-    // Setup mock window
-    mockWindow = {
-      trustedTypes: mockTrustedTypes
-    } as MockWindow;
-
-    // Set global window
-    (global as any).window = mockWindow;
-    (global as any).globalThis = mockWindow;
-
-    TestBed.configureTestingModule({
-      providers: [
-        { provide: CSP_NONCE, useValue: 'test-nonce-12345' }
-      ]
-    });
-    service = TestBed.inject(PdfCspPolicyService);
+    service = new PdfCspPolicyService();
+    originalTrustedTypes = (globalThis as any).trustedTypes;
   });
 
   afterEach(() => {
-    // Restore original window
-    (global as any).window = originalWindow;
-    (global as any).globalThis = originalWindow;
-    
-    // Reset service state
-    (service as any).sanitizer = undefined;
+    if (originalTrustedTypes === undefined) {
+      delete (globalThis as any).trustedTypes;
+    } else {
+      (globalThis as any).trustedTypes = originalTrustedTypes;
+    }
   });
 
-  describe('service initialization', () => {
-    it.skip('should be created', () => {
-      // Skip: Jest expect matcher not available in Angular testing context - TypeError: Cannot read properties of undefined (reading 'matchers')
+  describe('service creation', () => {
+    it('should be created', () => {
       expect(service).toBeTruthy();
     });
 
-    it.skip('should be provided in root', () => {
-      // Skip: Jest expect matcher not available in Angular testing context - TypeError: Cannot read properties of undefined (reading 'matchers')
-      expect(service).toBeDefined();
-    });
-
-    it.skip('should inject CSP_NONCE correctly', () => {
-      // Skip: Jest expect matcher not available in Angular testing context - TypeError: Cannot read properties of undefined (reading 'matchers')
-      expect((service as any).csp_nonce).toBe('test-nonce-12345');
+    it('should have sanitizer undefined initially', () => {
+      expect((service as any).sanitizer).toBeUndefined();
     });
   });
 
   describe('init method', () => {
-    it.skip('should initialize with trusted types when available', () => {
-      // Skip: Jest expect matcher not available in Angular testing context - TypeError: Cannot read properties of undefined (reading 'matchers')
+    it('should create policy with name pdf-viewer when trustedTypes is available', () => {
+      const mockPolicy = {
+        createHTML: jest.fn((input: string) => input),
+        createScriptURL: jest.fn((input: string) => input),
+      };
+      const mockCreatePolicy = jest.fn(() => mockPolicy);
+      (globalThis as any).trustedTypes = { createPolicy: mockCreatePolicy };
+
       service.init();
 
-      expect(mockTrustedTypes.createPolicy).toHaveBeenCalledWith('pdf-viewer', {
+      expect(mockCreatePolicy).toHaveBeenCalledWith('pdf-viewer', expect.objectContaining({
         createHTML: expect.any(Function),
-        createScriptURL: expect.any(Function)
-      });
+        createScriptURL: expect.any(Function),
+      }));
       expect((service as any).sanitizer).toBe(mockPolicy);
     });
 
-    it.skip('should not initialize when trusted types are not available', () => {
-      // Skip: Jest expect matcher not available in Angular testing context - TypeError: Cannot read properties of undefined (reading 'matchers')
-      (global as any).globalThis = { trustedTypes: undefined };
-      
+    it('should not create policy when trustedTypes is not available', () => {
+      delete (globalThis as any).trustedTypes;
+
       service.init();
 
       expect((service as any).sanitizer).toBeUndefined();
     });
 
-    it.skip('should not initialize multiple times', () => {
-      // Skip: Jest expect matcher not available in Angular testing context - TypeError: Cannot read properties of undefined (reading 'matchers')
+    it('should be idempotent - calling init twice only creates policy once', () => {
+      const mockPolicy = {
+        createHTML: jest.fn((input: string) => input),
+        createScriptURL: jest.fn((input: string) => input),
+      };
+      const mockCreatePolicy = jest.fn(() => mockPolicy);
+      (globalThis as any).trustedTypes = { createPolicy: mockCreatePolicy };
+
       service.init();
-      const firstSanitizer = (service as any).sanitizer;
-      
-      // Clear the mock call history
-      mockTrustedTypes.createPolicy = jest.fn();
-      
       service.init();
-      
-      expect(mockTrustedTypes.createPolicy).not.toHaveBeenCalled();
-      expect((service as any).sanitizer).toBe(firstSanitizer);
+
+      expect(mockCreatePolicy).toHaveBeenCalledTimes(1);
     });
 
-    it.skip('should handle server-side rendering', () => {
-      // Skip: Jest expect matcher not available in Angular testing context - TypeError: Cannot read properties of undefined (reading 'matchers')
-      (global as any).window = undefined;
-      
-      expect(() => service.init()).not.toThrow();
-      expect((service as any).sanitizer).toBeUndefined();
+    it('should skip initialization if sanitizer is already set', () => {
+      const existingSanitizer = { createHTML: jest.fn(), createScriptURL: jest.fn() };
+      (service as any).sanitizer = existingSanitizer;
+
+      const mockCreatePolicy = jest.fn();
+      (globalThis as any).trustedTypes = { createPolicy: mockCreatePolicy };
+
+      service.init();
+
+      expect(mockCreatePolicy).not.toHaveBeenCalled();
+      expect((service as any).sanitizer).toBe(existingSanitizer);
     });
   });
 
-  describe('addTrustedCSS method', () => {
-    let mockElement: HTMLElement;
+  describe('init policy callbacks', () => {
+    it('createHTML callback should pass through input unchanged', () => {
+      let capturedCreateHTML: ((input: string) => string) | undefined;
+      (globalThis as any).trustedTypes = {
+        createPolicy: jest.fn((_name: string, config: any) => {
+          capturedCreateHTML = config.createHTML;
+          return { createHTML: config.createHTML, createScriptURL: config.createScriptURL };
+        }),
+      };
+
+      service.init();
+
+      expect(capturedCreateHTML!('hello <b>world</b>')).toBe('hello <b>world</b>');
+    });
+
+    it('createScriptURL callback should pass through input unchanged', () => {
+      let capturedCreateScriptURL: ((input: string) => string) | undefined;
+      (globalThis as any).trustedTypes = {
+        createPolicy: jest.fn((_name: string, config: any) => {
+          capturedCreateScriptURL = config.createScriptURL;
+          return { createHTML: config.createHTML, createScriptURL: config.createScriptURL };
+        }),
+      };
+
+      service.init();
+
+      expect(capturedCreateScriptURL!('https://example.com/script.js')).toBe('https://example.com/script.js');
+    });
+  });
+
+  describe('with trustedTypes available', () => {
+    let mockPolicy: any;
 
     beforeEach(() => {
-      mockElement = {
-        textContent: ''
-      } as HTMLElement;
+      mockPolicy = {
+        createHTML: jest.fn((input: string) => `trusted-html-${input}`),
+        createScriptURL: jest.fn((input: string) => `trusted-url-${input}`),
+      };
+      (globalThis as any).trustedTypes = { createPolicy: jest.fn(() => mockPolicy) };
     });
 
-    it.skip('should add trusted CSS when trusted types are available', () => {
-      // Skip: Jest expect matcher not available in Angular testing context - TypeError: Cannot read properties of undefined (reading 'matchers')
-      const testCSS = 'body { color: red; }';
-      
-      service.addTrustedCSS(mockElement, testCSS);
+    describe('addTrustedCSS', () => {
+      it('should set textContent via sanitizer.createHTML', () => {
+        const el = { textContent: '' } as HTMLElement;
+        service.addTrustedCSS(el, 'body { color: red; }');
 
-      expect(mockPolicy.createHTML).toHaveBeenCalledWith(testCSS);
-      expect(mockElement.textContent).toBe('trusted-body { color: red; }');
-    });
-
-    it.skip('should add CSS directly when trusted types are not available', () => {
-      // Skip: Jest expect matcher not available in Angular testing context - TypeError: Cannot read properties of undefined (reading 'matchers')
-      (global as any).globalThis = { trustedTypes: undefined };
-      const testCSS = 'body { color: blue; }';
-      
-      service.addTrustedCSS(mockElement, testCSS);
-
-      expect(mockElement.textContent).toBe(testCSS);
-    });
-
-    it.skip('should handle server-side rendering', () => {
-      // Skip: Jest expect matcher not available in Angular testing context - TypeError: Cannot read properties of undefined (reading 'matchers')
-      (global as any).window = undefined;
-      const testCSS = 'body { color: green; }';
-      
-      expect(() => service.addTrustedCSS(mockElement, testCSS)).not.toThrow();
-      expect(mockElement.textContent).toBe(''); // Should remain unchanged
-    });
-
-    it.skip('should call init() if not already initialized', () => {
-      // Skip: Jest expect matcher not available in Angular testing context - TypeError: Cannot read properties of undefined (reading 'matchers')
-      const initSpy = jest.spyOn(service, 'init');
-      const testCSS = 'body { color: yellow; }';
-      
-      service.addTrustedCSS(mockElement, testCSS);
-
-      expect(initSpy).toHaveBeenCalled();
-    });
-  });
-
-  describe('addTrustedJavaScript method', () => {
-    let mockScript: HTMLScriptElement;
-
-    beforeEach(() => {
-      mockScript = {
-        src: ''
-      } as HTMLScriptElement;
-    });
-
-    it.skip('should add trusted script URL when trusted types are available', () => {
-      // Skip: Jest expect matcher not available in Angular testing context - TypeError: Cannot read properties of undefined (reading 'matchers')
-      const testURL = 'https://example.com/script.js';
-      
-      service.addTrustedJavaScript(mockScript, testURL);
-
-      expect(mockPolicy.createScriptURL).toHaveBeenCalledWith(testURL);
-      expect(mockScript.src).toBe('trusted-script-https://example.com/script.js');
-    });
-
-    it.skip('should add script URL directly when trusted types are not available', () => {
-      // Skip: Jest expect matcher not available in Angular testing context - TypeError: Cannot read properties of undefined (reading 'matchers')
-      (global as any).globalThis = { trustedTypes: undefined };
-      const testURL = 'https://example.com/script2.js';
-      
-      service.addTrustedJavaScript(mockScript, testURL);
-
-      expect(mockScript.src).toBe(testURL);
-    });
-
-    it.skip('should handle server-side rendering', () => {
-      // Skip: Jest expect matcher not available in Angular testing context - TypeError: Cannot read properties of undefined (reading 'matchers')
-      (global as any).window = undefined;
-      const testURL = 'https://example.com/script3.js';
-      
-      expect(() => service.addTrustedJavaScript(mockScript, testURL)).not.toThrow();
-      expect(mockScript.src).toBe(''); // Should remain unchanged
-    });
-
-    it.skip('should call init() if not already initialized', () => {
-      // Skip: Jest expect matcher not available in Angular testing context - TypeError: Cannot read properties of undefined (reading 'matchers')
-      const initSpy = jest.spyOn(service, 'init');
-      const testURL = 'https://example.com/script4.js';
-      
-      service.addTrustedJavaScript(mockScript, testURL);
-
-      expect(initSpy).toHaveBeenCalled();
-    });
-  });
-
-  describe('sanitizeHTML method', () => {
-    it.skip('should sanitize HTML when trusted types are available', () => {
-      // Skip: Jest expect matcher not available in Angular testing context - TypeError: Cannot read properties of undefined (reading 'matchers')
-      const testHTML = '<div>Test content</div>';
-      
-      const result = service.sanitizeHTML(testHTML);
-
-      expect(mockPolicy.createHTML).toHaveBeenCalledWith(testHTML);
-      expect(result).toBe('trusted-<div>Test content</div>');
-    });
-
-    it.skip('should return HTML directly when trusted types are not available', () => {
-      // Skip: Jest expect matcher not available in Angular testing context - TypeError: Cannot read properties of undefined (reading 'matchers')
-      (global as any).globalThis = { trustedTypes: undefined };
-      const testHTML = '<span>Direct content</span>';
-      
-      const result = service.sanitizeHTML(testHTML);
-
-      expect(result).toBe(testHTML);
-    });
-
-    it.skip('should return empty string for server-side rendering', () => {
-      // Skip: Jest expect matcher not available in Angular testing context - TypeError: Cannot read properties of undefined (reading 'matchers')
-      (global as any).window = undefined;
-      const testHTML = '<p>Server content</p>';
-      
-      const result = service.sanitizeHTML(testHTML);
-
-      expect(result).toBe('');
-    });
-
-    it.skip('should call init() if not already initialized', () => {
-      // Skip: Jest expect matcher not available in Angular testing context - TypeError: Cannot read properties of undefined (reading 'matchers')
-      const initSpy = jest.spyOn(service, 'init');
-      const testHTML = '<div>Init test</div>';
-      
-      service.sanitizeHTML(testHTML);
-
-      expect(initSpy).toHaveBeenCalled();
-    });
-  });
-
-  describe('addTrustedHTML method', () => {
-    let mockElement: HTMLElement;
-
-    beforeEach(() => {
-      mockElement = {
-        innerHTML: ''
-      } as HTMLElement;
-    });
-
-    it.skip('should add trusted HTML when trusted types are available', () => {
-      // Skip: Jest expect matcher not available in Angular testing context - TypeError: Cannot read properties of undefined (reading 'matchers')
-      const testHTML = '<p>Trusted content</p>';
-      
-      service.addTrustedHTML(mockElement, testHTML);
-
-      expect(mockPolicy.createHTML).toHaveBeenCalledWith(testHTML);
-      expect(mockElement.innerHTML).toBe('trusted-<p>Trusted content</p>');
-    });
-
-    it.skip('should add HTML directly when trusted types are not available', () => {
-      // Skip: Jest expect matcher not available in Angular testing context - TypeError: Cannot read properties of undefined (reading 'matchers')
-      (global as any).globalThis = { trustedTypes: undefined };
-      const testHTML = '<div>Direct HTML</div>';
-      
-      service.addTrustedHTML(mockElement, testHTML);
-
-      expect(mockElement.innerHTML).toBe(testHTML);
-    });
-
-    it.skip('should handle server-side rendering', () => {
-      (global as any).window = undefined;
-      const testHTML = '<span>Server HTML</span>';
-      
-      expect(() => service.addTrustedHTML(mockElement, testHTML)).not.toThrow();
-      expect(mockElement.innerHTML).toBe(''); // Should remain unchanged
-    });
-
-    it.skip('should call init() if not already initialized', () => {
-      const initSpy = jest.spyOn(service, 'init');
-      const testHTML = '<div>HTML init test</div>';
-      
-      service.addTrustedHTML(mockElement, testHTML);
-
-      expect(initSpy).toHaveBeenCalled();
-    });
-  });
-
-  describe('createTrustedHTML method', () => {
-    it.skip('should create trusted HTML when trusted types are available', () => {
-      const testHTML = '<article>Article content</article>';
-      
-      const result = service.createTrustedHTML(testHTML);
-
-      expect(mockPolicy.createHTML).toHaveBeenCalledWith(testHTML);
-      expect(result).toBe('trusted-<article>Article content</article>');
-    });
-
-    it.skip('should return HTML directly when trusted types are not available', () => {
-      (global as any).globalThis = { trustedTypes: undefined };
-      const testHTML = '<section>Section content</section>';
-      
-      const result = service.createTrustedHTML(testHTML);
-
-      expect(result).toBe(testHTML);
-    });
-
-    it.skip('should return undefined for server-side rendering', () => {
-      (global as any).window = undefined;
-      const testHTML = '<header>Header content</header>';
-      
-      const result = service.createTrustedHTML(testHTML);
-
-      expect(result).toBeUndefined();
-    });
-
-    it.skip('should call init() if not already initialized', () => {
-      const initSpy = jest.spyOn(service, 'init');
-      const testHTML = '<main>Main content</main>';
-      
-      service.createTrustedHTML(testHTML);
-
-      expect(initSpy).toHaveBeenCalled();
-    });
-  });
-
-  describe('generateTrustedURL method', () => {
-    it.skip('should generate trusted URL when trusted types are available', () => {
-      const testURL = 'https://cdn.example.com/lib.js';
-      
-      const result = service.generateTrustedURL(testURL);
-
-      expect(mockPolicy.createScriptURL).toHaveBeenCalledWith(testURL);
-      expect(result).toBe('trusted-script-https://cdn.example.com/lib.js');
-    });
-
-    it.skip('should return URL directly when trusted types are not available', () => {
-      (global as any).globalThis = { trustedTypes: undefined };
-      const testURL = 'https://cdn.example.com/lib2.js';
-      
-      const result = service.generateTrustedURL(testURL);
-
-      expect(result).toBe(testURL);
-    });
-
-    it.skip('should return undefined for server-side rendering', () => {
-      (global as any).window = undefined;
-      const testURL = 'https://cdn.example.com/lib3.js';
-      
-      const result = service.generateTrustedURL(testURL);
-
-      expect(result).toBeUndefined();
-    });
-
-    it.skip('should call init() if not already initialized', () => {
-      const initSpy = jest.spyOn(service, 'init');
-      const testURL = 'https://cdn.example.com/lib4.js';
-      
-      service.generateTrustedURL(testURL);
-
-      expect(initSpy).toHaveBeenCalled();
-    });
-  });
-
-  describe('edge cases and error handling', () => {
-    it.skip('should handle null CSP nonce gracefully', () => {
-      TestBed.overrideProvider(CSP_NONCE, { useValue: null });
-      const serviceWithNullNonce = TestBed.inject(PdfCspPolicyService);
-      
-      expect(() => serviceWithNullNonce.init()).not.toThrow();
-    });
-
-    it.skip('should handle undefined CSP nonce gracefully', () => {
-      TestBed.overrideProvider(CSP_NONCE, { useValue: undefined });
-      const serviceWithUndefinedNonce = TestBed.inject(PdfCspPolicyService);
-      
-      expect(() => serviceWithUndefinedNonce.init()).not.toThrow();
-    });
-
-    it.skip('should handle trusted types throwing errors gracefully', () => {
-      mockTrustedTypes.createPolicy = jest.fn(() => {
-        throw new Error('Trusted types error');
+        expect(mockPolicy.createHTML).toHaveBeenCalledWith('body { color: red; }');
+        expect(el.textContent).toBe('trusted-html-body { color: red; }');
       });
 
-      expect(() => service.init()).toThrow('Trusted types error');
+      it('should call init automatically', () => {
+        const initSpy = jest.spyOn(service, 'init');
+        service.addTrustedCSS({ textContent: '' } as HTMLElement, 'css');
+
+        expect(initSpy).toHaveBeenCalled();
+      });
     });
 
-    it.skip('should handle sanitizer methods throwing errors gracefully', () => {
-      mockPolicy.createHTML = jest.fn(() => {
-        throw new Error('Sanitizer error');
+    describe('addTrustedJavaScript', () => {
+      it('should set src via sanitizer.createScriptURL', () => {
+        const script = { src: '' } as HTMLScriptElement;
+        service.addTrustedJavaScript(script, 'https://example.com/script.js');
+
+        expect(mockPolicy.createScriptURL).toHaveBeenCalledWith('https://example.com/script.js');
+        expect(script.src).toBe('trusted-url-https://example.com/script.js');
       });
 
-      service.init();
+      it('should call init automatically', () => {
+        const initSpy = jest.spyOn(service, 'init');
+        service.addTrustedJavaScript({ src: '' } as HTMLScriptElement, 'url');
 
-      expect(() => service.sanitizeHTML('<div>test</div>')).toThrow('Sanitizer error');
+        expect(initSpy).toHaveBeenCalled();
+      });
     });
 
-    it.skip('should handle empty strings correctly', () => {
-      expect(service.sanitizeHTML('')).toBe('trusted-');
-      expect(service.createTrustedHTML('')).toBe('trusted-');
-      expect(service.generateTrustedURL('')).toBe('trusted-script-');
+    describe('sanitizeHTML', () => {
+      it('should return sanitized HTML via sanitizer.createHTML', () => {
+        const result = service.sanitizeHTML('<div>test</div>');
+
+        expect(mockPolicy.createHTML).toHaveBeenCalledWith('<div>test</div>');
+        expect(result).toBe('trusted-html-<div>test</div>');
+      });
+
+      it('should call init automatically', () => {
+        const initSpy = jest.spyOn(service, 'init');
+        service.sanitizeHTML('<p>test</p>');
+
+        expect(initSpy).toHaveBeenCalled();
+      });
     });
 
-    it.skip('should handle null and undefined inputs', () => {
-      // These should handle null/undefined gracefully without throwing
-      expect(() => service.sanitizeHTML(null as any)).not.toThrow();
-      expect(() => service.sanitizeHTML(undefined as any)).not.toThrow();
-      expect(() => service.createTrustedHTML(null as any)).not.toThrow();
-      expect(() => service.generateTrustedURL(null as any)).not.toThrow();
+    describe('addTrustedHTML', () => {
+      it('should set innerHTML via sanitizer.createHTML', () => {
+        const el = { innerHTML: '' } as HTMLElement;
+        service.addTrustedHTML(el, '<p>content</p>');
+
+        expect(mockPolicy.createHTML).toHaveBeenCalledWith('<p>content</p>');
+        expect(el.innerHTML).toBe('trusted-html-<p>content</p>');
+      });
+
+      it('should call init automatically', () => {
+        const initSpy = jest.spyOn(service, 'init');
+        service.addTrustedHTML({ innerHTML: '' } as HTMLElement, '<p>x</p>');
+
+        expect(initSpy).toHaveBeenCalled();
+      });
     });
 
-    it.skip('should handle malformed HTML gracefully', () => {
-      const malformedHTML = '<div><p>unclosed tags';
-      
-      const result = service.sanitizeHTML(malformedHTML);
-      
-      expect(mockPolicy.createHTML).toHaveBeenCalledWith(malformedHTML);
-      expect(result).toBe('trusted-<div><p>unclosed tags');
+    describe('createTrustedHTML', () => {
+      it('should return trusted HTML via sanitizer.createHTML', () => {
+        const result = service.createTrustedHTML('<article>content</article>');
+
+        expect(mockPolicy.createHTML).toHaveBeenCalledWith('<article>content</article>');
+        expect(result).toBe('trusted-html-<article>content</article>');
+      });
+
+      it('should call init automatically', () => {
+        const initSpy = jest.spyOn(service, 'init');
+        service.createTrustedHTML('<div>x</div>');
+
+        expect(initSpy).toHaveBeenCalled();
+      });
     });
 
-    it.skip('should handle very long strings', () => {
-      const longString = 'x'.repeat(100000);
-      
-      expect(() => service.sanitizeHTML(longString)).not.toThrow();
-      expect(mockPolicy.createHTML).toHaveBeenCalledWith(longString);
+    describe('generateTrustedURL', () => {
+      it('should return trusted URL via sanitizer.createScriptURL', () => {
+        const result = service.generateTrustedURL('https://cdn.example.com/lib.js');
+
+        expect(mockPolicy.createScriptURL).toHaveBeenCalledWith('https://cdn.example.com/lib.js');
+        expect(result).toBe('trusted-url-https://cdn.example.com/lib.js');
+      });
+
+      it('should call init automatically', () => {
+        const initSpy = jest.spyOn(service, 'init');
+        service.generateTrustedURL('url');
+
+        expect(initSpy).toHaveBeenCalled();
+      });
     });
   });
 
-  describe('integration scenarios', () => {
-    it.skip('should work with real DOM elements', () => {
-      const div = document.createElement('div');
-      const script = document.createElement('script');
-      const testHTML = '<p>Integration test</p>';
-      const testCSS = 'body { margin: 0; }';
-      const testURL = 'https://example.com/test.js';
-
-      service.addTrustedHTML(div, testHTML);
-      service.addTrustedCSS(div, testCSS);
-      service.addTrustedJavaScript(script, testURL);
-
-      expect(div.innerHTML).toBe('trusted-<p>Integration test</p>');
-      expect(div.textContent).toBe('trusted-body { margin: 0; }');
-      expect(script.src).toBe('trusted-script-https://example.com/test.js');
+  describe('without trustedTypes available (fallback behavior)', () => {
+    beforeEach(() => {
+      delete (globalThis as any).trustedTypes;
     });
 
-    it.skip('should maintain policy consistency across multiple calls', () => {
-      const testHTML1 = '<div>First</div>';
-      const testHTML2 = '<span>Second</span>';
-      
-      const result1 = service.sanitizeHTML(testHTML1);
-      const result2 = service.sanitizeHTML(testHTML2);
-      
-      expect(result1).toBe('trusted-<div>First</div>');
-      expect(result2).toBe('trusted-<span>Second</span>');
-      
-      // Should use the same policy instance
-      expect(mockTrustedTypes.createPolicy).toHaveBeenCalledTimes(1);
+    it('addTrustedCSS should set textContent directly', () => {
+      const el = { textContent: '' } as HTMLElement;
+      service.addTrustedCSS(el, 'body { margin: 0; }');
+      expect(el.textContent).toBe('body { margin: 0; }');
     });
 
-    it.skip('should handle mixed content types in sequence', () => {
-      const html = '<div>Content</div>';
-      const url = 'https://example.com/script.js';
+    it('addTrustedJavaScript should set src directly', () => {
+      const script = { src: '' } as HTMLScriptElement;
+      service.addTrustedJavaScript(script, 'https://example.com/app.js');
+      expect(script.src).toBe('https://example.com/app.js');
+    });
 
-      const htmlResult = service.sanitizeHTML(html);
-      const trustedHTML = service.createTrustedHTML(html);
-      const trustedURL = service.generateTrustedURL(url);
-      
-      expect(htmlResult).toBe('trusted-<div>Content</div>');
-      expect(trustedHTML).toBe('trusted-<div>Content</div>');
-      expect(trustedURL).toBe('trusted-script-https://example.com/script.js');
-      
-      // Should reuse the same policy
-      expect(mockTrustedTypes.createPolicy).toHaveBeenCalledTimes(1);
+    it('sanitizeHTML should return HTML as-is', () => {
+      const result = service.sanitizeHTML('<div>plain</div>');
+      expect(result).toBe('<div>plain</div>');
+    });
+
+    it('addTrustedHTML should set innerHTML directly', () => {
+      const el = { innerHTML: '' } as HTMLElement;
+      service.addTrustedHTML(el, '<span>direct</span>');
+      expect(el.innerHTML).toBe('<span>direct</span>');
+    });
+
+    it('createTrustedHTML should return HTML as-is', () => {
+      const result = service.createTrustedHTML('<footer>foot</footer>');
+      expect(result).toBe('<footer>foot</footer>');
+    });
+
+    it('generateTrustedURL should return URL as-is', () => {
+      const result = service.generateTrustedURL('https://example.com/file.js');
+      expect(result).toBe('https://example.com/file.js');
+    });
+  });
+
+  describe('policy reuse across multiple method calls', () => {
+    it('should create policy only once when multiple methods are called', () => {
+      const mockPolicy = {
+        createHTML: jest.fn((input: string) => input),
+        createScriptURL: jest.fn((input: string) => input),
+      };
+      const mockCreatePolicy = jest.fn(() => mockPolicy);
+      (globalThis as any).trustedTypes = { createPolicy: mockCreatePolicy };
+
+      service.sanitizeHTML('<div>1</div>');
+      service.createTrustedHTML('<div>2</div>');
+      service.generateTrustedURL('url1');
+      service.addTrustedCSS({ textContent: '' } as HTMLElement, 'css');
+      service.addTrustedJavaScript({ src: '' } as HTMLScriptElement, 'url2');
+      service.addTrustedHTML({ innerHTML: '' } as HTMLElement, '<p>3</p>');
+
+      expect(mockCreatePolicy).toHaveBeenCalledTimes(1);
+    });
+
+    it('should use the same policy for all calls', () => {
+      const mockPolicy = {
+        createHTML: jest.fn((input: string) => `html-${input}`),
+        createScriptURL: jest.fn((input: string) => `url-${input}`),
+      };
+      (globalThis as any).trustedTypes = { createPolicy: jest.fn(() => mockPolicy) };
+
+      const htmlResult = service.sanitizeHTML('<div>a</div>');
+      const urlResult = service.generateTrustedURL('https://x.com/a.js');
+
+      expect(htmlResult).toBe('html-<div>a</div>');
+      expect(urlResult).toBe('url-https://x.com/a.js');
+      expect(mockPolicy.createHTML).toHaveBeenCalledTimes(1);
+      expect(mockPolicy.createScriptURL).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('edge cases', () => {
+    beforeEach(() => {
+      const mockPolicy = {
+        createHTML: jest.fn((input: string) => `trusted-${input}`),
+        createScriptURL: jest.fn((input: string) => `trusted-${input}`),
+      };
+      (globalThis as any).trustedTypes = { createPolicy: jest.fn(() => mockPolicy) };
+    });
+
+    it('should handle empty strings', () => {
+      const htmlResult = service.sanitizeHTML('');
+      expect(htmlResult).toBe('trusted-');
+
+      const createResult = service.createTrustedHTML('');
+      expect(createResult).toBe('trusted-');
+
+      const urlResult = service.generateTrustedURL('');
+      expect(urlResult).toBe('trusted-');
+    });
+
+    it('should handle strings with special characters', () => {
+      const result = service.sanitizeHTML('<script>alert("xss")</script>');
+      expect(result).toBe('trusted-<script>alert("xss")</script>');
     });
   });
 });

@@ -119,16 +119,19 @@ describe('PdfDummyComponentsComponent', () => {
       expect(mockContainer.appendChild).toHaveBeenCalledWith(mockSpan);
     });
 
-    // TODO this is an important test, but it's broken
-    it.skip('should not create dummy widgets for existing elements', () => {
+    it('should not create dummy widgets for existing elements', () => {
       const existingElement = { id: 'attachmentsView' };
       getElementByIdSpy.mockReturnValue(existingElement as any);
       mockContainer.firstChild = null; // No children to remove
 
+      // Clear spy call history from component setup
+      createElementSpy.mockClear();
+
       component.addMissingStandardWidgets();
 
-      // Should not create elements that already exist
-      expect(createElementSpy).not.toHaveBeenCalled();
+      // When all elements already exist, no span or select elements should be created
+      expect(createElementSpy).not.toHaveBeenCalledWith('span');
+      expect(createElementSpy).not.toHaveBeenCalledWith('select');
     });
 
     it('should set correct properties on created dummy elements', () => {

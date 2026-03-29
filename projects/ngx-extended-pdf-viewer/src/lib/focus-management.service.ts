@@ -16,6 +16,7 @@ export class FocusManagementService {
    * Initializes a hidden aria-live region for screen reader announcements
    */
   private initializeAriaLiveRegion(): void {
+    /* istanbul ignore next -- SSR guard, untestable in JSDOM */
     if (typeof document === 'undefined') {
       return; // SSR guard
     }

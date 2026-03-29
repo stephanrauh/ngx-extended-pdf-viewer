@@ -451,4 +451,278 @@ describe('NgxExtendedPdfViewerService', () => {
       getElementByIdSpy.mockRestore();
     });
   });
+
+  describe('delegation methods with PDFViewerApplication', () => {
+    let mockPDFViewerApplication: any;
+
+    beforeEach(() => {
+      mockPDFViewerApplication = {
+        pdfViewer: {
+          pagesCount: 10,
+          currentPageNumber: 3,
+          _pages: [
+            { id: 1, renderingState: 3 },
+            { id: 2, renderingState: 0 },
+            { id: 3, renderingState: 3 },
+            { id: 4, renderingState: 1 },
+            { id: 5, renderingState: 3 },
+            { id: 6, renderingState: 0 },
+            { id: 7, renderingState: 0 },
+            { id: 8, renderingState: 0 },
+            { id: 9, renderingState: 0 },
+            { id: 10, renderingState: 0 },
+          ],
+          _getVisiblePages: jest.fn().mockReturnValue({
+            views: [{ id: 2 }, { id: 3 }, { id: 4 }],
+          }),
+          scrollPagePosIntoView: jest.fn(),
+          addPageToRenderQueue: jest.fn().mockReturnValue(true),
+        },
+        eventBus: { dispatch: jest.fn(), on: jest.fn() },
+      };
+      (service as any).PDFViewerApplication = mockPDFViewerApplication;
+    });
+
+    describe('numberOfPages', () => {
+      it('should return page count from _pages array', () => {
+        expect(service.numberOfPages()).toBe(10);
+      });
+
+      it('should return 0 when PDFViewerApplication is undefined', () => {
+        (service as any).PDFViewerApplication = undefined;
+        expect(service.numberOfPages()).toBe(0);
+      });
+    });
+
+    describe('getCurrentlyVisiblePageNumbers', () => {
+      it('should return visible page IDs', () => {
+        expect(service.getCurrentlyVisiblePageNumbers()).toEqual([2, 3, 4]);
+      });
+
+      it('should return empty array when PDFViewerApplication is undefined', () => {
+        (service as any).PDFViewerApplication = undefined;
+        expect(service.getCurrentlyVisiblePageNumbers()).toEqual([]);
+      });
+    });
+
+    describe('currentlyRenderedPages', () => {
+      it('should return IDs of pages with renderingState === 3', () => {
+        expect(service.currentlyRenderedPages()).toEqual([1, 3, 5]);
+      });
+
+      it('should return empty array when PDFViewerApplication is undefined', () => {
+        (service as any).PDFViewerApplication = undefined;
+        expect(service.currentlyRenderedPages()).toEqual([]);
+      });
+
+      it('should return empty array when no pages are rendered', () => {
+        mockPDFViewerApplication.pdfViewer._pages = [
+          { id: 1, renderingState: 0 },
+          { id: 2, renderingState: 1 },
+        ];
+        expect(service.currentlyRenderedPages()).toEqual([]);
+      });
+    });
+
+    describe('hasPageBeenRendered', () => {
+      it('should return true for a page with renderingState === 3', () => {
+        expect(service.hasPageBeenRendered(0)).toBe(true);
+        expect(service.hasPageBeenRendered(2)).toBe(true);
+        expect(service.hasPageBeenRendered(4)).toBe(true);
+      });
+
+      it('should return false for a page with renderingState !== 3', () => {
+        expect(service.hasPageBeenRendered(1)).toBe(false);
+        expect(service.hasPageBeenRendered(3)).toBe(false);
+      });
+
+      it('should return false for out-of-range page index', () => {
+        expect(service.hasPageBeenRendered(10)).toBe(false);
+        expect(service.hasPageBeenRendered(-1)).toBe(false);
+      });
+
+      it('should return false when PDFViewerApplication is undefined', () => {
+        (service as any).PDFViewerApplication = undefined;
+        expect(service.hasPageBeenRendered(0)).toBe(false);
+      });
+    });
+
+    describe('addPageToRenderQueue', () => {
+      it('should delegate to pdfViewer.addPageToRenderQueue', () => {
+        const result = service.addPageToRenderQueue(3);
+        expect(mockPDFViewerApplication.pdfViewer.addPageToRenderQueue).toHaveBeenCalledWith(3);
+        expect(result).toBe(true);
+      });
+
+      it('should return false when PDFViewerApplication is undefined', () => {
+        (service as any).PDFViewerApplication = undefined;
+        expect(service.addPageToRenderQueue(0)).toBe(false);
+      });
+
+      it('should return false when pdfViewer returns false', () => {
+        mockPDFViewerApplication.pdfViewer.addPageToRenderQueue.mockReturnValue(false);
+        expect(service.addPageToRenderQueue(99)).toBe(false);
+      });
+    });
+
+    describe('currentPageIndex', () => {
+      it('should return currentPageNumber - 1', () => {
+        expect(service.currentPageIndex()).toBe(2);
+      });
+
+      it('should return undefined when PDFViewerApplication is undefined', () => {
+        (service as any).PDFViewerApplication = undefined;
+        expect(service.currentPageIndex()).toBeUndefined();
+      });
+
+      it('should return 0 when currentPageNumber is 1', () => {
+        mockPDFViewerApplication.pdfViewer.currentPageNumber = 1;
+        expect(service.currentPageIndex()).toBe(0);
+      });
+    });
+
+    describe('scrollPageIntoView', () => {
+      it('should delegate to pdfViewer.scrollPagePosIntoView', () => {
+        service.scrollPageIntoView(5, { top: 100, left: 50 });
+        expect(mockPDFViewerApplication.pdfViewer.scrollPagePosIntoView).toHaveBeenCalledWith(5, { top: 100, left: 50 });
+      });
+
+      it('should pass undefined pageSpot when not provided', () => {
+        service.scrollPageIntoView(3);
+        expect(mockPDFViewerApplication.pdfViewer.scrollPagePosIntoView).toHaveBeenCalledWith(3, undefined);
+      });
+
+      it('should not throw when PDFViewerApplication is undefined', () => {
+        (service as any).PDFViewerApplication = undefined;
+        expect(() => service.scrollPageIntoView(1)).not.toThrow();
+      });
+    });
+  });
+
+  describe('editor property setters', () => {
+    let mockPDFViewerApplication: any;
+
+    beforeEach(() => {
+      mockPDFViewerApplication = {
+        eventBus: { dispatch: jest.fn(), on: jest.fn() },
+        pdfViewer: {},
+      };
+      (service as any).PDFViewerApplication = mockPDFViewerApplication;
+    });
+
+    it('should dispatch editorFontSize', () => {
+      service.editorFontSize = 14;
+      expect(mockPDFViewerApplication.eventBus.dispatch).toHaveBeenCalledWith('switchannotationeditorparams', { type: 11, value: 14 });
+      expect(mockPDFViewerApplication.eventBus.dispatch).toHaveBeenCalledWith('annotationeditorparamschanged', { details: [[11, 14]] });
+    });
+
+    it('should dispatch editorFontColor', () => {
+      service.editorFontColor = '#ff0000';
+      expect(mockPDFViewerApplication.eventBus.dispatch).toHaveBeenCalledWith('switchannotationeditorparams', { type: 12, value: '#ff0000' });
+    });
+
+    it('should dispatch editorInkColor', () => {
+      service.editorInkColor = '#00ff00';
+      expect(mockPDFViewerApplication.eventBus.dispatch).toHaveBeenCalledWith('switchannotationeditorparams', { type: 21, value: '#00ff00' });
+    });
+
+    it('should dispatch editorInkOpacity', () => {
+      service.editorInkOpacity = 50;
+      expect(mockPDFViewerApplication.eventBus.dispatch).toHaveBeenCalledWith('switchannotationeditorparams', { type: 23, value: 50 });
+    });
+
+    it('should dispatch editorInkThickness', () => {
+      service.editorInkThickness = 3;
+      expect(mockPDFViewerApplication.eventBus.dispatch).toHaveBeenCalledWith('switchannotationeditorparams', { type: 22, value: 3 });
+    });
+
+    it('should dispatch editorHighlightColor', () => {
+      service.editorHighlightColor = '#ffff00';
+      expect(mockPDFViewerApplication.eventBus.dispatch).toHaveBeenCalledWith('switchannotationeditorparams', { type: 31, value: '#ffff00' });
+    });
+
+    it('should dispatch editorHighlightDefaultColor', () => {
+      service.editorHighlightDefaultColor = '#0000ff';
+      expect(mockPDFViewerApplication.eventBus.dispatch).toHaveBeenCalledWith('switchannotationeditorparams', { type: 32, value: '#0000ff' });
+    });
+
+    it('should dispatch editorHighlightShowAll', () => {
+      service.editorHighlightShowAll = true;
+      expect(mockPDFViewerApplication.eventBus.dispatch).toHaveBeenCalledWith('switchannotationeditorparams', { type: 35, value: true });
+    });
+
+    it('should dispatch editorHighlightShowAll with false', () => {
+      service.editorHighlightShowAll = false;
+      expect(mockPDFViewerApplication.eventBus.dispatch).toHaveBeenCalledWith('switchannotationeditorparams', { type: 35, value: false });
+    });
+
+    it('should dispatch editorHighlightThickness', () => {
+      service.editorHighlightThickness = 8;
+      expect(mockPDFViewerApplication.eventBus.dispatch).toHaveBeenCalledWith('switchannotationeditorparams', { type: 33, value: 8 });
+    });
+
+    it('should not throw when PDFViewerApplication is undefined', () => {
+      (service as any).PDFViewerApplication = undefined;
+      expect(() => { service.editorFontSize = 14; }).not.toThrow();
+      expect(() => { service.editorFontColor = '#000'; }).not.toThrow();
+      expect(() => { service.editorInkColor = '#000'; }).not.toThrow();
+      expect(() => { service.editorInkOpacity = 50; }).not.toThrow();
+      expect(() => { service.editorInkThickness = 2; }).not.toThrow();
+      expect(() => { service.editorHighlightColor = '#000'; }).not.toThrow();
+      expect(() => { service.editorHighlightDefaultColor = '#000'; }).not.toThrow();
+      expect(() => { service.editorHighlightShowAll = true; }).not.toThrow();
+      expect(() => { service.editorHighlightThickness = 5; }).not.toThrow();
+    });
+  });
+
+  describe('filteredPageCount (pure logic)', () => {
+    it('should handle "from" only', () => {
+      expect(service.filteredPageCount(10, { from: 5 })).toBe(6); // pages 5-10
+    });
+
+    it('should handle "to" only', () => {
+      expect(service.filteredPageCount(10, { to: 3 })).toBe(3); // pages 1-3
+    });
+
+    it('should handle single-page range', () => {
+      expect(service.filteredPageCount(10, { from: 5, to: 5 })).toBe(1);
+    });
+
+    it('should handle included with pages beyond pageCount', () => {
+      expect(service.filteredPageCount(5, { included: [1, 3, 5, 7, 9] })).toBe(3); // only 1,3,5 are within range
+    });
+
+    it('should handle excluded with pages beyond pageCount', () => {
+      expect(service.filteredPageCount(5, { excluded: [2, 4, 8, 10] })).toBe(3); // 5 - 2 excluded within range
+    });
+
+    it('should return 0 for impossible range', () => {
+      expect(service.filteredPageCount(10, { from: 5, to: 3 })).toBe(0);
+    });
+  });
+
+  describe('isInPDFPrintRange (pure logic)', () => {
+    it('should handle single included page', () => {
+      expect(service.isInPDFPrintRange(0, { included: [1] })).toBe(true);
+      expect(service.isInPDFPrintRange(1, { included: [1] })).toBe(false);
+    });
+
+    it('should handle excluded overriding included', () => {
+      // page 3 is in included but also in excluded
+      const range: PDFPrintRange = { included: [1, 3, 5], excluded: [3] };
+      expect(service.isInPDFPrintRange(0, range)).toBe(true);  // page 1
+      expect(service.isInPDFPrintRange(2, range)).toBe(false); // page 3 (excluded wins)
+      expect(service.isInPDFPrintRange(4, range)).toBe(true);  // page 5
+    });
+
+    it('should handle from boundary equal to page', () => {
+      expect(service.isInPDFPrintRange(4, { from: 5 })).toBe(true);  // page 5 === from
+      expect(service.isInPDFPrintRange(3, { from: 5 })).toBe(false); // page 4 < from
+    });
+
+    it('should handle to boundary equal to page', () => {
+      expect(service.isInPDFPrintRange(4, { to: 5 })).toBe(true);  // page 5 === to
+      expect(service.isInPDFPrintRange(5, { to: 5 })).toBe(false); // page 6 > to
+    });
+  });
 });

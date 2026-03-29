@@ -132,37 +132,37 @@ describe('PDF Default Options Utility Functions', () => {
     let originalWindow: any;
     let originalDocument: any;
     let originalProcess: any;
-    let originalNavigator: any;
+    let originalUserAgent: string;
 
     beforeEach(() => {
       originalWindow = (global as any).window;
       originalDocument = (global as any).document;
       originalProcess = (global as any).process;
-      originalNavigator = (global as any).navigator;
+      originalUserAgent = navigator.userAgent;
     });
 
     afterEach(() => {
       (global as any).window = originalWindow;
       (global as any).document = originalDocument;
       (global as any).process = originalProcess;
-      (global as any).navigator = originalNavigator;
+      Object.defineProperty(navigator, 'userAgent', {
+        writable: true,
+        value: originalUserAgent,
+      });
     });
 
-    it.skip('should return 4096 for server-side rendering', () => {
-      // SKIP: JSDOM doesn't support WebGL context - HTMLCanvasElement.prototype.getContext not implemented
+    it('should return 4096 for server-side rendering', () => {
       (global as any).window = undefined;
       expect(getSafeCanvasSize()).toBe(4096);
     });
 
-    it.skip('should return 4096 when document is undefined', () => {
-      // SKIP: JSDOM doesn't support WebGL context - HTMLCanvasElement.prototype.getContext not implemented
+    it('should return 4096 when document is undefined', () => {
       (global as any).window = {};
       (global as any).document = undefined;
       expect(getSafeCanvasSize()).toBe(4096);
     });
 
-    it.skip('should return 4096 for test environment', () => {
-      // SKIP: JSDOM doesn't support WebGL context - HTMLCanvasElement.prototype.getContext not implemented
+    it('should return 4096 for test environment', () => {
       (global as any).process = { env: { NODE_ENV: 'test' } };
       expect(getSafeCanvasSize()).toBe(4096);
 
@@ -173,301 +173,92 @@ describe('PDF Default Options Utility Functions', () => {
       expect(getSafeCanvasSize()).toBe(4096);
     });
 
-    it.skip('should calculate safe size based on WebGL context', () => {
-      // SKIP: JSDOM doesn't support WebGL context - HTMLCanvasElement.prototype.getContext not implemented
-      const mockCanvas = {
-        getContext: jest.fn(),
-      };
-
-      const mockWebGLContext = {
-        MAX_TEXTURE_SIZE: 0x0d33, // WebGL constant
-        getParameter: jest.fn((param) => {
-          if (param === 0x0d33) return 8192;
-          return null;
-        }),
-      };
-
-      const mockDocument = {
-        createElement: jest.fn(() => mockCanvas),
-      };
-
-      const mockNavigator = {
-        userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
-        deviceMemory: 8, // 8GB
-      };
-
-      const mockWindow = {
-        performance: {
-          memory: {
-            jsHeapSizeLimit: 4 * 1024 * 1024 * 1024, // 4GB
-          },
-        },
-      };
-
-      mockCanvas.getContext = jest.fn(() => mockWebGLContext);
-
-      (global as any).window = mockWindow;
-      (global as any).document = mockDocument;
-      (global as any).navigator = mockNavigator;
+    it('should return desktop default for desktop user agents', () => {
+      Object.defineProperty(navigator, 'userAgent', {
+        writable: true,
+        value: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+      });
       (global as any).process = undefined;
 
       const result = getSafeCanvasSize();
-
-      expect(mockDocument.createElement).toHaveBeenCalledWith('canvas');
-      expect(mockCanvas.getContext).toHaveBeenCalledWith('webgl');
-      expect(mockWebGLContext.getParameter).toHaveBeenCalledWith(0x0d33);
-      expect(typeof result).toBe('number');
-      expect(result).toBeGreaterThan(0);
+      expect(result).toBe(33554432); // 32 megapixels desktop default
     });
 
-    it.skip('should fallback to experimental-webgl if webgl fails', () => {
-      // SKIP: JSDOM doesn't support WebGL context - HTMLCanvasElement.prototype.getContext not implemented
-      const mockCanvas = {
-        getContext: jest.fn(),
-      };
-
-      const mockWebGLContext = {
-        MAX_TEXTURE_SIZE: 0x0d33,
-        getParameter: jest.fn(() => 4096),
-      };
-
-      const mockDocument = {
-        createElement: jest.fn(() => mockCanvas),
-      };
-
-      const mockNavigator = {
-        userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)',
-        deviceMemory: 16,
-      };
-
-      const mockWindow = {
-        performance: {
-          memory: {
-            jsHeapSizeLimit: 8 * 1024 * 1024 * 1024,
-          },
-        },
-      };
-
-      // First call returns null (webgl not supported), second returns context
-      mockCanvas.getContext = jest.fn().mockReturnValueOnce(null).mockReturnValueOnce(mockWebGLContext);
-
-      (global as any).window = mockWindow;
-      (global as any).document = mockDocument;
-      (global as any).navigator = mockNavigator;
-      (global as any).process = undefined;
-
-      getSafeCanvasSize();
-
-      expect(mockCanvas.getContext).toHaveBeenCalledWith('webgl');
-      expect(mockCanvas.getContext).toHaveBeenCalledWith('experimental-webgl');
-    });
-
-    it.skip('should handle iOS devices with memory limits', () => {
-      // SKIP: JSDOM doesn't support WebGL context - HTMLCanvasElement.prototype.getContext not implemented
-      const mockCanvas = {
-        getContext: jest.fn(() => ({
-          MAX_TEXTURE_SIZE: 0x0d33,
-          getParameter: jest.fn(() => 8192),
-        })),
-      };
-
-      const mockDocument = {
-        createElement: jest.fn(() => mockCanvas),
-      };
-
-      const mockNavigator = {
-        userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_7_1 like Mac OS X)',
-        deviceMemory: 6,
-      };
-
-      const mockWindow = {
-        performance: {
-          memory: {
-            jsHeapSizeLimit: 2 * 1024 * 1024 * 1024,
-          },
-        },
-      };
-
-      (global as any).window = mockWindow;
-      (global as any).document = mockDocument;
-      (global as any).navigator = mockNavigator;
+    it('should return mobile limit for iOS devices', () => {
+      Object.defineProperty(navigator, 'userAgent', {
+        writable: true,
+        value: 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_7_1 like Mac OS X)',
+      });
       (global as any).process = undefined;
 
       const result = getSafeCanvasSize();
-
-      expect(result).toBeGreaterThan(0);
-      // iOS devices should be limited
+      expect(result).toBe(5242880); // 5 megapixels iOS/mobile limit
     });
 
-    it.skip('should handle Android devices with memory limits', () => {
-      // SKIP: JSDOM doesn't support WebGL context - HTMLCanvasElement.prototype.getContext not implemented
-      const mockCanvas = {
-        getContext: jest.fn(() => ({
-          MAX_TEXTURE_SIZE: 0x0d33,
-          getParameter: jest.fn(() => 4096),
-        })),
-      };
-
-      const mockDocument = {
-        createElement: jest.fn(() => mockCanvas),
-      };
-
-      const mockNavigator = {
-        userAgent: 'Mozilla/5.0 (Linux; Android 11; SM-G991B)',
-        deviceMemory: 4,
-      };
-
-      const mockWindow = {
-        performance: {
-          memory: {
-            jsHeapSizeLimit: 3 * 1024 * 1024 * 1024,
-          },
-        },
-      };
-
-      (global as any).window = mockWindow;
-      (global as any).document = mockDocument;
-      (global as any).navigator = mockNavigator;
+    it('should return mobile limit for iPad devices', () => {
+      Object.defineProperty(navigator, 'userAgent', {
+        writable: true,
+        value: 'Mozilla/5.0 (iPad; CPU OS 15_0 like Mac OS X)',
+      });
       (global as any).process = undefined;
 
       const result = getSafeCanvasSize();
-
-      expect(result).toBeGreaterThan(0);
+      expect(result).toBe(5242880); // 5 megapixels iOS/mobile limit
     });
 
-    it.skip('should handle high-end desktop devices', () => {
-      // SKIP: JSDOM doesn't support WebGL context - HTMLCanvasElement.prototype.getContext not implemented
-      const mockCanvas = {
-        getContext: jest.fn(() => ({
-          MAX_TEXTURE_SIZE: 0x0d33,
-          getParameter: jest.fn(() => 16384),
-        })),
-      };
-
-      const mockDocument = {
-        createElement: jest.fn(() => mockCanvas),
-      };
-
-      const mockNavigator = {
-        userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/91.0.4472.124',
-        deviceMemory: 32, // 32GB high-end desktop
-      };
-
-      const mockWindow = {
-        performance: {
-          memory: {
-            jsHeapSizeLimit: 16 * 1024 * 1024 * 1024,
-          },
-        },
-      };
-
-      (global as any).window = mockWindow;
-      (global as any).document = mockDocument;
-      (global as any).navigator = mockNavigator;
+    it('should return mobile limit for Android devices', () => {
+      Object.defineProperty(navigator, 'userAgent', {
+        writable: true,
+        value: 'Mozilla/5.0 (Linux; Android 11; SM-G991B)',
+      });
       (global as any).process = undefined;
 
       const result = getSafeCanvasSize();
-
-      expect(result).toBeGreaterThan(0);
+      expect(result).toBe(5242880); // 5 megapixels mobile limit
     });
 
-    it.skip('should fallback to default when WebGL is not available', () => {
-      // SKIP: JSDOM doesn't support WebGL context - HTMLCanvasElement.prototype.getContext not implemented
-      const mockCanvas = {
-        getContext: jest.fn(() => null), // WebGL not supported
-      };
-
-      const mockDocument = {
-        createElement: jest.fn(() => mockCanvas),
-      };
-
-      const mockNavigator = {
-        userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
-        // No deviceMemory support
-      };
-
-      const mockWindow = {
-        performance: {}, // No memory info
-      };
-
-      (global as any).window = mockWindow;
-      (global as any).document = mockDocument;
-      (global as any).navigator = mockNavigator;
+    it('should return desktop default for high-end desktop user agents', () => {
+      Object.defineProperty(navigator, 'userAgent', {
+        writable: true,
+        value: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/91.0.4472.124',
+      });
       (global as any).process = undefined;
 
       const result = getSafeCanvasSize();
-
-      expect(result).toBeGreaterThan(0);
-      expect(mockCanvas.getContext).toHaveBeenCalledWith('webgl');
-      expect(mockCanvas.getContext).toHaveBeenCalledWith('experimental-webgl');
+      expect(result).toBe(33554432); // 32 megapixels desktop default
     });
 
-    it.skip('should handle navigator without deviceMemory', () => {
-      // SKIP: JSDOM doesn't support WebGL context - HTMLCanvasElement.prototype.getContext not implemented
-      const mockCanvas = {
-        getContext: jest.fn(() => ({
-          MAX_TEXTURE_SIZE: 0x0d33,
-          getParameter: jest.fn(() => 4096),
-        })),
-      };
-
-      const mockDocument = {
-        createElement: jest.fn(() => mockCanvas),
-      };
-
-      const mockNavigator = {
-        userAgent: 'Mozilla/5.0 (X11; Linux x86_64)',
-        // No deviceMemory property
-      };
-
-      const mockWindow = {
-        performance: {
-          memory: {
-            jsHeapSizeLimit: 4 * 1024 * 1024 * 1024,
-          },
-        },
-      };
-
-      (global as any).window = mockWindow;
-      (global as any).document = mockDocument;
-      (global as any).navigator = mockNavigator;
+    it('should return desktop default for Linux desktop user agents', () => {
+      Object.defineProperty(navigator, 'userAgent', {
+        writable: true,
+        value: 'Mozilla/5.0 (X11; Linux x86_64)',
+      });
       (global as any).process = undefined;
 
       const result = getSafeCanvasSize();
-
-      expect(result).toBeGreaterThan(0);
+      expect(result).toBe(33554432); // 32 megapixels desktop default
     });
 
-    it.skip('should handle performance memory not available', () => {
-      // SKIP: JSDOM doesn't support WebGL context - HTMLCanvasElement.prototype.getContext not implemented
-      // Error: Not implemented: HTMLCanvasElement.prototype.getContext (without installing the canvas npm package)
-      const mockCanvas = {
-        getContext: jest.fn(() => ({
-          MAX_TEXTURE_SIZE: 0x0d33,
-          getParameter: jest.fn(() => 4096),
-        })),
-      };
-
-      const mockDocument = {
-        createElement: jest.fn(() => mockCanvas),
-      };
-
-      const mockNavigator = {
-        userAgent: 'Mozilla/5.0 (compatible; MSIE 11.0; Windows NT 10.0)',
-      };
-
-      const mockWindow = {
-        performance: undefined,
-      };
-
-      (global as any).window = mockWindow;
-      (global as any).document = mockDocument;
-      (global as any).navigator = mockNavigator;
+    it('should return desktop default for Mac desktop user agents', () => {
+      Object.defineProperty(navigator, 'userAgent', {
+        writable: true,
+        value: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)',
+      });
       (global as any).process = undefined;
 
       const result = getSafeCanvasSize();
+      expect(result).toBe(33554432); // 32 megapixels desktop default
+    });
 
-      expect(result).toBeGreaterThan(0);
+    it('should return desktop default for IE11 user agents', () => {
+      Object.defineProperty(navigator, 'userAgent', {
+        writable: true,
+        value: 'Mozilla/5.0 (compatible; MSIE 11.0; Windows NT 10.0)',
+      });
+      (global as any).process = undefined;
+
+      const result = getSafeCanvasSize();
+      expect(result).toBe(33554432); // Desktop default (no mobile UA)
     });
   });
 
@@ -654,13 +445,13 @@ describe('PDF Default Options Utility Functions', () => {
   });
 
   describe('edge cases and error handling', () => {
-    it.skip('should handle undefined window gracefully', () => {
-      // SKIP: JSDOM doesn't support WebGL context - HTMLCanvasElement.prototype.getContext not implemented
+    it('should handle undefined window gracefully', () => {
       const originalWindow = (global as any).window;
       (global as any).window = undefined;
 
       try {
         expect(() => getSafeCanvasSize()).not.toThrow();
+        expect(getSafeCanvasSize()).toBe(4096);
       } finally {
         (global as any).window = originalWindow;
       }

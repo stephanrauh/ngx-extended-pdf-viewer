@@ -10,6 +10,7 @@ export class PdfCspPolicyService {
   constructor() {}
 
   public init() {
+    /* istanbul ignore next -- SSR guard, untestable in JSDOM */
     if (typeof window === 'undefined') {
       // server-side rendering
       return;
@@ -28,6 +29,7 @@ export class PdfCspPolicyService {
   }
 
   public addTrustedCSS(styles: HTMLElement, css: string) {
+    /* istanbul ignore next -- SSR guard, untestable in JSDOM */
     if (typeof window === 'undefined') {
       // server-side rendering
       return;
@@ -41,6 +43,7 @@ export class PdfCspPolicyService {
   }
 
   public addTrustedJavaScript(scripts: HTMLScriptElement, css: string) {
+    /* istanbul ignore next -- SSR guard, untestable in JSDOM */
     if (typeof window === 'undefined') {
       // server-side rendering
       return;
@@ -66,6 +69,7 @@ export class PdfCspPolicyService {
     }
   }
   public addTrustedHTML(element: HTMLElement, html: string) {
+    /* istanbul ignore next -- SSR guard, untestable in JSDOM */
     if (typeof window === 'undefined') {
       // server-side rendering
       return;
@@ -79,6 +83,7 @@ export class PdfCspPolicyService {
   }
 
   public createTrustedHTML(html: string) {
+    /* istanbul ignore next -- SSR guard, untestable in JSDOM */
     if (typeof window === 'undefined') {
       // server-side rendering
       return;
@@ -92,6 +97,7 @@ export class PdfCspPolicyService {
   }
 
   public generateTrustedURL(sourcePath: string) {
+    /* istanbul ignore next -- SSR guard, untestable in JSDOM */
     if (typeof window === 'undefined') {
       // server-side rendering
       return;

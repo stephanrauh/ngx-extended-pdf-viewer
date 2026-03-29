@@ -66,6 +66,7 @@ export class PdfSidebarContentComponent implements OnDestroy {
   });
 
   constructor(public notificationService: PDFNotificationService) {
+    /* istanbul ignore next -- SSR guard, untestable in JSDOM */
     if (typeof window !== 'undefined') {
       effect(() => {
         this.PDFViewerApplication = notificationService.onPDFJSInitSignal();
@@ -88,6 +89,7 @@ export class PdfSidebarContentComponent implements OnDestroy {
     // #3135 end of modification by ngx-extended-pdf-viewer
   }
 
+  /* istanbul ignore next -- requires real Angular template and embedded view, untestable in unit tests */
   private createThumbnail({
     pdfThumbnailView: _pdfThumbnailView, // #3111: Not used - PDF.js v5.4.530+ populates this after we append the element
     linkService,

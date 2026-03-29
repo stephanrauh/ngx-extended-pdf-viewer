@@ -308,6 +308,7 @@ export class DynamicCssComponent implements OnDestroy {
    * @returns true if data-pdfjsprinting is set
    */
   private isPrinting(): boolean {
+    /* istanbul ignore next -- SSR guard, untestable in JSDOM */
     if (!this.isBrowser()) {
       return false;
     }

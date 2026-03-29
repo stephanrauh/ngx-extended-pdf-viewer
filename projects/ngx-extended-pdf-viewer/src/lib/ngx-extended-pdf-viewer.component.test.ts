@@ -2,7 +2,7 @@ import { PlatformLocation } from '@angular/common';
 import { ChangeDetectorRef, ElementRef, NgZone, PLATFORM_ID, Renderer2, CSP_NONCE, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AnnotationEditorEvent } from './events/annotation-editor-layer-event';
-import { FormDataType, NgxExtendedPdfViewerComponent } from './ngx-extended-pdf-viewer.component';
+import { FormDataType, NgxExtendedPdfViewerComponent, isIOS } from './ngx-extended-pdf-viewer.component';
 import { NgxExtendedPdfViewerService } from './ngx-extended-pdf-viewer.service';
 import { NgxKeyboardManagerService } from './ngx-keyboard-manager.service';
 import { PDFNotificationService } from './pdf-notification-service';
@@ -607,5 +607,78 @@ describe('NgxExtendedPdfViewerComponent', () => {
         });
       });
     });
+  });
+});
+
+describe('isIOS', () => {
+  const originalNavigator = navigator;
+
+  function mockUserAgent(ua: string) {
+    Object.defineProperty(globalThis, 'navigator', {
+      value: { userAgent: ua },
+      writable: true,
+      configurable: true,
+    });
+  }
+
+  afterEach(() => {
+    Object.defineProperty(globalThis, 'navigator', {
+      value: originalNavigator,
+      writable: true,
+      configurable: true,
+    });
+  });
+
+  it('should return true for iPhone user agent', () => {
+    mockUserAgent('Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X)');
+    expect(isIOS()).toBe(true);
+  });
+
+  it('should return true for iPad user agent', () => {
+    mockUserAgent('Mozilla/5.0 (iPad; CPU OS 16_0 like Mac OS X)');
+    expect(isIOS()).toBe(true);
+  });
+
+  it('should return true for iPod user agent', () => {
+    mockUserAgent('Mozilla/5.0 (iPod touch; CPU iPhone OS 16_0 like Mac OS X)');
+    expect(isIOS()).toBe(true);
+  });
+
+  it('should return true for iPad on iOS 13+ (reports as Mac with touch)', () => {
+    mockUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15');
+    // Simulate ontouchend being present in document (iPad on iOS 13+)
+    Object.defineProperty(document, 'ontouchend', {
+      value: null,
+      writable: true,
+      configurable: true,
+    });
+    expect(isIOS()).toBe(true);
+    delete (document as any).ontouchend;
+  });
+
+  it('should return false for Android user agent', () => {
+    mockUserAgent('Mozilla/5.0 (Linux; Android 13; Pixel 7)');
+    expect(isIOS()).toBe(false);
+  });
+
+  it('should return false for desktop Chrome user agent', () => {
+    mockUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0');
+    expect(isIOS()).toBe(false);
+  });
+
+  it('should return false for Mac without touch support', () => {
+    mockUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36');
+    // Ensure ontouchend is not on document
+    delete (document as any).ontouchend;
+    expect(isIOS()).toBe(false);
+  });
+
+  it('should return false when navigator.userAgent is empty', () => {
+    Object.defineProperty(globalThis, 'navigator', {
+      value: { userAgent: '' },
+      writable: true,
+      configurable: true,
+    });
+    expect(isIOS()).toBe(false);
   });
 });

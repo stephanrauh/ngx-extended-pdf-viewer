@@ -193,6 +193,448 @@ describe('DynamicCssComponent', () => {
     });
   });
 
+  describe('isZoneless and asyncWithCD', () => {
+    it('should detect zoneless when Zone is undefined', () => {
+      const originalZone = (globalThis as any).Zone;
+      delete (globalThis as any).Zone;
+
+      // Access private method via bracket notation
+      const result = (component as any).isZoneless();
+      expect(result).toBe(true);
+
+      (globalThis as any).Zone = originalZone;
+    });
+
+    it('should detect zone-based when Zone.current exists', () => {
+      const originalZone = (globalThis as any).Zone;
+      (globalThis as any).Zone = { current: {} };
+
+      const result = (component as any).isZoneless();
+      expect(result).toBe(false);
+
+      (globalThis as any).Zone = originalZone;
+    });
+
+    it('should detect zoneless when Zone exists but current is falsy', () => {
+      const originalZone = (globalThis as any).Zone;
+      (globalThis as any).Zone = { current: null };
+
+      const result = (component as any).isZoneless();
+      expect(result).toBe(true);
+
+      (globalThis as any).Zone = originalZone;
+    });
+
+    it('asyncWithCD should call detectChanges when zoneless', () => {
+      const originalZone = (globalThis as any).Zone;
+      delete (globalThis as any).Zone;
+
+      const callback = jest.fn();
+      const cdrSpy = jest.spyOn((component as any).cdr, 'detectChanges');
+
+      const wrapped = (component as any).asyncWithCD(callback);
+      wrapped();
+
+      expect(callback).toHaveBeenCalled();
+      expect(cdrSpy).toHaveBeenCalled();
+
+      (globalThis as any).Zone = originalZone;
+    });
+
+    it('asyncWithCD should not call detectChanges when zone-based', () => {
+      const originalZone = (globalThis as any).Zone;
+      (globalThis as any).Zone = { current: {} };
+
+      const callback = jest.fn();
+      const cdrSpy = jest.spyOn((component as any).cdr, 'detectChanges');
+
+      const wrapped = (component as any).asyncWithCD(callback);
+      wrapped();
+
+      expect(callback).toHaveBeenCalled();
+      expect(cdrSpy).not.toHaveBeenCalled();
+
+      (globalThis as any).Zone = originalZone;
+    });
+  });
+
+  describe('updateToolbarWidth - addTrustedCSS on existing style element', () => {
+    it('should call addTrustedCSS when style element already exists', () => {
+      const mockContainer = document.createElement('div');
+      Object.defineProperty(mockContainer, 'clientWidth', { configurable: true, value: 800 });
+
+      const mockStyleElement = document.createElement('style');
+      mockStyleElement.id = 'pdf-dynamic-css';
+
+      const getElementByIdSpy = jest.spyOn(document, 'getElementById');
+      getElementByIdSpy
+        .mockReturnValueOnce(mockContainer) // toolbarViewer
+        .mockReturnValueOnce(mockStyleElement); // pdf-dynamic-css already exists
+
+      component.updateToolbarWidth();
+
+      expect(mockPdfCspPolicyService.addTrustedCSS).toHaveBeenCalledWith(mockStyleElement, expect.any(String));
+
+      getElementByIdSpy.mockRestore();
+    });
+  });
+
+  describe('removeScrollbarInInfiniteScrollMode - full coverage', () => {
+    let mockNgxViewer: NgxHasHeight;
+
+    beforeEach(() => {
+      mockNgxViewer = {
+        height: undefined,
+        autoHeight: false,
+        minHeight: undefined,
+        markForCheck: jest.fn(),
+      };
+    });
+
+    it('should set height with primaryMenuVisible in infinite-scroll mode', () => {
+      jest.useFakeTimers();
+
+      const mockViewer = document.createElement('div');
+      Object.defineProperty(mockViewer, 'clientHeight', { configurable: true, value: 500 });
+
+      const mockZoom = document.createElement('div');
+
+      const getElementByIdSpy = jest.spyOn(document, 'getElementById').mockReturnValue(mockViewer);
+      const getElementsByClassNameSpy = jest.spyOn(document, 'getElementsByClassName').mockReturnValue([mockZoom] as any);
+
+      component.removeScrollbarInInfiniteScrollMode(false, 'infinite-scroll', true, mockNgxViewer, VerbosityLevel.INFOS);
+
+      jest.advanceTimersByTime(1);
+
+      expect(mockNgxViewer.height).toBe('552px'); // 500 + 17 + 35
+      expect(mockZoom.style.height).toBe('552px');
+
+      getElementByIdSpy.mockRestore();
+      getElementsByClassNameSpy.mockRestore();
+      jest.useRealTimers();
+    });
+
+    it('should set height without primaryMenu when height > 17', () => {
+      jest.useFakeTimers();
+
+      const mockViewer = document.createElement('div');
+      Object.defineProperty(mockViewer, 'clientHeight', { configurable: true, value: 500 });
+
+      const getElementByIdSpy = jest.spyOn(document, 'getElementById').mockReturnValue(mockViewer);
+      const getElementsByClassNameSpy = jest.spyOn(document, 'getElementsByClassName').mockReturnValue([] as any);
+
+      component.removeScrollbarInInfiniteScrollMode(false, 'infinite-scroll', false, mockNgxViewer, VerbosityLevel.INFOS);
+
+      jest.advanceTimersByTime(1);
+
+      expect(mockNgxViewer.height).toBe('517px'); // 500 + 17
+
+      getElementByIdSpy.mockRestore();
+      getElementsByClassNameSpy.mockRestore();
+      jest.useRealTimers();
+    });
+
+    it('should default to 100% when height is 0 and ngxViewer.height is undefined', () => {
+      jest.useFakeTimers();
+
+      const mockViewer = document.createElement('div');
+      Object.defineProperty(mockViewer, 'clientHeight', { configurable: true, value: 0 });
+
+      const getElementByIdSpy = jest.spyOn(document, 'getElementById').mockReturnValue(mockViewer);
+      const getElementsByClassNameSpy = jest.spyOn(document, 'getElementsByClassName').mockReturnValue([] as any);
+
+      component.removeScrollbarInInfiniteScrollMode(false, 'infinite-scroll', false, mockNgxViewer, VerbosityLevel.INFOS);
+
+      jest.advanceTimersByTime(1);
+
+      expect(mockNgxViewer.height).toBe('100%');
+
+      getElementByIdSpy.mockRestore();
+      getElementsByClassNameSpy.mockRestore();
+      jest.useRealTimers();
+    });
+
+    it('should restore height when restoreHeight is true', () => {
+      jest.useFakeTimers();
+      Object.defineProperty(window, 'innerHeight', { writable: true, configurable: true, value: 800 });
+
+      const mockViewer = document.createElement('div');
+      Object.defineProperty(mockViewer, 'clientHeight', { configurable: true, value: 500 });
+
+      const mockZoomContainer = document.createElement('div');
+      Object.defineProperty(mockZoomContainer, 'clientHeight', { configurable: true, value: 500 });
+      mockZoomContainer.getBoundingClientRect = jest.fn().mockReturnValue({ top: 50, left: 0, width: 1024, height: 500 });
+      mockZoomContainer.style.zIndex = '1';
+
+      const getElementByIdSpy = jest.spyOn(document, 'getElementById').mockReturnValue(mockViewer);
+      const getElementsByClassNameSpy = jest.spyOn(document, 'getElementsByClassName').mockReturnValue([mockZoomContainer] as any);
+      const getComputedStyleSpy = jest.spyOn(window, 'getComputedStyle').mockReturnValue({
+        paddingBottom: '0px',
+        marginBottom: '0px',
+      } as any);
+
+      mockNgxViewer.height = '500px';
+
+      component.removeScrollbarInInfiniteScrollMode(true, 'other-mode', false, mockNgxViewer, VerbosityLevel.INFOS);
+
+      jest.advanceTimersByTime(1);
+
+      expect(mockNgxViewer.height).toBeUndefined();
+      expect(mockNgxViewer.autoHeight).toBe(true);
+
+      getElementByIdSpy.mockRestore();
+      getElementsByClassNameSpy.mockRestore();
+      getComputedStyleSpy.mockRestore();
+      jest.useRealTimers();
+    });
+  });
+
+  describe('isPrinting', () => {
+    it('should return false when no printing attribute exists', () => {
+      const result = (component as any).isPrinting();
+      expect(result).toBe(false);
+    });
+
+    it('should return true when data-pdfjsprinting attribute exists', () => {
+      const el = document.createElement('div');
+      el.setAttribute('data-pdfjsprinting', '');
+      document.body.appendChild(el);
+
+      const result = (component as any).isPrinting();
+      expect(result).toBe(true);
+
+      document.body.removeChild(el);
+    });
+  });
+
+  describe('isContainerHeightZero', () => {
+    it('should return true and log warning when container height is 0', () => {
+      const mockContainer = document.createElement('div');
+      Object.defineProperty(mockContainer, 'clientHeight', { configurable: true, value: 0 });
+
+      const mockNgxViewer: NgxHasHeight = {
+        height: '50%',
+        autoHeight: false,
+        minHeight: undefined,
+        markForCheck: jest.fn(),
+      };
+
+      const warnSpy = jest.spyOn(console, 'warn').mockImplementation();
+
+      const result = (component as any).isContainerHeightZero(mockContainer, mockNgxViewer, VerbosityLevel.WARNINGS);
+
+      expect(result).toBe(true);
+      expect(warnSpy).toHaveBeenCalled();
+
+      warnSpy.mockRestore();
+    });
+
+    it('should return true without warning when autoHeight is already set', () => {
+      const mockContainer = document.createElement('div');
+      Object.defineProperty(mockContainer, 'clientHeight', { configurable: true, value: 0 });
+
+      const mockNgxViewer: NgxHasHeight = {
+        height: '50%',
+        autoHeight: true,
+        minHeight: undefined,
+        markForCheck: jest.fn(),
+      };
+
+      const warnSpy = jest.spyOn(console, 'warn').mockImplementation();
+
+      const result = (component as any).isContainerHeightZero(mockContainer, mockNgxViewer, VerbosityLevel.WARNINGS);
+
+      expect(result).toBe(true);
+      expect(warnSpy).not.toHaveBeenCalled();
+
+      warnSpy.mockRestore();
+    });
+
+    it('should return false when container has height', () => {
+      const mockContainer = document.createElement('div');
+      Object.defineProperty(mockContainer, 'clientHeight', { configurable: true, value: 500 });
+
+      const mockNgxViewer: NgxHasHeight = {
+        height: undefined,
+        autoHeight: false,
+        minHeight: undefined,
+        markForCheck: jest.fn(),
+      };
+
+      const result = (component as any).isContainerHeightZero(mockContainer, mockNgxViewer, VerbosityLevel.INFOS);
+
+      expect(result).toBe(false);
+    });
+  });
+
+  describe('adjustHeight', () => {
+    it('should set minHeight based on available space', () => {
+      Object.defineProperty(window, 'innerHeight', { writable: true, configurable: true, value: 800 });
+
+      const mockContainer = document.createElement('div');
+      mockContainer.getBoundingClientRect = jest.fn().mockReturnValue({ top: 100, left: 0, width: 1024, height: 500 });
+      // Provide a zIndex to stop recursion at this element
+      mockContainer.style.zIndex = '1';
+
+      const mockNgxViewer: NgxHasHeight = {
+        height: undefined,
+        autoHeight: true,
+        minHeight: undefined,
+        markForCheck: jest.fn(),
+      };
+
+      const getComputedStyleSpy = jest.spyOn(window, 'getComputedStyle').mockReturnValue({
+        paddingBottom: '10px',
+        marginBottom: '5px',
+      } as any);
+
+      (component as any).adjustHeight(mockContainer, mockNgxViewer);
+
+      // available=800, top=100, maximumHeight=700, padding=15, final=685
+      expect(mockNgxViewer.minHeight).toBe('685px');
+      expect(mockNgxViewer.markForCheck).toHaveBeenCalled();
+
+      getComputedStyleSpy.mockRestore();
+    });
+
+    it('should set minHeight to 100px when calculated height is too small', () => {
+      Object.defineProperty(window, 'innerHeight', { writable: true, configurable: true, value: 200 });
+
+      const mockContainer = document.createElement('div');
+      mockContainer.getBoundingClientRect = jest.fn().mockReturnValue({ top: 180, left: 0, width: 1024, height: 20 });
+      mockContainer.style.zIndex = '1';
+
+      const mockNgxViewer: NgxHasHeight = {
+        height: undefined,
+        autoHeight: true,
+        minHeight: undefined,
+        markForCheck: jest.fn(),
+      };
+
+      const getComputedStyleSpy = jest.spyOn(window, 'getComputedStyle').mockReturnValue({
+        paddingBottom: '10px',
+        marginBottom: '5px',
+      } as any);
+
+      (component as any).adjustHeight(mockContainer, mockNgxViewer);
+
+      // available=200, top=180, maximumHeight=20, padding=15, final=5 => clamp to 100px
+      expect(mockNgxViewer.minHeight).toBe('100px');
+
+      getComputedStyleSpy.mockRestore();
+    });
+  });
+
+  describe('calculateBorderMargin', () => {
+    it('should recursively calculate padding and margin', () => {
+      const parent = document.createElement('div');
+      parent.style.zIndex = '1'; // stops recursion at parent
+
+      const child = document.createElement('div');
+      parent.appendChild(child);
+
+      const getComputedStyleSpy = jest.spyOn(window, 'getComputedStyle').mockImplementation((el: Element) => {
+        if (el === child) {
+          return { paddingBottom: '10px', marginBottom: '5px' } as any;
+        }
+        return { paddingBottom: '20px', marginBottom: '8px' } as any;
+      });
+
+      const result = (component as any).calculateBorderMargin(child);
+
+      // child: 10+5=15, parent has zIndex so: 20+8=28, total=43
+      expect(result).toBe(43);
+
+      getComputedStyleSpy.mockRestore();
+    });
+
+    it('should return 0 for null container', () => {
+      const result = (component as any).calculateBorderMargin(null);
+      expect(result).toBe(0);
+    });
+
+    it('should stop recursion when element has zIndex', () => {
+      const el = document.createElement('div');
+      el.style.zIndex = '5';
+
+      const getComputedStyleSpy = jest.spyOn(window, 'getComputedStyle').mockReturnValue({
+        paddingBottom: '12px',
+        marginBottom: '8px',
+      } as any);
+
+      const result = (component as any).calculateBorderMargin(el);
+
+      expect(result).toBe(20); // 12+8, no recursion
+
+      getComputedStyleSpy.mockRestore();
+    });
+  });
+
+  describe('checkHeight - full integration', () => {
+    it('should skip when height is defined with units', () => {
+      const mockNgxViewer: NgxHasHeight = {
+        height: '50vh',
+        autoHeight: false,
+        minHeight: undefined,
+        markForCheck: jest.fn(),
+      };
+
+      // Should return early without errors
+      component.checkHeight(mockNgxViewer, VerbosityLevel.INFOS);
+      expect(mockNgxViewer.markForCheck).not.toHaveBeenCalled();
+    });
+
+    it('should skip when printing', () => {
+      const el = document.createElement('div');
+      el.setAttribute('data-pdfjsprinting', '');
+      document.body.appendChild(el);
+
+      const mockNgxViewer: NgxHasHeight = {
+        height: undefined,
+        autoHeight: false,
+        minHeight: undefined,
+        markForCheck: jest.fn(),
+      };
+
+      component.checkHeight(mockNgxViewer, VerbosityLevel.INFOS);
+      expect(mockNgxViewer.markForCheck).not.toHaveBeenCalled();
+
+      document.body.removeChild(el);
+    });
+
+    it('should set autoHeight and adjustHeight when container height is zero', () => {
+      Object.defineProperty(window, 'innerHeight', { writable: true, configurable: true, value: 800 });
+
+      const mockZoomContainer = document.createElement('div');
+      Object.defineProperty(mockZoomContainer, 'clientHeight', { configurable: true, value: 0 });
+      mockZoomContainer.getBoundingClientRect = jest.fn().mockReturnValue({ top: 50, left: 0, width: 1024, height: 0 });
+      mockZoomContainer.style.zIndex = '1';
+
+      const getElementsByClassNameSpy = jest.spyOn(document, 'getElementsByClassName').mockReturnValue([mockZoomContainer] as any);
+
+      const getComputedStyleSpy = jest.spyOn(window, 'getComputedStyle').mockReturnValue({
+        paddingBottom: '0px',
+        marginBottom: '0px',
+      } as any);
+
+      const mockNgxViewer: NgxHasHeight = {
+        height: undefined,
+        autoHeight: false,
+        minHeight: undefined,
+        markForCheck: jest.fn(),
+      };
+
+      component.checkHeight(mockNgxViewer, VerbosityLevel.INFOS);
+
+      expect(mockNgxViewer.autoHeight).toBe(true);
+      expect(mockNgxViewer.minHeight).toBe('750px'); // 800-50-0
+      expect(mockNgxViewer.markForCheck).toHaveBeenCalled();
+
+      getElementsByClassNameSpy.mockRestore();
+      getComputedStyleSpy.mockRestore();
+    });
+  });
+
   describe('ngOnDestroy', () => {
     it('should handle cleanup gracefully', () => {
       const getElementByIdSpy = jest.spyOn(mockDocument, 'getElementById').mockReturnValue(null);

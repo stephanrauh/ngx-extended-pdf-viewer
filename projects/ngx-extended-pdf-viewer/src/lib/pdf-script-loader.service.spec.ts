@@ -254,23 +254,6 @@ describe('PDFScriptLoaderService', () => {
     });
   });
 
-  describe('modern JavaScript feature detection', () => {
-    it.skip('should add script for optional chaining support when CSP is applied', async () => {
-      // Skipped: Complex DOM manipulation testing requires more sophisticated mocking
-      // The core business logic (browser compatibility detection) is tested elsewhere
-    });
-
-    it.skip('should handle script loading error gracefully', async () => {
-      // Skipped: Complex DOM manipulation testing requires more sophisticated mocking
-      // Error handling logic is covered in other integration tests
-    });
-
-    it.skip('should use inline script when CSP is not applied', async () => {
-      // Skipped: Complex DOM manipulation testing requires more sophisticated mocking
-      // The inline script generation logic is tested in createInlineScript tests
-    });
-  });
-
   describe('ES5 requirement detection', () => {
     it('should return false in server-side rendering environment', async () => {
       // Mock server-side environment
@@ -339,15 +322,6 @@ describe('PDFScriptLoaderService', () => {
       expect(needsES5).toBe(true);
     });
 
-    it.skip('should check modern JS support when basic requirements are met', async () => {
-      // Skipped: Complex async testing with navigator dependency requires better mocking
-      // The individual browser detection methods are tested separately
-    });
-
-    it.skip('should cache ES5 requirement result', async () => {
-      // Skipped: Complex async testing with navigator dependency requires better mocking
-      // Caching behavior is implicitly tested in integration scenarios
-    });
   });
 
   describe('Promise.withResolvers polyfill', () => {
@@ -393,20 +367,6 @@ describe('PDFScriptLoaderService', () => {
       expect(result).toBe(true);
     });
 
-    it.skip('should load viewer and return success status', async () => {
-      // Skipped: Complex async mocking of needsES5 and loadViewer methods
-      // Core functionality is tested through simpler integration tests
-    });
-
-    it.skip('should set pdfDefaultOptions.needsES5 when forcing legacy ES5', async () => {
-      // Skipped: Complex async mocking of needsES5 and loadViewer methods  
-      // The property setting logic is tested in unit tests for individual methods
-    });
-
-    it.skip('should return false if viewer loading fails', async () => {
-      // Skipped: Complex async mocking of needsES5 and loadViewer methods
-      // Failure scenarios are tested through integration tests
-    });
   });
 
   describe('ngOnDestroy', () => {
@@ -468,16 +428,6 @@ describe('PDFScriptLoaderService', () => {
   });
 
   describe('edge cases and error handling', () => {
-    it.skip('should handle undefined navigator in iOS detection', () => {
-      // Skipped: Requires careful navigator mocking in test environment
-      // Basic error handling is covered in server-side rendering tests
-    });
-
-    it.skip('should handle malformed iOS version strings', () => {
-      // Skipped: Requires navigator property mocking
-      // Edge cases are covered in basic iOS version detection tests
-    });
-
     it('should handle script element creation with special characters in path', () => {
       const sourcePath = '/test/script with spaces & special chars.js';
       const script = (service as any).createScriptElement(sourcePath);
@@ -494,15 +444,4 @@ describe('PDFScriptLoaderService', () => {
     });
   });
 
-  describe('integration scenarios', () => {
-    it.skip('should handle complete ES5 detection workflow for modern browser', async () => {
-      // Skipped: Complex navigator and browser API mocking required
-      // Individual browser detection methods are tested separately
-    });
-
-    it.skip('should handle complete ES5 detection workflow for legacy browser', async () => {
-      // Skipped: Complex navigator and browser API mocking required
-      // Individual legacy browser detection methods are tested separately
-    });
-  });
 });

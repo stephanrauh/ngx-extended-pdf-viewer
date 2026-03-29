@@ -9,6 +9,7 @@ export class UnitToPx {
   private static pxPerUnitCache: { [key: string]: number } = {};
 
   private static initElements(): void {
+    /* istanbul ignore next -- SSR guard, untestable in JSDOM */
     if (!document) {
       return;
     }
