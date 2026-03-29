@@ -1,4 +1,5 @@
 import { isPlatformBrowser, PlatformLocation } from '@angular/common';
+import { PositioningService } from './dynamic-css/positioning.service';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -1115,7 +1116,17 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     this.toolbarWidth = (100 / factor).toString() + '%';
     this.toolbarMarginTop = (factor - 1) * 16 + 'px';
 
-    this.calcViewerPositionTop();
+    // Defer position recalculation until after Angular has rendered the
+    // new scale transform on the toolbar. Without this, getBoundingClientRect()
+    // returns the OLD toolbar height because the DOM hasn't updated yet.
+    requestAnimationFrame(() => {
+      this.calcViewerPositionTop();
+
+      // Reposition any open popups (findbar, secondary toolbar, editor toolbars)
+      // so they move to the correct position after the zoom change.
+      const positioningService = new PositioningService();
+      positioningService.repositionOpenPopups();
+    });
   });
 
   // @ts-ignore TS6133 - Used for side effects only
@@ -1434,14 +1445,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       return;
     }
     const top = this.toolbar.getBoundingClientRect().height;
-    const previous = this.viewerPositionTop;
     if (top < 33) {
       this.viewerPositionTop = '33px';
     } else {
       this.viewerPositionTop = top + 'px';
-    }
-    if (previous !== this.viewerPositionTop) {
-      this.cdr.markForCheck();
     }
 
     const factor = top / 33;
@@ -1466,6 +1473,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     } else {
       this.findbarLeft = '0';
     }
+
+    this.cdr.markForCheck();
   }
 
   constructor(

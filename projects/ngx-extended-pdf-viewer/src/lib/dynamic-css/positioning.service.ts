@@ -4,6 +4,18 @@ export class PositioningService {
   private static readonly DOORHANGER_OFFSET = 17;
   private static readonly TOOLBAR_MARGIN = 4;
 
+  // Button → popup pairs for all positionable popups
+  private static readonly POPUP_PAIRS: Array<[string, string]> = [
+    ['primaryViewFind', 'findbar'],
+    ['secondaryToolbarToggle', 'secondaryToolbar'],
+    ['primaryEditorFreeText', 'editorFreeTextParamsToolbar'],
+    ['primaryEditorInk', 'editorInkParamsToolbar'],
+    ['primaryEditorHighlight', 'editorHighlightParamsToolbar'],
+    ['primaryEditorStamp', 'editorStampParamsToolbar'],
+    ['editorCommentButton', 'editorCommentParamsToolbar'],
+    ['primaryEditorSignatureButton', 'editorSignatureParamsToolbar'],
+  ];
+
   public positionPopupBelowItsButton(buttonId: string, popupId: string): void {
     if (!pdfDefaultOptions.positionPopupDialogsWithJavaScript) {
       return;
@@ -16,6 +28,32 @@ export class PositioningService {
       if (!button || !popup) return;
 
       this.applyPopupPositioning(button, popup);
+    });
+  }
+
+  /**
+   * Re-positions all currently open/visible popups. Call this when the
+   * toolbar layout changes (e.g., mobileFriendlyZoom changes at runtime).
+   */
+  public repositionOpenPopups(): void {
+    if (!pdfDefaultOptions.positionPopupDialogsWithJavaScript) {
+      return;
+    }
+
+    setTimeout(() => {
+      for (const [buttonId, popupId] of PositioningService.POPUP_PAIRS) {
+        const popup = document.querySelector<HTMLElement>(`#${popupId}`);
+        if (!popup) continue;
+
+        // A popup is "open" if it's visible (no hidden class/attribute and has offsetParent)
+        const isVisible = !popup.classList.contains('hidden') && !popup.hasAttribute('hidden') && popup.offsetParent !== null;
+        if (!isVisible) continue;
+
+        const button = this.findVisibleButton(buttonId);
+        if (!button) continue;
+
+        this.applyPopupPositioning(button, popup);
+      }
     });
   }
 
