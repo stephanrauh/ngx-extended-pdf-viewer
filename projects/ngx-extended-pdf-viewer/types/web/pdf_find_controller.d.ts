@@ -52,6 +52,7 @@ export class PDFFindController {
     get highlightMatches(): boolean | undefined;
     get pageMatches(): any[] | undefined;
     get pageMatchesLength(): any[] | undefined;
+    get pageMatchesColor(): any[] | undefined;
     get selected(): {
         pageIdx: number;
         matchIdx: number;
@@ -92,6 +93,7 @@ export class PDFFindController {
     _scrollMatches: boolean | undefined;
     _pageMatches: any[] | undefined;
     _pageMatchesLength: any[] | undefined;
+    _pageMatchesColor: any[] | undefined;
     _selected: {
         pageIdx: number;
         matchIdx: number;

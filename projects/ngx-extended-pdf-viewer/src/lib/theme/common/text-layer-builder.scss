@@ -124,6 +124,31 @@ ngx-extended-pdf-viewer {
         opacity: 0.25;
         backdrop-filter: var(--highlight-selected-backdrop-filter);
       }
+
+      // #3168 modified by ngx-extended-pdf-viewer
+      // Multi-color highlights for "find multiple words" feature.
+      // Each search term gets a distinct color (up to 5 colors, then wraps).
+      &.color0 {
+        background-color: rgba(180, 0, 170, 0.35);
+        &.selected { background-color: rgba(180, 0, 170, 0.6); }
+      }
+      &.color1 {
+        background-color: rgba(0, 125, 0, 0.35);
+        &.selected { background-color: rgba(0, 125, 0, 0.6); }
+      }
+      &.color2 {
+        background-color: rgba(0, 80, 255, 0.35);
+        &.selected { background-color: rgba(0, 80, 255, 0.6); }
+      }
+      &.color3 {
+        background-color: rgba(230, 0, 0, 0.35);
+        &.selected { background-color: rgba(230, 0, 0, 0.6); }
+      }
+      &.color4 {
+        background-color: rgba(230, 100, 0, 0.35);
+        &.selected { background-color: rgba(230, 100, 0, 0.6); }
+      }
+      // #3168 end of modification by ngx-extended-pdf-viewer
     }
 
     .customHighlight {
@@ -133,10 +158,49 @@ ngx-extended-pdf-viewer {
       --highlight-selected-backdrop-filter: none;
       background-color: var(--custom-highlight-bg-color);
 
+      &.appended {
+        position: initial;
+      }
+
+      &.begin {
+        border-radius: 4px 0 0 4px;
+      }
+
+      &.end {
+        border-radius: 0 4px 4px 0;
+      }
+
+      &.middle {
+        border-radius: 0;
+      }
+
       &.selected {
         background-color: var(--custom-highlight-selected-bg-color);
         backdrop-filter: var(--highlight-selected-backdrop-filter);
       }
+
+      // #3168 modified by ngx-extended-pdf-viewer
+      &.color0 {
+        background-color: rgba(180, 0, 170, 0.35);
+        &.selected { background-color: rgba(180, 0, 170, 0.6); }
+      }
+      &.color1 {
+        background-color: rgba(0, 125, 0, 0.35);
+        &.selected { background-color: rgba(0, 125, 0, 0.6); }
+      }
+      &.color2 {
+        background-color: rgba(0, 80, 255, 0.35);
+        &.selected { background-color: rgba(0, 80, 255, 0.6); }
+      }
+      &.color3 {
+        background-color: rgba(230, 0, 0, 0.35);
+        &.selected { background-color: rgba(230, 0, 0, 0.6); }
+      }
+      &.color4 {
+        background-color: rgba(230, 100, 0, 0.35);
+        &.selected { background-color: rgba(230, 100, 0, 0.6); }
+      }
+      // #3168 end of modification by ngx-extended-pdf-viewer
     }
 
     ::selection {

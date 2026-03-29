@@ -50,7 +50,7 @@ export class TextHighlighter {
      */
     enable(): void;
     disable(): void;
-    _convertMatches(matches: any, matchesLength: any, cssClass?: string, highlightAll?: boolean, isPageWithSelection?: boolean, selectedMatchIdx?: number): {
+    _convertMatches(matches: any, matchesLength: any, cssClass?: string, highlightAll?: boolean, isPageWithSelection?: boolean, selectedMatchIdx?: number, matchesColor?: null): {
         begin: {
             divIdx: number;
             offset: number;
