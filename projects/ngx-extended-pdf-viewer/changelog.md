@@ -725,3 +725,5 @@
 - 26.0.0-rc.21 updated Jest to v30 and jest-preset-angular to v16 to fix Node.js 25 compatibility; fixed isIOS and SSR tests for jsdom v26
 - 26.0.0-rc.22 #3069 fixed iPad pinch-zoom scroll drift by reverting from getBoundingClientRect() to containerTopLeft (offsetTop/offsetLeft) for the scroll adjustment — getBoundingClientRect() was unstable because scrollPageIntoView() changes scroll before the rect is read, causing cumulative drift on each touch frame
 - 26.0.0-rc.23 #3069 fixed the rc.22 scroll drift fix: containerTopLeft uses offsetTop/offsetLeft which are in layout coords, not viewport coords like the clientX/Y origin — now reads getBoundingClientRect() BEFORE scrollPageIntoView() so both are in viewport coords and the rect is stable
+- 26.0.0-rc.24 #3069 added debug code
+- 26.0.0-rc.25 #3069 fixed iPad pinch-zoom page jumping: skip scrollPageIntoView() during pinch/wheel zoom (when origin is provided) — refresh() resizing pages via CSS causes the browser to recalculate scrollTop, undoing the previous frame's adjustment; scrollPageIntoView() then jumps from the wrong position; the origin-based adjustment alone keeps the pinch center stable
