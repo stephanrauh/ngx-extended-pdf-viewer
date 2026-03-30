@@ -31,7 +31,7 @@
     "customizable PDF viewer"
   ],
   "peerDependencies": {
-    "@angular/common": ">=19.0.0 <22.0.0",
+    "@angular/common": "^21.2.6",
     "@angular/core": ">=19.0.0 <22.0.0"
   },
   "devDependencies": {
