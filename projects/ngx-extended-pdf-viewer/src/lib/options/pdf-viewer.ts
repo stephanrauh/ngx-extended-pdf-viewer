@@ -35,6 +35,7 @@ export interface IPDFViewer {
   currentPageLabel: string | undefined;
   currentPageNumber: number;
   enablePrintAutoRotate: boolean;
+  currentScale: number;
   currentScaleValue: string | number;
   pagesRotation: 0 | 90 | 180 | 270;
   removePageBorders: boolean;

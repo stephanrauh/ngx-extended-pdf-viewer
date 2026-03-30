@@ -761,6 +761,52 @@ describe('NgxExtendedPdfViewerComponent', () => {
       expect(component.zoom()).toBe('page-fit');
       expect(component['_lastZoomSetByPdfJs']).toBe(component.zoom());
     });
+
+    it('should not write currentScaleValue when setZoom scale matches pdf.js currentScale', async () => {
+      // This tests the second guard in setZoom(): even if the effect runs and
+      // _lastZoomSetByPdfJs was already cleared, setZoom() should not write back
+      // a numeric scale that pdf.js already has. This prevents scroll position
+      // jumps on iPad where rapid touch events can cause extra effect runs.
+      mockPDFViewerApp.pdfViewer.currentScale = 1.52;
+
+      // Simulate: zoom signal is 152 (= 1.52 * 100), pdf.js already at 1.52
+      fixture.componentRef.setInput('zoom', 152);
+      fixture.detectChanges();
+
+      // Call setZoom directly (simulating what the effect does)
+      // Need a root element for setZoom to proceed
+      const rootEl = { nativeElement: document.createElement('div') };
+      const scaleSelect = document.createElement('select');
+      scaleSelect.id = 'scaleSelect';
+      rootEl.nativeElement.appendChild(scaleSelect);
+      component['root'] = (() => rootEl) as any;
+
+      await (component as any).setZoom();
+
+      // currentScaleValue should NOT have been reassigned because
+      // the numeric value matches what pdf.js already has
+      expect(mockPDFViewerApp.pdfViewer.currentScaleValue).toBe(1);
+      // (still the original mock value — not overwritten to 1.52)
+    });
+
+    it('should write currentScaleValue when setZoom scale differs from pdf.js currentScale', async () => {
+      mockPDFViewerApp.pdfViewer.currentScale = 1.0;
+
+      // User sets zoom to 200 (= 2.0), but pdf.js is at 1.0
+      fixture.componentRef.setInput('zoom', 200);
+      fixture.detectChanges();
+
+      const rootEl = { nativeElement: document.createElement('div') };
+      const scaleSelect = document.createElement('select');
+      scaleSelect.id = 'scaleSelect';
+      rootEl.nativeElement.appendChild(scaleSelect);
+      component['root'] = (() => rootEl) as any;
+
+      await (component as any).setZoom();
+
+      // currentScaleValue SHOULD be updated because values differ
+      expect(mockPDFViewerApp.pdfViewer.currentScaleValue).toBe(2);
+    });
   });
 });
 

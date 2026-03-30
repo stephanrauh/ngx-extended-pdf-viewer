@@ -720,3 +720,4 @@
 - 26.0.0-rc.16 #2675 fixed `[mobileFriendlyZoom]` not updating toolbar responsive breakpoints — buttons now show/hide correctly when zoom changes
 - 26.0.0-rc.17 increased the timing threshold of a performance test to allow for slow GitHub actions
 - 26.0.0-rc.18 #3069 fixed pinch-zoom flicker/jumping caused by a feedback loop: pdf.js scalechanging events updated the Angular zoom signal, whose effect wrote the (potentially outdated) scale back to pdf.js
+- 26.0.0-rc.19 #3069 added a second guard in setZoom() that skips writing currentScaleValue when the numeric zoom already matches pdf.js's currentScale, preventing scroll position jumps during rapid touch pinch on iPad

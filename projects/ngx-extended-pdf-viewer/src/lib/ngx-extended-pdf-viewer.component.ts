@@ -2909,6 +2909,16 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       }
 
       if (PDFViewerApplication.pdfViewer) {
+        // Guard against writing back a scale that pdf.js already has. During rapid
+        // pinch zoom (especially on iPad), the Angular effect can fire multiple times
+        // and write a stale numeric scale back to pdf.js WITHOUT an origin, causing
+        // the scroll position to jump (the page "scrolls out of view").
+        if (typeof zoomAsNumber === 'number') {
+          const currentScale = PDFViewerApplication.pdfViewer.currentScale;
+          if (Math.abs(zoomAsNumber - currentScale) < 1e-6) {
+            return;
+          }
+        }
         PDFViewerApplication.pdfViewer.currentScaleValue = zoomAsNumber ?? 'auto';
       }
     }
