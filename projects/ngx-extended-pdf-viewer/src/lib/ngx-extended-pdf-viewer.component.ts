@@ -1034,6 +1034,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   /** Legal values: undefined, 'auto', 'page-actual', 'page-fit', 'page-width', or '50' (or any other percentage) */
   public zoom = model<ZoomType>(undefined);
 
+  /**
+   * Tracks the last zoom value set from a pdf.js scalechanging event.
+   * Used to break the feedback loop: pdf.js fires scalechanging → Angular updates zoom signal →
+   * effect calls setZoom() → sets currentScaleValue back on pdf.js. During pinch zoom,
+   * the async effect can set an outdated scale value back, causing flicker/jumping.
+   */
+  private _lastZoomSetByPdfJs: ZoomType | undefined;
+
   public zoomLevels = input<(string | number)[]>(['auto', 'page-actual', 'page-fit', 'page-width', 0.5, 1, 1.25, 1.5, 2, 3, 4]);
 
   public maxZoom = input(10);
@@ -1136,9 +1144,18 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
   // @ts-ignore TS6133 - Used for side effects only
   private _zoomEffect = effect(() => {
-    void this.zoom(); // Track zoom signal
+    const currentZoom = this.zoom(); // Track zoom signal
     if (typeof window === 'undefined') return;
     if (!this.service.ngxExtendedPdfViewerInitialized) return;
+
+    // Break the feedback loop: if this zoom value was set by a pdf.js scalechanging event,
+    // don't write it back to pdf.js. This prevents flicker/jumping during pinch zoom,
+    // where the async effect could set an outdated scale value back to pdf.js.
+    if (this._lastZoomSetByPdfJs !== undefined && currentZoom === this._lastZoomSetByPdfJs) {
+      this._lastZoomSetByPdfJs = undefined;
+      return;
+    }
+    this._lastZoomSetByPdfJs = undefined;
 
     this.setZoom();
   });
@@ -2318,10 +2335,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       if (x.presetValue !== 'auto' && x.presetValue !== 'page-fit' && x.presetValue !== 'page-actual' && x.presetValue !== 'page-width') {
         // ignore rounding differences
         if (Math.abs(x.previousScale - x.scale) > 0.000001) {
-          this.zoom.set(x.scale * 100);
+          const newZoom = x.scale * 100;
+          this._lastZoomSetByPdfJs = newZoom;
+          this.zoom.set(newZoom);
         }
       } else if (x.previousPresetValue !== x.presetValue) {
         // called when the user selects one of the text values of the zoom select dropdown
+        this._lastZoomSetByPdfJs = x.presetValue;
         this.zoom.set(x.presetValue);
       }
     }, opts);
