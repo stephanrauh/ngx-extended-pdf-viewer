@@ -722,3 +722,5 @@
 - 26.0.0-rc.18 #3069 fixed pinch-zoom flicker/jumping caused by a feedback loop: pdf.js scalechanging events updated the Angular zoom signal, whose effect wrote the (potentially outdated) scale back to pdf.js
 - 26.0.0-rc.19 #3069 added a second guard in setZoom() that skips writing currentScaleValue when the numeric zoom already matches pdf.js's currentScale, preventing scroll position jumps during rapid touch pinch on iPad
 - 26.0.0-rc.20 #3069 fixed iPad pinch-zoom stutter: suppressed Angular setZoom() calls during active zoom gestures so pdf.js's drawingDelay (400ms deferred re-render) is not bypassed — pages now stay blurry during pinch and sharpen after the gesture ends, matching native pdf.js behavior
+- 26.0.0-rc.21 updated Jest to v30 and jest-preset-angular to v16 to fix Node.js 25 compatibility; fixed isIOS and SSR tests for jsdom v26
+- 26.0.0-rc.22 #3069 fixed iPad pinch-zoom scroll drift by reverting from getBoundingClientRect() to containerTopLeft (offsetTop/offsetLeft) for the scroll adjustment — getBoundingClientRect() was unstable because scrollPageIntoView() changes scroll before the rect is read, causing cumulative drift on each touch frame
