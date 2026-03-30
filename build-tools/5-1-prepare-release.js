@@ -18,6 +18,27 @@ function runCommand(command, errorMessage, exitCode) {
   }
 }
 
+// Robustly remove a directory, retrying up to 3 times with a short delay.
+// On macOS, rm -rf node_modules can fail with "Directory not empty" when
+// Spotlight, Finder (.DS_Store), or a recently exited child process still
+// holds a file handle.
+function removeDirectoryWithRetry(dir, errorMessage, exitCode) {
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      fs.rmSync(dir, { recursive: true, force: true });
+      return;
+    } catch (error) {
+      if (attempt < 3) {
+        console.warn(`${errorMessage} (attempt ${attempt}/3, retrying in 2s...)`);
+        execSync('sleep 2');
+      } else {
+        console.error(`${errorMessage} (all 3 attempts failed)`);
+        process.exit(exitCode);
+      }
+    }
+  }
+}
+
 // Navigate to the root directory
 process.chdir(path.join(__dirname, '..'));
 
@@ -54,7 +75,7 @@ runCommand(
 runCommand(`git commit . -m "bumped the version number to ${newVersion}"`, 'Error 65: Git commit in mypdf.js failed', 65);
 
 // Install dependencies and build
-runCommand('rm -rf node_modules', 'Error 66a: Removing node_modules failed', 66);
+removeDirectoryWithRetry('node_modules', 'Error 66a: Removing node_modules failed', 66);
 runCommand('npm ci --ignore-scripts', 'Error 66b: npm install failed', 66);
 runCommand('npm audit fix --ignore-scripts || true', 'Error 66c: npm audit fix failed', 66);
 runCommand('../ngx-extended-pdf-viewer/build-tools/search-for-shai-hulud.sh --full', 'Error 66d: shai-hulud scan failed', 66);
@@ -81,7 +102,7 @@ runCommand(
 runCommand(`git commit . -m "bumped the version number to ${newVersion}"`, 'Error 61: Git commit in mypdf.js failed', 61);
 
 // Install dependencies and build
-runCommand('rm -rf node_modules', 'Error 68a: Removing node_modules failed', 68);
+removeDirectoryWithRetry('node_modules', 'Error 68a: Removing node_modules failed', 68);
 runCommand('npm ci --ignore-scripts', 'Error 68b: npm install failed', 68);
 runCommand('npm audit fix --ignore-scripts || true', 'Error 68c: npm audit fix failed', 68);
 runCommand('../ngx-extended-pdf-viewer/build-tools/search-for-shai-hulud.sh --full', 'Error 68d: shai-hulud scan failed', 68);
