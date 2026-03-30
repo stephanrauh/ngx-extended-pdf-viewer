@@ -721,3 +721,4 @@
 - 26.0.0-rc.17 increased the timing threshold of a performance test to allow for slow GitHub actions
 - 26.0.0-rc.18 #3069 fixed pinch-zoom flicker/jumping caused by a feedback loop: pdf.js scalechanging events updated the Angular zoom signal, whose effect wrote the (potentially outdated) scale back to pdf.js
 - 26.0.0-rc.19 #3069 added a second guard in setZoom() that skips writing currentScaleValue when the numeric zoom already matches pdf.js's currentScale, preventing scroll position jumps during rapid touch pinch on iPad
+- 26.0.0-rc.20 #3069 fixed iPad pinch-zoom stutter: suppressed Angular setZoom() calls during active zoom gestures so pdf.js's drawingDelay (400ms deferred re-render) is not bypassed — pages now stay blurry during pinch and sharpen after the gesture ends, matching native pdf.js behavior

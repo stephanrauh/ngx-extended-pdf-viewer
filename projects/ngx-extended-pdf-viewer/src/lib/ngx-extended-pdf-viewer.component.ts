@@ -1042,6 +1042,16 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
    */
   private _lastZoomSetByPdfJs: ZoomType | undefined;
 
+  /**
+   * True while pdf.js is actively handling a zoom gesture (pinch or Ctrl+wheel).
+   * During an active gesture, pdf.js uses drawingDelay=400ms to defer page re-rendering
+   * (the page stays blurry and only sharpens after the gesture ends). If Angular's
+   * setZoom() writes currentScaleValue during this window, it bypasses drawingDelay
+   * and triggers an immediate full re-render on every frame, causing stutter on iPad.
+   */
+  private _isPdfJsZooming = false;
+  private _pdfJsZoomingTimeout: ReturnType<typeof setTimeout> | undefined;
+
   public zoomLevels = input<(string | number)[]>(['auto', 'page-actual', 'page-fit', 'page-width', 0.5, 1, 1.25, 1.5, 2, 3, 4]);
 
   public maxZoom = input(10);
@@ -1147,6 +1157,15 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     const currentZoom = this.zoom(); // Track zoom signal
     if (typeof window === 'undefined') return;
     if (!this.service.ngxExtendedPdfViewerInitialized) return;
+
+    // Don't write back to pdf.js while it's actively handling a zoom gesture.
+    // pdf.js uses drawingDelay=400ms during pinch/wheel zoom to defer page
+    // re-rendering (pages stay blurry, then sharpen after the gesture ends).
+    // If we call setZoom() → currentScaleValue here, it bypasses drawingDelay
+    // and triggers an immediate full re-render on every frame, causing stutter.
+    if (this._isPdfJsZooming) {
+      return;
+    }
 
     // Break the feedback loop: if this zoom value was set by a pdf.js scalechanging event,
     // don't write it back to pdf.js. This prevents flicker/jumping during pinch zoom,
@@ -2322,6 +2341,18 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
         );
       }
       // #3060 end of modification by ngx-extended-pdf-viewer
+
+      // Mark that pdf.js is actively zooming (pinch or Ctrl+wheel). While this
+      // flag is set, the _zoomEffect skips calling setZoom() to avoid triggering
+      // immediate re-renders that bypass pdf.js's drawingDelay (400ms). The flag
+      // is cleared 500ms after the last scalechanging event — slightly longer than
+      // drawingDelay so that pdf.js finishes its deferred render first.
+      this._isPdfJsZooming = true;
+      clearTimeout(this._pdfJsZoomingTimeout);
+      this._pdfJsZoomingTimeout = setTimeout(() => {
+        this._isPdfJsZooming = false;
+      }, 500);
+
       setTimeout(
         this.asyncWithCD(() => {
           if (this.destroyInitialization) return;

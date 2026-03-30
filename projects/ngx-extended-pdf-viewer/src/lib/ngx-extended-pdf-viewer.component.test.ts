@@ -868,9 +868,20 @@ describe('isIOS', () => {
 
   it('should return false for Mac without touch support', () => {
     mockUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36');
-    // Ensure ontouchend is not on document
-    delete (document as any).ontouchend;
-    expect(isIOS()).toBe(false);
+    // jsdom v26+ defines ontouchend on Document.prototype, so it can't be
+    // removed from the instance. Temporarily shadow it to be absent via
+    // a descriptor that makes 'ontouchend' in document return false.
+    const proto = Object.getPrototypeOf(document);
+    const originalDesc = Object.getOwnPropertyDescriptor(proto, 'ontouchend');
+    delete (proto as any).ontouchend;
+    try {
+      expect(isIOS()).toBe(false);
+    } finally {
+      // Restore so other tests aren't affected
+      if (originalDesc) {
+        Object.defineProperty(proto, 'ontouchend', originalDesc);
+      }
+    }
   });
 
   it('should return false when navigator.userAgent is empty', () => {
