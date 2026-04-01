@@ -48,7 +48,7 @@ jobs:
 
       - name: Upgrade to npm 11.5.1+ for trusted publishing
         run: |
-          npm install -g npm@latest
+          npm install -g npm@11.5.1
           npm config delete always-auth || true
 
       - name: Verify tag matches package.json version
