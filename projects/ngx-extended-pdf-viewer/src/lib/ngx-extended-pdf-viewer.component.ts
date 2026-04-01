@@ -1164,7 +1164,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     // If we call setZoom() → currentScaleValue here, it bypasses drawingDelay
     // and triggers an immediate full re-render on every frame, causing stutter.
     if (this._isPdfJsZooming) {
-      console.log(`[pinch-angular] _zoomEffect SKIPPED — _isPdfJsZooming=true zoom=${currentZoom}`);
       return;
     }
 
@@ -1173,12 +1172,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     // where the async effect could set an outdated scale value back to pdf.js.
     if (this._lastZoomSetByPdfJs !== undefined && currentZoom === this._lastZoomSetByPdfJs) {
       this._lastZoomSetByPdfJs = undefined;
-      console.log(`[pinch-angular] _zoomEffect SKIPPED — matched _lastZoomSetByPdfJs zoom=${currentZoom}`);
       return;
     }
     this._lastZoomSetByPdfJs = undefined;
 
-    console.log(`[pinch-angular] _zoomEffect CALLING setZoom() zoom=${currentZoom}`);
     this.setZoom();
   });
 
