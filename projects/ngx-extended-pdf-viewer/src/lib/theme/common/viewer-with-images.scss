@@ -1025,6 +1025,9 @@ ngx-extended-pdf-viewer {
     width: 24px;
     margin-right: 8px !important;
     height: 25px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 
   // #3105 fixed the layout of the find bar

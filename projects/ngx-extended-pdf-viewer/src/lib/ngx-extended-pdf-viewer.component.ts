@@ -1350,6 +1350,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   });
 
   // @ts-ignore TS6133 - Used for side effects only
+  private _secondaryMenuEmptyEffect = effect(() => {
+    this.service.secondaryMenuIsEmpty();
+    this.hideToolbarIfItIsEmpty();
+  });
+
+  // @ts-ignore TS6133 - Used for side effects only
   private _enableDragAndDropEffect = effect(() => {
     const enableDragAndDrop = this.enableDragAndDrop();
     if (typeof window === 'undefined') return;

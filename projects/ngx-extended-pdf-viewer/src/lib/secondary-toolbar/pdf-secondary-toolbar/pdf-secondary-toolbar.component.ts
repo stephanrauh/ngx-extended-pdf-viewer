@@ -218,6 +218,9 @@ export class PdfSecondaryToolbarComponent implements AfterViewInit, OnDestroy {
     if (e.classList.contains('invisible')) {
       return 0;
     }
+    if (this.isResponsiveClassHidden(e)) {
+      return 0;
+    }
 
     if (e instanceof HTMLButtonElement || e instanceof HTMLAnchorElement) {
       return 1;
@@ -233,6 +236,58 @@ export class PdfSecondaryToolbarComponent implements AfterViewInit, OnDestroy {
       }
     }
     return count;
+  }
+
+  /**
+   * Checks if a responsive visibility class (e.g. visibleSmallView) is currently
+   * hidden at the current viewport width. These classes make buttons visible only
+   * at smaller viewports via CSS media queries (max-width). We can't use
+   * getComputedStyle because the secondary toolbar itself is hidden, so we
+   * extract the actual breakpoint from the dynamic CSS and compare it to the
+   * current viewport width.
+   */
+  private isResponsiveClassHidden(e: HTMLElement): boolean {
+    const responsiveClasses = [
+      'visibleXXSView', 'visibleTinyView', 'visibleSmallView',
+      'visibleMediumView', 'visibleLargeView', 'visibleXLView', 'visibleXXLView',
+    ];
+    for (const cls of responsiveClasses) {
+      if (e.classList.contains(cls)) {
+        return !this.isResponsiveBreakpointActive(cls);
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Checks if the given responsive class is currently active by evaluating
+   * the matching CSS @media rule from the dynamic stylesheet.
+   */
+  private isResponsiveBreakpointActive(cls: string): boolean {
+    const style = document.getElementById('pdf-dynamic-css') as HTMLStyleElement;
+    if (!style?.sheet) {
+      return false;
+    }
+    try {
+      const rules = style.sheet.cssRules;
+      for (let i = 0; i < rules.length; i++) {
+        const rule = rules[i];
+        if (rule instanceof CSSMediaRule) {
+          // Check if this media rule contains our responsive class
+          const innerRules = rule.cssRules;
+          for (let j = 0; j < innerRules.length; j++) {
+            const innerRule = innerRules[j];
+            if (innerRule instanceof CSSStyleRule && innerRule.selectorText.includes(cls)) {
+              // Use matchMedia to check if this media query is currently active
+              return window.matchMedia(rule.conditionText).matches;
+            }
+          }
+        }
+      }
+    } catch {
+      // CSSOM may throw on cross-origin stylesheets; not applicable here
+    }
+    return false;
   }
 
   public onClick(
