@@ -732,3 +732,4 @@
 - 26.0.0-rc.28 #3069 improved the iPad pinch-zoom (but it's still not as smooth as the zoom of native pdf.js); repaired the "signature" editor button
 - 26.0.0-rc.29 (same version - there was an error when publishing)
 - 26.0.0-rc.30 layout fixes: improved toolbar button alignment, secondary menu button is hidden automatically if there's no visible menu entry in the secondary toolbar
+- 26.0.0 updated the README.md
