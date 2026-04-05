@@ -733,3 +733,4 @@
 - 26.0.0-rc.29 (same version - there was an error when publishing)
 - 26.0.0-rc.30 layout fixes: improved toolbar button alignment, secondary menu button is hidden automatically if there's no visible menu entry in the secondary toolbar
 - 26.0.0 updated the README.md
+- 26.1.0 updated the bleeding-edge version of pdf.js from 5.4.530 to 5.4.624: page reordering via drag-and-drop in the thumbnail sidebar (including multi-select), page extraction (save selected pages as a new PDF), comment undo/redo support, updated JBIG2 decoder, improved sidebar resizer accessibility, MathML accessibility improvements, find-in-page working correctly after page reordering, and updated locale files

@@ -657,6 +657,7 @@ pdfjs-editor-movePageUp-button-label = Oldal mozgatása felfelé
 pdfjs-editor-movePageDown-button = Oldal mozgatása lefelé
 pdfjs-editor-movePageDown-button-label = Oldal mozgatása lefelé
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
+pdfjs-editor-undo-bar-message-comment = Comment removed
 pdfjs-toggle-views-manager-button =
     .title = Toggle Sidebar
 pdfjs-toggle-views-manager-notification-button =

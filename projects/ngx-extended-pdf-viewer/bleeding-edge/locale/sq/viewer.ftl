@@ -648,6 +648,7 @@ pdfjs-spread-odd-button-label = Odd Spreads
 pdfjs-spread-even-button =
     .title = Join page spreads starting with even-numbered pages
 pdfjs-spread-even-button-label = Even Spreads
+pdfjs-editor-undo-bar-message-comment = Comment removed
 pdfjs-toggle-views-manager-button =
     .title = Toggle Sidebar
 pdfjs-toggle-views-manager-notification-button =

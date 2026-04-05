@@ -623,6 +623,7 @@ pdfjs-editor-freetext-added-alert = Text added
 pdfjs-editor-ink-added-alert = Drawing added
 pdfjs-editor-stamp-added-alert = Image added
 pdfjs-editor-signature-added-alert = Signature added
+pdfjs-editor-undo-bar-message-comment = Comment removed
 pdfjs-editor-add-signature-image-no-data-error-title = Can’t convert this image into a signature
 pdfjs-editor-add-signature-image-no-data-error-description = Please try uploading a different image.
 pdfjs-show-comment-button =

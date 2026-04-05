@@ -614,6 +614,7 @@ pdfjs-editor-comments-sidebar-close-button =
 pdfjs-editor-comments-sidebar-close-button-label = Close the sidebar
 pdfjs-editor-comments-sidebar-no-comments1 = See something noteworthy? Highlight it and leave a comment.
 pdfjs-editor-comments-sidebar-no-comments-link = Learn more
+pdfjs-editor-undo-bar-message-comment = Comment removed
 pdfjs-editor-add-signature-image-no-data-error-title = Can’t convert this image into a signature
 pdfjs-editor-add-signature-image-no-data-error-description = Please try uploading a different image.
 pdfjs-show-comment-button =

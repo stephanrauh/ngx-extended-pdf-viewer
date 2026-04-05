@@ -116,6 +116,14 @@ const requiredIds = [
   'viewThumbnail',
   'primaryZoomIn',
   'primaryZoomOut',
+  'viewsManagerStatusAction',
+  'viewsManagerStatusActionButton',
+  'viewsManagerStatusActionLabel',
+  'viewsManagerStatusActionOptions',
+  'viewsManagerStatusActionCopy',
+  'viewsManagerStatusActionCut',
+  'viewsManagerStatusActionDelete',
+  'viewsManagerStatusActionSaveAs',
 ];
 
 @Component({

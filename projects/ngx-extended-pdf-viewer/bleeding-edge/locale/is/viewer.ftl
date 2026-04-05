@@ -608,6 +608,7 @@ pdfjs-editor-comments-sidebar-no-comments-link = Learn more
 pdfjs-editor-highlight-added-alert = Highlight added
 pdfjs-editor-freetext-added-alert = Text added
 pdfjs-editor-ink-added-alert = Drawing added
+pdfjs-editor-undo-bar-message-comment = Comment removed
 pdfjs-show-comment-button =
     .title = Show comment
 pdfjs-editor-edit-comment-popup-button-label = Edit comment

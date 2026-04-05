@@ -309,6 +309,10 @@ pdfjs-editor-signature-add-signature-button-label = പുതിയ ഒപ്പ
 #   $description (String) - a string describing/labeling the signature.
 pdfjs-editor-add-saved-signature-button =
     .title = കരുതിവച്ച ഒപ്പു് : { $description }
+pdfjs-editor-comments-sidebar-close-button =
+    .title = അണിവക്കം അടയ്ക്കുക
+    .aria-label = അണിവക്കം അടയ്ക്കുക
+pdfjs-editor-comments-sidebar-close-button-label = അണിവക്കം അടയ്ക്കുക
 
 ## Alt-text dialog
 
@@ -547,10 +551,6 @@ pdfjs-editor-comments-sidebar-title =
         [one] Comment
        *[other] Comments
     }
-pdfjs-editor-comments-sidebar-close-button =
-    .title = Close the sidebar
-    .aria-label = Close the sidebar
-pdfjs-editor-comments-sidebar-close-button-label = Close the sidebar
 pdfjs-editor-comments-sidebar-no-comments1 = See something noteworthy? Highlight it and leave a comment.
 pdfjs-editor-comments-sidebar-no-comments-link = Learn more
 pdfjs-editor-alt-text-dialog-description = Alt text (alternative text) helps when people can’t see the image or when it doesn’t load.
@@ -587,6 +587,7 @@ pdfjs-editor-freetext-added-alert = Text added
 pdfjs-editor-ink-added-alert = Drawing added
 pdfjs-editor-stamp-added-alert = Image added
 pdfjs-editor-signature-added-alert = Signature added
+pdfjs-editor-undo-bar-message-comment = Comment removed
 pdfjs-editor-add-signature-dialog-label = This modal allows the user to create a signature to add to a PDF document. The user can edit the name (which also serves as the alt text), and optionally save the signature for repeated use.
 pdfjs-editor-add-signature-image-no-data-error-title = Can’t convert this image into a signature
 pdfjs-editor-add-signature-image-no-data-error-description = Please try uploading a different image.

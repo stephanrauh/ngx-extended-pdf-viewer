@@ -639,6 +639,7 @@ pdfjs-editor-add-signature-edit-button-label = Modifitgar la descripziun
 pdfjs-editor-edit-signature-dialog-title = Modifitgar la descripziun
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
+pdfjs-editor-undo-bar-message-comment = Comment removed
 pdfjs-show-comment-button =
     .title = Show comment
 pdfjs-editor-edit-comment-dialog-save-button-when-editing = Update

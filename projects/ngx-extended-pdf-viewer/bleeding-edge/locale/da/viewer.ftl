@@ -657,6 +657,7 @@ pdfjs-editor-movePageUp-button-label = Flyt side op
 pdfjs-editor-movePageDown-button = Flyt side ned
 pdfjs-editor-movePageDown-button-label = Flyt side ned
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
+pdfjs-editor-undo-bar-message-comment = Comment removed
 pdfjs-toggle-views-manager-button =
     .title = Toggle Sidebar
 pdfjs-toggle-views-manager-notification-button =

@@ -648,6 +648,7 @@ pdfjs-editor-add-signature-edit-button-label = Таҳрир кардани та�
 pdfjs-editor-edit-signature-dialog-title = Таҳрир кардани тавсиф
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
+pdfjs-editor-undo-bar-message-comment = Comment removed
 pdfjs-toggle-views-manager-button =
     .title = Toggle Sidebar
 pdfjs-toggle-views-manager-notification-button =

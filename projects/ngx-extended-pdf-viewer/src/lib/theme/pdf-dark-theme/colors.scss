@@ -31,15 +31,17 @@ $thumbnail-selection-color: #545457;
 $thumbnail-hover-color: #3f3f43;
 
 // #3111 modified by ngx-extended-pdf-viewer
-// Modern PDF.js v5.4.938+ thumbnail variables (box-shadow approach)
-$thumbnail-border-width: 4px;
+// Modern PDF.js v5.4.624+ thumbnail variables (box-shadow approach)
+$thumbnail-border-width: 6px;
 $thumbnail-border-color: #3a3944;
-$thumbnail-hover-border-color: #3a3944;
+$thumbnail-hover-border-color: #bfbfc9;
 $thumbnail-current-border-color: #00cadb; // Focus outline color for dark mode
 $thumbnail-current-focused-outline: $thumbnail-hover-border-color;
 $thumbnail-outline: none;
 $thumbnail-page-number-bg: #23222b;
 $thumbnail-page-number-fg: $text-color;
+$thumbnail-current-page-number-bg: $thumbnail-current-border-color;
+$thumbnail-current-page-number-fg: #15141a;
 
 // Box-shadow definitions for modern thumbnails (dark mode)
 $thumbnail-shadow:
@@ -49,6 +51,7 @@ $thumbnail-shadow:
 
 $thumbnail-hover-shadow:
   0 0.375px 1.5px 0 rgba(0, 0, 0, 0.2),
+  0 0 0 1px rgba(251, 251, 254, 0.1),
   0 0 0 $thumbnail-border-width $thumbnail-hover-border-color,
   0 3px 12px 0 rgba(0, 0, 0, 0.4);
 
@@ -56,6 +59,18 @@ $thumbnail-current-shadow:
   0 0.375px 1.5px 0 rgba(0, 0, 0, 0.2),
   0 0 0 $thumbnail-border-width $thumbnail-current-border-color,
   0 3px 12px 0 rgba(0, 0, 0, 0.4);
+
+// Drag-and-drop thumbnail variables
+$thumbnail-dragging-placeholder-bg: rgba(0, 202, 219, 0.08);
+$thumbnail-multiple-dragging-bg: white;
+$thumbnail-multiple-dragging-shadow:
+  0 0 0 $thumbnail-border-width $thumbnail-current-border-color,
+  $thumbnail-border-width $thumbnail-border-width 0
+    calc(#{$thumbnail-border-width} / 2) $thumbnail-multiple-dragging-bg,
+  $thumbnail-border-width $thumbnail-border-width 0
+    calc(3 * #{$thumbnail-border-width} / 2) $thumbnail-current-border-color;
+$thumbnail-dragging-shadow: 0 0 0 $thumbnail-border-width $thumbnail-current-border-color;
+$thumbnail-multiple-dragging-text-color: #15141a;
 // #3111 end of modification by ngx-extended-pdf-viewer
 
 $sidebar-toolbar-background: #323234;

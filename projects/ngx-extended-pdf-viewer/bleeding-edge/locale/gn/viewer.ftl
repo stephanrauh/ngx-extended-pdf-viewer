@@ -647,6 +647,7 @@ pdfjs-editor-add-signature-edit-button-label = Embosako’i moha’ãnga
 pdfjs-editor-edit-signature-dialog-title = Embosako’i moha’ãnga
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
+pdfjs-editor-undo-bar-message-comment = Comment removed
 pdfjs-editor-add-signature-dialog-label = This modal allows the user to create a signature to add to a PDF document. The user can edit the name (which also serves as the alt text), and optionally save the signature for repeated use.
 pdfjs-toggle-views-manager-button =
     .title = Toggle Sidebar

@@ -665,6 +665,7 @@ pdfjs-editor-movePageUp-button-label = Přesunout stránku nahoru
 pdfjs-editor-movePageDown-button = Přesunout stránku dolů
 pdfjs-editor-movePageDown-button-label = Přesunout stránku dolů
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
+pdfjs-editor-undo-bar-message-comment = Comment removed
 pdfjs-toggle-views-manager-button =
     .title = Toggle Sidebar
 pdfjs-toggle-views-manager-notification-button =

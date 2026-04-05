@@ -493,6 +493,7 @@ pdfjs-editor-stamp-added-alert = Image added
 pdfjs-editor-signature-added-alert = Signature added
 pdfjs-editor-undo-bar-message-highlight = Highlight removed
 pdfjs-editor-undo-bar-message-signature = Signature removed
+pdfjs-editor-undo-bar-message-comment = Comment removed
 pdfjs-editor-undo-bar-message-multiple =
     { $count ->
         [one] { $count } annotation removed

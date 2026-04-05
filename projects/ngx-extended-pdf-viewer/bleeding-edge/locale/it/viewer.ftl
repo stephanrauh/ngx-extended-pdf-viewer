@@ -657,6 +657,7 @@ pdfjs-editor-movePageUp-button-label = Sposta pagina in alto
 pdfjs-editor-movePageDown-button = Sposta pagina in basso
 pdfjs-editor-movePageDown-button-label = Sposta pagina in basso
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
+pdfjs-editor-undo-bar-message-comment = Comment removed
 pdfjs-toggle-views-manager-button =
     .title = Toggle Sidebar
 pdfjs-toggle-views-manager-notification-button =

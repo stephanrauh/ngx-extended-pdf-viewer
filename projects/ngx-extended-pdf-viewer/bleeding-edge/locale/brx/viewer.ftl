@@ -430,6 +430,7 @@ pdfjs-editor-undo-bar-message-freetext = Text removed
 pdfjs-editor-undo-bar-message-ink = Drawing removed
 pdfjs-editor-undo-bar-message-stamp = Image removed
 pdfjs-editor-undo-bar-message-signature = Signature removed
+pdfjs-editor-undo-bar-message-comment = Comment removed
 pdfjs-editor-undo-bar-message-multiple =
     { $count ->
         [one] { $count } annotation removed

@@ -604,6 +604,7 @@ pdfjs-editor-comments-sidebar-close-button =
 pdfjs-editor-comments-sidebar-close-button-label = Close the sidebar
 pdfjs-editor-comments-sidebar-no-comments1 = See something noteworthy? Highlight it and leave a comment.
 pdfjs-editor-comments-sidebar-no-comments-link = Learn more
+pdfjs-editor-undo-bar-message-comment = Comment removed
 pdfjs-show-comment-button =
     .title = Show comment
 pdfjs-editor-edit-comment-popup-button-label = Edit comment

@@ -628,6 +628,11 @@ pdfjs-editor-edit-comment-dialog-text-input =
     .placeholder = Scomence a scrivi…
 pdfjs-editor-edit-comment-dialog-cancel-button = Anule
 
+## Edit a comment button in the editor toolbar
+
+pdfjs-editor-add-comment-button =
+    .title = Zonte coment
+
 ## Main menu for adding/removing signatures
 
 pdfjs-editor-delete-signature-button1 =
@@ -643,8 +648,7 @@ pdfjs-editor-add-signature-edit-button-label = Modifiche descrizion
 pdfjs-editor-edit-signature-dialog-title = Modifiche descrizion
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-editor-add-comment-button =
-    .title = Add comment
+pdfjs-editor-undo-bar-message-comment = Comment removed
 pdfjs-toggle-views-manager-button =
     .title = Toggle Sidebar
 pdfjs-toggle-views-manager-notification-button =

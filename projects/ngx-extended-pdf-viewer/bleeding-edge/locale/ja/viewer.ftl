@@ -632,6 +632,7 @@ pdfjs-editor-add-signature-edit-button-label = 説明を編集
 pdfjs-editor-edit-signature-dialog-title = 説明の編集
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
+pdfjs-editor-undo-bar-message-comment = Comment removed
 pdfjs-toggle-views-manager-button =
     .title = Toggle Sidebar
 pdfjs-toggle-views-manager-notification-button =

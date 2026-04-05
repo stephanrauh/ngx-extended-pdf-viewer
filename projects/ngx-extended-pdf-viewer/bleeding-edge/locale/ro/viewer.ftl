@@ -660,6 +660,7 @@ pdfjs-editor-movePageUp-button-label = Mută pagina în sus
 pdfjs-editor-movePageDown-button = Mută pagina în jos
 pdfjs-editor-movePageDown-button-label = Mută pagina în jos
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
+pdfjs-editor-undo-bar-message-comment = Comment removed
 pdfjs-toggle-views-manager-button =
     .title = Toggle Sidebar
 pdfjs-toggle-views-manager-notification-button =
