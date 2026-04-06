@@ -197,6 +197,50 @@ pdfjs-password-ok-button = យល់​ព្រម
 pdfjs-password-cancel-button = បោះបង់
 pdfjs-web-fonts-disabled = បាន​បិទ​ពុម្ពអក្សរ​បណ្ដាញ ៖ មិន​អាច​ប្រើ​ពុម្ពអក្សរ PDF ដែល​បាន​បង្កប់​បាន​ទេ ។
 
+## Editing
+
+pdfjs-editor-highlight-button =
+    .title = រំលេច
+pdfjs-editor-highlight-button-label = រំលេច
+pdfjs-highlight-floating-button-label = រំលេច
+
+## Alt-text dialog
+
+pdfjs-editor-alt-text-cancel-button = បោះបង់
+
+## Show all highlights
+## This is a toggle button to show/hide all the highlights.
+
+pdfjs-editor-highlight-show-all-button-label = បង្ហាញ​ទាំងអស់
+pdfjs-editor-highlight-show-all-button =
+    .title = បង្ហាញ​ទាំងអស់
+
+## New alt-text dialog
+## Group note for entire feature: Alternative text (alt text) helps when people can't see the image. This feature includes a tool to create alt text automatically using an AI model that works locally on the user's device to preserve privacy.
+
+pdfjs-editor-new-alt-text-not-now-button = មិន​មែន​ឥឡូវ
+
+## Image alt-text settings
+
+pdfjs-editor-alt-text-settings-delete-model-button = លុប
+
+## Dialog buttons
+
+pdfjs-editor-add-signature-cancel-button = បោះបង់
+
+##  Edit a comment dialog
+
+pdfjs-editor-edit-comment-dialog-cancel-button = បោះបង់
+
+## The view manager is a sidebar displaying different views:
+##  - thumbnails;
+##  - outline;
+##  - attachments;
+##  - layers.
+## The thumbnails view is used to edit the pdf: remove/insert pages, ...
+
+pdfjs-views-manager-pages-status-delete-button-label = លុប
+
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-save-button =
     .title = Save
@@ -236,6 +280,10 @@ pdfjs-current-outline-item-button =
     .title = Find Current Outline Item
 pdfjs-current-outline-item-button-label = Current Outline Item
 pdfjs-additional-layers = Additional Layers
+pdfjs-thumb-page-title1 =
+    .title = Page { $page } of { $total }
+pdfjs-thumb-page-checkbox1 =
+    .title = Select page { $page }
 pdfjs-find-match-diacritics-checkbox-label = Match Diacritics
 pdfjs-find-entire-word-checkbox-label = Whole Words
 pdfjs-find-match-count =
@@ -264,13 +312,9 @@ pdfjs-editor-ink-button-label = Draw
 pdfjs-editor-stamp-button =
     .title = Add or edit images
 pdfjs-editor-stamp-button-label = Add or edit images
-pdfjs-editor-highlight-button =
-    .title = Highlight
-pdfjs-editor-highlight-button-label = Highlight
 pdfjs-highlight-floating-button1 =
     .title = Highlight
     .aria-label = Highlight
-pdfjs-highlight-floating-button-label = Highlight
 pdfjs-comment-floating-button =
     .title = Comment
     .aria-label = Comment
@@ -343,7 +387,6 @@ pdfjs-editor-alt-text-add-description-label = Add a description
 pdfjs-editor-alt-text-add-description-description = Aim for 1-2 sentences that describe the subject, setting, or actions.
 pdfjs-editor-alt-text-mark-decorative-label = Mark as decorative
 pdfjs-editor-alt-text-mark-decorative-description = This is used for ornamental images, like borders or watermarks.
-pdfjs-editor-alt-text-cancel-button = Cancel
 pdfjs-editor-alt-text-save-button = Save
 pdfjs-editor-alt-text-decorative-tooltip = Marked as decorative
 pdfjs-editor-alt-text-textarea =
@@ -379,9 +422,6 @@ pdfjs-editor-colorpicker-pink =
     .title = Pink
 pdfjs-editor-colorpicker-red =
     .title = Red
-pdfjs-editor-highlight-show-all-button-label = Show all
-pdfjs-editor-highlight-show-all-button =
-    .title = Show all
 pdfjs-editor-new-alt-text-dialog-edit-label = Edit alt text (image description)
 pdfjs-editor-new-alt-text-dialog-add-label = Add alt text (image description)
 pdfjs-editor-new-alt-text-textarea =
@@ -390,7 +430,6 @@ pdfjs-editor-new-alt-text-description = Short description for people who can’t
 pdfjs-editor-new-alt-text-disclaimer1 = This alt text was created automatically and may be inaccurate.
 pdfjs-editor-new-alt-text-disclaimer-learn-more-url = Learn more
 pdfjs-editor-new-alt-text-create-automatically-button-label = Create alt text automatically
-pdfjs-editor-new-alt-text-not-now-button = Not now
 pdfjs-editor-new-alt-text-error-title = Couldn’t create alt text automatically
 pdfjs-editor-new-alt-text-error-description = Please write your own alt text or try again later.
 pdfjs-editor-new-alt-text-error-close-button = Close
@@ -413,11 +452,6 @@ pdfjs-editor-alt-text-settings-dialog-label = Image alt text settings
 pdfjs-editor-alt-text-settings-automatic-title = Automatic alt text
 pdfjs-editor-alt-text-settings-create-model-button-label = Create alt text automatically
 pdfjs-editor-alt-text-settings-create-model-description = Suggests descriptions to help people who can’t see the image or when the image doesn’t load.
-pdfjs-editor-alt-text-settings-download-model-label = Alt text AI model ({ $totalSize } MB)
-pdfjs-editor-alt-text-settings-ai-model-description = Runs locally on your device so your data stays private. Required for automatic alt text.
-pdfjs-editor-alt-text-settings-delete-model-button = Delete
-pdfjs-editor-alt-text-settings-download-model-button = Download
-pdfjs-editor-alt-text-settings-downloading-model-button = Downloading…
 pdfjs-editor-alt-text-settings-editor-title = Alt text editor
 pdfjs-editor-alt-text-settings-show-dialog-button-label = Show alt text editor right away when adding an image
 pdfjs-editor-alt-text-settings-show-dialog-description = Helps you make sure all your images have alt text.
@@ -479,7 +513,6 @@ pdfjs-editor-add-signature-image-upload-error-description = Check your network c
 pdfjs-editor-add-signature-image-no-data-error-title = Can’t convert this image into a signature
 pdfjs-editor-add-signature-image-no-data-error-description = Please try uploading a different image.
 pdfjs-editor-add-signature-error-close-button = Close
-pdfjs-editor-add-signature-cancel-button = Cancel
 pdfjs-editor-add-signature-add-button = Add
 pdfjs-editor-delete-signature-button1 =
     .title = Remove saved signature
@@ -501,16 +534,17 @@ pdfjs-editor-edit-comment-dialog-title-when-adding = Add comment
 pdfjs-editor-edit-comment-dialog-save-button-when-adding = Add
 pdfjs-editor-edit-comment-dialog-text-input =
     .placeholder = Start typing…
-pdfjs-editor-edit-comment-dialog-cancel-button = Cancel
 pdfjs-editor-add-comment-button =
     .title = Add comment
-pdfjs-toggle-views-manager-button =
-    .title = Toggle Sidebar
+pdfjs-toggle-views-manager-button1 =
+    .title = Manage pages
 pdfjs-toggle-views-manager-notification-button =
     .title = Toggle Sidebar (document contains thumbnails/outline/attachments/layers)
-pdfjs-toggle-views-manager-button-label = Toggle Sidebar
+pdfjs-toggle-views-manager-button1-label = Manage pages
 pdfjs-views-manager-sidebar =
     .aria-label = Sidebar
+pdfjs-views-manager-sidebar-resizer =
+    .aria-label = Sidebar resizer
 pdfjs-views-manager-view-selector-button =
     .title = Views
 pdfjs-views-manager-view-selector-button-label = Views
@@ -534,7 +568,6 @@ pdfjs-views-manager-pages-status-none-action-label = Select pages
 pdfjs-views-manager-pages-status-action-button-label = Manage
 pdfjs-views-manager-pages-status-copy-button-label = Copy
 pdfjs-views-manager-pages-status-cut-button-label = Cut
-pdfjs-views-manager-pages-status-delete-button-label = Delete
 pdfjs-views-manager-pages-status-save-as-button-label = Save as…
 pdfjs-views-manager-status-undo-cut-label =
     { $count ->
@@ -561,6 +594,7 @@ pdfjs-views-manager-status-undo-button-label = Undo
 pdfjs-views-manager-status-close-button =
     .title = Close
 pdfjs-views-manager-status-close-button-label = Close
+pdfjs-views-manager-paste-button-label = Paste
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = Match Each Word

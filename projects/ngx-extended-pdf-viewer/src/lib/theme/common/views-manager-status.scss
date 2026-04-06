@@ -1,0 +1,179 @@
+// Styles for the views manager status bar and popup menu
+// Ported from pdf.js views_manager.css and menu.css
+
+ngx-extended-pdf-viewer {
+  // Popup menu visibility toggle (from menu.css)
+  button.hasPopupMenu {
+    &[aria-expanded="true"] + menu {
+      visibility: visible;
+    }
+
+    &[aria-expanded="false"] + menu {
+      visibility: hidden;
+    }
+  }
+
+  // Popup menu styles (from menu.css)
+  .popupMenu {
+    --menu-bg: light-dark(white, #23222b);
+    --menu-box-shadow:
+      0 0.375px 1.5px 0 light-dark(rgb(0 0 0 / 0.05), rgb(0 0 0 / 0.2)),
+      0 3px 12px 0 light-dark(rgb(0 0 0 / 0.1), rgb(0 0 0 / 0.4));
+    --menu-border-color: light-dark(rgb(21 20 26 / 0.1), rgb(251 251 254 / 0.1));
+    --menu-text-color: light-dark(#15141a, #fbfbfe);
+    --menuitem-hover-bg: color-mix(in srgb, var(--menu-text-color), transparent 86%);
+    --menuitem-border-radius: 8px;
+    --disabled-opacity: 0.62;
+
+    display: flex;
+    flex-direction: column;
+    width: max-content;
+    height: auto;
+    position: relative;
+    left: 0;
+    top: 1px;
+    margin: 0;
+    padding: 5px;
+    box-sizing: border-box;
+
+    background: var(--menu-bg);
+    box-shadow: var(--menu-box-shadow);
+    border-radius: 6px;
+    border: 1px solid var(--menu-border-color);
+
+    > button {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      height: 26px;
+      padding-inline: 5px;
+      gap: 5px;
+      box-sizing: border-box;
+      border-radius: var(--menuitem-border-radius);
+      border: 1px solid transparent;
+      background: transparent;
+
+      &:disabled {
+        opacity: var(--disabled-opacity);
+      }
+
+      &:not(:disabled):hover {
+        background: var(--menuitem-hover-bg);
+      }
+
+      > span {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        min-width: max-content;
+        text-align: start;
+        color: var(--menu-text-color);
+        user-select: none;
+        padding-inline-start: 6px;
+
+        font: menu;
+        font-size: 13px;
+        font-style: normal;
+        font-weight: 510;
+        line-height: normal;
+      }
+    }
+  }
+
+  // Status bar styles (from views_manager.css)
+  #viewsManagerStatus {
+    display: flex;
+    align-items: center;
+    align-self: stretch;
+    justify-content: space-between;
+    width: auto;
+    border: 1px solid var(--status-border-color, transparent);
+
+    > div {
+      min-height: 64px;
+      width: 100%;
+      padding-inline: 16px;
+    }
+
+    .viewsManagerStatusLabel {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font: menu;
+      font-size: 13px;
+    }
+
+    #viewsManagerStatusAction {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      align-self: stretch;
+      background-color: var(--status-actions-bg, light-dark(rgb(21 20 26 / 0.03), rgb(251 251 254 / 0.03)));
+
+      #viewsManagerStatusActionLabelContainer > button {
+        position: relative;
+        width: 16px;
+        height: 16px;
+        border: none;
+        padding: 0;
+        flex: 0 0 auto;
+      }
+
+      #actionSelector {
+        height: 32px;
+        min-width: 115px;
+        width: auto;
+        display: block;
+
+        #viewsManagerStatusActionButton {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 8px;
+          width: 100%;
+          height: 100%;
+          padding: 4px 16px;
+        }
+
+        > .popupMenu {
+          width: 100%;
+          min-width: fit-content;
+          z-index: 1;
+        }
+      }
+    }
+
+    #viewsManagerStatusUndo,
+    #viewsManagerStatusWarning,
+    #viewsManagerStatusWaiting {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      > div {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: auto;
+      }
+    }
+
+    #viewsManagerStatusUndo {
+      background-color: var(--status-undo-bg, light-dark(rgb(0 98 250 / 0.08), rgb(0 202 219 / 0.08)));
+
+      #viewsManagerStatusUndoButton {
+        width: auto;
+        min-height: 24px;
+        padding: 4px 8px;
+      }
+    }
+
+    #viewsManagerStatusWarning {
+      background-color: var(--status-warning-bg, light-dark(#ffe8ea, #6e001f));
+    }
+
+    #viewsManagerStatusWaiting {
+      background-color: var(--status-waiting-bg, light-dark(rgb(0 98 250 / 0.08), rgb(0 202 219 / 0.08)));
+    }
+  }
+}

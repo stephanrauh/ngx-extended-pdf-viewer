@@ -534,6 +534,7 @@ pdfjs-editor-undo-bar-message-freetext = Moñe’ẽrã mboguepyre
 pdfjs-editor-undo-bar-message-ink = Ta’ãnga mboguepyre
 pdfjs-editor-undo-bar-message-stamp = Ta’ãnga mboguepyre
 pdfjs-editor-undo-bar-message-signature = Teraguapy mboguepyre
+pdfjs-editor-undo-bar-message-comment = Je’epy mboguepyre
 # Variables:
 #   $count (Number) - the number of removed annotations.
 pdfjs-editor-undo-bar-message-multiple =
@@ -632,6 +633,82 @@ pdfjs-editor-edit-comment-dialog-cancel-button = Eheja
 pdfjs-editor-add-comment-button =
     .title = Je’erei mbojuaju
 
+## The view manager is a sidebar displaying different views:
+##  - thumbnails;
+##  - outline;
+##  - attachments;
+##  - layers.
+## The thumbnails view is used to edit the pdf: remove/insert pages, ...
+
+pdfjs-toggle-views-manager-button =
+    .title = Emoambue tenda yke
+pdfjs-toggle-views-manager-notification-button =
+    .title = Embojopyru tenda ykegua (kuatia oguereko mba’e’i, kuaakaha/moirũha/ñuãha)
+pdfjs-toggle-views-manager-button-label = Emoambue tenda yke
+pdfjs-views-manager-sidebar =
+    .aria-label = Ta’ãngarupa yke
+pdfjs-views-manager-sidebar-resizer =
+    .aria-label = Tuichakue mongu’eha tenda yképe
+pdfjs-views-manager-view-selector-button =
+    .title = Hechaha
+pdfjs-views-manager-view-selector-button-label = Hechaha
+pdfjs-views-manager-pages-title = Kuatiarogue
+pdfjs-views-manager-outlines-title = Kuatiaite jejapopy
+pdfjs-views-manager-attachments-title = Moirũha
+pdfjs-views-manager-layers-title = Ñuãha
+pdfjs-views-manager-pages-option-label = Kuatiarogueita
+pdfjs-views-manager-outlines-option-label = Kuatiaite jejapopy
+pdfjs-views-manager-attachments-option-label = Moirũhaita
+pdfjs-views-manager-layers-option-label = Ñuãhaita
+pdfjs-views-manager-add-file-button =
+    .title = Embojuaju marandurenda
+pdfjs-views-manager-add-file-button-label = Embojuaju marandurenda
+# Variables:
+#   $count (Number) - the number of selected pages.
+pdfjs-views-manager-pages-status-action-label =
+    { $count ->
+        [one] { $count } poravopyre
+       *[other] { $count } poravopyre
+    }
+pdfjs-views-manager-pages-status-none-action-label = Eiporavo kuatiarogue
+pdfjs-views-manager-pages-status-action-button-label = Ñangareko
+pdfjs-views-manager-pages-status-copy-button-label = Monguatia
+pdfjs-views-manager-pages-status-cut-button-label = Kytĩ
+pdfjs-views-manager-pages-status-delete-button-label = Mboguete
+pdfjs-views-manager-pages-status-save-as-button-label = Ñongatu pyahu…
+# Variables:
+#   $count (Number) - the number of selected pages to be cut.
+pdfjs-views-manager-status-undo-cut-label =
+    { $count ->
+        [one] 1 kuatiarogue kytĩmbyre
+       *[other] { $count } kuatiarogue kytĩmbyre
+    }
+# Variables:
+#   $count (Number) - the number of selected pages to be copied.
+pdfjs-views-manager-pages-status-undo-copy-label =
+    { $count ->
+        [one] 1 kuatiarogue monguatiapyre
+       *[other] { $count } kuatiarogue monguatiapyre
+    }
+# Variables:
+#   $count (Number) - the number of selected pages to be deleted.
+pdfjs-views-manager-pages-status-undo-delete-label =
+    { $count ->
+        [one] 1 kuatiarogue mboguepyre
+       *[other] { $count } kuatiarogue mboguepyre
+    }
+pdfjs-views-manager-pages-status-waiting-ready-label = Embosako’ihína ne marandurenda…
+pdfjs-views-manager-pages-status-waiting-uploading-label = Ehupihína marandurenda…
+pdfjs-views-manager-status-warning-cut-label = Ndaikatúi oñekytĩ. Embopyahu kuatiarogue ha eha’ã jey.
+pdfjs-views-manager-status-warning-copy-label = Ndaikatúi oñembokuatia. Embopyahu kuatiarogue ha eha’ã jey.
+pdfjs-views-manager-status-warning-delete-label = Ndaikatúi embogue. Embopyahu kuatiarogue ha eha’ã jey.
+pdfjs-views-manager-status-warning-save-label = Ndaikatúi eñongatu. Embopyahu kuatiarogue ha eha’ã jey.
+pdfjs-views-manager-status-undo-button-label = Mboguevi
+pdfjs-views-manager-status-close-button =
+    .title = Mboty
+pdfjs-views-manager-status-close-button-label = Mboty
+pdfjs-views-manager-paste-button-label = Mboja
+
 ## Main menu for adding/removing signatures
 
 pdfjs-editor-delete-signature-button1 =
@@ -647,65 +724,14 @@ pdfjs-editor-add-signature-edit-button-label = Embosako’i moha’ãnga
 pdfjs-editor-edit-signature-dialog-title = Embosako’i moha’ãnga
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-editor-undo-bar-message-comment = Comment removed
+pdfjs-thumb-page-title1 =
+    .title = Page { $page } of { $total }
+pdfjs-thumb-page-checkbox1 =
+    .title = Select page { $page }
 pdfjs-editor-add-signature-dialog-label = This modal allows the user to create a signature to add to a PDF document. The user can edit the name (which also serves as the alt text), and optionally save the signature for repeated use.
-pdfjs-toggle-views-manager-button =
-    .title = Toggle Sidebar
-pdfjs-toggle-views-manager-notification-button =
-    .title = Toggle Sidebar (document contains thumbnails/outline/attachments/layers)
-pdfjs-toggle-views-manager-button-label = Toggle Sidebar
-pdfjs-views-manager-sidebar =
-    .aria-label = Sidebar
-pdfjs-views-manager-view-selector-button =
-    .title = Views
-pdfjs-views-manager-view-selector-button-label = Views
-pdfjs-views-manager-pages-title = Pages
-pdfjs-views-manager-outlines-title = Document outline
-pdfjs-views-manager-attachments-title = Attachments
-pdfjs-views-manager-layers-title = Layers
-pdfjs-views-manager-pages-option-label = Pages
-pdfjs-views-manager-outlines-option-label = Document outline
-pdfjs-views-manager-attachments-option-label = Attachments
-pdfjs-views-manager-layers-option-label = Layers
-pdfjs-views-manager-add-file-button =
-    .title = Add file
-pdfjs-views-manager-add-file-button-label = Add file
-pdfjs-views-manager-pages-status-action-label =
-    { $count ->
-        [one] { $count } selected
-        *[other] { $count } selected
-    }
-pdfjs-views-manager-pages-status-none-action-label = Select pages
-pdfjs-views-manager-pages-status-action-button-label = Manage
-pdfjs-views-manager-pages-status-copy-button-label = Copy
-pdfjs-views-manager-pages-status-cut-button-label = Cut
-pdfjs-views-manager-pages-status-delete-button-label = Delete
-pdfjs-views-manager-pages-status-save-as-button-label = Save as…
-pdfjs-views-manager-status-undo-cut-label =
-    { $count ->
-        [one] 1 page cut
-        *[other] { $count } pages cut
-    }
-pdfjs-views-manager-pages-status-undo-copy-label =
-    { $count ->
-        [one] 1 page copied
-        *[other] { $count } pages copied
-    }
-pdfjs-views-manager-pages-status-undo-delete-label =
-    { $count ->
-        [one] 1 page deleted
-        *[other] { $count } pages deleted
-    }
-pdfjs-views-manager-pages-status-waiting-ready-label = Getting your file ready…
-pdfjs-views-manager-pages-status-waiting-uploading-label = Uploading file…
-pdfjs-views-manager-status-warning-cut-label = Couldn’t cut. Refresh page and try again.
-pdfjs-views-manager-status-warning-copy-label = Couldn’t copy. Refresh page and try again.
-pdfjs-views-manager-status-warning-delete-label = Couldn’t delete. Refresh page and try again.
-pdfjs-views-manager-status-warning-save-label = Couldn’t save. Refresh page and try again.
-pdfjs-views-manager-status-undo-button-label = Undo
-pdfjs-views-manager-status-close-button =
-    .title = Close
-pdfjs-views-manager-status-close-button-label = Close
+pdfjs-toggle-views-manager-button1 =
+    .title = Manage pages
+pdfjs-toggle-views-manager-button1-label = Manage pages
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = Match Each Word

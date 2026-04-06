@@ -534,6 +534,7 @@ pdfjs-editor-undo-bar-message-freetext = Teksti poistettu
 pdfjs-editor-undo-bar-message-ink = Piirustus poistettu
 pdfjs-editor-undo-bar-message-stamp = Kuva poistettu
 pdfjs-editor-undo-bar-message-signature = Allekirjoitus poistettu
+pdfjs-editor-undo-bar-message-comment = Kommentti poistettu
 # Variables:
 #   $count (Number) - the number of removed annotations.
 pdfjs-editor-undo-bar-message-multiple =
@@ -633,6 +634,79 @@ pdfjs-editor-edit-comment-dialog-cancel-button = Peruuta
 pdfjs-editor-add-comment-button =
     .title = Lisää kommentti
 
+## The view manager is a sidebar displaying different views:
+##  - thumbnails;
+##  - outline;
+##  - attachments;
+##  - layers.
+## The thumbnails view is used to edit the pdf: remove/insert pages, ...
+
+pdfjs-toggle-views-manager-button =
+    .title = Näytä/piilota sivupaneeli
+pdfjs-toggle-views-manager-notification-button =
+    .title = Näytä/piilota sivupaneeli (dokumentissa on pienoiskuvat/sisällys/liitteitä/tasoja)
+pdfjs-toggle-views-manager-button-label = Näytä/piilota sivupaneeli
+pdfjs-views-manager-sidebar =
+    .aria-label = Sivupaneeli
+pdfjs-views-manager-view-selector-button =
+    .title = Näkymät
+pdfjs-views-manager-view-selector-button-label = Näkymät
+pdfjs-views-manager-pages-title = Sivut
+pdfjs-views-manager-outlines-title = Dokumentin sisällys
+pdfjs-views-manager-attachments-title = Liitteet
+pdfjs-views-manager-layers-title = Tasot
+pdfjs-views-manager-pages-option-label = Sivut
+pdfjs-views-manager-outlines-option-label = Dokumentin sisällys
+pdfjs-views-manager-attachments-option-label = Liitteet
+pdfjs-views-manager-layers-option-label = Tasot
+pdfjs-views-manager-add-file-button =
+    .title = Lisää tiedosto
+pdfjs-views-manager-add-file-button-label = Lisää tiedosto
+# Variables:
+#   $count (Number) - the number of selected pages.
+pdfjs-views-manager-pages-status-action-label =
+    { $count ->
+        [one] { $count } valittu
+       *[other] { $count } valittu
+    }
+pdfjs-views-manager-pages-status-none-action-label = Valitse sivut
+pdfjs-views-manager-pages-status-action-button-label = Hallitse
+pdfjs-views-manager-pages-status-copy-button-label = Kopioi
+pdfjs-views-manager-pages-status-cut-button-label = Leikkaa
+pdfjs-views-manager-pages-status-delete-button-label = Poista
+pdfjs-views-manager-pages-status-save-as-button-label = Tallenna nimellä…
+# Variables:
+#   $count (Number) - the number of selected pages to be cut.
+pdfjs-views-manager-status-undo-cut-label =
+    { $count ->
+        [one] 1 sivu leikattu
+       *[other] { $count } sivua leikattu
+    }
+# Variables:
+#   $count (Number) - the number of selected pages to be copied.
+pdfjs-views-manager-pages-status-undo-copy-label =
+    { $count ->
+        [one] 1 sivu kopioitu
+       *[other] { $count } sivua kopioitu
+    }
+# Variables:
+#   $count (Number) - the number of selected pages to be deleted.
+pdfjs-views-manager-pages-status-undo-delete-label =
+    { $count ->
+        [one] 1 sivu poistettu
+       *[other] { $count } sivua poistettu
+    }
+pdfjs-views-manager-pages-status-waiting-ready-label = Tiedostoa valmistellaan…
+pdfjs-views-manager-pages-status-waiting-uploading-label = Lähetetään tiedostoa…
+pdfjs-views-manager-status-warning-cut-label = Leikkaaminen epäonnistui. Päivitä sivu ja yritä uudelleen.
+pdfjs-views-manager-status-warning-copy-label = Kopiointi epäonnistui. Päivitä sivu ja yritä uudelleen.
+pdfjs-views-manager-status-warning-delete-label = Poisto epäonnistui. Päivitä sivu ja yritä uudelleen.
+pdfjs-views-manager-status-warning-save-label = Tallentaminen epäonnistui. Päivitä sivu ja yritä uudelleen.
+pdfjs-views-manager-status-undo-button-label = Kumoa
+pdfjs-views-manager-status-close-button =
+    .title = Sulje
+pdfjs-views-manager-status-close-button-label = Sulje
+
 ## Main menu for adding/removing signatures
 
 pdfjs-editor-delete-signature-button1 =
@@ -657,61 +731,13 @@ pdfjs-editor-movePageUp-button-label = Siirrä sivu ylös
 pdfjs-editor-movePageDown-button = Siirrä sivu alas
 pdfjs-editor-movePageDown-button-label = Siirrä sivu alas
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-editor-undo-bar-message-comment = Comment removed
-pdfjs-toggle-views-manager-button =
-    .title = Toggle Sidebar
-pdfjs-toggle-views-manager-notification-button =
-    .title = Toggle Sidebar (document contains thumbnails/outline/attachments/layers)
-pdfjs-toggle-views-manager-button-label = Toggle Sidebar
-pdfjs-views-manager-sidebar =
-    .aria-label = Sidebar
-pdfjs-views-manager-view-selector-button =
-    .title = Views
-pdfjs-views-manager-view-selector-button-label = Views
-pdfjs-views-manager-pages-title = Pages
-pdfjs-views-manager-outlines-title = Document outline
-pdfjs-views-manager-attachments-title = Attachments
-pdfjs-views-manager-layers-title = Layers
-pdfjs-views-manager-pages-option-label = Pages
-pdfjs-views-manager-outlines-option-label = Document outline
-pdfjs-views-manager-attachments-option-label = Attachments
-pdfjs-views-manager-layers-option-label = Layers
-pdfjs-views-manager-add-file-button =
-    .title = Add file
-pdfjs-views-manager-add-file-button-label = Add file
-pdfjs-views-manager-pages-status-action-label =
-    { $count ->
-        [one] { $count } selected
-        *[other] { $count } selected
-    }
-pdfjs-views-manager-pages-status-none-action-label = Select pages
-pdfjs-views-manager-pages-status-action-button-label = Manage
-pdfjs-views-manager-pages-status-copy-button-label = Copy
-pdfjs-views-manager-pages-status-cut-button-label = Cut
-pdfjs-views-manager-pages-status-delete-button-label = Delete
-pdfjs-views-manager-pages-status-save-as-button-label = Save as…
-pdfjs-views-manager-status-undo-cut-label =
-    { $count ->
-        [one] 1 page cut
-        *[other] { $count } pages cut
-    }
-pdfjs-views-manager-pages-status-undo-copy-label =
-    { $count ->
-        [one] 1 page copied
-        *[other] { $count } pages copied
-    }
-pdfjs-views-manager-pages-status-undo-delete-label =
-    { $count ->
-        [one] 1 page deleted
-        *[other] { $count } pages deleted
-    }
-pdfjs-views-manager-pages-status-waiting-ready-label = Getting your file ready…
-pdfjs-views-manager-pages-status-waiting-uploading-label = Uploading file…
-pdfjs-views-manager-status-warning-cut-label = Couldn’t cut. Refresh page and try again.
-pdfjs-views-manager-status-warning-copy-label = Couldn’t copy. Refresh page and try again.
-pdfjs-views-manager-status-warning-delete-label = Couldn’t delete. Refresh page and try again.
-pdfjs-views-manager-status-warning-save-label = Couldn’t save. Refresh page and try again.
-pdfjs-views-manager-status-undo-button-label = Undo
-pdfjs-views-manager-status-close-button =
-    .title = Close
-pdfjs-views-manager-status-close-button-label = Close
+pdfjs-thumb-page-title1 =
+    .title = Page { $page } of { $total }
+pdfjs-thumb-page-checkbox1 =
+    .title = Select page { $page }
+pdfjs-toggle-views-manager-button1 =
+    .title = Manage pages
+pdfjs-toggle-views-manager-button1-label = Manage pages
+pdfjs-views-manager-sidebar-resizer =
+    .aria-label = Sidebar resizer
+pdfjs-views-manager-paste-button-label = Paste

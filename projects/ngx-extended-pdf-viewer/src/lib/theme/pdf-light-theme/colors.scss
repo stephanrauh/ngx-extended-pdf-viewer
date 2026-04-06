@@ -31,17 +31,22 @@ $thumbnail-selection-color: #a9a9ac;
 $thumbnail-hover-color: #bebec1;
 
 // #3111 modified by ngx-extended-pdf-viewer
-// Modern PDF.js v5.4.624+ thumbnail variables (box-shadow approach)
+// PDF.js v5.5.207 thumbnail variables (box-shadow approach)
 $thumbnail-border-width: 6px;
 $thumbnail-border-color: #cfcfd8;
 $thumbnail-hover-border-color: #bfbfc9;
-$thumbnail-current-border-color: #0062fa; // Focus outline color for light mode
+$thumbnail-current-border-color: #0062fa;
 $thumbnail-current-focused-outline: $thumbnail-hover-border-color;
 $thumbnail-outline: none;
 $thumbnail-page-number-bg: #f0f0f4;
 $thumbnail-page-number-fg: $text-color;
+$thumbnail-page-number-border-color: transparent;
+$thumbnail-hover-page-number-bg: $thumbnail-page-number-bg;
+$thumbnail-hover-page-number-fg: $thumbnail-page-number-fg;
 $thumbnail-current-page-number-bg: $thumbnail-current-border-color;
 $thumbnail-current-page-number-fg: #fff;
+$thumbnail-current-hover-page-number-bg: $thumbnail-current-page-number-bg;
+$thumbnail-current-hover-page-number-fg: $thumbnail-current-page-number-fg;
 
 // Box-shadow definitions for modern thumbnails
 $thumbnail-shadow:
@@ -70,6 +75,7 @@ $thumbnail-multiple-dragging-shadow:
   $thumbnail-border-width $thumbnail-border-width 0
     calc(3 * #{$thumbnail-border-width} / 2) $thumbnail-current-border-color;
 $thumbnail-dragging-shadow: 0 0 0 $thumbnail-border-width $thumbnail-current-border-color;
+$thumbnail-multiple-dragging-indicator-bg: var(--indicator-color);
 $thumbnail-multiple-dragging-text-color: #fbfbfe;
 // #3111 end of modification by ngx-extended-pdf-viewer
 

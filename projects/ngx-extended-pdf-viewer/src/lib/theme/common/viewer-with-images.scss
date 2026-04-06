@@ -714,6 +714,14 @@ ngx-extended-pdf-viewer {
   // overflow-y on editorParamsToolbar was clipping the doorhanger triangle
   #secondaryToolbarButtonContainer {
     overflow-y: auto;
+
+    // Prevent long translations (e.g. German, Dutch, Greek) from wrapping
+    // to a second row in the secondary menu
+    .secondaryToolbarButton {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
   // #3084 end of modification by ngx-extended-pdf-viewer
 
@@ -1419,7 +1427,7 @@ ngx-extended-pdf-viewer .html {
     justify-content: space-evenly;
     width: 100%;
     padding: 20px 32px;
-    gap: 20px;
+    gap: 44px;
     box-sizing: border-box !important; // Force border-box to include padding in width
     position: relative;
   }
@@ -1458,15 +1466,15 @@ ngx-extended-pdf-viewer .html {
   // #3111 end of modification
 
   // #3111 modified by ngx-extended-pdf-viewer
-  // Updated to modern PDF.js v5.4.624+ thumbnail styling with box-shadow approach
+  // Updated to match upstream PDF.js v5.5.207 thumbnail styling
+  // Uses .thumbnailImageContainer (upstream renamed from .thumbnailImage)
   // Scoped to #thumbnailsView > .thumbnail for default thumbnails only
-  // Custom thumbnails wrapped in other elements won't be affected
   #thumbnailsView {
     &.isDragging {
       cursor: grabbing;
 
       > .thumbnail {
-        > .thumbnailImage:hover {
+        > .thumbnailImageContainer:hover {
           cursor: grabbing;
 
           &:not([aria-current="page"]) {
@@ -1488,32 +1496,72 @@ ngx-extended-pdf-viewer .html {
       }
     }
 
+    &.pasteMode {
+      > .thumbnail {
+        flex-direction: column;
+
+        > input {
+          display: none;
+        }
+
+        > .thumbnailPasteButton {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border-radius: 16px;
+          min-height: 24px;
+          padding: 4px 16px;
+
+          font: menu;
+          font-size: 13px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: normal;
+        }
+      }
+    }
+
+    &:not(.pasteMode) > .thumbnail > .thumbnailPasteButton {
+      display: none;
+    }
+
     > .thumbnail {
+      --input-dim: 16px;
+      --gap-between-input-and-thumbnail: 16px;
+
       display: inline-flex;
-      justify-content: center;
+      justify-content: flex-end;
       align-items: center;
-      gap: 16px;
-      width: auto;
+      flex-direction: row-reverse;
+      gap: var(--gap-between-input-and-thumbnail);
+      width: 190px;
       height: auto;
       position: relative;
       scroll-margin-top: 20px;
 
-      // Page number overlay badge (modern PDF.js approach)
-      &:not(.isDragging)::after {
+      .thumbnailPasteButton {
+        padding: 8px 0;
+        text-align: center;
+      }
+
+      // Page number overlay badge
+      &:not(.isDragging) > .thumbnailImageContainer::after {
         content: attr(page-number);
         border-radius: 8px;
+        border: 1px solid $thumbnail-page-number-border-color;
         background-color: $thumbnail-page-number-bg;
         color: $thumbnail-page-number-fg;
         position: absolute;
         bottom: 5px;
-        inset-inline-end: calc(var(--thumbnail-width) / 2);
+        inset-inline-end: 50%;
         min-width: 32px;
         height: 16px;
         text-align: center;
+        box-sizing: content-box;
         translate: calc(var(--dir-factor) * 50%);
 
         font: menu;
-        font-size: 13px;
+        font-size: 12px;
         font-style: normal;
         font-weight: 400;
         line-height: normal;
@@ -1521,9 +1569,11 @@ ngx-extended-pdf-viewer .html {
         user-select: none;
       }
 
-      &:has([aria-current="page"]):not(.isDragging)::after {
+      &:has([aria-current="page"]):not(.isDragging)
+        > .thumbnailImageContainer::after {
         background-color: $thumbnail-current-page-number-bg;
         color: $thumbnail-current-page-number-fg;
+        outline: 1px solid $thumbnail-current-border-color;
       }
 
       &.isDragging > input {
@@ -1532,9 +1582,12 @@ ngx-extended-pdf-viewer .html {
 
       > input {
         margin: 0;
+        width: var(--input-dim);
+        height: var(--input-dim);
+        accent-color: var(--indicator-color);
       }
 
-      > .thumbnailImage {
+      > .thumbnailImageContainer {
         --thumbnail-dragging-scale: 1.4;
 
         width: var(--thumbnail-width);
@@ -1544,6 +1597,17 @@ ngx-extended-pdf-viewer .html {
         box-sizing: content-box;
         outline: $thumbnail-outline;
         user-select: none;
+        position: relative;
+
+        img {
+          width: 100%;
+          height: 100%;
+          border: none;
+          border-radius: 8px;
+          outline: none;
+          user-select: none;
+          pointer-events: none;
+        }
 
         &.missingThumbnailImage {
           content-visibility: hidden;
@@ -1552,6 +1616,11 @@ ngx-extended-pdf-viewer .html {
         &:hover {
           cursor: pointer;
           box-shadow: $thumbnail-hover-shadow;
+
+          &::after {
+            background-color: $thumbnail-hover-page-number-bg;
+            color: $thumbnail-hover-page-number-fg;
+          }
         }
 
         &:focus-visible {
@@ -1568,6 +1637,11 @@ ngx-extended-pdf-viewer .html {
 
         &[aria-current="page"] {
           box-shadow: $thumbnail-current-shadow;
+
+          &:hover::after {
+            background-color: $thumbnail-current-hover-page-number-bg;
+            color: $thumbnail-current-hover-page-number-fg;
+          }
         }
 
         &.placeholder {
@@ -1588,7 +1662,7 @@ ngx-extended-pdf-viewer .html {
           &.multiple {
             box-shadow: $thumbnail-multiple-dragging-shadow;
 
-            > img {
+            > .thumbnailImageContainer {
               position: absolute;
               top: 0;
               left: 0;
@@ -1603,7 +1677,7 @@ ngx-extended-pdf-viewer .html {
             &::after {
               content: attr(data-multiple-count);
               border-radius: calc(8px * var(--thumbnail-dragging-scale));
-              background-color: var(--indicator-color);
+              background-color: $thumbnail-multiple-dragging-indicator-bg;
               color: $thumbnail-multiple-dragging-text-color;
               position: absolute;
               inset-block-end: calc(4px * var(--thumbnail-dragging-scale));

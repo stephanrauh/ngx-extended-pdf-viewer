@@ -7,11 +7,101 @@
     id="viewsManager"
     [style.top]="sidebarPositionTop()"
   >
-    <div
-      id="additionalSidebarContainer"
-      [class.hidden]="hideSidebarToolbar()"
-    >
-      <pdf-sidebar-toolbar [mobileFriendlyZoomScale]="mobileFriendlyZoomScale()"></pdf-sidebar-toolbar>
+    <div id="viewsManagerHeader">
+      <div
+        id="additionalSidebarContainer"
+        [class.hidden]="hideSidebarToolbar()"
+      >
+        <pdf-sidebar-toolbar [mobileFriendlyZoomScale]="mobileFriendlyZoomScale()"></pdf-sidebar-toolbar>
+      </div>
+      <div id="viewsManagerStatus">
+        <div id="viewsManagerStatusAction">
+          <span id="viewsManagerStatusActionLabelContainer" class="viewsManagerStatusLabel">
+            <button
+              id="viewsManagerStatusActionDeselectButton"
+              class="hidden"
+              type="button"
+              tabindex="0"
+              role="checkbox"
+              aria-checked="true"
+              aria-labelledby="viewsManagerStatusActionLabel"
+            ></button>
+            <span
+              id="viewsManagerStatusActionLabel"
+              class="viewsManagerStatusLabel"
+              data-l10n-id="pdfjs-views-manager-pages-status-none-action-label"
+            ></span>
+          </span>
+          <div id="actionSelector">
+            <button
+              id="viewsManagerStatusActionButton"
+              class="viewsManagerButton hasPopupMenu"
+              type="button"
+              tabindex="0"
+              aria-haspopup="menu"
+              aria-controls="viewsManagerStatusActionOptions"
+              aria-expanded="false"
+            >
+              <span data-l10n-id="pdfjs-views-manager-pages-status-action-button-label"></span>
+            </button>
+            <menu id="viewsManagerStatusActionOptions" class="popupMenu">
+              <button id="viewsManagerStatusActionCopy" class="noIcon" role="menuitem" type="button" tabindex="-1" disabled>
+                <span data-l10n-id="pdfjs-views-manager-pages-status-copy-button-label"></span>
+              </button>
+              <button id="viewsManagerStatusActionCut" class="noIcon" role="menuitem" type="button" tabindex="-1" disabled>
+                <span data-l10n-id="pdfjs-views-manager-pages-status-cut-button-label"></span>
+              </button>
+              <button id="viewsManagerStatusActionDelete" class="noIcon" role="menuitem" type="button" tabindex="-1" disabled>
+                <span data-l10n-id="pdfjs-views-manager-pages-status-delete-button-label"></span>
+              </button>
+              <button id="viewsManagerStatusActionSaveAs" class="noIcon" role="menuitem" type="button" tabindex="-1" disabled>
+                <span data-l10n-id="pdfjs-views-manager-pages-status-save-as-button-label"></span>
+              </button>
+            </menu>
+          </div>
+        </div>
+        <div id="viewsManagerStatusUndo" class="hidden">
+          <span id="viewsManagerStatusUndoLabel" class="viewsManagerStatusLabel"></span>
+          <div>
+            <button id="viewsManagerStatusUndoButton" class="viewsManagerButton" type="button" tabindex="0">
+              <span data-l10n-id="pdfjs-views-manager-status-undo-button-label"></span>
+            </button>
+            <button
+              id="viewsManagerStatusUndoCloseButton"
+              class="toolbarButton viewsManagerButton viewsCloseButton"
+              type="button"
+              tabindex="0"
+              data-l10n-id="pdfjs-views-manager-status-close-button"
+            >
+              <span data-l10n-id="pdfjs-views-manager-status-close-button-label"></span>
+            </button>
+          </div>
+        </div>
+        <div id="viewsManagerStatusWarning" class="hidden">
+          <span id="viewsManagerStatusWarningLabel" class="viewsManagerStatusLabel"></span>
+          <button
+            id="viewsManagerStatusWarningCloseButton"
+            class="toolbarButton viewsManagerButton viewsCloseButton"
+            type="button"
+            tabindex="0"
+            data-l10n-id="pdfjs-views-manager-status-close-button"
+          >
+            <span data-l10n-id="pdfjs-views-manager-status-close-button-label"></span>
+          </button>
+        </div>
+        <div id="viewsManagerStatusWaiting" class="hidden">
+          <span id="viewsManagerStatusWaitingLabel" class="viewsManagerStatusLabel"></span>
+          <button
+            id="viewsManagerStatusWaitingCloseButton"
+            class="toolbarButton viewsManagerButton viewsCloseButton"
+            type="button"
+            tabindex="0"
+            data-l10n-id="pdfjs-views-manager-status-close-button"
+          >
+            <span data-l10n-id="pdfjs-views-manager-status-close-button-label"></span>
+          </button>
+        </div>
+      </div>
     </div>
     <pdf-sidebar-content
       [customThumbnail]="customThumbnail()"
@@ -19,6 +109,6 @@
       [hideSidebarToolbar]="hideSidebarToolbar()"
       [mobileFriendlyZoomScale]="mobileFriendlyZoomScale()"
     ></pdf-sidebar-content>
-    <div id="viewsManagerResizer" class="sidebarResizer" role="separator" aria-controls="viewsManager" tabindex="0"></div>
+    <div id="viewsManagerResizer" class="sidebarResizer" role="separator" aria-controls="viewsManager" tabindex="0" data-l10n-id="pdfjs-views-manager-sidebar-resizer"></div>
   </div>
 </ng-template>
