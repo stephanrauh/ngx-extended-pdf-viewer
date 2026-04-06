@@ -5,7 +5,7 @@ const isEdge = typeof navigator === 'undefined' || /Edge\/\d./i.test(navigator.u
 const needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
 
 export const pdfjsVersion = '5.4.1411';
-export const pdfjsBleedingEdgeVersion = '5.5.1091';
+export const pdfjsBleedingEdgeVersion = '5.6.1091';
 export function getVersionSuffix(folder: string): string {
   if (folder?.includes('bleeding-edge')) {
     return pdfjsBleedingEdgeVersion;
@@ -131,8 +131,12 @@ export const pdfDefaultOptions = {
   enableOpenActionJavaScript: false,
   defaultCacheSize: 50,
   passwordPrompt: undefined,
-  enableHWA: true, // enable hardware acceleration. Active since pdf.js 4.4.
+  enableHWA: true, // enable hardware acceleration. Active since pdf.js 4.4, default true since pdf.js 5.6.
+  enableWebGPU: true, // enable WebGPU mesh shading for improved rendering performance
+  enableNewBadge: false, // show a "New" badge on the manage button (upstream default for MOZCENTRAL only)
+  imagesRightClickMinSize: -1, // minimum size (px) for right-clickable images in text layer; -1 = disabled
   positionPopupDialogsWithJavaScript: true,
-  enablePageReordering: false, // allows users to reorder pages by dragging thumbnails,
+  enablePageReordering: false, // allows users to reorder pages by dragging thumbnails
+  enableSplitMerge: false, // allows users to copy, cut, delete, and export selected pages
   pdfBackgroundColor: '', // background color for PDF content rendering
 };

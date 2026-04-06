@@ -112,8 +112,11 @@ export class PdfSidebarContentComponent implements OnDestroy {
 
     this.replacePageNumberEverywhere(newElement, id.toString());
 
-    // Handle click on the thumbnail div itself
-    newElement.onclick = () => {
+    // Handle click on the thumbnail div itself (but not on checkboxes)
+    newElement.onclick = (event) => {
+      if (event.target instanceof HTMLInputElement) {
+        return; // Let pdf.js handle checkbox clicks
+      }
       linkService.page = id;
       return false;
     };

@@ -201,6 +201,19 @@ pdfjs-thumb-page-title =
 #   $page (Number) - the page number
 pdfjs-thumb-page-canvas =
     .aria-label = { $page }. orriaren koadro txikia
+# Variables:
+#   $page (Number) - the page number
+pdfjs-thumb-page-checkbox1 =
+    .title = Hautatu { $page } orria
+# Variables:
+#   $page (Number) - the page number
+pdfjs-thumb-page-checkbox =
+    .aria-label = Hautatu { $page } orria
+# Variables:
+#   $page (Number) - the page number
+#   $total (Number) - the number of pages
+pdfjs-thumb-page-title1 =
+    .title = { $total } / { $page }. orria
 
 ## Find panel button title and messages
 
@@ -649,9 +662,12 @@ pdfjs-toggle-views-manager-button =
     .title = Txandakatu alboko barra
 pdfjs-toggle-views-manager-notification-button =
     .title = Txandakatu alboko barra (dokumentuak koadro txikiak/eskema/eranskinak/geruzak ditu)
+pdfjs-toggle-views-manager-button1-label = Kudeatu orriak
 pdfjs-toggle-views-manager-button-label = Txandakatu alboko barra
 pdfjs-views-manager-sidebar =
     .aria-label = Alboko barra
+pdfjs-views-manager-sidebar-resizer =
+    .aria-label = Alboko barra neurriz aldatzekoa
 pdfjs-views-manager-view-selector-button =
     .title = Ikuspegiak
 pdfjs-views-manager-view-selector-button-label = Ikuspegiak
@@ -707,9 +723,19 @@ pdfjs-views-manager-status-warning-copy-label = Ezin da kopiatu. Berritu orria e
 pdfjs-views-manager-status-warning-delete-label = Ezin da ezabatu. Berritu orria eta saiatu berriro.
 pdfjs-views-manager-status-warning-save-label = Ezin da gorde. Berritu orria eta saiatu berriro.
 pdfjs-views-manager-status-undo-button-label = Desegin
+pdfjs-views-manager-status-done-button-label = Eginda
 pdfjs-views-manager-status-close-button =
     .title = Itxi
 pdfjs-views-manager-status-close-button-label = Itxi
+pdfjs-views-manager-paste-button-label = Itsatsi
+pdfjs-views-manager-paste-button-before =
+    .title = Itsatsi lehen orriaren aurretik
+# Variables:
+#   $page (Number) - the page number after which the paste button is.
+pdfjs-views-manager-paste-button-after =
+    .title = Itsatsi { $page }. orriaren aurretik
+pdfjs-toggle-views-manager-button1 =
+    .title = Kudeatu orriak
 
 ## Main menu for adding/removing signatures
 
@@ -726,16 +752,12 @@ pdfjs-editor-add-signature-edit-button-label = Editatu azalpena
 pdfjs-editor-edit-signature-dialog-title = Editatu azalpena
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-thumb-page-title1 =
-    .title = Page { $page } of { $total }
-pdfjs-thumb-page-checkbox1 =
-    .title = Select page { $page }
-pdfjs-toggle-views-manager-button1 =
-    .title = Manage pages
-pdfjs-toggle-views-manager-button1-label = Manage pages
-pdfjs-views-manager-sidebar-resizer =
-    .aria-label = Sidebar resizer
-pdfjs-views-manager-paste-button-label = Paste
+pdfjs-views-manager-outlines-title1 = Document outline
+    .title = Document outline (double-click to expand/collapse all items)
+pdfjs-views-manager-layers-title1 = Layers
+    .title = Layers (double-click to reset all layers to the default state)
+pdfjs-views-manager-pages-status-export-selected-button-label = Export selected…
+pdfjs-new-badge-content = NEW
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = Match Each Word

@@ -1,5 +1,5 @@
 <!-- #2984 modified by ngx-extended-pdf-viewer -->
-<!-- PDF.js v5.4.530+ uses #viewsManagerContent as the scrollable container -->
+<!-- PDF.js v5.6.205 uses #viewsManagerContent as the scrollable container -->
 <div id="viewsManagerContent" tabindex="-1">
   <div id="thumbnailsView" (keydown)="onKeyDown($event)"></div>
   <!-- #3113 modified by ngx-extended-pdf-viewer - Add treeView class for proper outline/layers tree styling -->
@@ -10,13 +10,14 @@
 </div>
 <!-- #2984 end of modification by ngx-extended-pdf-viewer -->
 
-<!-- #3111 modified by ngx-extended-pdf-viewer -->
-<!-- Updated to match PDF.js v5.4.530+ structure: direct div with checkbox + img (no anchor wrapper) -->
-<!-- Note: page-number attribute (not data-page-number) is used by PDF.js v5.4.530+ -->
+<!-- Updated to match PDF.js v5.6.205 thumbnail structure:
+     div.thumbnail > div.thumbnailImageContainer > img
+     Checkbox is a sibling of thumbnailImageContainer, added by pdf.js when enableSplitMerge is true.
+     page-number attribute is set on both .thumbnail and .thumbnailImageContainer for page number badge. -->
 <ng-template #defaultThumbnail>
   <div class="thumbnail pdf-viewer-template" page-number="PAGE_NUMBER">
-    <input type="checkbox" tabindex="-1" />
-    <img class="thumbnailImage" role="button" tabindex="-1" alt="miniature of the page" />
+    <div class="thumbnailImageContainer missingThumbnailImage" role="button" tabindex="-1" page-number="PAGE_NUMBER">
+      <img class="thumbnailImage" />
+    </div>
   </div>
 </ng-template>
-<!-- #3111 end of modification by ngx-extended-pdf-viewer -->

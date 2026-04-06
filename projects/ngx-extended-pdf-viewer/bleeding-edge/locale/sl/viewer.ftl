@@ -201,6 +201,19 @@ pdfjs-thumb-page-title =
 #   $page (Number) - the page number
 pdfjs-thumb-page-canvas =
     .aria-label = Sličica strani { $page }
+# Variables:
+#   $page (Number) - the page number
+pdfjs-thumb-page-checkbox1 =
+    .title = Izberi stran { $page }
+# Variables:
+#   $page (Number) - the page number
+pdfjs-thumb-page-checkbox =
+    .aria-label = Izberi stran { $page }
+# Variables:
+#   $page (Number) - the page number
+#   $total (Number) - the number of pages
+pdfjs-thumb-page-title1 =
+    .title = Stran { $page } od { $total }
 
 ## Find panel button title and messages
 
@@ -653,9 +666,12 @@ pdfjs-toggle-views-manager-button =
     .title = Preklopi stransko vrstico
 pdfjs-toggle-views-manager-notification-button =
     .title = Preklopi stransko vrstico (dokument vsebuje sličice/oris/priponke/plasti)
+pdfjs-toggle-views-manager-button1-label = Upravljanje strani
 pdfjs-toggle-views-manager-button-label = Preklopi stransko vrstico
 pdfjs-views-manager-sidebar =
     .aria-label = Stranska vrstica
+pdfjs-views-manager-sidebar-resizer =
+    .aria-label = Sprememba velikosti stranske vrstice
 pdfjs-views-manager-view-selector-button =
     .title = Pogledi
 pdfjs-views-manager-view-selector-button-label = Pogledi
@@ -719,9 +735,19 @@ pdfjs-views-manager-status-warning-copy-label = Kopiranje ni bilo mogoče. Osve�
 pdfjs-views-manager-status-warning-delete-label = Brisanje ni bilo mogoče. Osvežite stran in poskusite znova.
 pdfjs-views-manager-status-warning-save-label = Shranjevanje ni bilo mogoče. Osvežite stran in poskusite znova.
 pdfjs-views-manager-status-undo-button-label = Razveljavi
+pdfjs-views-manager-status-done-button-label = Končano
 pdfjs-views-manager-status-close-button =
     .title = Zapri
 pdfjs-views-manager-status-close-button-label = Zapri
+pdfjs-views-manager-paste-button-label = Prilepi
+pdfjs-views-manager-paste-button-before =
+    .title = Prilepi pred prvo stran
+# Variables:
+#   $page (Number) - the page number after which the paste button is.
+pdfjs-views-manager-paste-button-after =
+    .title = Prilepi za stranjo { $page }
+pdfjs-toggle-views-manager-button1 =
+    .title = Upravljanje strani
 
 ## Main menu for adding/removing signatures
 
@@ -747,13 +773,9 @@ pdfjs-editor-movePageUp-button-label = Premakni stran navzgor
 pdfjs-editor-movePageDown-button = Premakni stran navzdol
 pdfjs-editor-movePageDown-button-label = Premakni stran navzdol
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-thumb-page-title1 =
-    .title = Page { $page } of { $total }
-pdfjs-thumb-page-checkbox1 =
-    .title = Select page { $page }
-pdfjs-toggle-views-manager-button1 =
-    .title = Manage pages
-pdfjs-toggle-views-manager-button1-label = Manage pages
-pdfjs-views-manager-sidebar-resizer =
-    .aria-label = Sidebar resizer
-pdfjs-views-manager-paste-button-label = Paste
+pdfjs-views-manager-outlines-title1 = Document outline
+    .title = Document outline (double-click to expand/collapse all items)
+pdfjs-views-manager-layers-title1 = Layers
+    .title = Layers (double-click to reset all layers to the default state)
+pdfjs-views-manager-pages-status-export-selected-button-label = Export selected…
+pdfjs-new-badge-content = NEW

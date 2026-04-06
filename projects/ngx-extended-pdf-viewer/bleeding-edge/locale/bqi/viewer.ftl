@@ -5,229 +5,92 @@
 
 ## Main toolbar buttons (tooltips and alt text for images)
 
-pdfjs-previous-button =
-    .title = Naunang Pahina
-pdfjs-previous-button-label = Nakaraan
-pdfjs-next-button =
-    .title = Sunod na Pahina
-pdfjs-next-button-label = Sunod
-# .title: Tooltip for the pageNumber input.
-pdfjs-page-input =
-    .title = Pahina
-# Variables:
-#   $pagesCount (Number) - the total number of pages in the document
-# This string follows an input field with the number of the page currently displayed.
-pdfjs-of-pages = ng { $pagesCount }
-# Variables:
-#   $pageNumber (Number) - the currently visible page
-#   $pagesCount (Number) - the total number of pages in the document
-pdfjs-page-of-pages = ({ $pageNumber } ng { $pagesCount })
-pdfjs-zoom-out-button =
-    .title = Paliitin
-pdfjs-zoom-out-button-label = Paliitin
-pdfjs-zoom-in-button =
-    .title = Palakihin
-pdfjs-zoom-in-button-label = Palakihin
-pdfjs-zoom-select =
-    .title = Mag-zoom
-pdfjs-presentation-mode-button =
-    .title = Lumipat sa Presentation Mode
-pdfjs-presentation-mode-button-label = Presentation Mode
-pdfjs-open-file-button =
-    .title = Magbukas ng file
-pdfjs-open-file-button-label = Buksan
 pdfjs-print-button =
-    .title = i-Print
-pdfjs-print-button-label = i-Print
-
-##  Secondary toolbar and context menu
-
-pdfjs-tools-button =
-    .title = Mga Kagamitan
-pdfjs-tools-button-label = Mga Kagamitan
-pdfjs-first-page-button =
-    .title = Pumunta sa Unang Pahina
-pdfjs-first-page-button-label = Pumunta sa Unang Pahina
-pdfjs-last-page-button =
-    .title = Pumunta sa Huling Pahina
-pdfjs-last-page-button-label = Pumunta sa Huling Pahina
-pdfjs-page-rotate-cw-button =
-    .title = Paikutin Pakanan
-pdfjs-page-rotate-cw-button-label = Paikutin Pakanan
-pdfjs-page-rotate-ccw-button =
-    .title = Paikutin Pakaliwa
-pdfjs-page-rotate-ccw-button-label = Paikutin Pakaliwa
-pdfjs-cursor-text-select-tool-button =
-    .title = I-enable ang Text Selection Tool
-pdfjs-cursor-text-select-tool-button-label = Text Selection Tool
-pdfjs-cursor-hand-tool-button =
-    .title = I-enable ang Hand Tool
-pdfjs-cursor-hand-tool-button-label = Hand Tool
-pdfjs-scroll-vertical-button =
-    .title = Gumamit ng Vertical Scrolling
-pdfjs-scroll-vertical-button-label = Vertical Scrolling
-pdfjs-scroll-horizontal-button =
-    .title = Gumamit ng Horizontal Scrolling
-pdfjs-scroll-horizontal-button-label = Horizontal Scrolling
-pdfjs-scroll-wrapped-button =
-    .title = Gumamit ng Wrapped Scrolling
-pdfjs-scroll-wrapped-button-label = Wrapped Scrolling
-pdfjs-spread-none-button =
-    .title = Huwag pagsamahin ang mga page spread
-pdfjs-spread-none-button-label = No Spreads
-pdfjs-spread-odd-button =
-    .title = Join page spreads starting with odd-numbered pages
-pdfjs-spread-odd-button-label = Mga Odd Spread
-pdfjs-spread-even-button =
-    .title = Pagsamahin ang mga page spread na nagsisimula sa mga even-numbered na pahina
-pdfjs-spread-even-button-label = Mga Even Spread
-
-## Document properties dialog
-
-pdfjs-document-properties-button =
-    .title = Mga Katangian ng Dokumento…
-pdfjs-document-properties-button-label = Mga Katangian ng Dokumento…
-pdfjs-document-properties-file-name = File name:
-pdfjs-document-properties-file-size = File size:
-pdfjs-document-properties-title = Pamagat:
-pdfjs-document-properties-author = May-akda:
-pdfjs-document-properties-subject = Paksa:
-pdfjs-document-properties-keywords = Mga keyword:
-pdfjs-document-properties-creation-date = Petsa ng Pagkakagawa:
-pdfjs-document-properties-modification-date = Petsa ng Pagkakabago:
-pdfjs-document-properties-creator = Tagalikha:
-pdfjs-document-properties-producer = PDF Producer:
-pdfjs-document-properties-version = PDF Version:
-pdfjs-document-properties-page-count = Bilang ng Pahina:
-pdfjs-document-properties-page-size = Laki ng Pahina:
-pdfjs-document-properties-page-size-unit-inches = pulgada
-pdfjs-document-properties-page-size-unit-millimeters = mm
-pdfjs-document-properties-page-size-orientation-portrait = patayo
-pdfjs-document-properties-page-size-orientation-landscape = pahiga
-pdfjs-document-properties-page-size-name-a-three = A3
-pdfjs-document-properties-page-size-name-a-four = A4
-pdfjs-document-properties-page-size-name-letter = Letter
-pdfjs-document-properties-page-size-name-legal = Legal
-
-## Variables:
-##   $width (Number) - the width of the (current) page
-##   $height (Number) - the height of the (current) page
-##   $unit (String) - the unit of measurement of the (current) page
-##   $name (String) - the name of the (current) page
-##   $orientation (String) - the orientation of the (current) page
-
-pdfjs-document-properties-page-size-dimension-string = { $width } × { $height } { $unit } ({ $orientation })
-pdfjs-document-properties-page-size-dimension-name-string = { $width } × { $height } { $unit } ({ $name }, { $orientation })
+    .title = چاپ
+pdfjs-print-button-label = چاپ
 
 ##
 
-# The linearization status of the document; usually called "Fast Web View" in
-# English locales of Adobe software.
-pdfjs-document-properties-linearized = Fast Web View:
-pdfjs-document-properties-linearized-yes = Oo
-pdfjs-document-properties-linearized-no = Hindi
-pdfjs-document-properties-close-button = Isara
+pdfjs-document-properties-linearized-yes = هری
 
 ## Print
 
-pdfjs-print-progress-message = Inihahanda ang dokumento para sa pag-print…
-# Variables:
-#   $progress (Number) - percent value
-pdfjs-print-progress-percent = { $progress }%
-pdfjs-print-progress-close-button = Kanselahin
-pdfjs-printing-not-supported = Babala: Hindi pa ganap na suportado ang pag-print sa browser na ito.
-pdfjs-printing-not-ready = Babala: Hindi ganap na nabuksan ang PDF para sa pag-print.
-
-## Tooltips and alt text for side panel toolbar buttons
-
-pdfjs-toggle-sidebar-button =
-    .title = Ipakita/Itago ang Sidebar
-pdfjs-toggle-sidebar-notification-button =
-    .title = Ipakita/Itago ang Sidebar (nagtataglay ang dokumento ng balangkas/mga attachment/mga layer)
-pdfjs-toggle-sidebar-button-label = Ipakita/Itago ang Sidebar
-pdfjs-document-outline-button =
-    .title = Ipakita ang Document Outline (mag-double-click para i-expand/collapse ang laman)
-pdfjs-document-outline-button-label = Balangkas ng Dokumento
-pdfjs-attachments-button =
-    .title = Ipakita ang mga Attachment
-pdfjs-attachments-button-label = Mga attachment
-pdfjs-layers-button =
-    .title = Ipakita ang mga Layer (mag-double click para mareset ang lahat ng layer sa orihinal na estado)
-pdfjs-layers-button-label = Mga layer
-pdfjs-thumbs-button =
-    .title = Ipakita ang mga Thumbnail
-pdfjs-thumbs-button-label = Mga thumbnail
-pdfjs-findbar-button =
-    .title = Hanapin sa Dokumento
-pdfjs-findbar-button-label = Hanapin
-pdfjs-additional-layers = Mga Karagdagang Layer
-
-## Thumbnails panel item (tooltip and alt text for images)
-
-# Variables:
-#   $page (Number) - the page number
-pdfjs-thumb-page-title =
-    .title = Pahina { $page }
-# Variables:
-#   $page (Number) - the page number
-pdfjs-thumb-page-canvas =
-    .aria-label = Thumbnail ng Pahina { $page }
-
-## Find panel button title and messages
-
-pdfjs-find-input =
-    .title = Hanapin
-    .placeholder = Hanapin sa dokumento…
-pdfjs-find-previous-button =
-    .title = Hanapin ang nakaraang pangyayari ng parirala
-pdfjs-find-previous-button-label = Nakaraan
-pdfjs-find-next-button =
-    .title = Hanapin ang susunod na pangyayari ng parirala
-pdfjs-find-next-button-label = Susunod
-pdfjs-find-highlight-checkbox = I-highlight lahat
-pdfjs-find-match-case-checkbox-label = Itugma ang case
-pdfjs-find-entire-word-checkbox-label = Buong salita
-pdfjs-find-reached-top = Naabot na ang tuktok ng dokumento, ipinagpatuloy mula sa ilalim
-pdfjs-find-reached-bottom = Naabot na ang dulo ng dokumento, ipinagpatuloy mula sa tuktok
-pdfjs-find-not-found = Hindi natagpuan ang parirala
-
-## Predefined zoom values
-
-pdfjs-page-scale-width = Lapad ng Pahina
-pdfjs-page-scale-fit = Pagkasyahin ang Pahina
-pdfjs-page-scale-auto = Automatic Zoom
-pdfjs-page-scale-actual = Totoong sukat
-# Variables:
-#   $scale (Number) - percent value for page scale
-pdfjs-page-scale-percent = { $scale }%
-
-## Loading indicator messages
-
-pdfjs-loading-error = Nagkaproblema habang niloload ang PDF.
-pdfjs-invalid-file-error = Di-wasto o sira ang PDF file.
-pdfjs-missing-file-error = Nawawalang PDF file.
-pdfjs-unexpected-response-error = Hindi inaasahang tugon ng server.
-pdfjs-rendering-error = Nagkaproblema habang nirerender ang pahina.
-
-## Annotations
-
-# .alt: This is used as a tooltip.
-# Variables:
-#   $type (String) - an annotation type from a list defined in the PDF spec
-# (32000-1:2008 Table 169 – Annotation types).
-# Some common types are e.g.: "Check", "Text", "Comment", "Note"
-pdfjs-text-annotation-type =
-    .alt = [{ $type } Annotation]
+pdfjs-print-progress-close-button = لقو
 
 ## Password
 
-pdfjs-password-label = Ipasok ang password upang buksan ang PDF file na ito.
-pdfjs-password-invalid = Maling password. Subukan uli.
-pdfjs-password-ok-button = OK
-pdfjs-password-cancel-button = Kanselahin
-pdfjs-web-fonts-disabled = Naka-disable ang mga Web font: hindi kayang gamitin ang mga naka-embed na PDF font.
+pdfjs-password-ok-button = خا
+pdfjs-password-cancel-button = لقو
+
+## Editing
+
+pdfjs-editor-stamp-button =
+    .title = ٱووردن یا آلشت شؽواتا
+pdfjs-editor-stamp-button-label = ٱووردن یا آلشت شؽواتا
+
+## Default editor aria labels
+
+pdfjs-editor-stamp-editor =
+    .aria-label = آلشتگر شؽوات
+
+##
+
+# .default-content is used as a placeholder in an empty text editor.
+pdfjs-free-text2 =
+    .aria-label = آلشتگر هؽل
+    .default-content = ناهاڌن پا هؽل کردن...
+pdfjs-editor-comments-sidebar-no-comments-link = قلوه دووسته بۊین
+
+## Alt-text dialog
+
+pdfjs-editor-alt-text-cancel-button = لقو
+
+## New alt-text dialog
+## Group note for entire feature: Alternative text (alt text) helps when people can't see the image. This feature includes a tool to create alt text automatically using an AI model that works locally on the user's device to preserve privacy.
+
+pdfjs-editor-new-alt-text-disclaimer-learn-more-url = قلوه دووسته بۊین
+
+## Dialog buttons
+
+pdfjs-editor-add-signature-cancel-button = لقو
+
+## Comment popup
+
+pdfjs-editor-edit-comment-popup-button-label = آلشت منشڌ
+pdfjs-editor-edit-comment-popup-button =
+    .title = آلشت منشڌ
+
+##  Edit a comment dialog
+
+# An existing comment is edited
+pdfjs-editor-edit-comment-dialog-title-when-editing = آلشت منشڌ
+pdfjs-editor-edit-comment-dialog-cancel-button = لقو
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
+pdfjs-previous-button =
+    .title = Previous Page
+pdfjs-previous-button-label = Previous
+pdfjs-next-button =
+    .title = Next Page
+pdfjs-next-button-label = Next
+pdfjs-page-input =
+    .title = Page
+pdfjs-of-pages = of { $pagesCount }
+pdfjs-page-of-pages = ({ $pageNumber } of { $pagesCount })
+pdfjs-zoom-out-button =
+    .title = Zoom Out
+pdfjs-zoom-out-button-label = Zoom Out
+pdfjs-zoom-in-button =
+    .title = Zoom In
+pdfjs-zoom-in-button-label = Zoom In
+pdfjs-zoom-select =
+    .title = Zoom
+pdfjs-presentation-mode-button =
+    .title = Switch to Presentation Mode
+pdfjs-presentation-mode-button-label = Presentation Mode
+pdfjs-open-file-button =
+    .title = Open File
+pdfjs-open-file-button-label = Open
 pdfjs-save-button =
     .title = Save
 pdfjs-save-button-label = Save
@@ -237,20 +100,111 @@ pdfjs-download-button-label = Download
 pdfjs-bookmark-button =
     .title = Current Page (View URL from Current Page)
 pdfjs-bookmark-button-label = Current Page
+pdfjs-tools-button =
+    .title = Tools
+pdfjs-tools-button-label = Tools
+pdfjs-first-page-button =
+    .title = Go to First Page
+pdfjs-first-page-button-label = Go to First Page
+pdfjs-last-page-button =
+    .title = Go to Last Page
+pdfjs-last-page-button-label = Go to Last Page
+pdfjs-page-rotate-cw-button =
+    .title = Rotate Clockwise
+pdfjs-page-rotate-cw-button-label = Rotate Clockwise
+pdfjs-page-rotate-ccw-button =
+    .title = Rotate Counterclockwise
+pdfjs-page-rotate-ccw-button-label = Rotate Counterclockwise
+pdfjs-cursor-text-select-tool-button =
+    .title = Enable Text Selection Tool
+pdfjs-cursor-text-select-tool-button-label = Text Selection Tool
+pdfjs-cursor-hand-tool-button =
+    .title = Enable Hand Tool
+pdfjs-cursor-hand-tool-button-label = Hand Tool
 pdfjs-scroll-page-button =
     .title = Use Page Scrolling
 pdfjs-scroll-page-button-label = Page Scrolling
+pdfjs-scroll-vertical-button =
+    .title = Use Vertical Scrolling
+pdfjs-scroll-vertical-button-label = Vertical Scrolling
+pdfjs-scroll-horizontal-button =
+    .title = Use Horizontal Scrolling
+pdfjs-scroll-horizontal-button-label = Horizontal Scrolling
+pdfjs-scroll-wrapped-button =
+    .title = Use Wrapped Scrolling
+pdfjs-scroll-wrapped-button-label = Wrapped Scrolling
+pdfjs-spread-none-button =
+    .title = Do not join page spreads
+pdfjs-spread-none-button-label = No Spreads
+pdfjs-spread-odd-button =
+    .title = Join page spreads starting with odd-numbered pages
+pdfjs-spread-odd-button-label = Odd Spreads
+pdfjs-spread-even-button =
+    .title = Join page spreads starting with even-numbered pages
+pdfjs-spread-even-button-label = Even Spreads
+pdfjs-document-properties-button =
+    .title = Document Properties…
+pdfjs-document-properties-button-label = Document Properties…
+pdfjs-document-properties-file-name = File name:
+pdfjs-document-properties-file-size = File size:
 pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } KB ({ $b } bytes)
 pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } bytes)
+pdfjs-document-properties-title = Title:
+pdfjs-document-properties-author = Author:
+pdfjs-document-properties-subject = Subject:
+pdfjs-document-properties-keywords = Keywords:
+pdfjs-document-properties-creation-date = Creation Date:
+pdfjs-document-properties-modification-date = Modification Date:
 pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
+pdfjs-document-properties-creator = Creator:
+pdfjs-document-properties-producer = PDF Producer:
+pdfjs-document-properties-version = PDF Version:
+pdfjs-document-properties-page-count = Page Count:
+pdfjs-document-properties-page-size = Page Size:
+pdfjs-document-properties-page-size-unit-inches = in
+pdfjs-document-properties-page-size-unit-millimeters = mm
+pdfjs-document-properties-page-size-orientation-portrait = portrait
+pdfjs-document-properties-page-size-orientation-landscape = landscape
+pdfjs-document-properties-page-size-name-a-three = A3
+pdfjs-document-properties-page-size-name-a-four = A4
+pdfjs-document-properties-page-size-name-letter = Letter
+pdfjs-document-properties-page-size-name-legal = Legal
+pdfjs-document-properties-page-size-dimension-string = { $width } × { $height } { $unit } ({ $orientation })
+pdfjs-document-properties-page-size-dimension-name-string = { $width } × { $height } { $unit } ({ $name }, { $orientation })
+pdfjs-document-properties-linearized-no = No
+pdfjs-document-properties-close-button = Close
+pdfjs-print-progress-message = Preparing document for printing…
+pdfjs-print-progress-percent = { $progress }%
+pdfjs-printing-not-supported = Warning: Printing is not fully supported by this browser.
+pdfjs-printing-not-ready = Warning: The PDF is not fully loaded for printing.
 pdfjs-current-outline-item-button =
     .title = Find Current Outline Item
 pdfjs-current-outline-item-button-label = Current Outline Item
+pdfjs-findbar-button =
+    .title = Find in Document
+pdfjs-findbar-button-label = Find
+pdfjs-additional-layers = Additional Layers
 pdfjs-thumb-page-title1 =
     .title = Page { $page } of { $total }
+pdfjs-thumb-page-canvas =
+    .aria-label = Thumbnail of Page { $page }
 pdfjs-thumb-page-checkbox1 =
     .title = Select page { $page }
+pdfjs-find-input =
+    .title = Find
+    .placeholder = Find in document…
+pdfjs-find-previous-button =
+    .title = Find the previous occurrence of the phrase
+pdfjs-find-previous-button-label = Previous
+pdfjs-find-next-button =
+    .title = Find the next occurrence of the phrase
+pdfjs-find-next-button-label = Next
+pdfjs-find-highlight-checkbox = Highlight All
+pdfjs-find-match-case-checkbox-label = Match Case
 pdfjs-find-match-diacritics-checkbox-label = Match Diacritics
+pdfjs-find-entire-word-checkbox-label = Whole Words
+pdfjs-find-reached-top = Reached top of document, continued from bottom
+pdfjs-find-reached-bottom = Reached end of document, continued from top
 pdfjs-find-match-count =
     { $total ->
         [one] { $current } of { $total } match
@@ -261,9 +215,25 @@ pdfjs-find-match-count-limit =
         [one] More than { $limit } match
        *[other] More than { $limit } matches
     }
+pdfjs-find-not-found = Phrase not found
+pdfjs-page-scale-width = Page Width
+pdfjs-page-scale-fit = Page Fit
+pdfjs-page-scale-auto = Automatic Zoom
+pdfjs-page-scale-actual = Actual Size
+pdfjs-page-scale-percent = { $scale }%
 pdfjs-page-landmark =
     .aria-label = Page { $page }
+pdfjs-loading-error = An error occurred while loading the PDF.
+pdfjs-invalid-file-error = Invalid or corrupted PDF file.
+pdfjs-missing-file-error = Missing PDF file.
+pdfjs-unexpected-response-error = Unexpected server response.
+pdfjs-rendering-error = An error occurred while rendering the page.
 pdfjs-annotation-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
+pdfjs-text-annotation-type =
+    .alt = [{ $type } Annotation]
+pdfjs-password-label = Enter the password to open this PDF file.
+pdfjs-password-invalid = Invalid password. Please try again.
+pdfjs-web-fonts-disabled = Web fonts are disabled: unable to use embedded PDF fonts.
 pdfjs-editor-free-text-button =
     .title = Text
 pdfjs-editor-color-picker-free-text-input =
@@ -274,9 +244,6 @@ pdfjs-editor-ink-button =
 pdfjs-editor-color-picker-ink-input =
     .title = Change drawing color
 pdfjs-editor-ink-button-label = Draw
-pdfjs-editor-stamp-button =
-    .title = Add or edit images
-pdfjs-editor-stamp-button-label = Add or edit images
 pdfjs-editor-highlight-button =
     .title = Highlight
 pdfjs-editor-highlight-button-label = Highlight
@@ -301,8 +268,6 @@ pdfjs-editor-ink-editor =
     .aria-label = Drawing editor
 pdfjs-editor-signature-editor1 =
     .aria-description = Signature editor: { $description }
-pdfjs-editor-stamp-editor =
-    .aria-label = Image editor
 pdfjs-editor-remove-ink-button =
     .title = Remove drawing
 pdfjs-editor-remove-freetext-button =
@@ -331,9 +296,6 @@ pdfjs-editor-signature-add-signature-button =
 pdfjs-editor-signature-add-signature-button-label = Add new signature
 pdfjs-editor-add-saved-signature-button =
     .title = Saved signature: { $description }
-pdfjs-free-text2 =
-    .aria-label = Text Editor
-    .default-content = Start typing…
 pdfjs-editor-comments-sidebar-title =
     { $count ->
         [one] Comment
@@ -344,7 +306,6 @@ pdfjs-editor-comments-sidebar-close-button =
     .aria-label = Close the sidebar
 pdfjs-editor-comments-sidebar-close-button-label = Close the sidebar
 pdfjs-editor-comments-sidebar-no-comments1 = See something noteworthy? Highlight it and leave a comment.
-pdfjs-editor-comments-sidebar-no-comments-link = Learn more
 pdfjs-editor-alt-text-button =
     .aria-label = Alt text
 pdfjs-editor-alt-text-button-label = Alt text
@@ -356,7 +317,6 @@ pdfjs-editor-alt-text-add-description-label = Add a description
 pdfjs-editor-alt-text-add-description-description = Aim for 1-2 sentences that describe the subject, setting, or actions.
 pdfjs-editor-alt-text-mark-decorative-label = Mark as decorative
 pdfjs-editor-alt-text-mark-decorative-description = This is used for ornamental images, like borders or watermarks.
-pdfjs-editor-alt-text-cancel-button = Cancel
 pdfjs-editor-alt-text-save-button = Save
 pdfjs-editor-alt-text-decorative-tooltip = Marked as decorative
 pdfjs-editor-alt-text-textarea =
@@ -401,7 +361,6 @@ pdfjs-editor-new-alt-text-textarea =
     .placeholder = Write your description here…
 pdfjs-editor-new-alt-text-description = Short description for people who can’t see the image or when the image doesn’t load.
 pdfjs-editor-new-alt-text-disclaimer1 = This alt text was created automatically and may be inaccurate.
-pdfjs-editor-new-alt-text-disclaimer-learn-more-url = Learn more
 pdfjs-editor-new-alt-text-create-automatically-button-label = Create alt text automatically
 pdfjs-editor-new-alt-text-not-now-button = Not now
 pdfjs-editor-new-alt-text-error-title = Couldn’t create alt text automatically
@@ -487,7 +446,6 @@ pdfjs-editor-add-signature-image-upload-error-description = Check your network c
 pdfjs-editor-add-signature-image-no-data-error-title = Can’t convert this image into a signature
 pdfjs-editor-add-signature-image-no-data-error-description = Please try uploading a different image.
 pdfjs-editor-add-signature-error-close-button = Close
-pdfjs-editor-add-signature-cancel-button = Cancel
 pdfjs-editor-add-signature-add-button = Add
 pdfjs-editor-delete-signature-button1 =
     .title = Remove saved signature
@@ -497,19 +455,14 @@ pdfjs-editor-edit-signature-dialog-title = Edit description
 pdfjs-editor-edit-signature-update-button = Update
 pdfjs-show-comment-button =
     .title = Show comment
-pdfjs-editor-edit-comment-popup-button-label = Edit comment
-pdfjs-editor-edit-comment-popup-button =
-    .title = Edit comment
 pdfjs-editor-delete-comment-popup-button-label = Remove comment
 pdfjs-editor-delete-comment-popup-button =
     .title = Remove comment
-pdfjs-editor-edit-comment-dialog-title-when-editing = Edit comment
 pdfjs-editor-edit-comment-dialog-save-button-when-editing = Update
 pdfjs-editor-edit-comment-dialog-title-when-adding = Add comment
 pdfjs-editor-edit-comment-dialog-save-button-when-adding = Add
 pdfjs-editor-edit-comment-dialog-text-input =
     .placeholder = Start typing…
-pdfjs-editor-edit-comment-dialog-cancel-button = Cancel
 pdfjs-editor-add-comment-button =
     .title = Add comment
 pdfjs-toggle-views-manager-button1 =

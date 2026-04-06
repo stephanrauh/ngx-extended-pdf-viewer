@@ -5,6 +5,7 @@
 <ng-template #defaultSidebar>
   <div
     id="viewsManager"
+    class="menuContainer sidebar"
     [style.top]="sidebarPositionTop()"
   >
     <div id="viewsManagerHeader">
@@ -54,8 +55,8 @@
               <button id="viewsManagerStatusActionDelete" class="noIcon" role="menuitem" type="button" tabindex="-1" disabled>
                 <span data-l10n-id="pdfjs-views-manager-pages-status-delete-button-label"></span>
               </button>
-              <button id="viewsManagerStatusActionSaveAs" class="noIcon" role="menuitem" type="button" tabindex="-1" disabled>
-                <span data-l10n-id="pdfjs-views-manager-pages-status-save-as-button-label"></span>
+              <button id="viewsManagerStatusActionExport" class="noIcon" role="menuitem" type="button" tabindex="-1" disabled>
+                <span data-l10n-id="pdfjs-views-manager-pages-status-export-selected-button-label"></span>
               </button>
             </menu>
           </div>

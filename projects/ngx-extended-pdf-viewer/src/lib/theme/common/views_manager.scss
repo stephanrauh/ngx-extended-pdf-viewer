@@ -1,0 +1,952 @@
+ngx-extended-pdf-viewer {
+/* Copyright 2025 Mozilla Foundation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#outerContainer {
+  &.viewsManagerMoving {
+    #viewsManager {
+      visibility: visible;
+    }
+  }
+
+  &.viewsManagerOpen {
+    #viewsManager {
+      visibility: visible;
+      inset-inline-start: 8px;
+    }
+
+    #viewerContainer:not(.pdfPresentationMode) {
+      inset-inline-start: var(--viewsManager-width, 0);
+      transition-property: inset-inline-start;
+    }
+  }
+
+  &.viewsManagerResizing :is(#sidebarContainer, #viewerContainer, #loadingBar) {
+    /* Improve responsiveness and avoid visual glitches when the sidebar is resized. */
+    transition-duration: 0s;
+  }
+}
+
+#viewsManager {
+  // --icon-size is defined in viewer.css :root but not in our Angular build
+  --icon-size: 16px;
+
+  // SVG icons inlined as data URIs (upstream uses url(images/...) which doesn't work in Angular builds)
+  --views-manager-button-icon: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M3 7H5C5.53 7 6.04 6.79 6.41 6.41C6.79 6.04 7 5.53 7 5V3C7 2.47 6.79 1.96 6.41 1.59C6.04 1.21 5.53 1 5 1H3C2.47 1 1.96 1.21 1.59 1.59C1.21 1.96 1 2.47 1 3V5C1 5.53 1.21 6.04 1.59 6.41C1.96 6.79 2.47 7 3 7ZM11 7H13C13.53 7 14.04 6.79 14.41 6.41C14.79 6.04 15 5.53 15 5V3C15 2.47 14.79 1.96 14.41 1.59C14.04 1.21 13.53 1 13 1H11C10.47 1 9.96 1.21 9.59 1.59C9.21 1.96 9 2.47 9 3V5C9 5.53 9.21 6.04 9.59 6.41C9.96 6.79 10.47 7 11 7ZM5 15H3C2.47 15 1.96 14.79 1.59 14.41C1.21 14.04 1 13.53 1 13V11C1 10.47 1.21 9.96 1.59 9.59C1.96 9.21 2.47 9 3 9H5C5.53 9 6.04 9.21 6.41 9.59C6.79 9.96 7 10.47 7 11V13C7 13.53 6.79 14.04 6.41 14.41C6.04 14.79 5.53 15 5 15ZM11 15H13C13.53 15 14.04 14.79 14.41 14.41C14.79 14.04 15 13.53 15 13V11C15 10.47 14.79 9.96 14.41 9.59C14.04 9.21 13.53 9 13 9H11C10.47 9 9.96 9.21 9.59 9.59C9.21 9.96 9 10.47 9 11V13C9 13.53 9.21 14.04 9.59 14.41C9.96 14.79 10.47 15 11 15Z' fill='black'/%3E%3C/svg%3E");
+  --views-manager-button-arrow-icon: url("data:image/svg+xml,%3Csvg width='8' height='10' viewBox='0 0 8 10' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4.23 7.47L7.85 3.85C7.89 3.81 7.93 3.75 7.96 3.69C7.98 3.63 7.99 3.57 7.99 3.5C7.99 3.43 7.98 3.37 7.96 3.31C7.93 3.25 7.89 3.19 7.85 3.15C7.75 3.05 7.63 3 7.49 3C7.36 3 7.23 3.05 7.14 3.15L3.99 6.29L0.85 3.15C0.75 3.06 0.63 3.01 0.5 3.01C0.36 3.01 0.24 3.06 0.15 3.15C0.05 3.25 0 3.37 0 3.5C0 3.63 0.05 3.76 0.14 3.85L3.75 7.47L4.23 7.47Z' fill='black'/%3E%3C/svg%3E");
+  --views-manager-add-file-button-icon: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 9.75V14C7 14.17 7.07 14.32 7.19 14.44C7.31 14.56 7.46 14.63 7.63 14.63C7.8 14.63 7.95 14.56 8.07 14.44C8.19 14.32 8.25 14.17 8.25 14V9.75L8.75 9.25H13C13.17 9.25 13.33 9.18 13.45 9.07C13.56 8.95 13.63 8.79 13.63 8.63C13.63 8.46 13.56 8.3 13.45 8.18C13.33 8.07 13.17 8 13 8H8.75L8.25 7.5V3.25C8.25 3.08 8.19 2.93 8.07 2.81C7.95 2.69 7.8 2.63 7.63 2.63C7.46 2.63 7.31 2.69 7.19 2.81C7.07 2.93 7 3.08 7 3.25V7.5L6.5 8H2.25C2.09 8 1.93 8.07 1.81 8.18C1.7 8.3 1.63 8.46 1.63 8.63C1.63 8.79 1.7 8.95 1.81 9.07C1.93 9.18 2.09 9.25 2.25 9.25H6.39L7 9.75Z' fill='black'/%3E%3C/svg%3E");
+  --current-outline-button-icon: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10.8 4.75V6.02C10.8 6.39 10.36 6.58 10.1 6.32L7.88 4.1C7.72 3.94 7.72 3.67 7.88 3.51L10.1 1.29C10.36 1.03 10.8 1.22 10.8 1.59V3.25H15V4.75H10.8ZM8 1.25H3V2.75H6.5L8 1.25ZM6.5 5.25H3V6.75H8L6.5 5.25ZM3 13.25H15V14.75H3V13.25ZM6 9.25H15V10.75H6V9.25ZM1.5 5.25H0V6.75H1.5V5.25ZM0 13.25H1.5V14.75H0V13.25ZM1.5 1.25H0V2.75H1.5V1.25ZM3 9.25H4.5V10.75H3V9.25Z' fill='black'/%3E%3C/svg%3E");
+  --menuitem-thumbnailsView-icon: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M3 7H5C5.53 7 6.04 6.79 6.41 6.41C6.79 6.04 7 5.53 7 5V3C7 2.47 6.79 1.96 6.41 1.59C6.04 1.21 5.53 1 5 1H3C2.47 1 1.96 1.21 1.59 1.59C1.21 1.96 1 2.47 1 3V5C1 5.53 1.21 6.04 1.59 6.41C1.96 6.79 2.47 7 3 7ZM11 7H13C13.53 7 14.04 6.79 14.41 6.41C14.79 6.04 15 5.53 15 5V3C15 2.47 14.79 1.96 14.41 1.59C14.04 1.21 13.53 1 13 1H11C10.47 1 9.96 1.21 9.59 1.59C9.21 1.96 9 2.47 9 3V5C9 5.53 9.21 6.04 9.59 6.41C9.96 6.79 10.47 7 11 7ZM5 15H3C2.47 15 1.96 14.79 1.59 14.41C1.21 14.04 1 13.53 1 13V11C1 10.47 1.21 9.96 1.59 9.59C1.96 9.21 2.47 9 3 9H5C5.53 9 6.04 9.21 6.41 9.59C6.79 9.96 7 10.47 7 11V13C7 13.53 6.79 14.04 6.41 14.41C6.04 14.79 5.53 15 5 15ZM11 15H13C13.53 15 14.04 14.79 14.41 14.41C14.79 14.04 15 13.53 15 13V11C15 10.47 14.79 9.96 14.41 9.59C14.04 9.21 13.53 9 13 9H11C10.47 9 9.96 9.21 9.59 9.59C9.21 9.96 9 10.47 9 11V13C9 13.53 9.21 14.04 9.59 14.41C9.96 14.79 10.47 15 11 15Z' fill='black'/%3E%3C/svg%3E");
+  --menuitem-outlinesView-icon: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3 1.25H15V2.75H3V1.25ZM15 5.25H3V6.75H15V5.25ZM15 13.25H3V14.75H15V13.25ZM15 9.25H6V10.75H15V9.25ZM0 5.25H1.5V6.75H0V5.25ZM1.5 13.25H0V14.75H1.5V13.25ZM0 1.25H1.5V2.75H0V1.25ZM4.5 9.25H3V10.75H4.5V9.25Z' fill='black'/%3E%3C/svg%3E");
+  --menuitem-attachmentsView-icon: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3.5 3.75C3.5 1.68 5.18 0 7.25 0C9.32 0 11 1.68 11 3.75V10.25C11 11.49 9.99 12.5 8.75 12.5C7.51 12.5 6.5 11.49 6.5 10.25V3.5H8V10.25C8 10.66 8.34 11 8.75 11C9.16 11 9.5 10.66 9.5 10.25V3.75C9.5 2.51 8.49 1.5 7.25 1.5C6.01 1.5 5 2.51 5 3.75V10.75C5 12.82 6.68 14.5 8.75 14.5C10.82 14.5 12.5 12.82 12.5 10.75V3.5H14V10.75C14 13.65 11.65 16 8.75 16C5.85 16 3.5 13.65 3.5 10.75V3.75Z' fill='black'/%3E%3C/svg%3E");
+  --menuitem-layersView-icon: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M8.37 2.35C8.14 2.22 7.86 2.22 7.63 2.35L1.38 5.85C1.15 5.98 1 6.23 1 6.5C1 6.77 1.15 7.02 1.38 7.15L7.63 10.65C7.86 10.78 8.14 10.78 8.37 10.65L14.62 7.15C14.85 7.02 15 6.77 15 6.5C15 6.23 14.85 5.98 14.62 5.85L8.37 2.35ZM8 9.14L3.28 6.5L8 3.86L12.72 6.5L8 9.14ZM1.64 9.08L8 12.64L14.33 9.1L15.06 10.41L8.37 14.15C8.14 14.28 7.86 14.28 7.63 14.15L0.9 10.39L1.64 9.08Z' fill='black'/%3E%3C/svg%3E");
+  --manage-button-icon: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M8.35 11L13.82 5.53C13.88 5.48 13.92 5.41 13.95 5.33C13.99 5.26 14 5.17 14 5.09C14 5.01 13.98 4.93 13.95 4.85C13.92 4.78 13.88 4.71 13.82 4.65C13.7 4.53 13.54 4.47 13.37 4.47C13.21 4.47 13.05 4.53 12.93 4.65L8 9.58L3.07 4.65C2.95 4.54 2.79 4.48 2.63 4.48C2.47 4.48 2.31 4.55 2.19 4.66C2.08 4.78 2.01 4.93 2.01 5.1C2.01 5.26 2.07 5.42 2.18 5.54L7.65 11L8.35 11Z' fill='black'/%3E%3C/svg%3E");
+  --close-button-icon: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M14 3.06L9.06 8L14 12.94L12.94 14L8 9.06L3.06 14L2 12.94L6.94 8L2 3.06L3.06 2L8 6.94L12.94 2L14 3.06Z' fill='black'/%3E%3C/svg%3E");
+  --undo-label-icon: url("data:image/svg+xml,%3Csvg width='12' height='13' viewBox='0 0 12 13' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6 .5a6 6 0 100 12 6 6 0 000-12zM5.06 8.9L2.95 6.79a.47.47 0 01.35-.8c.13 0 .26.05.35.15L5.31 7.74 8.35 4.7a.47.47 0 01.7.07.47.47 0 01-.05.64L5.56 8.9h-.5z' fill='%23FBFBFE'/%3E%3C/svg%3E");
+  --pages-selected-icon: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cmask id='m'%3E%3Crect width='16' height='16' rx='2' fill='white'/%3E%3Cpath d='M12 8L4 8' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/mask%3E%3Crect width='16' height='16' fill='black' mask='url(%23m)'/%3E%3C/svg%3E");
+  --spinner-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' width='16' height='16'%3E%3Cstyle%3E@keyframes r%7Bfrom%7Brotate:0%7Dto%7Brotate:360deg%7D%7D%23c%7Banimation:r 1.8s linear infinite;transform-origin:50%25 50%25%7D%3C/style%3E%3Cpath id='c' d='M9 5.53c0 .42.51.63.8.33l2.53-2.53a.47.47 0 000-.67L9.8.14A.47.47 0 009 .47v1.87A5.76 5.76 0 002.25 8c0 .94.23 1.83.64 2.62l1.14-1.14A4.21 4.21 0 013.75 8 4.25 4.25 0 018 3.75c.35 0 .68.04 1 .12v1.66zM7 10.47v1.66c.32.08.66.12 1 .12A4.25 4.25 0 0012.25 8c0-.52-.11-1.01-.28-1.47l1.14-1.14c.4.79.64 1.67.64 2.62A5.76 5.76 0 017 13.66v1.87a.47.47 0 01-.8.33l-2.53-2.53a.47.47 0 010-.67l2.53-2.53a.47.47 0 01.8.33z'/%3E%3C/svg%3E");
+
+  --sidebar-bg-color: light-dark(rgb(255 255 255 / 0.92), rgb(66 65 77 / 0.92));
+  --sidebar-backdrop-filter: blur(7px);
+  --sidebar-width: 230px;
+  --sidebar-min-width: min-content;
+  --sidebar-max-width: 50vw;
+  --sidebar-block-padding: 8px;
+
+  --text-color: light-dark(#15141a, #fbfbfe);
+  --button-fg: var(--text-color);
+  --button-no-bg: transparent;
+  --button-bg: light-dark(rgb(21 20 26 / 0.07), rgb(251 251 254 / 0.07));
+  --button-border-color: transparent;
+  --button-hover-bg: light-dark(rgb(21 20 26 / 0.14), rgb(251 251 254 / 0.14));
+  --button-hover-fg: var(--text-color);
+  --button-hover-border-color: var(--button-border-color);
+  --button-active-bg: light-dark(rgb(21 20 26 / 0.21), rgb(251 251 254 / 0.21));
+  --button-active-fg: var(--text-color);
+  --button-active-border-color: var(--button-border-color);
+  --button-focus-no-bg: color-mix(in srgb, var(--text-color), transparent 93%);
+  --button-focus-outline-color: light-dark(#0062fa, #00cadb);
+  --button-focus-border-color: light-dark(white, black);
+  --status-border-color: transparent;
+  --status-actions-bg: light-dark(
+    rgb(21 20 26 / 0.03),
+    rgb(251 251 254 / 0.03)
+  );
+  --status-undo-bg: light-dark(rgb(0 98 250 / 0.08), rgb(0 202 219 / 0.08));
+  --status-waiting-bg: var(--status-undo-bg);
+  --indicator-color: light-dark(#0062fa, #00cadb);
+  --status-warning-bg: light-dark(#ffe8ea, #6e001f);
+  --indicator-warning-color: light-dark(#b20037, #ffa0aa);
+  --header-shadow:
+    0 0.25px 0.75px -0.75px light-dark(rgb(0 0 0 / 0.05), rgb(0 0 0 / 0.2)),
+    0 2px 6px -6px light-dark(rgb(0 0 0 / 0.1), rgb(0 0 0 / 0.4));
+  --header-bg: light-dark(rgb(255 255 255 / 0.92), #42414e);
+  --image-outline: none;
+  --image-border-width: 6px;
+  --image-border-color: light-dark(#cfcfd8, #3a3944);
+  --image-hover-border-color: #bfbfc9;
+  --image-current-border-color: var(--button-focus-outline-color);
+  --image-current-focused-outline-color: var(--image-hover-border-color);
+  --image-page-number-bg: light-dark(#f0f0f4, #42414d);
+  --image-page-number-fg: var(--text-color);
+  --image-page-number-border-color: transparent;
+  --image-hover-page-number-bg: var(--image-page-number-bg);
+  --image-hover-page-number-fg: var(--image-page-number-fg);
+  --image-current-page-number-bg: var(--image-current-border-color);
+  --image-current-page-number-fg: light-dark(#fff, #15141a);
+  --image-current-hover-page-number-bg: var(--image-current-page-number-bg);
+  --image-current-hover-page-number-fg: var(--image-current-page-number-fg);
+  --image-shadow:
+    0 0.375px 1.5px 0 light-dark(rgb(0 0 0 / 0.05), rgb(0 0 0 / 0.2)),
+    0 0 0 1px var(--image-border-color),
+    0 3px 12px 0 light-dark(rgb(0 0 0 / 0.1), rgb(0 0 0 / 0.4));
+  --image-hover-shadow:
+    0 0.375px 1.5px 0 light-dark(rgb(0 0 0 / 0.05), rgb(0 0 0 / 0.2)),
+    0 0 0 1px light-dark(rgb(21 20 26 / 0.1), rgb(251 251 254 / 0.1)),
+    0 0 0 var(--image-border-width) var(--image-hover-border-color),
+    0 3px 12px 0 light-dark(rgb(0 0 0 / 0.1), rgb(0 0 0 / 0.4));
+  --image-current-shadow:
+    0 0.375px 1.5px 0 light-dark(rgb(0 0 0 / 0.05), rgb(0 0 0 / 0.2)),
+    0 0 0 var(--image-border-width) var(--image-current-border-color),
+    0 3px 12px 0 light-dark(rgb(0 0 0 / 0.1), rgb(0 0 0 / 0.4));
+  --image-dragging-placeholder-bg: light-dark(
+    rgb(0 98 250 / 0.08),
+    rgb(0 202 219 / 0.08)
+  );
+  --image-dragging-placeholder-border: var(--image-outline);
+  --multiple-dragging-bg: white;
+  --image-multiple-dragging-shadow:
+    0 0 0 var(--image-border-width) var(--image-current-border-color),
+    var(--image-border-width) var(--image-border-width) 0
+      calc(var(--image-border-width) / 2) var(--multiple-dragging-bg),
+    var(--image-border-width) var(--image-border-width) 0
+      calc(3 * var(--image-border-width) / 2) var(--image-current-border-color);
+  --image-dragging-shadow: 0 0 0 var(--image-border-width)
+    var(--image-current-border-color);
+  --multiple-dragging-indicator-bg: var(--indicator-color);
+  --multiple-dragging-text-color: light-dark(#fbfbfe, #15141a);
+
+  @media screen and (forced-colors: active) {
+    --text-color: CanvasText;
+    --button-fg: ButtonText;
+    --button-bg: ButtonFace;
+    --button-no-bg: ButtonFace;
+    --button-border-color: ButtonText;
+    --button-hover-bg: SelectedItemText;
+    --button-hover-fg: SelectedItem;
+    --button-hover-border-color: SelectedItem;
+    --button-active-bg: SelectedItemText;
+    --button-active-fg: SelectedItem;
+    --button-active-border-color: ButtonText;
+    --button-focus-no-bg: ButtonFace;
+    --button-focus-outline-color: CanvasText;
+    --button-focus-border-color: none;
+    --status-border-color: CanvasText;
+    --status-undo-bg: none;
+    --indicator-color: CanvasText;
+    --status-warning-bg: none;
+    --indicator-warning-color: CanvasText;
+    --header-shadow: none;
+    --image-shadow: none;
+    --image-outline: 1px solid ButtonText;
+    --image-focus-outline-color: CanvasText;
+    --image-hover-border-color: SelectedItem;
+    --image-hover-page-number-bg: SelectedItemText;
+    --image-hover-page-number-fg: SelectedItem;
+    --image-current-page-number-bg: ButtonText;
+    --image-current-page-number-fg: ButtonFace;
+    --image-current-border-color: ButtonText;
+    --image-current-focused-outline-color: var(--image-hover-border-color);
+    --image-current-hover-page-number-bg: SelectedItem;
+    --image-current-hover-page-number-fg: SelectedItemText;
+    --image-page-number-bg: ButtonFace;
+    --image-page-number-fg: ButtonText;
+    --image-page-number-border-color: var(--image-page-number-fg);
+    --multiple-dragging-bg: Canvas;
+    --multiple-dragging-indicator-bg: ButtonBorder;
+    --multiple-dragging-text-color: Canvas;
+    --image-dragging-placeholder-bg: Canvas;
+    --image-dragging-placeholder-border: 1px GrayText solid;
+  }
+
+  display: flex;
+  padding-bottom: 16px;
+  flex-direction: column;
+  align-items: flex-start;
+  inset-block-start: calc(100% + var(--sidebar-block-padding));
+  height: calc(
+    var(--viewer-container-height) - 2 * var(--sidebar-block-padding)
+  );
+  position: absolute;
+
+  inset-inline-start: calc(
+    -1 * var(--viewsManager-width, --sidebar-width) - 1px
+  );
+  transition-property: inset-inline-start;
+  transition-duration: var(--sidebar-transition-duration);
+  transition-timing-function: var(--sidebar-transition-timing-function);
+
+  .sidebarResizer {
+    inset-inline-start: calc(100% + 4px);
+  }
+
+  .viewsManagerButton {
+    width: auto;
+    color: var(--button-fg);
+    border-radius: 8px;
+    border: 1px solid var(--button-border-color);
+    background: var(--button-bg);
+
+    &:hover {
+      background-color: var(--button-hover-bg) !important;
+      color: var(--button-hover-fg) !important;
+      border-color: var(--button-hover-border-color) !important;
+
+      &::before {
+        background-color: var(--button-hover-fg) !important;
+      }
+    }
+    &:active {
+      background: var(--button-active-bg) !important;
+      color: var(--button-active-fg) !important;
+      border-color: var(--button-active-border-color) !important;
+
+      &::before {
+        background-color: var(--button-active-fg) !important;
+      }
+    }
+    &:focus-visible {
+      outline: 2px solid var(--button-focus-outline-color);
+      outline-offset: 2px;
+      border-color: var(--button-focus-border-color);
+    }
+
+    &.viewsCloseButton {
+      width: 26px;
+      height: 26px;
+      padding: 4px;
+      border-radius: 8px;
+      background: none;
+
+      &::before {
+        mask-image: var(--close-button-icon);
+      }
+    }
+  }
+
+  #viewsManagerHeader {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    align-self: stretch;
+    width: 100%;
+    box-sizing: border-box;
+    box-shadow: var(--header-shadow);
+    flex: 0 0 auto;
+    background-color: var(--header-bg);
+
+    .viewsManagerLabel {
+      flex: 1 1 auto;
+      color: var(--text-color);
+      text-align: center;
+      height: fit-content;
+      width: fit-content;
+      user-select: none;
+
+      font: menu;
+      font-size: 15px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+    }
+
+    #viewsManagerTitle {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      align-self: stretch;
+      justify-content: space-between;
+      width: auto;
+      padding: 12px 16px 12px 8px;
+
+      &:not(:has(#viewsManagerHeaderLabel ~ button:not([hidden])))::after {
+        /* If one of the following buttons is visible, hide the placeholder
+             button to avoid unnecessary space in the header. */
+
+        content: "";
+        flex: 0 0 auto;
+        width: 32px;
+        height: 32px;
+        pointer-events: none;
+      }
+
+      #viewsManagerSelector {
+        width: 48px;
+        height: 32px;
+        display: block;
+
+        > button {
+          background: var(--button-no-bg);
+          width: 100%;
+          height: 100%;
+
+          &:focus-visible {
+            background-color: var(--button-focus-no-bg);
+          }
+
+          &::before {
+            mask-repeat: no-repeat;
+            mask-image: var(--views-manager-button-icon);
+            background-color: var(--button-fg);
+          }
+
+          &::after {
+            content: "";
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            margin-left: 8px;
+            mask-repeat: no-repeat;
+            mask-position: center;
+            mask-image: var(--views-manager-button-arrow-icon);
+            background-color: var(--button-fg);
+          }
+
+          &:hover {
+            &::before,
+            &::after {
+              background-color: var(--button-hover-fg) !important;
+            }
+          }
+
+          &:active {
+            &::before,
+            &::after {
+              background-color: var(--button-active-fg) !important;
+            }
+          }
+        }
+
+        > .popupMenu {
+          min-width: 182px;
+          z-index: 1;
+
+          > button {
+            &#thumbnailsViewMenu::before {
+              mask-image: var(--menuitem-thumbnailsView-icon);
+            }
+            &#outlinesViewMenu::before {
+              mask-image: var(--menuitem-outlinesView-icon);
+            }
+            &#attachmentsViewMenu::before {
+              mask-image: var(--menuitem-attachmentsView-icon);
+            }
+            &#layersViewMenu::before {
+              mask-image: var(--menuitem-layersView-icon);
+            }
+          }
+        }
+      }
+
+      #viewsManagerAddFileButton {
+        visibility: hidden;
+
+        background: var(--button-no-bg);
+        width: 32px;
+        height: 32px;
+
+        &:focus-visible {
+          background-color: var(--button-focus-no-bg);
+        }
+
+        &::before {
+          mask-repeat: no-repeat;
+          mask-image: var(--views-manager-add-file-button-icon);
+        }
+      }
+
+      #viewsManagerCurrentOutlineButton {
+        background: var(--button-no-bg);
+        width: 32px;
+        height: 32px;
+
+        &:focus-visible {
+          background-color: var(--button-focus-no-bg);
+        }
+
+        &::before {
+          mask-repeat: no-repeat;
+          mask-image: var(--current-outline-button-icon);
+        }
+      }
+    }
+
+    #viewsManagerStatus {
+      display: flex;
+      align-items: center;
+      align-self: stretch;
+      justify-content: space-between;
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid var(--status-border-color);
+
+      > div {
+        min-height: 64px;
+        width: 100%;
+        padding-inline: 8px; // reduced from 16px for narrower sidebar
+        box-sizing: border-box;
+      }
+
+      .viewsManagerStatusLabel {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-width: 0; // allow flex shrinking
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        font: menu;
+        font-size: 13px;
+      }
+
+      #viewsManagerStatusAction {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        align-self: stretch;
+        background-color: var(--status-actions-bg);
+
+        #viewsManagerStatusActionLabelContainer > button {
+          position: relative;
+          width: var(--icon-size);
+          height: var(--icon-size);
+          border: none;
+          padding: 0;
+          flex: 0 0 auto;
+
+          &::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            mask-repeat: no-repeat;
+            mask-position: center;
+            background-color: var(--indicator-color);
+            mask-image: var(--pages-selected-icon);
+          }
+
+          &#viewsManagerStatusActionDeselectButton:focus-visible {
+            outline: 2px solid var(--button-focus-outline-color);
+            border: 1px solid var(--button-focus-border-color);
+            border-radius: 2px;
+            outline-offset: 1px;
+          }
+        }
+
+        // Hide manage button when no pages are selected (deselect button has .hidden class)
+        &:has(#viewsManagerStatusActionDeselectButton.hidden) #actionSelector {
+          visibility: hidden;
+        }
+
+        #actionSelector {
+          height: 32px;
+          width: fit-content;
+          display: block;
+          position: relative;
+          flex: 0 0 auto;
+
+          #viewsManagerStatusActionButton {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            width: auto;
+            white-space: nowrap;
+            height: 100%;
+            padding: 4px 16px;
+
+            &::after {
+              content: "";
+              display: inline-block;
+              width: var(--icon-size);
+              height: var(--icon-size);
+              mask-repeat: no-repeat;
+              mask-position: center;
+              mask-image: var(--manage-button-icon);
+              background-color: var(--button-fg);
+            }
+
+            &:hover::after {
+              background-color: var(--button-hover-fg) !important;
+            }
+
+            &:active::after {
+              background-color: var(--button-active-fg) !important;
+            }
+          }
+
+          > .popupMenu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 100%;
+            min-width: fit-content;
+            z-index: 200;
+            z-index: 100;
+          }
+        }
+      }
+
+      #viewsManagerStatusUndo {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        align-self: stretch;
+        background-color: var(--status-undo-bg);
+
+        > span::before {
+          content: "";
+          display: inline-block;
+          width: var(--icon-size);
+          height: var(--icon-size);
+          mask-repeat: no-repeat;
+          mask-position: center;
+          mask-image: var(--undo-label-icon);
+          background-color: var(--indicator-color);
+        }
+
+        > div {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          width: auto;
+
+          #viewsManagerStatusUndoButton {
+            width: auto;
+            min-height: 24px;
+            padding: 4px 8px;
+          }
+        }
+      }
+
+      #viewsManagerStatusWarning {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: var(--status-warning-bg);
+
+        > span {
+          align-items: flex-start;
+
+          &::before {
+            content: "";
+            display: inline-block;
+            width: var(--icon-size);
+            height: var(--icon-size);
+            mask-repeat: no-repeat;
+            mask-position: center;
+            background-color: var(--indicator-warning-color);
+            mask-image: var(--undo-label-icon);
+            flex: 0 0 auto;
+          }
+        }
+      }
+
+      #viewsManagerStatusWaiting {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: var(--status-waiting-bg);
+
+        > span::before {
+          content: "";
+          display: inline-block;
+          width: var(--icon-size);
+          height: var(--icon-size);
+          mask-repeat: no-repeat;
+          mask-position: center;
+          background-color: var(--indicator-color);
+          mask-image: var(--spinner-icon);
+          flex: 0 0 auto;
+        }
+      }
+    }
+  }
+
+  #viewsManagerContent {
+    width: 100%;
+    flex: 1 1 0%;
+    overflow: auto;
+
+    &:has(#thumbnailsView.isDragging) {
+      overflow-x: hidden;
+    }
+
+    #thumbnailsView {
+      --thumbnail-width: 126px;
+      --gap-between-input-and-thumbnail: 16px;
+
+      display: flex;
+      flex-flow: row wrap;
+      align-items: center;
+      justify-content: space-evenly;
+      padding: 20px 16px; // reduced from 32px for narrower ngx-extended-pdf-viewer sidebar
+      gap: 44px;
+      width: 100%;
+      box-sizing: border-box;
+      position: relative;
+
+      &.isDragging {
+        cursor: grabbing;
+
+        > .thumbnail {
+          > .thumbnailImageContainer:hover {
+            cursor: grabbing;
+
+            &:not([aria-current="page"]) {
+              box-shadow: var(--image-shadow);
+            }
+          }
+
+          > input {
+            pointer-events: none;
+          }
+        }
+
+        > .dragMarker {
+          position: absolute;
+          top: 0;
+          left: 0;
+          border: 2px solid var(--indicator-color);
+          contain: strict;
+        }
+      }
+
+      &.pasteMode {
+        gap: var(--gap-between-input-and-thumbnail);
+
+        > .thumbnail {
+          flex-direction: column;
+
+          > input {
+            display: none;
+          }
+
+          > .thumbnailPasteButton {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 16px;
+            min-height: 24px;
+            padding: 4px 16px;
+
+            font: menu;
+            font-size: 13px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: normal;
+          }
+        }
+      }
+
+      &:not(.pasteMode) > .thumbnail > .thumbnailPasteButton {
+        display: none;
+      }
+
+      > .thumbnail {
+        --input-dim: 16px;
+
+        &:not(&:has(input)) {
+          --input-dim: 0px;
+          --gap-between-input-and-thumbnail: 0px;
+        }
+
+        display: inline-flex;
+        justify-content: flex-end;
+        align-items: center;
+        flex-direction: row-reverse;
+        gap: var(--gap-between-input-and-thumbnail);
+        width: calc(
+          var(--thumbnail-width) + 2 *
+            (var(--input-dim) + var(--gap-between-input-and-thumbnail))
+        );
+        height: auto;
+        position: relative;
+        scroll-margin-top: 20px;
+
+        .thumbnailPasteButton {
+          padding: 8px 0;
+          text-align: center;
+        }
+
+        &:not(.isDragging) > .thumbnailImageContainer::after {
+          content: attr(page-number);
+          border-radius: 8px;
+          border: 1px solid var(--image-page-number-border-color);
+          background-color: var(--image-page-number-bg);
+          color: var(--image-page-number-fg);
+          position: absolute;
+          bottom: 5px;
+          inset-inline-end: 50%;
+          min-width: 32px;
+          height: 16px;
+          text-align: center;
+          box-sizing: content-box;
+          translate: calc(var(--dir-factor) * 50%);
+
+          font: menu;
+          font-size: 12px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: normal;
+
+          pointer-events: none;
+          user-select: none;
+        }
+
+        &:has([aria-current="page"]):not(.isDragging)
+          > .thumbnailImageContainer::after {
+          background-color: var(--image-current-page-number-bg);
+          color: var(--image-current-page-number-fg);
+          outline: 1px solid var(--image-current-border-color);
+        }
+
+        &.isDragging > input {
+          visibility: hidden;
+        }
+
+        > input {
+          margin: 0;
+          width: var(--input-dim);
+          height: var(--input-dim);
+          accent-color: var(--indicator-color);
+        }
+
+        > .thumbnailImageContainer {
+          --thumbnail-dragging-scale: 1.4;
+
+          width: var(--thumbnail-width);
+          border: none;
+          border-radius: 8px;
+          box-shadow: var(--image-shadow);
+          box-sizing: content-box;
+          outline: var(--image-outline);
+          user-select: none;
+          position: relative;
+
+          img {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 8px;
+            outline: none;
+            user-select: none;
+            pointer-events: none;
+          }
+
+          &.missingThumbnailImage {
+            content-visibility: hidden;
+          }
+
+          &:hover {
+            cursor: pointer;
+            box-shadow: var(--image-hover-shadow);
+
+            &::after {
+              background-color: var(--image-hover-page-number-bg);
+              color: var(--image-hover-page-number-fg);
+            }
+
+            @media screen and (forced-colors: active) {
+              /* box-shadow isn't rendered in HCM */
+              box-shadow: none;
+              outline: var(--image-border-width) var(--image-hover-border-color)
+                solid;
+            }
+          }
+
+          &:focus-visible {
+            &:not([aria-current="page"]) {
+              box-shadow: var(--image-hover-shadow);
+              outline: none;
+
+              @media screen and (forced-colors: active) {
+                /* box-shadow isn't rendered in HCM */
+                box-shadow: none;
+                outline: var(--image-border-width)
+                  var(--image-focus-outline-color) solid;
+              }
+            }
+
+            &[aria-current="page"] {
+              outline: var(--image-border-width) solid
+                var(--image-current-focused-outline-color);
+              outline-offset: var(--image-border-width);
+
+              @media screen and (forced-colors: active) {
+                /* box-shadow isn't rendered in HCM */
+                box-shadow: none;
+                outline: var(--image-border-width)
+                  var(--image-current-border-color) solid;
+                outline-offset: 0;
+
+                > img {
+                  outline: var(--image-border-width)
+                    var(--image-focus-outline-color) solid;
+                  outline-offset: var(--image-border-width);
+                }
+              }
+            }
+
+            @media screen and (forced-colors: active) {
+              /* box-shadow isn't rendered in HCM */
+              box-shadow: none;
+              outline: var(--image-border-width)
+                var(--image-current-border-color) solid;
+
+              &:hover > img {
+                outline: var(--image-border-width)
+                  var(--image-hover-border-color) solid;
+                outline-offset: var(--image-border-width);
+              }
+            }
+          }
+
+          &[aria-current="page"] {
+            box-shadow: var(--image-current-shadow);
+
+            &:hover::after {
+              background-color: var(--image-current-hover-page-number-bg);
+              color: var(--image-current-hover-page-number-fg);
+            }
+
+            @media screen and (forced-colors: active) {
+              /* box-shadow isn't rendered in HCM */
+              box-shadow: none;
+              outline: var(--image-border-width)
+                var(--image-current-border-color) solid;
+
+              &:hover > img {
+                outline: var(--image-border-width)
+                  var(--image-hover-border-color) solid;
+                outline-offset: var(--image-border-width);
+              }
+            }
+          }
+
+          &.placeholder {
+            background-color: var(--image-dragging-placeholder-bg);
+            box-shadow: none !important;
+            outline: var(--image-dragging-placeholder-border);
+          }
+
+          &.draggingThumbnail {
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 1;
+            transform-origin: 0 0 0;
+            scale: calc(1 / var(--thumbnail-dragging-scale));
+            pointer-events: none;
+            box-shadow: var(--image-dragging-shadow);
+
+            &.multiple {
+              box-shadow: var(--image-multiple-dragging-shadow);
+
+              @media screen and (forced-colors: active) {
+                forced-color-adjust: none;
+                box-shadow: var(--image-multiple-dragging-shadow);
+              }
+
+              > .thumbnailImageContainer {
+                position: absolute;
+                top: 0;
+                left: 0;
+
+                width: var(--thumbnail-width);
+                border: none;
+                border-radius: 8px;
+                box-sizing: content-box;
+                outline: none;
+                user-select: none;
+              }
+
+              &::after {
+                content: attr(data-multiple-count);
+                border-radius: calc(8px * var(--thumbnail-dragging-scale));
+                background-color: var(--multiple-dragging-indicator-bg);
+                color: var(--multiple-dragging-text-color);
+                position: absolute;
+                inset-block-end: calc(4px * var(--thumbnail-dragging-scale));
+                inset-inline-start: calc(4px * var(--thumbnail-dragging-scale));
+                min-width: calc(32px * var(--thumbnail-dragging-scale));
+                height: calc(16px * var(--thumbnail-dragging-scale));
+                text-align: center;
+                font: menu;
+                font-size: calc(13px * var(--thumbnail-dragging-scale));
+                font-style: normal;
+                font-weight: 400;
+                line-height: normal;
+                contain: strict;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    #attachmentsView {
+      --attachment-color: light-dark(rgb(0 0 0 / 0.8), rgb(255 255 255 / 0.8));
+      --attachment-bg-color: light-dark(
+        rgb(0 0 0 / 0.15),
+        rgb(255 255 255 / 0.15)
+      );
+      --attachment-hover-color: light-dark(
+        rgb(0 0 0 / 0.9),
+        rgb(255 255 255 / 0.9)
+      );
+
+      > ul {
+        list-style-type: none;
+        padding: 0;
+
+        > li > a {
+          text-decoration: none;
+          display: inline-block;
+          /* Subtract the right padding (left, in RTL mode) of the container: */
+          min-width: calc(100% - 4px);
+          height: auto;
+          margin-bottom: 1px;
+          padding: 2px 0 5px;
+          padding-inline-start: 4px;
+          border-radius: 2px;
+          color: var(--attachment-color);
+          font-size: 13px;
+          line-height: 15px;
+          user-select: none;
+          white-space: normal;
+          cursor: pointer;
+
+          &:hover {
+            background-color: var(--attachment-bg-color);
+            background-clip: padding-box;
+            border-radius: 2px;
+            color: var(--attachment-hover-color);
+          }
+        }
+      }
+    }
+  }
+}
+}

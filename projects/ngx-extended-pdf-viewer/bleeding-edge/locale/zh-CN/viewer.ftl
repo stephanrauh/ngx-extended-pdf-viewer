@@ -674,6 +674,7 @@ pdfjs-views-manager-status-undo-button-label = 撤销
 pdfjs-views-manager-status-close-button =
     .title = 关闭
 pdfjs-views-manager-status-close-button-label = 关闭
+pdfjs-views-manager-paste-button-label = 粘贴
 
 ## Main menu for adding/removing signatures
 
@@ -699,7 +700,17 @@ pdfjs-toggle-views-manager-button1 =
 pdfjs-toggle-views-manager-button1-label = Manage pages
 pdfjs-views-manager-sidebar-resizer =
     .aria-label = Sidebar resizer
-pdfjs-views-manager-paste-button-label = Paste
+pdfjs-views-manager-outlines-title1 = Document outline
+    .title = Document outline (double-click to expand/collapse all items)
+pdfjs-views-manager-layers-title1 = Layers
+    .title = Layers (double-click to reset all layers to the default state)
+pdfjs-views-manager-pages-status-export-selected-button-label = Export selected…
+pdfjs-views-manager-status-done-button-label = Done
+pdfjs-views-manager-paste-button-before =
+    .title = Paste before the first page
+pdfjs-views-manager-paste-button-after =
+    .title = Paste after page { $page }
+pdfjs-new-badge-content = NEW
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = Match Each Word

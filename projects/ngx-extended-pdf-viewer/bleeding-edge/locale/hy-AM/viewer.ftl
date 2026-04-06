@@ -370,6 +370,17 @@ pdfjs-editor-add-saved-signature-button =
 pdfjs-free-text2 =
     .aria-label = Գրվածքի խմբագիր
     .default-content = Սկսեք մուտքագրել...
+# Used to show how many comments are present in the pdf file.
+# Variables:
+#   $count (Number) - the number of comments.
+pdfjs-editor-comments-sidebar-title =
+    { $count ->
+        [one] Մեկնաբանություն
+       *[other] Մեկնաբանություններ
+    }
+# Instructional copy to add a comment by selecting text or an annotations.
+pdfjs-editor-comments-sidebar-no-comments1 = Տեսնո՞ւմ եք ինչ-որ ուշագրավ բան։ Գունանշեք այն և թողեք մեկնաբանություն։
+pdfjs-editor-comments-sidebar-no-comments-link = Իմանալ ավելին
 
 ## Alt-text dialog
 
@@ -548,8 +559,8 @@ pdfjs-editor-add-signature-image-button = Պատկեր
 ## Tab panels
 
 pdfjs-editor-add-signature-type-input =
-    .aria-label = Մուտքագրեք ձեր ստորագրությունը
-    .placeholder = Մուտքագրեք ձեր ստորագրությունը
+    .aria-label = Մուտքագրել ստորագրություն
+    .placeholder = Մուտքագրել ստորագրություն
 pdfjs-editor-add-signature-draw-placeholder = Նկարեք ձեր ստորագրությունը
 pdfjs-editor-add-signature-draw-thickness-range-label = Հաստություն
 # Variables:
@@ -586,6 +597,31 @@ pdfjs-editor-add-signature-cancel-button = Չեղարկել
 pdfjs-editor-add-signature-add-button = Ավելացնել
 pdfjs-editor-edit-signature-update-button = Թարմացնել
 
+##  Edit a comment dialog
+
+# No existing comment
+pdfjs-editor-edit-comment-dialog-title-when-adding = Ավելացնել մեկնաբանություն
+pdfjs-editor-edit-comment-dialog-save-button-when-adding = Ավելացնել
+pdfjs-editor-edit-comment-dialog-text-input =
+    .placeholder = Մուտքագրեք այստեղ…
+pdfjs-editor-edit-comment-dialog-cancel-button = Չեղարկել
+
+## Edit a comment button in the editor toolbar
+
+pdfjs-editor-add-comment-button =
+    .title = Ավելացնել մեկնաբանություն
+
+## The view manager is a sidebar displaying different views:
+##  - thumbnails;
+##  - outline;
+##  - attachments;
+##  - layers.
+## The thumbnails view is used to edit the pdf: remove/insert pages, ...
+
+pdfjs-views-manager-add-file-button =
+    .title = Ավելացնել ֆայլ
+pdfjs-views-manager-add-file-button-label = Ավելացնել ֆայլ
+
 ## Main menu for adding/removing signatures
 
 pdfjs-editor-delete-signature-button1 =
@@ -609,17 +645,10 @@ pdfjs-editor-comment-button =
     .title = Comment
     .aria-label = Comment
 pdfjs-editor-comment-button-label = Comment
-pdfjs-editor-comments-sidebar-title =
-    { $count ->
-        [one] Comment
-       *[other] Comments
-    }
 pdfjs-editor-comments-sidebar-close-button =
     .title = Close the sidebar
     .aria-label = Close the sidebar
 pdfjs-editor-comments-sidebar-close-button-label = Close the sidebar
-pdfjs-editor-comments-sidebar-no-comments1 = See something noteworthy? Highlight it and leave a comment.
-pdfjs-editor-comments-sidebar-no-comments-link = Learn more
 pdfjs-editor-undo-bar-message-comment = Comment removed
 pdfjs-show-comment-button =
     .title = Show comment
@@ -631,13 +660,6 @@ pdfjs-editor-delete-comment-popup-button =
     .title = Remove comment
 pdfjs-editor-edit-comment-dialog-title-when-editing = Edit comment
 pdfjs-editor-edit-comment-dialog-save-button-when-editing = Update
-pdfjs-editor-edit-comment-dialog-title-when-adding = Add comment
-pdfjs-editor-edit-comment-dialog-save-button-when-adding = Add
-pdfjs-editor-edit-comment-dialog-text-input =
-    .placeholder = Start typing…
-pdfjs-editor-edit-comment-dialog-cancel-button = Cancel
-pdfjs-editor-add-comment-button =
-    .title = Add comment
 pdfjs-toggle-views-manager-button1 =
     .title = Manage pages
 pdfjs-toggle-views-manager-notification-button =
@@ -651,16 +673,15 @@ pdfjs-views-manager-view-selector-button =
     .title = Views
 pdfjs-views-manager-view-selector-button-label = Views
 pdfjs-views-manager-pages-title = Pages
-pdfjs-views-manager-outlines-title = Document outline
+pdfjs-views-manager-outlines-title1 = Document outline
+    .title = Document outline (double-click to expand/collapse all items)
 pdfjs-views-manager-attachments-title = Attachments
-pdfjs-views-manager-layers-title = Layers
+pdfjs-views-manager-layers-title1 = Layers
+    .title = Layers (double-click to reset all layers to the default state)
 pdfjs-views-manager-pages-option-label = Pages
 pdfjs-views-manager-outlines-option-label = Document outline
 pdfjs-views-manager-attachments-option-label = Attachments
 pdfjs-views-manager-layers-option-label = Layers
-pdfjs-views-manager-add-file-button =
-    .title = Add file
-pdfjs-views-manager-add-file-button-label = Add file
 pdfjs-views-manager-pages-status-action-label =
     { $count ->
         [one] { $count } selected
@@ -671,7 +692,7 @@ pdfjs-views-manager-pages-status-action-button-label = Manage
 pdfjs-views-manager-pages-status-copy-button-label = Copy
 pdfjs-views-manager-pages-status-cut-button-label = Cut
 pdfjs-views-manager-pages-status-delete-button-label = Delete
-pdfjs-views-manager-pages-status-save-as-button-label = Save as…
+pdfjs-views-manager-pages-status-export-selected-button-label = Export selected…
 pdfjs-views-manager-status-undo-cut-label =
     { $count ->
         [one] 1 page cut
@@ -694,10 +715,16 @@ pdfjs-views-manager-status-warning-copy-label = Couldn’t copy. Refresh page an
 pdfjs-views-manager-status-warning-delete-label = Couldn’t delete. Refresh page and try again.
 pdfjs-views-manager-status-warning-save-label = Couldn’t save. Refresh page and try again.
 pdfjs-views-manager-status-undo-button-label = Undo
+pdfjs-views-manager-status-done-button-label = Done
 pdfjs-views-manager-status-close-button =
     .title = Close
 pdfjs-views-manager-status-close-button-label = Close
 pdfjs-views-manager-paste-button-label = Paste
+pdfjs-views-manager-paste-button-before =
+    .title = Paste before the first page
+pdfjs-views-manager-paste-button-after =
+    .title = Paste after page { $page }
+pdfjs-new-badge-content = NEW
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = Match Each Word

@@ -203,8 +203,17 @@ pdfjs-thumb-page-canvas =
     .aria-label = Miniatura strony { $page }
 # Variables:
 #   $page (Number) - the page number
+pdfjs-thumb-page-checkbox1 =
+    .title = Stronu { $page } wubrać
+# Variables:
+#   $page (Number) - the page number
 pdfjs-thumb-page-checkbox =
     .aria-label = Stronu { $page } wubrać
+# Variables:
+#   $page (Number) - the page number
+#   $total (Number) - the number of pages
+pdfjs-thumb-page-title1 =
+    .title = Strona { $page } z { $total }
 
 ## Find panel button title and messages
 
@@ -657,15 +666,22 @@ pdfjs-toggle-views-manager-button =
     .title = Bóčnicu přepinać
 pdfjs-toggle-views-manager-notification-button =
     .title = Bóčnicu přepinać (dokument miniatury/rozrjad/přiwěški/woršty wobsahuje)
+pdfjs-toggle-views-manager-button1-label = Strony rjadować
 pdfjs-toggle-views-manager-button-label = Bóčnicu přepinać
 pdfjs-views-manager-sidebar =
     .aria-label = Bóčnica
+pdfjs-views-manager-sidebar-resizer =
+    .aria-label = Přiměrjenje wulkosće bóčnicy
 pdfjs-views-manager-view-selector-button =
     .title = Napohlady
 pdfjs-views-manager-view-selector-button-label = Napohlady
 pdfjs-views-manager-pages-title = Strony
+pdfjs-views-manager-outlines-title1 = Dokumentowa struktura
+    .title = Dokumentowa struktura (klikńće dwójce, zo byšće wšě zapiski pokazał/schował)
 pdfjs-views-manager-outlines-title = Dokumentowa struktura
 pdfjs-views-manager-attachments-title = Přiwěški
+pdfjs-views-manager-layers-title1 = Runiny
+    .title = Runiny (klikńće dwójce, zo byšće wšě runiny na standardny status wróćo stajił)
 pdfjs-views-manager-layers-title = Runiny
 pdfjs-views-manager-pages-option-label = Strony
 pdfjs-views-manager-outlines-option-label = Dokumentowa struktura
@@ -688,6 +704,7 @@ pdfjs-views-manager-pages-status-action-button-label = Rjadować
 pdfjs-views-manager-pages-status-copy-button-label = Kopěrować
 pdfjs-views-manager-pages-status-cut-button-label = Wutřihać
 pdfjs-views-manager-pages-status-delete-button-label = Zhašeć
+pdfjs-views-manager-pages-status-export-selected-button-label = Wubrane eksportować…
 pdfjs-views-manager-pages-status-save-as-button-label = Składować jako…
 # Variables:
 #   $count (Number) - the number of selected pages to be cut.
@@ -723,10 +740,22 @@ pdfjs-views-manager-status-warning-copy-label = Njeda so kopěrować. Aktualizuj
 pdfjs-views-manager-status-warning-delete-label = Njeda so zhašeć. Aktualizujće stronu a spytajće hišće raz.
 pdfjs-views-manager-status-warning-save-label = Njeda so składować. Aktualizujće stronu a spytajće hišće raz.
 pdfjs-views-manager-status-undo-button-label = Cofnyć
+pdfjs-views-manager-status-done-button-label = Dokónčeny
 pdfjs-views-manager-status-close-button =
     .title = Začinić
 pdfjs-views-manager-status-close-button-label = Začinić
 pdfjs-views-manager-paste-button-label = Zasadźić
+pdfjs-views-manager-paste-button-before =
+    .title = Před prěnjej stronu zasadźić
+# Variables:
+#   $page (Number) - the page number after which the paste button is.
+pdfjs-views-manager-paste-button-after =
+    .title = Za stronu { $page } zasadźić
+# Badge used to promote a new feature in the UI, keep it as short as possible.
+# It's spelled uppercase for English, but it can be translated as usual.
+pdfjs-new-badge-content = NOWY
+pdfjs-toggle-views-manager-button1 =
+    .title = Strony rjadować
 
 ## Main menu for adding/removing signatures
 
@@ -743,15 +772,6 @@ pdfjs-editor-add-signature-edit-button-label = Wopisanje wobdźěłać
 pdfjs-editor-edit-signature-dialog-title = Wopisanje wobdźěłać
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-thumb-page-title1 =
-    .title = Page { $page } of { $total }
-pdfjs-thumb-page-checkbox1 =
-    .title = Select page { $page }
-pdfjs-toggle-views-manager-button1 =
-    .title = Manage pages
-pdfjs-toggle-views-manager-button1-label = Manage pages
-pdfjs-views-manager-sidebar-resizer =
-    .aria-label = Sidebar resizer
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = Match Each Word

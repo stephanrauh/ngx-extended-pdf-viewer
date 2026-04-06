@@ -62,9 +62,6 @@ ngx-extended-pdf-viewer {
       &:hover {
         background-color: var(--resizer-hover-bg-color);
       }
-
-      pointer-events: none;
-      display: none;
     }
 
     &.resizing {

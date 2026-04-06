@@ -201,6 +201,19 @@ pdfjs-thumb-page-title =
 #   $page (Number) - the page number
 pdfjs-thumb-page-canvas =
     .aria-label = { $page }. oldal bélyegképe
+# Variables:
+#   $page (Number) - the page number
+pdfjs-thumb-page-checkbox1 =
+    .title = { $page }. oldal kiválasztása
+# Variables:
+#   $page (Number) - the page number
+pdfjs-thumb-page-checkbox =
+    .aria-label = { $page }. oldal kiválasztása
+# Variables:
+#   $page (Number) - the page number
+#   $total (Number) - the number of pages
+pdfjs-thumb-page-title1 =
+    .title = { $page }. / { $total } oldal
 
 ## Find panel button title and messages
 
@@ -645,9 +658,12 @@ pdfjs-toggle-views-manager-button =
     .title = Oldalsáv be/ki
 pdfjs-toggle-views-manager-notification-button =
     .title = Oldalsáv be/ki (a dokumentum bélyegképeket/vázlatot/mellékleteket/rétegeket tartalmaz)
+pdfjs-toggle-views-manager-button1-label = Oldalak kezelése
 pdfjs-toggle-views-manager-button-label = Oldalsáv be/ki
 pdfjs-views-manager-sidebar =
     .aria-label = Oldalsáv
+pdfjs-views-manager-sidebar-resizer =
+    .aria-label = Oldalsáv-átméretező
 pdfjs-views-manager-view-selector-button =
     .title = Nézetek
 pdfjs-views-manager-view-selector-button-label = Nézetek
@@ -703,9 +719,19 @@ pdfjs-views-manager-status-warning-copy-label = Nem sikerült másolni. Frissít
 pdfjs-views-manager-status-warning-delete-label = Nem sikerült törölni. Frissítse az oldalt, és próbálja újra.
 pdfjs-views-manager-status-warning-save-label = Nem sikerült menteni. Frissítse az oldalt, és próbálja újra.
 pdfjs-views-manager-status-undo-button-label = Visszavonás
+pdfjs-views-manager-status-done-button-label = Kész
 pdfjs-views-manager-status-close-button =
     .title = Bezárás
 pdfjs-views-manager-status-close-button-label = Bezárás
+pdfjs-views-manager-paste-button-label = Beillesztés
+pdfjs-views-manager-paste-button-before =
+    .title = Beillesztés az első oldal elé
+# Variables:
+#   $page (Number) - the page number after which the paste button is.
+pdfjs-views-manager-paste-button-after =
+    .title = Beillesztés a(z) { $page }. oldal után
+pdfjs-toggle-views-manager-button1 =
+    .title = Oldalak kezelése
 
 ## Main menu for adding/removing signatures
 
@@ -731,13 +757,9 @@ pdfjs-editor-movePageUp-button-label = Oldal mozgatása felfelé
 pdfjs-editor-movePageDown-button = Oldal mozgatása lefelé
 pdfjs-editor-movePageDown-button-label = Oldal mozgatása lefelé
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-thumb-page-title1 =
-    .title = Page { $page } of { $total }
-pdfjs-thumb-page-checkbox1 =
-    .title = Select page { $page }
-pdfjs-toggle-views-manager-button1 =
-    .title = Manage pages
-pdfjs-toggle-views-manager-button1-label = Manage pages
-pdfjs-views-manager-sidebar-resizer =
-    .aria-label = Sidebar resizer
-pdfjs-views-manager-paste-button-label = Paste
+pdfjs-views-manager-outlines-title1 = Document outline
+    .title = Document outline (double-click to expand/collapse all items)
+pdfjs-views-manager-layers-title1 = Layers
+    .title = Layers (double-click to reset all layers to the default state)
+pdfjs-views-manager-pages-status-export-selected-button-label = Export selected…
+pdfjs-new-badge-content = NEW

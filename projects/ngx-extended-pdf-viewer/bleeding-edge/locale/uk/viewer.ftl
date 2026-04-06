@@ -201,6 +201,10 @@ pdfjs-thumb-page-title =
 #   $page (Number) - the page number
 pdfjs-thumb-page-canvas =
     .aria-label = Ескіз сторінки { $page }
+# Variables:
+#   $page (Number) - the page number
+pdfjs-thumb-page-checkbox =
+    .aria-label = Вибрати сторінку { $page }
 
 ## Find panel button title and messages
 
@@ -652,6 +656,8 @@ pdfjs-toggle-views-manager-notification-button =
 pdfjs-toggle-views-manager-button-label = Перемкнути бічну панель
 pdfjs-views-manager-sidebar =
     .aria-label = Бічна панель
+pdfjs-views-manager-sidebar-resizer =
+    .aria-label = Зміна розміру бічної панелі
 pdfjs-views-manager-view-selector-button =
     .title = Вигляд
 pdfjs-views-manager-view-selector-button-label = Вигляд
@@ -714,6 +720,7 @@ pdfjs-views-manager-status-undo-button-label = Повернути
 pdfjs-views-manager-status-close-button =
     .title = Закрити
 pdfjs-views-manager-status-close-button-label = Закрити
+pdfjs-views-manager-paste-button-label = Вставити
 
 ## Main menu for adding/removing signatures
 
@@ -746,6 +753,14 @@ pdfjs-thumb-page-checkbox1 =
 pdfjs-toggle-views-manager-button1 =
     .title = Manage pages
 pdfjs-toggle-views-manager-button1-label = Manage pages
-pdfjs-views-manager-sidebar-resizer =
-    .aria-label = Sidebar resizer
-pdfjs-views-manager-paste-button-label = Paste
+pdfjs-views-manager-outlines-title1 = Document outline
+    .title = Document outline (double-click to expand/collapse all items)
+pdfjs-views-manager-layers-title1 = Layers
+    .title = Layers (double-click to reset all layers to the default state)
+pdfjs-views-manager-pages-status-export-selected-button-label = Export selected…
+pdfjs-views-manager-status-done-button-label = Done
+pdfjs-views-manager-paste-button-before =
+    .title = Paste before the first page
+pdfjs-views-manager-paste-button-after =
+    .title = Paste after page { $page }
+pdfjs-new-badge-content = NEW

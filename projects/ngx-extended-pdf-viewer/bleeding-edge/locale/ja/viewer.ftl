@@ -201,6 +201,19 @@ pdfjs-thumb-page-title =
 #   $page (Number) - the page number
 pdfjs-thumb-page-canvas =
     .aria-label = { $page } ページの縮小版
+# Variables:
+#   $page (Number) - the page number
+pdfjs-thumb-page-checkbox1 =
+    .title = { $page } ページを選択します
+# Variables:
+#   $page (Number) - the page number
+pdfjs-thumb-page-checkbox =
+    .aria-label = { $page } ページを選択します
+# Variables:
+#   $page (Number) - the page number
+#   $total (Number) - the number of pages
+pdfjs-thumb-page-title1 =
+    .title = { $page } / { $total } ページ
 
 ## Find panel button title and messages
 
@@ -629,9 +642,12 @@ pdfjs-toggle-views-manager-button =
     .title = サイドバーを切り替えます
 pdfjs-toggle-views-manager-notification-button =
     .title = サイドバーを切り替えます (文書に含まれるサムネイル、アウトライン、添付データ、レイヤー)
+pdfjs-toggle-views-manager-button1-label = ページを管理
 pdfjs-toggle-views-manager-button-label = サイドバーを切り替え
 pdfjs-views-manager-sidebar =
     .aria-label = サイドバー
+pdfjs-views-manager-sidebar-resizer =
+    .aria-label = サイドバーの幅変更
 pdfjs-views-manager-view-selector-button =
     .title = ビュー
 pdfjs-views-manager-view-selector-button-label = ビュー
@@ -674,6 +690,9 @@ pdfjs-views-manager-status-undo-button-label = 元に戻す
 pdfjs-views-manager-status-close-button =
     .title = 閉じる
 pdfjs-views-manager-status-close-button-label = 閉じる
+pdfjs-views-manager-paste-button-label = 貼り付け
+pdfjs-toggle-views-manager-button1 =
+    .title = ページを管理
 
 ## Main menu for adding/removing signatures
 
@@ -690,16 +709,17 @@ pdfjs-editor-add-signature-edit-button-label = 説明を編集
 pdfjs-editor-edit-signature-dialog-title = 説明の編集
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-thumb-page-title1 =
-    .title = Page { $page } of { $total }
-pdfjs-thumb-page-checkbox1 =
-    .title = Select page { $page }
-pdfjs-toggle-views-manager-button1 =
-    .title = Manage pages
-pdfjs-toggle-views-manager-button1-label = Manage pages
-pdfjs-views-manager-sidebar-resizer =
-    .aria-label = Sidebar resizer
-pdfjs-views-manager-paste-button-label = Paste
+pdfjs-views-manager-outlines-title1 = Document outline
+    .title = Document outline (double-click to expand/collapse all items)
+pdfjs-views-manager-layers-title1 = Layers
+    .title = Layers (double-click to reset all layers to the default state)
+pdfjs-views-manager-pages-status-export-selected-button-label = Export selected…
+pdfjs-views-manager-status-done-button-label = Done
+pdfjs-views-manager-paste-button-before =
+    .title = Paste before the first page
+pdfjs-views-manager-paste-button-after =
+    .title = Paste after page { $page }
+pdfjs-new-badge-content = NEW
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = Match Each Word
