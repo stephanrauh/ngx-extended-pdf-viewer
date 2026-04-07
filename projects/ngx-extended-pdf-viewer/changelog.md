@@ -733,4 +733,35 @@
 - 26.0.0-rc.29 (same version - there was an error when publishing)
 - 26.0.0-rc.30 layout fixes: improved toolbar button alignment, secondary menu button is hidden automatically if there's no visible menu entry in the secondary toolbar
 - 26.0.0 updated the README.md
-- 26.1.0 updated the bleeding-edge version of pdf.js from 5.4.530 to 5.6.205: page reordering via drag-and-drop (including multi-select, paste, undo/redo), page extraction/export, copy/cut/delete pages with undo support, hardware acceleration enabled by default, WebGPU mesh shading, CCITTFax and JBIG2 decoder updates, Brotli decompression, sidebar manage menu with popup, improved sidebar resizer, thumbnail styling improvements, high contrast mode improvements, MathML accessibility, right-click on images support, and updated locale files
+- 27.0.0 updated the bleeding-edge version of pdf.js from 5.4.530 to 5.6.205
+  - **Breaking changes:**
+    - The sidebar thumbnail DOM structure changed: thumbnails now use `div.thumbnailImageContainer > img` instead of `img.thumbnailImage` directly. If you have custom CSS targeting `.thumbnailImage`, update it to target `.thumbnailImageContainer img` or `.thumbnailImageContainer`.
+    - The sidebar now includes a `#viewsManagerHeader` wrapper div and a `#viewsManagerStatus` bar. Custom sidebar implementations may need adjustment.
+    - Removed legacy `.thumbnailSelectionRing` CSS — modern pdf.js uses box-shadow for thumbnail selection.
+    - `pdfDefaultOptions.enableHWA` now defaults to `true` (hardware acceleration on by default).
+    - pdf.js internally replaced `CMapReaderFactory`, `StandardFontDataFactory`, and `WasmFactory` with a single `BinaryDataFactory`.
+  - **New features:**
+    - `pdfDefaultOptions.enableSplitMerge`: copy, cut, delete, and export selected pages via the sidebar manage menu
+    - `pdfDefaultOptions.enableWebGPU`: WebGPU mesh shading for improved rendering performance
+    - `pdfDefaultOptions.imagesRightClickMinSize`: right-click on images in the text layer
+    - Page reordering via drag-and-drop in the thumbnail sidebar (including multi-select, paste, undo/redo)
+    - Sidebar manage menu with popup for page operations (copy/cut/delete/export)
+    - Sidebar resizer is now visible and functional
+    - CCITTFax decoder from pdfium, updated JBIG2 decoder, Brotli decompression
+  - **Bug fixes:**
+    - Fixed book mode toggle (can now exit book mode by clicking again)
+    - Fixed infinite scroll mode not properly exiting when switching to other modes
+    - Fixed custom print dialog progress bar (was stuck at 45%)
+    - Fixed ink editor events not firing (case mismatch in event type)
+    - Fixed dark mode checkboxes invisible in XFA forms
+    - Fixed secondary toolbar buttons overflowing with long translations (ellipsis truncation)
+    - Fixed zoom two-way binding feedback loop (string/number type mismatch)
+    - Fixed blob: and capacitor: URL support for PDFFetchStream
+    - Thumbnail alt text now uses l10n with page number instead of hardcoded text
+  - **Other improvements:**
+    - Updated locale files for all languages
+    - High contrast mode (HCM) improvements for thumbnails
+    - MathML accessibility improvements
+    - Removed smartphone demo
+    - Editor settings demo now shows HTML code example
+    - Hiding buttons demo uses compact 4-column grid layout

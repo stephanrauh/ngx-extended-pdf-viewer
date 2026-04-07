@@ -803,6 +803,16 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
   public showMovePageButton = input<ResponsiveVisibility>(false);
 
+  /** Enable page reordering via drag-and-drop in the thumbnail sidebar.
+   *  This is read at initialization time only. Changing it after the viewer has loaded
+   *  requires destroying and recreating the component. */
+  public enablePageReorderingInput = input<boolean | undefined>(undefined, { alias: 'enablePageReordering' });
+
+  /** Enable split & merge: copy, cut, delete, and export selected pages via the sidebar manage menu.
+   *  This is read at initialization time only. Changing it after the viewer has loaded
+   *  requires destroying and recreating the component. */
+  public enableSplitMergeInput = input<boolean | undefined>(undefined, { alias: 'enableSplitMerge' });
+
   // #2818 modified by ngx-extended-pdf-viewer
   public disableMovePageButton = input<boolean>(false);
   // #2818 end of modification by ngx-extended-pdf-viewer
@@ -1106,7 +1116,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   }
 
   public get enablePageReordering(): boolean {
-    return pdfDefaultOptions.enablePageReordering;
+    return this.enablePageReorderingInput() ?? pdfDefaultOptions.enablePageReordering;
+  }
+
+  public get enableSplitMerge(): boolean {
+    return this.enableSplitMergeInput() ?? pdfDefaultOptions.enableSplitMerge;
   }
 
   /**
@@ -2051,6 +2065,16 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       'doubleTapZoomsInTextSelectionMode',
       'doubleTapResetsZoomOnSecondDoubleTap',
     ];
+    // Apply component inputs to pdfDefaultOptions before passing to AppOptions
+    const enablePageReorderingInput = this.enablePageReorderingInput();
+    if (enablePageReorderingInput !== undefined) {
+      pdfDefaultOptions.enablePageReordering = enablePageReorderingInput;
+    }
+    const enableSplitMergeInput = this.enableSplitMergeInput();
+    if (enableSplitMergeInput !== undefined) {
+      pdfDefaultOptions.enableSplitMerge = enableSplitMergeInput;
+    }
+
     for (const key in pdfDefaultOptions) {
       if (!optionsToIgnore.includes(key)) {
         const option = (pdfDefaultOptions as any)[key];

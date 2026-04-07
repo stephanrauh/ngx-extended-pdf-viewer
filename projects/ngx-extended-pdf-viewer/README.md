@@ -153,6 +153,45 @@ Regarding security: I'm not perfect - it's always a best-effort approach without
 
 ## 📦 Version Highlights
 
+### Version 27
+
+Version 27 updates the bleeding-edge version of pdf.js to 5.6.205 and introduces page management features.
+
+**New for end users:**
+
+- **Page management** (experimental): Users can select pages in the sidebar and copy, cut, delete, or export them as a new PDF. Undo/redo is supported. Enable with `[enableSplitMerge]="true"` or `pdfDefaultOptions.enableSplitMerge = true`.
+- **Drag-and-drop page reordering**: Reorder pages by dragging thumbnails in the sidebar. Supports multi-select, paste, and undo. Enable with `[enablePageReordering]="true"` or `pdfDefaultOptions.enablePageReordering = true`.
+- **Resizable sidebar**: The sidebar can now be resized by dragging its edge.
+- **Right-click to save images**: Users can right-click images in PDF documents to save them. Enable with `pdfDefaultOptions.imagesRightClickMinSize = 16`.
+- **Hardware acceleration on by default**: Rendering now uses hardware acceleration out of the box for smoother scrolling and zoom.
+- **Faster rendering**: WebGPU mesh shading improves rendering performance on supported hardware.
+- **Better PDF support**: Improved decoding of JBIG2, CCITTFax (fax-format), and Brotli-compressed content.
+- **Long button labels truncated**: Toolbar buttons with long translations (e.g., German, Dutch, Greek) now show an ellipsis instead of overflowing.
+
+**New for developers:**
+
+- New component inputs: `[enableSplitMerge]` and `[enablePageReordering]` — these are read at initialization time only. Changing them after the viewer has loaded requires destroying and recreating the component.
+- New `pdfDefaultOptions`: `enableSplitMerge`, `enableWebGPU`, `imagesRightClickMinSize`, `enableNewBadge`.
+- Book mode now toggles off when you click the button again.
+- Infinite scroll mode now properly exits when switching to another view mode programmatically.
+
+**Bug fixes:**
+
+- Fixed book mode toggle (can now exit by clicking again)
+- Fixed infinite scroll mode not properly exiting when switching modes
+- Fixed custom print dialog progress bar (was hardcoded instead of bound to actual progress)
+- Fixed ink editor events not firing in the editor events demo
+- Fixed dark mode: form checkboxes in XFA documents are now visible
+- Fixed `blob:` and `capacitor:` URL support for loading PDFs (broken after upstream URL validation change)
+- Fixed zoom two-way binding feedback loop when typing numeric values
+
+#### ❗ Breaking changes:
+
+- **Custom thumbnail CSS**: If you have custom CSS targeting `.thumbnailImage` in the sidebar, update it to target `.thumbnailImageContainer img` or `.thumbnailImageContainer`. The sidebar thumbnail DOM structure changed from `img.thumbnailImage` to `div.thumbnailImageContainer > img`.
+- **Legacy thumbnail CSS removed**: `.thumbnailSelectionRing` and `.thumbnail.selected` styles have been removed. Modern pdf.js uses box-shadow for selection styling.
+- **Sidebar DOM structure**: The sidebar now includes `#viewsManagerHeader` and `#viewsManagerStatus` elements. Custom sidebar implementations that manipulate the sidebar DOM may need adjustment.
+- **`enableHWA` default changed**: `pdfDefaultOptions.enableHWA` now defaults to `true`. If you experience rendering issues on older hardware, set it to `false`.
+
 ### Version 26
 
 **Breaking Change: Angular 19+ Required**

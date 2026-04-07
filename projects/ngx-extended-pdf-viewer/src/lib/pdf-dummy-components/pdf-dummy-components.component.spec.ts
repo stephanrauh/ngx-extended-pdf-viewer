@@ -245,7 +245,7 @@ describe('PdfDummyComponentsComponent', () => {
       component.addMissingStandardWidgets();
 
       // Should process each required ID
-      expect(getElementByIdSpy).toHaveBeenCalledTimes(113); // Number of unique IDs in requiredIds array + scaleSelect
+      expect(getElementByIdSpy).toHaveBeenCalledTimes(137); // Number of unique IDs in requiredIds array + scaleSelect
     });
 
     it('should handle duplicate IDs in requiredIds array', () => {

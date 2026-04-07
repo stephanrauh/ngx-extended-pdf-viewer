@@ -380,8 +380,12 @@ describe('PDF Default Options Utility Functions', () => {
       expect(pdfDefaultOptions.doubleTapResetsZoomOnSecondDoubleTap).toBe(false);
       expect(pdfDefaultOptions.enableScripting).toBe(false);
       expect(pdfDefaultOptions.enableHWA).toBe(true);
+      expect(pdfDefaultOptions.enableWebGPU).toBe(true);
+      expect(pdfDefaultOptions.enableNewBadge).toBe(false);
+      expect(pdfDefaultOptions.imagesRightClickMinSize).toBe(-1);
       expect(pdfDefaultOptions.positionPopupDialogsWithJavaScript).toBe(true);
       expect(pdfDefaultOptions.enablePageReordering).toBe(false);
+      expect(pdfDefaultOptions.enableSplitMerge).toBe(false);
     });
 
     describe('function properties behavior', () => {
