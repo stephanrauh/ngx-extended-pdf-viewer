@@ -943,6 +943,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       this.handTool.set(false);
       return;
     }
+    if (this.service.ngxExtendedPdfViewerInitialized) {
+      // #3179: Tell pdf.js to switch the cursor tool. selectCursorTool() reads
+      // the current value of this.handTool() internally and dispatches
+      // 'switchcursortool' with tool=1 (hand) or tool=0 (text selection).
+      this.selectCursorTool();
+    }
   });
 
   public showHandToolButton = input<ResponsiveVisibility>(false);
