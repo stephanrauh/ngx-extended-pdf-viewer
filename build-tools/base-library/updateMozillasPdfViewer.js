@@ -38,6 +38,15 @@ if (BRANCH === 'bleeding-edge') {
   FOLDER = 'bleeding-edge';
 }
 
+// For patch releases: check out specific mypdf.js tags instead of following branches.
+// Set MYPDFJS_TAG environment variable to override (e.g., "ngx-extended-pdf-viewer-26.0.0")
+const mypdfTag = process.env.MYPDFJS_TAG;
+if (mypdfTag) {
+  const tag = FOLDER === 'bleeding-edge' ? mypdfTag + '-bleeding-edge' : mypdfTag;
+  console.log(`Checking out mypdf.js tag: ${tag}`);
+  runCommand(`git checkout "${tag}"`, `Error checking out mypdf.js tag ${tag}:`);
+}
+
 // Build based on argument
 const quickMode = process.argv[2] === 'quick';
 if (quickMode) {
