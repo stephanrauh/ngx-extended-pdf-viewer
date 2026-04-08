@@ -733,6 +733,7 @@
 - 26.0.0-rc.29 (same version - there was an error when publishing)
 - 26.0.0-rc.30 layout fixes: improved toolbar button alignment, secondary menu button is hidden automatically if there's no visible menu entry in the secondary toolbar
 - 26.0.0 updated the README.md
+- 26.0.1 #3179 fixed programmatic [handTool] changes not taking effect after initialization
 - 27.0.0 updated the bleeding-edge version of pdf.js from 5.4.530 to 5.6.205
   - **Breaking changes:**
     - The sidebar thumbnail DOM structure changed: thumbnails now use `div.thumbnailImageContainer > img` instead of `img.thumbnailImage` directly. If you have custom CSS targeting `.thumbnailImage`, update it to target `.thumbnailImageContainer img` or `.thumbnailImageContainer`.
