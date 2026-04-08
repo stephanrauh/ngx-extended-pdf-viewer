@@ -36,6 +36,16 @@ let FOLDER = 'assets';
 const BRANCH = execSync('git rev-parse --abbrev-ref HEAD', { encoding: 'utf8' }).trim();
 if (BRANCH === 'bleeding-edge') {
   FOLDER = 'bleeding-edge';
+} else if (BRANCH === 'HEAD') {
+  // Detached HEAD — check if we're on a bleeding-edge tag
+  try {
+    const tag = execSync('git describe --tags --exact-match HEAD', { encoding: 'utf8' }).trim();
+    if (tag.includes('bleeding-edge')) {
+      FOLDER = 'bleeding-edge';
+    }
+  } catch (e) {
+    // Not on an exact tag, keep default
+  }
 }
 
 // Build based on argument
