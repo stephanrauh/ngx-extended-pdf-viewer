@@ -65,7 +65,7 @@
     "@types/node": "^24.12.2",
     "@types/trusted-types": "^2.0.7",
     "autoprefixer": "^10.4.27",
-    "basic-ftp": "^5.2.0",
+    "basic-ftp": "^5.2.1",
     "dotenv": "^17.4.0",
     "fs-extra": "^11.3.4",
     "jest": "^30.3.0",
