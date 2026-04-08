@@ -62,6 +62,22 @@ jobs:
           fi
           echo "✓ Version verified: $PACKAGE_VERSION"
 
+      - name: Determine mypdf.js tag for patch releases
+        id: mypdf-tag
+        run: |
+          TAG_VERSION=${GITHUB_REF#refs/tags/}
+          # For patch releases (e.g., 26.0.1), set MYPDFJS_TAG to the base version tag
+          PATCH=$(echo "$TAG_VERSION" | cut -d. -f3)
+          if [ "$PATCH" != "0" ] && ! echo "$TAG_VERSION" | grep -qE '(alpha|beta|rc)'; then
+            MAJOR=$(echo "$TAG_VERSION" | cut -d. -f1)
+            MINOR=$(echo "$TAG_VERSION" | cut -d. -f2)
+            BASE_TAG="ngx-extended-pdf-viewer-${MAJOR}.${MINOR}.0"
+            echo "MYPDFJS_TAG=$BASE_TAG" >> $GITHUB_ENV
+            echo "Patch release detected. Using mypdf.js tag: $BASE_TAG"
+          else
+            echo "Regular release. Using default branches."
+          fi
+
       - name: Build and publish library
         working-directory: workspace/ngx-extended-pdf-viewer
         run: npm run do-release:lib

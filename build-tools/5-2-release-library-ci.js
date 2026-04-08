@@ -34,11 +34,16 @@ try {
   console.warn('⚠️  SBOM generation failed (non-critical, continuing...)');
 }
 
+// For patch releases, MYPDFJS_TAG overrides branch names with tagged commits.
+// E.g., MYPDFJS_TAG=ngx-extended-pdf-viewer-26.0.0 checks out that tag + "-bleeding-edge" variant.
+const mypdfTag = process.env.MYPDFJS_TAG;
+const bleedingEdgeBranch = mypdfTag ? `${mypdfTag}-bleeding-edge` : 'bleeding-edge';
+
 // Build base library from bleeding-edge
-console.log('\n🔨 Building base library (bleeding-edge)...');
+console.log(`\n🔨 Building base library (${bleedingEdgeBranch})...`);
 process.chdir(path.join('..', 'mypdf.js'));
 runCommand('git reset --hard', 'Error 66a: Git reset failed', 66);
-runCommand('git checkout bleeding-edge', 'Error 66: Git checkout failed', 66);
+runCommand(`git checkout ${bleedingEdgeBranch}`, 'Error 66: Git checkout failed', 66);
 runCommand('npm ci --ignore-scripts', 'Error 66b: npm install failed', 66);
 runCommand('npm audit fix --ignore-scripts || true', 'Error 66c: npm audit fix failed', 66);
 runCommand('../ngx-extended-pdf-viewer/build-tools/search-for-shai-hulud.sh --full', 'Error 66d: shai-hulud scan failed', 66);
@@ -98,11 +103,12 @@ if (!allBleedingEdgeFilesValid) {
 }
 console.log('✓ All bleeding-edge assets verified');
 
-// Build base library from stable branch (5.4.530)
-console.log('\n🔨 Building base library (5.4.530)...');
+// Build base library from stable branch
+const stableBranch = mypdfTag || '5.4.530';
+console.log(`\n🔨 Building base library (${stableBranch})...`);
 process.chdir(path.join('..', 'mypdf.js'));
 runCommand('git reset --hard', 'Error 68a: Git reset failed', 68);
-runCommand('git checkout 5.4.530', 'Error 68: Git checkout failed', 68);
+runCommand(`git checkout ${stableBranch}`, 'Error 68: Git checkout failed', 68);
 runCommand('npm ci --ignore-scripts', 'Error 68b: npm install failed', 68);
 runCommand('npm audit fix --ignore-scripts || true', 'Error 68c: npm audit fix failed', 68);
 runCommand('../ngx-extended-pdf-viewer/build-tools/search-for-shai-hulud.sh --full', 'Error 68d: shai-hulud scan failed', 68);
