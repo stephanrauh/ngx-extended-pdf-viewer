@@ -6,10 +6,10 @@ import { ResponsiveVisibility } from '../../responsive-visibility';
 import { PdfCursorTools } from './../../options/pdf-cursor-tools';
 
 @Component({
-    selector: 'pdf-hand-tool',
-    templateUrl: './pdf-hand-tool.component.html',
-    styleUrls: ['./pdf-hand-tool.component.css'],
-    standalone: false
+  selector: 'pdf-hand-tool',
+  templateUrl: './pdf-hand-tool.component.html',
+  styleUrls: ['./pdf-hand-tool.component.css'],
+  standalone: false
 })
 export class PdfHandToolComponent implements OnDestroy {
   public showHandToolButton = input<ResponsiveVisibility>(true);
@@ -39,6 +39,9 @@ export class PdfHandToolComponent implements OnDestroy {
     // Effect to sync handTool input to isSelected
     effect(() => {
       this.isSelected = this.handTool();
+      if (this.isSelected) {
+        this.onClick();
+      }
     });
   }
 

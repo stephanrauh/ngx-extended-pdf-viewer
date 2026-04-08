@@ -38,6 +38,9 @@ export class PdfSelectToolComponent implements OnDestroy {
 
     effect(() => {
       this.isSelected = !this.handTool();
+      if(this.isSelected) {
+        this.onClick();
+      }
     });
   }
 
