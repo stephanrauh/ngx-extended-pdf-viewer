@@ -44,6 +44,8 @@ const mypdfTag = process.env.MYPDFJS_TAG;
 if (mypdfTag) {
   const tag = FOLDER === 'bleeding-edge' ? mypdfTag + '-bleeding-edge' : mypdfTag;
   console.log(`Checking out mypdf.js tag: ${tag}`);
+  // Discard any local changes from previous build steps before switching tags
+  runCommand('git checkout -- .', 'Error discarding local changes in mypdf.js:');
   runCommand(`git checkout "${tag}"`, `Error checking out mypdf.js tag ${tag}:`);
 }
 
