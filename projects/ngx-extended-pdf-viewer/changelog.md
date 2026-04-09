@@ -734,3 +734,4 @@
 - 26.0.0-rc.30 layout fixes: improved toolbar button alignment, secondary menu button is hidden automatically if there's no visible menu entry in the secondary toolbar
 - 26.0.0 updated the README.md
 - 26.0.1 #3179 fixed programmatic [handTool] changes not taking effect after initialization
+- 26.0.2 #3183 fixed viewer height in constrained containers (e.g. mat-card with height: 80vh): the signals migration removed a change guard, causing the pageViewMode effect to reset the height on initialization; also improved auto-height to respect parent overflow bounds

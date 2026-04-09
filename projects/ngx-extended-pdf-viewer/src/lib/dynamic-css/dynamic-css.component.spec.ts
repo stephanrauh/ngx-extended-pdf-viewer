@@ -354,7 +354,7 @@ describe('DynamicCssComponent', () => {
       jest.useRealTimers();
     });
 
-    it('should restore height when restoreHeight is true', () => {
+    it('should restore height and clear zoom inline style when restoreHeight is true', () => {
       jest.useFakeTimers();
       Object.defineProperty(window, 'innerHeight', { writable: true, configurable: true, value: 800 });
 
@@ -365,12 +365,16 @@ describe('DynamicCssComponent', () => {
       Object.defineProperty(mockZoomContainer, 'clientHeight', { configurable: true, value: 500 });
       mockZoomContainer.getBoundingClientRect = jest.fn().mockReturnValue({ top: 50, left: 0, width: 1024, height: 500 });
       mockZoomContainer.style.zIndex = '1';
+      // Simulate stale inline height from a previous infinite-scroll session
+      mockZoomContainer.style.height = '900px';
 
       const getElementByIdSpy = jest.spyOn(document, 'getElementById').mockReturnValue(mockViewer);
       const getElementsByClassNameSpy = jest.spyOn(document, 'getElementsByClassName').mockReturnValue([mockZoomContainer] as any);
       const getComputedStyleSpy = jest.spyOn(window, 'getComputedStyle').mockReturnValue({
         paddingBottom: '0px',
         marginBottom: '0px',
+        overflowY: 'visible',
+        height: 'auto',
       } as any);
 
       mockNgxViewer.height = '500px';
@@ -381,6 +385,7 @@ describe('DynamicCssComponent', () => {
 
       expect(mockNgxViewer.height).toBeUndefined();
       expect(mockNgxViewer.autoHeight).toBe(true);
+      expect(mockZoomContainer.style.height).toBe('');
 
       getElementByIdSpy.mockRestore();
       getElementsByClassNameSpy.mockRestore();
@@ -468,7 +473,7 @@ describe('DynamicCssComponent', () => {
   });
 
   describe('adjustHeight', () => {
-    it('should set minHeight based on available space', () => {
+    it('should set minHeight based on available space (no constrained parent)', () => {
       Object.defineProperty(window, 'innerHeight', { writable: true, configurable: true, value: 800 });
 
       const mockContainer = document.createElement('div');
@@ -486,10 +491,13 @@ describe('DynamicCssComponent', () => {
       const getComputedStyleSpy = jest.spyOn(window, 'getComputedStyle').mockReturnValue({
         paddingBottom: '10px',
         marginBottom: '5px',
+        overflowY: 'visible',
+        height: 'auto',
       } as any);
 
       (component as any).adjustHeight(mockContainer, mockNgxViewer);
 
+      // No constrained parent → falls back to window.innerHeight=800
       // available=800, top=100, maximumHeight=700, padding=15, final=685
       expect(mockNgxViewer.minHeight).toBe('685px');
       expect(mockNgxViewer.markForCheck).toHaveBeenCalled();
@@ -514,6 +522,8 @@ describe('DynamicCssComponent', () => {
       const getComputedStyleSpy = jest.spyOn(window, 'getComputedStyle').mockReturnValue({
         paddingBottom: '10px',
         marginBottom: '5px',
+        overflowY: 'visible',
+        height: 'auto',
       } as any);
 
       (component as any).adjustHeight(mockContainer, mockNgxViewer);
@@ -521,6 +531,171 @@ describe('DynamicCssComponent', () => {
       // available=200, top=180, maximumHeight=20, padding=15, final=5 => clamp to 100px
       expect(mockNgxViewer.minHeight).toBe('100px');
 
+      getComputedStyleSpy.mockRestore();
+    });
+
+    it('should respect constrained parent with overflow:hidden (#3183)', () => {
+      Object.defineProperty(window, 'innerHeight', { writable: true, configurable: true, value: 1000 });
+
+      // Create a constrained parent (simulates mat-card-content with height: 80vh)
+      const constrainedParent = document.createElement('div');
+      constrainedParent.getBoundingClientRect = jest.fn().mockReturnValue({ top: 50, left: 0, width: 1024, height: 600, bottom: 650 });
+
+      // Create the zoom container inside the constrained parent
+      const mockContainer = document.createElement('div');
+      constrainedParent.appendChild(mockContainer);
+      mockContainer.getBoundingClientRect = jest.fn().mockReturnValue({ top: 100, left: 0, width: 1024, height: 0 });
+      mockContainer.style.zIndex = '1';
+
+      const mockNgxViewer: NgxHasHeight = {
+        height: undefined,
+        autoHeight: true,
+        minHeight: undefined,
+        markForCheck: jest.fn(),
+      };
+
+      const getComputedStyleSpy = jest.spyOn(window, 'getComputedStyle').mockImplementation((el: Element) => {
+        if (el === constrainedParent) {
+          return { paddingBottom: '0px', marginBottom: '0px', overflowY: 'hidden', height: '600px' } as any;
+        }
+        return { paddingBottom: '0px', marginBottom: '0px', overflowY: 'visible', height: 'auto' } as any;
+      });
+
+      (component as any).adjustHeight(mockContainer, mockNgxViewer);
+
+      // Should use constrainedParent.bottom=650 instead of window.innerHeight=1000
+      // available=650, top=100, maximumHeight=550, padding=0, final=550
+      expect(mockNgxViewer.minHeight).toBe('550px');
+      expect(mockNgxViewer.markForCheck).toHaveBeenCalled();
+
+      getComputedStyleSpy.mockRestore();
+    });
+
+    it('should respect constrained parent with overflow:auto (#3183)', () => {
+      Object.defineProperty(window, 'innerHeight', { writable: true, configurable: true, value: 1000 });
+
+      const constrainedParent = document.createElement('div');
+      constrainedParent.getBoundingClientRect = jest.fn().mockReturnValue({ top: 0, left: 0, width: 1024, height: 400, bottom: 400 });
+
+      const mockContainer = document.createElement('div');
+      constrainedParent.appendChild(mockContainer);
+      mockContainer.getBoundingClientRect = jest.fn().mockReturnValue({ top: 50, left: 0, width: 1024, height: 0 });
+      mockContainer.style.zIndex = '1';
+
+      const mockNgxViewer: NgxHasHeight = {
+        height: undefined,
+        autoHeight: true,
+        minHeight: undefined,
+        markForCheck: jest.fn(),
+      };
+
+      const getComputedStyleSpy = jest.spyOn(window, 'getComputedStyle').mockImplementation((el: Element) => {
+        if (el === constrainedParent) {
+          return { paddingBottom: '0px', marginBottom: '0px', overflowY: 'auto', height: '400px' } as any;
+        }
+        return { paddingBottom: '0px', marginBottom: '0px', overflowY: 'visible', height: 'auto' } as any;
+      });
+
+      (component as any).adjustHeight(mockContainer, mockNgxViewer);
+
+      // Should use constrainedParent.bottom=400 instead of window.innerHeight=1000
+      expect(mockNgxViewer.minHeight).toBe('350px'); // 400 - 50
+
+      getComputedStyleSpy.mockRestore();
+    });
+  });
+
+  describe('findAvailableBottom', () => {
+    it('should return window.innerHeight when no constrained ancestor exists', () => {
+      Object.defineProperty(window, 'innerHeight', { writable: true, configurable: true, value: 900 });
+
+      const mockContainer = document.createElement('div');
+      document.body.appendChild(mockContainer);
+
+      const getComputedStyleSpy = jest.spyOn(window, 'getComputedStyle').mockReturnValue({
+        overflowY: 'visible',
+        height: 'auto',
+      } as any);
+
+      const result = (component as any).findAvailableBottom(mockContainer);
+      expect(result).toBe(900);
+
+      document.body.removeChild(mockContainer);
+      getComputedStyleSpy.mockRestore();
+    });
+
+    it('should return constrained ancestor bottom when overflow is hidden with explicit height', () => {
+      const constrainedParent = document.createElement('div');
+      constrainedParent.getBoundingClientRect = jest.fn().mockReturnValue({ bottom: 500 });
+      document.body.appendChild(constrainedParent);
+
+      const child = document.createElement('div');
+      constrainedParent.appendChild(child);
+
+      const getComputedStyleSpy = jest.spyOn(window, 'getComputedStyle').mockImplementation((el: Element) => {
+        if (el === constrainedParent) {
+          return { overflowY: 'hidden', height: '500px' } as any;
+        }
+        return { overflowY: 'visible', height: 'auto' } as any;
+      });
+
+      const result = (component as any).findAvailableBottom(child);
+      expect(result).toBe(500);
+
+      document.body.removeChild(constrainedParent);
+      getComputedStyleSpy.mockRestore();
+    });
+
+    it('should skip ancestors with overflow but no explicit height', () => {
+      Object.defineProperty(window, 'innerHeight', { writable: true, configurable: true, value: 1000 });
+
+      const overflowParent = document.createElement('div');
+      document.body.appendChild(overflowParent);
+
+      const child = document.createElement('div');
+      overflowParent.appendChild(child);
+
+      const getComputedStyleSpy = jest.spyOn(window, 'getComputedStyle').mockImplementation((el: Element) => {
+        if (el === overflowParent) {
+          // overflow:hidden but height:auto — not a real constraint
+          return { overflowY: 'hidden', height: 'auto' } as any;
+        }
+        return { overflowY: 'visible', height: 'auto' } as any;
+      });
+
+      const result = (component as any).findAvailableBottom(child);
+      expect(result).toBe(1000); // falls back to window.innerHeight
+
+      document.body.removeChild(overflowParent);
+      getComputedStyleSpy.mockRestore();
+    });
+
+    it('should find the nearest constrained ancestor, not a more distant one', () => {
+      const outerParent = document.createElement('div');
+      outerParent.getBoundingClientRect = jest.fn().mockReturnValue({ bottom: 800 });
+      document.body.appendChild(outerParent);
+
+      const innerParent = document.createElement('div');
+      innerParent.getBoundingClientRect = jest.fn().mockReturnValue({ bottom: 400 });
+      outerParent.appendChild(innerParent);
+
+      const child = document.createElement('div');
+      innerParent.appendChild(child);
+
+      const getComputedStyleSpy = jest.spyOn(window, 'getComputedStyle').mockImplementation((el: Element) => {
+        if (el === innerParent) {
+          return { overflowY: 'scroll', height: '400px' } as any;
+        }
+        if (el === outerParent) {
+          return { overflowY: 'hidden', height: '800px' } as any;
+        }
+        return { overflowY: 'visible', height: 'auto' } as any;
+      });
+
+      const result = (component as any).findAvailableBottom(child);
+      expect(result).toBe(400); // nearest wins
+
+      document.body.removeChild(outerParent);
       getComputedStyleSpy.mockRestore();
     });
   });
@@ -615,6 +790,8 @@ describe('DynamicCssComponent', () => {
       const getComputedStyleSpy = jest.spyOn(window, 'getComputedStyle').mockReturnValue({
         paddingBottom: '0px',
         marginBottom: '0px',
+        overflowY: 'visible',
+        height: 'auto',
       } as any);
 
       const mockNgxViewer: NgxHasHeight = {
@@ -628,6 +805,47 @@ describe('DynamicCssComponent', () => {
 
       expect(mockNgxViewer.autoHeight).toBe(true);
       expect(mockNgxViewer.minHeight).toBe('750px'); // 800-50-0
+      expect(mockNgxViewer.markForCheck).toHaveBeenCalled();
+
+      getElementsByClassNameSpy.mockRestore();
+      getComputedStyleSpy.mockRestore();
+    });
+
+    it('should respect constrained parent when auto-adjusting height (#3183)', () => {
+      Object.defineProperty(window, 'innerHeight', { writable: true, configurable: true, value: 1000 });
+
+      // Simulate mat-card-content with height: 80vh, overflow: hidden
+      const constrainedParent = document.createElement('div');
+      constrainedParent.getBoundingClientRect = jest.fn().mockReturnValue({ top: 20, bottom: 620 });
+
+      const mockZoomContainer = document.createElement('div');
+      constrainedParent.appendChild(mockZoomContainer);
+      Object.defineProperty(mockZoomContainer, 'clientHeight', { configurable: true, value: 0 });
+      mockZoomContainer.getBoundingClientRect = jest.fn().mockReturnValue({ top: 80, left: 0, width: 1024, height: 0 });
+      mockZoomContainer.style.zIndex = '1';
+
+      const getElementsByClassNameSpy = jest.spyOn(document, 'getElementsByClassName').mockReturnValue([mockZoomContainer] as any);
+
+      const getComputedStyleSpy = jest.spyOn(window, 'getComputedStyle').mockImplementation((el: Element) => {
+        if (el === constrainedParent) {
+          return { paddingBottom: '0px', marginBottom: '0px', overflowY: 'hidden', height: '600px' } as any;
+        }
+        return { paddingBottom: '0px', marginBottom: '0px', overflowY: 'visible', height: 'auto' } as any;
+      });
+
+      const mockNgxViewer: NgxHasHeight = {
+        height: undefined,
+        autoHeight: false,
+        minHeight: undefined,
+        markForCheck: jest.fn(),
+      };
+
+      component.checkHeight(mockNgxViewer, VerbosityLevel.INFOS);
+
+      expect(mockNgxViewer.autoHeight).toBe(true);
+      // Should use parent.bottom=620, not window.innerHeight=1000
+      // 620 - 80 = 540
+      expect(mockNgxViewer.minHeight).toBe('540px');
       expect(mockNgxViewer.markForCheck).toHaveBeenCalled();
 
       getElementsByClassNameSpy.mockRestore();

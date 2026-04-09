@@ -197,10 +197,19 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
   public pageViewMode = model<PageViewModeType>('multiple');
 
+  private _previousPageViewMode: PageViewModeType = 'multiple';
+
   // @ts-ignore TS6133 - Used for side effects only
   private _pageViewModeEffect = effect(() => {
     const viewMode = this.pageViewMode();
     if (!isPlatformBrowser(this.platformId)) return;
+
+    // Skip if the value hasn't actually changed. Without this guard,
+    // the effect fires on initialization with 'multiple', which triggers
+    // handleMultiplePageMode() → restoreHeight, incorrectly replacing
+    // the user's height with a computed pixel value (#3183).
+    if (this._previousPageViewMode === viewMode) return;
+    this._previousPageViewMode = viewMode;
 
     const mustRedraw = !this.pdfScriptLoaderService.ngxExtendedPdfViewerIncompletelyInitialized && viewMode === 'book';
 
@@ -615,12 +624,18 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     }
 
     // Sync to protected backing fields
-    this._height = h;
     this._minHeight = this.minHeightInput();
 
     this.autoHeight = false;
     if (h === 'auto') {
       this.autoHeight = true;
+      // When height is 'auto', set _height to undefined so that
+      // checkHeight() → adjustHeight() can compute the correct pixel value.
+      // Setting _height to 'auto' would cause isHeightDefinedWithUnits()
+      // to return true, skipping the auto-height calculation entirely.
+      this._height = undefined;
+    } else {
+      this._height = h;
     }
 
     setTimeout(
