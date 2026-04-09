@@ -270,6 +270,9 @@ export class DynamicCssComponent implements OnDestroy {
           } else if (restoreHeight) {
             ngxExtendedPdfViewer.height = undefined;
             ngxExtendedPdfViewer.autoHeight = true;
+            if (zoom) {
+              (<HTMLElement>zoom).style.height = '';
+            }
             this.checkHeight(ngxExtendedPdfViewer, logLevel);
           }
         }));
@@ -339,14 +342,34 @@ export class DynamicCssComponent implements OnDestroy {
   }
 
   private adjustHeight(container: HTMLElement, ngxExtendedPdfViewer: NgxHasHeight): void {
-    const available = window.innerHeight;
+    const availableBottom = this.findAvailableBottom(container);
     const rect = container.getBoundingClientRect();
     const top = rect.top;
-    let maximumHeight = available - top;
+    let maximumHeight = availableBottom - top;
     const padding = this.calculateBorderMargin(container);
     maximumHeight -= padding;
     ngxExtendedPdfViewer.minHeight = maximumHeight > 100 ? `${maximumHeight}px` : '100px';
     ngxExtendedPdfViewer.markForCheck();
+  }
+
+  /**
+   * Walks up the DOM to find the nearest ancestor with constrained overflow (hidden/auto/scroll)
+   * and an explicit height. This ensures the viewer respects parent container bounds
+   * (e.g., a mat-card-content with height: 80vh) instead of always using the full viewport.
+   * Falls back to window.innerHeight if no constraining ancestor is found.
+   */
+  private findAvailableBottom(element: HTMLElement): number {
+    let parent = element.parentElement;
+    while (parent && parent !== document.body && parent !== document.documentElement) {
+      const style = window.getComputedStyle(parent);
+      const overflowY = style.overflowY;
+      if ((overflowY === 'hidden' || overflowY === 'auto' || overflowY === 'scroll')
+          && style.height !== 'auto' && style.height !== '') {
+        return parent.getBoundingClientRect().bottom;
+      }
+      parent = parent.parentElement;
+    }
+    return window.innerHeight;
   }
 
   private calculateBorderMargin(container: HTMLElement | null): number {
