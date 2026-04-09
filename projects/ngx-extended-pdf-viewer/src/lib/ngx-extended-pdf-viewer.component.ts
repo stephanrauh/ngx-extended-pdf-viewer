@@ -2357,6 +2357,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
               PDFViewerApplication.pdfViewer.currentPageLabel = this.pageLabel();
             }
           }
+          // Scroll the current page's thumbnail into view. The ViewsManager
+          // normally does this in open() or setInitialView(), but Angular
+          // manages sidebar visibility independently, so the scroll never
+          // fires during initial load.
+          PDFViewerApplication.pdfThumbnailViewer?.scrollThumbnailIntoView(
+            PDFViewerApplication.pdfViewer.currentPageNumber
+          );
         }),
       );
       this.setZoom();
