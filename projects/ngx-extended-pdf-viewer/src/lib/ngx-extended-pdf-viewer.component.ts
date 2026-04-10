@@ -226,6 +226,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
     this.handleViewMode(viewMode);
 
+    // #3140 modified by ngx-extended-pdf-viewer
+    // When leaving book mode while in PAGE_FLIP cursor mode, switch back to SELECT.
+    if (viewMode !== 'book' && this.showPageFlipButton() && this.service.ngxExtendedPdfViewerInitialized) {
+      PDFViewerApplication?.eventBus.dispatch('switchcursortool', { tool: PdfCursorTools.SELECT });
+    }
+    // #3140 end of modification by ngx-extended-pdf-viewer
+
     if (mustRedraw) {
       this.redrawViewer(viewMode);
     }
@@ -276,6 +283,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     if (this.scrollMode() !== ScrollModeType.vertical) {
       this.scrollMode.set(ScrollModeType.vertical);
     }
+    // #3140 modified by ngx-extended-pdf-viewer
+    // When entering book mode with the page-flip button enabled,
+    // automatically switch to PAGE_FLIP cursor tool.
+    if (this.showPageFlipButton() && this.service.ngxExtendedPdfViewerInitialized) {
+      const PDFViewerApplication: IPDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
+      PDFViewerApplication?.eventBus.dispatch('switchcursortool', { tool: PdfCursorTools.PAGE_FLIP });
+    }
+    // #3140 end of modification by ngx-extended-pdf-viewer
   }
 
   private handleMultiplePageMode(): void {
@@ -969,6 +984,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       return;
     }
     if (this.service.ngxExtendedPdfViewerInitialized) {
+      // #3140 modified by ngx-extended-pdf-viewer
+      // When the page-flip button is shown, the cursor tool is fully managed by
+      // the three toolbar buttons (select/hand/page-flip), not by the handTool binding.
+      // Calling selectCursorTool() here would override user-initiated tool changes.
+      if (this.showPageFlipButton()) {
+        return;
+      }
+      // #3140 end of modification by ngx-extended-pdf-viewer
       // #3179: Tell pdf.js to switch the cursor tool. selectCursorTool() reads
       // the current value of this.handTool() internally and dispatches
       // 'switchcursortool' with tool=1 (hand) or tool=0 (text selection).
@@ -981,6 +1004,47 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   // #2818 modified by ngx-extended-pdf-viewer
   public disableHandToolButton = input<boolean>(false);
   // #2818 end of modification by ngx-extended-pdf-viewer
+
+  // #3140 modified by ngx-extended-pdf-viewer
+  /**
+   * In book mode, dragging normally flips pages. Set this to false to disable
+   * drag-to-flip, allowing text selection and panning instead. Click-based
+   * page flipping is not affected. When true (the default), drag-to-flip is
+   * automatically disabled when zoomed in beyond 100% so the user can pan.
+   */
+  public enableFlipByDrag = input<boolean>(true);
+
+  // @ts-ignore TS6133 - Used for side effects only
+  private _enableFlipByDragEffect = effect(() => {
+    const value = this.enableFlipByDrag();
+    if (this.service.ngxExtendedPdfViewerInitialized) {
+      const PDFViewerApplication: IPDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
+      if (PDFViewerApplication?.pdfViewer) {
+        PDFViewerApplication.pdfViewer.enableFlipByDrag = value;
+      }
+    }
+  });
+  public showPageFlipButton = input<ResponsiveVisibility>(false);
+
+  public disablePageFlipButton = input<boolean>(false);
+
+  /**
+   * In book mode, show or hide the dog-ear fold animation on page corners
+   * when hovering near them. Only relevant when drag-to-flip is enabled.
+   */
+  public showPageCorners = input<boolean>(true);
+
+  // @ts-ignore TS6133 - Used for side effects only
+  private _showPageCornersEffect = effect(() => {
+    const value = this.showPageCorners();
+    if (this.service.ngxExtendedPdfViewerInitialized) {
+      const PDFViewerApplication: IPDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
+      if (PDFViewerApplication?.pdfViewer?.pageFlip) {
+        PDFViewerApplication.pdfViewer.pageFlip.setting.showPageCorners = value;
+      }
+    }
+  });
+  // #3140 end of modification by ngx-extended-pdf-viewer
 
   public showSpreadButton = input<ResponsiveVisibility>(true);
 
@@ -2474,6 +2538,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       queueMicrotask(
         this.asyncWithCD(() => {
           this.handTool.set(x.tool === PdfCursorTools.HAND);
+          // #3140 modified by ngx-extended-pdf-viewer
+          // When the page-flip button is shown, the cursor tool controls enableFlipByDrag:
+          // PAGE_FLIP mode enables drag-to-flip, other modes disable it.
+          // When the button is not shown, enableFlipByDrag is controlled by the [enableFlipByDrag] input.
+          if (this.showPageFlipButton() && PDFViewerApplication?.pdfViewer) {
+            PDFViewerApplication.pdfViewer.enableFlipByDrag = x.tool === PdfCursorTools.PAGE_FLIP;
+          }
+          // #3140 end of modification by ngx-extended-pdf-viewer
         }),
       );
     }, opts);
@@ -2664,6 +2736,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   }
 
   public async openPDF2(): Promise<void> {
+    if (!this._src) {
+      return;
+    }
     // #3131 Guard against detached ArrayBuffers — can happen if a previous open() already transferred the buffer to the worker.
     // The 'detached' property is available in modern browsers (Chrome 114+, Firefox 122+, Safari 17.4+).
     // In older browsers the property is undefined (falsy), so the check is safely skipped.
@@ -2757,7 +2832,19 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
   private selectCursorTool() {
     const PDFViewerApplication: IPDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
-    PDFViewerApplication.eventBus.dispatch('switchcursortool', { tool: this.handTool() ? 1 : 0 });
+    // #3140 modified by ngx-extended-pdf-viewer
+    let tool: number;
+    // PAGE_FLIP takes priority over handTool when in book mode with the button shown,
+    // because book mode defaults to page-flip and handTool defaults to true on desktop.
+    if (this.showPageFlipButton() && this.pageViewMode() === 'book') {
+      tool = PdfCursorTools.PAGE_FLIP;
+    } else if (this.handTool()) {
+      tool = PdfCursorTools.HAND;
+    } else {
+      tool = PdfCursorTools.SELECT;
+    }
+    PDFViewerApplication.eventBus.dispatch('switchcursortool', { tool });
+    // #3140 end of modification by ngx-extended-pdf-viewer
   }
 
   public doReplaceBrowserPrint(useCustomPrintOfPdfJS: boolean): void {

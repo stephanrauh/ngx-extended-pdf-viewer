@@ -36,9 +36,16 @@ export class PdfSelectToolComponent implements OnDestroy {
       }
     });
 
+    // #3140 modified by ngx-extended-pdf-viewer
+    // Only use handTool input for initial state before pdf.js fires cursortoolchanged.
+    // After init, cursortoolchanged is the sole source of truth (supports 3+ modes).
     effect(() => {
-      this.isSelected = !this.handTool();
+      const isHand = this.handTool();
+      if (!this.PDFViewerApplication) {
+        this.isSelected = !isHand;
+      }
     });
+    // #3140 end of modification by ngx-extended-pdf-viewer
   }
 
   private onPdfJsInit() {
@@ -48,6 +55,11 @@ export class PdfSelectToolComponent implements OnDestroy {
     const opts = { signal: this.eventBusAbortController.signal };
     // #3135 end of modification by ngx-extended-pdf-viewer
     this.PDFViewerApplication?.eventBus.on('cursortoolchanged', ({ tool }: HandtoolChanged) => (this.isSelected = tool === PdfCursorTools.SELECT), opts);
+    // #3140: Read current tool state — may have missed the initial cursortoolchanged event
+    const activeTool = (this.PDFViewerApplication as any)?.pdfCursorTools?.activeTool;
+    if (activeTool !== undefined) {
+      this.isSelected = activeTool === PdfCursorTools.SELECT;
+    }
   }
 
   // #3135 modified by ngx-extended-pdf-viewer

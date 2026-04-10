@@ -123,6 +123,8 @@ export class PdfToolbarComponent implements AfterViewInit {
   public disableInfiniteScrollButton = input<boolean>(false);
   public disableBookModeButton = input<boolean>(false);
   public disableHandToolButton = input<boolean>(false);
+  public showPageFlipButton = input<ResponsiveVisibility>(false);
+  public disablePageFlipButton = input<boolean>(false);
   public disableRotateCwButton = input<boolean>(false);
   public disableRotateCcwButton = input<boolean>(false);
   public disablePresentationModeButton = input<boolean>(false);

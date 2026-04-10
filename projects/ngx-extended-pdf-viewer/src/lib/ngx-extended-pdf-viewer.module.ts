@@ -48,6 +48,7 @@ import { PdfMatchDiacriticsComponent } from './toolbar/pdf-findbar/pdf-findbar-o
 import { PdfFindbarComponent } from './toolbar/pdf-findbar/pdf-findbar.component';
 import { PdfSearchInputFieldComponent } from './toolbar/pdf-findbar/pdf-search-input-field/pdf-search-input-field.component';
 import { PdfHandToolComponent } from './toolbar/pdf-hand-tool/pdf-hand-tool.component';
+import { PdfPageFlipToolComponent } from './toolbar/pdf-page-flip-tool/pdf-page-flip-tool.component';
 import { PdfHighlightEditorComponent } from './toolbar/pdf-highlight-editor/pdf-highlight-editor.component';
 import { PdfHorizontalScrollComponent } from './toolbar/pdf-horizontal-scroll/pdf-horizontal-scroll.component';
 import { PdfInfiniteScrollComponent } from './toolbar/pdf-infinite-scroll/pdf-infinite-scroll.component';
@@ -132,6 +133,7 @@ if (!(Promise as any)['allSettled']) {
     PdfFindResultsCountComponent,
     PdfFirstPageComponent,
     PdfHandToolComponent,
+    PdfPageFlipToolComponent,
     PdfHighlightEditorComponent,
     PdfHorizontalScrollComponent,
     PdfInfiniteScrollComponent,
@@ -211,6 +213,7 @@ if (!(Promise as any)['allSettled']) {
     PdfFindResultsCountComponent,
     PdfFirstPageComponent,
     PdfHandToolComponent,
+    PdfPageFlipToolComponent,
     PdfHighlightEditorComponent,
     PdfHorizontalScrollComponent,
     PdfInfiniteScrollComponent,

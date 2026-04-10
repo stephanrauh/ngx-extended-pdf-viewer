@@ -55,4 +55,6 @@ export interface IPDFViewer {
   destroyBookMode(): void;
   stopRendering(): void;
   refresh(noUpdate?: boolean, updateArgs?: object): void;
+  enableFlipByDrag: boolean; // #3140 added by ngx-extended-pdf-viewer
+  pageFlip: { setting: { showPageCorners: boolean; enableFlipByDrag: boolean } } | null; // #3140 added by ngx-extended-pdf-viewer
 }

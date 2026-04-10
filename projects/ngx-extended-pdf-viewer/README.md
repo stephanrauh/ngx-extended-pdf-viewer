@@ -174,6 +174,10 @@ Version 27 updates the bleeding-edge version of pdf.js to 5.6.205 and introduces
 - New `pdfDefaultOptions`: `enableSplitMerge`, `enableWebGPU`, `imagesRightClickMinSize`, `enableNewBadge`.
 - Book mode now toggles off when you click the button again.
 - Infinite scroll mode now properly exits when switching to another view mode programmatically.
+- **Book mode cursor tools**: New `[showPageFlipButton]` input adds a third cursor tool mode alongside the existing hand tool and text selection tool. When active, dragging flips pages; the other two modes allow panning and text selection respectively. The button only appears in book mode.
+- **`[enableFlipByDrag]`**: Controls whether dragging flips pages in book mode. When `true` (default), drag-to-flip is automatically disabled when zoomed in beyond the page-fit scale, allowing panning instead. Set to `false` to disable drag-to-flip entirely.
+- **`[showPageCorners]`**: Controls the dog-ear fold animation on page corners in book mode (default: `true`).
+- **`[customPdfViewer]`**: Replaces the entire viewer HTML with a custom template, giving full control over the viewer structure.
 
 **Bug fixes:**
 
@@ -184,6 +188,7 @@ Version 27 updates the bleeding-edge version of pdf.js to 5.6.205 and introduces
 - Fixed dark mode: form checkboxes in XFA documents are now visible
 - Fixed `blob:` and `capacitor:` URL support for loading PDFs (broken after upstream URL validation change)
 - Fixed zoom two-way binding feedback loop when typing numeric values
+- Fixed crash in bleeding-edge mode when `enableSplitMerge` is false (manageMenu null guard)
 
 #### ❗ Breaking changes:
 
@@ -191,6 +196,7 @@ Version 27 updates the bleeding-edge version of pdf.js to 5.6.205 and introduces
 - **Legacy thumbnail CSS removed**: `.thumbnailSelectionRing` and `.thumbnail.selected` styles have been removed. Modern pdf.js uses box-shadow for selection styling.
 - **Sidebar DOM structure**: The sidebar now includes `#viewsManagerHeader` and `#viewsManagerStatus` elements. Custom sidebar implementations that manipulate the sidebar DOM may need adjustment.
 - **`enableHWA` default changed**: `pdfDefaultOptions.enableHWA` now defaults to `true`. If you experience rendering issues on older hardware, set it to `false`.
+- **Cursor tool button state**: The hand tool and select tool toolbar buttons now derive their toggle state from `cursortoolchanged` events after pdf.js initialization, instead of the `[(handTool)]` two-way binding. This only affects you if you programmatically set `[(handTool)]` after initialization and relied on the toolbar buttons updating without going through pdf.js — which is unlikely in practice.
 
 ### Version 26
 

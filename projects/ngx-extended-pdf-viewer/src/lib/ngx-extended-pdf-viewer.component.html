@@ -113,6 +113,8 @@
               [disableInfiniteScrollButton]="disableInfiniteScrollButton()"
               [disableBookModeButton]="disableBookModeButton()"
               [disableHandToolButton]="disableHandToolButton()"
+              [showPageFlipButton]="pageViewMode() === 'book' ? showPageFlipButton() : false"
+              [disablePageFlipButton]="disablePageFlipButton()"
               [disableRotateCwButton]="disableRotateCwButton()"
               [disableRotateCcwButton]="disableRotateCcwButton()"
               [disablePresentationModeButton]="disablePresentationModeButton()"

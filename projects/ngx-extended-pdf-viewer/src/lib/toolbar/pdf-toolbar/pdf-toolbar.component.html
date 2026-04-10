@@ -125,6 +125,10 @@
         [handTool]="handTool()"
         [disable]="disableHandToolButton()"
       ></pdf-select-tool>
+      <pdf-page-flip-tool
+        [showPageFlipButton]="showPageFlipButton()"
+        [disable]="disablePageFlipButton()"
+      ></pdf-page-flip-tool>
       <pdf-rotate-page-cw [showRotateCwButton]="showRotateCwButton()" [disable]="disableRotateCwButton()"> </pdf-rotate-page-cw>
       <pdf-rotate-page-ccw [showRotateCcwButton]="showRotateCcwButton()" [disable]="disableRotateCcwButton()"> </pdf-rotate-page-ccw>
       <pdf-presentation-mode [showPresentationModeButton]="showPresentationModeButton()" [disable]="disablePresentationModeButton()"></pdf-presentation-mode>
