@@ -25,7 +25,7 @@ const requiredIds = [
   'editorModeButtons',
   'editorNone',
   //  'editorSignatureButton',
-  //  'editorSignatureAddSignature',
+  'editorSignatureAddSignature',
   'editorStampAddImage',
   'errorClose',
   'errorMessage',
@@ -140,6 +140,65 @@ const requiredIds = [
   'viewsManagerStatusWaiting',
   'viewsManagerStatusWaitingLabel',
   'viewsManagerStatusWaitingCloseButton',
+  // #2853 added by ngx-extended-pdf-viewer
+  // IDs required by viewer.js that were missing, needed for [customPdfViewer]
+  'altTextCancel',
+  'altTextDialog',
+  'altTextSave',
+  'altTextSettingsCloseButton',
+  'altTextSettingsDialog',
+  'altTextSettingsLearnMore',
+  'commentManagerCancelButton',
+  'commentManagerDialog',
+  'commentManagerSaveButton',
+  'commentManagerTextInput',
+  'commentManagerTitle',
+  'commentManagerToolbar',
+  'createModelButton',
+  'decorativeButton',
+  'descriptionButton',
+  'descriptionTextarea',
+  'documentPropertiesDialog',
+  'downloadButton',
+  'editorCommentButton',
+  'editorCommentsSidebar',
+  'editorCommentsSidebarCloseButton',
+  'editorCommentsSidebarCount',
+  'editorCommentsSidebarList',
+  'editorCommentsSidebarResizer',
+  'editorCommentsSidebarTitle',
+  'editorFreeTextColor',
+  'editorFreeTextFontSize',
+  'editorFreeHighlightThickness',
+  'editorHighlightShowAll',
+  'editorInkColor',
+  'editorInkOpacity',
+  'editorInkParamsToolbar',
+  'editorInkThickness',
+  'editorUndoBar',
+  'editorUndoBarCloseButton',
+  'editorUndoBarMessage',
+  'editorUndoBarUndoButton',
+  'findMultiple',
+  'mainContainer',
+  'matchRegExp',
+  'newAltTextCancel',
+  'newAltTextCloseButton',
+  'newAltTextDescriptionTextarea',
+  'newAltTextDialog',
+  'newAltTextDisclaimer',
+  'newAltTextDownloadModel',
+  'newAltTextError',
+  'newAltTextImagePreview',
+  'newAltTextLearnMore',
+  'newAltTextNotNow',
+  'newAltTextSave',
+  'newAltTextTitle',
+  'passwordDialog',
+  'toolbarContainer',
+  'viewer',
+  'viewer-alert',
+  // #2853 end of modification by ngx-extended-pdf-viewer
 ];
 
 @Component({
@@ -188,4 +247,31 @@ export class PdfDummyComponentsComponent {
     }
     return false;
   }
+
+  // #2853 added by ngx-extended-pdf-viewer
+  /** Fallback for when viewChild can't find the component (e.g. [customPdfViewer]) */
+  public static addMissingStandardWidgetsStatic(): void {
+    const container = document.getElementsByClassName('dummy-pdf-viewer-components')[0] as HTMLElement;
+    if (!container) {
+      return;
+    }
+    while (container.firstChild) {
+      container.removeChild(container.firstChild);
+    }
+    requiredIds.forEach((id) => {
+      if (!document.getElementById(id)) {
+        const dummy = document.createElement('span');
+        dummy.id = id;
+        dummy.className = 'invisible dummy-component';
+        container.appendChild(dummy);
+      }
+    });
+    if (!document.getElementById('scaleSelect')) {
+      const dummy = document.createElement('select');
+      dummy.id = 'scaleSelect';
+      dummy.className = 'invisible dummy-component';
+      container.appendChild(dummy);
+    }
+  }
+  // #2853 end of modification by ngx-extended-pdf-viewer
 }

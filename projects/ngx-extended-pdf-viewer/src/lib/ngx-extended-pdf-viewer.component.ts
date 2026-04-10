@@ -1690,7 +1690,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
           return;
         }
 
-        if (this.root()?.nativeElement?.offsetParent) {
+        // #2853 modified by ngx-extended-pdf-viewer
+        // When [customPdfViewer] is used, the #root template ref may not resolve
+        // because viewChild can't see refs in externally-defined templates.
+        // Fall back to finding the .zoom element by class as a workaround.
+        const rootEl = this.root()?.nativeElement || this.elementRef?.nativeElement?.querySelector('.zoom');
+        if (rootEl?.offsetParent) {
           resolve();
         } else {
           this.checkRootElementTimeout = setTimeout(this.asyncWithCD(checkRootElement), 50);
@@ -1713,11 +1718,17 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
   private assignTabindexes() {
     if (this.startTabindex) {
-      const r = this.root()?.nativeElement.cloneNode(true) as HTMLElement;
+      // #2853 modified by ngx-extended-pdf-viewer
+      const rootEl = this.root()?.nativeElement || this.elementRef?.nativeElement?.querySelector('.zoom');
+      if (!rootEl) {
+        return;
+      }
+      const r = rootEl.cloneNode(true) as HTMLElement;
+      // #2853 end of modification by ngx-extended-pdf-viewer
       r.classList.add('offscreen');
       this.showElementsRecursively(r);
       document.body.appendChild(r);
-      const elements = this.collectElementPositions(r, this.root()?.nativeElement, []);
+      const elements = this.collectElementPositions(r, rootEl, []);
       document.body.removeChild(r);
       const topRightGreaterThanBottomLeftComparator = (a: any, b: any) => {
         if (a.y - b.y > 15) {
@@ -1928,7 +1939,16 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
           this.initResizeObserver();
           this.onResize();
           this.hideToolbarIfItIsEmpty();
-          this.dummyComponents()?.addMissingStandardWidgets();
+          // #2853 modified by ngx-extended-pdf-viewer
+          // When [customPdfViewer] is used, viewChild can't find the component
+          // in externally-defined templates. Fall back to finding it via the DOM.
+          const dummy = this.dummyComponents();
+          if (dummy) {
+            dummy.addMissingStandardWidgets();
+          } else {
+            PdfDummyComponentsComponent.addMissingStandardWidgetsStatic();
+          }
+          // #2853 end of modification by ngx-extended-pdf-viewer
           if (this.pdfScriptLoaderService.PDFViewerApplicationOptions) {
             const PDFViewerApplicationOptions: IPDFViewerApplicationOptions = this.pdfScriptLoaderService.PDFViewerApplicationOptions;
             (globalThis as any).PDFViewerApplicationOptions = PDFViewerApplicationOptions;

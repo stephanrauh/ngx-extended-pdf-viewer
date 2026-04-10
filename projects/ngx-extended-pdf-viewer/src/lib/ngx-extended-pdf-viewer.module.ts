@@ -193,6 +193,7 @@ if (!(Promise as any)['allSettled']) {
     PdfDrawEditorComponent,
     PdfDocumentPropertiesDialogComponent,
     PdfDownloadComponent,
+    PdfDummyComponentsComponent,
     PdfEditorComponent,
     PdfEditSignatureDialogComponent,
     PdfEditorSignatureComponent,

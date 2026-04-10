@@ -74,6 +74,7 @@ export * from './lib/pdf-dialog/pdf-edit-signature-dialog/pdf-edit-signature-dia
 export * from './lib/pdf-dialog/pdf-error-message/pdf-error-message.component';
 export * from './lib/pdf-dialog/pdf-password-dialog/pdf-password-dialog.component';
 export * from './lib/pdf-dialog/pdf-prepare-printing-dialog/pdf-prepare-printing-dialog.component';
+export * from './lib/pdf-dummy-components/pdf-dummy-components.component';
 export * from './lib/pdf-document-properties-extractor';
 export * from './lib/pdf-notification-service';
 export * from './lib/pdf-script-loader.service';

@@ -735,7 +735,7 @@
 - 26.0.0 updated the README.md
 - 26.0.1 #3179 fixed programmatic [handTool] changes not taking effect after initialization
 - 26.0.2 #3183 fixed viewer height in constrained containers (e.g. mat-card with height: 80vh): the signals migration removed a change guard, causing the pageViewMode effect to reset the height on initialization; also improved auto-height to respect parent overflow bounds; scroll the correct thumbnail into view ageain
-- 27.0.0 updated the bleeding-edge version of pdf.js from 5.4.530 to 5.6.205
+- 27.0.0 #2943 fixed crash in bleeding-edge mode when enableSplitMerge is false (manageMenu null guard); updated the bleeding-edge version of pdf.js from 5.4.530 to 5.6.205
   - **Breaking changes:**
     - The sidebar thumbnail DOM structure changed: thumbnails now use `div.thumbnailImageContainer > img` instead of `img.thumbnailImage` directly. If you have custom CSS targeting `.thumbnailImage`, update it to target `.thumbnailImageContainer img` or `.thumbnailImageContainer`.
     - The sidebar now includes a `#viewsManagerHeader` wrapper div and a `#viewsManagerStatus` bar. Custom sidebar implementations may need adjustment.
