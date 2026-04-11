@@ -588,6 +588,9 @@ ngx-extended-pdf-viewer {
     width: 100%;
     flex: 1 1 0%;
     overflow: auto;
+    // #3140: padding ensures the selected thumbnail's box-shadow (6px spread)
+    // isn't clipped by overflow:auto, which clips at the padding box edge.
+    padding: 0 8px;
 
     &:has(#thumbnailsView.isDragging) {
       overflow-x: hidden;
@@ -601,7 +604,7 @@ ngx-extended-pdf-viewer {
       flex-flow: row wrap;
       align-items: center;
       justify-content: space-evenly;
-      padding: 20px 16px; // reduced from 32px for narrower ngx-extended-pdf-viewer sidebar
+      padding: 20px 8px; // reduced from 32px for narrower ngx-extended-pdf-viewer sidebar
       gap: 44px;
       width: 100%;
       box-sizing: border-box;

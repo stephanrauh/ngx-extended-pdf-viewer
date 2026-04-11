@@ -924,8 +924,9 @@ export class NgxExtendedPdfViewerService {
     this.setEditorProperty(AnnotationEditorParamsType.HIGHLIGHT_COLOR, color);
   }
 
+  /** @deprecated This feature was never wired up in pdf.js. Use editorHighlightColor instead. */
   public set editorHighlightDefaultColor(color: string) {
-    this.setEditorProperty(AnnotationEditorParamsType.HIGHLIGHT_DEFAULT_COLOR, color);
+    this.setEditorProperty(AnnotationEditorParamsType.HIGHLIGHT_COLOR, color);
   }
 
   public set editorHighlightShowAll(showAll: boolean) {

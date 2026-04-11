@@ -641,9 +641,9 @@ describe('NgxExtendedPdfViewerService', () => {
       expect(mockPDFViewerApplication.eventBus.dispatch).toHaveBeenCalledWith('switchannotationeditorparams', { type: 31, value: '#ffff00' });
     });
 
-    it('should dispatch editorHighlightDefaultColor', () => {
+    it('should dispatch editorHighlightDefaultColor (deprecated, maps to HIGHLIGHT_COLOR)', () => {
       service.editorHighlightDefaultColor = '#0000ff';
-      expect(mockPDFViewerApplication.eventBus.dispatch).toHaveBeenCalledWith('switchannotationeditorparams', { type: 35, value: '#0000ff' });
+      expect(mockPDFViewerApplication.eventBus.dispatch).toHaveBeenCalledWith('switchannotationeditorparams', { type: 31, value: '#0000ff' });
     });
 
     it('should dispatch editorHighlightShowAll', () => {

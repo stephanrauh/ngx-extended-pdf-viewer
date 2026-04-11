@@ -385,7 +385,9 @@ describe('DynamicCssComponent', () => {
 
       expect(mockNgxViewer.height).toBeUndefined();
       expect(mockNgxViewer.autoHeight).toBe(true);
-      expect(mockZoomContainer.style.height).toBe('');
+      // minHeight is cleared then immediately recalculated by checkHeight → adjustHeight.
+      // The recalculated value depends on the mocked container dimensions.
+      expect(mockNgxViewer.minHeight).toBeDefined();
 
       getElementByIdSpy.mockRestore();
       getElementsByClassNameSpy.mockRestore();

@@ -268,11 +268,14 @@ export class DynamicCssComponent implements OnDestroy {
               (<HTMLElement>zoom).style.height = ngxExtendedPdfViewer.height;
             }
           } else if (restoreHeight) {
+            // Clear both height and minHeight so Angular's [style.height] binding
+            // re-evaluates. Don't directly set zoom.style.height — that bypasses
+            // Angular's change detection and causes the binding to go stale.
             ngxExtendedPdfViewer.height = undefined;
+            ngxExtendedPdfViewer.minHeight = undefined;
             ngxExtendedPdfViewer.autoHeight = true;
-            if (zoom) {
-              (<HTMLElement>zoom).style.height = '';
-            }
+            ngxExtendedPdfViewer.markForCheck();
+            // checkHeight will recalculate and set minHeight to the correct value
             this.checkHeight(ngxExtendedPdfViewer, logLevel);
           }
         }));
