@@ -10,9 +10,11 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-describe('annotation-editor-event regression test', () => {
+const editorDir = path.resolve(__dirname, '../../../../../mypdf.js/src/display/editor');
+const mypdfjsAvailable = fs.existsSync(editorDir);
+
+(mypdfjsAvailable ? describe : describe.skip)('annotation-editor-event regression test', () => {
   // Read all editor source files once
-  const editorDir = path.resolve(__dirname, '../../../../../mypdf.js/src/display/editor');
   const editorFiles = [
     'editor.js',
     'draw.js',
