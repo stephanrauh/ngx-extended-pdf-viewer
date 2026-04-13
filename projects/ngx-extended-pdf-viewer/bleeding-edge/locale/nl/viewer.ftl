@@ -764,3 +764,5 @@ pdfjs-editor-movePageUp-button = Pagina omhoog verplaatsen
 pdfjs-editor-movePageUp-button-label = Pagina omhoog verplaatsen
 pdfjs-editor-movePageDown-button = Pagina omlaag verplaatsen
 pdfjs-editor-movePageDown-button-label = Pagina omlaag verplaatsen
+pdfjs-cursor-page-flip-tool-button = Pagina omslaan
+pdfjs-cursor-page-flip-tool-button-label = Pagina omslaan

@@ -21,3 +21,5 @@ pdfjs-editor-movePageUp-button = Sposta pagina in alto
 pdfjs-editor-movePageUp-button-label = Sposta pagina in alto
 pdfjs-editor-movePageDown-button = Sposta pagina in basso
 pdfjs-editor-movePageDown-button-label = Sposta pagina in basso
+pdfjs-cursor-page-flip-tool-button = Sfoglia pagine
+pdfjs-cursor-page-flip-tool-button-label = Sfoglia pagine

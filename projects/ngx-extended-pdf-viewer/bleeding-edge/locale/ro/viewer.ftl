@@ -737,6 +737,8 @@ pdfjs-editor-movePageUp-button = Mută pagina în sus
 pdfjs-editor-movePageUp-button-label = Mută pagina în sus
 pdfjs-editor-movePageDown-button = Mută pagina în jos
 pdfjs-editor-movePageDown-button-label = Mută pagina în jos
+pdfjs-cursor-page-flip-tool-button = Răsfoire pagini
+pdfjs-cursor-page-flip-tool-button-label = Răsfoire pagini
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-thumb-page-title1 =
     .title = Page { $page } of { $total }

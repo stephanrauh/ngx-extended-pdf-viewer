@@ -588,3 +588,5 @@ pdfjs-editor-movePageUp-button = Move Page Up
 pdfjs-editor-movePageUp-button-label = Move Page Up
 pdfjs-editor-movePageDown-button = Move Page Down
 pdfjs-editor-movePageDown-button-label = Move Page Down
+pdfjs-cursor-page-flip-tool-button = Page Flip
+pdfjs-cursor-page-flip-tool-button-label = Page Flip

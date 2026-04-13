@@ -778,6 +778,8 @@ pdfjs-editor-movePageUp-button = Přesunout stránku nahoru
 pdfjs-editor-movePageUp-button-label = Přesunout stránku nahoru
 pdfjs-editor-movePageDown-button = Přesunout stránku dolů
 pdfjs-editor-movePageDown-button-label = Přesunout stránku dolů
+pdfjs-cursor-page-flip-tool-button = Listování stránek
+pdfjs-cursor-page-flip-tool-button-label = Listování stránek
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-views-manager-layers-title1 = Layers
     .title = Layers (double-click to reset all layers to the default state)

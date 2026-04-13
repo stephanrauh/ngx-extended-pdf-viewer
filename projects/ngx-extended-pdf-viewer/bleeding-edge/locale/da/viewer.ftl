@@ -700,6 +700,8 @@ pdfjs-editor-movePageUp-button = Flyt side op
 pdfjs-editor-movePageUp-button-label = Flyt side op
 pdfjs-editor-movePageDown-button = Flyt side ned
 pdfjs-editor-movePageDown-button-label = Flyt side ned
+pdfjs-cursor-page-flip-tool-button = Bladre i sider
+pdfjs-cursor-page-flip-tool-button-label = Bladre i sider
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-views-manager-sidebar-resizer =
     .aria-label = Sidebar resizer

@@ -24,3 +24,5 @@ pdfjs-editor-movePageDown-button-label = Déplacer la page vers le bas
 
 
 
+pdfjs-cursor-page-flip-tool-button = Feuilleter les pages
+pdfjs-cursor-page-flip-tool-button-label = Feuilleter les pages

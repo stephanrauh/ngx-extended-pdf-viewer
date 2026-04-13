@@ -756,6 +756,8 @@ pdfjs-editor-movePageUp-button = Mover página hacia arriba
 pdfjs-editor-movePageUp-button-label = Mover página hacia arriba
 pdfjs-editor-movePageDown-button = Mover página hacia abajo
 pdfjs-editor-movePageDown-button-label = Mover página hacia abajo
+pdfjs-cursor-page-flip-tool-button = Pasar página
+pdfjs-cursor-page-flip-tool-button-label = Pasar página
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-views-manager-outlines-title1 = Document outline
     .title = Document outline (double-click to expand/collapse all items)

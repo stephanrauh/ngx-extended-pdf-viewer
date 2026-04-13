@@ -21,3 +21,5 @@ pdfjs-editor-movePageUp-button = Pomakni stranicu gore
 pdfjs-editor-movePageUp-button-label = Pomakni stranicu gore
 pdfjs-editor-movePageDown-button = Pomakni stranicu dolje
 pdfjs-editor-movePageDown-button-label = Pomakni stranicu dolje
+pdfjs-cursor-page-flip-tool-button = Listanje stranica
+pdfjs-cursor-page-flip-tool-button-label = Listanje stranica

@@ -21,3 +21,5 @@ pdfjs-editor-movePageUp-button = Přesunout stránku nahoru
 pdfjs-editor-movePageUp-button-label = Přesunout stránku nahoru
 pdfjs-editor-movePageDown-button = Přesunout stránku dolů
 pdfjs-editor-movePageDown-button-label = Přesunout stránku dolů
+pdfjs-cursor-page-flip-tool-button = Listování stránek
+pdfjs-cursor-page-flip-tool-button-label = Listování stránek

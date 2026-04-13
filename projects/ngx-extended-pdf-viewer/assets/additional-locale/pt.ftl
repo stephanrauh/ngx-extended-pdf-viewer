@@ -22,3 +22,5 @@ pdfjs-editor-movePageUp-button-label = Mover página para cima
 pdfjs-editor-movePageDown-button = Mover página para baixo
 pdfjs-editor-movePageDown-button-label = Mover página para baixo
 
+pdfjs-cursor-page-flip-tool-button = Virar página
+pdfjs-cursor-page-flip-tool-button-label = Virar página

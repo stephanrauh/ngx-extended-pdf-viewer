@@ -21,3 +21,5 @@ pdfjs-editor-movePageUp-button = Flytta sida uppåt
 pdfjs-editor-movePageUp-button-label = Flytta sida uppåt
 pdfjs-editor-movePageDown-button = Flytta sida nedåt
 pdfjs-editor-movePageDown-button-label = Flytta sida nedåt
+pdfjs-cursor-page-flip-tool-button = Bläddra sidor
+pdfjs-cursor-page-flip-tool-button-label = Bläddra sidor

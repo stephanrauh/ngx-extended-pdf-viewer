@@ -24,3 +24,5 @@ pdfjs-editor-movePageDown-button-label = Pagina omlaag verplaatsen
 
 
 
+pdfjs-cursor-page-flip-tool-button = Pagina omslaan
+pdfjs-cursor-page-flip-tool-button-label = Pagina omslaan

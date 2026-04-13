@@ -21,3 +21,5 @@ pdfjs-editor-movePageUp-button = Premakni stran navzgor
 pdfjs-editor-movePageUp-button-label = Premakni stran navzgor
 pdfjs-editor-movePageDown-button = Premakni stran navzdol
 pdfjs-editor-movePageDown-button-label = Premakni stran navzdol
+pdfjs-cursor-page-flip-tool-button = Listanje strani
+pdfjs-cursor-page-flip-tool-button-label = Listanje strani

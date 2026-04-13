@@ -21,3 +21,5 @@ pdfjs-editor-movePageUp-button = Przenieś stronę w górę
 pdfjs-editor-movePageUp-button-label = Przenieś stronę w górę
 pdfjs-editor-movePageDown-button = Przenieś stronę w dół
 pdfjs-editor-movePageDown-button-label = Przenieś stronę w dół
+pdfjs-cursor-page-flip-tool-button = Przewracanie stron
+pdfjs-cursor-page-flip-tool-button-label = Przewracanie stron

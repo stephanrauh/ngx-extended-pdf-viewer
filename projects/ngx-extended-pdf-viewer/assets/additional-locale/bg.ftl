@@ -21,3 +21,5 @@ pdfjs-editor-movePageUp-button = Премести страницата наго�
 pdfjs-editor-movePageUp-button-label = Премести страницата нагоре
 pdfjs-editor-movePageDown-button = Премести страницата надолу
 pdfjs-editor-movePageDown-button-label = Премести страницата надолу
+pdfjs-cursor-page-flip-tool-button = Прелистване на страници
+pdfjs-cursor-page-flip-tool-button-label = Прелистване на страници

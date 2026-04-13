@@ -21,3 +21,5 @@ pdfjs-editor-movePageUp-button = Siirrä sivu ylös
 pdfjs-editor-movePageUp-button-label = Siirrä sivu ylös
 pdfjs-editor-movePageDown-button = Siirrä sivu alas
 pdfjs-editor-movePageDown-button-label = Siirrä sivu alas
+pdfjs-cursor-page-flip-tool-button = Sivun kääntö
+pdfjs-cursor-page-flip-tool-button-label = Sivun kääntö

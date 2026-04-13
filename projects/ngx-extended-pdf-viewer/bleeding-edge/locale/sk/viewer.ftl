@@ -772,6 +772,8 @@ pdfjs-editor-movePageUp-button = Presunúť stránku nahor
 pdfjs-editor-movePageUp-button-label = Presunúť stránku nahor
 pdfjs-editor-movePageDown-button = Presunúť stránku nadol
 pdfjs-editor-movePageDown-button-label = Presunúť stránku nadol
+pdfjs-cursor-page-flip-tool-button = Listovanie stránok
+pdfjs-cursor-page-flip-tool-button-label = Listovanie stránok
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-views-manager-outlines-title1 = Document outline
     .title = Document outline (double-click to expand/collapse all items)

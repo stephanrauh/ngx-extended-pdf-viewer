@@ -756,6 +756,8 @@ pdfjs-editor-movePageUp-button = Oldal mozgatása felfelé
 pdfjs-editor-movePageUp-button-label = Oldal mozgatása felfelé
 pdfjs-editor-movePageDown-button = Oldal mozgatása lefelé
 pdfjs-editor-movePageDown-button-label = Oldal mozgatása lefelé
+pdfjs-cursor-page-flip-tool-button = Lapozás
+pdfjs-cursor-page-flip-tool-button-label = Lapozás
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-views-manager-outlines-title1 = Document outline
     .title = Document outline (double-click to expand/collapse all items)
