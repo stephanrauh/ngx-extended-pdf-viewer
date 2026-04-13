@@ -233,4 +233,16 @@ ngx-extended-pdf-viewer {
       top: 0;
     }
   }
+
+  .textLayerImages {
+    position: absolute;
+    inset: 0;
+    user-select: none;
+    z-index: 1; // above .endOfContent (z-index: 0) so right-click reaches image placeholders
+
+    canvas {
+      position: absolute;
+      transform-origin: 0% 0%;
+    }
+  }
 }
