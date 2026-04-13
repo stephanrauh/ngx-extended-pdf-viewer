@@ -2,9 +2,9 @@
  * Key/value storage for annotation data in forms.
  */
 export class AnnotationStorage {
-    onSetModified: any;
-    onResetModified: any;
-    onAnnotationEditor: any;
+    onSetModified: null;
+    onResetModified: null;
+    onAnnotationEditor: null;
     /**
      * Get the value for a given key if it exists, or return the default value.
      * @param {string} key
@@ -79,11 +79,11 @@ export class PrintAnnotationStorage extends AnnotationStorage {
      * PLEASE NOTE: Only intended for usage within the API itself.
      * @ignore
      */
-    get serializable(): {
-        map: any;
-        hash: any;
-        transfer: any;
-    };
+    get serializable(): Readonly<{
+        map: null;
+        hash: "";
+        transfer: undefined;
+    }>;
     get modifiedIds(): any;
     #private;
 }

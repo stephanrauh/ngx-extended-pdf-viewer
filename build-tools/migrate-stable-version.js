@@ -4,7 +4,7 @@
  * Automates the migration of the mypdf.js stable branch version
  *
  * Usage: node migrate-stable-version.js <old-version> <new-version>
- * Example: node migrate-stable-version.js 5.4.149 5.4.530
+ * Example: node migrate-stable-version.js 5.4.149 5.6.205
  */
 
 const fs = require('fs');
@@ -15,7 +15,7 @@ const { execSync } = require('child_process');
 const args = process.argv.slice(2);
 if (args.length !== 2) {
   console.error('Usage: node migrate-stable-version.js <old-version> <new-version>');
-  console.error('Example: node migrate-stable-version.js 5.4.149 5.4.530');
+  console.error('Example: node migrate-stable-version.js 5.4.149 5.6.205');
   process.exit(1);
 }
 

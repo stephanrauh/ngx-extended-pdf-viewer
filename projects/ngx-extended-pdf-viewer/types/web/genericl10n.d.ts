@@ -1,8 +1,4 @@
-export type IL10n = import("./interfaces").IL10n;
-/**
- * @implements {IL10n}
- */
-export class GenericL10n extends L10n implements IL10n {
+export class GenericL10n extends L10n {
     /**
      * Generate the bundles for Fluent.
      * @param {String} defaultLang - The fallback language to use for

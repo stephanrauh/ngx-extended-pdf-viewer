@@ -37,11 +37,6 @@ export type DocumentInitParameters = {
      */
     password?: string | undefined;
     /**
-     * - The PDF file length. It's used for progress
-     * reports and range requests operations.
-     */
-    length?: number | undefined;
-    /**
      * - Allows for using a custom range
      * transport implementation.
      */
@@ -78,12 +73,6 @@ export type DocumentInitParameters = {
      */
     cMapPacked?: boolean | undefined;
     /**
-     * - The factory that will be used when
-     * reading built-in CMap files.
-     * The default value is {DOMCMapReaderFactory}.
-     */
-    CMapReaderFactory?: Object | undefined;
-    /**
      * - The URL where the predefined ICC profiles are
      * located. Include the trailing slash.
      */
@@ -102,27 +91,14 @@ export type DocumentInitParameters = {
      */
     standardFontDataUrl?: string | undefined;
     /**
-     * - The factory that will be used
-     * when reading the standard font files.
-     * The default value is {DOMStandardFontDataFactory}.
-     */
-    StandardFontDataFactory?: Object | undefined;
-    /**
      * - The URL where the wasm files are located.
      * Include the trailing slash.
      */
     wasmUrl?: string | undefined;
     /**
-     * - The factory that will be used
-     * when reading the wasm files.
-     * The default value is {DOMWasmFactory}.
-     */
-    WasmFactory?: Object | undefined;
-    /**
      * - Enable using the Fetch API in the
-     * worker-thread when reading CMap and standard font files. When `true`,
-     * the `CMapReaderFactory`, `StandardFontDataFactory`, and `WasmFactory`
-     * options are ignored.
+     * worker-thread when reading built-in CMap files, standard font files,
+     * and wasm files. If `true`, the `BinaryDataFactory` option is ignored.
      * The default value is `true` in web environments and `false` in Node.js.
      */
     useWorkerFetch?: boolean | undefined;
@@ -247,10 +223,23 @@ export type DocumentInitParameters = {
      */
     FilterFactory?: Object | undefined;
     /**
+     * - The factory that will be used when
+     * falling back to reading built-in CMap files, standard font files,
+     * and wasm files in the main-thread.
+     * The default value is {DOMBinaryDataFactory}.
+     */
+    BinaryDataFactory?: Object | undefined;
+    /**
      * - Enables hardware acceleration for
      * rendering. The default value is `false`.
      */
     enableHWA?: boolean | undefined;
+    /**
+     * - The pages mapper that will be used to map
+     * page ids and page numbers. It's used when the page order is changed or some
+     * pages are removed, cloned, etc.
+     */
+    pagesMapper?: Object | undefined;
 };
 export type OnProgressParameters = {
     /**
@@ -261,6 +250,11 @@ export type OnProgressParameters = {
      * - Total number of bytes in the PDF file.
      */
     total: number;
+    /**
+     * - Currently loaded percentage, as an integer value
+     * in the [0, 100] range. If `total` is undefined, the percentage is `NaN`.
+     */
+    percent: number;
 };
 /**
  * Page getViewport parameters.
@@ -493,6 +487,10 @@ export type RenderParameters = {
      */
     isEditing?: boolean | undefined;
     /**
+     * - Record the location of images in the PDF
+     */
+    recordImages?: boolean | undefined;
+    /**
      * - Record the dependencies and bounding
      * boxes of all PDF operations that render onto the canvas.
      */
@@ -624,8 +622,6 @@ export const build: string;
  *   cross-site Access-Control requests should be made using credentials such
  *   as cookies or authorization headers. The default is `false`.
  * @property {string} [password] - For decrypting password-protected PDFs.
- * @property {number} [length] - The PDF file length. It's used for progress
- *   reports and range requests operations.
  * @property {PDFDataRangeTransport} [range] - Allows for using a custom range
  *   transport implementation.
  * @property {number} [rangeChunkSize] - Specify maximum number of bytes fetched
@@ -641,9 +637,6 @@ export const build: string;
  *   located. Include the trailing slash.
  * @property {boolean} [cMapPacked] - Specifies if the Adobe CMaps are binary
  *   packed or not. The default value is `true`.
- * @property {Object} [CMapReaderFactory] - The factory that will be used when
- *   reading built-in CMap files.
- *   The default value is {DOMCMapReaderFactory}.
  * @property {string} [iccUrl] - The URL where the predefined ICC profiles are
  *   located. Include the trailing slash.
  * @property {boolean} [useSystemFonts] - When `true`, fonts that aren't
@@ -653,18 +646,11 @@ export const build: string;
  *   regardless of the environment (to prevent completely broken fonts).
  * @property {string} [standardFontDataUrl] - The URL where the standard font
  *   files are located. Include the trailing slash.
- * @property {Object} [StandardFontDataFactory] - The factory that will be used
- *   when reading the standard font files.
- *   The default value is {DOMStandardFontDataFactory}.
  * @property {string} [wasmUrl] - The URL where the wasm files are located.
  *   Include the trailing slash.
- * @property {Object} [WasmFactory] - The factory that will be used
- *   when reading the wasm files.
- *   The default value is {DOMWasmFactory}.
  * @property {boolean} [useWorkerFetch] - Enable using the Fetch API in the
- *   worker-thread when reading CMap and standard font files. When `true`,
- *   the `CMapReaderFactory`, `StandardFontDataFactory`, and `WasmFactory`
- *   options are ignored.
+ *   worker-thread when reading built-in CMap files, standard font files,
+ *   and wasm files. If `true`, the `BinaryDataFactory` option is ignored.
  *   The default value is `true` in web environments and `false` in Node.js.
  * @property {boolean} [useWasm] - Attempt to use WebAssembly in order to
  *    improve e.g. image decoding performance.
@@ -736,8 +722,15 @@ export const build: string;
  * @property {Object} [FilterFactory] - The factory that will be used to
  *    create SVG filters when rendering some images on the main canvas.
  *    The default value is {DOMFilterFactory}.
+ * @property {Object} [BinaryDataFactory] - The factory that will be used when
+ *   falling back to reading built-in CMap files, standard font files,
+ *   and wasm files in the main-thread.
+ *   The default value is {DOMBinaryDataFactory}.
  * @property {boolean} [enableHWA] - Enables hardware acceleration for
  *   rendering. The default value is `false`.
+ * @property {Object} [pagesMapper] - The pages mapper that will be used to map
+ *   page ids and page numbers. It's used when the page order is changed or some
+ *   pages are removed, cloned, etc.
  */
 /**
  * This is the main entry point for loading a PDF and interacting with it.
@@ -778,10 +771,6 @@ export class PDFDataRangeTransport {
     /**
      * @param {function} listener
      */
-    addProgressListener(listener: Function): void;
-    /**
-     * @param {function} listener
-     */
     addProgressiveReadListener(listener: Function): void;
     /**
      * @param {function} listener
@@ -792,11 +781,6 @@ export class PDFDataRangeTransport {
      * @param {Uint8Array|null} chunk
      */
     onDataRange(begin: number, chunk: Uint8Array | null): void;
-    /**
-     * @param {number} loaded
-     * @param {number|undefined} total
-     */
-    onDataProgress(loaded: number, total: number | undefined): void;
     /**
      * @param {Uint8Array|null} chunk
      */
@@ -815,6 +799,8 @@ export class PDFDataRangeTransport {
  * @typedef {Object} OnProgressParameters
  * @property {number} loaded - Currently loaded number of bytes.
  * @property {number} total - Total number of bytes in the PDF file.
+ * @property {number} percent - Currently loaded percentage, as an integer value
+ *   in the [0, 100] range. If `total` is undefined, the percentage is `NaN`.
  */
 /**
  * The loading task controls the operations required to load a PDF document
@@ -885,6 +871,10 @@ export class PDFDocumentProxy {
     constructor(pdfInfo: any, transport: any);
     _pdfInfo: any;
     _transport: any;
+    /**
+     * @type {PagesMapper} The pages mapper instance.
+     */
+    get pagesMapper(): PagesMapper;
     /**
      * @type {AnnotationStorage} Storage for annotation data in forms.
      */
@@ -1132,6 +1122,7 @@ export class PDFDocumentProxy {
     getDownloadInfo(): Promise<{
         length: number;
     }>;
+    getRawData(data: any): any;
     /**
      * Cleans up resources allocated by the document on both the main and worker
      * threads.
@@ -1307,6 +1298,7 @@ export class PDFDocumentProxy {
  *   annotation ids with canvases used to render them.
  * @property {PrintAnnotationStorage} [printAnnotationStorage]
  * @property {boolean} [isEditing] - Render the page in editing mode.
+ * @property {boolean} [recordImages] - Record the location of images in the PDF
  * @property {boolean} [recordOperations] - Record the dependencies and bounding
  *   boxes of all PDF operations that render onto the canvas.
  * @property {OperationsFilter} [operationsFilter] - If provided, only
@@ -1367,7 +1359,7 @@ export class PDFDocumentProxy {
  * Proxy to a `PDFPage` in the worker thread.
  */
 export class PDFPageProxy {
-    constructor(pageIndex: any, pageInfo: any, transport: any, pdfBug?: boolean);
+    constructor(pageIndex: any, pageInfo: any, transport: any, pagesMapper: any, pdfBug?: boolean);
     _pageIndex: any;
     _pageInfo: any;
     _transport: any;
@@ -1379,6 +1371,12 @@ export class PDFPageProxy {
     _intentStates: Map<any, any>;
     destroyed: boolean;
     recordedBBoxes: any;
+    imageCoordinates: any;
+    clone(id: any): PDFPageProxy;
+    /**
+     * @param {number} value - The page number to set. First page is 1.
+     */
+    set pageNumber(value: number);
     /**
      * @type {number} Page number of the page. First page is 1.
      */
@@ -1439,7 +1437,7 @@ export class PDFPageProxy {
      * @returns {RenderTask} An object that contains a promise that is
      *   resolved when the page finishes rendering.
      */
-    render({ canvasContext, canvas, viewport, intent, annotationMode, transform, background, optionalContentConfigPromise, annotationCanvasMap, pageColors, printAnnotationStorage, isEditing, recordOperations, operationsFilter, }: RenderParameters): RenderTask;
+    render({ canvasContext, canvas, viewport, intent, annotationMode, transform, background, optionalContentConfigPromise, annotationCanvasMap, pageColors, printAnnotationStorage, isEditing, recordImages, recordOperations, operationsFilter, }: RenderParameters): RenderTask;
     /**
      * @param {GetOperatorListParameters} params - Page getOperatorList
      *   parameters.
@@ -1572,6 +1570,7 @@ export class PDFWorker {
  */
 export class RenderTask {
     constructor(internalRenderTask: any);
+    _internalRenderTask: null;
     /**
      * Callback for incremental rendering -- a function that will be called
      * each time the rendering is paused.  To continue rendering call the
@@ -1606,13 +1605,14 @@ export class RenderTask {
      * @type {boolean}
      */
     get separateAnnots(): boolean;
-    #private;
+    get imageCoordinates(): any;
 }
 /** @type {string} */
 export const version: string;
 import { PageViewport } from "./display_utils.js";
 import { OptionalContentConfig } from "./optional_content_config.js";
 import { PrintAnnotationStorage } from "./annotation_storage.js";
+import { PagesMapper } from "./pages_mapper.js";
 import { AnnotationStorage } from "./annotation_storage.js";
 import { Metadata } from "./metadata.js";
 import { StatTimer } from "./display_utils.js";

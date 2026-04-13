@@ -122,6 +122,7 @@ export class AnnotationEditor {
     isAttachedToDOM: boolean;
     deleted: boolean;
     eventBus: any;
+    updatePageIndex(newPageIndex: any): void;
     get editorType(): any;
     get mode(): any;
     /**
@@ -294,22 +295,22 @@ export class AnnotationEditor {
     addStandaloneCommentButton(): void;
     removeStandaloneCommentButton(): void;
     hideStandaloneCommentButton(): void;
-    set comment(text: {
-        text: any;
-        richText: any;
-        date: any;
-        deleted: any;
+    set comment(value: {
+        text: never;
+        richText: never;
+        date: never;
+        deleted: never;
         color: any;
         opacity: any;
-    });
+    } | null);
     get comment(): {
-        text: any;
-        richText: any;
-        date: any;
-        deleted: any;
+        text: never;
+        richText: never;
+        date: never;
+        deleted: never;
         color: any;
         opacity: any;
-    };
+    } | null;
     setCommentData({ comment, popupRef, richText, commentDate }: {
         comment: any;
         popupRef: any;

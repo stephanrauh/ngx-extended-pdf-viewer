@@ -20,6 +20,7 @@ export class TilingPattern {
     baseTransform: any;
     createPatternCanvas(owner: any, opIdx: any): {
         canvas: any;
+        canvasEntry: any;
         scaleX: any;
         scaleY: any;
         offsetX: any;
@@ -46,7 +47,9 @@ declare class RadialAxialShadingPattern extends BaseShadingPattern {
     matrix: any;
     isOriginBased(): boolean;
     isRadial(): boolean;
+    _isCircleCenterOutside(): boolean;
     _createGradient(ctx: any, transform?: null): any;
+    _createReversedGradient(ctx: any, transform?: null): any;
     getPattern(ctx: any, owner: any, inverse: any, pathType: any): any;
 }
 declare class MeshShadingPattern extends BaseShadingPattern {
@@ -58,7 +61,7 @@ declare class MeshShadingPattern extends BaseShadingPattern {
     _bbox: any;
     _background: any;
     matrix: any;
-    _createMeshCanvas(combinedScale: any, backgroundColor: any, cachedCanvases: any): {
+    _createMeshCanvas(combinedScale: any, backgroundColor: any, canvasFactory: any): {
         canvas: any;
         offsetX: number;
         offsetY: number;

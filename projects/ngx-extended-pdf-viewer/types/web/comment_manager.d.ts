@@ -1,7 +1,7 @@
 export class CommentManager {
     static "__#private@#hasForcedColors": null;
     static _makeCommentColor(color: any, opacity: any): string | null;
-    constructor(commentDialog: any, sidebar: any, eventBus: any, linkService: any, overlayManager: any, ltr: any, hasForcedColors: any);
+    constructor(commentDialog: any, sidebar: any, eventBus: any, linkService: any, overlayManager: any, ltr: any, hasForcedColors: any, globalAbortSignal: any);
     dialogElement: any;
     setSidebarUiManager(uiManager: any): void;
     showSidebar(annotations: any): void;

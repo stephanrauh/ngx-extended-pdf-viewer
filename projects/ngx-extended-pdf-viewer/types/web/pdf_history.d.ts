@@ -2,7 +2,7 @@ export type PDFHistoryOptions = {
     /**
      * - The navigation/linking service.
      */
-    linkService: IPDFLinkService;
+    linkService: PDFLinkService;
     /**
      * - The application event bus.
      */
@@ -39,7 +39,7 @@ export type PushParameters = {
     pageNumber: number;
 };
 export type EventBus = import("./event_utils").EventBus;
-export type IPDFLinkService = import("./interfaces").IPDFLinkService;
+export type PDFLinkService = import("./pdf_link_service.js").PDFLinkService;
 export function isDestArraysEqual(firstDest: any, secondDest: any): boolean;
 export function isDestHashesEqual(destHash: any, pushHash: any): boolean;
 export class PDFHistory {
@@ -47,7 +47,7 @@ export class PDFHistory {
      * @param {PDFHistoryOptions} options
      */
     constructor({ linkService, eventBus }: PDFHistoryOptions);
-    linkService: import("./interfaces").IPDFLinkService;
+    linkService: import("./pdf_link_service.js").PDFLinkService;
     eventBus: import("./event_utils.js").EventBus;
     _initialized: boolean;
     _fingerprint: string;

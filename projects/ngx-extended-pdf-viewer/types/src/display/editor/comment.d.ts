@@ -40,6 +40,18 @@ export class Comment {
         date: null;
         deleted: boolean;
     };
+    /**
+     * Restore the comment data (used for undo).
+     * @param {Object} data - The comment data to restore.
+     * @param {string} data.text - The comment text.
+     * @param {string|null} data.richText - The rich text content.
+     * @param {Date|null} data.date - The original date.
+     */
+    restoreData({ text, richText, date }: {
+        text: string;
+        richText: string | null;
+        date: Date | null;
+    }): void;
     setInitialText(text: any, richText?: null): void;
     setDate(date: any): void;
     shown(): void;

@@ -186,7 +186,6 @@ export class FormatError extends FormatError_base {
     [x: string]: any;
     constructor(msg: any);
 }
-export function fromBase64Util(str: any): any;
 export function getModificationDate(date?: Date): string;
 export function getUuid(): string;
 export function getVerbosityLevel(): number;
@@ -206,6 +205,9 @@ export function isArrayEqual(arr1: any, arr2: any): boolean;
 export const isNodeJS: any;
 export const LINE_DESCENT_FACTOR: 0.35;
 export const LINE_FACTOR: 1.35;
+export function makeArr(): never[];
+export function makeMap(): Map<any, any>;
+export function makeObj(): any;
 export function MathClamp(v: any, min: any, max: any): number;
 export namespace MeshFigureType {
     let TRIANGLES: number;
@@ -362,6 +364,7 @@ export function string32(value: any): string;
 export function stringToBytes(str: any): Uint8Array<any>;
 export function stringToPDFString(str: any, keepEscapeSequence?: boolean): string;
 export function stringToUTF8String(str: any): string;
+export function stripPath(str: any): any;
 export namespace TextRenderingMode {
     export let FILL: number;
     export let STROKE: number;
@@ -375,8 +378,6 @@ export namespace TextRenderingMode {
     export let FILL_STROKE_MASK: number;
     export let ADD_TO_PATH_FLAG: number;
 }
-export function toBase64Util(arr: any): any;
-export function toHexUtil(arr: any): any;
 declare const UnknownErrorException_base: any;
 export class UnknownErrorException extends UnknownErrorException_base {
     [x: string]: any;

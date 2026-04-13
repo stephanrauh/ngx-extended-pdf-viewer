@@ -1,6 +1,3 @@
-export type DrawLayerBuilderOptions = {
-    pageIndex: number;
-};
 export type DrawLayerBuilderRenderOptions = {
     /**
      * - The default value is "display".
@@ -8,19 +5,10 @@ export type DrawLayerBuilderRenderOptions = {
     intent?: string | undefined;
 };
 /**
- * @typedef {Object} DrawLayerBuilderOptions
- * @property {number} pageIndex
- */
-/**
  * @typedef {Object} DrawLayerBuilderRenderOptions
  * @property {string} [intent] - The default value is "display".
  */
 export class DrawLayerBuilder {
-    /**
-     * @param {DrawLayerBuilderOptions} options
-     */
-    constructor(options: DrawLayerBuilderOptions);
-    pageIndex: number;
     /**
      * @param {DrawLayerBuilderRenderOptions} options
      * @returns {Promise<void>}

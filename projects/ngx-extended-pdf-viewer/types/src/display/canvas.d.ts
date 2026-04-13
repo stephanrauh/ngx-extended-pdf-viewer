@@ -2,14 +2,12 @@ export class CanvasGraphics {
     constructor(canvasCtx: any, commonObjs: any, objs: any, canvasFactory: any, filterFactory: any, { optionalContentConfig, markedContentStack }: {
         optionalContentConfig: any;
         markedContentStack?: null | undefined;
-    }, annotationCanvasMap: any, pageColors: any, dependencyTracker: any);
+    }, annotationCanvasMap: any, pageColors: any, dependencyTracker: any, imagesTracker: any);
     ctx: any;
     current: CanvasExtraState;
     stateStack: any[];
     pendingClip: {} | {} | null;
     pendingEOFill: boolean;
-    res: any;
-    xobjs: any;
     commonObjs: any;
     objs: any;
     canvasFactory: any;
@@ -21,11 +19,11 @@ export class CanvasGraphics {
     smaskStack: any[];
     smaskCounter: number;
     tempSMask: any;
+    smaskGroupCanvases: any[];
     suspendedCtx: any;
     contentVisible: boolean;
     markedContentStack: never[];
     optionalContentConfig: any;
-    cachedCanvases: CachedCanvases;
     cachedPatterns: Map<any, any>;
     annotationCanvasMap: any;
     viewportScale: number;
@@ -36,6 +34,7 @@ export class CanvasGraphics {
     _cachedGetSinglePixelWidth: number | null;
     _cachedBitmapsMap: Map<any, any>;
     dependencyTracker: any;
+    imagesTracker: any;
     getObject(opIdx: any, data: any, fallback?: null): any;
     beginDrawing({ transform, viewport, transparency, background, }: {
         transform: any;
@@ -43,17 +42,25 @@ export class CanvasGraphics {
         transparency?: boolean | undefined;
         background?: null | undefined;
     }): void;
+    transparentCanvasEntry: any;
     compositeCtx: any;
-    transparentCanvas: any;
     executeOperatorList(operatorList: any, executionStartIdx: any, continueCallback: any, stepper: any, operationsFilter: any): any;
+    transparentCanvas: any;
     endDrawing(): void;
     _scaleImage(img: any, inverseTransform: any): {
         img: any;
         paintWidth: any;
         paintHeight: any;
+        tmpCanvas: any;
     };
     _createMaskCanvas(opIdx: any, img: any): {
         canvas: any;
+        offsetX: number;
+        offsetY: number;
+        canvasEntry?: undefined;
+    } | {
+        canvas: any;
+        canvasEntry: any;
         offsetX: number;
         offsetY: number;
     };
@@ -77,6 +84,7 @@ export class CanvasGraphics {
      * the right order on the canvas' graphics state stack.
      */
     beginSMaskMode(opIdx: any): void;
+    smaskScratchCanvas: any;
     endSMaskMode(): void;
     compose(dirtyBox: any): void;
     composeSMask(ctx: any, smask: any, layerCtx: any, layerBox: any): void;
@@ -142,7 +150,10 @@ export class CanvasGraphics {
     paintImageXObject(opIdx: any, objId: any): void;
     paintImageXObjectRepeat(opIdx: any, objId: any, scaleX: any, scaleY: any, positions: any): void;
     applyTransferMapsToCanvas(ctx: any): any;
-    applyTransferMapsToBitmap(imgData: any): any;
+    applyTransferMapsToBitmap(imgData: any): {
+        img: any;
+        canvasEntry: any;
+    };
     paintInlineImageXObject(opIdx: any, imgData: any): void;
     paintInlineImageXObjectGroup(opIdx: any, imgData: any, map: any): void;
     paintSolidColorImageMask(opIdx: any): void;
@@ -161,7 +172,7 @@ export class CanvasGraphics {
     #private;
 }
 declare class CanvasExtraState {
-    constructor(width: any, height: any, preInit: any);
+    constructor(width: any, height: any);
     alphaIsShape: boolean;
     fontSize: number;
     fontSizeScale: number;
@@ -187,21 +198,13 @@ declare class CanvasExtraState {
     lineWidth: number;
     activeSMask: null;
     transferMaps: string;
-    clipBox: Float32Array<ArrayBuffer>;
     minMax: Float32Array<ArrayBuffer>;
+    clipBox: Float32Array<ArrayBuffer>;
     clone(): any;
     getPathBoundingBox(pathType?: string, transform?: null): Float32Array<ArrayBuffer>;
     updateClipFromPath(): void;
     isEmptyClip(): boolean;
     startNewPathAndClipBox(box: any): void;
     getClippedPathBoundingBox(pathType?: string, transform?: null): number[] | null;
-}
-declare class CachedCanvases {
-    constructor(canvasFactory: any);
-    canvasFactory: any;
-    cache: any;
-    getCanvas(id: any, width: any, height: any): any;
-    delete(id: any): void;
-    clear(): void;
 }
 export {};

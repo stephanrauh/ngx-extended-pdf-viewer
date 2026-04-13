@@ -1,4 +1,3 @@
-export type IL10n = import("./interfaces.js").IL10n;
 export type PDFDocumentProxy = import("../src/display/api.js").PDFDocumentProxy;
 export type PDFDocumentLoadingTask = import("../src/display/api.js").PDFDocumentLoadingTask;
 export namespace PDFViewerApplication {

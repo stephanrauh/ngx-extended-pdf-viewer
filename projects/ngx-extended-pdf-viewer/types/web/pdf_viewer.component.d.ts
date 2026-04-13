@@ -13,7 +13,7 @@ import { PDFScriptingManager } from "./pdf_scripting_manager.component.js";
 import { PDFSinglePageViewer } from "./pdf_single_page_viewer.js";
 import { PDFViewer } from "./pdf_viewer.js";
 import { ProgressBar } from "./ui_utils.js";
-import { RenderingStates } from "./ui_utils.js";
+import { RenderingStates } from "./renderable_view.js";
 import { ScrollMode } from "./ui_utils.js";
 import { SimpleLinkService } from "./pdf_link_service.js";
 import { SpreadMode } from "./ui_utils.js";

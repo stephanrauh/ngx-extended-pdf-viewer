@@ -20,6 +20,6 @@ export class StructTreeLayerBuilder {
     getAriaAttributes(annotationId: any): Promise<any>;
     hide(): void;
     show(): void;
-    addElementsToTextLayer(): void;
+    updateTextLayer(): void;
     #private;
 }

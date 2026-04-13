@@ -3,13 +3,7 @@
  * and passing it back to the external service.
  */
 export class PdfTextExtractor {
-    constructor(externalServices: any);
-    /**
-     * The PDF viewer is required to get the page text.
-     *
-     * @param {PDFViewer | null}
-     */
-    setViewer(pdfViewer: any): void;
+    constructor(externalServices: any, pdfViewer: any, eventBus: any);
     /**
      * Builds up all of the text from a PDF.
      *

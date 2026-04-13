@@ -201,6 +201,19 @@ pdfjs-thumb-page-title =
 #   $page (Number) - the page number
 pdfjs-thumb-page-canvas =
     .aria-label = { $page } ページの縮小版
+# Variables:
+#   $page (Number) - the page number
+pdfjs-thumb-page-checkbox1 =
+    .title = { $page } ページを選択します
+# Variables:
+#   $page (Number) - the page number
+pdfjs-thumb-page-checkbox =
+    .aria-label = { $page } ページを選択します
+# Variables:
+#   $page (Number) - the page number
+#   $total (Number) - the number of pages
+pdfjs-thumb-page-title1 =
+    .title = { $page } / { $total } ページ
 
 ## Find panel button title and messages
 
@@ -522,6 +535,7 @@ pdfjs-editor-undo-bar-message-freetext = フリーテキスト注釈が削除さ
 pdfjs-editor-undo-bar-message-ink = インク注釈が削除されました
 pdfjs-editor-undo-bar-message-stamp = 画像が削除されました
 pdfjs-editor-undo-bar-message-signature = 署名が削除されました
+pdfjs-editor-undo-bar-message-comment = コメントが削除されました
 # Variables:
 #   $count (Number) - the number of removed annotations.
 pdfjs-editor-undo-bar-message-multiple = { $count } 個の注釈が削除されました
@@ -617,6 +631,69 @@ pdfjs-editor-edit-comment-dialog-cancel-button = キャンセル
 pdfjs-editor-add-comment-button =
     .title = コメントを追加します
 
+## The view manager is a sidebar displaying different views:
+##  - thumbnails;
+##  - outline;
+##  - attachments;
+##  - layers.
+## The thumbnails view is used to edit the pdf: remove/insert pages, ...
+
+pdfjs-toggle-views-manager-button =
+    .title = サイドバーを切り替えます
+pdfjs-toggle-views-manager-notification-button =
+    .title = サイドバーを切り替えます (文書に含まれるサムネイル、アウトライン、添付データ、レイヤー)
+pdfjs-toggle-views-manager-button1-label = ページを管理
+pdfjs-toggle-views-manager-button-label = サイドバーを切り替え
+pdfjs-views-manager-sidebar =
+    .aria-label = サイドバー
+pdfjs-views-manager-sidebar-resizer =
+    .aria-label = サイドバーの幅変更
+pdfjs-views-manager-view-selector-button =
+    .title = ビュー
+pdfjs-views-manager-view-selector-button-label = ビュー
+pdfjs-views-manager-pages-title = ページ
+pdfjs-views-manager-outlines-title = 文書のアウトライン
+pdfjs-views-manager-attachments-title = 添付データ
+pdfjs-views-manager-layers-title = レイヤー
+pdfjs-views-manager-pages-option-label = ページ
+pdfjs-views-manager-outlines-option-label = 文書のアウトライン
+pdfjs-views-manager-attachments-option-label = 添付データ
+pdfjs-views-manager-layers-option-label = レイヤー
+pdfjs-views-manager-add-file-button =
+    .title = ファイルを追加します
+pdfjs-views-manager-add-file-button-label = ファイルを追加
+# Variables:
+#   $count (Number) - the number of selected pages.
+pdfjs-views-manager-pages-status-action-label = { $count } ページ選択中
+pdfjs-views-manager-pages-status-none-action-label = ページを選択
+pdfjs-views-manager-pages-status-action-button-label = 管理
+pdfjs-views-manager-pages-status-copy-button-label = コピー
+pdfjs-views-manager-pages-status-cut-button-label = 切り取り
+pdfjs-views-manager-pages-status-delete-button-label = 削除
+pdfjs-views-manager-pages-status-save-as-button-label = 名前を付けて保存...
+# Variables:
+#   $count (Number) - the number of selected pages to be cut.
+pdfjs-views-manager-status-undo-cut-label = { $count } ページを切り取りしました
+# Variables:
+#   $count (Number) - the number of selected pages to be copied.
+pdfjs-views-manager-pages-status-undo-copy-label = { $count } ページをコピーしました
+# Variables:
+#   $count (Number) - the number of selected pages to be deleted.
+pdfjs-views-manager-pages-status-undo-delete-label = { $count } ページを削除しました
+pdfjs-views-manager-pages-status-waiting-ready-label = ファイルを準備しています...
+pdfjs-views-manager-pages-status-waiting-uploading-label = ファイルをアップロードしています...
+pdfjs-views-manager-status-warning-cut-label = 切り取りできませんでした。ページを更新してもう一度試してください。
+pdfjs-views-manager-status-warning-copy-label = コピーできませんでした。ページを更新してもう一度試してください。
+pdfjs-views-manager-status-warning-delete-label = 削除できませんでした。ページを更新してもう一度試してください。
+pdfjs-views-manager-status-warning-save-label = 保存できませんでした。ページを更新してもう一度試してください。
+pdfjs-views-manager-status-undo-button-label = 元に戻す
+pdfjs-views-manager-status-close-button =
+    .title = 閉じる
+pdfjs-views-manager-status-close-button-label = 閉じる
+pdfjs-views-manager-paste-button-label = 貼り付け
+pdfjs-toggle-views-manager-button1 =
+    .title = ページを管理
+
 ## Main menu for adding/removing signatures
 
 pdfjs-editor-delete-signature-button1 =
@@ -632,63 +709,17 @@ pdfjs-editor-add-signature-edit-button-label = 説明を編集
 pdfjs-editor-edit-signature-dialog-title = 説明の編集
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-toggle-views-manager-button =
-    .title = Toggle Sidebar
-pdfjs-toggle-views-manager-notification-button =
-    .title = Toggle Sidebar (document contains thumbnails/outline/attachments/layers)
-pdfjs-toggle-views-manager-button-label = Toggle Sidebar
-pdfjs-views-manager-sidebar =
-    .aria-label = Sidebar
-pdfjs-views-manager-view-selector-button =
-    .title = Views
-pdfjs-views-manager-view-selector-button-label = Views
-pdfjs-views-manager-pages-title = Pages
-pdfjs-views-manager-outlines-title = Document outline
-pdfjs-views-manager-attachments-title = Attachments
-pdfjs-views-manager-layers-title = Layers
-pdfjs-views-manager-pages-option-label = Pages
-pdfjs-views-manager-outlines-option-label = Document outline
-pdfjs-views-manager-attachments-option-label = Attachments
-pdfjs-views-manager-layers-option-label = Layers
-pdfjs-views-manager-add-file-button =
-    .title = Add file
-pdfjs-views-manager-add-file-button-label = Add file
-pdfjs-views-manager-pages-status-action-label =
-    { $count ->
-        [one] { $count } selected
-        *[other] { $count } selected
-    }
-pdfjs-views-manager-pages-status-none-action-label = Select pages
-pdfjs-views-manager-pages-status-action-button-label = Manage
-pdfjs-views-manager-pages-status-copy-button-label = Copy
-pdfjs-views-manager-pages-status-cut-button-label = Cut
-pdfjs-views-manager-pages-status-delete-button-label = Delete
-pdfjs-views-manager-pages-status-save-as-button-label = Save as…
-pdfjs-views-manager-status-undo-cut-label =
-    { $count ->
-        [one] 1 page cut
-        *[other] { $count } pages cut
-    }
-pdfjs-views-manager-pages-status-undo-copy-label =
-    { $count ->
-        [one] 1 page copied
-        *[other] { $count } pages copied
-    }
-pdfjs-views-manager-pages-status-undo-delete-label =
-    { $count ->
-        [one] 1 page deleted
-        *[other] { $count } pages deleted
-    }
-pdfjs-views-manager-pages-status-waiting-ready-label = Getting your file ready…
-pdfjs-views-manager-pages-status-waiting-uploading-label = Uploading file…
-pdfjs-views-manager-status-warning-cut-label = Couldn’t cut. Refresh page and try again.
-pdfjs-views-manager-status-warning-copy-label = Couldn’t copy. Refresh page and try again.
-pdfjs-views-manager-status-warning-delete-label = Couldn’t delete. Refresh page and try again.
-pdfjs-views-manager-status-warning-save-label = Couldn’t save. Refresh page and try again.
-pdfjs-views-manager-status-undo-button-label = Undo
-pdfjs-views-manager-status-close-button =
-    .title = Close
-pdfjs-views-manager-status-close-button-label = Close
+pdfjs-views-manager-outlines-title1 = Document outline
+    .title = Document outline (double-click to expand/collapse all items)
+pdfjs-views-manager-layers-title1 = Layers
+    .title = Layers (double-click to reset all layers to the default state)
+pdfjs-views-manager-pages-status-export-selected-button-label = Export selected…
+pdfjs-views-manager-status-done-button-label = Done
+pdfjs-views-manager-paste-button-before =
+    .title = Paste before the first page
+pdfjs-views-manager-paste-button-after =
+    .title = Paste after page { $page }
+pdfjs-new-badge-content = NEW
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = Match Each Word
@@ -697,3 +728,5 @@ pdfjs-editor-movePageUp-button = Move Page Up
 pdfjs-editor-movePageUp-button-label = Move Page Up
 pdfjs-editor-movePageDown-button = Move Page Down
 pdfjs-editor-movePageDown-button-label = Move Page Down
+pdfjs-cursor-page-flip-tool-button = Page Flip
+pdfjs-cursor-page-flip-tool-button-label = Page Flip

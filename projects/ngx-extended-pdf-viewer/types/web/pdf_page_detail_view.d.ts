@@ -1,9 +1,4 @@
-export type IRenderableView = import("./interfaces").IRenderableView;
-/** @typedef {import("./interfaces").IRenderableView} IRenderableView */
-/**
- * @implements {IRenderableView}
- */
-export class PDFPageDetailView extends BasePDFPageView implements IRenderableView {
+export class PDFPageDetailView extends BasePDFPageView {
     constructor({ pageView }: {
         pageView: any;
     });
@@ -15,7 +10,6 @@ export class PDFPageDetailView extends BasePDFPageView implements IRenderableVie
      */
     renderingCancelled: boolean;
     pageView: any;
-    renderingId: string;
     div: any;
     setPdfPage(pdfPage: any): void;
     get pdfPage(): any;

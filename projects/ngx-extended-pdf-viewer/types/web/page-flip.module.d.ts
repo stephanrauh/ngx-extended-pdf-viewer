@@ -674,6 +674,12 @@ declare class UI {
     swipeTimeout: number;
     onResize: () => void;
     onMouseDown: (e: any) => void;
+    _clickStartPos: {
+        x: number;
+        y: number;
+    } | null;
+    _clickStartClientX: any;
+    _clickStartClientY: any;
     onTouchStart: (e: any) => void;
     onMouseUp: (e: any) => void;
     onMouseMove: (e: any) => void;

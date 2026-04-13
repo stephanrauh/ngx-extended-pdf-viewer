@@ -1,5 +1,6 @@
 export type PageViewport = import("./display_utils").PageViewport;
 export type TextContent = import("./api").TextContent;
+export type TextLayerImages = import("./text_layer_images").TextLayerImages;
 export type TextLayerParameters = {
     /**
      * - Text content to
@@ -17,6 +18,11 @@ export type TextLayerParameters = {
      * the text runs.
      */
     viewport: PageViewport;
+    /**
+     * - An optional TextLayerImages instance
+     * that handles right clicking on images.
+     */
+    images?: import("./text_layer_images").TextLayerImages | undefined;
 };
 export type TextLayerUpdateParameters = {
     /**
@@ -52,7 +58,7 @@ export class TextLayer {
     /**
      * @param {TextLayerParameters} options
      */
-    constructor({ textContentSource, container, viewport }: TextLayerParameters);
+    constructor({ textContentSource, images, container, viewport }: TextLayerParameters);
     /**
      * Render the textLayer.
      * @returns {Promise}

@@ -59,7 +59,7 @@ export type PageViewportCloneParameters = {
      */
     dontFlip?: boolean | undefined;
 };
-export function applyOpacity(r: any, g: any, b: any, opacity: any): any[];
+export function applyOpacity(color: any, opacity: any): any;
 export class ColorScheme {
     static get isDarkMode(): any;
 }
@@ -269,11 +269,11 @@ export function renderRichText({ html, dir, className }: {
  */
 export function setLayerDimensions(div: HTMLDivElement, viewport: PageViewport, mustFlip?: boolean, mustRotate?: boolean): void;
 export class StatTimer {
-    started: any;
     times: any[];
     time(name: any): void;
     timeEnd(name: any): void;
     toString(): string;
+    #private;
 }
 export function stopEvent(e: any): void;
 export const SupportedImageMimeTypes: string[];

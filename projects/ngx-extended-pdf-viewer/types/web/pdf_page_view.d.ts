@@ -1,10 +1,9 @@
 export type PageViewport = import("../src/display/display_utils").PageViewport;
 export type OptionalContentConfig = import("../src/display/optional_content_config").OptionalContentConfig;
 export type EventBus = import("./event_utils").EventBus;
-export type IL10n = import("./interfaces").IL10n;
-export type IRenderableView = import("./interfaces").IRenderableView;
 export type PDFRenderingQueue = import("./pdf_rendering_queue").PDFRenderingQueue;
 export type CommentManager = import("./comment_manager.js").CommentManager;
+export type L10n = import("./l10n.js").L10n;
 export type PDFPageViewOptions = {
     /**
      * - The viewer element.
@@ -82,6 +81,12 @@ export type PDFPageViewOptions = {
      */
     enableDetailCanvas?: boolean | undefined;
     /**
+     * - All images whose width and
+     * height are at least this value (in pixels) will be lazily inserted in the
+     * dom to allow right-clicking and saving them. Use `-1` to disable this.
+     */
+    imagesRightClickMinSize?: number | undefined;
+    /**
      * - When enabled, PDF
      * rendering will keep track of which areas of the page each PDF operation
      * affects. Then, when rendering a partial page (if `enableDetailCanvas` is
@@ -98,7 +103,7 @@ export type PDFPageViewOptions = {
     /**
      * - Localization service.
      */
-    l10n?: import("./interfaces").IL10n | undefined;
+    l10n?: import("./l10n.js").L10n | undefined;
     /**
      * - The object that is used to lookup
      * the necessary layer-properties.
@@ -111,18 +116,16 @@ export type PDFPageViewOptions = {
     enableAutoLinking?: boolean | undefined;
     /**
      * - The comment manager instance.
+     * to.
      */
     commentManager?: import("./comment_manager.js").CommentManager | undefined;
+    abortSignal?: AbortSignal | undefined;
 };
-/**
- * @implements {IRenderableView}
- */
-export class PDFPageView extends BasePDFPageView implements IRenderableView {
+export class PDFPageView extends BasePDFPageView {
     /**
      * @param {PDFPageViewOptions} options
      */
     constructor(options: PDFPageViewOptions);
-    renderingId: string;
     pdfPage: any;
     pageLabel: string | null;
     rotation: number;
@@ -135,7 +138,7 @@ export class PDFPageView extends BasePDFPageView implements IRenderableView {
     maxCanvasPixels: any;
     maxCanvasDim: any;
     capCanvasAreaFactor: any;
-    l10n: import("./interfaces").IL10n | GenericL10n | undefined;
+    l10n: import("./l10n.js").L10n | undefined;
     _isStandalone: boolean | undefined;
     _container: HTMLDivElement | undefined;
     _annotationCanvasMap: any;
@@ -147,8 +150,11 @@ export class PDFPageView extends BasePDFPageView implements IRenderableView {
     drawLayer: any;
     detailView: any;
     div: HTMLDivElement;
+    clone(id: any): PDFPageView;
+    updatePageNumber(newPageNumber: any): void;
     setPdfPage(pdfPage: any): void;
     destroy(): void;
+    deleteMe(isCut: any): void;
     hasEditableAnnotations(): boolean;
     get _textHighlighter(): any;
     reset({ keepAnnotationLayer, keepAnnotationEditorLayer, keepXfaLayer, keepTextLayer, keepCanvasWrapper, preserveDetailViewState, }?: {
@@ -212,7 +218,7 @@ export class PDFPageView extends BasePDFPageView implements IRenderableView {
     get height(): number;
     getPagePoint(x: any, y: any): any[];
     _ensureCanvasWrapper(): null;
-    _getRenderingContext(canvas: any, transform: any, recordOperations: any): {
+    _getRenderingContext(canvas: any, transform: any, recordOperations: any, recordImages: any): {
         canvas: any;
         transform: any;
         viewport: import("../src/display/display_utils").PageViewport;
@@ -223,6 +229,7 @@ export class PDFPageView extends BasePDFPageView implements IRenderableView {
         isEditing: boolean;
         background: any;
         recordOperations: any;
+        recordImages: any;
     };
     draw(): Promise<void>;
     /**
@@ -237,7 +244,6 @@ export class PDFPageView extends BasePDFPageView implements IRenderableView {
     #private;
 }
 import { BasePDFPageView } from "./base_pdf_page_view.js";
-import { GenericL10n } from "./genericl10n";
 import { AnnotationLayerBuilder } from "./annotation_layer_builder.js";
 import { TextLayerBuilder } from "./text_layer_builder.js";
 import { XfaLayerBuilder } from "./xfa_layer_builder.js";

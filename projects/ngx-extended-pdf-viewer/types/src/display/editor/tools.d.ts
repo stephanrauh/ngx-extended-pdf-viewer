@@ -47,6 +47,12 @@ export class AnnotationEditorUIManager {
     updateComment(editor: any): void;
     updatePopupColor(editor: any): void;
     removeComment(editor: any): void;
+    /**
+     * Delete a comment from an editor with undo support.
+     * @param {AnnotationEditor} editor - The editor whose comment to delete.
+     * @param {Object} savedData - The comment data to save for undo.
+     */
+    deleteComment(editor: AnnotationEditor, savedData: Object): void;
     toggleComment(editor: any, isSelected: any, visibility?: undefined): void;
     makeCommentColor(color: any, opacity: any): any;
     getCommentDialogElement(): any;
@@ -62,6 +68,7 @@ export class AnnotationEditorUIManager {
     onPageChanging({ pageNumber }: {
         pageNumber: any;
     }): void;
+    deletePage(id: any): void;
     focusMainContainer(): void;
     findParent(x: any, y: any): any;
     disableUserSelect(value?: boolean): void;
@@ -134,6 +141,11 @@ export class AnnotationEditorUIManager {
     onEditingAction({ name }: {
         name: any;
     }): void;
+    updatePageIndex(oldPageIndex: any, newPageIndex: any): void;
+    startUpdatePages(): void;
+    endUpdatePages(): void;
+    clonePage(pageIndex: any, newPageIndex: any): void;
+    findClonesForPage(layer: any): Promise<any[]>;
     /**
      * Set the editing state.
      * It can be useful to temporarily disable it when the user is editing a

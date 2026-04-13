@@ -1,12 +1,12 @@
 export type PDFPageProxy = import("../src/display/api").PDFPageProxy;
 export type PageViewport = import("../src/display/display_utils").PageViewport;
 export type AnnotationStorage = import("../src/display/annotation_storage").AnnotationStorage;
-export type IDownloadManager = import("./interfaces").IDownloadManager;
-export type IPDFLinkService = import("./interfaces").IPDFLinkService;
 export type StructTreeLayerBuilder = import("./struct_tree_layer_builder.js").StructTreeLayerBuilder;
 export type TextAccessibilityManager = import("./text_accessibility.js").TextAccessibilityManager;
 export type AnnotationEditorUIManager = import("../src/display/editor/tools.js").AnnotationEditorUIManager;
 export type CommentManager = import("./comment_manager.js").CommentManager;
+export type PDFLinkService = import("./pdf_link_service.js").PDFLinkService;
+export type BaseDownloadManager = import("./base_download_manager.js").BaseDownloadManager;
 export type AnnotationLayerBuilderOptions = {
     pdfPage: PDFPageProxy;
     annotationStorage?: import("../src/display/annotation_storage").AnnotationStorage | undefined;
@@ -16,8 +16,8 @@ export type AnnotationLayerBuilderOptions = {
      */
     imageResourcesPath?: string | undefined;
     renderForms: boolean;
-    linkService: IPDFLinkService;
-    downloadManager?: import("./interfaces").IDownloadManager | undefined;
+    linkService: PDFLinkService;
+    downloadManager?: import("./base_download_manager.js").BaseDownloadManager | undefined;
     enableComment?: boolean | undefined;
     enableScripting?: boolean | undefined;
     hasJSActionsPromise?: Promise<boolean> | undefined;
@@ -45,8 +45,8 @@ export type AnnotationLayerBuilderRenderOptions = {
  * @property {string} [imageResourcesPath] - Path for image resources, mainly
  *   for annotation icons. Include trailing slash.
  * @property {boolean} renderForms
- * @property {IPDFLinkService} linkService
- * @property {IDownloadManager} [downloadManager]
+ * @property {PDFLinkService} linkService
+ * @property {BaseDownloadManager} [downloadManager]
  * @property {boolean} [enableComment]
  * @property {boolean} [enableScripting]
  * @property {Promise<boolean>} [hasJSActionsPromise]
@@ -70,8 +70,8 @@ export class AnnotationLayerBuilder {
      */
     constructor({ pdfPage, linkService, downloadManager, annotationStorage, imageResourcesPath, renderForms, enableComment, commentManager, enableScripting, hasJSActionsPromise, fieldObjectsPromise, annotationCanvasMap, accessibilityManager, annotationEditorUIManager, onAppend, }: AnnotationLayerBuilderOptions);
     pdfPage: import("../src/display/api").PDFPageProxy;
-    linkService: import("./interfaces").IPDFLinkService;
-    downloadManager: import("./interfaces").IDownloadManager | undefined;
+    linkService: import("./pdf_link_service.js").PDFLinkService;
+    downloadManager: import("./base_download_manager.js").BaseDownloadManager | undefined;
     imageResourcesPath: string;
     renderForms: boolean;
     annotationStorage: import("../src/display/annotation_storage").AnnotationStorage;
@@ -87,7 +87,7 @@ export class AnnotationLayerBuilder {
     annotationLayer: AnnotationLayer | null;
     div: HTMLDivElement | null;
     _cancelled: boolean;
-    _eventBus: any;
+    _eventBus: import("./event_utils.js").EventBus;
     /**
      * @param {AnnotationLayerBuilderRenderOptions} options
      * @returns {Promise<void>} A promise that is resolved when rendering of the

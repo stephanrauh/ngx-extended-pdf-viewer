@@ -1,11 +1,11 @@
 export type PDFPageProxy = import("../src/display/api").PDFPageProxy;
 export type AnnotationStorage = import("../src/display/annotation_storage").AnnotationStorage;
 export type PageViewport = import("../src/display/display_utils").PageViewport;
-export type IPDFLinkService = import("./interfaces").IPDFLinkService;
+export type PDFLinkService = import("./pdf_link_service.js").PDFLinkService;
 export type XfaLayerBuilderOptions = {
     pdfPage: PDFPageProxy;
     annotationStorage?: import("../src/display/annotation_storage").AnnotationStorage | undefined;
-    linkService: IPDFLinkService;
+    linkService: PDFLinkService;
     xfaHtml?: Object | undefined;
 };
 export type XfaLayerBuilderRenderOptions = {
@@ -19,7 +19,7 @@ export type XfaLayerBuilderRenderOptions = {
  * @typedef {Object} XfaLayerBuilderOptions
  * @property {PDFPageProxy} pdfPage
  * @property {AnnotationStorage} [annotationStorage]
- * @property {IPDFLinkService} linkService
+ * @property {PDFLinkService} linkService
  * @property {Object} [xfaHtml]
  */
 /**
@@ -34,7 +34,7 @@ export class XfaLayerBuilder {
     constructor({ pdfPage, annotationStorage, linkService, xfaHtml, }: XfaLayerBuilderOptions);
     pdfPage: import("../src/display/api").PDFPageProxy;
     annotationStorage: import("../src/display/annotation_storage").AnnotationStorage;
-    linkService: import("./interfaces").IPDFLinkService;
+    linkService: import("./pdf_link_service.js").PDFLinkService;
     xfaHtml: Object;
     div: HTMLDivElement | null;
     _cancelled: boolean;

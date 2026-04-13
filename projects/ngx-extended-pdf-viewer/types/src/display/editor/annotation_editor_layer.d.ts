@@ -1,10 +1,10 @@
 export type AnnotationEditorUIManager = import("./tools.js").AnnotationEditorUIManager;
 export type PageViewport = import("../display_utils.js").PageViewport;
 export type TextAccessibilityManager = import("../../../web/text_accessibility.js").TextAccessibilityManager;
-export type IL10n = import("../../../web/interfaces").IL10n;
 export type AnnotationLayer = import("../annotation_layer.js").AnnotationLayer;
 export type DrawLayer = import("../draw_layer.js").DrawLayer;
-export type StructTreeLayerBuilder = any;
+export type StructTreeLayerBuilder = import("../../../web/struct_tree_layer_builder.js").StructTreeLayerBuilder;
+export type L10n = import("../../../web/l10n.js").L10n;
 export type AnnotationEditorLayerOptions = {
     mode: Object;
     div: HTMLDivElement;
@@ -13,7 +13,7 @@ export type AnnotationEditorLayerOptions = {
     enabled: boolean;
     accessibilityManager?: import("../../../web/text_accessibility.js").TextAccessibilityManager | undefined;
     pageIndex: number;
-    l10n: IL10n;
+    l10n: L10n;
     annotationLayer?: import("../annotation_layer.js").AnnotationLayer | undefined;
     textLayer?: HTMLDivElement | undefined;
     drawLayer: DrawLayer;
@@ -36,7 +36,7 @@ export class AnnotationEditorLayer {
     div: HTMLDivElement;
     viewport: import("../display_utils.js").PageViewport;
     drawLayer: import("../draw_layer.js").DrawLayer;
-    _structTree: any;
+    _structTree: import("../../../web/struct_tree_layer_builder.js").StructTreeLayerBuilder;
     eventBus: any;
     get isEmpty(): boolean;
     get isInvisible(): boolean;
@@ -114,11 +114,6 @@ export class AnnotationEditorLayer {
      */
     addUndoableEditor(editor: AnnotationEditor): void;
     getEditorByUID(uid: any): any;
-    /**
-     * Get an id for an editor.
-     * @returns {string}
-     */
-    getNextId(): string;
     combinedSignal(ac: any): AbortSignal;
     canCreateNewEmptyEditor(): boolean | undefined;
     /**
@@ -192,7 +187,7 @@ export class AnnotationEditorLayer {
      * Render the main editor.
      * @param {RenderEditorLayerOptions} parameters
      */
-    render({ viewport }: RenderEditorLayerOptions): void;
+    render({ viewport }: RenderEditorLayerOptions): Promise<void>;
     /**
      * Update the main editor.
      * @param {RenderEditorLayerOptions} parameters

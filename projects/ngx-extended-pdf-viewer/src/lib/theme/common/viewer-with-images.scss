@@ -107,6 +107,10 @@ ngx-extended-pdf-viewer {
         .structTree {
           contain: strict;
         }
+
+        &.detailView {
+          image-rendering: pixelated;
+        }
       }
     }
   }
@@ -1328,6 +1332,31 @@ ngx-extended-pdf-viewer .html {
       opacity: 0;
       width: 0;
       height: 0;
+    }
+  }
+
+  .loadingInput {
+    position: relative;
+
+    &::after {
+      position: absolute;
+      visibility: hidden;
+      display: none;
+      width: var(--icon-size);
+      height: var(--icon-size);
+
+      content: "";
+      background-color: var(--toolbar-icon-bg-color);
+      mask-size: cover;
+      mask-image: var(--loading-icon);
+    }
+
+    &.start::after {
+      inset-inline-start: 4px;
+    }
+
+    &.end::after {
+      inset-inline-end: 4px;
     }
   }
 

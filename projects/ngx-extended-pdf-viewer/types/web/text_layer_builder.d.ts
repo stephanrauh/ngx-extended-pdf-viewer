@@ -1,5 +1,6 @@
 export type PDFPageProxy = import("../src/display/api").PDFPageProxy;
 export type PageViewport = import("../src/display/display_utils").PageViewport;
+export type TextLayerImages = import("../src/display/text_layer_images.js").TextLayerImages;
 export type TextHighlighter = import("./text_highlighter").TextHighlighter;
 export type TextAccessibilityManager = import("./text_accessibility.js").TextAccessibilityManager;
 export type TextLayerBuilderOptions = {
@@ -12,9 +13,11 @@ export type TextLayerBuilderOptions = {
     accessibilityManager?: import("./text_accessibility.js").TextAccessibilityManager | undefined;
     enablePermissions?: boolean | undefined;
     onAppend?: Function | undefined;
+    abortSignal?: AbortSignal | undefined;
 };
 export type TextLayerBuilderRenderOptions = {
     viewport: PageViewport;
+    images: TextLayerImages;
     textContentParams?: Object | undefined;
 };
 /**
@@ -25,10 +28,12 @@ export type TextLayerBuilderRenderOptions = {
  * @property {TextAccessibilityManager} [accessibilityManager]
  * @property {boolean} [enablePermissions]
  * @property {function} [onAppend]
+ * @property {AbortSignal} [abortSignal]
  */
 /**
  * @typedef {Object} TextLayerBuilderRenderOptions
  * @property {PageViewport} viewport
+ * @property {TextLayerImages} images
  * @property {Object} [textContentParams]
  */
 /**
@@ -40,11 +45,11 @@ export class TextLayerBuilder {
     static "__#private@#textLayers": Map<any, any>;
     static "__#private@#selectionChangeAbortController": null;
     static "__#private@#removeGlobalSelectionListener"(textLayerDiv: any): void;
-    static "__#private@#enableGlobalSelectionListener"(): void;
+    static "__#private@#enableGlobalSelectionListener"(globalAbortSignal: any): void;
     /**
      * @param {TextLayerBuilderOptions} options
      */
-    constructor({ pdfPage, highlighter, accessibilityManager, enablePermissions, onAppend, }: TextLayerBuilderOptions);
+    constructor({ pdfPage, highlighter, accessibilityManager, enablePermissions, onAppend, abortSignal, }: TextLayerBuilderOptions);
     pdfPage: import("../src/display/api").PDFPageProxy;
     highlighter: import("./text_highlighter").TextHighlighter;
     accessibilityManager: import("./text_accessibility.js").TextAccessibilityManager;
@@ -54,7 +59,7 @@ export class TextLayerBuilder {
      * @param {TextLayerBuilderRenderOptions} options
      * @returns {Promise<void>}
      */
-    render({ viewport, textContentParams }: TextLayerBuilderRenderOptions): Promise<void>;
+    render({ viewport, images, textContentParams }: TextLayerBuilderRenderOptions): Promise<void>;
     hide(): void;
     show(): void;
     /**

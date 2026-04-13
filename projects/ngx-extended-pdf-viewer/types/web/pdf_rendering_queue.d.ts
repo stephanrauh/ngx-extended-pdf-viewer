@@ -1,18 +1,13 @@
-export type IRenderableView = import("./interfaces").IRenderableView;
 export type PDFViewer = import("./pdf_viewer").PDFViewer;
 export type PDFThumbnailViewer = import("./pdf_thumbnail_viewer").PDFThumbnailViewer;
+export type RenderableView = import("./renderable_view").RenderableView;
 /**
  * Controls rendering of the views for pages and thumbnails.
  */
 export class PDFRenderingQueue {
-    pdfViewer: import("./pdf_viewer").PDFViewer | null;
-    pdfThumbnailViewer: import("./pdf_thumbnail_viewer").PDFThumbnailViewer | null;
-    onIdle: any;
-    highestPriorityPage: string | null;
-    /** @type {number} */
-    idleTimeout: number;
-    printing: boolean;
     isThumbnailViewEnabled: boolean;
+    onIdle: null;
+    printing: boolean;
     /**
      * @param {PDFViewer} pdfViewer
      */
@@ -22,10 +17,10 @@ export class PDFRenderingQueue {
      */
     setThumbnailViewer(pdfThumbnailViewer: PDFThumbnailViewer): void;
     /**
-     * @param {IRenderableView} view
+     * @param {RenderableView} view
      * @returns {boolean}
      */
-    isHighestPriority(view: IRenderableView): boolean;
+    isHighestPriority(view: RenderableView): boolean;
     /**
      * @param {Object} currentlyVisiblePages
      */
@@ -39,16 +34,17 @@ export class PDFRenderingQueue {
      */
     getHighestPriority(visible: Object, views: any[], scrolledDown: boolean, preRenderExtra?: boolean, ignoreDetailViews?: boolean): any;
     /**
-     * @param {IRenderableView} view
+     * @param {RenderableView} view
      * @returns {boolean}
      */
-    isViewFinished(view: IRenderableView): boolean;
+    isViewFinished(view: RenderableView): boolean;
     /**
      * Render a page or thumbnail view. This calls the appropriate function
      * based on the views state. If the view is already rendered it will return
      * `false`.
      *
-     * @param {IRenderableView} view
+     * @param {RenderableView} view
      */
-    renderView(view: IRenderableView): boolean;
+    renderView(view: RenderableView): boolean;
+    #private;
 }

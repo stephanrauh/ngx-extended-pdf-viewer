@@ -1,6 +1,51 @@
 export type SimpleDependency = "lineWidth" | "lineCap" | "lineJoin" | "miterLimit" | "dash" | "strokeAlpha" | "fillColor" | "fillAlpha" | "globalCompositeOperation" | "path" | "filter" | "font" | "fontObj";
 export type IncrementalDependency = "transform" | "moveText" | "sameLineText";
 export type InternalIncrementalDependency = IncrementalDependency | typeof FORCED_DEPENDENCY_LABEL;
+export class CanvasBBoxTracker {
+    constructor(canvas: any, operationsCount: any);
+    _pendingBBoxIdx: number;
+    _savesStack: any[];
+    _markedContentStack: any[];
+    growOperationsCount(operationsCount: any): void;
+    get clipBox(): number[];
+    save(opIdx: any): this;
+    restore(opIdx: any, onSavePopped: any): this;
+    /**
+     * @param {number} idx
+     */
+    recordOpenMarker(idx: number): this;
+    getOpenMarker(): any;
+    recordCloseMarker(opIdx: any, onSavePopped: any): this;
+    beginMarkedContent(opIdx: any): this;
+    endMarkedContent(opIdx: any, onSavePopped: any): this;
+    pushBaseTransform(ctx: any): this;
+    popBaseTransform(): this;
+    resetBBox(idx: any): this;
+    recordClipBox(idx: any, ctx: any, minX: any, maxX: any, minY: any, maxY: any): this;
+    recordBBox(idx: any, ctx: any, minX: any, maxX: any, minY: any, maxY: any): this;
+    recordFullPageBBox(idx: any): this;
+    /**
+     * @param {number} idx
+     */
+    recordOperation(idx: number, preserve: boolean | undefined, dependencyLists: any): this;
+    bboxToClipBoxDropOperation(idx: any): this;
+    take(): BBoxReader;
+    takeDebugMetadata(): void;
+    recordSimpleData(name: any, idx: any): this;
+    recordIncrementalData(name: any, idx: any): this;
+    resetIncrementalData(name: any, idx: any): this;
+    recordNamedData(name: any, idx: any): this;
+    recordSimpleDataFromNamed(name: any, depName: any, fallbackIdx: any): this;
+    recordFutureForcedDependency(name: any, idx: any): this;
+    inheritSimpleDataAsFutureForcedDependencies(names: any): this;
+    inheritPendingDependenciesAsFutureForcedDependencies(): this;
+    recordCharacterBBox(idx: any, ctx: any, font: any, scale: number | undefined, x: number | undefined, y: number | undefined, getMeasure: any): this;
+    getSimpleIndex(dependencyName: any): undefined;
+    recordDependencies(idx: any, dependencyNames: any): this;
+    recordNamedDependency(idx: any, name: any): this;
+    recordShowTextOperation(idx: any, preserve?: boolean): this;
+    #private;
+}
 /**
  * @typedef {"lineWidth" | "lineCap" | "lineJoin" | "miterLimit" | "dash" |
  * "strokeAlpha" | "fillColor" | "fillAlpha" | "globalCompositeOperation" |
@@ -14,17 +59,18 @@ export type InternalIncrementalDependency = IncrementalDependency | typeof FORCE
  * typeof FORCED_DEPENDENCY_LABEL} InternalIncrementalDependency
  */
 export class CanvasDependencyTracker {
-    constructor(canvas: any, operationsCount: any, recordDebugMetadata?: boolean);
+    constructor(bboxTracker: any, recordDebugMetadata?: boolean);
+    get clipBox(): any;
     growOperationsCount(operationsCount: any): void;
     save(opIdx: any): this;
     restore(opIdx: any): this;
-    /**
-     * @param {number} idx
-     */
-    recordOpenMarker(idx: number): this;
+    recordOpenMarker(opIdx: any): this;
     getOpenMarker(): any;
     recordCloseMarker(opIdx: any): this;
-    beginMarkedContent(opIdx: any): this;
+    /**
+     * @param {number} opIdx
+     */
+    beginMarkedContent(opIdx: number): this;
     endMarkedContent(opIdx: any): this;
     pushBaseTransform(ctx: any): this;
     popBaseTransform(): this;
@@ -67,11 +113,20 @@ export class CanvasDependencyTracker {
     recordOperation(idx: number, preserve?: boolean): this;
     recordShowTextOperation(idx: any, preserve?: boolean): this;
     bboxToClipBoxDropOperation(idx: any, preserve?: boolean): this;
-    _takePendingDependencies(): Set<any>;
-    _extractOperation(idx: any): any;
-    _pushPendingDependencies(dependencies: any): void;
-    take(): BBoxReader;
+    take(): any;
     takeDebugMetadata(): Map<any, any> | undefined;
+    #private;
+}
+/**
+ * Track the locations of images in the canvas. For each image it computes
+ * a bounding box as a potentially rotated rectangle, matching the rotation of
+ * the current canvas transform.
+ */
+export class CanvasImagesTracker {
+    static "__#private@#CoordsArray": Float32ArrayConstructor | Float16ArrayConstructor;
+    constructor(canvas: any);
+    record(ctx: any, width: any, height: any, clipBox: any): void;
+    take(): Float32Array<ArrayBuffer> | Float16Array<ArrayBuffer>;
     #private;
 }
 /**
@@ -83,6 +138,7 @@ export class CanvasDependencyTracker {
  */
 export class CanvasNestedDependencyTracker implements CanvasDependencyTracker {
     constructor(dependencyTracker: any, opIdx: any, ignoreBBoxes: any);
+    get clipBox(): any;
     growOperationsCount(): void;
     save(opIdx: any): this;
     restore(opIdx: any): this;

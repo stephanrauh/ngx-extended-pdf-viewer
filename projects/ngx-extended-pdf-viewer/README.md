@@ -17,7 +17,7 @@ Built on Mozilla’s pdf.js and extended with dozens of enhancements, it's ideal
 
 ### Prerequisites
 
-⚠️ **Version 26 requires Angular 19, 20, or 21.** If you're using Angular 17 or 18, please continue using version 25.6.4.
+⚠️ **Versions 26 and 27 require Angular 19, 20, or 21.** If you're using Angular 17 or 18, please continue using version 25.6.4.
 
 **Why this breaking change?** There are many reasons: Version 26 supports zone-less Angular and migrates to signals. And Angular 18 exited its Long-Term Support (LTS) phase, and security vulnerability CVE-2025-66035 will not be fixed in Angular 17 or 18. Updating to Angular 19 ensures your application continues to receive critical security patches.
 
@@ -155,14 +155,14 @@ Regarding security: I'm not perfect - it's always a best-effort approach without
 
 ### Version 27
 
-Version 27 updates the bleeding-edge version of pdf.js to 5.6.205 and introduces page management features.
+Version 27 updates to pdf.js 5.6.205 and introduces page management features.
 
 **New for end users:**
 
 - **Page management** (experimental): Users can select pages in the sidebar and copy, cut, delete, or export them as a new PDF. Undo/redo is supported. Enable with `[enableSplitMerge]="true"` or `pdfDefaultOptions.enableSplitMerge = true`.
 - **Drag-and-drop page reordering**: Reorder pages by dragging thumbnails in the sidebar. Supports multi-select, paste, and undo. Enable with `[enablePageReordering]="true"` or `pdfDefaultOptions.enablePageReordering = true`.
 - **Resizable sidebar**: The sidebar can now be resized by dragging its edge.
-- **Right-click to save images**: Users can right-click images in PDF documents to save them. Enable with `pdfDefaultOptions.imagesRightClickMinSize = 16`.
+- **Right-click to save images**: Users can right-click images in PDF documents to save them. Enable with `pdfDefaultOptions.imagesRightClickMinSize = 16`. Requires the text layer to be active (`[textLayer]="true"`).
 - **Hardware acceleration on by default**: Rendering now uses hardware acceleration out of the box for smoother scrolling and zoom.
 - **Faster rendering**: WebGPU mesh shading improves rendering performance on supported hardware.
 - **Better PDF support**: Improved decoding of JBIG2, CCITTFax (fax-format), and Brotli-compressed content.
@@ -171,7 +171,7 @@ Version 27 updates the bleeding-edge version of pdf.js to 5.6.205 and introduces
 **New for developers:**
 
 - New component inputs: `[enableSplitMerge]` and `[enablePageReordering]` — these are read at initialization time only. Changing them after the viewer has loaded requires destroying and recreating the component.
-- New `pdfDefaultOptions`: `enableSplitMerge`, `enableWebGPU`, `imagesRightClickMinSize`, `enableNewBadge`.
+- New `pdfDefaultOptions`: `enableSplitMerge`, `enableWebGPU`, `imagesRightClickMinSize`.
 - Book mode now toggles off when you click the button again.
 - Infinite scroll mode now properly exits when switching to another view mode programmatically.
 - **Book mode cursor tools**: New `[showPageFlipButton]` input adds a third cursor tool mode alongside the existing hand tool and text selection tool. When active, dragging flips pages; the other two modes allow panning and text selection respectively. The button only appears in book mode.

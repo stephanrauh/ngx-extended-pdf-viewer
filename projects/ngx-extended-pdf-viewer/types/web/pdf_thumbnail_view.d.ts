@@ -1,8 +1,6 @@
 export type OptionalContentConfig = import("../src/display/optional_content_config").OptionalContentConfig;
 export type PageViewport = import("../src/display/display_utils").PageViewport;
 export type EventBus = import("./event_utils").EventBus;
-export type IPDFLinkService = import("./interfaces").IPDFLinkService;
-export type IRenderableView = import("./interfaces").IRenderableView;
 export type PDFRenderingQueue = import("./pdf_rendering_queue").PDFRenderingQueue;
 export type PDFThumbnailViewOptions = {
     /**
@@ -30,7 +28,7 @@ export type PDFThumbnailViewOptions = {
     /**
      * - The navigation/linking service.
      */
-    linkService: IPDFLinkService;
+    linkService: PDFLinkService;
     /**
      * - The rendering queue object.
      */
@@ -54,16 +52,12 @@ export type PDFThumbnailViewOptions = {
      */
     pageColors?: Object | undefined;
 };
-/**
- * @implements {IRenderableView}
- */
-export class PDFThumbnailView implements IRenderableView {
+export class PDFThumbnailView extends RenderableView {
     /**
      * @param {PDFThumbnailViewOptions} options
      */
-    constructor({ container, eventBus, id, defaultViewport, optionalContentConfigPromise, linkService, renderingQueue, maxCanvasPixels, maxCanvasDim, pageColors, }: PDFThumbnailViewOptions);
+    constructor({ container, eventBus, id, defaultViewport, optionalContentConfigPromise, linkService, renderingQueue, maxCanvasPixels, maxCanvasDim, pageColors, enableSplitMerge, enablePageReordering, }: PDFThumbnailViewOptions);
     id: number;
-    renderingId: string;
     pageLabel: string | null;
     pdfPage: any;
     rotation: number;
@@ -74,14 +68,19 @@ export class PDFThumbnailView implements IRenderableView {
     maxCanvasDim: any;
     pageColors: Object | null;
     eventBus: import("./event_utils").EventBus;
-    linkService: import("./interfaces").IPDFLinkService;
+    linkService: PDFLinkService;
     renderingQueue: import("./pdf_rendering_queue").PDFRenderingQueue;
-    renderTask: any;
-    renderingState: number;
-    resume: (() => void) | null;
+    placeholder: any;
     div: Element | undefined;
+    imageContainer: Element | undefined;
     image: Element | null | undefined;
     checkbox: Element | null | undefined;
+    pasteButton: HTMLButtonElement | null;
+    clone(container: any, id: any): PDFThumbnailView;
+    addPasteButton(pasteCallback: any): void;
+    prevPasteButton: Node | null | undefined;
+    removePasteButton(): void;
+    toggleSelected(isSelected: any): void;
     _dragStartHandler(event: any): void;
     _dragOverHandler(event: any): void;
     _dropHandler(event: any): void;
@@ -89,11 +88,13 @@ export class PDFThumbnailView implements IRenderableView {
     _showDottedLine(target: any, height: any, insertAbove: any): void;
     _removeDottedLine(): void;
     _movePage(draggedId: any, targetId: any): void;
+    updateId(newId: any): void;
     canvasWidth: number | undefined;
     canvasHeight: number | undefined;
     scale: number | undefined;
     setPdfPage(pdfPage: any): void;
     reset(): void;
+    destroy(): void;
     update({ rotation }: {
         rotation?: null | undefined;
     }): void;
@@ -111,3 +112,4 @@ export class PDFThumbnailView implements IRenderableView {
     setPageLabel(label: string | null): void;
     #private;
 }
+import { RenderableView } from "./renderable_view.js";

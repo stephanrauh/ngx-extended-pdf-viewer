@@ -1,5 +1,4 @@
 export type EventBus = import("./event_utils").EventBus;
-export type IPDFLinkService = import("./interfaces").IPDFLinkService;
 export type PDFLinkServiceOptions = {
     /**
      * - The application event bus.
@@ -45,9 +44,8 @@ export namespace LinkTarget {
 /**
  * Performs navigation functions inside PDF, such as opening specified page,
  * or destination.
- * @implements {IPDFLinkService}
  */
-export class PDFLinkService implements IPDFLinkService {
+export class PDFLinkService {
     /**
      * @param {PDFLinkServiceOptions} options
      */
@@ -140,8 +138,5 @@ export class PDFLinkService implements IPDFLinkService {
      */
     executeSetOCGState(action: Object): Promise<void>;
 }
-/**
- * @implements {IPDFLinkService}
- */
-export class SimpleLinkService extends PDFLinkService implements IPDFLinkService {
+export class SimpleLinkService extends PDFLinkService {
 }

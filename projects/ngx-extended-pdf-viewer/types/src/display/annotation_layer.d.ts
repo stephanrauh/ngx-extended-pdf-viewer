@@ -1,16 +1,16 @@
 export type PDFPageProxy = import("./api").PDFPageProxy;
 export type PageViewport = import("./display_utils").PageViewport;
 export type TextAccessibilityManager = import("../../web/text_accessibility.js").TextAccessibilityManager;
-export type IDownloadManager = import("../../web/interfaces").IDownloadManager;
-export type IPDFLinkService = import("../../web/interfaces").IPDFLinkService;
 export type AnnotationEditorUIManager = any;
 export type StructTreeLayerBuilder = import("../../web/struct_tree_layer_builder.js").StructTreeLayerBuilder;
 export type CommentManager = import("../../web/comment_manager.js").CommentManager;
+export type PDFLinkService = import("../../web/pdf_link_service.js").PDFLinkService;
+export type BaseDownloadManager = import("../../web/base_download_manager.js").BaseDownloadManager;
 export type AnnotationElementParameters = {
     data: Object;
     layer: HTMLDivElement;
-    linkService: IPDFLinkService;
-    downloadManager?: import("../../web/interfaces").IDownloadManager | undefined;
+    linkService: PDFLinkService;
+    downloadManager?: import("../../web/base_download_manager.js").BaseDownloadManager | undefined;
     annotationStorage?: AnnotationStorage | undefined;
     /**
      * - Path for image resources, mainly
@@ -28,8 +28,8 @@ export type AnnotationLayerParameters = {
     div: HTMLDivElement;
     annotations: any[];
     page: PDFPageProxy;
-    linkService: IPDFLinkService;
-    downloadManager?: import("../../web/interfaces").IDownloadManager | undefined;
+    linkService: PDFLinkService;
+    downloadManager?: import("../../web/base_download_manager.js").BaseDownloadManager | undefined;
     annotationStorage?: AnnotationStorage | undefined;
     /**
      * - Path for image resources, mainly
@@ -64,8 +64,8 @@ export type AnnotationLayerParameters = {
  * @property {HTMLDivElement} div
  * @property {Array} annotations
  * @property {PDFPageProxy} page
- * @property {IPDFLinkService} linkService
- * @property {IDownloadManager} [downloadManager]
+ * @property {PDFLinkService} linkService
+ * @property {BaseDownloadManager} [downloadManager]
  * @property {AnnotationStorage} [annotationStorage]
  * @property {string} [imageResourcesPath] - Path for image resources, mainly
  *   for annotation icons. Include trailing slash.
@@ -119,8 +119,6 @@ export class AnnotationLayer {
      * Add link annotations to the annotation layer.
      *
      * @param {Array<Object>} annotations
-     * @param {IPDFLinkService} linkService
-     * @memberof AnnotationLayer
      */
     addLinkAnnotations(annotations: Array<Object>): Promise<void>;
     /**
@@ -130,7 +128,7 @@ export class AnnotationLayer {
      * @memberof AnnotationLayer
      */
     update({ viewport }: AnnotationLayerParameters): void;
-    getEditableAnnotations(): any[];
+    getEditableAnnotations(): MapIterator<any>;
     getEditableAnnotation(id: any): any;
     addFakeAnnotation(editor: any): EditorAnnotationElement;
     removeAnnotation(id: any): void;

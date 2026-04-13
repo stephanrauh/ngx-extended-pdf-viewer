@@ -1,5 +1,5 @@
 export class FontFaceObject {
-    constructor(translatedData: any, inspectFont: null | undefined, extra: any, charProcOperatorList: any);
+    constructor(translatedData: any, inspectFont: null | undefined, charProcOperatorList: any, extra: any);
     compiledGlyphs: any;
     _inspectFont: any;
     charProcOperatorList: any;
@@ -20,7 +20,6 @@ export class FontFaceObject {
     get ascent(): any;
     get defaultWidth(): any;
     get descent(): any;
-    set bbox(bbox: any);
     get bbox(): any;
     get fontMatrix(): any;
     get fallbackName(): any;

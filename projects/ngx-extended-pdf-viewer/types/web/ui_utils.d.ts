@@ -97,6 +97,7 @@ export namespace CursorTool {
     let SELECT: number;
     let HAND: number;
     let ZOOM: number;
+    let PAGE_FLIP: number;
 }
 export const DEFAULT_SCALE: 1;
 export const DEFAULT_SCALE_DELTA: 1.1;
@@ -174,7 +175,7 @@ export function isValidRotation(angle: any): boolean;
 export function isValidScrollMode(mode: any): boolean;
 export function isValidSpreadMode(mode: any): boolean;
 export const MAX_AUTO_SCALE: 1.25;
-export const MAX_SCALE: 10;
+export const MAX_SCALE: 25;
 export const MIN_SCALE: 0.1;
 export function normalizeWheelEventDelta(evt: any): number;
 export function normalizeWheelEventDirection(evt: any): number;
@@ -205,12 +206,6 @@ export class ProgressBar {
  * @param {boolean} [replaceInvisible]
  */
 export function removeNullCharacters(str: string, replaceInvisible?: boolean): string;
-export namespace RenderingStates {
-    let INITIAL: number;
-    let RUNNING: number;
-    let PAUSED: number;
-    let FINISHED: number;
-}
 export const SCROLLBAR_PADDING: 40;
 /**
  * Scrolls specified element into view of its parent.
@@ -219,9 +214,6 @@ export const SCROLLBAR_PADDING: 40;
  *   specifying the offset from the top left edge.
  * @param {number} [spot.left]
  * @param {number} [spot.top]
- * @param {boolean} [scrollMatches] - When scrolling search results into view,
- *   ignore elements that either: Contains marked content identifiers,
- *   or have the CSS-rule `overflow: hidden;` set. The default value is `false`.
  */
 export function scrollIntoView(element: HTMLElement, spot?: {
     left?: number | undefined;

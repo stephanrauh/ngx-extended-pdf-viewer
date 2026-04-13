@@ -29,7 +29,7 @@ export class Sidebar {
          * sidebar.
          */
         toggleButton: HTMLElement;
-    }, ltr: boolean, isResizerOnTheLeft: boolean);
+    }, ltr: boolean, isResizerOnTheLeft: boolean, globalAbortSignal: any);
     _sidebar: HTMLElement | null;
     _isOpen: boolean | undefined;
     /**
