@@ -72,11 +72,11 @@ filesToUpdate.forEach(({ path: filePath, description }) => {
   const originalContent = content;
 
   // Replace all occurrences of old version with new version
-  const regex = new RegExp(oldVersion.replace(/\./g, '\\.'), 'g');
-  const matches = content.match(regex);
-  const count = matches ? matches.length : 0;
-
-  content = content.replace(regex, newVersion);
+  let count = 0;
+  while (content.includes(oldVersion)) {
+    content = content.replace(oldVersion, newVersion);
+    count++;
+  }
 
   if (content !== originalContent) {
     fs.writeFileSync(fullPath, content, 'utf8');
