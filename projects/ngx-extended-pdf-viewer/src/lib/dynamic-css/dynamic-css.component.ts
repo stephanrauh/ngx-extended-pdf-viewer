@@ -185,7 +185,7 @@ export class DynamicCssComponent implements OnDestroy {
     @Inject(DOCUMENT) private readonly document: Document,
     private readonly pdfCspPolicyService: PdfCspPolicyService,
     @Inject(CSP_NONCE) @Optional() private readonly nonce: string | null | undefined,
-    private cdr: ChangeDetectorRef
+    private readonly cdr: ChangeDetectorRef
   ) {
     // Width is now an input signal and will be provided by the parent component
   }
@@ -305,7 +305,7 @@ export class DynamicCssComponent implements OnDestroy {
    * @param height the height of the container
    */
   private isHeightDefinedWithUnits(height: string | undefined): boolean {
-    return height ? isNaN(Number(height.replace('%', ''))) : false;
+    return height ? Number.isNaN(Number(height.replace('%', ''))) : false;
   }
 
   /**
@@ -325,7 +325,7 @@ export class DynamicCssComponent implements OnDestroy {
    * Checks if the code is running in a browser environment.
    */
   private isBrowser(): boolean {
-    return typeof window !== 'undefined' && typeof document !== 'undefined';
+    return typeof globalThis.window !== 'undefined' && typeof document !== 'undefined';
   }
 
   private getContainer(): HTMLElement | null {
@@ -364,7 +364,7 @@ export class DynamicCssComponent implements OnDestroy {
   private findAvailableBottom(element: HTMLElement): number {
     let parent = element.parentElement;
     while (parent && parent !== document.body && parent !== document.documentElement) {
-      const style = window.getComputedStyle(parent);
+      const style = globalThis.window.getComputedStyle(parent);
       const overflowY = style.overflowY;
       if ((overflowY === 'hidden' || overflowY === 'auto' || overflowY === 'scroll')
           && style.height !== 'auto' && style.height !== '') {
@@ -372,12 +372,12 @@ export class DynamicCssComponent implements OnDestroy {
       }
       parent = parent.parentElement;
     }
-    return window.innerHeight;
+    return globalThis.window.innerHeight;
   }
 
   private calculateBorderMargin(container: HTMLElement | null): number {
     if (container) {
-      const computedStyle = window.getComputedStyle(container);
+      const computedStyle = globalThis.window.getComputedStyle(container);
 
       const padding = UnitToPx.toPx(computedStyle.paddingBottom);
       const margin = UnitToPx.toPx(computedStyle.marginBottom);

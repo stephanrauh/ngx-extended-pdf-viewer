@@ -42,11 +42,11 @@ describe('DynamicCssComponent', () => {
 
   beforeEach(() => {
     // Set screen/document width
-    Object.defineProperty(window, 'innerWidth', { writable: true, configurable: true, value: 1024 });
+    Object.defineProperty(globalThis.window, 'innerWidth', { writable: true, configurable: true, value: 1024 });
     Object.defineProperty(document.documentElement, 'clientWidth', { writable: true, configurable: true, value: 1024 });
     Object.defineProperty(document.body, 'clientWidth', { writable: true, configurable: true, value: 1024 });
 
-    mockDocument = global.document;
+    mockDocument = globalThis.document;
 
     mockRenderer = {
       createElement: jest.fn().mockImplementation((tagName: string) => createMockElement({ tagName })),
@@ -87,8 +87,6 @@ describe('DynamicCssComponent', () => {
       ],
       schemas: [NO_ERRORS_SCHEMA],
     });
-    // TestBed.overrideProvider(DOCUMENT, { useValue: global.document });
-
     fixture = TestBed.createComponent(DynamicCssComponent);
     component = fixture.componentInstance;
   });
@@ -356,7 +354,7 @@ describe('DynamicCssComponent', () => {
 
     it('should restore height and clear zoom inline style when restoreHeight is true', () => {
       jest.useFakeTimers();
-      Object.defineProperty(window, 'innerHeight', { writable: true, configurable: true, value: 800 });
+      Object.defineProperty(globalThis.window, 'innerHeight', { writable: true, configurable: true, value: 800 });
 
       const mockViewer = document.createElement('div');
       Object.defineProperty(mockViewer, 'clientHeight', { configurable: true, value: 500 });
@@ -370,7 +368,7 @@ describe('DynamicCssComponent', () => {
 
       const getElementByIdSpy = jest.spyOn(document, 'getElementById').mockReturnValue(mockViewer);
       const getElementsByClassNameSpy = jest.spyOn(document, 'getElementsByClassName').mockReturnValue([mockZoomContainer] as any);
-      const getComputedStyleSpy = jest.spyOn(window, 'getComputedStyle').mockReturnValue({
+      const getComputedStyleSpy = jest.spyOn(globalThis.window, 'getComputedStyle').mockReturnValue({
         paddingBottom: '0px',
         marginBottom: '0px',
         overflowY: 'visible',
@@ -404,13 +402,13 @@ describe('DynamicCssComponent', () => {
 
     it('should return true when data-pdfjsprinting attribute exists', () => {
       const el = document.createElement('div');
-      el.setAttribute('data-pdfjsprinting', '');
+      el.dataset['pdfjsprinting'] = '';
       document.body.appendChild(el);
 
       const result = (component as any).isPrinting();
       expect(result).toBe(true);
 
-      document.body.removeChild(el);
+      el.remove();
     });
   });
 
@@ -476,7 +474,7 @@ describe('DynamicCssComponent', () => {
 
   describe('adjustHeight', () => {
     it('should set minHeight based on available space (no constrained parent)', () => {
-      Object.defineProperty(window, 'innerHeight', { writable: true, configurable: true, value: 800 });
+      Object.defineProperty(globalThis.window, 'innerHeight', { writable: true, configurable: true, value: 800 });
 
       const mockContainer = document.createElement('div');
       mockContainer.getBoundingClientRect = jest.fn().mockReturnValue({ top: 100, left: 0, width: 1024, height: 500 });
@@ -490,7 +488,7 @@ describe('DynamicCssComponent', () => {
         markForCheck: jest.fn(),
       };
 
-      const getComputedStyleSpy = jest.spyOn(window, 'getComputedStyle').mockReturnValue({
+      const getComputedStyleSpy = jest.spyOn(globalThis.window, 'getComputedStyle').mockReturnValue({
         paddingBottom: '10px',
         marginBottom: '5px',
         overflowY: 'visible',
@@ -508,7 +506,7 @@ describe('DynamicCssComponent', () => {
     });
 
     it('should set minHeight to 100px when calculated height is too small', () => {
-      Object.defineProperty(window, 'innerHeight', { writable: true, configurable: true, value: 200 });
+      Object.defineProperty(globalThis.window, 'innerHeight', { writable: true, configurable: true, value: 200 });
 
       const mockContainer = document.createElement('div');
       mockContainer.getBoundingClientRect = jest.fn().mockReturnValue({ top: 180, left: 0, width: 1024, height: 20 });
@@ -521,7 +519,7 @@ describe('DynamicCssComponent', () => {
         markForCheck: jest.fn(),
       };
 
-      const getComputedStyleSpy = jest.spyOn(window, 'getComputedStyle').mockReturnValue({
+      const getComputedStyleSpy = jest.spyOn(globalThis.window, 'getComputedStyle').mockReturnValue({
         paddingBottom: '10px',
         marginBottom: '5px',
         overflowY: 'visible',
@@ -537,7 +535,7 @@ describe('DynamicCssComponent', () => {
     });
 
     it('should respect constrained parent with overflow:hidden (#3183)', () => {
-      Object.defineProperty(window, 'innerHeight', { writable: true, configurable: true, value: 1000 });
+      Object.defineProperty(globalThis.window, 'innerHeight', { writable: true, configurable: true, value: 1000 });
 
       // Create a constrained parent (simulates mat-card-content with height: 80vh)
       const constrainedParent = document.createElement('div');
@@ -556,7 +554,7 @@ describe('DynamicCssComponent', () => {
         markForCheck: jest.fn(),
       };
 
-      const getComputedStyleSpy = jest.spyOn(window, 'getComputedStyle').mockImplementation((el: Element) => {
+      const getComputedStyleSpy = jest.spyOn(globalThis.window, 'getComputedStyle').mockImplementation((el: Element) => {
         if (el === constrainedParent) {
           return { paddingBottom: '0px', marginBottom: '0px', overflowY: 'hidden', height: '600px' } as any;
         }
@@ -574,7 +572,7 @@ describe('DynamicCssComponent', () => {
     });
 
     it('should respect constrained parent with overflow:auto (#3183)', () => {
-      Object.defineProperty(window, 'innerHeight', { writable: true, configurable: true, value: 1000 });
+      Object.defineProperty(globalThis.window, 'innerHeight', { writable: true, configurable: true, value: 1000 });
 
       const constrainedParent = document.createElement('div');
       constrainedParent.getBoundingClientRect = jest.fn().mockReturnValue({ top: 0, left: 0, width: 1024, height: 400, bottom: 400 });
@@ -591,7 +589,7 @@ describe('DynamicCssComponent', () => {
         markForCheck: jest.fn(),
       };
 
-      const getComputedStyleSpy = jest.spyOn(window, 'getComputedStyle').mockImplementation((el: Element) => {
+      const getComputedStyleSpy = jest.spyOn(globalThis.window, 'getComputedStyle').mockImplementation((el: Element) => {
         if (el === constrainedParent) {
           return { paddingBottom: '0px', marginBottom: '0px', overflowY: 'auto', height: '400px' } as any;
         }
@@ -609,12 +607,12 @@ describe('DynamicCssComponent', () => {
 
   describe('findAvailableBottom', () => {
     it('should return window.innerHeight when no constrained ancestor exists', () => {
-      Object.defineProperty(window, 'innerHeight', { writable: true, configurable: true, value: 900 });
+      Object.defineProperty(globalThis.window, 'innerHeight', { writable: true, configurable: true, value: 900 });
 
       const mockContainer = document.createElement('div');
       document.body.appendChild(mockContainer);
 
-      const getComputedStyleSpy = jest.spyOn(window, 'getComputedStyle').mockReturnValue({
+      const getComputedStyleSpy = jest.spyOn(globalThis.window, 'getComputedStyle').mockReturnValue({
         overflowY: 'visible',
         height: 'auto',
       } as any);
@@ -622,7 +620,7 @@ describe('DynamicCssComponent', () => {
       const result = (component as any).findAvailableBottom(mockContainer);
       expect(result).toBe(900);
 
-      document.body.removeChild(mockContainer);
+      mockContainer.remove();
       getComputedStyleSpy.mockRestore();
     });
 
@@ -634,7 +632,7 @@ describe('DynamicCssComponent', () => {
       const child = document.createElement('div');
       constrainedParent.appendChild(child);
 
-      const getComputedStyleSpy = jest.spyOn(window, 'getComputedStyle').mockImplementation((el: Element) => {
+      const getComputedStyleSpy = jest.spyOn(globalThis.window, 'getComputedStyle').mockImplementation((el: Element) => {
         if (el === constrainedParent) {
           return { overflowY: 'hidden', height: '500px' } as any;
         }
@@ -644,12 +642,12 @@ describe('DynamicCssComponent', () => {
       const result = (component as any).findAvailableBottom(child);
       expect(result).toBe(500);
 
-      document.body.removeChild(constrainedParent);
+      constrainedParent.remove();
       getComputedStyleSpy.mockRestore();
     });
 
     it('should skip ancestors with overflow but no explicit height', () => {
-      Object.defineProperty(window, 'innerHeight', { writable: true, configurable: true, value: 1000 });
+      Object.defineProperty(globalThis.window, 'innerHeight', { writable: true, configurable: true, value: 1000 });
 
       const overflowParent = document.createElement('div');
       document.body.appendChild(overflowParent);
@@ -657,7 +655,7 @@ describe('DynamicCssComponent', () => {
       const child = document.createElement('div');
       overflowParent.appendChild(child);
 
-      const getComputedStyleSpy = jest.spyOn(window, 'getComputedStyle').mockImplementation((el: Element) => {
+      const getComputedStyleSpy = jest.spyOn(globalThis.window, 'getComputedStyle').mockImplementation((el: Element) => {
         if (el === overflowParent) {
           // overflow:hidden but height:auto — not a real constraint
           return { overflowY: 'hidden', height: 'auto' } as any;
@@ -668,7 +666,7 @@ describe('DynamicCssComponent', () => {
       const result = (component as any).findAvailableBottom(child);
       expect(result).toBe(1000); // falls back to window.innerHeight
 
-      document.body.removeChild(overflowParent);
+      overflowParent.remove();
       getComputedStyleSpy.mockRestore();
     });
 
@@ -684,7 +682,7 @@ describe('DynamicCssComponent', () => {
       const child = document.createElement('div');
       innerParent.appendChild(child);
 
-      const getComputedStyleSpy = jest.spyOn(window, 'getComputedStyle').mockImplementation((el: Element) => {
+      const getComputedStyleSpy = jest.spyOn(globalThis.window, 'getComputedStyle').mockImplementation((el: Element) => {
         if (el === innerParent) {
           return { overflowY: 'scroll', height: '400px' } as any;
         }
@@ -697,7 +695,7 @@ describe('DynamicCssComponent', () => {
       const result = (component as any).findAvailableBottom(child);
       expect(result).toBe(400); // nearest wins
 
-      document.body.removeChild(outerParent);
+      outerParent.remove();
       getComputedStyleSpy.mockRestore();
     });
   });
@@ -710,7 +708,7 @@ describe('DynamicCssComponent', () => {
       const child = document.createElement('div');
       parent.appendChild(child);
 
-      const getComputedStyleSpy = jest.spyOn(window, 'getComputedStyle').mockImplementation((el: Element) => {
+      const getComputedStyleSpy = jest.spyOn(globalThis.window, 'getComputedStyle').mockImplementation((el: Element) => {
         if (el === child) {
           return { paddingBottom: '10px', marginBottom: '5px' } as any;
         }
@@ -734,7 +732,7 @@ describe('DynamicCssComponent', () => {
       const el = document.createElement('div');
       el.style.zIndex = '5';
 
-      const getComputedStyleSpy = jest.spyOn(window, 'getComputedStyle').mockReturnValue({
+      const getComputedStyleSpy = jest.spyOn(globalThis.window, 'getComputedStyle').mockReturnValue({
         paddingBottom: '12px',
         marginBottom: '8px',
       } as any);
@@ -763,7 +761,7 @@ describe('DynamicCssComponent', () => {
 
     it('should skip when printing', () => {
       const el = document.createElement('div');
-      el.setAttribute('data-pdfjsprinting', '');
+      el.dataset['pdfjsprinting'] = '';
       document.body.appendChild(el);
 
       const mockNgxViewer: NgxHasHeight = {
@@ -776,11 +774,11 @@ describe('DynamicCssComponent', () => {
       component.checkHeight(mockNgxViewer, VerbosityLevel.INFOS);
       expect(mockNgxViewer.markForCheck).not.toHaveBeenCalled();
 
-      document.body.removeChild(el);
+      el.remove();
     });
 
     it('should set autoHeight and adjustHeight when container height is zero', () => {
-      Object.defineProperty(window, 'innerHeight', { writable: true, configurable: true, value: 800 });
+      Object.defineProperty(globalThis.window, 'innerHeight', { writable: true, configurable: true, value: 800 });
 
       const mockZoomContainer = document.createElement('div');
       Object.defineProperty(mockZoomContainer, 'clientHeight', { configurable: true, value: 0 });
@@ -789,7 +787,7 @@ describe('DynamicCssComponent', () => {
 
       const getElementsByClassNameSpy = jest.spyOn(document, 'getElementsByClassName').mockReturnValue([mockZoomContainer] as any);
 
-      const getComputedStyleSpy = jest.spyOn(window, 'getComputedStyle').mockReturnValue({
+      const getComputedStyleSpy = jest.spyOn(globalThis.window, 'getComputedStyle').mockReturnValue({
         paddingBottom: '0px',
         marginBottom: '0px',
         overflowY: 'visible',
@@ -814,7 +812,7 @@ describe('DynamicCssComponent', () => {
     });
 
     it('should respect constrained parent when auto-adjusting height (#3183)', () => {
-      Object.defineProperty(window, 'innerHeight', { writable: true, configurable: true, value: 1000 });
+      Object.defineProperty(globalThis.window, 'innerHeight', { writable: true, configurable: true, value: 1000 });
 
       // Simulate mat-card-content with height: 80vh, overflow: hidden
       const constrainedParent = document.createElement('div');
@@ -828,7 +826,7 @@ describe('DynamicCssComponent', () => {
 
       const getElementsByClassNameSpy = jest.spyOn(document, 'getElementsByClassName').mockReturnValue([mockZoomContainer] as any);
 
-      const getComputedStyleSpy = jest.spyOn(window, 'getComputedStyle').mockImplementation((el: Element) => {
+      const getComputedStyleSpy = jest.spyOn(globalThis.window, 'getComputedStyle').mockImplementation((el: Element) => {
         if (el === constrainedParent) {
           return { paddingBottom: '0px', marginBottom: '0px', overflowY: 'hidden', height: '600px' } as any;
         }

@@ -23,6 +23,7 @@ import {
   TemplateRef,
   viewChild,
 } from '@angular/core';
+import { convertBlobToUint8Array } from './utils/blob-conversion';
 import { PdfDocumentLoadedEvent } from './events/document-loaded-event';
 import { FileInputChanged } from './events/file-input-changed';
 import { FindResult, FindResultMatchesCount, FindState } from './events/find-result';
@@ -100,7 +101,7 @@ export type NamedDestType = (string | undefined) & {};
 export type PasswordType = (string | undefined) & {};
 
 export function isIOS(): boolean {
-  if (typeof window === 'undefined') {
+  if (typeof globalThis.window === 'undefined') {
     return false;
   }
 
@@ -173,7 +174,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   public formData = input<FormDataType | undefined>(undefined);
 
   // @ts-ignore TS6133 - Used for side effects only
-  private _formDataEffect = effect(() => {
+  private readonly _formDataEffect = effect(() => {
     const data = this.formData();
     if (data !== undefined) {
       const previousFormData = { ...this.formSupport.formData };
@@ -200,7 +201,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   private _previousPageViewMode: PageViewModeType = 'multiple';
 
   // @ts-ignore TS6133 - Used for side effects only
-  private _pageViewModeEffect = effect(() => {
+  private readonly _pageViewModeEffect = effect(() => {
     const viewMode = this.pageViewMode();
     if (!isPlatformBrowser(this.platformId)) return;
 
@@ -338,9 +339,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   public src = model<PdfSrcType>(undefined);
 
   // @ts-ignore TS6133 - Used for side effects only
-  private _srcEffect = effect(() => {
+  private readonly _srcEffect = effect(() => {
     const url = this.src();
-    if (typeof window === 'undefined') return;
+    if (typeof globalThis.window === 'undefined') return;
 
     // Skip processing if change was triggered by user
     if (this.srcChangeTriggeredByUser) {
@@ -355,7 +356,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       this._src = url.toString();
     } else if (typeof Blob !== 'undefined' && url instanceof Blob) {
       (async () => {
-        const converted = await this.convertBlobToUint8Array(url);
+        const converted = await convertBlobToUint8Array(url);
         this._src = converted.buffer;
         if (this.service.ngxExtendedPdfViewerInitialized && this._src !== this._lastOpenedSrc) { // #3131
           // Close book mode if needed
@@ -423,7 +424,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   public scrollMode = model<ScrollModeType>(ScrollModeType.vertical);
 
   // @ts-ignore TS6133 - Used for side effects only
-  private _scrollModeEffect = effect(() => {
+  private readonly _scrollModeEffect = effect(() => {
     const value = this.scrollMode();
     const PDFViewerApplication: IPDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
     if (PDFViewerApplication?.pdfViewer) {
@@ -460,7 +461,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   public enablePrintAutoRotate = input<boolean>(pdfDefaultOptions.enablePrintAutoRotate);
 
   // @ts-ignore TS6133 - Used for side effects only
-  private _enablePrintAutoRotateEffect = effect(() => {
+  private readonly _enablePrintAutoRotateEffect = effect(() => {
     const value = this.enablePrintAutoRotate();
     pdfDefaultOptions.enablePrintAutoRotate = value;
     if (this.pdfScriptLoaderService.PDFViewerApplication?.pdfViewer) {
@@ -529,7 +530,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   public minifiedJSLibraries = model<boolean>(pdfDefaultOptions._internalFilenameSuffix === '.min');
 
   // @ts-ignore TS6133 - Used for side effects only
-  private _minifiedJSLibrariesEffect = effect(() => {
+  private readonly _minifiedJSLibrariesEffect = effect(() => {
     const value = this.minifiedJSLibraries();
     pdfDefaultOptions._internalFilenameSuffix = value ? '.min' : '';
   });
@@ -558,34 +559,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
   public hasSignature!: boolean;
 
-  private async convertBlobToUint8Array(blob: Blob): Promise<Uint8Array> {
-    // first try the algorithm for modern browsers and node.js
-    if (blob.arrayBuffer) {
-      const arrayBuffer = await blob.arrayBuffer();
-      return new Uint8Array(arrayBuffer);
-    }
-
-    // then try the old-fashioned way
-    return new Promise<Uint8Array>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        if (reader.result) {
-          resolve(new Uint8Array(reader.result as ArrayBuffer));
-        } else {
-          reject(new Error('Error converting Blob to Uint8Array'));
-        }
-      };
-      reader.onerror = () => {
-        reject(new Error('FileReader error'));
-      };
-      reader.readAsArrayBuffer(blob);
-    });
-  }
-
   public base64Src: InputSignal<string | null | undefined> = input();
 
   // @ts-ignore TS6133 - Used for side effects only
-  private base64SrcEffect = effect(() => {
+  private readonly base64SrcEffect = effect(() => {
     const base64 = this.base64Src();
     if (!isPlatformBrowser(this.platformId)) return;
 
@@ -632,7 +609,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   public heightInput = input<string | undefined>('100%', { alias: 'height' });
 
   // @ts-ignore TS6133 - Used for side effects only
-  private _heightEffect = effect(() => {
+  private readonly _heightEffect = effect(() => {
     let h = this.heightInput();
     if (!h) {
       h = '100%';
@@ -667,7 +644,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   public pdfBackgroundColor = input(undefined);
 
   // @ts-ignore TS6133 - Used for side effects only
-  private _pdfBackgroundColorEffect = effect(() => {
+  private readonly _pdfBackgroundColorEffect = effect(() => {
     const color = this.pdfBackgroundColor();
     // Skip during initialization — the initial value is set in the init code path
     if (!this.service.ngxExtendedPdfViewerInitialized) return;
@@ -681,7 +658,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   });
 
   // @ts-ignore TS6133 - Used for side effects only
-  private _readingDirectionEffect = effect(() => {
+  private readonly _readingDirectionEffect = effect(() => {
     const direction = this.readingDirection();
     const isRtl = direction === 'rtl';
     const isLtr = direction === 'ltr';
@@ -723,7 +700,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
   /** Override the default locale. This must be the complete locale name, such as "es-ES". The string is allowed to be all lowercase.
    */
-  public language = input<string | undefined>(typeof window === 'undefined' ? 'en' : navigator.language);
+  public language = input<string | undefined>(typeof globalThis.window === 'undefined' ? 'en' : navigator.language);
 
   /** By default, listening to the URL is deactivated because often the anchor tag is used for the Angular router */
   public listenToURL = input(false);

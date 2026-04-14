@@ -253,7 +253,7 @@ export class FocusManagementService {
    * @returns True if the element is visible
    */
   private isVisible(element: HTMLElement): boolean {
-    const style = window.getComputedStyle(element);
+    const style = globalThis.window.getComputedStyle(element);
     return style.display !== 'none' && style.visibility !== 'hidden' && element.offsetParent !== null;
   }
 }

@@ -77,7 +77,7 @@ describe('FocusManagementService', () => {
 
       const addEventSpy = jest.spyOn(document, 'addEventListener');
 
-      new FocusManagementService();
+      void new FocusManagementService();
 
       expect(addEventSpy).toHaveBeenCalledWith('DOMContentLoaded', expect.any(Function));
 
@@ -153,7 +153,7 @@ describe('FocusManagementService', () => {
       jest.spyOn(document, 'addEventListener').mockImplementation(() => {});
       jest.spyOn(document, 'removeEventListener').mockImplementation(() => {});
 
-      jest.spyOn(window, 'getComputedStyle').mockReturnValue({
+      jest.spyOn(globalThis.window, 'getComputedStyle').mockReturnValue({
         display: 'block',
         visibility: 'visible',
       } as CSSStyleDeclaration);
@@ -272,7 +272,7 @@ describe('FocusManagementService', () => {
       addEventSpy = jest.spyOn(document, 'addEventListener').mockImplementation(() => {});
       jest.spyOn(document, 'removeEventListener').mockImplementation(() => {});
 
-      jest.spyOn(window, 'getComputedStyle').mockReturnValue({
+      jest.spyOn(globalThis.window, 'getComputedStyle').mockReturnValue({
         display: 'block',
         visibility: 'visible',
       } as CSSStyleDeclaration);
@@ -388,7 +388,7 @@ describe('FocusManagementService', () => {
         querySelectorAll: jest.fn().mockReturnValue([visibleEl, hiddenEl]),
       } as any;
 
-      jest.spyOn(window, 'getComputedStyle').mockImplementation((el: Element) => {
+      jest.spyOn(globalThis.window, 'getComputedStyle').mockImplementation((el: Element) => {
         if (el === visibleEl) {
           return { display: 'block', visibility: 'visible' } as CSSStyleDeclaration;
         }
@@ -450,7 +450,7 @@ describe('FocusManagementService', () => {
         querySelectorAll: jest.fn().mockReturnValue([visibleBtn]),
       } as any;
 
-      jest.spyOn(window, 'getComputedStyle').mockReturnValue({
+      jest.spyOn(globalThis.window, 'getComputedStyle').mockReturnValue({
         display: 'block',
         visibility: 'visible',
       } as CSSStyleDeclaration);
@@ -471,7 +471,7 @@ describe('FocusManagementService', () => {
         querySelectorAll: jest.fn().mockReturnValue([hiddenEl]),
       } as any;
 
-      jest.spyOn(window, 'getComputedStyle').mockReturnValue({
+      jest.spyOn(globalThis.window, 'getComputedStyle').mockReturnValue({
         display: 'none',
         visibility: 'visible',
       } as CSSStyleDeclaration);
@@ -488,7 +488,7 @@ describe('FocusManagementService', () => {
         querySelectorAll: jest.fn().mockReturnValue([hiddenEl, visibleEl]),
       } as any;
 
-      jest.spyOn(window, 'getComputedStyle').mockImplementation((el: Element) => {
+      jest.spyOn(globalThis.window, 'getComputedStyle').mockImplementation((el: Element) => {
         if (el === hiddenEl) {
           return { display: 'none', visibility: 'visible' } as CSSStyleDeclaration;
         }
@@ -504,7 +504,7 @@ describe('FocusManagementService', () => {
   describe('isVisible', () => {
     it('should return true for a visible element', () => {
       const el = { offsetParent: {} } as any;
-      jest.spyOn(window, 'getComputedStyle').mockReturnValue({
+      jest.spyOn(globalThis.window, 'getComputedStyle').mockReturnValue({
         display: 'block',
         visibility: 'visible',
       } as CSSStyleDeclaration);
@@ -514,7 +514,7 @@ describe('FocusManagementService', () => {
 
     it('should return false if display is none', () => {
       const el = { offsetParent: {} } as any;
-      jest.spyOn(window, 'getComputedStyle').mockReturnValue({
+      jest.spyOn(globalThis.window, 'getComputedStyle').mockReturnValue({
         display: 'none',
         visibility: 'visible',
       } as CSSStyleDeclaration);
@@ -524,7 +524,7 @@ describe('FocusManagementService', () => {
 
     it('should return false if visibility is hidden', () => {
       const el = { offsetParent: {} } as any;
-      jest.spyOn(window, 'getComputedStyle').mockReturnValue({
+      jest.spyOn(globalThis.window, 'getComputedStyle').mockReturnValue({
         display: 'block',
         visibility: 'hidden',
       } as CSSStyleDeclaration);
@@ -534,7 +534,7 @@ describe('FocusManagementService', () => {
 
     it('should return false if offsetParent is null', () => {
       const el = { offsetParent: null } as any;
-      jest.spyOn(window, 'getComputedStyle').mockReturnValue({
+      jest.spyOn(globalThis.window, 'getComputedStyle').mockReturnValue({
         display: 'block',
         visibility: 'visible',
       } as CSSStyleDeclaration);

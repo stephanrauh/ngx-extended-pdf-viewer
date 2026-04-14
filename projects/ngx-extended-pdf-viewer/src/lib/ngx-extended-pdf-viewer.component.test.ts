@@ -165,29 +165,12 @@ describe('NgxExtendedPdfViewerComponent', () => {
     expect(component.toolbarMarginTop).toBe('8px');
   });
 
-  /*
-  it('should call ngOnInit and initialize PDF viewer', async () => {
-    const spy = jest.spyOn(component, 'doInitPDFViewer');
-    await component.ngOnInit();
-    expect(spy).toHaveBeenCalled();
-  });
-  */
-
   // Skip: Requires complex Angular component mocking and event bus setup
   it.skip('should call ngOnDestroy and clean up', async () => {
     const spy = jest.spyOn(component['pdfScriptLoaderService'].PDFViewerApplication, 'close');
     await component.ngOnDestroy();
     expect(spy).toHaveBeenCalled();
   });
-
-  /* Skip: ngOnChanges has been replaced by effects
-  it('should handle src changes via effect', async () => {
-    const spy = jest.spyOn(component, 'openPDF2');
-    fixture.componentRef.setInput('src', 'http://example.com/test.pdf');
-    TestBed.flushEffects();
-    expect(spy).toHaveBeenCalled();
-  });
-  */
 
   it('should have zoom as a model signal', () => {
     // zoom is a model signal - just verify it exists
@@ -206,14 +189,6 @@ describe('NgxExtendedPdfViewerComponent', () => {
     TestBed.flushEffects();
     expect(component.onContextMenu()).toBe(false);
   });
-
-  /*  it('should call zoomToPageWidth and update zoom', async () => {
-    const event = new MouseEvent('dblclick', { clientY: 100 });
-    const spy = jest.spyOn(component, 'setZoom');
-    await component.zoomToPageWidth(event);
-    expect(spy).toHaveBeenCalled();
-  });
-  */
 
   describe('openPDF2 - detached buffer guard (#3131)', () => {
     let mockPDFViewerApp: any;

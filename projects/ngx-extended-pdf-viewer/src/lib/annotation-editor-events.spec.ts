@@ -7,8 +7,8 @@
  * It reads the mypdf.js editor source files and checks for the presence
  * of each event type string in a dispatch("annotation-editor-event", ...) call.
  */
-import * as fs from 'fs';
-import * as path from 'path';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 
 const editorDir = path.resolve(__dirname, '../../../../../mypdf.js/src/display/editor');
 const mypdfjsAvailable = fs.existsSync(editorDir);

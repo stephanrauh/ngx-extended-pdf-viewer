@@ -95,12 +95,12 @@ export class PositioningService {
   private setHorizontalPosition(popup: HTMLElement, buttonRect: DOMRect, containerRect: DOMRect, isRightAligned: boolean): void {
     const centerOffset = buttonRect.width / 2 - PositioningService.DOORHANGER_OFFSET;
 
-    if (!isRightAligned) {
-      popup.style.left = `${buttonRect.left - containerRect.left + centerOffset}px`;
-      popup.style.right = '';
-    } else {
+    if (isRightAligned) {
       popup.style.right = `${containerRect.right - buttonRect.right + centerOffset}px`;
       popup.style.left = '';
+    } else {
+      popup.style.left = `${buttonRect.left - containerRect.left + centerOffset}px`;
+      popup.style.right = '';
     }
   }
 
