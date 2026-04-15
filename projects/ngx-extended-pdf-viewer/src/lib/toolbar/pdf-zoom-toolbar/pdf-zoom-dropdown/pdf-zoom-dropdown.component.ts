@@ -60,6 +60,6 @@ export class PdfZoomDropdownComponent {
 
   private snakeToCamel(str: string) {
     // idea found here: https://hisk.io/javascript-snake-to-camel/
-    return str.replace(/([-_][a-z])/g, (group) => group.toUpperCase().replace('-', '').replace('_', ''));
+    return str.replaceAll(/([-_][a-z])/g, (group) => group.toUpperCase().replaceAll('-', '').replaceAll('_', ''));
   }
 }

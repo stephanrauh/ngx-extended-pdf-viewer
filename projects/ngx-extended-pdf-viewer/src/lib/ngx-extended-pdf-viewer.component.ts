@@ -3029,7 +3029,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       let zoomAsNumber: string | number | undefined = this.zoom();
       if (String(zoomAsNumber).endsWith('%')) {
         zoomAsNumber = Number(String(zoomAsNumber).replace('%', '')) / 100;
-      } else if (!isNaN(Number(zoomAsNumber))) {
+      } else if (!Number.isNaN(Number(zoomAsNumber))) {
         zoomAsNumber = Number(zoomAsNumber) / 100;
       }
       if (!zoomAsNumber) {
@@ -3040,7 +3040,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
         } else {
           const userSetting = await PDFViewerApplication.store.get('zoom');
           if (userSetting) {
-            if (!isNaN(Number(userSetting))) {
+            if (!Number.isNaN(Number(userSetting))) {
               zoomAsNumber = Number(userSetting) / 100;
             } else {
               zoomAsNumber = userSetting;

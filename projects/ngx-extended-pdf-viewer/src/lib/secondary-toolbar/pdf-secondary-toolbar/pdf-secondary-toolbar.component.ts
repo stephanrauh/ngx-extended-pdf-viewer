@@ -44,7 +44,7 @@ export class PdfSecondaryToolbarComponent implements AfterViewInit, OnDestroy {
       return 'auto';
     }
     const topValue = this.secondaryToolbarTop() || '33px';
-    const topPx = parseFloat(topValue.toString());
+    const topPx = Number.parseFloat(topValue.toString());
     const scale = this.mobileFriendlyZoomScale();
 
     // Find the nearest .zoom container

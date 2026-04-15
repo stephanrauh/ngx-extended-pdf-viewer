@@ -69,21 +69,21 @@ export class PdfDocumentPropertiesExtractor {
 
     // JavaScript's `Date` object expects the month to be between 0 and 11
     // instead of 1 and 12, so we have to correct for that.
-    const year = parseInt(matches[1], 10);
-    let month = parseInt(matches[2], 10);
+    const year = Number.parseInt(matches[1], 10);
+    let month = Number.parseInt(matches[2], 10);
     month = month >= 1 && month <= 12 ? month - 1 : 0;
-    let day = parseInt(matches[3], 10);
+    let day = Number.parseInt(matches[3], 10);
     day = day >= 1 && day <= 31 ? day : 1;
-    let hour = parseInt(matches[4], 10);
+    let hour = Number.parseInt(matches[4], 10);
     hour = hour >= 0 && hour <= 23 ? hour : 0;
-    let minute = parseInt(matches[5], 10);
+    let minute = Number.parseInt(matches[5], 10);
     minute = minute >= 0 && minute <= 59 ? minute : 0;
-    let second = parseInt(matches[6], 10);
+    let second = Number.parseInt(matches[6], 10);
     second = second >= 0 && second <= 59 ? second : 0;
     const universalTimeRelation = matches[7] || 'Z';
-    let offsetHour = parseInt(matches[8], 10);
+    let offsetHour = Number.parseInt(matches[8], 10);
     offsetHour = offsetHour >= 0 && offsetHour <= 23 ? offsetHour : 0;
-    let offsetMinute = parseInt(matches[9], 10) || 0;
+    let offsetMinute = Number.parseInt(matches[9], 10) || 0;
     offsetMinute = offsetMinute >= 0 && offsetMinute <= 59 ? offsetMinute : 0;
 
     // Universal time relation 'Z' means that the local time is equal to the

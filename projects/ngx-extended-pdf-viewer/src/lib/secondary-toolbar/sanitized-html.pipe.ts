@@ -12,6 +12,6 @@ export class SanitizedHtmlPipe implements PipeTransform {
     if (!value) return undefined;
     // The HTML is already validated in imageHtml computed signal (only allowed SVG tags)
     // We just need to bypass Angular's automatic sanitization
-    return this.sanitizer.bypassSecurityTrustHtml(value);
+    return this.sanitizer.bypassSecurityTrustHtml(value); // NOSONAR - input is pre-validated SVG from imageHtml (only allowed SVG tags)
   }
 }

@@ -55,7 +55,7 @@ export class UnitToPx {
       const bare = match[1] === '';
       const val = bare ? 1 : Number(match[1]);
       const unit = match[2].trim(); // Explicitly trim the unit
-      const valid = !isNaN(val) && unit && (bare || match[1] !== 'NaN');
+      const valid = !Number.isNaN(val) && unit && (bare || match[1] !== 'NaN');
       
       // Validate that we have a proper unit (known CSS units)
       const knownUnits = ['px', 'em', 'rem', 'pt', 'pc', 'in', 'cm', 'mm', '%', 'vh', 'vw', 'ex', 'ch'];

@@ -885,11 +885,11 @@ export class NgxExtendedPdfViewerService {
     }
     if (typeof value === 'string') {
       if (value.endsWith('%')) {
-        return (parseInt(value, 10) / 100) * maxValue;
+        return (Number.parseInt(value, 10) / 100) * maxValue;
       } else if (value.endsWith('px')) {
-        return parseInt(value, 10) * (maxValue / imageMaxValue);
+        return Number.parseInt(value, 10) * (maxValue / imageMaxValue);
       } else {
-        return parseInt(value, 10);
+        return Number.parseInt(value, 10);
       }
     } else {
       return value;

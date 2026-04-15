@@ -9,7 +9,7 @@ describe('UnitToPx', () => {
       if ((UnitToPx as any).con && (UnitToPx as any).con.parentNode) {
         (UnitToPx as any).con.parentNode.removeChild((UnitToPx as any).con);
       }
-    } catch (e) {
+    } catch {
       // Ignore cleanup errors in test environment
     }
     (UnitToPx as any).con = undefined;

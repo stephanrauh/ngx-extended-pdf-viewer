@@ -223,7 +223,7 @@ new (function () {
     }
     const match = navigator.appVersion.match(/OS (\d+)_(\d+)_?(\d+)?/);
     if (match !== undefined && match !== null) {
-      return parseInt(match[1], 10) < 14;
+      return Number.parseInt(match[1], 10) < 14;
     }
 
     return false;
