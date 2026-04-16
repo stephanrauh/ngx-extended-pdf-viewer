@@ -117,7 +117,7 @@ export class NgxKeyboardManagerService {
     } else if (keyDef === 'pageup') {
       key = 33;
     } else {
-      key = keyDef.toUpperCase().charCodeAt(0);
+      key = keyDef.toUpperCase().charCodeAt(0); // NOSONAR — keyboard shortcuts are ASCII, charCodeAt is correct
     }
     if (keycode === 'WHEEL') {
       return keyDef === 'wheel' && cmd === cmdDef;

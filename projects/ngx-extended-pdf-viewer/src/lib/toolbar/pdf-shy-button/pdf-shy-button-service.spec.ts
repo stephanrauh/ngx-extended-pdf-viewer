@@ -134,8 +134,10 @@ describe('PdfShyButtonService', () => {
       TestBed.flushEffects();
 
       const button = createMockButton({ secondaryMenuId: 'myId' });
+      // Intentionally add the same button twice to verify that re-adding
+      // (replacing) a button doesn't throw when l10n is unavailable.
       service.add(button);
-      service.add(button);
+      service.add(button); // NOSONAR — intentional duplicate add to test replacement
 
       // Should not throw when setTimeout fires
       expect(() => jest.advanceTimersByTime(1)).not.toThrow();
@@ -146,8 +148,10 @@ describe('PdfShyButtonService', () => {
       jest.useFakeTimers();
 
       const button = createMockButton({ secondaryMenuId: 'myId' });
+      // Intentionally add the same button twice to verify that re-adding
+      // (replacing) a button doesn't throw when PDFViewerApplication is undefined.
       service.add(button);
-      service.add(button);
+      service.add(button); // NOSONAR — intentional duplicate add to test replacement
 
       expect(() => jest.advanceTimersByTime(1)).not.toThrow();
       jest.useRealTimers();

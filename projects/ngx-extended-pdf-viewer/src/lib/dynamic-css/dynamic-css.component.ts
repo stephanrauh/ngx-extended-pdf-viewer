@@ -10,7 +10,7 @@ import { UnitToPx } from '../unit-to-px';
     selector: 'pdf-dynamic-css',
     templateUrl: './dynamic-css.component.html',
     styleUrls: ['./dynamic-css.component.css'],
-    standalone: false
+    standalone: false // NOSONAR — intentional for backward compatibility with NgModule consumers
 })
 export class DynamicCssComponent implements OnDestroy {
   public zoom = input<number>(1.0);

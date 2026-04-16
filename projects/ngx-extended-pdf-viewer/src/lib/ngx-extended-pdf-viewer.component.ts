@@ -95,10 +95,10 @@ export interface FormDataType {
 
 export type PdfSrcType = string | ArrayBuffer | Blob | Uint8Array | URL | { range: any } | undefined;
 // Intersection with {} prevents TypeScript from simplifying these types in generated .d.ts files
-export type Base64SrcType = (string | null | undefined) & {};
-export type PageType = (number | undefined) & {};
-export type NamedDestType = (string | undefined) & {};
-export type PasswordType = (string | undefined) & {};
+export type Base64SrcType = (string | null | undefined) & {}; // NOSONAR — prevents TS from simplifying in .d.ts
+export type PageType = (number | undefined) & {}; // NOSONAR — prevents TS from simplifying in .d.ts
+export type NamedDestType = (string | undefined) & {}; // NOSONAR — prevents TS from simplifying in .d.ts
+export type PasswordType = (string | undefined) & {}; // NOSONAR — prevents TS from simplifying in .d.ts
 
 export function isIOS(): boolean {
   if (typeof globalThis.window === 'undefined') {
@@ -122,7 +122,7 @@ export function isIOS(): boolean {
   templateUrl: './ngx-extended-pdf-viewer.component.html',
   styleUrls: ['./ngx-extended-pdf-viewer.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+  standalone: false, // NOSONAR — intentional for backward compatibility with NgModule consumers
 })
 export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasHeight {
   private readonly formSupport = new NgxFormSupport();
@@ -571,7 +571,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       const len = binary_string.length;
       const bytes = new Uint8Array(len);
       for (let i = 0; i < len; i++) {
-        bytes[i] = binary_string.charCodeAt(i);
+        bytes[i] = binary_string.charCodeAt(i); // NOSONAR — base64 decoded string is single-byte ASCII, charCodeAt is correct
       }
       this.src.set(bytes.buffer);
     }
