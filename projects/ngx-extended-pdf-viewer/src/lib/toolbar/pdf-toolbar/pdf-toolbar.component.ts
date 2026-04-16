@@ -4,10 +4,10 @@ import { SpreadType } from '../../options/spread-type';
 import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
-    selector: 'pdf-toolbar',
-    templateUrl: './pdf-toolbar.component.html',
-    styleUrls: ['./pdf-toolbar.component.css'],
-    standalone: false
+  selector: 'pdf-toolbar',
+  templateUrl: './pdf-toolbar.component.html',
+  styleUrls: ['./pdf-toolbar.component.css'],
+  standalone: false,
 })
 export class PdfToolbarComponent implements AfterViewInit {
   public customToolbar = input<TemplateRef<any> | undefined>(undefined);
@@ -141,12 +141,11 @@ export class PdfToolbarComponent implements AfterViewInit {
   public disableSecondaryToolbarButton = input<boolean>(false);
   // #2818 end of modification by ngx-extended-pdf-viewer
 
-  public onToolbarLoaded = output<HTMLElement>();
+  public onToolbarLoaded = output<HTMLElement>(); // NOSONAR — backward-compatible event name
 
   public findbarVisible = input<boolean>(false);
 
-  constructor(private elementRef: ElementRef) {
-  }
+  constructor(private readonly elementRef: ElementRef) {}
 
   ngAfterViewInit(): void {
     this.onToolbarLoaded.emit(this.elementRef.nativeElement.getElementsByClassName('toolbar')[0] as HTMLElement);

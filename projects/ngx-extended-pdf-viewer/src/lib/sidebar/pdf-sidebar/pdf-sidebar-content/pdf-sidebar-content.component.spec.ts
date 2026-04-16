@@ -309,12 +309,12 @@ describe('PdfSidebarContentComponent', () => {
   describe('replacePageNumberEverywhere', () => {
     it('should replace PAGE_NUMBER in element attributes', () => {
       const el = document.createElement('div');
-      el.setAttribute('data-page', 'PAGE_NUMBER');
+      el.dataset['page'] = 'PAGE_NUMBER';
       el.setAttribute('title', 'Page PAGE_NUMBER');
 
       (component as any).replacePageNumberEverywhere(el, '42');
 
-      expect(el.getAttribute('data-page')).toBe('42');
+      expect(el.dataset['page']).toBe('42');
       expect(el.getAttribute('title')).toBe('Page 42');
     });
 
@@ -329,7 +329,7 @@ describe('PdfSidebarContentComponent', () => {
 
     it('should recursively replace in child elements', () => {
       const parent = document.createElement('div');
-      parent.setAttribute('data-id', 'PAGE_NUMBER');
+      parent.dataset['id'] = 'PAGE_NUMBER';
 
       const child = document.createElement('span');
       child.setAttribute('aria-label', 'Thumbnail PAGE_NUMBER');
@@ -339,7 +339,7 @@ describe('PdfSidebarContentComponent', () => {
 
       (component as any).replacePageNumberEverywhere(parent, '3');
 
-      expect(parent.getAttribute('data-id')).toBe('3');
+      expect(parent.dataset['id']).toBe('3');
       expect(child.getAttribute('aria-label')).toBe('Thumbnail 3');
       expect(child.textContent).toBe('3');
     });

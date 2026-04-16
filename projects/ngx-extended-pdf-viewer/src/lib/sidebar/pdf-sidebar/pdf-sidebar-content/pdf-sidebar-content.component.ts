@@ -107,8 +107,8 @@ export class PdfSidebarContentComponent implements OnDestroy {
     // PDF.js v5.4.530+ uses direct div structure without anchor wrapper
     // Add the thumbnail ID class (e.g., "thumbnail1") while keeping existing "thumbnail" class
     newElement.classList.add(`thumbnail${id}`);
-    newElement.setAttribute('data-l10n-id', 'pdfjs-thumb-page-title');
-    newElement.setAttribute('data-l10n-args', thumbPageTitlePromiseOrPageL10nArgs);
+    newElement.setAttribute('data-l10n-id', 'pdfjs-thumb-page-title'); // NOSONAR — matches pdf.js upstream pattern which uses setAttribute for l10n attributes
+    newElement.setAttribute('data-l10n-args', thumbPageTitlePromiseOrPageL10nArgs); // NOSONAR
 
     this.replacePageNumberEverywhere(newElement, id.toString());
 

@@ -357,7 +357,7 @@ export class NgxExtendedPdfViewerService {
     annotationMode: AnnotationMode = AnnotationMode.ENABLE,
   ): Promise<HTMLCanvasElement | undefined> {
     if (!this.PDFViewerApplication) {
-      return Promise.resolve(undefined);
+      return undefined;
     }
     const pdfDocument = this.PDFViewerApplication.pdfDocument;
     const pdfPage = await pdfDocument.getPage(pageNumber);
@@ -518,7 +518,7 @@ export class NgxExtendedPdfViewerService {
 
   public async renderPage(pageIndex: number): Promise<void> {
     if (!this.hasPageBeenRendered(pageIndex)) {
-      await this.addPageToRenderQueue(pageIndex);
+      await this.addPageToRenderQueue(pageIndex); // NOSONAR — awaiting non-Promise is intentional, keeps the loop structure simple
       while (!this.hasPageBeenRendered(pageIndex)) {
         await this.sleep(7);
       }

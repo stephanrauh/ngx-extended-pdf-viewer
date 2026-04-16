@@ -401,11 +401,11 @@ describe('NgxExtendedPdfViewerComponent', () => {
       expect(component['eventBusAbortController']).toBeNull();
     });
 
-    it('should not throw when controller is already null', async () => {
+    it('should not throw when controller is already null', () => {
       component['eventBusAbortController'] = null;
       setupDestroyMocks();
 
-      await expect(component.ngOnDestroy()).resolves.not.toThrow();
+      expect(() => component.ngOnDestroy()).not.toThrow();
     });
   });
 

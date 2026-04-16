@@ -46,5 +46,6 @@ export class PdfToggleSidebarComponent implements OnDestroy {
   };
 
   public ngOnDestroy(): void {
+    // Required by OnDestroy interface — cleanup handled by Angular signal effects
   }
 }

@@ -326,7 +326,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     this.cdr.markForCheck();
   }
 
-  public progress = output<ProgressBarEvent>();
+  public progress = output<ProgressBarEvent>(); // NOSONAR — backward-compatible event name
 
   private readonly secondaryToolbarComponent = viewChild<PdfSecondaryToolbarComponent>('pdfSecondaryToolbarComponent');
 
@@ -605,8 +605,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   }
 
   // Public input signals (templates bind to these)
-  public minHeightInput = input<string | undefined>(undefined, { alias: 'minHeight' });
-  public heightInput = input<string | undefined>('100%', { alias: 'height' });
+  public minHeightInput = input<string | undefined>(undefined, { alias: 'minHeight' }); // NOSONAR — alias for backward compat
+  public heightInput = input<string | undefined>('100%', { alias: 'height' }); // NOSONAR
 
   // @ts-ignore TS6133 - Used for side effects only
   private readonly _heightEffect = effect(() => {
@@ -813,12 +813,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   /** Enable page reordering via drag-and-drop in the thumbnail sidebar.
    *  This is read at initialization time only. Changing it after the viewer has loaded
    *  requires destroying and recreating the component. */
-  public enablePageReorderingInput = input<boolean | undefined>(undefined, { alias: 'enablePageReordering' });
+  public enablePageReorderingInput = input<boolean | undefined>(undefined, { alias: 'enablePageReordering' }); // NOSONAR — alias for backward compat
 
   /** Enable split & merge: copy, cut, delete, and export selected pages via the sidebar manage menu.
    *  This is read at initialization time only. Changing it after the viewer has loaded
    *  requires destroying and recreating the component. */
-  public enableSplitMergeInput = input<boolean | undefined>(undefined, { alias: 'enableSplitMerge' });
+  public enableSplitMergeInput = input<boolean | undefined>(undefined, { alias: 'enableSplitMerge' }); // NOSONAR
 
   // #2818 modified by ngx-extended-pdf-viewer
   public disableMovePageButton = input<boolean>(false);
@@ -1455,9 +1455,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
   // @ts-ignore TS6133 - Used for side effects only
   private _keyboardSettingsEffect = effect(() => {
-    void this.ignoreKeyboard(); // Track signal
-    void this.ignoreKeys(); // Track signal
-    void this.acceptKeys(); // Track signal
+    void this.ignoreKeyboard(); // NOSONAR — void tracks signal dependency
+    void this.ignoreKeys(); // NOSONAR
+    void this.acceptKeys(); // NOSONAR
     if (typeof window === 'undefined') return;
 
     const PDFViewerApplicationOptions = this.pdfScriptLoaderService.PDFViewerApplicationOptions;
@@ -1476,7 +1476,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
   // @ts-ignore TS6133 - Used for side effects only
   private _disableFormsEffect = effect(() => {
-    void this.disableForms(); // Track signal
+    void this.disableForms(); // NOSONAR — void tracks signal dependency
     if (typeof window === 'undefined') return;
 
     this.enableOrDisableForms(this.elementRef.nativeElement, false);
@@ -1539,10 +1539,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
   // @ts-ignore TS6133 - Used for side effects only
   private _customComponentsEffect = effect(() => {
-    void this.customFindbar; // Track signal
-    void this.customFindbarButtons; // Track signal
-    void this.customFindbarInputArea; // Track signal
-    void this.customToolbar(); // Track signal
+    void this.customFindbar; // NOSONAR — void tracks signal dependency
+    void this.customFindbarButtons; // NOSONAR
+    void this.customFindbarInputArea; // NOSONAR
+    void this.customToolbar(); // NOSONAR
     if (typeof window === 'undefined') return;
 
     if (this.dummyComponents) {
@@ -1681,7 +1681,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     }
   }
 
-  public async ngOnInit() {
+  public ngOnInit() {
     this.hideToolbarIfItIsEmpty();
     if (isPlatformBrowser(this.platformId)) {
       this.ngZone.runOutsideAngular(() => {
@@ -2835,15 +2835,17 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     }
   }
 
-  public async ngOnDestroy(): Promise<void> {
+  public ngOnDestroy(): void {
     this.destroyInitialization = true;
     if (this.checkRootElementTimeout) {
       clearTimeout(this.checkRootElementTimeout);
     }
+    // Async cleanup is fire-and-forget — Angular does not await ngOnDestroy.
+    const cleanup = async () => {
     if (this.initializationPromise) {
       try {
         await this.initializationPromise;
-      } catch (e) {}
+      } catch {}
     }
 
     this.notificationService.onPDFJSInitSignal.set(undefined);
@@ -2957,6 +2959,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
         });
       }
     }
+    }; // end of async cleanup
+    cleanup();
   }
 
   private isPrimaryMenuVisible(): boolean {

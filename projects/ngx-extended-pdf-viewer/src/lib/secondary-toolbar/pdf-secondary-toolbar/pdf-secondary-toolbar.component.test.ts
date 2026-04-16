@@ -285,7 +285,7 @@ describe('PdfSecondaryToolbarComponent', () => {
 
     it('should not set up MutationObserver in server environment', async () => {
       // Need to create a new TestBed configuration for server environment
-      await TestBed.resetTestingModule();
+      await TestBed.resetTestingModule(); // NOSONAR — awaiting non-Promise is safe and keeps async test structure consistent
       
       await TestBed.configureTestingModule({
         declarations: [PdfSecondaryToolbarComponent],

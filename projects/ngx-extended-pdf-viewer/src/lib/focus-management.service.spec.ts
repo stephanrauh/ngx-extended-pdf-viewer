@@ -77,7 +77,7 @@ describe('FocusManagementService', () => {
 
       const addEventSpy = jest.spyOn(document, 'addEventListener');
 
-      void new FocusManagementService();
+      void new FocusManagementService(); // NOSONAR — instantiation side-effect is intentional, result not needed
 
       expect(addEventSpy).toHaveBeenCalledWith('DOMContentLoaded', expect.any(Function));
 

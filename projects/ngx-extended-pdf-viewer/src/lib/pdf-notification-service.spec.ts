@@ -127,7 +127,7 @@ describe('PDFNotificationService', () => {
       });
 
       expect(() => {
-        void new PDFNotificationService();
+        void new PDFNotificationService(); // NOSONAR — instantiation side-effect is intentional, result not needed
       }).toThrow('Version parsing error');
     });
   });
