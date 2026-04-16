@@ -47,7 +47,7 @@
     "@angular/forms": "^19.2.20",
     "@angular/platform-browser": "^19.2.20",
     "@angular/platform-browser-dynamic": "^19.2.20",
-    "@angular/router": "^19.2.20",
+    "@angular/router": "^19.2.21",
     "angular2-smart-table": "^4.1.1",
     "marked": "^17.0.6",
     "prismjs": "^1.30.0",
