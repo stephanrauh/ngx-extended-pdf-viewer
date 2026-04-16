@@ -736,7 +736,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   // #2818 end of modification by ngx-extended-pdf-viewer
 
   // @ts-ignore TS6133 - Used for side effects only
-  private _showSidebarButtonEffect = effect(() => {
+  private readonly _showSidebarButtonEffect = effect(() => {
     const show = this.showSidebarButton();
     if (!isPlatformBrowser(this.platformId)) {
       this._showSidebarButton = false;
@@ -761,7 +761,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   public sidebarVisible = model<boolean | undefined>(undefined);
 
   // @ts-ignore TS6133 - Used for side effects only
-  private _sidebarVisibleEffect = effect(() => {
+  private readonly _sidebarVisibleEffect = effect(() => {
     const value = this.sidebarVisible();
     const PDFViewerApplication: IPDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
     // PDF.js v5.4.530 renamed pdfSidebar to viewsManager
@@ -915,7 +915,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   public showScrollingButtons = input<ResponsiveVisibility | undefined>(undefined);
 
   // @ts-ignore TS6133 - Used for side effects only
-  private _showScrollingButtonsEffect = effect(() => {
+  private readonly _showScrollingButtonsEffect = effect(() => {
     const value = this.showScrollingButtons();
     if (value !== undefined) {
       this.showSinglePageModeButton.set(value);
@@ -940,7 +940,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   public showRotateButton = input<ResponsiveVisibility | undefined>(undefined);
 
   // @ts-ignore TS6133 - Used for side effects only
-  private _showRotateButtonEffect = effect(() => {
+  private readonly _showRotateButtonEffect = effect(() => {
     const value = this.showRotateButton();
     if (value !== undefined) {
       this.showRotateCwButton.set(value);
@@ -951,7 +951,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   public handTool = model<boolean>(!isIOS());
 
   // @ts-ignore TS6133 - Used for side effects only
-  private _handToolEffect = effect(() => {
+  private readonly _handToolEffect = effect(() => {
     const value = this.handTool();
     if (isIOS() && value) {
       console.log(
@@ -992,7 +992,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   public enableFlipByDrag = input<boolean>(true);
 
   // @ts-ignore TS6133 - Used for side effects only
-  private _enableFlipByDragEffect = effect(() => {
+  private readonly _enableFlipByDragEffect = effect(() => {
     const value = this.enableFlipByDrag();
     if (this.service.ngxExtendedPdfViewerInitialized) {
       const PDFViewerApplication: IPDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
@@ -1012,7 +1012,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   public showPageCorners = input<boolean>(true);
 
   // @ts-ignore TS6133 - Used for side effects only
-  private _showPageCornersEffect = effect(() => {
+  private readonly _showPageCornersEffect = effect(() => {
     const value = this.showPageCorners();
     if (this.service.ngxExtendedPdfViewerInitialized) {
       const PDFViewerApplication: IPDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
@@ -1050,7 +1050,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   private _pageSetFromScroll = false;
 
   // @ts-ignore TS6133 - Used for side effects only
-  private _pageEffect = effect(() => {
+  private readonly _pageEffect = effect(() => {
     const newPageNumber = this.page();
     if (newPageNumber) {
       // silently cope with strings
@@ -1192,7 +1192,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   public mobileFriendlyZoom = input<string>('100%');
 
   // @ts-ignore TS6133 - Used for side effects only
-  private _mobileFriendlyZoomEffect = effect(() => {
+  private readonly _mobileFriendlyZoomEffect = effect(() => {
     let zoom = this.mobileFriendlyZoom();
     // tslint:disable-next-line:triple-equals - the type conversion is intended
     if (zoom == 'true') {
@@ -1229,7 +1229,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   });
 
   // @ts-ignore TS6133 - Used for side effects only
-  private _zoomEffect = effect(() => {
+  private readonly _zoomEffect = effect(() => {
     const currentZoom = this.zoom(); // Track zoom signal
     if (typeof window === 'undefined') return;
     if (!this.service.ngxExtendedPdfViewerInitialized) return;
@@ -1256,7 +1256,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   });
 
   // @ts-ignore TS6133 - Used for side effects only
-  private _maxZoomEffect = effect(() => {
+  private readonly _maxZoomEffect = effect(() => {
     const maxZoom = this.maxZoom();
     if (typeof window === 'undefined') return;
     if (!this.service.ngxExtendedPdfViewerInitialized) return;
@@ -1271,7 +1271,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   });
 
   // @ts-ignore TS6133 - Used for side effects only
-  private _minZoomEffect = effect(() => {
+  private readonly _minZoomEffect = effect(() => {
     const minZoom = this.minZoom();
     if (typeof window === 'undefined') return;
     if (!this.service.ngxExtendedPdfViewerInitialized) return;
@@ -1286,7 +1286,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   });
 
   // @ts-ignore TS6133 - Used for side effects only
-  private _findbarVisibleEffect = effect(() => {
+  private readonly _findbarVisibleEffect = effect(() => {
     const visible = this.findbarVisible();
     if (typeof window === 'undefined') return;
     if (!this.service.ngxExtendedPdfViewerInitialized) return;
@@ -1297,16 +1297,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       if (!PDFViewerApplication.findBar.opened) {
         PDFViewerApplication.findBar.open();
       }
-    } else {
+    } else if (PDFViewerApplication.findBar.opened) {
       // Only close if actually open
-      if (PDFViewerApplication.findBar.opened) {
-        PDFViewerApplication.findBar.close();
-      }
+      PDFViewerApplication.findBar.close();
     }
   });
 
   // @ts-ignore TS6133 - Used for side effects only
-  private _propertiesDialogVisibleEffect = effect(() => {
+  private readonly _propertiesDialogVisibleEffect = effect(() => {
     const visible = this.propertiesDialogVisible();
     if (typeof window === 'undefined') return;
     if (!this.service.ngxExtendedPdfViewerInitialized) return;
@@ -1317,16 +1315,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       if (PDFViewerApplication.overlayManager.active !== PDFViewerApplication.pdfDocumentProperties.dialog) {
         PDFViewerApplication.pdfDocumentProperties.open();
       }
-    } else {
+    } else if (PDFViewerApplication.overlayManager.active === PDFViewerApplication.pdfDocumentProperties.dialog) {
       // Only close if actually open
-      if (PDFViewerApplication.overlayManager.active === PDFViewerApplication.pdfDocumentProperties.dialog) {
-        PDFViewerApplication.pdfDocumentProperties.close();
-      }
+      PDFViewerApplication.pdfDocumentProperties.close();
     }
   });
 
   // @ts-ignore TS6133 - Used for side effects only
-  private _pageLabelEffect = effect(() => {
+  private readonly _pageLabelEffect = effect(() => {
     const pageLabel = this.pageLabel();
     if (typeof window === 'undefined') return;
     if (!this.service.ngxExtendedPdfViewerInitialized) return;
@@ -1340,7 +1336,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   });
 
   // @ts-ignore TS6133 - Used for side effects only
-  private _rotationEffect = effect(() => {
+  private readonly _rotationEffect = effect(() => {
     const rotation = this.rotation();
     if (typeof window === 'undefined') return;
     if (!this.service.ngxExtendedPdfViewerInitialized) return;
@@ -1357,7 +1353,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   });
 
   // @ts-ignore TS6133 - Used for side effects only
-  private _activeSidebarViewEffect = effect(() => {
+  private readonly _activeSidebarViewEffect = effect(() => {
     const activeSidebarView = this.activeSidebarView();
     const sidebarVisible = this.sidebarVisible();
     if (typeof window === 'undefined') return;
@@ -1379,7 +1375,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   });
 
   // @ts-ignore TS6133 - Used for side effects only
-  private _filenameForDownloadEffect = effect(() => {
+  private readonly _filenameForDownloadEffect = effect(() => {
     const filename = this.filenameForDownload();
     if (typeof window === 'undefined') return;
     if (!this.service.ngxExtendedPdfViewerInitialized) return;
@@ -1389,7 +1385,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   });
 
   // @ts-ignore TS6133 - Used for side effects only
-  private _nameddestEffect = effect(() => {
+  private readonly _nameddestEffect = effect(() => {
     const nameddest = this.nameddest();
     if (typeof window === 'undefined') return;
     if (!this.service.ngxExtendedPdfViewerInitialized) return;
@@ -1401,7 +1397,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   });
 
   // @ts-ignore TS6133 - Used for side effects only
-  private _spreadEffect = effect(() => {
+  private readonly _spreadEffect = effect(() => {
     const spread = this.spread();
     if (typeof window === 'undefined') return;
     if (!this.service.ngxExtendedPdfViewerInitialized) return;
@@ -1426,13 +1422,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   });
 
   // @ts-ignore TS6133 - Used for side effects only
-  private _secondaryMenuEmptyEffect = effect(() => {
+  private readonly _secondaryMenuEmptyEffect = effect(() => {
     this.service.secondaryMenuIsEmpty();
     this.hideToolbarIfItIsEmpty();
   });
 
   // @ts-ignore TS6133 - Used for side effects only
-  private _enableDragAndDropEffect = effect(() => {
+  private readonly _enableDragAndDropEffect = effect(() => {
     const enableDragAndDrop = this.enableDragAndDrop();
     if (typeof window === 'undefined') return;
     if (!this.service.ngxExtendedPdfViewerInitialized) return;
@@ -1442,7 +1438,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   });
 
   // @ts-ignore TS6133 - Used for side effects only
-  private _printResolutionEffect = effect(() => {
+  private readonly _printResolutionEffect = effect(() => {
     const printResolution = this.printResolution();
     if (typeof window === 'undefined') return;
     if (printResolution === null || printResolution === undefined) return;
@@ -1467,7 +1463,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   });
 
   // @ts-ignore TS6133 - Used for side effects only
-  private _replaceBrowserPrintEffect = effect(() => {
+  private readonly _replaceBrowserPrintEffect = effect(() => {
     const replaceBrowserPrint = this.replaceBrowserPrint();
     if (typeof window === 'undefined') return;
 
@@ -1483,7 +1479,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   });
 
   // @ts-ignore TS6133 - Used for side effects only
-  private _showBordersEffect = effect(() => {
+  private readonly _showBordersEffect = effect(() => {
     const showBorders = this.showBorders();
     if (typeof window === 'undefined') return;
 
@@ -1515,7 +1511,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   });
 
   // @ts-ignore TS6133 - Used for side effects only
-  private _showUnverifiedSignaturesEffect = effect(() => {
+  private readonly _showUnverifiedSignaturesEffect = effect(() => {
     const showUnverifiedSignatures = this.showUnverifiedSignatures;
     if (typeof window === 'undefined') return;
     if (!this.service.ngxExtendedPdfViewerInitialized) return;
@@ -1527,7 +1523,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   });
 
   // @ts-ignore TS6133 - Used for side effects only
-  private _enablePrintEffect = effect(() => {
+  private readonly _enablePrintEffect = effect(() => {
     const enablePrint = this.enablePrint();
     if (typeof window === 'undefined') return;
 
@@ -1770,7 +1766,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       this.showElementsRecursively(r);
       document.body.appendChild(r);
       const elements = this.collectElementPositions(r, rootEl, []);
-      document.body.removeChild(r);
+      r.remove();
       const topRightGreaterThanBottomLeftComparator = (a: any, b: any) => {
         if (a.y - b.y > 15) {
           return 1;
@@ -2025,8 +2021,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
             const topLevelElements = body[0].children;
             for (let i = topLevelElements.length - 1; i >= 0; i--) {
               const e = topLevelElements.item(i);
-              if (e && e.id === 'printContainer') {
-                body[0].removeChild(e);
+              if (e?.id === 'printContainer') {
+                e.remove();
               }
             }
           }
@@ -2137,7 +2133,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     }
     const options = this.pdfScriptLoaderService.PDFViewerApplicationOptions;
     // tslint:disable-next-line:forin
-    const optionsToIgnore = [
+    const optionsToIgnore = new Set([
       'needsES5',
       'rangeChunkSize',
       '_internalFilenameSuffix',
@@ -2146,7 +2142,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       'doubleTapZoomsInHandMode',
       'doubleTapZoomsInTextSelectionMode',
       'doubleTapResetsZoomOnSecondDoubleTap',
-    ];
+    ]);
     // Apply component inputs to pdfDefaultOptions before passing to AppOptions
     const enablePageReorderingInput = this.enablePageReorderingInput();
     if (enablePageReorderingInput !== undefined) {
@@ -2158,7 +2154,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     }
 
     for (const key in pdfDefaultOptions) {
-      if (!optionsToIgnore.includes(key)) {
+      if (!optionsToIgnore.has(key)) {
         const option = (pdfDefaultOptions as any)[key];
         if (key !== 'findController' && typeof option === 'function') {
           options.set(key, option());
@@ -3133,7 +3129,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     const annotations = await page.getAnnotations();
     const signature = annotations.find((a) => a.fieldType === 'Sig');
     if (signature) {
-      const rect = signature?.rect;
+      const rect = signature.rect;
       if (rect && rect.length === 4 && rect[2] - rect[0] > 0 && rect[3] - rect[1] > 0 && !signature.hidden) {
         return true;
       }

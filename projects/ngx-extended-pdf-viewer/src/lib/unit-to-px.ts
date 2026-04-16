@@ -38,7 +38,7 @@ export class UnitToPx {
       this.el.style.width = this.sample + unit;
       document.body.appendChild(this.con);
       const dimension = this.el.getBoundingClientRect();
-      this.con.parentNode!.removeChild(this.con);
+      this.con.parentNode!.removeChild(this.con); // NOSONAR — mock objects in tests lack .remove()
       this.pxPerUnitCache[unit] = dimension.width / this.sample;
     }
     return this.pxPerUnitCache[unit];

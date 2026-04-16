@@ -68,12 +68,12 @@ export class PdfSecondaryToolbarComponent implements AfterViewInit, OnDestroy {
   // #3135 end of modification by ngx-extended-pdf-viewer
 
   constructor(
-    private element: ElementRef,
+    private readonly element: ElementRef,
     public notificationService: PDFNotificationService,
-    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(PLATFORM_ID) private readonly platformId: Object,
     public pdfShyButtonService: PdfShyButtonService,
-    private ngxExtendedPdfViewerService: NgxExtendedPdfViewerService,
-    private cdr: ChangeDetectorRef
+    private readonly ngxExtendedPdfViewerService: NgxExtendedPdfViewerService,
+    private readonly cdr: ChangeDetectorRef
   ) {
     effect(() => {
       this.PDFViewerApplication = notificationService.onPDFJSInitSignal();

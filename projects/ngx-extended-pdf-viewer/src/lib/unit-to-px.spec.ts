@@ -6,9 +6,7 @@ describe('UnitToPx', () => {
     (UnitToPx as any).pxPerUnitCache = {};
     // Clean up any DOM elements
     try {
-      if ((UnitToPx as any).con && (UnitToPx as any).con.parentNode) {
-        (UnitToPx as any).con.parentNode.removeChild((UnitToPx as any).con);
-      }
+      (UnitToPx as any).con?.remove();
     } catch {
       // Ignore cleanup errors in test environment
     }

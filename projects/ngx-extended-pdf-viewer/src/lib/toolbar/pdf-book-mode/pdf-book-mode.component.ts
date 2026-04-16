@@ -21,7 +21,7 @@ export class PdfBookModeComponent implements OnDestroy {
 
   public onClick?: () => void;
 
-  constructor(private cdr: ChangeDetectorRef) {
+  constructor(private readonly cdr: ChangeDetectorRef) {
     this.onClick = () => {
       setTimeout(this.asyncWithCD(() => {
         this.pageViewMode.set('book');

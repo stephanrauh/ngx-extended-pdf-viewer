@@ -219,7 +219,7 @@ export class PdfDummyComponentsComponent {
     for (let i = 0; i < container.children.length; i++) {
       const child = container.firstChild;
       if (child) {
-        container.removeChild(child);
+        child.remove();
       }
     }
 
@@ -256,7 +256,7 @@ export class PdfDummyComponentsComponent {
       return;
     }
     while (container.firstChild) {
-      container.removeChild(container.firstChild);
+      container.firstChild.remove();
     }
     requiredIds.forEach((id) => {
       if (!document.getElementById(id)) {

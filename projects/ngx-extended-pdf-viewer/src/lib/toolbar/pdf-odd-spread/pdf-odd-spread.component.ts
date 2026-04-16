@@ -28,7 +28,7 @@ export class PdfOddSpreadComponent implements OnDestroy {
   private eventBusAbortController: AbortController | null = null;
   // #3135 end of modification by ngx-extended-pdf-viewer
 
-  constructor(notificationService: PDFNotificationService, private cdr: ChangeDetectorRef) {
+  constructor(notificationService: PDFNotificationService, private readonly cdr: ChangeDetectorRef) {
     effect(() => {
       this.PDFViewerApplication = notificationService.onPDFJSInitSignal();
       if (this.PDFViewerApplication) {

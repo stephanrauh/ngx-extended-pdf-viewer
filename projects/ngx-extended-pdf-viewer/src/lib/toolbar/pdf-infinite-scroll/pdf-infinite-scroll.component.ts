@@ -26,7 +26,7 @@ export class PdfInfiniteScrollComponent implements OnDestroy {
 
   private PDFViewerApplication: IPDFViewerApplication | undefined;
 
-  constructor(public notificationService: PDFNotificationService, private cdr: ChangeDetectorRef) {
+  constructor(public notificationService: PDFNotificationService, private readonly cdr: ChangeDetectorRef) {
     effect(() => {
       this.PDFViewerApplication = notificationService.onPDFJSInitSignal();
     });

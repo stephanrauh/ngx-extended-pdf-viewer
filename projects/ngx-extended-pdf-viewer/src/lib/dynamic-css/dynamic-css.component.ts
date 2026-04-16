@@ -392,7 +392,7 @@ export class DynamicCssComponent implements OnDestroy {
   public ngOnDestroy() {
     const styles = this.document.getElementById('pdf-dynamic-css') as HTMLElement;
     if (styles?.parentElement) {
-      (styles.parentElement as any).removeChild(styles);
+      styles.remove();
     }
   }
 }

@@ -35,8 +35,8 @@ export class PdfStampEditorComponent implements OnDestroy {
 
   constructor(
     notificationService: PDFNotificationService,
-    private focusManagement: FocusManagementService,
-    private cdr: ChangeDetectorRef,
+    private readonly focusManagement: FocusManagementService,
+    private readonly cdr: ChangeDetectorRef,
   ) {
     effect(() => {
       this.PDFViewerApplication = notificationService.onPDFJSInitSignal();

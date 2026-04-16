@@ -22,26 +22,24 @@ import { PDFPageProxy } from './pdf-viewer-application';
 
 export type AnnotationLayerBuilderOptions = {
   pdfPage: PDFPageProxy;
-  annotationStorage?: AnnotationStorage | undefined;
+  annotationStorage?: AnnotationStorage;
   /**
    * - Path for image resources, mainly
    * for annotation icons. Include trailing slash.
    */
-  imageResourcesPath?: string | undefined;
+  imageResourcesPath?: string;
   renderForms: boolean;
   linkService: any; // IPDFLinkService;
-  downloadManager?: any /*import('./interfaces').IDownloadManager */ | undefined;
-  enableScripting?: boolean | undefined;
-  hasJSActionsPromise?: Promise<boolean> | undefined;
-  fieldObjectsPromise?:
-    | Promise<{
-        [x: string]: Object[];
-      } | null>
-    | undefined;
-  annotationCanvasMap?: Map<string, HTMLCanvasElement> | undefined;
-  accessibilityManager?: any /*import('./text_accessibility.js').TextAccessibilityManager */ | undefined;
-  annotationEditorUIManager?: any /* import('../src/pdf').AnnotationEditorUIManager */ | undefined;
-  onAppend?: Function | undefined;
+  downloadManager?: any /*import('./interfaces').IDownloadManager */;
+  enableScripting?: boolean;
+  hasJSActionsPromise?: Promise<boolean>;
+  fieldObjectsPromise?: Promise<{
+    [x: string]: Object[];
+  } | null>;
+  annotationCanvasMap?: Map<string, HTMLCanvasElement>;
+  accessibilityManager?: any /*import('./text_accessibility.js').TextAccessibilityManager */;
+  annotationEditorUIManager?: any /* import('../src/pdf').AnnotationEditorUIManager */;
+  onAppend?: Function;
 };
 
 export type AnnotationLayerBuilderRenderOptions = {
@@ -49,8 +47,8 @@ export type AnnotationLayerBuilderRenderOptions = {
   /**
    * - The default value is "display".
    */
-  intent?: string | undefined;
-  structTreeLayer?: any /* import('./struct_tree_layer_builder.js').StructTreeLayerBuilder */ | undefined;
+  intent?: string;
+  structTreeLayer?: any /* import('./struct_tree_layer_builder.js').StructTreeLayerBuilder */;
 };
 
 export interface AnnotationLayerBuilder {

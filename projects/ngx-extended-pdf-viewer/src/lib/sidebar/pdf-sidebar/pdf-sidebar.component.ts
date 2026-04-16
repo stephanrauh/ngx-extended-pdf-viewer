@@ -25,7 +25,7 @@ export class PdfSidebarComponent {
 
   public hideSidebarToolbar = signal(true);
 
-  constructor(private elementRef: ElementRef) {}
+  constructor(private readonly elementRef: ElementRef) {}
 
   public showToolbarWhenNecessary(): void {
     const element = this.elementRef.nativeElement as HTMLElement;

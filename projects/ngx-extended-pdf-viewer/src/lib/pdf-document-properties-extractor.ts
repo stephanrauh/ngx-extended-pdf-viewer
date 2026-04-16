@@ -16,7 +16,7 @@ export interface PdfDocumentInfo {
 }
 
 export class PdfDocumentPropertiesExtractor {
-  private pdfDateStringRegex = new RegExp(
+  private readonly pdfDateStringRegex = new RegExp(
     '^D:' + // Prefix (required)
       '(\\d{4})' + // Year (required)
       '(\\d{2})?' + // Month (optional)
@@ -24,7 +24,7 @@ export class PdfDocumentPropertiesExtractor {
       '(\\d{2})?' + // Hour (optional)
       '(\\d{2})?' + // Minute (optional)
       '(\\d{2})?' + // Second (optional)
-      '([Z|+|-])?' + // Universal time relation (optional)
+      '([Z+\\-])?' + // Universal time relation (optional)
       '(\\d{2})?' + // Offset hour (optional)
       // tslint:disable-next-line: quotemark
       "'?" + // Splitting apostrophe (optional)

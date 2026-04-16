@@ -49,8 +49,8 @@ export interface PDFFindController {
   /**
    * @param {PDFFindControllerOptions} options
    */
-  _linkService: any; // import("./interfaces").IPDFLinkService;
-  _eventBus: any; // import("./event_utils").EventBus;
+  _linkService: any;
+  _eventBus: any;
   _pageViewMode: any;
   /**
    * Callback used to check if a `pageNumber` is currently visible.

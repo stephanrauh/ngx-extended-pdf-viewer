@@ -53,10 +53,12 @@ describe('PdfDummyComponentsComponent', () => {
     beforeEach(() => {
       mockContainer = {
         children: [{ id: 'child1' }, { id: 'child2' }],
-        firstChild: { id: 'firstChild' },
+        firstChild: null as any,
         removeChild: jest.fn(),
         appendChild: jest.fn(),
       };
+      // Default: no children to remove. Tests that need children set firstChild explicitly.
+      mockContainer.firstChild = null;
 
       getElementsByClassNameSpy.mockReturnValue([mockContainer] as any);
     });
@@ -77,34 +79,25 @@ describe('PdfDummyComponentsComponent', () => {
     });
 
     it('should clear existing children from container', () => {
-      // Mock firstChild to return a child the first time, then null
-      mockContainer.firstChild = { id: 'child1' };
-      mockContainer.removeChild.mockImplementationOnce(() => {
-        mockContainer.firstChild = null;
-      });
+      // Mock firstChild with a remove() method that clears it
+      const child1 = { id: 'child1', remove: jest.fn(() => { mockContainer.firstChild = null; }) };
+      mockContainer.firstChild = child1;
 
       component.addMissingStandardWidgets();
 
-      expect(mockContainer.removeChild).toHaveBeenCalledWith({ id: 'child1' });
+      expect(child1.remove).toHaveBeenCalled();
     });
 
     it('should handle multiple children removal', () => {
-      const child1 = { id: 'child1' };
-      const child2 = { id: 'child2' };
+      const child2 = { id: 'child2', remove: jest.fn(() => { mockContainer.firstChild = null; }) };
+      const child1 = { id: 'child1', remove: jest.fn(() => { mockContainer.firstChild = child2; }) };
 
       mockContainer.firstChild = child1;
-      mockContainer.removeChild
-        .mockImplementationOnce(() => {
-          mockContainer.firstChild = child2;
-        })
-        .mockImplementationOnce(() => {
-          mockContainer.firstChild = null;
-        });
 
       component.addMissingStandardWidgets();
 
-      expect(mockContainer.removeChild).toHaveBeenCalledWith(child1);
-      expect(mockContainer.removeChild).toHaveBeenCalledWith(child2);
+      expect(child1.remove).toHaveBeenCalled();
+      expect(child2.remove).toHaveBeenCalled();
     });
 
     it('should create dummy widgets for missing elements', () => {

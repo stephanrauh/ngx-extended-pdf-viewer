@@ -350,7 +350,7 @@ describe('PdfSecondaryToolbarComponent', () => {
         },
       };
 
-      component['element'] = { nativeElement: mockElement } as any;
+      Object.defineProperty(component, 'element', { value: { nativeElement: mockElement }, writable: true });
 
       component.checkVisibility();
 
@@ -370,7 +370,7 @@ describe('PdfSecondaryToolbarComponent', () => {
         },
       };
 
-      component['element'] = { nativeElement: mockElement } as any;
+      Object.defineProperty(component, 'element', { value: { nativeElement: mockElement }, writable: true });
 
       component.checkVisibility();
 

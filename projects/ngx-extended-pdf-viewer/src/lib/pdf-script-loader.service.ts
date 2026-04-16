@@ -32,8 +32,8 @@ export class PDFScriptLoaderService implements OnDestroy {
   public ngxExtendedPdfViewerIncompletelyInitialized = true;
 
   public constructor(
-    private pdfCspPolicyService: PdfCspPolicyService,
-    @Inject(CSP_NONCE) private csp_nonce: string,
+    private readonly pdfCspPolicyService: PdfCspPolicyService,
+    @Inject(CSP_NONCE) private readonly csp_nonce: string,
   ) {
     effect(() => {
       if (this.onPDFJSInitSignal()) {

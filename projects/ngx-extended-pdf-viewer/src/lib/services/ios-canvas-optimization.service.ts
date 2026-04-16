@@ -23,7 +23,7 @@ export class IOSCanvasOptimizationService {
   private readonly reductionFactor = 0.25; // Reduce to 25% during pinch
   private readonly iosMaxCanvasPixels = 5242880; // PDF.js iOS limit (5MP)
 
-  constructor(private ngZone: NgZone) {
+  constructor(private readonly ngZone: NgZone) {
     // Store original canvas size
     this.originalMaxCanvasPixels = pdfDefaultOptions.maxCanvasPixels || this.getDefaultCanvasSize();
     this.reducedMaxCanvasPixels = Math.min(

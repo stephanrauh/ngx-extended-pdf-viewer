@@ -24,7 +24,7 @@ export class PdfZoomOutComponent implements OnDestroy {
   private eventBusAbortController: AbortController | null = null;
   // #3135 end of modification by ngx-extended-pdf-viewer
 
-  private eventListener = ({ source, scale }: ScaleChangingEvent) => {
+  private readonly eventListener = ({ source, scale }: ScaleChangingEvent) => {
     const minZoom = source.minZoom;
     if (minZoom) {
       this.disabled = scale <= minZoom;

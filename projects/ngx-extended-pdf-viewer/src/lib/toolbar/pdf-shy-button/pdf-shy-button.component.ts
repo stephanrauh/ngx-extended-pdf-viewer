@@ -60,7 +60,7 @@ export class PdfShyButtonComponent implements OnInit, AfterViewInit, AfterConten
     const value = this.image();
     if (!value) return undefined;
 
-    const svgTags = [
+    const svgTags = new Set([
       // 'a' is not allowed!
       'animate',
       'animateMotion',
@@ -130,11 +130,11 @@ export class PdfShyButtonComponent implements OnInit, AfterViewInit, AfterConten
       'use',
       'video',
       'view',
-    ];
+    ]);
 
     // Validation: only <svg> and SVG tags are allowed
     const tags = value.split('<').filter((tag) => tag.length > 0);
-    const legal = tags.every((tag) => tag.startsWith('svg') || tag.startsWith('/') || svgTags.includes(tag.split(/\s|>/)[0]));
+    const legal = tags.every((tag) => tag.startsWith('svg') || tag.startsWith('/') || svgTags.has(tag.split(/\s|>/)[0]));
     if (!legal) {
       throw new Error('Illegal image for PDFShyButton. Only SVG images are allowed. Please use only the tags <svg> and <path>. ' + value);
     }
@@ -144,10 +144,10 @@ export class PdfShyButtonComponent implements OnInit, AfterViewInit, AfterConten
   });
 
   constructor(
-    private pdfShyButtonServiceService: PdfShyButtonService,
-    private renderer: Renderer2,
+    private readonly pdfShyButtonServiceService: PdfShyButtonService,
+    private readonly renderer: Renderer2,
     notificationService: PDFNotificationService,
-    private pdfCspPolicyService: PdfCspPolicyService,
+    private readonly pdfCspPolicyService: PdfCspPolicyService,
   ) {
     effect(() => {
       this.PDFViewerApplication = notificationService.onPDFJSInitSignal();

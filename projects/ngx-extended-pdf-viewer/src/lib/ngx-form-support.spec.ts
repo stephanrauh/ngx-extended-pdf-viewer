@@ -433,7 +433,7 @@ describe('NgxFormSupport', () => {
       expect(result).toBe('root.parent.field');
 
       // Clean up
-      document.body.removeChild(grandParent);
+      grandParent.remove();
     });
   });
 
