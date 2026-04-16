@@ -166,9 +166,9 @@ describe('NgxExtendedPdfViewerComponent', () => {
   });
 
   // Skip: Requires complex Angular component mocking and event bus setup
-  it.skip('should call ngOnDestroy and clean up', async () => {
+  it.skip('should call ngOnDestroy and clean up', () => {
     const spy = jest.spyOn(component['pdfScriptLoaderService'].PDFViewerApplication, 'close');
-    await component.ngOnDestroy();
+    component.ngOnDestroy();
     expect(spy).toHaveBeenCalled();
   });
 
@@ -387,16 +387,16 @@ describe('NgxExtendedPdfViewerComponent', () => {
       component['eventBusAbortController'] = mockController;
       setupDestroyMocks();
 
-      await component.ngOnDestroy();
+      component.ngOnDestroy();
 
       expect(abortSpy).toHaveBeenCalled();
     });
 
-    it('should set controller to null in ngOnDestroy', async () => {
+    it('should set controller to null in ngOnDestroy', () => {
       component['eventBusAbortController'] = new AbortController();
       setupDestroyMocks();
 
-      await component.ngOnDestroy();
+      component.ngOnDestroy();
 
       expect(component['eventBusAbortController']).toBeNull();
     });

@@ -2836,11 +2836,15 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     if (this.checkRootElementTimeout) {
       clearTimeout(this.checkRootElementTimeout);
     }
+    // #3131 Unregister all eventBus listeners synchronously before async cleanup.
+    this.eventBusAbortController?.abort();
+    this.eventBusAbortController = null;
+
     // Async cleanup is fire-and-forget — Angular does not await ngOnDestroy.
     const cleanup = async () => {
     if (this.initializationPromise) {
       try {
-        await this.initializationPromise;
+        await this.initializationPromise; // NOSONAR — typed as function but may hold a Promise at runtime
       } catch {}
     }
 
@@ -2903,10 +2907,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       PDFViewerApplication.pdfThumbnailViewer?.stopRendering();
       delete PDFViewerApplication.ngxKeyboardManager;
       delete PDFViewerApplication.cspPolicyService;
-      // #3131 Unregister all eventBus listeners in one call via AbortController.
-      this.eventBusAbortController?.abort();
-      this.eventBusAbortController = null;
-
       // #802 clear the form data; otherwise the "download" dialogs opens
       PDFViewerApplication.pdfDocument?.annotationStorage?.resetModified();
       this.formSupport?.reset();
