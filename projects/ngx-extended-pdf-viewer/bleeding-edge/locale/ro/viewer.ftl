@@ -733,11 +733,14 @@ unverified-signature-warning = Acest fișier PDF conține o semnătură digital�
 pdfjs-infinite-scroll-button-label = Derulare infinită
 pdfjs-find-multiple-checkbox-label = Potrivește fiecare cuvânt
 pdfjs-find-regexp-checkbox-label = Expresie regulată
-pdfjs-editor-movePageUp-button = Mută pagina în sus
+pdfjs-editor-movePageUp-button =
+    .title = Mută pagina în sus
 pdfjs-editor-movePageUp-button-label = Mută pagina în sus
-pdfjs-editor-movePageDown-button = Mută pagina în jos
+pdfjs-editor-movePageDown-button =
+    .title = Mută pagina în jos
 pdfjs-editor-movePageDown-button-label = Mută pagina în jos
-pdfjs-cursor-page-flip-tool-button = Răsfoire pagini
+pdfjs-cursor-page-flip-tool-button =
+    .title = Răsfoire pagini
 pdfjs-cursor-page-flip-tool-button-label = Răsfoire pagini
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-thumb-page-title1 =

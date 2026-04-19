@@ -656,11 +656,14 @@ unverified-signature-warning = Ova PDF datoteka sadrži digitalni potpis. PDF pr
 pdfjs-infinite-scroll-button-label = Beskonačno pomicanje
 pdfjs-find-multiple-checkbox-label = Podudaraj svaku riječ
 pdfjs-find-regexp-checkbox-label = Regularni izraz
-pdfjs-editor-movePageUp-button = Pomakni stranicu gore
+pdfjs-editor-movePageUp-button =
+    .title = Pomakni stranicu gore
 pdfjs-editor-movePageUp-button-label = Pomakni stranicu gore
-pdfjs-editor-movePageDown-button = Pomakni stranicu dolje
+pdfjs-editor-movePageDown-button =
+    .title = Pomakni stranicu dolje
 pdfjs-editor-movePageDown-button-label = Pomakni stranicu dolje
-pdfjs-cursor-page-flip-tool-button = Listanje stranica
+pdfjs-cursor-page-flip-tool-button =
+    .title = Listanje stranica
 pdfjs-cursor-page-flip-tool-button-label = Listanje stranica
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-thumb-page-title1 =

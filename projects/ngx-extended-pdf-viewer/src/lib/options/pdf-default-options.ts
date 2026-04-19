@@ -4,8 +4,8 @@ const _isIE11 = typeof window === 'undefined' ? false : !!(<any>globalThis).MSIn
 const isEdge = typeof navigator === 'undefined' || /Edge\/\d./i.test(navigator.userAgent);
 const needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
 
-export const pdfjsVersion = '5.6.1103';
-export const pdfjsBleedingEdgeVersion = '5.6.1102';
+export const pdfjsVersion = '5.6.1104';
+export const pdfjsBleedingEdgeVersion = '5.6.1104';
 export function getVersionSuffix(folder: string): string {
   if (folder?.includes('bleeding-edge')) {
     return pdfjsBleedingEdgeVersion;
@@ -70,7 +70,7 @@ export const pdfDefaultOptions = {
   enableSignatureEditor: false,
   externalLinkRel: 'noopener noreferrer nofollow',
   externalLinkTarget: 0,
-  findController: undefined, // must extend PDFFindController
+  findController: undefined as any, // must extend PDFFindController
   historyUpdateUrl: false,
   ignoreDestinationZoom: false,
   imageResourcesPath: './images/',
@@ -103,7 +103,7 @@ export const pdfDefaultOptions = {
   maxImageSize: -1,
   pdfBug: false,
   verbosity: 1,
-  workerPort: null,
+  workerPort: null as any,
   assetsFolder: 'assets',
   _internalFilenameSuffix: '.min', // don't modify this - it's an internal field
   sandboxBundleSrc: function () {
@@ -130,7 +130,7 @@ export const pdfDefaultOptions = {
   enableCatalogAAJavaScript: false,
   enableOpenActionJavaScript: false,
   defaultCacheSize: 50,
-  passwordPrompt: undefined,
+  passwordPrompt: undefined as any,
   enableHWA: true, // enable hardware acceleration. Active since pdf.js 4.4, default true since pdf.js 5.6.
   enableWebGPU: true, // enable WebGPU mesh shading for improved rendering performance
   enableNewBadge: false, // show a "New" badge on the manage button (upstream default for MOZCENTRAL only)

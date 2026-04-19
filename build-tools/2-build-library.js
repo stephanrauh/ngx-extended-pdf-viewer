@@ -31,7 +31,7 @@ try {
 
 // Pack library
 try {
-  execSync('npx ng-packagr -p projects/ngx-extended-pdf-viewer/ng-package.json', { stdio: 'inherit', shell: true });
+  execSync('npx ng-packagr -p projects/ngx-extended-pdf-viewer/ng-package.json -c projects/ngx-extended-pdf-viewer/tsconfig.lib.json', { stdio: 'inherit', shell: true });
 } catch (error) {
   console.error('Error 22: Packing library failed');
   process.exit(22);

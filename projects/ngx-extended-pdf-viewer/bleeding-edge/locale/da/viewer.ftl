@@ -696,11 +696,14 @@ unverified-signature-warning = Denne PDF-fil indeholder en digital signatur. PDF
 pdfjs-infinite-scroll-button-label = Uendelig rulning
 pdfjs-find-multiple-checkbox-label = Match hvert ord
 pdfjs-find-regexp-checkbox-label = Regulært udtryk
-pdfjs-editor-movePageUp-button = Flyt side op
+pdfjs-editor-movePageUp-button =
+    .title = Flyt side op
 pdfjs-editor-movePageUp-button-label = Flyt side op
-pdfjs-editor-movePageDown-button = Flyt side ned
+pdfjs-editor-movePageDown-button =
+    .title = Flyt side ned
 pdfjs-editor-movePageDown-button-label = Flyt side ned
-pdfjs-cursor-page-flip-tool-button = Bladre i sider
+pdfjs-cursor-page-flip-tool-button =
+    .title = Bladre i sider
 pdfjs-cursor-page-flip-tool-button-label = Bladre i sider
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-views-manager-sidebar-resizer =

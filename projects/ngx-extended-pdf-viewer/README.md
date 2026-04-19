@@ -192,6 +192,7 @@ Version 27 updates to pdf.js 5.6.205 and introduces page management features.
 
 #### ❗ Breaking changes:
 
+- **ES2022 target**: The TypeScript compilation target has been raised from `es5` to `es2022`. This aligns with Angular 19's own output level and the browser targets of the underlying pdf.js engine (Chrome 118+, Safari 15+, Firefox ESR). As a side effect, the compilation has become stricter. Basically, now it works the way it always should have worked, but even in my showcase it broke several pages. You may need to update your `tsconfig.json`.
 - **Custom thumbnail CSS**: If you have custom CSS targeting `.thumbnailImage` in the sidebar, update it to target `.thumbnailImageContainer img` or `.thumbnailImageContainer`. The sidebar thumbnail DOM structure changed from `img.thumbnailImage` to `div.thumbnailImageContainer > img`.
 - **Legacy thumbnail CSS removed**: `.thumbnailSelectionRing` and `.thumbnail.selected` styles have been removed. Modern pdf.js uses box-shadow for selection styling.
 - **Sidebar DOM structure**: The sidebar now includes `#viewsManagerHeader` and `#viewsManagerStatus` elements. Custom sidebar implementations that manipulate the sidebar DOM may need adjustment.

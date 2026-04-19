@@ -17,12 +17,15 @@ unverified-signature-warning = Deze PDF bevat een digitale handtekening. De PDF 
 pdfjs-infinite-scroll-button-label = Oneindig scrollen
 pdfjs-find-multiple-checkbox-label = Elk woord zoeken
 pdfjs-find-regexp-checkbox-label = Reguliere expressie
-pdfjs-editor-movePageUp-button = Pagina omhoog verplaatsen
+pdfjs-editor-movePageUp-button =
+    .title = Pagina omhoog verplaatsen
 pdfjs-editor-movePageUp-button-label = Pagina omhoog verplaatsen
-pdfjs-editor-movePageDown-button = Pagina omlaag verplaatsen
+pdfjs-editor-movePageDown-button =
+    .title = Pagina omlaag verplaatsen
 pdfjs-editor-movePageDown-button-label = Pagina omlaag verplaatsen
 
 
 
-pdfjs-cursor-page-flip-tool-button = Pagina omslaan
+pdfjs-cursor-page-flip-tool-button =
+    .title = Pagina omslaan
 pdfjs-cursor-page-flip-tool-button-label = Pagina omslaan

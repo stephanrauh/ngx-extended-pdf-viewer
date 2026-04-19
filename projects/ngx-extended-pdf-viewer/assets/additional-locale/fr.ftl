@@ -17,12 +17,15 @@ unverified-signature-warning = Ce fichier PDF contient une signature numérique.
 pdfjs-infinite-scroll-button-label = Défilement infini
 pdfjs-find-multiple-checkbox-label = Correspondre à chaque mot
 pdfjs-find-regexp-checkbox-label = Expression régulière
-pdfjs-editor-movePageUp-button = Déplacer la page vers le haut
+pdfjs-editor-movePageUp-button =
+    .title = Déplacer la page vers le haut
 pdfjs-editor-movePageUp-button-label = Déplacer la page vers le haut
-pdfjs-editor-movePageDown-button = Déplacer la page vers le bas
+pdfjs-editor-movePageDown-button =
+    .title = Déplacer la page vers le bas
 pdfjs-editor-movePageDown-button-label = Déplacer la page vers le bas
 
 
 
-pdfjs-cursor-page-flip-tool-button = Feuilleter les pages
+pdfjs-cursor-page-flip-tool-button =
+    .title = Feuilleter les pages
 pdfjs-cursor-page-flip-tool-button-label = Feuilleter les pages

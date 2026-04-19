@@ -759,11 +759,14 @@ unverified-signature-warning = Ten plik PDF zawiera podpis cyfrowy. Przeglądark
 pdfjs-infinite-scroll-button-label = Nieskończone przewijanie
 pdfjs-find-multiple-checkbox-label = Dopasuj każde słowo
 pdfjs-find-regexp-checkbox-label = Wyrażenie regularne
-pdfjs-editor-movePageUp-button = Przenieś stronę w górę
+pdfjs-editor-movePageUp-button =
+    .title = Przenieś stronę w górę
 pdfjs-editor-movePageUp-button-label = Przenieś stronę w górę
-pdfjs-editor-movePageDown-button = Przenieś stronę w dół
+pdfjs-editor-movePageDown-button =
+    .title = Przenieś stronę w dół
 pdfjs-editor-movePageDown-button-label = Przenieś stronę w dół
-pdfjs-cursor-page-flip-tool-button = Przewracanie stron
+pdfjs-cursor-page-flip-tool-button =
+    .title = Przewracanie stron
 pdfjs-cursor-page-flip-tool-button-label = Przewracanie stron
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-views-manager-outlines-title1 = Document outline

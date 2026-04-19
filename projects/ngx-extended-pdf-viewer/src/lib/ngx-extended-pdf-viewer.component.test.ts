@@ -1,5 +1,5 @@
 import { PlatformLocation } from '@angular/common';
-import { ChangeDetectorRef, ElementRef, NgZone, PLATFORM_ID, Renderer2, CSP_NONCE, NO_ERRORS_SCHEMA } from '@angular/core';
+import { ChangeDetectorRef, ElementRef, NgZone, PLATFORM_ID, Renderer2, CSP_NONCE, NO_ERRORS_SCHEMA, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AnnotationEditorEvent } from './events/annotation-editor-layer-event';
 import { FormDataType, NgxExtendedPdfViewerComponent, isIOS } from './ngx-extended-pdf-viewer.component';
@@ -35,20 +35,30 @@ describe('NgxExtendedPdfViewerComponent', () => {
         { 
           provide: PDFScriptLoaderService,
           useValue: {
-            onPDFJSInitSignal: jest.fn(() => undefined),
+            onPDFJSInitSignal: signal(undefined),
             pdfjsVersion: '4.0.379',
             PDFViewerApplication: {
               eventBus: {
-                dispatch: jest.fn()
+                dispatch: jest.fn(),
+                on: jest.fn(),
+                destroy: jest.fn()
               },
               pdfViewer: {
                 currentScale: 1,
+                destroyBookMode: jest.fn(),
                 setScale: jest.fn(),
+                setTextLayerMode: jest.fn(),
+                stopRendering: jest.fn(),
                 update: jest.fn()
               },
+              pdfThumbnailViewer: { stopRendering: jest.fn() },
               toolbar: {
                 pageNumber: 1
-              }
+              },
+              close: jest.fn().mockResolvedValue(undefined),
+              unbindEvents: jest.fn(),
+              unbindWindowEvents: jest.fn(),
+              _cleanup: jest.fn()
             },
             PDFViewerApplicationOptions: {
               set: jest.fn()
@@ -68,9 +78,9 @@ describe('NgxExtendedPdfViewerComponent', () => {
         },
         NgxKeyboardManagerService,
         { 
-          provide: PDFNotificationService, 
-          useValue: { 
-            onPDFJSInitSignal: jest.fn(() => undefined),
+          provide: PDFNotificationService,
+          useValue: {
+            onPDFJSInitSignal: signal(undefined),
             pdfjsVersion: '4.0.379'
           } 
         },
@@ -195,12 +205,13 @@ describe('NgxExtendedPdfViewerComponent', () => {
 
     beforeEach(() => {
       mockPDFViewerApp = {
-        eventBus: { dispatch: jest.fn(), on: jest.fn() },
+        eventBus: { dispatch: jest.fn(), on: jest.fn(), destroy: jest.fn() },
         findBar: { close: jest.fn() },
         secondaryToolbar: { close: jest.fn() },
         pdfViewer: {
           currentScale: 1,
           setScale: jest.fn(),
+          setTextLayerMode: jest.fn(),
           update: jest.fn(),
           destroyBookMode: jest.fn(),
           stopRendering: jest.fn(),
@@ -210,6 +221,9 @@ describe('NgxExtendedPdfViewerComponent', () => {
         appConfig: { filenameForDownload: '' },
         close: jest.fn().mockResolvedValue(undefined),
         open: jest.fn().mockResolvedValue(undefined),
+        unbindEvents: jest.fn(),
+        unbindWindowEvents: jest.fn(),
+        _cleanup: jest.fn(),
         toolbar: { pageNumber: 1 },
       };
       component['pdfScriptLoaderService'].PDFViewerApplication = mockPDFViewerApp;
@@ -250,12 +264,13 @@ describe('NgxExtendedPdfViewerComponent', () => {
 
     beforeEach(() => {
       mockPDFViewerApp = {
-        eventBus: { dispatch: jest.fn(), on: jest.fn() },
+        eventBus: { dispatch: jest.fn(), on: jest.fn(), destroy: jest.fn() },
         findBar: { close: jest.fn() },
         secondaryToolbar: { close: jest.fn() },
         pdfViewer: {
           currentScale: 1,
           setScale: jest.fn(),
+          setTextLayerMode: jest.fn(),
           update: jest.fn(),
           destroyBookMode: jest.fn(),
           stopRendering: jest.fn(),
@@ -265,6 +280,9 @@ describe('NgxExtendedPdfViewerComponent', () => {
         appConfig: { filenameForDownload: '' },
         close: jest.fn().mockResolvedValue(undefined),
         open: jest.fn().mockResolvedValue(undefined),
+        unbindEvents: jest.fn(),
+        unbindWindowEvents: jest.fn(),
+        _cleanup: jest.fn(),
         toolbar: { pageNumber: 1 },
       };
       component['pdfScriptLoaderService'].PDFViewerApplication = mockPDFViewerApp;
@@ -310,12 +328,13 @@ describe('NgxExtendedPdfViewerComponent', () => {
 
     beforeEach(() => {
       mockPDFViewerApp = {
-        eventBus: { dispatch: jest.fn(), on: jest.fn() },
+        eventBus: { dispatch: jest.fn(), on: jest.fn(), destroy: jest.fn() },
         findBar: { close: jest.fn() },
         secondaryToolbar: { close: jest.fn() },
         pdfViewer: {
           currentScale: 1,
           setScale: jest.fn(),
+          setTextLayerMode: jest.fn(),
           update: jest.fn(),
           destroyBookMode: jest.fn(),
           stopRendering: jest.fn(),
@@ -325,6 +344,9 @@ describe('NgxExtendedPdfViewerComponent', () => {
         appConfig: { filenameForDownload: '' },
         close: jest.fn().mockResolvedValue(undefined),
         open: jest.fn().mockResolvedValue(undefined),
+        unbindEvents: jest.fn(),
+        unbindWindowEvents: jest.fn(),
+        _cleanup: jest.fn(),
         toolbar: { pageNumber: 1 },
       };
       component['pdfScriptLoaderService'].PDFViewerApplication = mockPDFViewerApp;
@@ -366,7 +388,7 @@ describe('NgxExtendedPdfViewerComponent', () => {
     function setupDestroyMocks() {
       component['pdfScriptLoaderService'].PDFViewerApplication = {
         eventBus: { dispatch: jest.fn(), on: jest.fn(), destroy: jest.fn() },
-        pdfViewer: { destroyBookMode: jest.fn(), stopRendering: jest.fn() },
+        pdfViewer: { destroyBookMode: jest.fn(), stopRendering: jest.fn(), setTextLayerMode: jest.fn() },
         pdfThumbnailViewer: { stopRendering: jest.fn() },
         pdfDocument: { annotationStorage: { resetModified: jest.fn() } },
         ngxConsole: { reset: jest.fn() },
@@ -532,12 +554,13 @@ describe('NgxExtendedPdfViewerComponent', () => {
   describe('formSupport null guard (#3131)', () => {
     it('should not throw when formSupport is undefined during annotationlayerrendered', () => {
       const mockPDFViewerApp = {
-        eventBus: { dispatch: jest.fn(), on: jest.fn() },
+        eventBus: { dispatch: jest.fn(), on: jest.fn(), destroy: jest.fn() },
         findBar: { close: jest.fn() },
         secondaryToolbar: { close: jest.fn() },
         pdfViewer: {
           currentScale: 1,
           destroyBookMode: jest.fn(),
+          setTextLayerMode: jest.fn(),
           stopRendering: jest.fn(),
         },
         pdfThumbnailViewer: { stopRendering: jest.fn() },
@@ -547,6 +570,9 @@ describe('NgxExtendedPdfViewerComponent', () => {
         ngxConsole: { reset: jest.fn() },
         close: jest.fn().mockResolvedValue(undefined),
         open: jest.fn().mockResolvedValue(undefined),
+        unbindEvents: jest.fn(),
+        unbindWindowEvents: jest.fn(),
+        _cleanup: jest.fn(),
         toolbar: { pageNumber: 1 },
         serviceWorkerOptions: {},
         enablePrint: true,
@@ -596,6 +622,7 @@ describe('NgxExtendedPdfViewerComponent', () => {
           on: jest.fn((name: string, handler: Function) => {
             eventHandlers[name] = handler;
           }),
+          destroy: jest.fn(),
         },
         findBar: { close: jest.fn() },
         secondaryToolbar: { close: jest.fn() },
@@ -604,6 +631,7 @@ describe('NgxExtendedPdfViewerComponent', () => {
           currentScaleValue: 1,
           _pages: [{}],
           setScale: jest.fn(),
+          setTextLayerMode: jest.fn(),
           update: jest.fn(),
           destroyBookMode: jest.fn(),
           stopRendering: jest.fn(),
@@ -615,6 +643,9 @@ describe('NgxExtendedPdfViewerComponent', () => {
         ngxConsole: { reset: jest.fn() },
         close: jest.fn().mockResolvedValue(undefined),
         open: jest.fn().mockResolvedValue(undefined),
+        unbindEvents: jest.fn(),
+        unbindWindowEvents: jest.fn(),
+        _cleanup: jest.fn(),
         toolbar: { pageNumber: 1 },
         serviceWorkerOptions: {},
         enablePrint: true,

@@ -768,11 +768,14 @@ unverified-signature-warning = Dokument vsebuje digitalni podpis. PDF viewer ne 
 pdfjs-infinite-scroll-button-label = Neskončno drsenje
 pdfjs-find-multiple-checkbox-label = Najdi vsako besedo
 pdfjs-find-regexp-checkbox-label = Regularni izraz
-pdfjs-editor-movePageUp-button = Premakni stran navzgor
+pdfjs-editor-movePageUp-button =
+    .title = Premakni stran navzgor
 pdfjs-editor-movePageUp-button-label = Premakni stran navzgor
-pdfjs-editor-movePageDown-button = Premakni stran navzdol
+pdfjs-editor-movePageDown-button =
+    .title = Premakni stran navzdol
 pdfjs-editor-movePageDown-button-label = Premakni stran navzdol
-pdfjs-cursor-page-flip-tool-button = Listanje strani
+pdfjs-cursor-page-flip-tool-button =
+    .title = Listanje strani
 pdfjs-cursor-page-flip-tool-button-label = Listanje strani
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-views-manager-outlines-title1 = Document outline

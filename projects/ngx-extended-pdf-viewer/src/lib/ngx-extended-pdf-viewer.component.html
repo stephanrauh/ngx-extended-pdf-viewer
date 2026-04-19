@@ -20,7 +20,7 @@
   >
     <div class="html">
       <div
-        class="body pdf-js-version-{{ majorMinorPdfJsVersion }}"
+        [class]="'body pdf-js-version-' + majorMinorPdfJsVersion"
         [style.backgroundColor]="backgroundColor()"
       >
         <div id="outerContainer">
