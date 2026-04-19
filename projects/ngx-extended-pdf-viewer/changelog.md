@@ -737,3 +737,4 @@
 - 26.0.2 #3183 fixed viewer height in constrained containers (e.g. mat-card with height: 80vh): the signals migration removed a change guard, causing the pageViewMode effect to reset the height on initialization; also improved auto-height to respect parent overflow bounds
 - 26.0.3 scroll the correct thumbnail into view on initial load
 - 26.0.4 fixed thumbnail scroll landing on the wrong page due to a premature scroll call before pdf.js set the initial page
+- 26.0.5 #3195 In book mode, clicking the table of contents in the sidebar now flips the desired page open. Previously, it only updated the page number in the main toolbar.
