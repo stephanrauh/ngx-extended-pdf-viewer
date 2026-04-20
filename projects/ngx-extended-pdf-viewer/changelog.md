@@ -739,3 +739,4 @@
 - 26.0.4 fixed thumbnail scroll landing on the wrong page due to a premature scroll call before pdf.js set the initial page
 - 26.0.5 #3195 In book mode, clicking the table of contents in the sidebar now flips the desired page open. Previously, it only updated the page number in the main toolbar. (build was broken - mypdf.js fix was not included)
 - 26.0.6 #3195 re-release of 26.0.5 with the mypdf.js fix correctly included; fixed CI to use patch-specific mypdf.js tags
+- 26.0.7 now the comment button has its image back; fixed the comment dialog's focus outline overflowing the dialog border

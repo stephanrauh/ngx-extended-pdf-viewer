@@ -838,13 +838,16 @@ ngx-extended-pdf-viewer {
     --comment-dialog-text: light-dark(#15141a, #fbfbfe);
     --comment-dialog-header-bg: light-dark(#f0f0f4, #2b2a33);
     --comment-button-hover-bg-dialog: light-dark(#e0e0e6, #52525e);
+    width: 360px;
+    max-width: 100%;
+    min-width: 200px;
+    padding: 8px 16px 16px;
+    box-sizing: border-box;
     background-color: var(--comment-dialog-bg);
     border: 1px solid var(--comment-dialog-border);
     color: var(--comment-dialog-text);
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    max-width: 400px;
-    min-width: 300px;
 
     @media screen and (forced-colors: active) {
       --comment-dialog-bg: Canvas;
