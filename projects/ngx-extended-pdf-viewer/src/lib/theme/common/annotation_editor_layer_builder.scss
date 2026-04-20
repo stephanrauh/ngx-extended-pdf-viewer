@@ -515,6 +515,21 @@ ngx-extended-pdf-viewer {
           }
         }
       }
+
+      .comment {
+        width: var(--editor-toolbar-height);
+
+        &::before {
+          content: "";
+          mask-image: var(--comment-edit-button-icon);
+          mask-repeat: no-repeat;
+          mask-position: center;
+          display: inline-block;
+          background-color: var(--editor-toolbar-fg-color);
+          width: 100%;
+          height: 100%;
+        }
+      }
     }
   }
 
