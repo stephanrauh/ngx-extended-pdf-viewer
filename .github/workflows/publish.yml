@@ -66,14 +66,25 @@ jobs:
         id: mypdf-tag
         run: |
           TAG_VERSION=${GITHUB_REF#refs/tags/}
-          # For patch releases (e.g., 26.0.1), set MYPDFJS_TAG to the base version tag
+          # For patch releases (e.g., 26.0.1), use the patch-specific mypdf.js tag if it exists,
+          # otherwise fall back to the base version tag
           PATCH=$(echo "$TAG_VERSION" | cut -d. -f3)
           if [ "$PATCH" != "0" ] && ! echo "$TAG_VERSION" | grep -qE '(alpha|beta|rc)'; then
             MAJOR=$(echo "$TAG_VERSION" | cut -d. -f1)
             MINOR=$(echo "$TAG_VERSION" | cut -d. -f2)
+            PATCH_TAG="ngx-extended-pdf-viewer-${TAG_VERSION}"
             BASE_TAG="ngx-extended-pdf-viewer-${MAJOR}.${MINOR}.0"
-            echo "MYPDFJS_TAG=$BASE_TAG" >> $GITHUB_ENV
-            echo "Patch release detected. Using mypdf.js tag: $BASE_TAG"
+            # Use patch-specific tag if it exists (for backports with mypdf.js changes),
+            # otherwise fall back to base version tag
+            cd workspace/mypdf.js
+            if git rev-parse "$PATCH_TAG" >/dev/null 2>&1; then
+              echo "MYPDFJS_TAG=$PATCH_TAG" >> $GITHUB_ENV
+              echo "Patch release detected. Using patch-specific mypdf.js tag: $PATCH_TAG"
+            else
+              echo "MYPDFJS_TAG=$BASE_TAG" >> $GITHUB_ENV
+              echo "Patch release detected. Using base mypdf.js tag: $BASE_TAG"
+            fi
+            cd ..
           else
             echo "Regular release. Using default branches."
           fi
