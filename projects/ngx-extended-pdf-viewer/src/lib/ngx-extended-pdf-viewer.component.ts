@@ -2948,25 +2948,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
         PDFViewerApplicationOptions.set('defaultZoomValue', zoomAsNumber);
       }
 
-      const rootNativeElement = rootElement?.nativeElement as HTMLElement | undefined;
-      if (!rootNativeElement) return;
-      const scaleDropdownField = rootNativeElement.querySelector('#scaleSelect') as HTMLSelectElement | undefined;
-      if (scaleDropdownField) {
-        if (this.zoom() === 'auto' || this.zoom() === 'page-fit' || this.zoom() === 'page-actual' || this.zoom() === 'page-width') {
-          scaleDropdownField.value = this.zoom() as string;
-        } else {
-          scaleDropdownField.value = 'custom';
-          if (scaleDropdownField.options) {
-            for (const option of scaleDropdownField.options as any) {
-              if (option.value === 'custom') {
-                option.textContent = `${Math.round(Number(zoomAsNumber) * 100_000) / 1000}%`;
-              }
-            }
-          }
-        }
-      }
-
-      if (PDFViewerApplication.pdfViewer) {
+      if (PDFViewerApplication.pdfViewer && PDFViewerApplication.pdfViewer._pages?.length > 0) {
         // Guard against writing back a scale that pdf.js already has. During rapid
         // pinch zoom (especially on iPad), the Angular effect can fire multiple times
         // and write a stale numeric scale back to pdf.js WITHOUT an origin, causing
