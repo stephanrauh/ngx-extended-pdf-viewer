@@ -627,6 +627,7 @@ describe('NgxExtendedPdfViewerComponent', () => {
         pdfViewer: {
           currentScale: 1,
           currentScaleValue: 1,
+          _pages: [{}],
           setScale: jest.fn(),
           update: jest.fn(),
           destroyBookMode: jest.fn(),

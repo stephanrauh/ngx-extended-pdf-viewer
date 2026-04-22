@@ -2393,7 +2393,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       if (x.presetValue !== 'auto' && x.presetValue !== 'page-fit' && x.presetValue !== 'page-actual' && x.presetValue !== 'page-width') {
         // ignore rounding differences
         if (Math.abs(x.previousScale - x.scale) > 0.000001) {
-          const newZoom = x.scale * 100;
+          const newZoom = Math.round(x.scale * 100_000) / 1000;
           this._lastZoomSetByPdfJs = newZoom;
           this.zoom.set(newZoom);
         }

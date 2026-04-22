@@ -740,3 +740,4 @@
 - 26.0.5 #3195 In book mode, clicking the table of contents in the sidebar now flips the desired page open. Previously, it only updated the page number in the main toolbar. (build was broken - mypdf.js fix was not included)
 - 26.0.6 #3195 re-release of 26.0.5 with the mypdf.js fix correctly included; fixed CI to use patch-specific mypdf.js tags
 - 26.0.7 now the comment button has its image back; fixed the comment dialog's focus outline overflowing the dialog border
+- 26.0.8 #3198 fixed Fluent resolver error ("Variable type not supported: $scale, object") caused by NaN in zoom scale l10n args; fixed [(zoom)] two-way binding getting out of sync with the actual pdf.js scale after SPA navigation; rounded (zoomChange) values to 3 decimal places to avoid floating-point artifacts like 70.00000000000001
