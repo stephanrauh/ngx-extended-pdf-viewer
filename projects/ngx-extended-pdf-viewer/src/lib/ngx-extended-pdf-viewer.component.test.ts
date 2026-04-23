@@ -224,7 +224,7 @@ describe('NgxExtendedPdfViewerComponent', () => {
         unbindEvents: jest.fn(),
         unbindWindowEvents: jest.fn(),
         _cleanup: jest.fn(),
-        toolbar: { pageNumber: 1 },
+        toolbar: { pageNumber: 1, setPageScale: jest.fn() },
       };
       component['pdfScriptLoaderService'].PDFViewerApplication = mockPDFViewerApp;
       component['overrideDefaultSettings'] = jest.fn();
@@ -283,7 +283,7 @@ describe('NgxExtendedPdfViewerComponent', () => {
         unbindEvents: jest.fn(),
         unbindWindowEvents: jest.fn(),
         _cleanup: jest.fn(),
-        toolbar: { pageNumber: 1 },
+        toolbar: { pageNumber: 1, setPageScale: jest.fn() },
       };
       component['pdfScriptLoaderService'].PDFViewerApplication = mockPDFViewerApp;
       component['overrideDefaultSettings'] = jest.fn();
@@ -347,7 +347,7 @@ describe('NgxExtendedPdfViewerComponent', () => {
         unbindEvents: jest.fn(),
         unbindWindowEvents: jest.fn(),
         _cleanup: jest.fn(),
-        toolbar: { pageNumber: 1 },
+        toolbar: { pageNumber: 1, setPageScale: jest.fn() },
       };
       component['pdfScriptLoaderService'].PDFViewerApplication = mockPDFViewerApp;
       component['overrideDefaultSettings'] = jest.fn();
@@ -573,7 +573,7 @@ describe('NgxExtendedPdfViewerComponent', () => {
         unbindEvents: jest.fn(),
         unbindWindowEvents: jest.fn(),
         _cleanup: jest.fn(),
-        toolbar: { pageNumber: 1 },
+        toolbar: { pageNumber: 1, setPageScale: jest.fn() },
         serviceWorkerOptions: {},
         enablePrint: true,
         findController: { state: {} },
@@ -646,7 +646,7 @@ describe('NgxExtendedPdfViewerComponent', () => {
         unbindEvents: jest.fn(),
         unbindWindowEvents: jest.fn(),
         _cleanup: jest.fn(),
-        toolbar: { pageNumber: 1 },
+        toolbar: { pageNumber: 1, setPageScale: jest.fn() },
         serviceWorkerOptions: {},
         enablePrint: true,
         findController: { state: {} },
@@ -813,6 +813,137 @@ describe('NgxExtendedPdfViewerComponent', () => {
 
       // currentScaleValue SHOULD be updated because values differ
       expect(mockPDFViewerApp.pdfViewer.currentScaleValue).toBe(2);
+    });
+
+    it('should sync toolbar and emit currentZoomFactor when same-scale guard triggers', async () => {
+      mockPDFViewerApp.pdfViewer.currentScale = 0.6;
+
+      fixture.componentRef.setInput('zoom', 60);
+      fixture.detectChanges();
+
+      const rootEl = { nativeElement: document.createElement('div') };
+      const scaleSelect = document.createElement('select');
+      scaleSelect.id = 'scaleSelect';
+      rootEl.nativeElement.appendChild(scaleSelect);
+      component['root'] = (() => rootEl) as any;
+
+      const emitSpy = jest.spyOn(component.currentZoomFactor, 'emit');
+
+      await (component as any).setZoom();
+
+      // Same-scale guard should have called setPageScale to sync toolbar
+      expect(mockPDFViewerApp.toolbar.setPageScale).toHaveBeenCalledWith(0.6, 0.6);
+      // And emitted currentZoomFactor
+      expect(emitSpy).toHaveBeenCalledWith(0.6);
+    });
+
+    it('should round zoom values to avoid floating-point artifacts', () => {
+      const handler = eventHandlers['scalechanging'];
+
+      handler({
+        scale: 0.7000000000000001, // typical floating-point artifact
+        previousScale: 1.0,
+        presetValue: undefined,
+        previousPresetValue: undefined,
+      });
+
+      // Should round to 70, not 70.00000000000001
+      expect(component.zoom()).toBe(70);
+    });
+  });
+
+  describe('_showBordersEffect scalechanging dispatch', () => {
+    let mockPDFViewerApp: any;
+    let eventHandlers: Record<string, Function>;
+
+    beforeEach(() => {
+      eventHandlers = {};
+      mockPDFViewerApp = {
+        eventBus: {
+          dispatch: jest.fn(),
+          on: jest.fn((event: string, handler: Function) => {
+            eventHandlers[event] = handler;
+          }),
+          destroy: jest.fn(),
+        },
+        findBar: { close: jest.fn() },
+        secondaryToolbar: { close: jest.fn() },
+        pdfViewer: {
+          currentScale: 1.25,
+          currentScaleValue: 'auto',
+          _pages: [{}],
+          setScale: jest.fn(),
+          setTextLayerMode: jest.fn(),
+          update: jest.fn(),
+          destroyBookMode: jest.fn(),
+          stopRendering: jest.fn(),
+          removePageBorders: false,
+        },
+        pdfThumbnailViewer: { stopRendering: jest.fn() },
+        pdfDocument: { annotationStorage: { resetModified: jest.fn() } },
+        appConfig: { filenameForDownload: '' },
+        pdfLinkService: { setHash: undefined },
+        ngxConsole: { reset: jest.fn() },
+        close: jest.fn().mockResolvedValue(undefined),
+        open: jest.fn().mockResolvedValue(undefined),
+        unbindEvents: jest.fn(),
+        unbindWindowEvents: jest.fn(),
+        _cleanup: jest.fn(),
+        toolbar: { pageNumber: 1, setPageScale: jest.fn() },
+        serviceWorkerOptions: {},
+        enablePrint: true,
+        findController: { state: {} },
+        onError: undefined,
+      };
+      component['pdfScriptLoaderService'].PDFViewerApplication = mockPDFViewerApp;
+      component['pdfScriptLoaderService'].PDFViewerApplicationOptions = { set: jest.fn(), get: jest.fn() } as any;
+    });
+
+    it('should dispatch scalechanging with actual pdf.js scale, not raw Angular zoom value', () => {
+      // Create a viewer element so the effect can find it
+      const viewer = document.createElement('div');
+      viewer.id = 'viewer';
+      document.body.appendChild(viewer);
+
+      // Set zoom to 60 (Angular value), but pdf.js is at scale 1.25
+      fixture.componentRef.setInput('zoom', 60);
+      fixture.componentRef.setInput('showBorders', false);
+      fixture.detectChanges();
+      TestBed.flushEffects();
+
+      // The scalechanging event should use pdf.js's actual scale (1.25),
+      // NOT the raw Angular zoom value (60)
+      const dispatchCalls = mockPDFViewerApp.eventBus.dispatch.mock.calls
+        .filter((call: any[]) => call[0] === 'scalechanging');
+
+      for (const call of dispatchCalls) {
+        const event = call[1];
+        // No scalechanging event should ever carry the raw Angular zoom value
+        expect(event.scale).not.toBe(60);
+        expect(event.presetValue).not.toBe(60);
+      }
+
+      viewer.remove();
+    });
+
+    it('should not dispatch scalechanging when pdf.js has no current scale', () => {
+      const viewer = document.createElement('div');
+      viewer.id = 'viewer';
+      document.body.appendChild(viewer);
+
+      // Set currentScale to 0 (falsy — viewer not ready)
+      mockPDFViewerApp.pdfViewer.currentScale = 0;
+
+      fixture.componentRef.setInput('showBorders', false);
+      fixture.detectChanges();
+      TestBed.flushEffects();
+
+      // Should NOT dispatch scalechanging when currentScale is falsy
+      const dispatchCalls = mockPDFViewerApp.eventBus.dispatch.mock.calls
+        .filter((call: any[]) => call[0] === 'scalechanging');
+      expect(dispatchCalls.length).toBe(0);
+
+      viewer.remove();
     });
   });
 });

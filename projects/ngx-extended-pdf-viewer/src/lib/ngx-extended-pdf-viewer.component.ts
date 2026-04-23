@@ -1501,13 +1501,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
         if (PDFViewerApplication.pdfViewer) {
           PDFViewerApplication.pdfViewer.removePageBorders = !showBorders;
         }
-        const zoomEvent = {
-          source: viewer,
-          // tslint:disable-next-line:no-bitwise
-          scale: (Number(this.zoom()) | 100) / 100,
-          presetValue: this.zoom(),
-        } as ScaleChangingEvent;
-        PDFViewerApplication.eventBus?.dispatch('scalechanging', zoomEvent);
+        if (PDFViewerApplication.pdfViewer?.currentScale) {
+          const zoomEvent = {
+            source: viewer,
+            scale: PDFViewerApplication.pdfViewer.currentScale,
+            presetValue: PDFViewerApplication.pdfViewer.currentScaleValue,
+          } as ScaleChangingEvent;
+          PDFViewerApplication.eventBus?.dispatch('scalechanging', zoomEvent);
+        }
       }
     }
   });
@@ -2538,7 +2539,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
         if (x.presetValue !== 'auto' && x.presetValue !== 'page-fit' && x.presetValue !== 'page-actual' && x.presetValue !== 'page-width') {
           // ignore rounding differences
           if (Math.abs(x.previousScale - x.scale) > 0.000001) {
-            const newZoom = x.scale * 100;
+            const newZoom = Math.round(x.scale * 100_000) / 1000;
             this._lastZoomSetByPdfJs = newZoom;
             this.zoom.set(newZoom);
           }
@@ -3182,6 +3183,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
         if (typeof zoomAsNumber === 'number') {
           const currentScale = PDFViewerApplication.pdfViewer.currentScale;
           if (Math.abs(zoomAsNumber - currentScale) < 1e-6) {
+            // Scale is already correct, but the toolbar dropdown and currentZoomFactor
+            // may be stale (e.g. after SPA navigation where #isSameScale suppressed
+            // the scalechanging event).
+            PDFViewerApplication.toolbar?.setPageScale(zoomAsNumber, zoomAsNumber);
+            this.currentZoomFactor.emit(Math.round(currentScale * 10000) / 10000);
             return;
           }
         }
