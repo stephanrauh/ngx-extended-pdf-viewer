@@ -2507,14 +2507,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     PDFViewerApplication.eventBus.on(
       'scalechanging',
       (x: ScaleChangingEvent) => {
-        // #3060 modified by ngx-extended-pdf-viewer - diagnostic logging for iOS scale bug
-        if (x.scale < 0.15 || (x.previousScale && x.previousScale < 0.15)) {
-          console.log(
-            `[#3060 DEBUG] scalechanging event: scale=${x.scale}, previousScale=${x.previousScale}, presetValue=${x.presetValue}, this.zoom=${this.zoom()}, source=${x.source?.constructor?.name}`,
-          );
-        }
-        // #3060 end of modification by ngx-extended-pdf-viewer
-
         // Mark that pdf.js is actively zooming (pinch or Ctrl+wheel). While this
         // flag is set, the _zoomEffect skips calling setZoom() to avoid triggering
         // immediate re-renders that bypass pdf.js's drawingDelay (400ms). The flag
