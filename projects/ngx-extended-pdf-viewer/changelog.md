@@ -741,3 +741,4 @@
 - 26.0.6 #3195 re-release of 26.0.5 with the mypdf.js fix correctly included; fixed CI to use patch-specific mypdf.js tags
 - 26.0.7 now the comment button has its image back; fixed the comment dialog's focus outline overflowing the dialog border
 - 26.0.8 #3198 fixed Fluent resolver error ("Variable type not supported: $scale, object") caused by NaN in zoom scale l10n args; fixed [(zoom)] two-way binding getting out of sync with the actual pdf.js scale after SPA navigation; rounded (zoomChange) values to 3 decimal places to avoid floating-point artifacts like 70.00000000000001
+- 26.0.9 fixed the zoom toolbar showing wrong percentages after SPA navigation (the _showBordersEffect was dispatching a fake scalechanging event with a bogus scale computed via bitwise OR instead of the actual pdf.js scale); #2424 `getSerializedAnnotations()` now auto-commits active annotation editors before serializing; removed #3060 diagnostic logging

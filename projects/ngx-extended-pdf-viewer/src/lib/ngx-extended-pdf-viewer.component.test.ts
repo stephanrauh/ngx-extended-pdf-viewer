@@ -235,7 +235,7 @@ describe('NgxExtendedPdfViewerComponent', () => {
         appConfig: { filenameForDownload: '' },
         close: jest.fn().mockResolvedValue(undefined),
         open: jest.fn().mockResolvedValue(undefined),
-        toolbar: { pageNumber: 1 },
+        toolbar: { pageNumber: 1, setPageScale: jest.fn() },
       };
       component['pdfScriptLoaderService'].PDFViewerApplication = mockPDFViewerApp;
       component['overrideDefaultSettings'] = jest.fn();
@@ -290,7 +290,7 @@ describe('NgxExtendedPdfViewerComponent', () => {
         appConfig: { filenameForDownload: '' },
         close: jest.fn().mockResolvedValue(undefined),
         open: jest.fn().mockResolvedValue(undefined),
-        toolbar: { pageNumber: 1 },
+        toolbar: { pageNumber: 1, setPageScale: jest.fn() },
       };
       component['pdfScriptLoaderService'].PDFViewerApplication = mockPDFViewerApp;
       component['overrideDefaultSettings'] = jest.fn();
@@ -350,7 +350,7 @@ describe('NgxExtendedPdfViewerComponent', () => {
         appConfig: { filenameForDownload: '' },
         close: jest.fn().mockResolvedValue(undefined),
         open: jest.fn().mockResolvedValue(undefined),
-        toolbar: { pageNumber: 1 },
+        toolbar: { pageNumber: 1, setPageScale: jest.fn() },
       };
       component['pdfScriptLoaderService'].PDFViewerApplication = mockPDFViewerApp;
       component['overrideDefaultSettings'] = jest.fn();
@@ -572,7 +572,7 @@ describe('NgxExtendedPdfViewerComponent', () => {
         ngxConsole: { reset: jest.fn() },
         close: jest.fn().mockResolvedValue(undefined),
         open: jest.fn().mockResolvedValue(undefined),
-        toolbar: { pageNumber: 1 },
+        toolbar: { pageNumber: 1, setPageScale: jest.fn() },
         serviceWorkerOptions: {},
         enablePrint: true,
         findController: { state: {} },
@@ -640,7 +640,7 @@ describe('NgxExtendedPdfViewerComponent', () => {
         ngxConsole: { reset: jest.fn() },
         close: jest.fn().mockResolvedValue(undefined),
         open: jest.fn().mockResolvedValue(undefined),
-        toolbar: { pageNumber: 1 },
+        toolbar: { pageNumber: 1, setPageScale: jest.fn() },
         serviceWorkerOptions: {},
         enablePrint: true,
         findController: { state: {} },

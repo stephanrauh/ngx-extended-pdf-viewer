@@ -620,6 +620,11 @@ export class NgxExtendedPdfViewerService {
    * @returns Array of serialized annotations with temporary IDs, or null if no annotations exist
    */
   public getSerializedAnnotations(): EditorAnnotation[] | null | undefined {
+    // #2424 modified by ngx-extended-pdf-viewer
+    // Auto-commit any active annotation editor before serializing, so that
+    // annotations still being edited are included in the result.
+    (this.PDFViewerApplication?.pdfViewer as any)?.annotationEditorUIManager?.commitOrRemove();
+    // #2424 end of modification by ngx-extended-pdf-viewer
     return this.PDFViewerApplication?.pdfViewer.getSerializedAnnotations();
   }
 
@@ -636,7 +641,8 @@ export class NgxExtendedPdfViewerService {
    * @returns The serialized annotation matching the ID, or null if not found
    */
   public getSerializedAnnotation(id: string): EditorAnnotation | null | undefined {
-    const annotations = this.PDFViewerApplication?.pdfViewer.getSerializedAnnotations();
+    // #2424: use our wrapper which auto-commits active editors
+    const annotations = this.getSerializedAnnotations();
     if (!annotations || !Array.isArray(annotations)) {
       return null;
     }

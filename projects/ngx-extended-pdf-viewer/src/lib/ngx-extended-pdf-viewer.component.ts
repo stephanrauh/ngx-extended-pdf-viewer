@@ -1448,13 +1448,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
         if (PDFViewerApplication.pdfViewer) {
           PDFViewerApplication.pdfViewer.removePageBorders = !showBorders;
         }
-        const zoomEvent = {
-          source: viewer,
-          // tslint:disable-next-line:no-bitwise
-          scale: (Number(this.zoom()) | 100) / 100,
-          presetValue: this.zoom(),
-        } as ScaleChangingEvent;
-        PDFViewerApplication.eventBus?.dispatch('scalechanging', zoomEvent);
+        if (PDFViewerApplication.pdfViewer?.currentScale) {
+          const zoomEvent = {
+            source: viewer,
+            scale: PDFViewerApplication.pdfViewer.currentScale,
+            presetValue: PDFViewerApplication.pdfViewer.currentScaleValue,
+          } as ScaleChangingEvent;
+          PDFViewerApplication.eventBus?.dispatch('scalechanging', zoomEvent);
+        }
       }
     }
   });
@@ -2361,14 +2362,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       );
     }, opts);
     PDFViewerApplication.eventBus.on('scalechanging', (x: ScaleChangingEvent) => {
-      // #3060 modified by ngx-extended-pdf-viewer - diagnostic logging for iOS scale bug
-      if (x.scale < 0.15 || (x.previousScale && x.previousScale < 0.15)) {
-        console.log(
-          `[#3060 DEBUG] scalechanging event: scale=${x.scale}, previousScale=${x.previousScale}, presetValue=${x.presetValue}, this.zoom=${this.zoom()}, source=${x.source?.constructor?.name}`,
-        );
-      }
-      // #3060 end of modification by ngx-extended-pdf-viewer
-
       // Mark that pdf.js is actively zooming (pinch or Ctrl+wheel). While this
       // flag is set, the _zoomEffect skips calling setZoom() to avoid triggering
       // immediate re-renders that bypass pdf.js's drawingDelay (400ms). The flag
@@ -2956,6 +2949,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
         if (typeof zoomAsNumber === 'number') {
           const currentScale = PDFViewerApplication.pdfViewer.currentScale;
           if (Math.abs(zoomAsNumber - currentScale) < 1e-6) {
+            // Scale is already correct, but the toolbar dropdown and currentZoomFactor
+            // may be stale (e.g. after SPA navigation where #isSameScale suppressed
+            // the scalechanging event).
+            PDFViewerApplication.toolbar?.setPageScale(zoomAsNumber, zoomAsNumber);
+            this.currentZoomFactor.emit(Math.round(currentScale * 10000) / 10000);
             return;
           }
         }
