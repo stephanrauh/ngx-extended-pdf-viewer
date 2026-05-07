@@ -60,7 +60,7 @@
     "@angular/cli": "^19.2.24",
     "@angular/compiler-cli": "^19.2.21",
     "@schematics/angular": "^19.0.0",
-    "@types/estree": "^1.0.5",
+    "@types/estree": "^1.0.9",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.12.2",
     "@types/trusted-types": "^2.0.7",
