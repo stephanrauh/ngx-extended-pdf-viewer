@@ -117,6 +117,7 @@ const requiredIds = [
   'primaryZoomIn',
   'primaryZoomOut',
   'viewsManagerAddFileButton',
+  'viewsManagerAddFilePicker',
   'viewsManagerSelectorButton',
   'viewsManagerSelectorOptions',
   'viewsManagerHeaderLabel',
