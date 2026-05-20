@@ -242,15 +242,18 @@ describe('PDFScriptLoaderService', () => {
     });
 
     it('should return false in server-side rendering environment', () => {
-      // Mock server-side environment
+      // jsdom marks `window` on globalThis as non-configurable, so `delete`
+      // fails — but it's still writable, so assigning undefined makes
+      // `typeof window === 'undefined'` true for the guard under test.
       const originalWindow = (global as any).window;
-      delete (global as any).window;
+      (global as any).window = undefined;
 
-      const requiresES5 = (service as any).iOSVersionRequiresES5();
-      expect(requiresES5).toBe(false);
-
-      // Restore window
-      (global as any).window = originalWindow;
+      try {
+        const requiresES5 = (service as any).iOSVersionRequiresES5();
+        expect(requiresES5).toBe(false);
+      } finally {
+        (global as any).window = originalWindow;
+      }
     });
   });
 
@@ -398,14 +401,17 @@ describe('PDFScriptLoaderService', () => {
     });
 
     it('should handle server-side rendering environment', () => {
-      // Mock server-side environment
+      // jsdom marks `window` on globalThis as non-configurable, so `delete`
+      // fails — but it's still writable, so assigning undefined makes
+      // `typeof window === 'undefined'` true for the guard under test.
       const originalWindow = (global as any).window;
-      delete (global as any).window;
+      (global as any).window = undefined;
 
-      expect(() => service.ngOnDestroy()).not.toThrow();
-
-      // Restore window
-      (global as any).window = originalWindow;
+      try {
+        expect(() => service.ngOnDestroy()).not.toThrow();
+      } finally {
+        (global as any).window = originalWindow;
+      }
     });
   });
 

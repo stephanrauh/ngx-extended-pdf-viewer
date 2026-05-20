@@ -380,14 +380,20 @@ describe('PdfSecondaryToolbarComponent', () => {
 
   describe('checkVisibilityRecursively', () => {
     it('should return 0 for server-side rendering', () => {
+      // jsdom marks `window` on globalThis as non-configurable, so `delete`
+      // fails — but it's still writable, so assigning undefined makes
+      // `typeof window === 'undefined'` true for the guard under test.
       const originalWindow = global.window;
-      delete (global as any).window;
+      (global as any).window = undefined;
 
-      const element = document.createElement('div');
-      const result = component['checkVisibilityRecursively'](element);
+      try {
+        const element = document.createElement('div');
+        const result = component['checkVisibilityRecursively'](element);
 
-      expect(result).toBe(0);
-      global.window = originalWindow;
+        expect(result).toBe(0);
+      } finally {
+        global.window = originalWindow;
+      }
     });
 
     it('should return 0 for elements with display none style', () => {
