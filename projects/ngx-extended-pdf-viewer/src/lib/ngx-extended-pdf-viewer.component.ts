@@ -1515,7 +1515,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
   // @ts-ignore TS6133 - Used for side effects only
   private readonly _showUnverifiedSignaturesEffect = effect(() => {
-    const showUnverifiedSignatures = this.showUnverifiedSignatures;
+    // #1321 modified by ngx-extended-pdf-viewer
+    // showUnverifiedSignatures is an InputSignal — must be invoked so the
+    // effect tracks the signal and the worker receives a plain boolean
+    // (passing the signal function tripped the structured-clone algorithm
+    // with "Function object could not be cloned").
+    const showUnverifiedSignatures = this.showUnverifiedSignatures();
+    // #1321 end of modification by ngx-extended-pdf-viewer
     if (typeof window === 'undefined') return;
     if (!this.service.ngxExtendedPdfViewerInitialized) return;
 
@@ -2008,11 +2014,20 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
           PDFViewerApplicationOptions.set('pageViewMode', this.pageViewMode());
           PDFViewerApplicationOptions.set('verbosity', this.logLevel());
           PDFViewerApplicationOptions.set('pdfBackgroundColor', this.pdfBackgroundColor());
+          // #3115 modified by ngx-extended-pdf-viewer
+          // Apply color-scheme to the viewer host element instead of letting
+          // PDF.js write it to document.documentElement, which would override
+          // the host application's color-scheme (e.g. break Angular Material).
+          // color-scheme is inherited, so descendants of the host pick it up.
+          const hostElement = this.elementRef.nativeElement as HTMLElement;
           if (this.theme() === 'dark') {
-            PDFViewerApplicationOptions.set('viewerCssTheme', 2);
+            hostElement.style.colorScheme = 'dark';
           } else if (this.theme() === 'light') {
-            PDFViewerApplicationOptions.set('viewerCssTheme', 1);
+            hostElement.style.colorScheme = 'light';
+          } else {
+            hostElement.style.removeProperty('color-scheme');
           }
+          // #3115 end of modification by ngx-extended-pdf-viewer
 
           PDFViewerApplication.isViewerEmbedded = true;
           if (PDFViewerApplication.printKeyDownListener) {
