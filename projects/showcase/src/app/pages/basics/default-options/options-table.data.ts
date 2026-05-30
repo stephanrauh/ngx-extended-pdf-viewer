@@ -182,12 +182,6 @@ export const availableOptions = [
     coveredBy: '',
   },
   {
-    attribute: 'isEvalSupported',
-    description:
-      'Determines if we can evaluate strings as JavaScript. Primarily used to improve performance of font rendering, and when parsing PDF functions. The default value is <code>true</code>.',
-    coveredBy: '',
-  },
-  {
     attribute: 'maxImageSize',
     description:
       "The maximum allowed image size in total pixels, i.e. width * height. Images above this value will not be rendered. Use -1 for no limit, which is also the default value. Note that the browser also limits the image size. ngx-extended-pdf-viewer tries to reduce the size of images that are larger than the browser allows, but this doesn't always work.",

@@ -335,12 +335,6 @@ export type DocumentInitParameters = {
    */
   maxImageSize: number | undefined;
   /**
-   * - Determines if we can evaluate strings
-   * as JavaScript. Primarily used to improve performance of font rendering, and
-   * when parsing PDF functions. The default value is `true`.
-   */
-  isEvalSupported: boolean | undefined;
-  /**
    * - Determines if we can use
    * `OffscreenCanvas` in the worker. Primarily used to improve performance of
    * image conversion/rendering.

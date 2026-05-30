@@ -297,7 +297,6 @@ describe('PDF Default Options Utility Functions', () => {
       expect(typeof pdfDefaultOptions.disableFontFace).toBe('boolean');
       expect(typeof pdfDefaultOptions.disableRange).toBe('boolean');
       expect(typeof pdfDefaultOptions.disableStream).toBe('boolean');
-      expect(typeof pdfDefaultOptions.isEvalSupported).toBe('boolean');
       expect(typeof pdfDefaultOptions.isOffscreenCanvasSupported).toBe('boolean');
       expect(typeof pdfDefaultOptions.pdfBug).toBe('boolean');
     });

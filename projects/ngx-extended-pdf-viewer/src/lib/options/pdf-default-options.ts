@@ -5,7 +5,7 @@ const isEdge = typeof navigator === 'undefined' || /Edge\/\d./i.test(navigator.u
 const needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
 
 export const pdfjsVersion = '5.6.1113';
-export const pdfjsBleedingEdgeVersion = '5.7.1196';
+export const pdfjsBleedingEdgeVersion = '5.7.1197';
 export function getVersionSuffix(folder: string): string {
   if (folder?.includes('bleeding-edge')) {
     return pdfjsBleedingEdgeVersion;
@@ -98,7 +98,6 @@ export const pdfDefaultOptions = {
   disableFontFace: false,
   disableRange: false,
   disableStream: true,
-  isEvalSupported: true,
   isOffscreenCanvasSupported: true,
   maxImageSize: -1,
   pdfBug: false,
