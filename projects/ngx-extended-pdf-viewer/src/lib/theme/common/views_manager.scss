@@ -447,6 +447,30 @@ ngx-extended-pdf-viewer {
             mask-image: var(--pages-selected-icon);
           }
 
+          // pdf.js v6: Windows High Contrast support for the action button.
+          @media screen and (forced-colors: active) {
+            border-radius: 2px;
+            background-color: var(--button-bg);
+
+            &::before {
+              background-color: var(--button-fg);
+            }
+            &:hover {
+              background-color: var(--button-hover-bg);
+
+              &::before {
+                background-color: var(--button-hover-fg);
+              }
+            }
+            &:active {
+              background-color: var(--button-active-bg);
+
+              &::before {
+                background-color: var(--button-active-fg);
+              }
+            }
+          }
+
           &#viewsManagerStatusActionDeselectButton:focus-visible {
             outline: 2px solid var(--button-focus-outline-color);
             border: 1px solid var(--button-focus-border-color);
@@ -588,9 +612,11 @@ ngx-extended-pdf-viewer {
     width: 100%;
     flex: 1 1 0%;
     overflow: auto;
-    // #3140: padding ensures the selected thumbnail's box-shadow (6px spread)
-    // isn't clipped by overflow:auto, which clips at the padding box edge.
-    padding: 0 8px;
+    // #3140: padding ensures the selected thumbnail's box-shadow isn't
+    // clipped by overflow:auto, which clips at the padding box edge.
+    // The ring is 6px (`--image-border-width`) + a 12px soft blur — need
+    // at least ~14px so the right side of the selection ring stays visible.
+    padding: 0 14px;
 
     &:has(#thumbnailsView.isDragging) {
       overflow-x: hidden;
@@ -626,14 +652,18 @@ ngx-extended-pdf-viewer {
             pointer-events: none;
           }
         }
+      }
 
-        > .dragMarker {
-          position: absolute;
-          top: 0;
-          left: 0;
-          border: 2px solid var(--indicator-color);
-          contain: strict;
-        }
+      // pdf.js v6: show the drop marker for both internal drag-reorder
+      // (.isDragging) and file-drag (.isDraggingFile, used by the new
+      // drag-and-drop PDF merge feature).
+      &.isDragging > .dragMarker,
+      &.isDraggingFile > .dragMarker {
+        position: absolute;
+        top: 0;
+        left: 0;
+        border: 2px solid var(--indicator-color);
+        contain: strict;
       }
 
       &.pasteMode {

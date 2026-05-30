@@ -735,6 +735,7 @@ pdfjs-views-manager-paste-button-after =
 # Badge used to promote a new feature in the UI, keep it as short as possible.
 # It's spelled uppercase for English, but it can be translated as usual.
 pdfjs-new-badge-content = NOU
+pdfjs-views-manager-waiting-for-file = Se încarcă fișierul…
 pdfjs-toggle-views-manager-button1 =
     .title = Gestionează paginile
 
@@ -766,5 +767,3 @@ pdfjs-editor-movePageDown-button-label = Mută pagina în jos
 pdfjs-cursor-page-flip-tool-button =
     .title = Răsfoire pagini
 pdfjs-cursor-page-flip-tool-button-label = Răsfoire pagini
-# Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-views-manager-waiting-for-file = Uploading file…

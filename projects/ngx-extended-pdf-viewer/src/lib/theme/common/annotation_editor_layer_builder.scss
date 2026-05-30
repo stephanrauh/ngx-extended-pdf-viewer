@@ -298,6 +298,8 @@ ngx-extended-pdf-viewer {
         pointer-events: auto;
         box-sizing: content-box;
         padding: var(--editor-toolbar-padding);
+        // pdf.js v6: prevent accidental text selection in the editor toolbar.
+        user-select: none;
 
         position: absolute;
         inset-inline-end: 0;

@@ -21,6 +21,10 @@ ngx-extended-pdf-viewer {
     overflow: clip;
     opacity: 1;
     line-height: 1;
+    // pdf.js v6 (bug fix): inherited spacing leaked into the text layer and
+    // misaligned selection rects. Pin both to `normal`.
+    letter-spacing: normal;
+    word-spacing: normal;
     text-size-adjust: none;
     forced-color-adjust: none;
     transform-origin: 0 0;
@@ -37,6 +41,9 @@ ngx-extended-pdf-viewer {
       white-space: pre;
       cursor: text;
       transform-origin: 0% 0%;
+      // pdf.js v6: explicit text selection even if a parent applied
+      // user-select: none.
+      user-select: text;
     }
 
     // #3111 modified by ngx-extended-pdf-viewer
@@ -204,12 +211,10 @@ ngx-extended-pdf-viewer {
     }
 
     ::selection {
-      /* stylelint-disable declaration-block-no-duplicate-properties */
-      /*#if !MOZCENTRAL*/
-      background: rgba(0 0 255 / 0.25);
-      /*#endif*/
-      /* stylelint-enable declaration-block-no-duplicate-properties */
-      background: color-mix(in srgb, AccentColor, transparent 75%);
+      // pdf.js v6 (bug 1879559): text selection visibility now relies on
+      // the `.canvasWrapper > .selection` overlay (see draw_layer_builder),
+      // so the browser-default selection tint is turned off here.
+      background: transparent;
     }
 
     /* Avoids https://github.com/mozilla/pdf.js/issues/13840 in Chrome */

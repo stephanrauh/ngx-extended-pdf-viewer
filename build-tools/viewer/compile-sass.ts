@@ -1,5 +1,10 @@
 import * as fs from 'fs';
 import * as sass from 'sass';
+import postcss from 'postcss';
+// @ts-ignore - no published type definitions
+import postcssDirPseudoClass from 'postcss-dir-pseudo-class';
+// @ts-ignore - no published type definitions
+import postcssLightDark from '@csstools/postcss-light-dark-function';
 
 function removeComments(code: string): string {
   // Remove single-line comments
@@ -22,6 +27,22 @@ const options = {
     },
   },
 } as sass.Options<'sync'>;
+
+// PostCSS pipeline that downlevels two CSS features pdf.js v6 uses
+// natively but which require very recent browsers:
+//   - :dir() pseudo-class (Chrome 123+ / Safari 16.4+ / Firefox 49+)
+//   - light-dark() CSS function (Chrome 123+ / Safari 17.5+ / Firefox 120+)
+// CSS native '&' nesting is handled by Sass itself (same syntax as SCSS
+// nesting), so postcss-nesting is not needed in this pipeline.
+const polyfiller = postcss([
+  postcssDirPseudoClass(),
+  postcssLightDark({ preserve: true }),
+]);
+
+async function polyfillCss(css: string): Promise<string> {
+  const result = await polyfiller.process(css, { from: undefined });
+  return result.css;
+}
 const darkScss = removeComments(fs.readFileSync('./projects/ngx-extended-pdf-viewer/src/lib/theme/pdf-dark-theme/colors.scss', 'utf8'));
 const lightScss = removeComments(fs.readFileSync('./projects/ngx-extended-pdf-viewer/src/lib/theme/pdf-light-theme/colors.scss', 'utf8'));
 const textLayerBuildScss = removeComments(fs.readFileSync('./projects/ngx-extended-pdf-viewer/src/lib/theme/common/text-layer-builder.scss', 'utf8'));
@@ -39,18 +60,24 @@ const bookMode = sass.compile('./projects/ngx-extended-pdf-viewer/src/lib/theme/
 const dialog = sass.compile('./projects/ngx-extended-pdf-viewer/src/lib/theme/common/dialog.scss', options);
 const messageBar = sass.compile('./projects/ngx-extended-pdf-viewer/src/lib/theme/common/message_bar.scss', options);
 
-fs.writeFileSync(
-  './projects/ngx-extended-pdf-viewer/src/lib/theme/pdf-dark-theme/colors.css',
-  dark.css + ' ' + print.css + ' ' + toggleButton.css + bookMode.css + dialog.css + messageBar.css, //
-);
-fs.writeFileSync(
-  './projects/ngx-extended-pdf-viewer/src/lib/theme/pdf-light-theme/colors.css',
-  light.css + ' ' + print.css + ' ' + toggleButton.css + bookMode.css + dialog.css + messageBar.css, //
-);
-
 const annotationLayerBuilder = sass.compile('./projects/ngx-extended-pdf-viewer/src/lib/theme/common/annotation-layer-builder.scss', options);
 const xfaLayerBuilder = sass.compile('./projects/ngx-extended-pdf-viewer/src/lib/theme/common/xfa_layer_builder.scss', options);
 const drawLayerBuilder = sass.compile('./projects/ngx-extended-pdf-viewer/src/lib/theme/common/draw_layer_builder.scss', options);
 const annotationEditorLayerBuilder = sass.compile('./projects/ngx-extended-pdf-viewer/src/lib/theme/common/annotation_editor_layer_builder.scss', options);
-const acroLightCSS = [annotationLayerBuilder.css, xfaLayerBuilder.css, drawLayerBuilder.css, annotationEditorLayerBuilder.css].join(' ');
-fs.writeFileSync('./projects/ngx-extended-pdf-viewer/src/lib/theme/acroform-default-theme/pdf-acroform-default-colors.css', acroLightCSS);
+
+(async () => {
+  fs.writeFileSync(
+    './projects/ngx-extended-pdf-viewer/src/lib/theme/pdf-dark-theme/colors.css',
+    await polyfillCss(dark.css + ' ' + print.css + ' ' + toggleButton.css + bookMode.css + dialog.css + messageBar.css),
+  );
+  fs.writeFileSync(
+    './projects/ngx-extended-pdf-viewer/src/lib/theme/pdf-light-theme/colors.css',
+    await polyfillCss(light.css + ' ' + print.css + ' ' + toggleButton.css + bookMode.css + dialog.css + messageBar.css),
+  );
+
+  const acroLightCSS = [annotationLayerBuilder.css, xfaLayerBuilder.css, drawLayerBuilder.css, annotationEditorLayerBuilder.css].join(' ');
+  fs.writeFileSync(
+    './projects/ngx-extended-pdf-viewer/src/lib/theme/acroform-default-theme/pdf-acroform-default-colors.css',
+    await polyfillCss(acroLightCSS),
+  );
+})();

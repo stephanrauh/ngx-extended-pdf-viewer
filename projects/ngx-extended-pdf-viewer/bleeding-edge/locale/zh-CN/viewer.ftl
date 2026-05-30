@@ -696,6 +696,7 @@ pdfjs-views-manager-paste-button-after =
 # Badge used to promote a new feature in the UI, keep it as short as possible.
 # It's spelled uppercase for English, but it can be translated as usual.
 pdfjs-new-badge-content = 新
+pdfjs-views-manager-waiting-for-file = 正在上传文件…
 pdfjs-toggle-views-manager-button1 =
     .title = 管理页面
 
@@ -714,7 +715,6 @@ pdfjs-editor-add-signature-edit-button-label = 编辑描述
 pdfjs-editor-edit-signature-dialog-title = 编辑描述
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-views-manager-waiting-for-file = Uploading file…
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = Match Each Word

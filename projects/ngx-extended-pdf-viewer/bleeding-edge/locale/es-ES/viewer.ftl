@@ -661,6 +661,8 @@ pdfjs-views-manager-view-selector-button =
     .title = Vistas
 pdfjs-views-manager-view-selector-button-label = Vistas
 pdfjs-views-manager-pages-title = Páginas
+pdfjs-views-manager-outlines-title1 = Esquema del documento
+    .title = Esquema del documento (doble-clic para expandir/contraer todos los elementos)
 pdfjs-views-manager-attachments-title = Adjuntos
 pdfjs-views-manager-layers-title1 = Capas
     .title = Capas (doble clic para restablecer todas las capas a su estado predeterminado)
@@ -726,6 +728,7 @@ pdfjs-views-manager-paste-button-after =
 # Badge used to promote a new feature in the UI, keep it as short as possible.
 # It's spelled uppercase for English, but it can be translated as usual.
 pdfjs-new-badge-content = NUEVO
+pdfjs-views-manager-waiting-for-file = Subiendo el archivo…
 pdfjs-toggle-views-manager-button1 =
     .title = Administrar páginas
 
@@ -757,7 +760,3 @@ pdfjs-editor-movePageDown-button-label = Mover página hacia abajo
 pdfjs-cursor-page-flip-tool-button =
     .title = Pasar página
 pdfjs-cursor-page-flip-tool-button-label = Pasar página
-# Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-views-manager-outlines-title1 = Document outline
-    .title = Document outline (double-click to expand/collapse all items)
-pdfjs-views-manager-waiting-for-file = Uploading file…
