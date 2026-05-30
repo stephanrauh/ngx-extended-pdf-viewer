@@ -417,12 +417,6 @@ export const attributes = [
       "If this flag is set to true, the PDF viewer loads fewer JavaScript files from the server. Unfortunately, this breaks compatibility to the Content Security Policy (CSP). If you're using CSP, set this attribute to `false`. If you're declaring CSP in a meta tag, the viewer sets the flag automatically to false.",
   },
   {
-    attribute: 'delayFirstView',
-    defaultValue: '0',
-    description:
-      "Number of milliseconds to wait between initializing the PDF viewer and loading the PDF file. Most users can let this parameter safely at it's default value of zero. Set this to 1000 or higher if you run into timing problems (typically caused by loading the locale files after the PDF files, so they are not available when the PDF viewer is initialized).",
-  },
-  {
     attribute: 'imageResourcesPath',
     defaultValue: './assets/images',
     description: "Allows you to put the viewer's SVG files into an arbitrary folder.",

@@ -264,14 +264,6 @@ constructor() {
 
 If everything works, the file is lazy-loaded when the PDF viewer opens, and you're rewarded with a non-blocking PDF viewer, even if your PDF file is huge.
 
-## set delayFirstView="1000" (deprecated)
-
-This workaround was needed in the early version of ngx-extended-pdf-viewer, before I understood how to initialize the library correctly. However, it may come in handy every once in a while. Sometimes the initialization of the pdf viewer takes some time, so the PDF file is opened too early. As a work-around, you can add a delay. Setting it to one second is usually a good compromise:
-
-```html
-<ngx-extended-pdf-viewer src="..." [delayFirstView]="1000"></ngx-extended-pdf-viewer>
-```
-
 ## "Failed to load module script: Expected a JavaScript module script but the server responds with a MIME type of "text/plain"
 
 Update your server configuration. Many servers don't recognize `*.mjs` files as JavaScript. To fix this, you have to configure the server so it sends the file with the proper MIME type (`text/javascript`). You also have to configure the new i18n files. They've got the file ending `.ftl` and need the MIME type `text/plain`.
