@@ -50,6 +50,11 @@ export type PDFThumbnailViewerOptions = {
      */
     enableNewBadge?: boolean | undefined;
     /**
+     * - Enables the merge feature.
+     * The default value is `false`.
+     */
+    enableMerge?: boolean | undefined;
+    /**
      * - Enables split and merge features.
      * The default value is `false`.
      */
@@ -70,13 +75,15 @@ export type PDFThumbnailViewerOptions = {
      */
     manageMenu?: Object | undefined;
     /**
-     * - The button that opens a dialog
-     * to add a PDF file to merge with the current one.
-     *
-     * /**
-     * Viewer control to display thumbnails for pages in a PDF document.
+     * - The waiting bar elements shown during
+     * long-running operations.
      */
-    addFileButton: HTMLButtonElement;
+    waitingBar?: Object | undefined;
+    /**
+     * - The file picker and button used to
+     * add one or more PDF files to merge with the current one.
+     */
+    addFileComponent?: Object | undefined;
 };
 /**
  * @typedef {Object} PDFThumbnailViewerOptions
@@ -98,6 +105,8 @@ export type PDFThumbnailViewerOptions = {
  *   events.
  * @property {boolean} [enableNewBadge] - Enables the "new" badge for the split
  *   and merge features.
+ * @property {boolean} [enableMerge] - Enables the merge feature.
+ *   The default value is `false`.
  * @property {boolean} [enableSplitMerge] - Enables split and merge features.
  *   The default value is `false`.
  * @property {Object} [statusBar] - The status bar elements to manage the status
@@ -106,19 +115,29 @@ export type PDFThumbnailViewerOptions = {
  *   action.
  * @property {Object} [manageMenu] - The menu elements to manage saving edited
  *   PDF.
- * @property {HTMLButtonElement} addFileButton - The button that opens a dialog
- *   to add a PDF file to merge with the current one.
-
+ * @property {Object} [waitingBar] - The waiting bar elements shown during
+ *   long-running operations.
+ * @property {Object} [addFileComponent] - The file picker and button used to
+ *   add one or more PDF files to merge with the current one.
+ */
 /**
  * Viewer control to display thumbnails for pages in a PDF document.
  */
 export class PDFThumbnailViewer {
     static "__#private@#draggingScaleFactor": number;
     static "__#private@#getScaleFactor"(image: any): number;
+    static "__#private@#fitImageDimensions"(width: any, height: any, { minSide, maxSide }: {
+        minSide?: number | undefined;
+        maxSide: any;
+    }): {
+        width: any;
+        height: any;
+    };
+    static "__#private@#fileToImageBitmap"(file: any): Promise<ImageBitmap>;
     /**
      * @param {PDFThumbnailViewerOptions} options
      */
-    constructor({ container, eventBus, linkService, renderingQueue, maxCanvasPixels, maxCanvasDim, pageColors, abortSignal, enableSplitMerge, enablePageReordering, enableNewBadge, statusBar, undoBar, manageMenu, addFileButton, }: PDFThumbnailViewerOptions);
+    constructor({ container, eventBus, linkService, renderingQueue, maxCanvasPixels, maxCanvasDim, pageColors, abortSignal, enableMerge, enableSplitMerge, enablePageReordering, enableNewBadge, statusBar, undoBar, waitingBar, manageMenu, addFileComponent, }: PDFThumbnailViewerOptions);
     scrollableContainer: HTMLElement | null;
     container: HTMLDivElement;
     eventBus: import("./event_utils").EventBus;

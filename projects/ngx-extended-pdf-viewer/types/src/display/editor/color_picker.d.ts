@@ -8,6 +8,7 @@ export class BasicColorPicker {
     constructor(editor: any);
     renderButton(): HTMLInputElement;
     update(value: any): void;
+    updateOpacity(value: any): void;
     destroy(): void;
     hideDropdown(): void;
     #private;

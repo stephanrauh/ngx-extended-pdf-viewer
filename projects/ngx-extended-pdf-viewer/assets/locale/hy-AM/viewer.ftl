@@ -355,7 +355,7 @@ pdfjs-editor-stamp-add-image-button-label = Հավելել պատկեր
 # This refers to the thickness of the line used for free highlighting (not bound to text)
 pdfjs-editor-free-highlight-thickness-input = Հաստություն
 pdfjs-editor-free-highlight-thickness-title =
-    .title = Փոխել հաստությունը տեքստից բացի այլ տարրեր նշելիս
+    .title = Փոխել հաստությունը՝ տեքստից բացի այլ տարրեր գունանշելիս
 pdfjs-editor-add-signature-container =
     .aria-label = Ստորագրության կառավարման տարրեր և պահված ստորագրություններ
 pdfjs-editor-signature-add-signature-button =
@@ -566,7 +566,7 @@ pdfjs-editor-add-signature-draw-thickness-range-label = Հաստություն
 # Variables:
 #   $thickness (Number) - the thickness (in pixels) of the line used to draw a signature.
 pdfjs-editor-add-signature-draw-thickness-range =
-    .title = Նկաելու հաստությունը՝ { $thickness }
+    .title = Նկարելու հաստությունը՝ { $thickness }
 pdfjs-editor-add-signature-image-placeholder = Քաշեք ֆայլը այստեղ՝ վերբեռնելու համար
 pdfjs-editor-add-signature-image-browse-link =
     { PLATFORM() ->
@@ -725,6 +725,7 @@ pdfjs-views-manager-paste-button-before =
 pdfjs-views-manager-paste-button-after =
     .title = Paste after page { $page }
 pdfjs-new-badge-content = NEW
+pdfjs-views-manager-waiting-for-file = Uploading file…
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = Match Each Word

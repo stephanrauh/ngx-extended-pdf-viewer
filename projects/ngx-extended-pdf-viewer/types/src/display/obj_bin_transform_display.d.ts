@@ -46,11 +46,7 @@ export class PatternInfo {
     buffer: any;
     view: DataView<any>;
     data: Uint8Array<any>;
-    getIR(): (string | number | number[] | Uint8Array<any> | Float32Array<any> | {
-        type: number;
-        coords: Int32Array<any>;
-        colors: Int32Array<any>;
-    }[] | null)[] | (string | number | number[] | (string | number)[][] | null)[];
+    getIR(): (string | number | number[] | Uint8Array<any> | Float32Array<any> | null)[] | (string | number | number[] | (string | number)[][] | null)[];
 }
 export class SystemFontInfo {
     constructor(buffer: any);

@@ -1,5 +1,5 @@
 export type PDFPageProxy = import("../src/display/api").PDFPageProxy;
-export type PageViewport = import("../src/display/display_utils").PageViewport;
+export type PageViewport = import("../src/display/page_viewport").PageViewport;
 export type AnnotationEditorUIManager = import("../src/display/editor/tools.js").AnnotationEditorUIManager;
 export type TextAccessibilityManager = import("./text_accessibility.js").TextAccessibilityManager;
 export type AnnotationLayer = import("../src/display/annotation_layer.js").AnnotationLayer;

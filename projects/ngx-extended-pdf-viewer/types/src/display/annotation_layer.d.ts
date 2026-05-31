@@ -1,5 +1,6 @@
 export type PDFPageProxy = import("./api").PDFPageProxy;
-export type PageViewport = import("./display_utils").PageViewport;
+export type PageViewport = import("./page_viewport").PageViewport;
+export type OptionalContentConfig = any;
 export type TextAccessibilityManager = import("../../web/text_accessibility.js").TextAccessibilityManager;
 export type AnnotationEditorUIManager = any;
 export type StructTreeLayerBuilder = import("../../web/struct_tree_layer_builder.js").StructTreeLayerBuilder;
@@ -53,10 +54,7 @@ export type AnnotationLayerParameters = {
     accessibilityManager?: import("../../web/text_accessibility.js").TextAccessibilityManager | undefined;
     annotationEditorUIManager?: AnnotationEditorUIManager;
     structTreeLayer?: import("../../web/struct_tree_layer_builder.js").StructTreeLayerBuilder | undefined;
-    /**
-     * - The comment manager instance.
-     */
-    commentManager?: import("../../web/comment_manager.js").CommentManager | undefined;
+    optionalContentConfig?: OptionalContentConfig;
 };
 /**
  * @typedef {Object} AnnotationLayerParameters
@@ -78,7 +76,7 @@ export type AnnotationLayerParameters = {
  * @property {TextAccessibilityManager} [accessibilityManager]
  * @property {AnnotationEditorUIManager} [annotationEditorUIManager]
  * @property {StructTreeLayerBuilder} [structTreeLayer]
- * @property {CommentManager} [commentManager] - The comment manager instance.
+ * @property {OptionalContentConfig} [optionalContentConfig]
  */
 /**
  * Manage the layer containing all the annotations.
@@ -100,10 +98,10 @@ export class AnnotationLayer {
         linkService: any;
         annotationStorage: any;
     });
+    zIndex: number;
     div: any;
     page: any;
     viewport: any;
-    zIndex: number;
     _annotationEditorUIManager: any;
     _commentManager: any;
     popupShow: any[] | undefined;
@@ -127,7 +125,7 @@ export class AnnotationLayer {
      * @param {AnnotationLayerParameters} viewport
      * @memberof AnnotationLayer
      */
-    update({ viewport }: AnnotationLayerParameters): void;
+    update({ viewport, optionalContentConfig }: AnnotationLayerParameters): void;
     getEditableAnnotations(): MapIterator<any>;
     getEditableAnnotation(id: any): any;
     addFakeAnnotation(editor: any): EditorAnnotationElement;
@@ -267,6 +265,7 @@ declare class AnnotationElement {
     public getElementsToTriggerPopup(): Array<HTMLElement> | HTMLElement;
     addHighlightArea(): void;
     _editOnDoubleClick(): void;
+    updateOC(optionalContentConfig: any): void;
     get width(): number;
     get height(): number;
     #private;

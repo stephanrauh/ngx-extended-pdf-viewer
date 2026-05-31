@@ -1,5 +1,4 @@
 export type AnnotationStorage = import("./annotation_storage").AnnotationStorage;
-export type PageViewport = import("./display_utils").PageViewport;
 export type PDFLinkService = import("../../web/pdf_link_service.js").PDFLinkService;
 export type XfaLayerParameters = {
     viewport: PageViewport;
@@ -44,4 +43,12 @@ export class XfaLayer {
      * @param {XfaLayerParameters} parameters
      */
     static update(parameters: XfaLayerParameters): void;
+    /**
+     * NOTE: This is (mostly) intended to support printing of XFA forms.
+     */
+    static getPageViewport(xfaPage: any, { scale, rotation }: {
+        scale?: number | undefined;
+        rotation?: number | undefined;
+    }): PageViewport;
 }
+import { PageViewport } from "./page_viewport.js";

@@ -1,6 +1,6 @@
 export type PDFPageProxy = import("../src/display/api").PDFPageProxy;
 export type AnnotationStorage = import("../src/display/annotation_storage").AnnotationStorage;
-export type PageViewport = import("../src/display/display_utils").PageViewport;
+export type PageViewport = import("../src/display/page_viewport").PageViewport;
 export type PDFLinkService = import("./pdf_link_service.js").PDFLinkService;
 export type XfaLayerBuilderOptions = {
     pdfPage: PDFPageProxy;
@@ -32,12 +32,11 @@ export class XfaLayerBuilder {
      * @param {XfaLayerBuilderOptions} options
      */
     constructor({ pdfPage, annotationStorage, linkService, xfaHtml, }: XfaLayerBuilderOptions);
+    div: null;
     pdfPage: import("../src/display/api").PDFPageProxy;
     annotationStorage: import("../src/display/annotation_storage").AnnotationStorage;
     linkService: import("./pdf_link_service.js").PDFLinkService;
     xfaHtml: Object;
-    div: HTMLDivElement | null;
-    _cancelled: boolean;
     /**
      * @param {XfaLayerBuilderRenderOptions} viewport
      * @returns {Promise<Object | void>} A promise that is resolved when rendering
@@ -47,4 +46,5 @@ export class XfaLayerBuilder {
     render({ viewport, intent }: XfaLayerBuilderRenderOptions): Promise<Object | void>;
     cancel(): void;
     hide(): void;
+    #private;
 }

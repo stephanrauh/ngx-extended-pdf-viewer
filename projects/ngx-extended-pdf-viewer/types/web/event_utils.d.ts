@@ -19,6 +19,8 @@ export type WaitOnEventOrTimeoutParameters = {
  * and `off` methods. To raise an event, the `dispatch` method shall be used.
  */
 export class EventBus {
+    _on(eventName: any, listener: any, options?: null): void;
+    _off(eventName: any, listener: any, options?: null): void;
     /**
      * @param {string} eventName
      * @param {function} listener
@@ -36,14 +38,6 @@ export class EventBus {
      * @param {Object} data
      */
     dispatch(eventName: string, data: Object): void;
-    /**
-     * @ignore
-     */
-    _on(eventName: any, listener: any, options?: null): void;
-    /**
-     * @ignore
-     */
-    _off(eventName: any, listener: any, options?: null): void;
     destroy(): void;
     #private;
 }

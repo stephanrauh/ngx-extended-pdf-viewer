@@ -412,15 +412,19 @@ describe('PdfSidebarComponent', () => {
       const viewsManager = fixture.nativeElement.querySelector('#viewsManager') as HTMLElement;
       expect(viewsManager).not.toBeNull();
       expect(viewsManager.getAttribute('role')).toBe('dialog');
-      expect(viewsManager.getAttribute('aria-describedby')).toBe('viewsManagerHeaderLabel');
       expect(viewsManager.getAttribute('data-l10n-id')).toBe('pdfjs-views-manager-sidebar');
     });
 
-    it('renders the heading label that aria-describedby targets', () => {
+    it('does not render the redundant heading label or aria-describedby reference', () => {
+      // Upstream pdf.js v6 uses #viewsManagerHeaderLabel as a breadcrumb for the active view,
+      // but ngx-extended-pdf-viewer's pdf-sidebar-toolbar already shows that via highlighted
+      // buttons. The label was deliberately removed; the dummy span placeholder in
+      // pdf-dummy-components still satisfies pdf.js's data-l10n-id setter off-screen.
       const label = fixture.nativeElement.querySelector('#viewsManagerHeaderLabel');
-      expect(label).not.toBeNull();
-      expect(label.getAttribute('role')).toBe('heading');
-      expect(label.getAttribute('aria-level')).toBe('2');
+      expect(label).toBeNull();
+
+      const viewsManager = fixture.nativeElement.querySelector('#viewsManager') as HTMLElement;
+      expect(viewsManager.getAttribute('aria-describedby')).toBeNull();
     });
 
     it('renders the Add-file button and a real <input type="file"> picker', () => {

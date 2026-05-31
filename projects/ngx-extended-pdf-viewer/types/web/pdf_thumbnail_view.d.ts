@@ -1,7 +1,3 @@
-export type OptionalContentConfig = import("../src/display/optional_content_config").OptionalContentConfig;
-export type PageViewport = import("../src/display/display_utils").PageViewport;
-export type EventBus = import("./event_utils").EventBus;
-export type PDFRenderingQueue = import("./pdf_rendering_queue").PDFRenderingQueue;
 export type PDFThumbnailViewOptions = {
     /**
      * - The viewer element.
@@ -52,6 +48,10 @@ export type PDFThumbnailViewOptions = {
      */
     pageColors?: Object | undefined;
 };
+export type OptionalContentConfig = import("../src/display/optional_content_config").OptionalContentConfig;
+export type PageViewport = import("../src/display/page_viewport").PageViewport;
+export type EventBus = import("./event_utils").EventBus;
+export type PDFRenderingQueue = import("./pdf_rendering_queue").PDFRenderingQueue;
 export class PDFThumbnailView extends RenderableView {
     /**
      * @param {PDFThumbnailViewOptions} options
@@ -61,7 +61,7 @@ export class PDFThumbnailView extends RenderableView {
     pageLabel: string | null;
     pdfPage: any;
     rotation: number;
-    viewport: import("../src/display/display_utils").PageViewport;
+    viewport: import("../src/display/page_viewport").PageViewport;
     pdfPageRotate: number;
     _optionalContentConfigPromise: Promise<import("../src/display/optional_content_config").OptionalContentConfig> | null;
     maxCanvasPixels: any;

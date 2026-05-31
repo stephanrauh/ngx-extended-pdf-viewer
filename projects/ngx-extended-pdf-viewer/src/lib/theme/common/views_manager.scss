@@ -370,11 +370,17 @@ ngx-extended-pdf-viewer {
 
       #viewsManagerAddFileButton {
         background: var(--button-no-bg);
-        width: 32px;
+        width: auto;
         height: 32px;
+        padding: 0 12px 0 8px;
+        gap: 6px;
         display: flex;
         align-items: center;
         justify-content: center;
+        color: var(--button-fg);
+        font: menu;
+        font-size: 13px;
+        white-space: nowrap;
 
         &:focus-visible {
           background-color: var(--button-focus-no-bg);
@@ -391,6 +397,7 @@ ngx-extended-pdf-viewer {
           display: inline-block;
           width: 20px;
           height: 20px;
+          flex: 0 0 auto;
           mask-repeat: no-repeat;
           mask-position: center;
           mask-size: contain;
@@ -400,15 +407,15 @@ ngx-extended-pdf-viewer {
           top: 0;
         }
 
-        // The button is the visible target; the picker is a hidden file input
-        // that pdf.js triggers via picker.click() from the button click handler.
+        // The picker is a hidden file input triggered by pdf.js via picker.click().
         > input {
           display: none;
         }
 
-        // Hide the auto-generated text label so only the icon shows.
+        // Show the l10n label next to the icon so users see what the button does.
         > span {
-          display: none;
+          display: inline-block;
+          user-select: none;
         }
       }
 

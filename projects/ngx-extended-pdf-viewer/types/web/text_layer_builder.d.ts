@@ -1,5 +1,5 @@
 export type PDFPageProxy = import("../src/display/api").PDFPageProxy;
-export type PageViewport = import("../src/display/display_utils").PageViewport;
+export type PageViewport = import("../src/display/page_viewport").PageViewport;
 export type TextLayerImages = import("../src/display/text_layer_images.js").TextLayerImages;
 export type TextHighlighter = import("./text_highlighter").TextHighlighter;
 export type TextAccessibilityManager = import("./text_accessibility.js").TextAccessibilityManager;
@@ -43,7 +43,7 @@ export type TextLayerBuilderRenderOptions = {
  */
 export class TextLayerBuilder {
     static "__#private@#textLayers": Map<any, any>;
-    static "__#private@#selectionChangeAbortController": null;
+    static "__#private@#selectionChangeAC": null;
     static "__#private@#removeGlobalSelectionListener"(textLayerDiv: any): void;
     static "__#private@#enableGlobalSelectionListener"(globalAbortSignal: any): void;
     /**

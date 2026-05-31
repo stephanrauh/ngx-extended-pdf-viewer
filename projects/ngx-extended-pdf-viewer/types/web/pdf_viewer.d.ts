@@ -1,6 +1,6 @@
 export type PDFDocumentProxy = import("../src/display/api").PDFDocumentProxy;
 export type PDFPageProxy = import("../src/display/api").PDFPageProxy;
-export type PageViewport = import("../src/display/display_utils").PageViewport;
+export type PageViewport = import("../src/display/page_viewport").PageViewport;
 export type OptionalContentConfig = import("../src/display/optional_content_config").OptionalContentConfig;
 export type EventBus = import("./event_utils").EventBus;
 export type PDFFindController = import("./pdf_find_controller").PDFFindController;
@@ -111,6 +111,12 @@ export type PDFViewerOptions = {
      */
     enableDetailCanvas?: boolean | undefined;
     /**
+     * - Enables rendering of text
+     * selections in the draw layer.
+     * The default value is `true`.
+     */
+    enableSelectionRendering?: boolean | undefined;
+    /**
      * - All images whose width and
      * height are at least this value (in pixels) will be lazily inserted in the
      * dom to allow right-clicking and saving them. Use `-1` to disable this.
@@ -205,6 +211,9 @@ export namespace PagesCountLimit {
  *   `maxCanvasDim`, it will draw a second canvas on top of the CSS-zoomed one,
  *   that only renders the part of the page that is close to the viewport.
  *   The default value is `true`.
+ * @property {boolean} [enableSelectionRendering] - Enables rendering of text
+ *   selections in the draw layer.
+ *   The default value is `true`.
  * @property {number} [imagesRightClickMinSize] - All images whose width and
  *  height are at least this value (in pixels) will be lazily inserted in the
  *  dom to allow right-clicking and saving them. Use `-1` to disable this.
@@ -269,6 +278,7 @@ export class PDFViewer {
     capCanvasAreaFactor: number | undefined;
     enableDetailCanvas: boolean;
     enableOptimizedPartialRendering: boolean;
+    enableSelectionRendering: boolean;
     imagesRightClickMinSize: number;
     l10n: import("./l10n.js").L10n | undefined;
     pageColors: Object | null;
@@ -298,6 +308,10 @@ export class PDFViewer {
      * @type {boolean} - True if all {PDFPageView} objects are initialized.
      */
     get pageViewsReady(): boolean;
+    /**
+     * Clear text selections within the viewer.
+     */
+    clearSelection(): void;
     /**
      * @type {boolean}
      */

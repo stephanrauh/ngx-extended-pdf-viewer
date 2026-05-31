@@ -201,6 +201,15 @@ pdfjs-thumb-page-title =
 #   $page (Number) - the page number
 pdfjs-thumb-page-canvas =
     .aria-label = Miniatura da página { $page }
+# Variables:
+#   $page (Number) - the page number
+pdfjs-thumb-page-checkbox1 =
+    .title = Selecionar a página { $page }
+# Variables:
+#   $page (Number) - the page number
+#   $total (Number) - the number of pages
+pdfjs-thumb-page-title1 =
+    .title = Página { $page } de { $total }
 
 ## Find panel button title and messages
 
@@ -286,9 +295,13 @@ pdfjs-web-fonts-disabled = Os tipos de letra web estão desativados: não é pos
 
 pdfjs-editor-free-text-button =
     .title = Texto
+pdfjs-editor-color-picker-free-text-input =
+    .title = Alterar cor do texto
 pdfjs-editor-free-text-button-label = Texto
 pdfjs-editor-ink-button =
     .title = Desenhar
+pdfjs-editor-color-picker-ink-input =
+    .title = Alterar a cor de desenho
 pdfjs-editor-ink-button-label = Desenhar
 pdfjs-editor-stamp-button =
     .title = Adicionar ou editar imagens
@@ -300,6 +313,14 @@ pdfjs-highlight-floating-button1 =
     .title = Realçar
     .aria-label = Realçar
 pdfjs-highlight-floating-button-label = Realçar
+pdfjs-comment-floating-button =
+    .title = Comentário
+    .aria-label = Comentário
+pdfjs-comment-floating-button-label = Comentário
+pdfjs-editor-comment-button =
+    .title = Comentário
+    .aria-label = Comentário
+pdfjs-editor-comment-button-label = Comentário
 pdfjs-editor-signature-button =
     .title = Adicionar assinatura
 pdfjs-editor-signature-button-label = Adicionar assinatura
@@ -362,6 +383,21 @@ pdfjs-editor-add-saved-signature-button =
 pdfjs-free-text2 =
     .aria-label = Editor de texto
     .default-content = Comece a escrever…
+# Used to show how many comments are present in the pdf file.
+# Variables:
+#   $count (Number) - the number of comments.
+pdfjs-editor-comments-sidebar-title =
+    { $count ->
+        [one] Comentário
+       *[other] Comentários
+    }
+pdfjs-editor-comments-sidebar-close-button =
+    .title = Fechar barra lateral
+    .aria-label = Fechar barra lateral
+pdfjs-editor-comments-sidebar-close-button-label = Fechar barra lateral
+# Instructional copy to add a comment by selecting text or an annotations.
+pdfjs-editor-comments-sidebar-no-comments1 = Viu algo interessante? Realce e adicione um comentário.
+pdfjs-editor-comments-sidebar-no-comments-link = Saber mais
 
 ## Alt-text dialog
 
@@ -494,6 +530,9 @@ pdfjs-editor-alt-text-settings-close-button = Fechar
 
 ## Accessibility labels (announced by screen readers) for objects added to the editor.
 
+pdfjs-editor-highlight-added-alert = Destaque adicionado
+pdfjs-editor-freetext-added-alert = Texto adicionado
+pdfjs-editor-ink-added-alert = Desenho adicionado
 pdfjs-editor-stamp-added-alert = Imagem adicionada
 pdfjs-editor-signature-added-alert = Assinatura adicionada
 
@@ -504,6 +543,7 @@ pdfjs-editor-undo-bar-message-freetext = Texto removido
 pdfjs-editor-undo-bar-message-ink = Desenho removido
 pdfjs-editor-undo-bar-message-stamp = Imagem removida
 pdfjs-editor-undo-bar-message-signature = Assinatura removida
+pdfjs-editor-undo-bar-message-comment = Comentário removido
 # Variables:
 #   $count (Number) - the number of removed annotations.
 pdfjs-editor-undo-bar-message-multiple =
@@ -603,6 +643,95 @@ pdfjs-editor-edit-comment-dialog-cancel-button = Cancelar
 pdfjs-editor-add-comment-button =
     .title = Adicionar comentário
 
+## The view manager is a sidebar displaying different views:
+##  - thumbnails;
+##  - outline;
+##  - attachments;
+##  - layers.
+## The thumbnails view is used to edit the pdf: remove/insert pages, ...
+
+pdfjs-toggle-views-manager-notification-button =
+    .title = Alternar barra lateral (o documento inclui miniaturas/esquema/anexos/camadas)
+pdfjs-toggle-views-manager-button1-label = Gerir páginas
+pdfjs-views-manager-sidebar =
+    .aria-label = Barra lateral
+pdfjs-views-manager-sidebar-resizer =
+    .aria-label = Redimensionador da barra lateral
+pdfjs-views-manager-view-selector-button =
+    .title = Vistas
+pdfjs-views-manager-view-selector-button-label = Vistas
+pdfjs-views-manager-pages-title = Páginas
+pdfjs-views-manager-outlines-title1 = Esquema do documento
+    .title = Esquema do documento (duplo clique para expandir/colapsar todos os itens)
+pdfjs-views-manager-attachments-title = Anexos
+pdfjs-views-manager-layers-title1 = Camadas
+    .title = Camadas (duplo clique para repor todas as camadas para o estado predefinido)
+pdfjs-views-manager-pages-option-label = Páginas
+pdfjs-views-manager-outlines-option-label = Esquema do documento
+pdfjs-views-manager-attachments-option-label = Anexos
+pdfjs-views-manager-layers-option-label = Camadas
+pdfjs-views-manager-add-file-button =
+    .title = Adicionar ficheiro
+pdfjs-views-manager-add-file-button-label = Adicionar ficheiro
+# Variables:
+#   $count (Number) - the number of selected pages.
+pdfjs-views-manager-pages-status-action-label =
+    { $count ->
+        [one] { $count } selecionada
+       *[other] { $count } selecionadas
+    }
+pdfjs-views-manager-pages-status-none-action-label = Selecionar páginas
+pdfjs-views-manager-pages-status-action-button-label = Gerir
+pdfjs-views-manager-pages-status-copy-button-label = Copiar
+pdfjs-views-manager-pages-status-cut-button-label = Cortar
+pdfjs-views-manager-pages-status-delete-button-label = Eliminar
+pdfjs-views-manager-pages-status-export-selected-button-label = Exportar selecionado…
+# Variables:
+#   $count (Number) - the number of selected pages to be cut.
+pdfjs-views-manager-status-undo-cut-label =
+    { $count ->
+        [one] 1 página cortada
+       *[other] { $count } páginas cortadas
+    }
+# Variables:
+#   $count (Number) - the number of selected pages to be copied.
+pdfjs-views-manager-pages-status-undo-copy-label =
+    { $count ->
+        [one] 1 página copiada
+       *[other] { $count } páginas copiadas
+    }
+# Variables:
+#   $count (Number) - the number of selected pages to be deleted.
+pdfjs-views-manager-pages-status-undo-delete-label =
+    { $count ->
+        [one] 1 página eliminada
+       *[other] { $count } páginas eliminadas
+    }
+pdfjs-views-manager-pages-status-waiting-ready-label = A preparar o seu ficheiro…
+pdfjs-views-manager-pages-status-waiting-uploading-label = A carregar ficheiro…
+pdfjs-views-manager-status-warning-cut-label = Não foi possível cortar. Atualize a página e tente novamente.
+pdfjs-views-manager-status-warning-copy-label = Não foi possível copiar. Atualize a página e tente novamente.
+pdfjs-views-manager-status-warning-delete-label = Não foi possível eliminar. Atualize a página e tente novamente.
+pdfjs-views-manager-status-warning-save-label = Não foi possível guardar. Atualize a página e tente novamente.
+pdfjs-views-manager-status-undo-button-label = Desfazer
+pdfjs-views-manager-status-done-button-label = Feito
+pdfjs-views-manager-status-close-button =
+    .title = Fechar
+pdfjs-views-manager-status-close-button-label = Fechar
+pdfjs-views-manager-paste-button-label = Colar
+pdfjs-views-manager-paste-button-before =
+    .title = Colar antes da primeira página
+# Variables:
+#   $page (Number) - the page number after which the paste button is.
+pdfjs-views-manager-paste-button-after =
+    .title = Colar depois da página { $page }
+# Badge used to promote a new feature in the UI, keep it as short as possible.
+# It's spelled uppercase for English, but it can be translated as usual.
+pdfjs-new-badge-content = NOVO
+pdfjs-views-manager-waiting-for-file = A carregar ficheiro…
+pdfjs-toggle-views-manager-button1 =
+    .title = Gerir páginas
+
 ## Main menu for adding/removing signatures
 
 pdfjs-editor-delete-signature-button1 =
@@ -631,103 +760,3 @@ pdfjs-editor-movePageDown-button-label = Mover página para baixo
 pdfjs-cursor-page-flip-tool-button =
     .title = Virar página
 pdfjs-cursor-page-flip-tool-button-label = Virar página
-# Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-thumb-page-title1 =
-    .title = Page { $page } of { $total }
-pdfjs-thumb-page-checkbox1 =
-    .title = Select page { $page }
-pdfjs-editor-color-picker-free-text-input =
-    .title = Change text color
-pdfjs-editor-color-picker-ink-input =
-    .title = Change drawing color
-pdfjs-comment-floating-button =
-    .title = Comment
-    .aria-label = Comment
-pdfjs-comment-floating-button-label = Comment
-pdfjs-editor-comment-button =
-    .title = Comment
-    .aria-label = Comment
-pdfjs-editor-comment-button-label = Comment
-pdfjs-editor-comments-sidebar-title =
-    { $count ->
-        [one] Comment
-       *[other] Comments
-    }
-pdfjs-editor-comments-sidebar-close-button =
-    .title = Close the sidebar
-    .aria-label = Close the sidebar
-pdfjs-editor-comments-sidebar-close-button-label = Close the sidebar
-pdfjs-editor-comments-sidebar-no-comments1 = See something noteworthy? Highlight it and leave a comment.
-pdfjs-editor-comments-sidebar-no-comments-link = Learn more
-pdfjs-editor-highlight-added-alert = Highlight added
-pdfjs-editor-freetext-added-alert = Text added
-pdfjs-editor-ink-added-alert = Drawing added
-pdfjs-editor-undo-bar-message-comment = Comment removed
-pdfjs-toggle-views-manager-button1 =
-    .title = Manage pages
-pdfjs-toggle-views-manager-notification-button =
-    .title = Toggle Sidebar (document contains thumbnails/outline/attachments/layers)
-pdfjs-toggle-views-manager-button1-label = Manage pages
-pdfjs-views-manager-sidebar =
-    .aria-label = Sidebar
-pdfjs-views-manager-sidebar-resizer =
-    .aria-label = Sidebar resizer
-pdfjs-views-manager-view-selector-button =
-    .title = Views
-pdfjs-views-manager-view-selector-button-label = Views
-pdfjs-views-manager-pages-title = Pages
-pdfjs-views-manager-outlines-title1 = Document outline
-    .title = Document outline (double-click to expand/collapse all items)
-pdfjs-views-manager-attachments-title = Attachments
-pdfjs-views-manager-layers-title1 = Layers
-    .title = Layers (double-click to reset all layers to the default state)
-pdfjs-views-manager-pages-option-label = Pages
-pdfjs-views-manager-outlines-option-label = Document outline
-pdfjs-views-manager-attachments-option-label = Attachments
-pdfjs-views-manager-layers-option-label = Layers
-pdfjs-views-manager-add-file-button =
-    .title = Add file
-pdfjs-views-manager-add-file-button-label = Add file
-pdfjs-views-manager-pages-status-action-label =
-    { $count ->
-        [one] { $count } selected
-        *[other] { $count } selected
-    }
-pdfjs-views-manager-pages-status-none-action-label = Select pages
-pdfjs-views-manager-pages-status-action-button-label = Manage
-pdfjs-views-manager-pages-status-copy-button-label = Copy
-pdfjs-views-manager-pages-status-cut-button-label = Cut
-pdfjs-views-manager-pages-status-delete-button-label = Delete
-pdfjs-views-manager-pages-status-export-selected-button-label = Export selected…
-pdfjs-views-manager-status-undo-cut-label =
-    { $count ->
-        [one] 1 page cut
-        *[other] { $count } pages cut
-    }
-pdfjs-views-manager-pages-status-undo-copy-label =
-    { $count ->
-        [one] 1 page copied
-        *[other] { $count } pages copied
-    }
-pdfjs-views-manager-pages-status-undo-delete-label =
-    { $count ->
-        [one] 1 page deleted
-        *[other] { $count } pages deleted
-    }
-pdfjs-views-manager-pages-status-waiting-ready-label = Getting your file ready…
-pdfjs-views-manager-pages-status-waiting-uploading-label = Uploading file…
-pdfjs-views-manager-status-warning-cut-label = Couldn’t cut. Refresh page and try again.
-pdfjs-views-manager-status-warning-copy-label = Couldn’t copy. Refresh page and try again.
-pdfjs-views-manager-status-warning-delete-label = Couldn’t delete. Refresh page and try again.
-pdfjs-views-manager-status-warning-save-label = Couldn’t save. Refresh page and try again.
-pdfjs-views-manager-status-undo-button-label = Undo
-pdfjs-views-manager-status-done-button-label = Done
-pdfjs-views-manager-status-close-button =
-    .title = Close
-pdfjs-views-manager-status-close-button-label = Close
-pdfjs-views-manager-paste-button-label = Paste
-pdfjs-views-manager-paste-button-before =
-    .title = Paste before the first page
-pdfjs-views-manager-paste-button-after =
-    .title = Paste after page { $page }
-pdfjs-new-badge-content = NEW

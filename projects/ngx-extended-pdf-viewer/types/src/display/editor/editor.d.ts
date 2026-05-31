@@ -34,6 +34,7 @@ export type AnnotationEditorParameters = {
  */
 export class AnnotationEditor {
     static _l10n: null;
+    static _l10nAlert: null;
     static _l10nResizer: null;
     static _borderLineWidth: number;
     static _colorManager: ColorManager;

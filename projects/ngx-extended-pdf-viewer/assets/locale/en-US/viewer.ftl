@@ -784,6 +784,8 @@ pdfjs-views-manager-paste-button-after =
 # It's spelled uppercase for English, but it can be translated as usual.
 pdfjs-new-badge-content = NEW
 
+pdfjs-views-manager-waiting-for-file = Uploading file…
+
 # Additional translations for ngx-extended-pdf-viewer (en)
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

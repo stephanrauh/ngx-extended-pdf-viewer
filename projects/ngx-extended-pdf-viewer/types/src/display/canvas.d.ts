@@ -17,9 +17,13 @@ export class CanvasGraphics {
     baseTransformStack: any[];
     groupLevel: number;
     smaskStack: any[];
-    smaskCounter: number;
     tempSMask: any;
     smaskGroupCanvases: any[];
+    smaskPreparedEntry: any;
+    smaskPreparedFor: any;
+    smaskPreparedOffsetX: number;
+    smaskPreparedOffsetY: number;
+    smaskPreparedOOBAlpha: any;
     suspendedCtx: any;
     contentVisible: boolean;
     markedContentStack: never[];
@@ -73,22 +77,63 @@ export class CanvasGraphics {
     setFlatness(opIdx: any, flatness: any): void;
     setGState(opIdx: any, states: any): void;
     get inSMaskMode(): boolean;
-    checkSMaskState(): void;
+    _clearPreparedSMask(): void;
+    _ensurePreparedSMask(smask: any): void;
+    checkSMaskState(opIdx: any): void;
+    _prepareSMaskCanvas(smask: any): void;
     /**
-     * Soft mask mode takes the current main drawing canvas and replaces it with
-     * a temporary canvas. Any drawing operations that happen on the temporary
-     * canvas need to be composed with the main canvas that was suspended (see
-     * `compose()`). The temporary canvas also duplicates many of its operations
-     * on the suspended canvas to keep them in sync, so that when the soft mask
-     * mode ends any clipping paths or transformations will still be active and in
-     * the right order on the canvas' graphics state stack.
+     * Bake the mask plus optional backdrop into a (w x h) canvas with the
+     * mask drawn at (drawX, drawY), then optionally pipe through the SVG
+     * filter described by `filterSpec`. Returns the prepared canvas-
+     * factory entry.
+     *
+     * The backdrop fill uses destination-atop so transparent / partial-
+     * alpha pixels inside the mask see the backdrop *before* filtering
+     * (per PDF spec). Filtering the raw mask would yield filter(0)
+     * instead of filter(backdrop) -- wrong for "keep" Luminosity and for
+     * Alpha masks whose transferMap[255] differs from transferMap[0].
+     *
+     * In the no-backdrop layer-size case the OOB region of srcEntry
+     * stays transparent and the filter outputs filter(transparent) =
+     * transferMap[0], matching the spec's transparent extension of the
+     * mask group. No-backdrop mask-size prebakes have no OOB region;
+     * destination-in handles OOB at compose time.
+     *
+     * Some browsers (e.g. older Safari) silently ignore SVG `url(#id)`
+     * filters on a 2D canvas: the assignment is accepted but
+     * `ctx.filter` reads back as "none" and `drawImage` produces an
+     * unfiltered copy. We detect that and fall back to a pixel-buffer
+     * loop that reproduces the SVG filter exactly (matrix luminance and
+     * `feFuncA` transferMap, both with sRGB color-interpolation, i.e.
+     * straight on gamma-encoded byte values).
+     */
+    _bakeSMaskCanvas(maskCanvas: any, drawX: any, drawY: any, w: any, h: any, backdrop: any, filterSpec: any): any;
+    /**
+     * Replaces the current drawing canvas with a temporary scratch canvas and
+     * suspends the main context. Drawing operations on the scratch canvas are
+     * composited back via `compose()`. The scratch canvas mirrors many operations
+     * onto the suspended canvas to keep their graphics-state stacks in sync, so
+     * that clipping paths and transformations remain correct when soft mask mode
+     * ends.
      */
     beginSMaskMode(opIdx: any): void;
     smaskScratchCanvas: any;
     endSMaskMode(): void;
     compose(dirtyBox: any): void;
     composeSMask(ctx: any, smask: any, layerCtx: any, layerBox: any): void;
-    genericComposeSMask(maskCtx: any, layerCtx: any, width: any, height: any, subtype: any, backdrop: any, transferMap: any, layerOffsetX: any, layerOffsetY: any, maskOffsetX: any, maskOffsetY: any): void;
+    /**
+     * Fade the dirty box's OOB region by a constant alpha. Called from
+     * composeSMask when smaskPreparedOOBAlpha is in (0, 255).
+     *
+     * destination-in clears every destination pixel outside the source's
+     * footprint, so four fillRects (one per strip) would each clear the
+     * others. Instead one fillRect covers the dirty box, restricted by
+     * an even-odd clip enclosing exactly (dirty_box XOR mask_region);
+     * within the clip the source covers everything so no "outside
+     * source" pixels exist.
+     */
+    _applySMaskOOBAlpha(layerCtx: any, layerOffsetX: any, layerOffsetY: any, layerWidth: any, layerHeight: any, maskX0: any, maskY0: any, maskX1: any, maskY1: any, alpha: any): void;
+    genericComposeSMask(smask: any, layerCtx: any, width: any, height: any, layerOffsetX: any, layerOffsetY: any): void;
     save(opIdx: any): void;
     restore(opIdx: any): void;
     transform(opIdx: any, a: any, b: any, c: any, d: any, e: any, f: any): void;
@@ -191,6 +236,7 @@ declare class CanvasExtraState {
     textRise: number;
     fillColor: string;
     strokeColor: string;
+    tilingPatternDims: null;
     patternFill: boolean;
     patternStroke: boolean;
     fillAlpha: number;

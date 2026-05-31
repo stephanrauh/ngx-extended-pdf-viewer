@@ -1,4 +1,4 @@
-export type PageViewport = import("./display_utils").PageViewport;
+export type PageViewport = import("./page_viewport").PageViewport;
 export type TextContent = import("./api").TextContent;
 export type TextLayerImages = import("./text_layer_images").TextLayerImages;
 export type TextLayerParameters = {

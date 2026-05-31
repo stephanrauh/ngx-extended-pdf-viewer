@@ -675,3 +675,4 @@ pdfjs-views-manager-paste-button-before =
 pdfjs-views-manager-paste-button-after =
     .title = Paste after page { $page }
 pdfjs-new-badge-content = NEW
+pdfjs-views-manager-waiting-for-file = Uploading file…

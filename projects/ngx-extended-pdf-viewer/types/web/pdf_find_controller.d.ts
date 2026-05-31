@@ -11,6 +11,13 @@ export type PDFFindControllerOptions = {
      */
     eventBus: EventBus;
     /**
+     * - The number of milliseconds to delay execution of
+     * find commands. In the viewer each keystroke in the find bar triggers a
+     * `find` event, so this delay avoids triggering a search prematurely when the
+     * user is still typing the query. The default value is 250.
+     */
+    delay?: number | undefined;
+    /**
      * - True if the matches
      * count must be updated on progress or only when the last page is reached.
      * The default value is `true`.
@@ -29,6 +36,10 @@ export function normalize(text: any, options?: {}): any[];
  * @typedef {Object} PDFFindControllerOptions
  * @property {PDFLinkService} linkService - The navigation/linking service.
  * @property {EventBus} eventBus - The application event bus.
+ * @property {number} [delay] - The number of milliseconds to delay execution of
+ *   find commands. In the viewer each keystroke in the find bar triggers a
+ *   `find` event, so this delay avoids triggering a search prematurely when the
+ *   user is still typing the query. The default value is 250.
  * @property {boolean} [updateMatchesCountOnProgress] - True if the matches
  *   count must be updated on progress or only when the last page is reached.
  *   The default value is `true`.
@@ -40,7 +51,7 @@ export class PDFFindController {
     /**
      * @param {PDFFindControllerOptions} options
      */
-    constructor({ linkService, eventBus, updateMatchesCountOnProgress, pageViewMode, listenToEventBus, }: PDFFindControllerOptions);
+    constructor({ linkService, eventBus, delay, updateMatchesCountOnProgress, pageViewMode, listenToEventBus, }: PDFFindControllerOptions);
     _linkService: import("./pdf_link_service.js").PDFLinkService;
     _eventBus: import("./event_utils").EventBus;
     _pageViewMode: any;

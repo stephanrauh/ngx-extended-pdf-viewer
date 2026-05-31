@@ -24,6 +24,8 @@ export class InkEditor extends DrawingEditor {
     /** @inheritdoc */
     get toolbarButtons(): (string | null)[][];
     get colorType(): number;
+    get colorAndOpacityType(): number;
+    get opacityType(): number;
     get color(): any;
     get opacity(): any;
     /** @inheritdoc */

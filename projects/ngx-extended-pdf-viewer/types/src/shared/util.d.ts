@@ -39,6 +39,7 @@ export namespace AnnotationEditorParamsType {
     let INK_COLOR: number;
     let INK_THICKNESS: number;
     let INK_OPACITY: number;
+    let INK_COLOR_AND_OPACITY: number;
     let HIGHLIGHT_COLOR: number;
     let HIGHLIGHT_THICKNESS: number;
     let HIGHLIGHT_FREE: number;
@@ -143,6 +144,7 @@ export function assert(cond: any, msg: any): void;
  */
 export const BaseException: any;
 export const BASELINE_FACTOR: number;
+export const BBOX_INIT: number[];
 export function bytesToString(bytes: any): string;
 /**
  * Attempts to create a valid absolute URL.
@@ -167,15 +169,16 @@ export namespace DrawOPS {
     let quadraticCurveTo: number;
     let closePath: number;
 }
+export const F32_BBOX_INIT: Float32Array<ArrayBuffer>;
 export class FeatureTest {
     static get isLittleEndian(): any;
-    static get isEvalSupported(): any;
     static get isOffscreenCanvasSupported(): any;
     static get isImageDecoderSupported(): any;
     static get isFloat16ArraySupported(): any;
     static get isSanitizerSupported(): any;
     static get platform(): any;
-    static get isCSSRoundSupported(): any;
+    static get isCanvasFilterSupported(): any;
+    static get isAlphaColorInputSupported(): any;
 }
 export const FONT_IDENTITY_MATRIX: number[];
 declare const FormatError_base: any;
@@ -186,10 +189,8 @@ export class FormatError extends FormatError_base {
     [x: string]: any;
     constructor(msg: any);
 }
-export function getModificationDate(date?: Date): string;
 export function getUuid(): string;
 export function getVerbosityLevel(): number;
-export const hexNumbers: string[];
 export namespace ImageKind {
     let GRAYSCALE_1BPP: number;
     let RGB_24BPP: number;
@@ -208,7 +209,6 @@ export const LINE_FACTOR: 1.35;
 export function makeArr(): never[];
 export function makeMap(): Map<any, any>;
 export function makeObj(): any;
-export function MathClamp(v: any, min: any, max: any): number;
 export namespace MeshFigureType {
     let TRIANGLES: number;
     let LATTICE: number;
@@ -360,11 +360,10 @@ export class ResponseException extends ResponseException_base {
 }
 export function setVerbosityLevel(level: any): void;
 export function shadow(obj: any, prop: any, value: any, nonSerializable?: boolean): any;
-export function string32(value: any): string;
 export function stringToBytes(str: any): Uint8Array<any>;
-export function stringToPDFString(str: any, keepEscapeSequence?: boolean): string;
 export function stringToUTF8String(str: any): string;
 export function stripPath(str: any): any;
+export const SVG_NS: "http://www.w3.org/2000/svg";
 export namespace TextRenderingMode {
     export let FILL: number;
     export let STROKE: number;
@@ -396,9 +395,8 @@ export function unreachable(msg: any): void;
 export function updateUrlHash(url: URL | string, hash: string, allowRel?: boolean): string;
 export function utf8StringToString(str: any): string;
 export class Util {
+    static get hexNums(): any;
     static makeHexColor(r: any, g: any, b: any): string;
-    static domMatrixToTransform(dm: any): any[];
-    static scaleMinMax(transform: any, minMax: any): void;
     static transform(m1: any, m2: any): any[];
     static multiplyByDOMMatrix(m: any, md: any): any[];
     static applyTransform(p: any, m: any, pos?: number): void;

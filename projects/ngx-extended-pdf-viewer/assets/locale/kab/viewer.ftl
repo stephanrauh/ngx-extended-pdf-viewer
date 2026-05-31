@@ -598,6 +598,8 @@ pdfjs-editor-edit-comment-popup-button =
 pdfjs-editor-delete-comment-popup-button-label = Kkes awennit
 pdfjs-editor-delete-comment-popup-button =
     .title = Kkes awennit
+pdfjs-show-comment-button =
+    .title = Sken awennit
 
 ##  Edit a comment dialog
 
@@ -639,8 +641,6 @@ pdfjs-editor-undo-bar-message-multiple =
     }
 pdfjs-editor-add-signature-dialog-label = This modal allows the user to create a signature to add to a PDF document. The user can edit the name (which also serves as the alt text), and optionally save the signature for repeated use.
 pdfjs-editor-add-signature-save-warning-message = You’ve reached the limit of 5 saved signatures. Remove one to save more.
-pdfjs-show-comment-button =
-    .title = Show comment
 pdfjs-editor-edit-comment-dialog-save-button-when-editing = Update
 pdfjs-editor-edit-comment-dialog-save-button-when-adding = Add
 pdfjs-editor-add-comment-button =
@@ -713,6 +713,7 @@ pdfjs-views-manager-paste-button-before =
 pdfjs-views-manager-paste-button-after =
     .title = Paste after page { $page }
 pdfjs-new-badge-content = NEW
+pdfjs-views-manager-waiting-for-file = Uploading file…
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = Match Each Word

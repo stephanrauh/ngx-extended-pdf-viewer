@@ -1,4 +1,4 @@
-export type PageViewport = import("../src/display/display_utils").PageViewport;
+export type PageViewport = import("../src/display/page_viewport").PageViewport;
 export type OptionalContentConfig = import("../src/display/optional_content_config").OptionalContentConfig;
 export type EventBus = import("./event_utils").EventBus;
 export type PDFRenderingQueue = import("./pdf_rendering_queue").PDFRenderingQueue;
@@ -87,6 +87,12 @@ export type PDFPageViewOptions = {
      */
     imagesRightClickMinSize?: number | undefined;
     /**
+     * - When enabled, renders text
+     * selections in the draw layer.
+     * The default value is `true`.
+     */
+    enableSelectionRendering?: boolean | undefined;
+    /**
      * - When enabled, PDF
      * rendering will keep track of which areas of the page each PDF operation
      * affects. Then, when rendering a partial page (if `enableDetailCanvas` is
@@ -130,7 +136,7 @@ export class PDFPageView extends BasePDFPageView {
     pageLabel: string | null;
     rotation: number;
     scale: number;
-    viewport: import("../src/display/display_utils").PageViewport;
+    viewport: import("../src/display/page_viewport").PageViewport;
     pdfPageRotate: number;
     _optionalContentConfigPromise: Promise<import("../src/display/optional_content_config").OptionalContentConfig> | null;
     imageResourcesPath: string;
@@ -221,7 +227,7 @@ export class PDFPageView extends BasePDFPageView {
     _getRenderingContext(canvas: any, transform: any, recordOperations: any, recordImages: any): {
         canvas: any;
         transform: any;
-        viewport: import("../src/display/display_utils").PageViewport;
+        viewport: import("../src/display/page_viewport").PageViewport;
         annotationMode: number;
         optionalContentConfigPromise: Promise<import("../src/display/optional_content_config").OptionalContentConfig> | null;
         annotationCanvasMap: any;

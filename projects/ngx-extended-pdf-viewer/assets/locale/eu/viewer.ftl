@@ -21,7 +21,7 @@ pdfjs-of-pages = / { $pagesCount }
 # Variables:
 #   $pageNumber (Number) - the currently visible page
 #   $pagesCount (Number) - the total number of pages in the document
-pdfjs-page-of-pages = { $pagesCount }/{ $pageNumber }
+pdfjs-page-of-pages = ({ $pageNumber } / { $pagesCount })
 pdfjs-zoom-out-button =
     .title = Urrundu zooma
 pdfjs-zoom-out-button-label = Urrundu zooma
@@ -207,13 +207,9 @@ pdfjs-thumb-page-checkbox1 =
     .title = Hautatu { $page } orria
 # Variables:
 #   $page (Number) - the page number
-pdfjs-thumb-page-checkbox =
-    .aria-label = Hautatu { $page } orria
-# Variables:
-#   $page (Number) - the page number
 #   $total (Number) - the number of pages
 pdfjs-thumb-page-title1 =
-    .title = { $total } / { $page }. orria
+    .title = { $page } / { $total } orria
 
 ## Find panel button title and messages
 
@@ -237,8 +233,8 @@ pdfjs-find-reached-bottom = Dokumentuaren bukaerara heldu da, hasieratik jarrait
 #   $total (Number) - the total number of matches in the document
 pdfjs-find-match-count =
     { $total ->
-        [one] { $total }/{ $current }. bat-etortzea
-       *[other] { $total }/{ $current }. bat-etortzea
+        [one] { $current }/{ $total } bat-etortzea
+       *[other] { $current }/{ $total } bat-etortzea
     }
 # Variables:
 #   $limit (Number) - the maximum number of matches
@@ -492,8 +488,8 @@ pdfjs-editor-new-alt-text-error-close-button = Itxi
 # Variables:
 #   $totalSize (Number) - the total size (in MB) of the AI model.
 #   $downloadedSize (Number) - the downloaded size (in MB) of the AI model.
-pdfjs-editor-new-alt-text-ai-model-downloading-progress = Testu alternatiboaren AA modeloa deskargatzen ({ $totalSize }/{ $downloadedSize } MB)
-    .aria-valuetext = Testu alternatiboaren AA modeloa deskargatzen ({ $totalSize }/{ $downloadedSize } MB)
+pdfjs-editor-new-alt-text-ai-model-downloading-progress = Testu alternatiboaren AA modeloa deskargatzen ({ $downloadedSize }/{ $totalSize } MB)
+    .aria-valuetext = Testu alternatiboaren AA modeloa deskargatzen ({ $downloadedSize }/{ $totalSize } MB)
 # This is a button that users can click to edit the alt text they have already added.
 pdfjs-editor-new-alt-text-added-button =
     .aria-label = Testu alternatiboa gehituta
@@ -658,12 +654,9 @@ pdfjs-editor-add-comment-button =
 ##  - layers.
 ## The thumbnails view is used to edit the pdf: remove/insert pages, ...
 
-pdfjs-toggle-views-manager-button =
-    .title = Txandakatu alboko barra
 pdfjs-toggle-views-manager-notification-button =
     .title = Txandakatu alboko barra (dokumentuak koadro txikiak/eskema/eranskinak/geruzak ditu)
 pdfjs-toggle-views-manager-button1-label = Kudeatu orriak
-pdfjs-toggle-views-manager-button-label = Txandakatu alboko barra
 pdfjs-views-manager-sidebar =
     .aria-label = Alboko barra
 pdfjs-views-manager-sidebar-resizer =
@@ -672,9 +665,11 @@ pdfjs-views-manager-view-selector-button =
     .title = Ikuspegiak
 pdfjs-views-manager-view-selector-button-label = Ikuspegiak
 pdfjs-views-manager-pages-title = Orriak
-pdfjs-views-manager-outlines-title = Dokumentuaren eskema
+pdfjs-views-manager-outlines-title1 = Dokumentuaren eskema
+    .title = Dokumentuaren eskema (klik bikoitza elementu guztiak zabaltzeko/tolesteko)
 pdfjs-views-manager-attachments-title = Eranskinak
-pdfjs-views-manager-layers-title = Geruzak
+pdfjs-views-manager-layers-title1 = Geruzak
+    .title = Geruzak (klik bikoitza geruza guztiak egoera lehenetsira berrezartzeko)
 pdfjs-views-manager-pages-option-label = Orriak
 pdfjs-views-manager-outlines-option-label = Dokumentuaren eskema
 pdfjs-views-manager-attachments-option-label = Eranskinak
@@ -694,7 +689,7 @@ pdfjs-views-manager-pages-status-action-button-label = Kudeatu
 pdfjs-views-manager-pages-status-copy-button-label = Kopiatu
 pdfjs-views-manager-pages-status-cut-button-label = Ebaki
 pdfjs-views-manager-pages-status-delete-button-label = Ezabatu
-pdfjs-views-manager-pages-status-save-as-button-label = Gorde honela…
+pdfjs-views-manager-pages-status-export-selected-button-label = Esportatu hautatutakoa…
 # Variables:
 #   $count (Number) - the number of selected pages to be cut.
 pdfjs-views-manager-status-undo-cut-label =
@@ -734,6 +729,10 @@ pdfjs-views-manager-paste-button-before =
 #   $page (Number) - the page number after which the paste button is.
 pdfjs-views-manager-paste-button-after =
     .title = Itsatsi { $page }. orriaren aurretik
+# Badge used to promote a new feature in the UI, keep it as short as possible.
+# It's spelled uppercase for English, but it can be translated as usual.
+pdfjs-new-badge-content = BERRIA
+pdfjs-views-manager-waiting-for-file = Fitxategia igotzen…
 pdfjs-toggle-views-manager-button1 =
     .title = Kudeatu orriak
 
@@ -752,12 +751,6 @@ pdfjs-editor-add-signature-edit-button-label = Editatu azalpena
 pdfjs-editor-edit-signature-dialog-title = Editatu azalpena
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-views-manager-outlines-title1 = Document outline
-    .title = Document outline (double-click to expand/collapse all items)
-pdfjs-views-manager-layers-title1 = Layers
-    .title = Layers (double-click to reset all layers to the default state)
-pdfjs-views-manager-pages-status-export-selected-button-label = Export selected…
-pdfjs-new-badge-content = NEW
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = Match Each Word

@@ -1,5 +1,5 @@
 export type PDFPageProxy = import("../src/display/api").PDFPageProxy;
-export type PageViewport = import("../src/display/display_utils").PageViewport;
+export type PageViewport = import("../src/display/page_viewport").PageViewport;
 export type AnnotationStorage = import("../src/display/annotation_storage").AnnotationStorage;
 export type StructTreeLayerBuilder = import("./struct_tree_layer_builder.js").StructTreeLayerBuilder;
 export type TextAccessibilityManager = import("./text_accessibility.js").TextAccessibilityManager;
@@ -37,6 +37,7 @@ export type AnnotationLayerBuilderRenderOptions = {
      */
     intent?: string | undefined;
     structTreeLayer?: import("./struct_tree_layer_builder.js").StructTreeLayerBuilder | undefined;
+    optionalContentConfigPromise?: Promise<any> | undefined;
 };
 /**
  * @typedef {Object} AnnotationLayerBuilderOptions
@@ -63,6 +64,7 @@ export type AnnotationLayerBuilderRenderOptions = {
  * @property {PageViewport} viewport
  * @property {string} [intent] - The default value is "display".
  * @property {StructTreeLayerBuilder} [structTreeLayer]
+ * @property {Promise} [optionalContentConfigPromise]
  */
 export class AnnotationLayerBuilder {
     /**
@@ -93,7 +95,7 @@ export class AnnotationLayerBuilder {
      * @returns {Promise<void>} A promise that is resolved when rendering of the
      *   annotations is complete.
      */
-    render({ viewport, intent, structTreeLayer }: AnnotationLayerBuilderRenderOptions): Promise<void>;
+    render({ viewport, intent, structTreeLayer, optionalContentConfigPromise, }: AnnotationLayerBuilderRenderOptions): Promise<void>;
     cancel(): void;
     hide(internal?: boolean): void;
     hasEditableAnnotations(): boolean;
