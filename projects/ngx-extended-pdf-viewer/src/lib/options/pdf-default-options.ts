@@ -150,5 +150,6 @@ export const pdfDefaultOptions = {
   positionPopupDialogsWithJavaScript: true,
   enablePageReordering: false, // allows users to reorder pages by dragging thumbnails
   enableSplitMerge: false, // allows users to copy, cut, delete, and export selected pages
+  enableMerge: false, // adds an "Add file" button to the sidebar that merges another PDF/image into the current document
   pdfBackgroundColor: '', // background color for PDF content rendering
 };

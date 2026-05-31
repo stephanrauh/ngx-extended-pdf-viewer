@@ -822,6 +822,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
    *  requires destroying and recreating the component. */
   public enableSplitMergeInput = input<boolean | undefined>(undefined, { alias: 'enableSplitMerge' }); // NOSONAR
 
+  /** Enable merging: adds an "Add file" button to the thumbnail sidebar that lets the user
+   *  insert another PDF (or images, as additional pages) into the current document.
+   *  Experimental upstream — opt in deliberately.
+   *  This is read at initialization time only. Changing it after the viewer has loaded
+   *  requires destroying and recreating the component. */
+  public enableMergeInput = input<boolean | undefined>(undefined, { alias: 'enableMerge' }); // NOSONAR
+
   // #2818 modified by ngx-extended-pdf-viewer
   public disableMovePageButton = input<boolean>(false);
   // #2818 end of modification by ngx-extended-pdf-viewer
@@ -1185,6 +1192,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
   public get enableSplitMerge(): boolean {
     return this.enableSplitMergeInput() ?? pdfDefaultOptions.enableSplitMerge;
+  }
+
+  public get enableMerge(): boolean {
+    return this.enableMergeInput() ?? pdfDefaultOptions.enableMerge;
   }
 
   /**
@@ -2169,6 +2180,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     const enableSplitMergeInput = this.enableSplitMergeInput();
     if (enableSplitMergeInput !== undefined) {
       pdfDefaultOptions.enableSplitMerge = enableSplitMergeInput;
+    }
+    const enableMergeInput = this.enableMergeInput();
+    if (enableMergeInput !== undefined) {
+      pdfDefaultOptions.enableMerge = enableMergeInput;
     }
 
     for (const key in pdfDefaultOptions) {

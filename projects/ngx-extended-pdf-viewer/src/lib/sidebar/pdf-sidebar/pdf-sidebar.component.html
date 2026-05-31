@@ -6,6 +6,8 @@
   <div
     id="viewsManager"
     class="menuContainer sidebar"
+    role="dialog"
+    data-l10n-id="pdfjs-views-manager-sidebar"
     [style.top]="sidebarPositionTop()"
   >
     <div id="viewsManagerHeader">
@@ -15,6 +17,40 @@
       >
         <pdf-sidebar-toolbar [mobileFriendlyZoomScale]="mobileFriendlyZoomScale()"></pdf-sidebar-toolbar>
       </div>
+      <!-- #3141 added by ngx-extended-pdf-viewer
+           pdf.js v6 sidebar title row: Add-file button (merge feature) +
+           jump-to-current-outline button. Both hidden until pdf.js unhides them
+           via enableMerge / outline-view activation. The collapse-when-empty rule
+           in views_manager.scss hides the whole row when nothing is visible.
+           Upstream's #viewsManagerHeaderLabel (a breadcrumb for the active view)
+           is intentionally omitted — ngx's pdf-sidebar-toolbar already shows
+           which view is active via the highlighted toolbar button. The dummy
+           component still provides an off-screen placeholder so pdf.js's
+           data-l10n-id setter doesn't error. -->
+      <div id="viewsManagerTitle">
+        <button
+          id="viewsManagerAddFileButton"
+          class="toolbarButton viewsManagerButton"
+          type="button"
+          tabindex="0"
+          data-l10n-id="pdfjs-views-manager-add-file-button"
+          hidden="true"
+        >
+          <span data-l10n-id="pdfjs-views-manager-add-file-button-label">Add file</span>
+          <input id="viewsManagerAddFilePicker" type="file" accept="application/pdf,image/*" multiple />
+        </button>
+        <button
+          id="viewsManagerCurrentOutlineButton"
+          class="toolbarButton viewsManagerButton"
+          type="button"
+          tabindex="0"
+          data-l10n-id="pdfjs-current-outline-item-button"
+          hidden="true"
+        >
+          <span data-l10n-id="pdfjs-current-outline-item-button-label">Current outline item</span>
+        </button>
+      </div>
+      <!-- #3141 end of addition by ngx-extended-pdf-viewer -->
       <div id="viewsManagerStatus">
         <div id="viewsManagerStatusAction">
           <span id="viewsManagerStatusActionLabelContainer" class="viewsManagerStatusLabel">

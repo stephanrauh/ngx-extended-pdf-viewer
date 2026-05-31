@@ -281,6 +281,14 @@ ngx-extended-pdf-viewer {
       width: auto;
       padding: 12px 16px 12px 8px;
 
+      // #3141: ngx-extended-pdf-viewer keeps its own view-switcher toolbar above
+      // this title row, so an empty title row would just be wasted vertical space.
+      // Collapse it when no buttons are visible. Upstream pdf.js doesn't need this
+      // because its #viewsManagerSelector inside the title is always visible.
+      &:not(:has(> button:not([hidden]))) {
+        display: none;
+      }
+
       &:not(:has(#viewsManagerHeaderLabel ~ button:not([hidden])))::after {
         /* If one of the following buttons is visible, hide the placeholder
              button to avoid unnecessary space in the header. */
@@ -361,19 +369,46 @@ ngx-extended-pdf-viewer {
       }
 
       #viewsManagerAddFileButton {
-        visibility: hidden;
-
         background: var(--button-no-bg);
         width: 32px;
         height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
         &:focus-visible {
           background-color: var(--button-focus-no-bg);
         }
 
+        // Upstream pdf.js relies on a central `.toolbarButton::before { content: "" }`
+        // rule in viewer.css; ngx's themes use inline SVG for their own toolbar and
+        // never imported that rule, so the pseudo-element needs its own content + sizing.
+        // The `transform: none` overrides the Retina rule in viewer-with-images.scss:1827
+        // (`.toolbarButton::before { transform: scale(0.5) }`) which is meant for ngx's
+        // legacy raster icons but would shrink this SVG-mask icon to half its size.
         &::before {
+          content: "";
+          display: inline-block;
+          width: 20px;
+          height: 20px;
           mask-repeat: no-repeat;
+          mask-position: center;
+          mask-size: contain;
           mask-image: var(--views-manager-add-file-button-icon);
+          background-color: var(--button-fg);
+          transform: none;
+          top: 0;
+        }
+
+        // The button is the visible target; the picker is a hidden file input
+        // that pdf.js triggers via picker.click() from the button click handler.
+        > input {
+          display: none;
+        }
+
+        // Hide the auto-generated text label so only the icon shows.
+        > span {
+          display: none;
         }
       }
 
@@ -381,14 +416,30 @@ ngx-extended-pdf-viewer {
         background: var(--button-no-bg);
         width: 32px;
         height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
         &:focus-visible {
           background-color: var(--button-focus-no-bg);
         }
 
         &::before {
+          content: "";
+          display: inline-block;
+          width: 20px;
+          height: 20px;
           mask-repeat: no-repeat;
+          mask-position: center;
+          mask-size: contain;
           mask-image: var(--current-outline-button-icon);
+          background-color: var(--button-fg);
+          transform: none;
+          top: 0;
+        }
+
+        > span {
+          display: none;
         }
       }
     }

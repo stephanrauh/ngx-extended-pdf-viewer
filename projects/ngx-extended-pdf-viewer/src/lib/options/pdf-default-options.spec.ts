@@ -385,6 +385,7 @@ describe('PDF Default Options Utility Functions', () => {
       expect(pdfDefaultOptions.positionPopupDialogsWithJavaScript).toBe(true);
       expect(pdfDefaultOptions.enablePageReordering).toBe(false);
       expect(pdfDefaultOptions.enableSplitMerge).toBe(false);
+      expect(pdfDefaultOptions.enableMerge).toBe(false);
     });
 
     describe('function properties behavior', () => {
@@ -415,8 +416,9 @@ describe('PDF Default Options Utility Functions', () => {
 
       it('should return correct wasmUrl', () => {
         const result = pdfDefaultOptions.wasmUrl();
-        expect(result).toContain('wasm/');
-        expect(result).toContain('./assets');
+        // #3140: wasmUrl now resolves against document.baseURI so it works on sub-routes.
+        // In jsdom that gives an http://localhost/... URL; in SSR it falls back to ./assets/wasm/.
+        expect(result).toContain('assets/wasm/');
       });
 
       it('should return ES5 versions when needsES5 is true', () => {

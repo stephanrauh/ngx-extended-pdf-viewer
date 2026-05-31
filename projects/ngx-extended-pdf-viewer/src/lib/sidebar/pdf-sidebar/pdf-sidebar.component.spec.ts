@@ -401,4 +401,49 @@ describe('PdfSidebarComponent', () => {
       expect(component.hideSidebarToolbar()).toBe(false);
     });
   });
+
+  // #3141: pdf.js v6 sidebar gaps — verify the elements pdf.js looks up by ID are actually rendered.
+  describe('pdf.js v6 sidebar elements (#3141)', () => {
+    beforeEach(() => {
+      fixture.detectChanges();
+    });
+
+    it('renders the views-manager dialog with a11y attributes', () => {
+      const viewsManager = fixture.nativeElement.querySelector('#viewsManager') as HTMLElement;
+      expect(viewsManager).not.toBeNull();
+      expect(viewsManager.getAttribute('role')).toBe('dialog');
+      expect(viewsManager.getAttribute('aria-describedby')).toBe('viewsManagerHeaderLabel');
+      expect(viewsManager.getAttribute('data-l10n-id')).toBe('pdfjs-views-manager-sidebar');
+    });
+
+    it('renders the heading label that aria-describedby targets', () => {
+      const label = fixture.nativeElement.querySelector('#viewsManagerHeaderLabel');
+      expect(label).not.toBeNull();
+      expect(label.getAttribute('role')).toBe('heading');
+      expect(label.getAttribute('aria-level')).toBe('2');
+    });
+
+    it('renders the Add-file button and a real <input type="file"> picker', () => {
+      const button = fixture.nativeElement.querySelector('#viewsManagerAddFileButton') as HTMLButtonElement;
+      expect(button).not.toBeNull();
+      expect(button.tagName).toBe('BUTTON');
+      expect(button.hidden).toBe(true); // pdf.js unhides it when enableMerge is true
+
+      const picker = fixture.nativeElement.querySelector('#viewsManagerAddFilePicker') as HTMLInputElement;
+      expect(picker).not.toBeNull();
+      expect(picker.tagName).toBe('INPUT');
+      expect(picker.type).toBe('file');
+      expect(picker.accept).toBe('application/pdf,image/*');
+      expect(picker.multiple).toBe(true);
+      // picker must live inside the button so click on button triggers the picker
+      expect(button.contains(picker)).toBe(true);
+    });
+
+    it('renders the current-outline-item button', () => {
+      const button = fixture.nativeElement.querySelector('#viewsManagerCurrentOutlineButton') as HTMLButtonElement;
+      expect(button).not.toBeNull();
+      expect(button.tagName).toBe('BUTTON');
+      expect(button.hidden).toBe(true); // pdf.js unhides it in outline view
+    });
+  });
 });
