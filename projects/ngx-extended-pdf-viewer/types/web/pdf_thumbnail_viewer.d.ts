@@ -124,16 +124,16 @@ export type PDFThumbnailViewerOptions = {
  * Viewer control to display thumbnails for pages in a PDF document.
  */
 export class PDFThumbnailViewer {
-    static "__#private@#draggingScaleFactor": number;
-    static "__#private@#getScaleFactor"(image: any): number;
-    static "__#private@#fitImageDimensions"(width: any, height: any, { minSide, maxSide }: {
+    static #draggingScaleFactor: number;
+    static #getScaleFactor(image: any): number;
+    static #fitImageDimensions(width: any, height: any, { minSide, maxSide }: {
         minSide?: number | undefined;
         maxSide: any;
     }): {
         width: any;
         height: any;
     };
-    static "__#private@#fileToImageBitmap"(file: any): Promise<ImageBitmap>;
+    static #fileToImageBitmap(file: any): Promise<ImageBitmap>;
     /**
      * @param {PDFThumbnailViewerOptions} options
      */

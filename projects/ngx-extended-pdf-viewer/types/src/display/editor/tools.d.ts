@@ -443,10 +443,10 @@ export class CommandManager {
  * multiple pointers (e.g. two fingers, a pen, a mouse, ...).
  */
 export class CurrentPointers {
-    static "__#private@#pointerId": number;
-    static "__#private@#pointerIds": null;
-    static "__#private@#moveTimestamp": number;
-    static "__#private@#pointerType": null;
+    static #pointerId: number;
+    static #pointerIds: null;
+    static #moveTimestamp: number;
+    static #pointerType: null;
     static initializeAndAddPointerId(pointerId: any): void;
     static setPointer(pointerType: any, pointerId: any): void;
     static setTimeStamp(timeStamp: any): void;

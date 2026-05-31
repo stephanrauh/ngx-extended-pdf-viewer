@@ -123,10 +123,10 @@ export class CanvasDependencyTracker {
  * the current canvas transform.
  */
 export class CanvasImagesTracker {
-    static "__#private@#CoordsArray": Float32ArrayConstructor | Float16ArrayConstructor;
+    static #CoordsArray: any;
     constructor(canvas: any);
     record(ctx: any, width: any, height: any, clipBox: any): void;
-    take(): Float32Array<ArrayBuffer> | Float16Array<ArrayBuffer>;
+    take(): any;
     #private;
 }
 /**

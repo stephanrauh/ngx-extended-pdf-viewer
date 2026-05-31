@@ -1,7 +1,7 @@
 export class Autolinker {
-    static "__#private@#index": number;
-    static "__#private@#regex": any;
-    static "__#private@#numericTLDRegex": any;
+    static #index: number;
+    static #regex: any;
+    static #numericTLDRegex: any;
     static findLinks(text: any): {
         url: string;
         index: any;

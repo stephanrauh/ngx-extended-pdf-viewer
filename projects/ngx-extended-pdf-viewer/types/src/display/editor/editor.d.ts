@@ -74,7 +74,7 @@ export class AnnotationEditor {
      * @param {AnnotationEditorLayer} parent
      */
     static paste(item: DataTransferItem, parent: AnnotationEditorLayer): void;
-    static "__#private@#rotatePoint"(x: any, y: any, angle: any): any[];
+    static #rotatePoint(x: any, y: any, angle: any): any[];
     static _round(x: any): number;
     /**
      * Deserialize the editor.

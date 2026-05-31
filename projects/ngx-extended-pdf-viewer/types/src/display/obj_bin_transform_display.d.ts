@@ -38,7 +38,7 @@ export class FontInfo {
 }
 export class FontPathInfo {
     constructor(buffer: any);
-    get path(): Float32Array<any> | Float16Array<any>;
+    get path(): any;
     #private;
 }
 export class PatternInfo {

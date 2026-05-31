@@ -4,8 +4,8 @@ export const GenericL10n: null;
  *       internally.
  */
 export class L10n {
-    static "__#private@#fixupLangCode"(langCode: any): any;
-    static "__#private@#isRTL"(lang: any): boolean;
+    static #fixupLangCode(langCode: any): any;
+    static #isRTL(lang: any): boolean;
     constructor({ lang, isRTL }: {
         lang: any;
         isRTL: any;

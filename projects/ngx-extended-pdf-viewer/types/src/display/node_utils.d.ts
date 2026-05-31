@@ -1,9 +1,9 @@
-export function fetchData(url: any): Promise<Uint8Array<ArrayBuffer>>;
+export function fetchData(url: any): Promise<Uint8Array<any>>;
 export class NodeBinaryDataFactory extends BaseBinaryDataFactory {
     /**
      * @ignore
      */
-    _fetch(url: any, kind: any): Promise<Uint8Array<ArrayBuffer>>;
+    _fetch(url: any, kind: any): Promise<Uint8Array<any>>;
 }
 export class NodeCanvasFactory extends BaseCanvasFactory {
     /**

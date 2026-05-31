@@ -1,5 +1,5 @@
 export class CommentManager {
-    static "__#private@#hasForcedColors": null;
+    static #hasForcedColors: null;
     static _makeCommentColor(color: any, opacity: any): string | null;
     constructor(commentDialog: any, sidebar: any, eventBus: any, linkService: any, overlayManager: any, ltr: any, hasForcedColors: any, globalAbortSignal: any);
     dialogElement: any;

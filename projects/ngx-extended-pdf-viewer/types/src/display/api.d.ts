@@ -764,7 +764,7 @@ export class PDFDataRangeTransport {
  * after which individual pages can be rendered.
  */
 export class PDFDocumentLoadingTask {
-    static "__#private@#docId": number;
+    static #docId: number;
     /**
      * @private
      */
@@ -1531,9 +1531,9 @@ export class PDFPageProxy {
  * @param {PDFWorkerParameters} params - The worker initialization parameters.
  */
 export class PDFWorker {
-    static "__#private@#fakeWorkerId": number;
-    static "__#private@#isWorkerDisabled": boolean;
-    static "__#private@#workerPorts": WeakMap<object, any>;
+    static #fakeWorkerId: number;
+    static #isWorkerDisabled: boolean;
+    static #workerPorts: WeakMap<object, any>;
     /**
      * @param {PDFWorkerParameters} params - The worker initialization parameters.
      * @returns {PDFWorker}
@@ -1544,7 +1544,7 @@ export class PDFWorker {
      * @type {string}
      */
     static get workerSrc(): string;
-    static get "__#private@#mainThreadWorkerMessageHandler"(): any;
+    static get #mainThreadWorkerMessageHandler(): any;
     static get _setupFakeWorkerGlobal(): any;
     constructor({ name, port, verbosity, cspPolicyService, }?: {
         name?: null | undefined;

@@ -409,8 +409,8 @@ export class Util {
     static intersect(rect1: any, rect2: any): number[] | null;
     static pointBoundingBox(x: any, y: any, minMax: any): void;
     static rectBoundingBox(x0: any, y0: any, x1: any, y1: any, minMax: any): void;
-    static "__#private@#getExtremumOnCurve"(x0: any, x1: any, x2: any, x3: any, y0: any, y1: any, y2: any, y3: any, t: any, minMax: any): void;
-    static "__#private@#getExtremum"(x0: any, x1: any, x2: any, x3: any, y0: any, y1: any, y2: any, y3: any, a: any, b: any, c: any, minMax: any): void;
+    static #getExtremumOnCurve(x0: any, x1: any, x2: any, x3: any, y0: any, y1: any, y2: any, y3: any, t: any, minMax: any): void;
+    static #getExtremum(x0: any, x1: any, x2: any, x3: any, y0: any, y1: any, y2: any, y3: any, a: any, b: any, c: any, minMax: any): void;
     static bezierBoundingBox(x0: any, y0: any, x1: any, y1: any, x2: any, y2: any, x3: any, y3: any, minMax: any): void;
 }
 export namespace VerbosityLevel {

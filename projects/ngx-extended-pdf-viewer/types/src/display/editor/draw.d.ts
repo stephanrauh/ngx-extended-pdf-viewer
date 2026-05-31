@@ -4,9 +4,9 @@
 export class DrawingEditor extends AnnotationEditor {
     static _currentDrawId: number;
     static _currentParent: null;
-    static "__#private@#currentDraw": null;
-    static "__#private@#currentDrawingAC": null;
-    static "__#private@#currentDrawingOptions": null;
+    static #currentDraw: null;
+    static #currentDrawingAC: null;
+    static #currentDrawingOptions: null;
     static _INNER_MARGIN: number;
     static _mergeSVGProperties(p1: any, p2: any): any;
     /**

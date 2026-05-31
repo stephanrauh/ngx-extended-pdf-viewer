@@ -74,7 +74,7 @@ export class OutputScale {
     limitCanvas(width: any, height: any, maxPixels: any, maxDim: any, capAreaFactor?: number): boolean;
 }
 export class PDFDateString {
-    static "__#private@#regex": any;
+    static #regex: any;
     /**
      * Convert a PDF date string to a JavaScript `Date` object.
      *

@@ -1,5 +1,5 @@
 export class CaretBrowsingMode {
-    static "__#private@#caretPositionFromPoint"(x: any, y: any): CaretPosition | {
+    static #caretPositionFromPoint(x: any, y: any): CaretPosition | {
         offsetNode: any;
         offset: any;
     } | null;

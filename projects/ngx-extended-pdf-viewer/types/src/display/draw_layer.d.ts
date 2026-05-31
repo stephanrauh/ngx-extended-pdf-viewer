@@ -81,18 +81,18 @@ export type TextLayerSelectionData = {
  * be able to use mix-blend-mode for some of them.
  */
 export class DrawLayer {
-    static "__#private@#id": number;
-    static "__#private@#selectionId": number;
+    static #id: number;
+    static #selectionId: number;
     /** @type {AbortController | null} */
-    static "__#private@#selectionChangeAC": AbortController | null;
+    static #selectionChangeAC: AbortController | null;
     /** @type {Set<HTMLDivElement>} */
-    static "__#private@#selections": Set<HTMLDivElement>;
+    static #selections: Set<HTMLDivElement>;
     /** @type {boolean} */
-    static "__#private@#isSelecting": boolean;
+    static #isSelecting: boolean;
     /** @type {Set<Element>} */
-    static "__#private@#textLayerSet": Set<Element>;
+    static #textLayerSet: Set<Element>;
     /** @type {WeakMap<Element, TextLayerSelectionData>} */
-    static "__#private@#textLayers": WeakMap<Element, TextLayerSelectionData>;
+    static #textLayers: WeakMap<Element, TextLayerSelectionData>;
     /**
      * Clean up the selection for a text layer.
      *
@@ -101,17 +101,17 @@ export class DrawLayer {
      * @returns {undefined}
      *   Nothing.
      */
-    static "__#private@#cleanupTextLayerSelection"(textLayer: Element): undefined;
+    static #cleanupTextLayerSelection(textLayer: Element): undefined;
     /**
      * @returns {boolean}
      *   Whether there is a non-collapsed document selection.
      */
-    static "__#private@#hasSelection"(): boolean;
+    static #hasSelection(): boolean;
     /**
      * @returns {Array<Element>}
      *   Connected text layers sorted in document order.
      */
-    static "__#private@#getOrderedTextLayers"(): Array<Element>;
+    static #getOrderedTextLayers(): Array<Element>;
     /**
      * Handle `selectionchange` to update the selection display for text layers.
      * We want to display the selection in a separate layer on top of the text
@@ -121,9 +121,9 @@ export class DrawLayer {
      * @returns {undefined}
      *   Nothing.
      */
-    static "__#private@#selectionChange"(): undefined;
+    static #selectionChange(): undefined;
     static get _svgFactory(): any;
-    static "__#private@#setBox"(element: any, [x, y, width, height]: [any, any, any, any]): void;
+    static #setBox(element: any, [x, y, width, height]: [any, any, any, any]): void;
     /**
      * @param {DrawLayerOptions} options
      *   Configuration.
