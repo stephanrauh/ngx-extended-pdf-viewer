@@ -27,12 +27,12 @@
     "PDF viewer",
     "Angular",
     "ng2",
-    "Angular 19 - 21",
+    "Angular 19 - 22",
     "customizable PDF viewer"
   ],
   "peerDependencies": {
-    "@angular/common": ">=19.0.0 <22.0.0",
-    "@angular/core": ">=19.0.0 <22.0.0"
+    "@angular/common": ">=19.0.0 <23.0.0",
+    "@angular/core": ">=19.0.0 <23.0.0"
   },
   "devDependencies": {
     "typescript": "file:../../node_modules/typescript"

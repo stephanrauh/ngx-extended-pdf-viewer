@@ -5,6 +5,10 @@
   display: flex;
   flex-direction: column;
   flex: 1 1 0%;
+  /* #3140: parent #viewsManager uses `align-items: flex-start`, so without
+     `align-self: stretch` this host shrinks to its content width and clips
+     the selected thumbnail's right-side box-shadow. */
+  align-self: stretch;
   overflow: hidden;
 }
 /* #3111 end of modification by ngx-extended-pdf-viewer */

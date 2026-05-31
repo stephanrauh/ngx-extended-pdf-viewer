@@ -118,7 +118,20 @@ export const pdfDefaultOptions = {
         }.mjs`;
   },
   standardFontDataUrl: () => `${assetsUrl(pdfDefaultOptions.assetsFolder, '/..')}/standard_fonts/`,
-  wasmUrl: () => `${assetsUrl(pdfDefaultOptions.assetsFolder, '/..')}/wasm/`,
+  // #3140: wasm files live inside the assets folder (not as a sibling).
+  // Resolve against document.baseURI so the path stays correct on sub-routes
+  // (pdf.js's QuickJS loader resolves wasmUrl against `location.href`, which
+  // otherwise turns `./assets/wasm/` into `/<route>/assets/wasm/`).
+  wasmUrl: () => {
+    const folder = pdfDefaultOptions.assetsFolder;
+    if (folder?.includes('://')) {
+      return `${folder}/wasm/`;
+    }
+    if (typeof document !== 'undefined') {
+      return new URL(`${folder}/wasm/`, document.baseURI).href;
+    }
+    return `./${folder}/wasm/`;
+  },
 
   // options specific to ngx-extended-pdf-viewer (as opposed to being used by pdf.js)
   doubleTapZoomFactor: 'page-width',

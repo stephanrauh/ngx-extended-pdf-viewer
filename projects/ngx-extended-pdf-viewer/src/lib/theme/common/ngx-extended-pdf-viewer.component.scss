@@ -201,6 +201,7 @@ ngx-extended-pdf-viewer {
     margin-left: -2px !important;
     margin-right: -2px !important;
   }
+
   // #3113 end of modification by ngx-extended-pdf-viewer
 
   /* #2943 modified by ngx-extended-pdf-viewer */
@@ -387,15 +388,12 @@ ngx-extended-pdf-viewer {
 
   #editorCommentsSidebar,
   .commentPopup,
-  .annotationLayer {
-  }
+  .annotationLayer {}
 
   #editorCommentsSidebar,
   .commentPopup {
-    --comment-date-fg-color: light-dark(
-        rgb(21 20 26 / 0.69),
-        rgb(251 251 254 / 0.69)
-    );
+    --comment-date-fg-color: light-dark(rgb(21 20 26 / 0.69),
+        rgb(251 251 254 / 0.69));
     --comment-bg-color: light-dark(#f9f9fb, #1c1b22);
     --comment-hover-bg-color: light-dark(#e0e0e6, #2c2b33);
     --comment-active-bg-color: light-dark(#d1d1d9, #3a3944);
@@ -408,14 +406,10 @@ ngx-extended-pdf-viewer {
     --comment-fg-color: light-dark(#15141a, #fbfbfe);
     --comment-count-bg-color: light-dark(#e2f7ff, #00317e);
     --comment-indicator-active-fg-color: light-dark(#0041a4, #a6ecf4);
-    --comment-indicator-active-filter: brightness(
-        calc(1 / var(--comment-active-brightness))
-    );
+    --comment-indicator-active-filter: brightness(calc(1 / var(--comment-active-brightness)));
     --comment-indicator-focus-fg-color: light-dark(#5b5b66, #fbfbfe);
     --comment-indicator-hover-fg-color: light-dark(#0053cb, #61dce9);
-    --comment-indicator-hover-filter: brightness(
-        calc(1 / var(--comment-hover-brightness))
-    );
+    --comment-indicator-hover-filter: brightness(calc(1 / var(--comment-hover-brightness)));
     --comment-indicator-selected-fg-color: light-dark(#0062fa, #00cadb);
 
     --button-comment-bg: transparent;
@@ -517,6 +511,7 @@ ngx-extended-pdf-viewer {
             @media screen and (forced-colors: active) {
               background-color: var(--comment-hover-bg-color);
             }
+
             filter: var(--comment-hover-filter);
 
             time::after {
@@ -530,6 +525,7 @@ ngx-extended-pdf-viewer {
             @media screen and (forced-colors: active) {
               background-color: var(--comment-active-bg-color);
             }
+
             filter: var(--comment-active-filter);
 
             time::after {
@@ -667,7 +663,8 @@ ngx-extended-pdf-viewer {
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
-    z-index: 100001; /* above selected annotation editor */
+    z-index: 100001;
+    /* above selected annotation editor */
     pointer-events: auto;
     margin-top: 2px;
 
@@ -730,7 +727,7 @@ ngx-extended-pdf-viewer {
         gap: 2px;
         cursor: default;
 
-        > button {
+        >button {
           width: 32px;
           height: 32px;
           padding: 8px;
@@ -806,7 +803,7 @@ ngx-extended-pdf-viewer {
       margin-block: 0;
     }
 
-    > * {
+    >* {
       white-space: pre-wrap;
       font-size: max(15px, calc(10px * var(--total-scale-factor)));
       overflow-wrap: break-word;
@@ -871,11 +868,13 @@ ngx-extended-pdf-viewer {
       }
 
       #commentManagerTextInput {
+        box-sizing: border-box !important;
         width: 100%;
         min-height: 132px;
         margin-bottom: 12px;
       }
     }
+
     // #3113 end of modification by ngx-extended-pdf-viewer
   }
 

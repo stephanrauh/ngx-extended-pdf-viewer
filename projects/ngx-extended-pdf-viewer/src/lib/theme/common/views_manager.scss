@@ -609,14 +609,16 @@ ngx-extended-pdf-viewer {
   }
 
   #viewsManagerContent {
-    width: 100%;
     flex: 1 1 0%;
     overflow: auto;
-    // #3140: padding ensures the selected thumbnail's box-shadow isn't
-    // clipped by overflow:auto, which clips at the padding box edge.
-    // The ring is 6px (`--image-border-width`) + a 12px soft blur — need
-    // at least ~14px so the right side of the selection ring stays visible.
-    padding: 0 14px;
+    // #3140: scrollbar-gutter keeps the scrollbar from overlapping the
+    // right-side shadow; padding reserves room for the 6px selection ring
+    // plus its 12px soft blur so neither side gets clipped by overflow:auto.
+    // Don't add `width: 100%`: the global `box-sizing: content-box !important`
+    // (set for ng-zorro-antd compat, #2282) would make padding overflow the
+    // parent. Without a width, the flex item stretches and padding stays inside.
+    scrollbar-gutter: stable;
+    padding: 0 24px;
 
     &:has(#thumbnailsView.isDragging) {
       overflow-x: hidden;
@@ -632,8 +634,7 @@ ngx-extended-pdf-viewer {
       justify-content: space-evenly;
       padding: 20px 8px; // reduced from 32px for narrower ngx-extended-pdf-viewer sidebar
       gap: 44px;
-      width: 100%;
-      box-sizing: border-box;
+      // No `width: 100%`: see #3140 note on #viewsManagerContent above.
       position: relative;
 
       &.isDragging {
