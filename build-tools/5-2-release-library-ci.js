@@ -49,7 +49,18 @@ runCommand('node ./build-tools/1-build-base-library.js', 'Error 53: build-base-l
 
 // Verify bleeding-edge assets were created
 const bleedingEdgePath = path.join('projects', 'ngx-extended-pdf-viewer', 'bleeding-edge');
-const minFileSize = 700 * 1024; // 700 KB in bytes
+
+// Per-file-type minimum sizes. pdf.js 6.0 shrank the sandbox bundle considerably
+// (from ~1 MB in v5.x to ~140–340 KB), so the previous flat 700 KB threshold
+// would false-positive on legitimate v6 builds. Thresholds chosen ~25% below
+// observed v6 sizes to catch genuinely empty/broken builds without being brittle.
+function expectedMinSize(fileName) {
+  if (fileName.includes('pdf.sandbox-')) {
+    return fileName.endsWith('.min.mjs') ? 100 * 1024 : 250 * 1024;
+  }
+  // pdf.worker-* and viewer-* are always > 1 MB even minified.
+  return 700 * 1024;
+}
 
 function verifyFile(filePath, description) {
   if (!fs.existsSync(filePath)) {
@@ -57,6 +68,7 @@ function verifyFile(filePath, description) {
     return false;
   }
   const stats = fs.statSync(filePath);
+  const minFileSize = expectedMinSize(description);
   if (stats.size < minFileSize) {
     console.error(`Error: File too small (${stats.size} bytes, expected >= ${minFileSize}) - ${description}: ${filePath}`);
     return false;
