@@ -386,6 +386,10 @@ describe('PDF Default Options Utility Functions', () => {
       expect(pdfDefaultOptions.enablePageReordering).toBe(false);
       expect(pdfDefaultOptions.enableSplitMerge).toBe(false);
       expect(pdfDefaultOptions.enableMerge).toBe(false);
+      expect(pdfDefaultOptions.useWasm).toBe(true);
+      expect(pdfDefaultOptions.enableAltText).toBe(false);
+      expect(pdfDefaultOptions.enableAutoLinking).toBe(true);
+      expect(pdfDefaultOptions.enableHighlightFloatingButton).toBe(false);
     });
 
     describe('function properties behavior', () => {

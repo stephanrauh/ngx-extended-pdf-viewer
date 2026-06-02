@@ -4,8 +4,8 @@ const _isIE11 = typeof window === 'undefined' ? false : !!(<any>globalThis).MSIn
 const isEdge = typeof navigator === 'undefined' || /Edge\/\d./i.test(navigator.userAgent);
 const needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
 
-export const pdfjsVersion = '6.0.1149';
-export const pdfjsBleedingEdgeVersion = '6.0.1149';
+export const pdfjsVersion = '6.0.1150';
+export const pdfjsBleedingEdgeVersion = '6.0.1150';
 export function getVersionSuffix(folder: string): string {
   if (folder?.includes('bleeding-edge')) {
     return pdfjsBleedingEdgeVersion;
@@ -151,5 +151,9 @@ export const pdfDefaultOptions = {
   enablePageReordering: false, // allows users to reorder pages by dragging thumbnails
   enableSplitMerge: false, // allows users to copy, cut, delete, and export selected pages
   enableMerge: false, // adds an "Add file" button to the sidebar that merges another PDF/image into the current document
+  useWasm: true, // set to false to disable WebAssembly for image decoding (uses *_nowasm_fallback.js instead). Required for CSPs that forbid `wasm-unsafe-eval`.
+  enableAltText: false, // enables the alt-text editor for images that the user adds via the stamp/image annotation tool
+  enableAutoLinking: true, // detects URLs and email addresses in the text layer and turns them into clickable links
+  enableHighlightFloatingButton: false, // shows a floating "Highlight" shortcut next to selected text (experimental upstream)
   pdfBackgroundColor: '', // background color for PDF content rendering
 };
