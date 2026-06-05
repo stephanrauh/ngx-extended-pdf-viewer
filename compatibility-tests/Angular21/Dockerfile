@@ -10,30 +10,9 @@ RUN npm install -g @angular/cli@21
 RUN ng new --defaults --skip-git --skip-tests demo
 
 COPY ngx-extended-pdf-viewer.tgz /work/ngx-extended-pdf-viewer.tgz
-RUN cd demo && ng add --defaults --skip-confirmation /work/ngx-extended-pdf-viewer.tgz
+RUN cd demo && ng add --defaults --skip-confirmation /work/ngx-extended-pdf-viewer.tgz --stable --no-example-component
 
-RUN cd demo && node -e "                                                       \
-  const fs = require('fs');                                                    \
-  const c = JSON.parse(fs.readFileSync('angular.json', 'utf8'));               \
-  const p = Object.values(c.projects)[0];                                      \
-  const target = (p.architect || p.targets).build;                             \
-  target.options.assets = target.options.assets || [];                         \
-  target.options.assets.push({                                                 \
-    glob: '**/*',                                                              \
-    input: 'node_modules/ngx-extended-pdf-viewer/assets',                      \
-    output: '/assets/'                                                         \
-  });                                                                          \
-  const prod = (target.configurations || {}).production;                       \
-  if (prod && Array.isArray(prod.budgets)) {                                   \
-    prod.budgets = prod.budgets.map((b) =>                                     \
-      b.type === 'initial'                                                     \
-        ? { ...b, maximumWarning: '5mb', maximumError: '10mb' }                \
-        : b);                                                                  \
-  }                                                                            \
-  fs.writeFileSync('angular.json', JSON.stringify(c, null, 2));                \
-  console.log('Patched angular.json: lib assets + relaxed initial budget');    \
-"
-
+# Schematic now handles assets + budget relaxation; no manual patching needed.
 RUN rm -rf demo/src demo/public
 COPY common/demo/src /work/demo/src
 COPY common/demo/public /work/demo/public

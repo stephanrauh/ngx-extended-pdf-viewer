@@ -15,37 +15,11 @@ RUN ng new --defaults --skip-git --skip-tests demo
 
 # 2. Install the locally-built library via the schematic. The tarball is
 #    copied in by `test.sh` after running `npm run build:base && build:lib`
-#    and `npm pack` from dist/ngx-extended-pdf-viewer.
+#    and `npm pack` from dist/ngx-extended-pdf-viewer. The schematic
+#    handles asset configuration + bundle-budget relaxation for us; this
+#    Dockerfile no longer needs to patch angular.json by hand.
 COPY ngx-extended-pdf-viewer.tgz /work/ngx-extended-pdf-viewer.tgz
-RUN cd demo && ng add --defaults --skip-confirmation /work/ngx-extended-pdf-viewer.tgz
-
-# 2b. Patch angular.json with the library assets. The library's ng-add
-#     schematic only knows about the legacy `@angular-devkit/build-angular:browser`
-#     builder; Angular 17+ uses `@angular/build:application` so the schematic
-#     bails ("Assets may not be configured correctly"). Until the schematic
-#     is updated upstream we add the assets entry by hand.
-RUN cd demo && node -e "                                                       \
-  const fs = require('fs');                                                    \
-  const c = JSON.parse(fs.readFileSync('angular.json', 'utf8'));               \
-  const p = Object.values(c.projects)[0];                                      \
-  const target = (p.architect || p.targets).build;                             \
-  target.options.assets = target.options.assets || [];                         \
-  target.options.assets.push({                                                 \
-    glob: '**/*',                                                              \
-    input: 'node_modules/ngx-extended-pdf-viewer/assets',                      \
-    output: '/assets/'                                                         \
-  });                                                                          \
-  /* ngx-extended-pdf-viewer is large; default 1 MB initial budget fails. */   \
-  const prod = (target.configurations || {}).production;                       \
-  if (prod && Array.isArray(prod.budgets)) {                                   \
-    prod.budgets = prod.budgets.map((b) =>                                     \
-      b.type === 'initial'                                                     \
-        ? { ...b, maximumWarning: '5mb', maximumError: '10mb' }                \
-        : b);                                                                  \
-  }                                                                            \
-  fs.writeFileSync('angular.json', JSON.stringify(c, null, 2));                \
-  console.log('Patched angular.json: lib assets + relaxed initial budget');    \
-"
+RUN cd demo && ng add --defaults --skip-confirmation /work/ngx-extended-pdf-viewer.tgz --stable --no-example-component
 
 # 3. Overlay the shared demo source on top of `ng new`'s + `ng add`'s
 #    output. We nuke and replace `src/` and `public/` entirely so the demo

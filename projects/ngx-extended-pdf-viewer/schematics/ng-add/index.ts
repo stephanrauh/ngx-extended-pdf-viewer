@@ -14,6 +14,23 @@ interface AngularVersion {
 }
 
 /**
+ * Builder/executor names that produce a browser bundle and therefore need
+ * the library's assets configured. `angular.json` stores this name under
+ * `builder`; Nx project.json stores it under `executor`. Match either.
+ */
+const SUPPORTED_BROWSER_BUILDERS = [
+  '@angular-devkit/build-angular:browser',
+  '@angular-devkit/build-angular:application',
+  '@angular/build:application', // Angular 17+ modern builder, default in 22
+  '@nrwl/angular:webpack-browser',
+  '@nx/angular:webpack-browser',
+  '@nx/angular:application',
+  '@nx/angular:browser',
+  '@nx/vite:build',
+  '@nrwl/vite:build',
+];
+
+/**
  * Detects the Angular version from package.json
  */
 function detectAngularVersion(tree: Tree): AngularVersion | null {
@@ -135,25 +152,22 @@ export function ngAdd(options: Schema): Rule {
       project.projectType === 'library' ||
       (project.projectType !== 'application' && project.root && (project.root.startsWith('libs/') || project.root.includes('/libs/')));
 
-    // For applications, verify it has a browser/application build target
+    // For applications, verify it has a browser/application build target.
+    // We accept all builder/executor names we've seen in the wild:
+    //   - @angular-devkit/build-angular:browser   (Angular 6-16)
+    //   - @angular-devkit/build-angular:application (Angular 17+ legacy)
+    //   - @angular/build:application              (Angular 17+ modern, default in 22)
+    //   - Nx variants
+    // angular.json stores this under `builder`; Nx project.json under `executor`.
+    // We check both fields so the schematic works in both ecosystems.
     let hasBrowserBuild = false;
     if (!isLibrary) {
       const buildConfig = project.architect || project.targets;
       if (buildConfig) {
-        const browserExecutors = [
-          '@angular-devkit/build-angular:browser',
-          '@angular-devkit/build-angular:application',
-          '@nrwl/angular:webpack-browser',
-          '@nx/angular:webpack-browser',
-          '@nx/angular:application',
-          '@nx/angular:browser', // Defensive addition for potential future use
-          '@nx/vite:build',
-          '@nrwl/vite:build',
-        ];
-
-        hasBrowserBuild = Object.values(buildConfig).some(
-          (target: any) => target.executor && browserExecutors.some((executor) => target.executor.includes(executor)),
-        );
+        hasBrowserBuild = Object.values(buildConfig).some((target: any) => {
+          const builderName = target.executor || target.builder;
+          return builderName && SUPPORTED_BROWSER_BUILDERS.some((b) => builderName.includes(b));
+        });
       }
     }
 
@@ -183,6 +197,12 @@ export function ngAdd(options: Schema): Rule {
       return tree; // No asset configuration for libraries
     }
 
+    // Deployment hint: pdf.js ships as `.mjs` modules. Browsers refuse to
+    // execute them unless the server returns a JavaScript MIME type, but
+    // some servers default to `application/octet-stream` for `.mjs`. We
+    // can't reach the user's web server from a schematic, so we just warn.
+    printDeploymentHints();
+
     // For applications with browser build or libraries, update configuration
     if (!isLibrary && hasBrowserBuild) {
       return chain([updateAngularJsonRule(projectName, stable)]);
@@ -196,6 +216,18 @@ export function ngAdd(options: Schema): Rule {
       return tree;
     }
   };
+}
+
+function printDeploymentHints(): void {
+  console.log('');
+  console.log('ℹ️  Deployment checklist for ngx-extended-pdf-viewer');
+  console.log('  pdf.js is loaded as ES modules. Some web servers default `.mjs`');
+  console.log('  to `application/octet-stream`, and browsers refuse to execute it.');
+  console.log('  Ensure your server returns a JavaScript MIME type for `.mjs`:');
+  console.log('    nginx  : add `application/javascript mjs;` to a `types {}` block');
+  console.log('    Apache : `AddType application/javascript .mjs`');
+  console.log('    IIS    : add `<mimeMap fileExtension=".mjs" mimeType="application/javascript" />`');
+  console.log('');
 }
 
 /**
@@ -361,6 +393,49 @@ function validateProjectConfiguration(tree: Tree, projectName: string): Workspac
   return workspaceConfig;
 }
 
+/**
+ * ngx-extended-pdf-viewer's compiled JS bundle is ~1.2 MB — Angular CLI's
+ * default 1 MB `initial` budget fails `ng build --configuration production`
+ * the very first time the consumer builds. The pdf.js `.mjs` / `.wasm` /
+ * font files (~4 MB) live under the `assets` array and are NOT included
+ * in the budget; this raises only what's actually needed for the JS
+ * bundle plus reasonable headroom for the consumer's own code.
+ *
+ * Idempotent: won't lower an already-raised budget.
+ */
+function relaxInitialBundleBudget(targetConfig: any, targetName: string): void {
+  const prod = targetConfig?.configurations?.production;
+  if (!prod || !Array.isArray(prod.budgets)) return;
+  let changed = false;
+  prod.budgets = prod.budgets.map((b: any) => {
+    if (b.type !== 'initial') return b;
+    const parse = (v: any) => {
+      if (typeof v !== 'string') return Number(v) || 0;
+      const m = v.match(/^(\d+(?:\.\d+)?)\s*(kb|mb)?$/i);
+      if (!m) return 0;
+      return Number(m[1]) * (m[2]?.toLowerCase() === 'mb' ? 1024 * 1024 : 1024);
+    };
+    // Library wrapper is ~1.2 MB; 2 MB warning leaves ~800 KB of consumer
+    // headroom before warnings, 3 MB before errors.
+    const want = { maximumWarning: '2mb', maximumError: '3mb' };
+    const newB = { ...b };
+    if (parse(b.maximumWarning) < parse(want.maximumWarning)) {
+      newB.maximumWarning = want.maximumWarning;
+      changed = true;
+    }
+    if (parse(b.maximumError) < parse(want.maximumError)) {
+      newB.maximumError = want.maximumError;
+      changed = true;
+    }
+    return newB;
+  });
+  if (changed) {
+    console.log(
+      `Relaxed initial-bundle budget on ${targetName} (2mb warning / 3mb error) — the ngx-extended-pdf-viewer wrapper alone is ~1.2 MB.`,
+    );
+  }
+}
+
 export function updateAngularJsonRule(projectName: string, stable: boolean): Rule {
   return (tree: Tree, _context: SchematicContext) => {
     return updateAngularJson(tree, projectName, stable);
@@ -438,27 +513,18 @@ function updateAngularJson(tree: Tree, projectName: string, stable: boolean): Tr
     }
   };
 
-  // Prioritize executor detection over name heuristics
-  const buildExecutors = [
-    '@angular-devkit/build-angular:browser',
-    '@angular-devkit/build-angular:application',
-    '@nrwl/angular:webpack-browser',
-    '@nx/angular:webpack-browser',
-    '@nx/angular:application',
-    '@nx/angular:browser', // Defensive addition for potential future use
-    '@nx/vite:build',
-    '@nrwl/vite:build',
-  ];
-
-  // First, try to find a build target by executor
+  // First, try to find a build target by builder/executor. angular.json
+  // stores the builder under `builder`; Nx project.json uses `executor`.
   let foundBuildTarget = false;
   for (const [targetName, target] of Object.entries(buildConfig)) {
     const targetConfig = target as any;
-    if (targetConfig.executor && buildExecutors.some((executor) => targetConfig.executor.includes(executor))) {
+    const builderName = targetConfig.executor || targetConfig.builder;
+    if (builderName && SUPPORTED_BROWSER_BUILDERS.some((b) => builderName.includes(b))) {
       if (addAssetsToTarget(targetConfig, targetName)) {
         updated = true;
         foundBuildTarget = true;
       }
+      relaxInitialBundleBudget(targetConfig, targetName);
       break; // Only update one build target
     }
   }
