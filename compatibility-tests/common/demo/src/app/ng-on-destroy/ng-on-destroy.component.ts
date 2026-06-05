@@ -1,31 +1,23 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { pdfDefaultOptions } from 'ngx-extended-pdf-viewer';
+import { Component } from '@angular/core';
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 
+/**
+ * Lifecycle compat: mount → unmount → remount via `@if (visible)`.
+ * Catches regressions where ngOnDestroy leaves dangling state that
+ * prevents a fresh mount from rendering.
+ */
 @Component({
-  selector: 'ng-on-destroy-example',
+  selector: 'app-ng-on-destroy',
+  standalone: true,
+  imports: [NgxExtendedPdfViewerModule],
   templateUrl: './ng-on-destroy.component.html',
-  styleUrls: ['./ng-on-destroy.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NgOnDestroyComponent {
-  public visible = false;
-
-  constructor() {
-    if (window.location.search.includes('bleeding-edge')) {
-      pdfDefaultOptions.assetsFolder = 'bleeding-edge';
-    }
-  }
-
+  public visible = true;
   public hide(): void {
     this.visible = false;
   }
-
   public show(): void {
     this.visible = true;
-  }
-
-  public toggle(): void {
-    this.visible = true;
-    setTimeout(() => (this.visible = false), 0);
   }
 }

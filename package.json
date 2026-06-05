@@ -33,7 +33,11 @@
     "--- test": "",
     "test": "jest",
     "test:ci": "jest --coverage",
-    "test:ng17": "cd compatibility-tests/Angular17 && ./test.sh",
+    "test:compat": "bash compatibility-tests/compat-all.sh",
+    "test:compat:ng19": "bash compatibility-tests/Angular19/test.sh",
+    "test:compat:ng20": "bash compatibility-tests/Angular20/test.sh",
+    "test:compat:ng21": "bash compatibility-tests/Angular21/test.sh",
+    "test:compat:ng22": "bash compatibility-tests/Angular22/test.sh",
     "--- new showcase": "",
     "build:watch": "npm run build:lib:watch"
   },

@@ -1,0 +1,8 @@
+<button id="page-button" type="button" (click)="page = page + 1">next page</button>
+<span id="page-value">{{ page }}</span>
+<ngx-extended-pdf-viewer
+  [src]="'/assets/pdfs/Bootstrap-vs-Material-Design-vs-Prime-vs-Tailwind.pdf'"
+  [(page)]="page"
+  [height]="'80vh'"
+>
+</ngx-extended-pdf-viewer>

@@ -1,0 +1,8 @@
+ngx-extended-pdf-viewer.tgz
+*.tgz
+playwright/node_modules
+playwright/.playwright-report
+playwright/.playwright-results
+playwright/test-results
+# POM is copied from extended-pdf-viewer-showcase at test time — never commit.
+playwright/poms
