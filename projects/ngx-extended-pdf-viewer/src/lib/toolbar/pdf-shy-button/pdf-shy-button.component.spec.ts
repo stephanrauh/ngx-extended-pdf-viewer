@@ -284,22 +284,27 @@ describe('PdfShyButtonComponent', () => {
       expect(mockPdfCspPolicyService.addTrustedHTML).toHaveBeenCalled();
     });
 
-    it('should remove child nodes when imageHtml is empty', () => {
+    it('should remove the SVG icon but preserve the label span when imageHtml is empty', () => {
       fixture.componentRef.setInput('image', '');
       fixture.detectChanges();
       TestBed.flushEffects();
 
-      // Create a mock button element with children
+      // Mirror the rendered template: a label span (kept) and a previously
+      // injected SVG icon (removed when imageHtml goes empty).
       const mockButton = document.createElement('button');
-      const child = document.createElement('span');
-      mockButton.appendChild(child);
+      const labelSpan = document.createElement('span');
+      labelSpan.setAttribute('data-l10n-id', 'some-label');
+      const svgIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      mockButton.appendChild(labelSpan);
+      mockButton.appendChild(svgIcon);
 
-      // Override buttonRef to return our mock
       jest.spyOn(component, 'buttonRef').mockReturnValue({ nativeElement: mockButton } as any);
 
       component.updateButtonImage();
 
-      expect(mockButton.childNodes.length).toBe(0);
+      expect(mockButton.childNodes.length).toBe(1);
+      expect(mockButton.firstChild).toBe(labelSpan);
+      expect(mockButton.querySelector('svg')).toBeNull();
     });
 
     it('should do nothing when buttonRef is undefined', () => {
