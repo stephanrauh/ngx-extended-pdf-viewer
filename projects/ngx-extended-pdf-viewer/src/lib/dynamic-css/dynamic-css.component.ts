@@ -135,11 +135,6 @@ export class DynamicCssComponent implements OnDestroy {
   display: none;
 }
 
-#outerContainer .hiddenXLView,
-#outerContainer .hiddenXXLView {
-  display: unset;
-}
-
 @media all and (max-width: ${this.xl()}px) {
   #outerContainer .hiddenXLView {
     display: none;

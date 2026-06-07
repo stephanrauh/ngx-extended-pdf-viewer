@@ -8,6 +8,8 @@
 <button type="button" [id]="primaryToolbarId()" [class]="'toolbarButton ' + cssClass()" [title]="title()"
   [attr.data-l10n-id]="l10nId() || null" [class.toggled]="toggled()" [disabled]="disabled()" (click)="onClick($event)"
   [attr.aria-label]="title()" [attr.role]="role()" [attr.aria-expanded]="toggled() ? 'true' : (ariaHasPopup() ? 'false' : null)"
-  [attr.aria-haspopup]="ariaHasPopup()" [attr.aria-controls]="ariaControls()" #buttonRef></button>
+  [attr.aria-haspopup]="ariaHasPopup()" [attr.aria-controls]="ariaControls()" #buttonRef>
+  <span [attr.data-l10n-id]="l10nLabel() || null"></span>
+</button>
 }
 }

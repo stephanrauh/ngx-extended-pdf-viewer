@@ -17,7 +17,7 @@ Built on Mozilla’s pdf.js and extended with dozens of enhancements, it's ideal
 
 ### Prerequisites
 
-⚠️ **Versions 26 and 27 require Angular 19, 20, or 21.** If you're using Angular 17 or 18, please continue using version 25.6.4.
+⚠️ **Versions 26 through 28 require Angular 19, 20, 21, or 22.** If you're using Angular 17 or 18, please continue using version 25.6.4.
 
 **Why this breaking change?** There are many reasons: Version 26 supports zone-less Angular and migrates to signals. And Angular 18 exited its Long-Term Support (LTS) phase, and security vulnerability CVE-2025-66035 will not be fixed in Angular 17 or 18. Updating to Angular 19 ensures your application continues to receive critical security patches.
 
@@ -25,15 +25,15 @@ In general, I aim to support the last four Angular versions (roughly two years o
 
 **Is there a migration schematic?** No - because migrating to ngx-extended-pdf-viewer shouldn't be a big deal. The library uses signals internally, but that hardly ever shows in your application, unless you're using `@ViewChild` to access properties of ngx-extended-pdf-viewer. Even then, solving the error messages should be easy. Adopting zone-less Angular was also surprisingly easy, at least in my showcase. I hope you'll experience a similarly smooth transition!
 
-✅ **Angular 21+ Zoneless Support**
+✅ **Zoneless Angular Support (21 and 22)**
 
-**ngx-extended-pdf-viewer 26 now fully supports Angular 21+ zoneless change detection!** The library works seamlessly in both zone.js and zoneless applications with zero configuration required.
+**ngx-extended-pdf-viewer fully supports zoneless change detection in Angular 21 and 22.** The library works seamlessly in both zone.js and zoneless applications with zero configuration required.
 
-**Using Zoneless (Default in Angular 21+):**
+**Using Zoneless (the default in Angular 21 and 22):**
 Simply use the library as normal - it will automatically detect zoneless mode and trigger change detection appropriately. You'll have to use `cdr.markForCheck()` every once in a while, but I assume you're already familiar with that pattern.
 
 **Using Zone.js (Optional):**
-If you prefer to use zone.js in your Angular 21+ application, add this to your `app.config.ts`:
+If you prefer to use zone.js in your Angular 21 or 22 application, add this to your `app.config.ts`:
 
 ```typescript
 import { provideZoneChangeDetection } from '@angular/core';
@@ -60,8 +60,8 @@ npm add ngx-extended-pdf-viewer
 
 | Package           | Version            |
 | ----------------- | ------------------ |
-| `@angular/core`   | `>=19.0.0 <22.0.0` |
-| `@angular/common` | `>=19.0.0 <22.0.0` |
+| `@angular/core`   | `>=19.0.0 <23.0.0` |
+| `@angular/common` | `>=19.0.0 <23.0.0` |
 
 ### 2. Usage in Your Angular Component
 
@@ -152,6 +152,32 @@ Regarding security: I'm not perfect - it's always a best-effort approach without
 ---
 
 ## 📦 Version Highlights
+
+### Version 28
+
+Version 28 updates to pdf.js 6.0 and adds Angular 22 support.
+
+**New for end users:**
+
+- **Merge PDFs and images**: A new "Add file" button in the sidebar lets users append another PDF or an image to the current document. Enable with `[enableMerge]="true"`.
+- **Auto-detected links**: URLs and email addresses in the text layer are turned into clickable links automatically.
+- **Highlight shortcut** (opt-in): A small "Highlight" button appears next to selected text. Enable with `pdfDefaultOptions.enableHighlightFloatingButton = true`.
+- **Improved accessibility**: Toolbar buttons now expose their localized name to screen readers.
+- **Works in hidden tabs and lazy-loaded routes**: Mounting the viewer inside an inactive Material tab or a lazy route used to behave erratically. It now starts up correctly once it becomes visible, and the navigation inputs you set up front are applied at that moment.
+
+**New for developers:**
+
+- **Angular 22 support**: ngx-extended-pdf-viewer 28 supports Angular 19, 20, 21, and 22.
+- **`ng add` works with Angular 22**: The schematic recognizes Angular 17+'s `@angular/build:application` builder (the default in the Angular 22 scaffold) and raises the production bundle budget so your first `ng build` doesn't fail because of the viewer's size.
+- **`[theme]` plays nicely with the host app's theming**: Setting `[theme]` no longer conflicts with Angular Material's automatic light/dark detection.
+- **Hidden tabs & lazy routes**: `[page]`, `[nameddest]`, and `scrollPageIntoView()` are queued and replayed once the viewer becomes visible. A new "Hidden tabs & lazy routes" showcase page demonstrates the setup.
+- **CSP-friendly image decoding**: Set `pdfDefaultOptions.useWasm = false` if your CSP forbids `'wasm-unsafe-eval'`, and the viewer falls back to JavaScript image decoders.
+- **New `pdfDefaultOptions` flags**: `useWasm`, `enableAltText`, `enableAutoLinking`, `enableHighlightFloatingButton`.
+
+**Bug fixes:**
+
+- Fixed a crash when dragging thumbnails to reorder pages.
+- Fixed `[(zoom)]` showing wrong percentages after SPA navigation.
 
 ### Version 27
 

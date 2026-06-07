@@ -221,9 +221,18 @@ export class PdfShyButtonComponent implements OnInit, AfterViewInit, AfterConten
           this.renderer.appendChild(el, image);
         }
       } else {
-        const childNodes = el.childNodes;
-        for (let child of childNodes) {
-          this.renderer.removeChild(el, child);
+        // Only clear the SVG image previously injected by this method;
+        // leave the Angular-managed label span (rendered in the template
+        // for Fluent's screen-reader translation) alone. Snapshot first —
+        // iterating a live NodeList while removing skips every other child.
+        const children: ChildNode[] = Array.from(el.childNodes);
+        for (const child of children) {
+          if (
+            child.nodeType === Node.ELEMENT_NODE &&
+            (child as Element).tagName.toLowerCase() === 'svg'
+          ) {
+            this.renderer.removeChild(el, child);
+          }
         }
       }
     }

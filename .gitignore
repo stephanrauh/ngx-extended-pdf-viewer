@@ -58,3 +58,4 @@ sbom.json
 /ftp/.env
 .htaccess
 .claude
+/test-results/.last-run.json
