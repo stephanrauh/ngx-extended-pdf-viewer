@@ -3,6 +3,7 @@ import { ChangeDetectorRef, ElementRef, NgZone, PLATFORM_ID, Renderer2, CSP_NONC
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AnnotationEditorEvent } from './events/annotation-editor-layer-event';
 import { FormDataType, NgxExtendedPdfViewerComponent, isIOS } from './ngx-extended-pdf-viewer.component';
+import { PageViewModeType, ScrollModeType } from './options/pdf-viewer';
 import { NgxExtendedPdfViewerService } from './ngx-extended-pdf-viewer.service';
 import { NgxKeyboardManagerService } from './ngx-keyboard-manager.service';
 import { PDFNotificationService } from './pdf-notification-service';
@@ -945,6 +946,136 @@ describe('NgxExtendedPdfViewerComponent', () => {
 
       viewer.remove();
     });
+  });
+
+  describe('eventBus race-condition guards (#3216)', () => {
+    // When an <ngx-extended-pdf-viewer> instance is destroyed and a new one is created shortly
+    // after, the PDFViewerApplication singleton can briefly have `pdfViewer` attached while
+    // `eventBus` is still undefined. Signal effects on the new instance fire during this window
+    // and used to throw `TypeError: Cannot read properties of undefined (reading 'dispatch')`.
+    //
+    // These tests pin the destroy/recreate window by swapping in a PDFViewerApplication whose
+    // `eventBus` is undefined, then triggering each signal-driven code path that reaches it.
+
+    function installRacyApp(overrides: any = {}): any {
+      const racyApp = {
+        eventBus: undefined,
+        pdfViewer: {
+          scrollMode: ScrollModeType.vertical,
+          // ngOnDestroy's async cleanup calls these on the same singleton — give them noops so
+          // afterEach teardown doesn't crash on a racy mock that's missing these methods.
+          destroyBookMode: jest.fn(),
+          stopRendering: jest.fn(),
+        },
+        pdfThumbnailViewer: { stopRendering: jest.fn() },
+        findBar: { close: jest.fn() },
+        secondaryToolbar: { close: jest.fn() },
+        appConfig: { filenameForDownload: '' },
+        pdfLinkService: { setHash: undefined },
+        serviceWorkerOptions: {},
+        enablePrint: true,
+        page: 1,
+        close: jest.fn().mockResolvedValue(undefined),
+        open: jest.fn().mockResolvedValue(undefined),
+        unbindEvents: jest.fn(),
+        unbindWindowEvents: jest.fn(),
+        _cleanup: jest.fn(),
+        ...overrides,
+      };
+      // Merge pdfViewer override (if any) on top of the safe defaults — caller may want to set
+      // additional pdfViewer fields without losing destroyBookMode/stopRendering.
+      if (overrides.pdfViewer) {
+        racyApp.pdfViewer = {
+          destroyBookMode: jest.fn(),
+          stopRendering: jest.fn(),
+          ...overrides.pdfViewer,
+        };
+      }
+      component['pdfScriptLoaderService'].PDFViewerApplication = racyApp;
+      component['pdfScriptLoaderService'].PDFViewerApplicationOptions = { set: jest.fn(), get: jest.fn() } as any;
+      return racyApp;
+    }
+
+    it('should not throw in _scrollModeEffect when eventBus is undefined but pdfViewer is set', () => {
+      const racyApp = installRacyApp({ pdfViewer: { scrollMode: ScrollModeType.vertical } });
+      // Force a scrollMode change so the effect body actually reaches the dispatch branch.
+      // pdfViewer.scrollMode is vertical, we set horizontal — the inner `if (...scrollMode !== Number(value))`
+      // is satisfied, then `eventBus?.dispatch(...)` would have thrown without the guard.
+      fixture.componentRef.setInput('scrollMode', ScrollModeType.horizontal);
+      expect(() => {
+        fixture.detectChanges();
+        TestBed.flushEffects();
+      }).not.toThrow();
+      // Sanity: pdfViewer was visited, but no listener was registered (no eventBus to call).
+      expect(racyApp.pdfViewer.scrollMode).toBe(ScrollModeType.vertical);
+    });
+
+    it('should not throw in _pageViewModeEffect when switching to book mode with eventBus undefined', () => {
+      // handleBookMode dispatches switchcursortool when showPageFlipButton is true AND
+      // ngxExtendedPdfViewerInitialized is true. The `init` flag is sticky across destroy/recreate.
+      installRacyApp({ pdfViewer: { pageViewMode: 'multiple', scrollMode: ScrollModeType.vertical } });
+      component['service'].ngxExtendedPdfViewerInitialized = true;
+      fixture.componentRef.setInput('showPageFlipButton', true);
+      fixture.componentRef.setInput('pageViewMode', 'book' as PageViewModeType);
+      expect(() => {
+        fixture.detectChanges();
+        TestBed.flushEffects();
+      }).not.toThrow();
+    });
+
+    it('should not throw in _pageViewModeEffect when leaving book mode with eventBus undefined', () => {
+      // Leaving book mode (and showPageFlipButton true) dispatches switchcursortool with SELECT.
+      installRacyApp({ pdfViewer: { pageViewMode: 'book', scrollMode: ScrollModeType.vertical } });
+      component['service'].ngxExtendedPdfViewerInitialized = true;
+      fixture.componentRef.setInput('showPageFlipButton', true);
+      // First settle into book mode (no dispatch yet on the leave-book branch).
+      fixture.componentRef.setInput('pageViewMode', 'book' as PageViewModeType);
+      fixture.detectChanges();
+      TestBed.flushEffects();
+      // Now leave book mode — this branch is the one that would crash.
+      fixture.componentRef.setInput('pageViewMode', 'multiple' as PageViewModeType);
+      expect(() => {
+        fixture.detectChanges();
+        TestBed.flushEffects();
+      }).not.toThrow();
+    });
+
+    it('should not throw in handleInfiniteScrollMode when eventBus is undefined', () => {
+      // pageViewMode='infinite-scroll' + scrollMode in {page, horizontal} reaches the unguarded dispatch.
+      installRacyApp({ pdfViewer: { pageViewMode: 'multiple', scrollMode: ScrollModeType.horizontal } });
+      // Set scrollMode FIRST so the effect's precondition (scrollMode in {page, horizontal}) holds
+      // before pageViewMode flips to 'infinite-scroll'.
+      fixture.componentRef.setInput('scrollMode', ScrollModeType.horizontal);
+      fixture.detectChanges();
+      TestBed.flushEffects();
+      fixture.componentRef.setInput('pageViewMode', 'infinite-scroll' as PageViewModeType);
+      expect(() => {
+        fixture.detectChanges();
+        TestBed.flushEffects();
+      }).not.toThrow();
+    });
+
+    it('should not throw in selectCursorTool reached from _handToolEffect when eventBus is undefined', () => {
+      // _handToolEffect calls selectCursorTool when ngxExtendedPdfViewerInitialized is true and
+      // showPageFlipButton is false. The flag is sticky across destroy/recreate.
+      installRacyApp({ pdfViewer: { scrollMode: ScrollModeType.vertical } });
+      component['service'].ngxExtendedPdfViewerInitialized = true;
+      fixture.componentRef.setInput('showPageFlipButton', false);
+      // Toggle handTool to a non-default to force the effect body to run.
+      fixture.componentRef.setInput('handTool', !component.handTool());
+      expect(() => {
+        fixture.detectChanges();
+        TestBed.flushEffects();
+      }).not.toThrow();
+    });
+
+    // Not tested via this spec: the dispatch sites inside openPDF()/openPDF2() (the
+    // 'annotationeditormodechanged' and 'switchannotationeditormode' calls). The openPDF2
+    // dispatch is already inside try/catch so the crash was always swallowed. openPDF()'s
+    // dispatch is reachable but the surrounding method touches enough of the singleton
+    // (textLayer setup, scrollMode setup, async open()) that a unit-test stub becomes
+    // brittle. The `?.eventBus?.dispatch` guards are still applied as defensive cleanup
+    // and exercised at integration test time.
   });
 });
 

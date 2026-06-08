@@ -27,7 +27,8 @@ export class PdfMoveUpComponent {
   public movePageUp = () => {
     if (this.PDFViewerApplication) {
       const currentPage = this.PDFViewerApplication.page;
-      this.PDFViewerApplication.eventBus.dispatch('movePageUp', {
+      // #3216 eventBus may be undefined during destroy/recreate transitions of the PDFViewerApplication singleton.
+      this.PDFViewerApplication.eventBus?.dispatch('movePageUp', {
         source: { pageNumber: currentPage }
       });
     }

@@ -27,7 +27,8 @@ export class PdfMoveDownComponent {
   public movePageDown = () => {
     if (this.PDFViewerApplication) {
       const currentPage = this.PDFViewerApplication.page;
-      this.PDFViewerApplication.eventBus.dispatch('movePageDown', {
+      // #3216 eventBus may be undefined during destroy/recreate transitions of the PDFViewerApplication singleton.
+      this.PDFViewerApplication.eventBus?.dispatch('movePageDown', {
         source: { pageNumber: currentPage }
       });
     }

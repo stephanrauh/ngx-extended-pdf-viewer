@@ -45,6 +45,20 @@ process.chdir(path.join(__dirname, '..'));
 // Check commit state - ensure everything is clean before starting
 runCommand('node ./build-tools/release/check-commit-state.js', 'Error 51: check-commit-state.js failed', 51);
 
+// Run the full test suite before touching version numbers, committing, or
+// pushing. If any of these fail, the working tree stays clean and the
+// release can be retried after fixing the regression — nothing to revert.
+console.log('\n🧪 Running Jest tests in ngx-extended-pdf-viewer...');
+runCommand('npm test', 'Error 52: Jest tests failed', 52);
+
+console.log('\n🧪 Running Playwright compatibility tests (Angular 19–22)...');
+runCommand('npm run test:compat', 'Error 53: Playwright compatibility tests failed', 53);
+
+console.log('\n🧪 Running Playwright tests of the showcase...');
+process.chdir(path.join('..', 'extended-pdf-viewer-showcase'));
+runCommand('npm run test:e2e', 'Error 54: Showcase Playwright tests failed', 54);
+process.chdir(path.join('..', 'ngx-extended-pdf-viewer'));
+
 // Read the current version number
 const packageJsonPath = path.join('projects', 'ngx-extended-pdf-viewer', 'package.json');
 let packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));

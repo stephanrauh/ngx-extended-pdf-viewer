@@ -103,6 +103,16 @@ describe('PdfMoveDownComponent', () => {
       expect(() => component.movePageDown()).not.toThrow();
     });
 
+    it('should not throw when PDFViewerApplication is set but eventBus is undefined (#3216)', () => {
+      // Destroy/recreate race: the singleton can have a truthy reference while its
+      // eventBus is still being wired up.
+      pdfAppSignal.set({ page: 3, eventBus: undefined } as unknown as IPDFViewerApplication);
+      fixture.detectChanges();
+      TestBed.flushEffects();
+
+      expect(() => component.movePageDown()).not.toThrow();
+    });
+
     it('should use the current page number from PDFViewerApplication', () => {
       pdfAppSignal.set(mockPDFViewerApplication);
       fixture.detectChanges();

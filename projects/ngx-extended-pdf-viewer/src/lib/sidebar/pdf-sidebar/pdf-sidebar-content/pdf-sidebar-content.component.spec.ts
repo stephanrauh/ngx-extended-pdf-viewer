@@ -379,5 +379,17 @@ describe('PdfSidebarContentComponent', () => {
 
       expect(eventBus.on).not.toHaveBeenCalled();
     });
+
+    it('should not throw when PDFViewerApplication is set but eventBus is undefined (#3216)', () => {
+      // Destroy/recreate race: the PDFViewerApplication singleton can briefly have a
+      // truthy reference while its `eventBus` is still being wired up. The init effect
+      // must not crash in this window.
+      const racyApp = { eventBus: undefined } as unknown as IPDFViewerApplication;
+      pdfAppSignal.set(racyApp);
+      expect(() => {
+        fixture.detectChanges();
+        TestBed.flushEffects();
+      }).not.toThrow();
+    });
   });
 });

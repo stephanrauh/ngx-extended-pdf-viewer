@@ -61,6 +61,19 @@ export interface Section {
   providedIn: 'root',
 })
 export class NgxExtendedPdfViewerService {
+  /**
+   * Tracks the most recently mounted `<ngx-extended-pdf-viewer>` instance's `openPDF()`
+   * completion. Public for backward compatibility — historically used as the "is the viewer
+   * ready?" gate when the library only supported a single instance at a time.
+   *
+   * Today this flag is **not** the source of truth for the service's own `find()` /
+   * `findNext()` / `findPrevious()` methods; those gate on the live `findController`
+   * directly. Component-internal effect guards have moved to a per-instance flag.
+   *
+   * In a future multi-viewer world this field will likely become "any viewer is mounted".
+   * Prefer querying viewer state via a viewer reference (see future API) instead of via
+   * this singleton flag.
+   */
   public ngxExtendedPdfViewerInitialized = false;
 
   public secondaryMenuIsEmpty = signal(false);
@@ -79,7 +92,10 @@ export class NgxExtendedPdfViewerService {
   }
 
   public find(text: string | string[] | RegExp, options: FindOptions = {}): Array<Promise<number>> | undefined {
-    if (!this.ngxExtendedPdfViewerInitialized) {
+    // #3216 Gate on the live findController rather than the public flag — the controller is
+    // the actual authority on "can I find?", and the flag can be stale across destroy/recreate.
+    const findController = options.useSecondaryFindcontroller ? this.PDFViewerApplication?.customFindController : this.PDFViewerApplication?.findController;
+    if (!findController) {
       // tslint:disable-next-line:quotemark
       console.error("The PDF viewer hasn't finished initializing. Please call find() later.");
       return undefined;
@@ -156,32 +172,33 @@ export class NgxExtendedPdfViewerService {
         type: 'find',
         dontScrollIntoView: options.dontScrollIntoView ?? false,
       };
-      const findController = options.useSecondaryFindcontroller ? this.PDFViewerApplication?.customFindController : this.PDFViewerApplication?.findController;
-      const result = findController?.ngxFind(findParameters);
+      const result = findController.ngxFind(findParameters);
       return result;
     }
   }
 
   public findNext(useSecondaryFindcontroller: boolean = false): boolean {
-    if (!this.ngxExtendedPdfViewerInitialized) {
+    // #3216 Gate on the live findController, not the public flag.
+    const findController = useSecondaryFindcontroller ? this.PDFViewerApplication?.customFindController : this.PDFViewerApplication?.findController;
+    if (!findController) {
       // tslint:disable-next-line:quotemark
       console.error("The PDF viewer hasn't finished initializing. Please call findNext() later.");
       return false;
     } else {
-      const findController = useSecondaryFindcontroller ? this.PDFViewerApplication?.customFindController : this.PDFViewerApplication?.findController;
-      findController?.ngxFindNext();
+      findController.ngxFindNext();
       return true;
     }
   }
 
   public findPrevious(useSecondaryFindcontroller: boolean = false): boolean {
-    if (!this.ngxExtendedPdfViewerInitialized) {
+    // #3216 Gate on the live findController, not the public flag.
+    const findController = useSecondaryFindcontroller ? this.PDFViewerApplication?.customFindController : this.PDFViewerApplication?.findController;
+    if (!findController) {
       // tslint:disable-next-line:quotemark
       console.error("The PDF viewer hasn't finished initializing. Please call findPrevious() later.");
       return false;
     } else {
-      const findController = useSecondaryFindcontroller ? this.PDFViewerApplication?.customFindController : this.PDFViewerApplication?.findController;
-      findController?.ngxFindPrevious();
+      findController.ngxFindPrevious();
       return true;
     }
   }

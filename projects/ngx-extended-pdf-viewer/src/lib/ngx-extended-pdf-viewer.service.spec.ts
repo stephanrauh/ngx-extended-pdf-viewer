@@ -109,7 +109,8 @@ describe('NgxExtendedPdfViewerService', () => {
     });
 
     it('should handle find with default options', () => {
-      service.ngxExtendedPdfViewerInitialized = true;
+      // #3216 The new gate checks the live findController, not the public flag.
+      (service as any).PDFViewerApplication = { findController: { ngxFind: jest.fn() } };
 
       // This test focuses on the option handling logic, not PDF.js integration
       service.find('test');
@@ -120,7 +121,7 @@ describe('NgxExtendedPdfViewerService', () => {
     });
 
     it('should configure DOM checkboxes based on find options', () => {
-      service.ngxExtendedPdfViewerInitialized = true;
+      (service as any).PDFViewerApplication = { findController: { ngxFind: jest.fn() } };
       const options: FindOptions = {
         highlightAll: true,
         matchCase: true,
@@ -149,10 +150,21 @@ describe('NgxExtendedPdfViewerService', () => {
     });
 
     it('should handle missing DOM elements gracefully', () => {
-      service.ngxExtendedPdfViewerInitialized = true;
+      (service as any).PDFViewerApplication = { findController: { ngxFind: jest.fn() } };
       jest.spyOn(document, 'getElementById').mockReturnValue(null);
 
       expect(() => service.find('test')).not.toThrow();
+    });
+
+    it('should return undefined when findController is not yet wired up (#3216)', () => {
+      // PDFViewerApplication can be present (notification signal fired) before findController exists.
+      service.ngxExtendedPdfViewerInitialized = true; // stale public flag — must not gate find()
+      (service as any).PDFViewerApplication = {}; // no findController
+      const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
+
+      expect(service.find('test')).toBeUndefined();
+      expect(consoleSpy).toHaveBeenCalledWith("The PDF viewer hasn't finished initializing. Please call find() later.");
+      consoleSpy.mockRestore();
     });
   });
 
@@ -410,8 +422,9 @@ describe('NgxExtendedPdfViewerService', () => {
     });
 
     it('should handle find workflow with complex options', () => {
-      service.ngxExtendedPdfViewerInitialized = true;
-      
+      // #3216 The find() gate now checks the live findController, not the public flag.
+      (service as any).PDFViewerApplication = { findController: { ngxFind: jest.fn() } };
+
       // Set up mock elements for find functionality
       const mockHighlightCheckbox = { checked: false } as HTMLInputElement;
       const mockMatchCaseCheckbox = { checked: false } as HTMLInputElement;

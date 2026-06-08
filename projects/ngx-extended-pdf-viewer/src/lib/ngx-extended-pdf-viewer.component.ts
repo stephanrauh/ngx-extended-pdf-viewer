@@ -229,8 +229,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
     // #3140 modified by ngx-extended-pdf-viewer
     // When leaving book mode while in PAGE_FLIP cursor mode, switch back to SELECT.
-    if (viewMode !== 'book' && this.showPageFlipButton() && this.service.ngxExtendedPdfViewerInitialized) {
-      PDFViewerApplication?.eventBus.dispatch('switchcursortool', { tool: PdfCursorTools.SELECT });
+    if (viewMode !== 'book' && this.showPageFlipButton() && this.initialized) {
+      // #3216 eventBus may be undefined during destroy/recreate transitions of the PDFViewerApplication singleton.
+      PDFViewerApplication?.eventBus?.dispatch('switchcursortool', { tool: PdfCursorTools.SELECT });
     }
     // #3140 end of modification by ngx-extended-pdf-viewer
 
@@ -261,7 +262,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   private handleInfiniteScrollMode(): void {
     if (this.scrollMode() === ScrollModeType.page || this.scrollMode() === ScrollModeType.horizontal) {
       this.scrollMode.set(ScrollModeType.vertical);
-      this.pdfScriptLoaderService.PDFViewerApplication.eventBus.dispatch('switchscrollmode', { mode: Number(this.scrollMode()) });
+      // #3216 eventBus may be undefined during destroy/recreate transitions of the PDFViewerApplication singleton.
+      this.pdfScriptLoaderService.PDFViewerApplication?.eventBus?.dispatch('switchscrollmode', { mode: Number(this.scrollMode()) });
     }
     setTimeout(
       this.asyncWithCD(() => {
@@ -287,9 +289,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     // #3140 modified by ngx-extended-pdf-viewer
     // When entering book mode with the page-flip button enabled,
     // automatically switch to PAGE_FLIP cursor tool.
-    if (this.showPageFlipButton() && this.service.ngxExtendedPdfViewerInitialized) {
+    if (this.showPageFlipButton() && this.initialized) {
       const PDFViewerApplication: IPDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
-      PDFViewerApplication?.eventBus.dispatch('switchcursortool', { tool: PdfCursorTools.PAGE_FLIP });
+      // #3216 eventBus may be undefined during destroy/recreate transitions of the PDFViewerApplication singleton.
+      PDFViewerApplication?.eventBus?.dispatch('switchcursortool', { tool: PdfCursorTools.PAGE_FLIP });
     }
     // #3140 end of modification by ngx-extended-pdf-viewer
   }
@@ -358,7 +361,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       (async () => {
         const converted = await convertBlobToUint8Array(url);
         this._src = converted.buffer;
-        if (this.service.ngxExtendedPdfViewerInitialized && this._src !== this._lastOpenedSrc) {
+        if (this.initialized && this._src !== this._lastOpenedSrc) {
           // #3131
           // Close book mode if needed
           if (this.pageViewMode() === 'book') {
@@ -390,7 +393,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     }
 
     // Handle PDF opening/closing
-    if (this.service.ngxExtendedPdfViewerInitialized) {
+    if (this.initialized) {
       // Close book mode if needed
       if (this.pageViewMode() === 'book') {
         const PDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
@@ -431,7 +434,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     const PDFViewerApplication: IPDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
     if (PDFViewerApplication?.pdfViewer) {
       if (PDFViewerApplication.pdfViewer.scrollMode !== Number(value)) {
-        PDFViewerApplication.eventBus.dispatch('switchscrollmode', { mode: Number(value) });
+        // #3216 eventBus may be undefined during destroy/recreate transitions even when pdfViewer is set.
+        PDFViewerApplication.eventBus?.dispatch('switchscrollmode', { mode: Number(value) });
       }
     }
     if (value === ScrollModeType.page) {
@@ -649,7 +653,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   private readonly _pdfBackgroundColorEffect = effect(() => {
     const color = this.pdfBackgroundColor();
     // Skip during initialization — the initial value is set in the init code path
-    if (!this.service.ngxExtendedPdfViewerInitialized) return;
+    if (!this.initialized) return;
 
     const PDFViewerApplicationOptions = this.pdfScriptLoaderService.PDFViewerApplicationOptions;
     const PDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
@@ -673,7 +677,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     if (viewerContainer) {
       viewerContainer.classList.toggle('readingDirection-rtl', isRtl);
     }
-    if (!this.service.ngxExtendedPdfViewerInitialized) return;
+    if (!this.initialized) return;
     const PDFViewerApplicationOptions = this.pdfScriptLoaderService.PDFViewerApplicationOptions;
     if (PDFViewerApplicationOptions) {
       PDFViewerApplicationOptions.set('readingDirection', direction);
@@ -969,7 +973,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       this.handTool.set(false);
       return;
     }
-    if (this.service.ngxExtendedPdfViewerInitialized) {
+    if (this.initialized) {
       // #3140 modified by ngx-extended-pdf-viewer
       // When the page-flip button is shown, the cursor tool is fully managed by
       // the three toolbar buttons (select/hand/page-flip), not by the handTool binding.
@@ -1003,7 +1007,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   // @ts-ignore TS6133 - Used for side effects only
   private readonly _enableFlipByDragEffect = effect(() => {
     const value = this.enableFlipByDrag();
-    if (this.service.ngxExtendedPdfViewerInitialized) {
+    if (this.initialized) {
       const PDFViewerApplication: IPDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
       if (PDFViewerApplication?.pdfViewer) {
         PDFViewerApplication.pdfViewer.enableFlipByDrag = value;
@@ -1023,7 +1027,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   // @ts-ignore TS6133 - Used for side effects only
   private readonly _showPageCornersEffect = effect(() => {
     const value = this.showPageCorners();
-    if (this.service.ngxExtendedPdfViewerInitialized) {
+    if (this.initialized) {
       const PDFViewerApplication: IPDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
       if (PDFViewerApplication?.pdfViewer?.pageFlip) {
         PDFViewerApplication.pdfViewer.pageFlip.setting.showPageCorners = value;
@@ -1076,7 +1080,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
     // Navigate to the page if PDF viewer is initialized
     if (typeof window === 'undefined') return;
-    if (!this.service.ngxExtendedPdfViewerInitialized) return;
+    if (!this.initialized) return;
 
     const PDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
     if (newPageNumber && PDFViewerApplication?.pdfViewer) {
@@ -1171,6 +1175,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   private initializationPromise: (() => Promise<void>) | null = null;
   private checkRootElementTimeout: any;
   private destroyInitialization = false;
+  /**
+   * #3216 Per-instance "openPDF() has completed" flag. Set true in openPDF(), reset in
+   * ngOnDestroy(). Distinct from NgxExtendedPdfViewerService.ngxExtendedPdfViewerInitialized,
+   * which is a singleton flag preserved for backward compatibility — see that service for the
+   * distinction and the multi-viewer migration path.
+   */
+  private initialized = false;
 
   public get pdfJsVersion(): string {
     return getVersionSuffix(pdfDefaultOptions.assetsFolder);
@@ -1245,7 +1256,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   private readonly _zoomEffect = effect(() => {
     const currentZoom = this.zoom(); // Track zoom signal
     if (typeof window === 'undefined') return;
-    if (!this.service.ngxExtendedPdfViewerInitialized) return;
+    if (!this.initialized) return;
 
     // Don't write back to pdf.js while it's actively handling a zoom gesture.
     // pdf.js uses drawingDelay=400ms during pinch/wheel zoom to defer page
@@ -1272,7 +1283,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   private readonly _maxZoomEffect = effect(() => {
     const maxZoom = this.maxZoom();
     if (typeof window === 'undefined') return;
-    if (!this.service.ngxExtendedPdfViewerInitialized) return;
+    if (!this.initialized) return;
 
     const PDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
     if (PDFViewerApplication.pdfViewer) {
@@ -1287,7 +1298,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   private readonly _minZoomEffect = effect(() => {
     const minZoom = this.minZoom();
     if (typeof window === 'undefined') return;
-    if (!this.service.ngxExtendedPdfViewerInitialized) return;
+    if (!this.initialized) return;
 
     const PDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
     if (PDFViewerApplication.pdfViewer) {
@@ -1302,7 +1313,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   private readonly _findbarVisibleEffect = effect(() => {
     const visible = this.findbarVisible();
     if (typeof window === 'undefined') return;
-    if (!this.service.ngxExtendedPdfViewerInitialized) return;
+    if (!this.initialized) return;
 
     const PDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
     if (visible) {
@@ -1320,7 +1331,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   private readonly _propertiesDialogVisibleEffect = effect(() => {
     const visible = this.propertiesDialogVisible();
     if (typeof window === 'undefined') return;
-    if (!this.service.ngxExtendedPdfViewerInitialized) return;
+    if (!this.initialized) return;
 
     const PDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
     if (visible) {
@@ -1338,7 +1349,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   private readonly _pageLabelEffect = effect(() => {
     const pageLabel = this.pageLabel();
     if (typeof window === 'undefined') return;
-    if (!this.service.ngxExtendedPdfViewerInitialized) return;
+    if (!this.initialized) return;
 
     const PDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
     if (pageLabel) {
@@ -1352,7 +1363,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   private readonly _rotationEffect = effect(() => {
     const rotation = this.rotation();
     if (typeof window === 'undefined') return;
-    if (!this.service.ngxExtendedPdfViewerInitialized) return;
+    if (!this.initialized) return;
 
     const PDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
     if (rotation) {
@@ -1370,7 +1381,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     const activeSidebarView = this.activeSidebarView();
     const sidebarVisible = this.sidebarVisible();
     if (typeof window === 'undefined') return;
-    if (!this.service.ngxExtendedPdfViewerInitialized) return;
+    if (!this.initialized) return;
 
     const PDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
     // PDF.js v5.4.530 renamed pdfSidebar to viewsManager
@@ -1391,7 +1402,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   private readonly _filenameForDownloadEffect = effect(() => {
     const filename = this.filenameForDownload();
     if (typeof window === 'undefined') return;
-    if (!this.service.ngxExtendedPdfViewerInitialized) return;
+    if (!this.initialized) return;
 
     const PDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
     PDFViewerApplication.appConfig.filenameForDownload = filename;
@@ -1401,7 +1412,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   private readonly _nameddestEffect = effect(() => {
     const nameddest = this.nameddest();
     if (typeof window === 'undefined') return;
-    if (!this.service.ngxExtendedPdfViewerInitialized) return;
+    if (!this.initialized) return;
 
     const PDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
     if (nameddest) {
@@ -1413,7 +1424,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   private readonly _spreadEffect = effect(() => {
     const spread = this.spread();
     if (typeof window === 'undefined') return;
-    if (!this.service.ngxExtendedPdfViewerInitialized) return;
+    if (!this.initialized) return;
 
     const PDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
     if (spread === 'even') {
@@ -1444,7 +1455,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   private readonly _enableDragAndDropEffect = effect(() => {
     const enableDragAndDrop = this.enableDragAndDrop();
     if (typeof window === 'undefined') return;
-    if (!this.service.ngxExtendedPdfViewerInitialized) return;
+    if (!this.initialized) return;
 
     const PDFViewerApplicationOptions = this.pdfScriptLoaderService.PDFViewerApplicationOptions;
     PDFViewerApplicationOptions.set('enableDragAndDrop', enableDragAndDrop);
@@ -1534,7 +1545,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     const showUnverifiedSignatures = this.showUnverifiedSignatures();
     // #1321 end of modification by ngx-extended-pdf-viewer
     if (typeof window === 'undefined') return;
-    if (!this.service.ngxExtendedPdfViewerInitialized) return;
+    if (!this.initialized) return;
 
     const PDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
     if (PDFViewerApplication?.pdfDocument) {
@@ -1765,7 +1776,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   private async waitUntilOldComponentIsGone(): Promise<void> {
     return new Promise<void>((resolve) => {
       const interval = setInterval(() => {
-        if (!this.service.ngxExtendedPdfViewerInitialized) {
+        if (!this.initialized) {
           clearInterval(interval);
           resolve();
         }
@@ -1931,7 +1942,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       return;
     }
 
-    if (this.service.ngxExtendedPdfViewerInitialized) {
+    if (this.initialized) {
       // tslint:disable-next-line:quotemark
       console.error("You're trying to open two instances of the PDF viewer. Most likely, this will result in errors.");
     }
@@ -2257,6 +2268,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     } else {
       PDFViewerApplication.appConfig.filenameForDownload = this.guessFilenameFromUrl(this._src);
     }
+    this.initialized = true;
     this.service.ngxExtendedPdfViewerInitialized = true;
     this.registerEventListeners(PDFViewerApplication);
     this.selectCursorTool();
@@ -2312,7 +2324,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
         options.cspPolicyService = this.cspPolicyService;
         PDFViewerApplication.findBar?.close();
         PDFViewerApplication.secondaryToolbar?.close();
-        PDFViewerApplication.eventBus.dispatch('annotationeditormodechanged', { mode: 0 });
+        // #3216 eventBus may be undefined during destroy/recreate transitions of the PDFViewerApplication singleton.
+        PDFViewerApplication.eventBus?.dispatch('annotationeditormodechanged', { mode: 0 });
 
         this._lastOpenedSrc = this._src; // #3131
         await PDFViewerApplication.open(options);
@@ -2867,7 +2880,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     try {
       // sometimes the annotation editor UI is undefined, but it's a private variable,
       // so we simply catch the error
-      PDFViewerApplication.eventBus.dispatch('switchannotationeditormode', { mode: 0 });
+      // #3216 eventBus may be undefined during destroy/recreate transitions.
+      PDFViewerApplication.eventBus?.dispatch('switchannotationeditormode', { mode: 0 });
     } catch (e) {
       // ignore this error
     }
@@ -2957,7 +2971,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     } else {
       tool = PdfCursorTools.SELECT;
     }
-    PDFViewerApplication.eventBus.dispatch('switchcursortool', { tool });
+    // #3216 eventBus may be undefined during destroy/recreate transitions of the PDFViewerApplication singleton.
+    PDFViewerApplication?.eventBus?.dispatch('switchcursortool', { tool });
     // #3140 end of modification by ngx-extended-pdf-viewer
   }
 
@@ -2980,6 +2995,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     // #3131 Unregister all eventBus listeners synchronously before async cleanup.
     this.eventBusAbortController?.abort();
     this.eventBusAbortController = null;
+    // #3216 Reset both flags synchronously. The async cleanup below also clears the
+    // singleton flag (later), but a new viewer mounted in the same microtask would
+    // otherwise see the stale `true` and let its effects dispatch against a singleton
+    // that's mid-teardown.
+    this.initialized = false;
+    this.service.ngxExtendedPdfViewerInitialized = false;
 
     // Async cleanup is fire-and-forget — Angular does not await ngOnDestroy.
     const cleanup = async () => {

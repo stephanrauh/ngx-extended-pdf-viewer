@@ -76,7 +76,8 @@ export class PdfSidebarContentComponent implements OnDestroy {
           this.eventBusAbortController = new AbortController();
           const opts = { signal: this.eventBusAbortController.signal };
           // #3135 end of modification by ngx-extended-pdf-viewer
-          this.PDFViewerApplication.eventBus.on('rendercustomthumbnail', this.createThumbnail.bind(this), opts);
+          // #3216 eventBus may be undefined when the init signal fires before PDFViewerApplication finishes wiring up.
+          this.PDFViewerApplication.eventBus?.on('rendercustomthumbnail', this.createThumbnail.bind(this), opts);
         }
       });
     }
