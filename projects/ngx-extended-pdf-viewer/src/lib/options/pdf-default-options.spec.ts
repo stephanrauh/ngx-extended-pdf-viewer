@@ -6,6 +6,7 @@ import {
   pdfDefaultOptions,
   pdfjsBleedingEdgeVersion,
   pdfjsVersion,
+  resolveAssetUrlAgainstBaseHref,
 } from './pdf-default-options';
 
 describe('PDF Default Options Utility Functions', () => {
@@ -75,6 +76,35 @@ describe('PDF Default Options Utility Functions', () => {
       expect(assetsUrl('custom://example.com/assets')).toBe('custom://example.com/assets');
       expect(assetsUrl('data://base64,content')).toBe('data://base64,content');
       expect(assetsUrl('mailto://test@example.com')).toBe('mailto://test@example.com');
+    });
+  });
+
+  // #3209: relative asset URLs are resolved against document.baseURI so a
+  // `<base href>` / context path is applied exactly once.
+  describe('resolveAssetUrlAgainstBaseHref', () => {
+    it('should resolve a relative ./ URL against document.baseURI into an absolute URL', () => {
+      const result = resolveAssetUrlAgainstBaseHref('./assets/pdf.worker-1.2.3.min.mjs');
+      // jsdom's baseURI is http://localhost/
+      expect(result).toBe(new URL('./assets/pdf.worker-1.2.3.min.mjs', document.baseURI).href);
+      expect(result).toContain('://');
+      expect(result.startsWith('./')).toBe(false);
+    });
+
+    it('should normalize a ../ segment while resolving', () => {
+      // "./assets/../cmaps/" must collapse to "<base>/cmaps/", matching the
+      // pre-#3209 browser resolution of the bare relative string.
+      const result = resolveAssetUrlAgainstBaseHref('./assets/../cmaps/');
+      expect(result).toBe(new URL('./assets/../cmaps/', document.baseURI).href);
+      expect(result).toContain('/cmaps/');
+      expect(result).not.toContain('/assets/');
+    });
+
+    it('should return an already-absolute URL unchanged (does not start with ./)', () => {
+      // Absolute folders skip baseURI resolution, so the SSR fallback path is
+      // also exercised by any string that does not start with "./".
+      expect(resolveAssetUrlAgainstBaseHref('https://cdn.example.com/assets/pdf.worker.mjs')).toBe(
+        'https://cdn.example.com/assets/pdf.worker.mjs'
+      );
     });
   });
 
@@ -393,10 +423,12 @@ describe('PDF Default Options Utility Functions', () => {
     });
 
     describe('function properties behavior', () => {
+      // #3209: the derived options resolve against document.baseURI, so in jsdom
+      // they return absolute http://localhost/... URLs (with the `assets/..`
+      // segment of cMapUrl / standardFontDataUrl normalized away).
       it('should return correct cMapUrl', () => {
         const result = pdfDefaultOptions.cMapUrl();
         expect(result).toContain('cmaps/');
-        expect(result).toContain('./assets');
       });
 
       it('should return correct sandboxBundleSrc', () => {
@@ -409,13 +441,12 @@ describe('PDF Default Options Utility Functions', () => {
         const result = pdfDefaultOptions.workerSrc();
         expect(result).toContain('pdf.worker');
         expect(result).toContain('.mjs');
-        expect(result).toContain('./assets');
+        expect(result).toContain('assets/pdf.worker');
       });
 
       it('should return correct standardFontDataUrl', () => {
         const result = pdfDefaultOptions.standardFontDataUrl();
         expect(result).toContain('standard_fonts/');
-        expect(result).toContain('./assets');
       });
 
       it('should return correct wasmUrl', () => {

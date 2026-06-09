@@ -21,6 +21,20 @@ export function assetsUrl(url: string, postfixIfPathIsRelativ = ''): string {
   return `./${url + postfixIfPathIsRelativ}`;
 }
 
+// #3209: a relative asset URL such as "./assets/pdf.worker-x.min.mjs" is
+// resolved by pdf.js (and the browser's `new Worker()`) against the current
+// route or, with a `<base href>`, gets the base applied twice — producing
+// mangled URLs like ".../crossdomainproxy//crossdomainproxy/../...". Resolving
+// against `document.baseURI` here yields a stable absolute URL, mirroring the
+// wasmUrl (#3140) fix. Absolute folders and SSR (no `document`) keep the exact
+// string `assetsUrl()` already produced, so existing setups are unaffected.
+export function resolveAssetUrlAgainstBaseHref(composedUrl: string): string {
+  if (composedUrl.startsWith('./') && typeof document !== 'undefined') {
+    return new URL(composedUrl, document.baseURI).href;
+  }
+  return composedUrl;
+}
+
 export function isBleedingEdge(): boolean {
   return pdfDefaultOptions.assetsFolder?.includes('bleeding-edge');
 }
@@ -92,7 +106,7 @@ export const pdfDefaultOptions = {
   viewOnLoad: 0,
   cMapPacked: true,
   cMapUrl: function () {
-    return `${assetsUrl(pdfDefaultOptions.assetsFolder, '/..')}/cmaps/`;
+    return resolveAssetUrlAgainstBaseHref(`${assetsUrl(pdfDefaultOptions.assetsFolder, '/..')}/cmaps/`);
   },
   disableAutoFetch: false,
   disableFontFace: false,
@@ -106,18 +120,22 @@ export const pdfDefaultOptions = {
   assetsFolder: 'assets',
   _internalFilenameSuffix: '.min', // don't modify this - it's an internal field
   sandboxBundleSrc: function () {
-    return pdfDefaultOptions.needsES5
-      ? `./pdf.sandbox-${getVersionSuffix(assetsUrl(pdfDefaultOptions.assetsFolder))}-es5.mjs`
-      : `./pdf.sandbox-${getVersionSuffix(assetsUrl(pdfDefaultOptions.assetsFolder))}${pdfDefaultOptions._internalFilenameSuffix}.mjs`;
+    return resolveAssetUrlAgainstBaseHref(
+      pdfDefaultOptions.needsES5
+        ? `./pdf.sandbox-${getVersionSuffix(assetsUrl(pdfDefaultOptions.assetsFolder))}-es5.mjs`
+        : `./pdf.sandbox-${getVersionSuffix(assetsUrl(pdfDefaultOptions.assetsFolder))}${pdfDefaultOptions._internalFilenameSuffix}.mjs`
+    );
   },
   workerSrc: function () {
-    return pdfDefaultOptions.needsES5
-      ? `${assetsUrl(pdfDefaultOptions.assetsFolder)}/pdf.worker-${getVersionSuffix(assetsUrl(pdfDefaultOptions.assetsFolder))}-es5.mjs`
-      : `${assetsUrl(pdfDefaultOptions.assetsFolder)}/pdf.worker-${getVersionSuffix(assetsUrl(pdfDefaultOptions.assetsFolder))}${
-          pdfDefaultOptions._internalFilenameSuffix
-        }.mjs`;
+    return resolveAssetUrlAgainstBaseHref(
+      pdfDefaultOptions.needsES5
+        ? `${assetsUrl(pdfDefaultOptions.assetsFolder)}/pdf.worker-${getVersionSuffix(assetsUrl(pdfDefaultOptions.assetsFolder))}-es5.mjs`
+        : `${assetsUrl(pdfDefaultOptions.assetsFolder)}/pdf.worker-${getVersionSuffix(assetsUrl(pdfDefaultOptions.assetsFolder))}${
+            pdfDefaultOptions._internalFilenameSuffix
+          }.mjs`
+    );
   },
-  standardFontDataUrl: () => `${assetsUrl(pdfDefaultOptions.assetsFolder, '/..')}/standard_fonts/`,
+  standardFontDataUrl: () => resolveAssetUrlAgainstBaseHref(`${assetsUrl(pdfDefaultOptions.assetsFolder, '/..')}/standard_fonts/`),
   // #3140: wasm files live inside the assets folder (not as a sibling).
   // Resolve against document.baseURI so the path stays correct on sub-routes
   // (pdf.js's QuickJS loader resolves wasmUrl against `location.href`, which

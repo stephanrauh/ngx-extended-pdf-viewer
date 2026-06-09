@@ -65,6 +65,13 @@ The CMap files and the JavaScript files <code>viewer-\*.min.mjs</code>, and <cod
 Sometimes the path resolution fails. In this case, you'll need to set the default option <code>assetsFolder</code> to the appropriate value.
 Maybe you'll even have to modify the derived options <code>workerSrc</code> and <code>cMapUrl</code>.
 
+Since version 28.0.0-rc.8 (#3209), the derived options <code>workerSrc</code>, <code>cMapUrl</code>, <code>standardFontDataUrl</code>, and <code>sandboxBundleSrc</code> resolve their relative paths against <code>document.baseURI</code>, so a <code>&lt;base href&gt;</code> tag is applied exactly once. If you are on an older version and see a mangled worker URL with a duplicated context-path segment — for example <code>https://appserver/crossdomainproxy//crossdomainproxy/../pdf.worker-x.y.z.min.mjs</code> — set <code>workerSrc</code> to an absolute URL yourself:
+
+<pre><code>import &#123; pdfDefaultOptions &#125; from 'ngx-extended-pdf-viewer';
+
+// `href` is the absolute base of your assets, e.g. document.baseURI + 'assets/'
+pdfDefaultOptions.workerSrc = () =&gt; href + 'pdf.worker-6.0.1158.min.mjs';</code></pre>
+
 Another workaround is to load the file <code>viewer-\*.min.mjs</code> yourself. You just have to make sure that the files are loaded before ngx-extended-pdf-viewer is initialized. The drawback of this approach is that there's no automatic browser switch. ngx-extended-pdf-viewer detects the capabilities the user's browsers and selects either the slow-but-safe ECMAScript 5 version, or the faster default version that only runs on modern browsers.
 
 In any case, you should not load the file <code>pdf.worker-\*.min.mjs</code> yourself. Technically, that's possible, and the approach works well for small PDF files. But it ruins the performance of the PDF viewer. One of our <a href="https://www.obwb.ca/library/okanagan-basin-waterscape-poster/">test PDF files (75 MB!)</a> shows almost immediately in the default configuration, but takes several minutes when your loading <code>pdf.worker-\*.min.mjs</code> yourself. (The technical explanation is that loading the pdf worker file yourself disables the service worker).
