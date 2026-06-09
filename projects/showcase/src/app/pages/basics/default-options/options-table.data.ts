@@ -207,7 +207,7 @@ export const availableOptions = [
   {
     attribute: 'workerSrc',
     description:
-      "URL of the worker file. By default, it's <code>./assets/pdf.worker-x.y.z.min.js</code>. You can modify this option if your worker file is at a different location or if the resolution of the relative path doesn't work for some reason. This value can either be a string or a lambda. The default implementation takes <code>pdfDefaultOptions.assetsFolder</code>, <code>[minifiedJSLibraries]</code>, and <code>[forceUsingLegacyES5]</code> into account to determine the path.",
+      "URL of the worker file. By default, it's <code>./assets/pdf.worker-x.y.z.min.js</code>. You can modify this option if your worker file is at a different location or if the resolution of the relative path doesn't work for some reason. This value can either be a string or a lambda. The default implementation takes <code>pdfDefaultOptions.assetsFolder</code>, <code>[minifiedJSLibraries]</code>, and <code>[forceUsingLegacyES5]</code> into account to determine the path. Since 28.0.0-rc.8 (#3209) the relative path is resolved against <code>document.baseURI</code>, so a <code>&lt;base href&gt;</code> or context path is applied exactly once (this also covers <code>cMapUrl</code>, <code>standardFontDataUrl</code>, and <code>sandboxBundleSrc</code>).",
     coveredBy: '<code>minifiedJSLibraries</code> and <code>assetsFolder</code>',
   },
   {

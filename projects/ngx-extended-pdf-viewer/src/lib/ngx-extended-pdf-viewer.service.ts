@@ -683,6 +683,14 @@ export class NgxExtendedPdfViewerService {
    * - Highlight
    * - Popup (comments)
    *
+   * **Timing:** an annotation is added to a page's annotation _editor_ layer,
+   * which is created only after that page has been rendered (slightly after the
+   * display annotation layer). Wait for the page's `(annotationEditorLayerRendered)`
+   * event before calling this method - **not** `(annotationLayerRendered)`, which
+   * fires too early. Calling it before the editor layer exists logs
+   * `paste: "Cannot read properties of undefined (reading 'deserialize')"` and adds
+   * nothing (see issue #2656).
+   *
    * @param serializedAnnotation A single annotation object, array of annotations, or JSON string
    * @returns Promise that resolves when the annotation(s) have been added
    *
@@ -735,6 +743,26 @@ export class NgxExtendedPdfViewerService {
     return imageBlob;
   }
 
+  /**
+   * Adds an image to a page as a stamp (editor) annotation. Since this is a
+   * viewer rather than an editor, the image is placed on the annotation editor
+   * layer; in most cases the result is indistinguishable from a real stamp.
+   *
+   * The `left`, `bottom`, `right`, and `top` coordinates accept percentages
+   * (e.g. `'50%'`), pixels (e.g. `'100px'`), or PDF coordinates (e.g. `100`).
+   * Omitted coordinates default to the logical origin (`left`/`bottom` to `0`,
+   * `right`/`top` to `'100%'`). If `page` is omitted, the current page is used.
+   *
+   * **Timing:** wait for the target page's `(annotationEditorLayerRendered)`
+   * event before calling this - **not** `(annotationLayerRendered)`. The editor
+   * layer is created only after the page is rendered, so calling it too early
+   * logs `paste: "Cannot read properties of undefined (reading 'deserialize')"`
+   * and adds nothing (see issue #2656). On large, lazily-rendered documents,
+   * add each page's image from its own `(annotationEditorLayerRendered)` handler.
+   *
+   * @param parameters The image source, optional target page, position, and rotation
+   * @returns Promise that resolves once the image has been added
+   */
   public async addImageToAnnotationLayer({ urlOrDataUrl, page, left, bottom, right, top, rotation }: PdfImageParameters): Promise<void> {
     if (!this.PDFViewerApplication) {
       console.error('The PDF viewer has not been initialized yet.');
@@ -794,6 +822,30 @@ export class NgxExtendedPdfViewerService {
     }
   }
 
+  /**
+   * Adds a highlight (editor) annotation to a page.
+   *
+   * The `left`, `bottom`, `right`, and `top` coordinates accept percentages
+   * (e.g. `'50%'`), pixels (e.g. `'100px'`), or PDF coordinates (e.g. `100`).
+   * If `page` is omitted (`undefined`), the current page is used.
+   *
+   * **Timing:** like {@link addImageToAnnotationLayer}, wait for the target
+   * page's `(annotationEditorLayerRendered)` event before calling this - **not**
+   * `(annotationLayerRendered)`. Calling it before the editor layer exists logs
+   * `paste: "Cannot read properties of undefined (reading 'deserialize')"` and
+   * adds nothing (see issue #2656).
+   *
+   * @param color RGB color as a 0-255 triple, e.g. `[255, 255, 0]` for yellow
+   * @param page Zero-based page index, or `undefined` for the current page
+   * @param left Left edge (percentage, pixels, or PDF coordinate)
+   * @param bottom Bottom edge (percentage, pixels, or PDF coordinate)
+   * @param right Right edge (percentage, pixels, or PDF coordinate)
+   * @param top Top edge (percentage, pixels, or PDF coordinate)
+   * @param thickness Highlighter thickness; defaults to `12`
+   * @param rotation Rotation in degrees (`0`, `90`, `180`, or `270`); defaults to `0`
+   * @param opacity Opacity between `0` and `1`; defaults to `0.5`
+   * @returns Promise that resolves once the highlight has been added
+   */
   public async addHighlightToAnnotationLayer(
     color: number[],
     page: number | undefined,
