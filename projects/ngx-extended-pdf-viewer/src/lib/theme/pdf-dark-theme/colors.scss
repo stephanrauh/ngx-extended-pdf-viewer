@@ -1,6 +1,8 @@
 $highlight: rgba(180, 0, 170, 0.4);
 
-$highlight-selected: rgba(0, 100, 0, 1);
+// #3210 translucent so the selected match is darker than the non-selected
+// matches without needing `opacity` on .selected. See pdf-light-theme/colors.scss.
+$highlight-selected: rgba(0, 100, 0, 0.55);
 
 $background: #2a2a2e;
 

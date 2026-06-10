@@ -112,6 +112,17 @@ ngx-extended-pdf-viewer {
 
       &.appended {
         position: initial;
+        // #3210 Safari only repaints the first (already-composited) page's find
+        // highlights after a zoom/scroll/resize — the spans and their
+        // background-color are correct in the DOM, just not painted. Promoting
+        // each appended highlight to its own GPU layer forces an immediate
+        // paint. `inline-block` is required because `transform` does not apply
+        // to inline boxes. Only `.appended` spans need this; `.middle` is the
+        // text <div>, which already carries its own transform (own layer).
+        // `translateZ(0)` is supported by every Safari version, so this stays
+        // safe for older Safari too.
+        display: inline-block;
+        transform: translateZ(0);
       }
 
       &.begin {
@@ -127,8 +138,12 @@ ngx-extended-pdf-viewer {
       }
 
       &.selected {
+        // #3210 no `opacity` here. Element-opacity dropped the selected match to
+        // ~0.15 effective alpha — paler than the 0.35 non-selected matches, the
+        // opposite of what you want (the selected match should stand out). The
+        // alpha now lives in $highlight-selected / the color*.selected colours,
+        // so the selected match is darker than the rest.
         background-color: $highlight-selected;
-        opacity: 0.25;
         backdrop-filter: var(--highlight-selected-backdrop-filter);
       }
 
@@ -167,6 +182,10 @@ ngx-extended-pdf-viewer {
 
       &.appended {
         position: initial;
+        // #3210 see .highlight.appended above — same Safari first-page repaint
+        // fix for custom-find-controller highlights.
+        display: inline-block;
+        transform: translateZ(0);
       }
 
       &.begin {

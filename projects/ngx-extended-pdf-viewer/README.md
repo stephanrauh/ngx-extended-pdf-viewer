@@ -178,6 +178,8 @@ Version 28 updates to pdf.js 6.0 and adds Angular 22 support.
 
 - Fixed a crash when dragging thumbnails to reorder pages.
 - Fixed `[(zoom)]` showing wrong percentages after SPA navigation.
+- Fixed search highlights not appearing on the first page in Safari.
+- Fixed worker and other assets failing to load when the app is served from a context path or uses a `<base href>`.
 
 ### Version 27
 

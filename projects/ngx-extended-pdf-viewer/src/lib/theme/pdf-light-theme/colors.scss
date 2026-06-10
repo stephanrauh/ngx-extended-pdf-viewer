@@ -1,6 +1,9 @@
 $highlight: rgba(180, 0, 170, 0.4);
 
-$highlight-selected: rgba(0, 100, 0, 1);
+// #3210 translucent (was opaque + `opacity: 0.25` on .selected). The alpha is
+// baked in here so the selected match is darker/more prominent than the
+// non-selected matches ($highlight, alpha 0.4) instead of paler.
+$highlight-selected: rgba(0, 100, 0, 0.55);
 
 $background: #d4d4d7;
 
