@@ -63,7 +63,7 @@
     "@angular/cli": "^19.2.26",
     "@angular/compiler-cli": "^19.2.24",
     "@csstools/postcss-light-dark-function": "^3.0.1",
-    "@schematics/angular": "^19.0.0",
+    "@schematics/angular": "^22.0.1",
     "@types/estree": "^1.0.9",
     "@types/jest": "^29.5.14",
     "@types/node": "^24.12.4",
