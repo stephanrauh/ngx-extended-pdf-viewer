@@ -1,3 +1,8 @@
+// #3219 The active viewer theme — drives `color-scheme` so the upstream
+// pdf.js `light-dark()` colors (views manager / sidebar panels, etc.) follow
+// the chosen viewer theme instead of the OS color-scheme.
+$color-scheme: light;
+
 $highlight: rgba(180, 0, 170, 0.4);
 
 // #3210 translucent (was opaque + `opacity: 0.25` on .selected). The alpha is

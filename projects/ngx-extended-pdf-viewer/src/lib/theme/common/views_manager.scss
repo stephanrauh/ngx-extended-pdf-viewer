@@ -40,6 +40,17 @@ ngx-extended-pdf-viewer {
 }
 
 #viewsManager {
+  // #3219 modified by ngx-extended-pdf-viewer
+  // Pin the panel's color-scheme to the active *viewer* theme. Upstream pdf.js
+  // styles the whole views-manager panel (sidebar background, header, buttons,
+  // thumbnail borders, treeView text…) with `light-dark()`, which resolves
+  // against this `color-scheme`. Without it the property defaults to `light`,
+  // so a *dark* viewer theme kept rendering the light values — e.g. a white
+  // panel behind white outline text. `$color-scheme` is `light`/`dark` per
+  // theme build (see pdf-light-theme/pdf-dark-theme colors.scss).
+  color-scheme: $color-scheme;
+  // #3219 end of modification by ngx-extended-pdf-viewer
+
   // --icon-size is defined in viewer.css :root but not in our Angular build
   --icon-size: 16px;
 
