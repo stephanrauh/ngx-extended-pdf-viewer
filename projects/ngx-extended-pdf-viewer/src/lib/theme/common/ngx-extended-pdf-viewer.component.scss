@@ -219,7 +219,13 @@ ngx-extended-pdf-viewer {
   .annotationLayer,
   .annotationEditorLayer {
     .annotationCommentButton {
-      // color-scheme: light dark;
+      // #3219 Pin to `light` (not the OS, not the viewer theme). This button
+      // floats over the PDF *page*, which stays white regardless of theme, so a
+      // light (white) button reads on both white and dark-background pages.
+      // The upstream `color-scheme: light dark` followed the OS, so a dark OS
+      // made the button #1c1b22 — dark-on-dark and effectively invisible on
+      // dark-background PDFs.
+      color-scheme: light;
 
       --comment-button-bg: light-dark(white, #1c1b22);
       --comment-button-fg: light-dark(#5b5b66, #fbfbfe);
@@ -336,8 +342,11 @@ ngx-extended-pdf-viewer {
 
   #editorCommentsSidebar {
     // #3113 modified by ngx-extended-pdf-viewer
-    // Enable color-scheme for proper light-dark() function support in comments sidebar
-    color-scheme: light dark;
+    // #3219 Pin color-scheme to the active viewer theme (not the OS). The
+    // comments sidebar is styled with light-dark(); with `light dark` it
+    // followed the OS, so a dark viewer theme kept rendering the light values
+    // (invisible text on a light panel). $color-scheme is light/dark per build.
+    color-scheme: $color-scheme;
     // #3113 end of modification by ngx-extended-pdf-viewer
     display: flex;
     height: auto;
@@ -645,8 +654,10 @@ ngx-extended-pdf-viewer {
 
   .commentPopup {
     // #3113 modified by ngx-extended-pdf-viewer
-    // Enable color-scheme for proper light-dark() function support in comment popups
-    color-scheme: light dark;
+    // #3219 Pin color-scheme to the active viewer theme (not the OS) so the
+    // comment popup's light-dark() colors track the chosen theme instead of
+    // staying light (invisible text) under a dark viewer theme.
+    color-scheme: $color-scheme;
     // #3113 end of modification by ngx-extended-pdf-viewer
 
     --divider-color: light-dark(#cfcfd8, #3a3944);
@@ -817,8 +828,10 @@ ngx-extended-pdf-viewer {
   /* Comment manager dialog styles (for individual comment editing) */
   #commentManagerDialog {
     // #3113 modified by ngx-extended-pdf-viewer
-    // Enable color-scheme for proper light-dark() function support in comment dialog
-    color-scheme: light dark;
+    // #3219 Pin color-scheme to the active viewer theme (not the OS) so the
+    // comment manager dialog's light-dark() colors track the chosen theme
+    // instead of staying light (invisible text) under a dark viewer theme.
+    color-scheme: $color-scheme;
     // #3113 end of modification by ngx-extended-pdf-viewer
 
     --comment-dialog-bg: light-dark(#fff, #23222b);
