@@ -21,6 +21,22 @@ if [ "${SKIP_LIBRARY_BUILD:-0}" != "1" ]; then
   npm run build:lib
 fi
 
+# Provision the Playwright browser once up front, using the harness's OWN
+# pinned Playwright (compatibility-tests/playwright). Every Angular runner
+# shares this single install, and each minor of Playwright requires a
+# specific Chromium build — so the browser MUST be fetched through this
+# local binary, not a floating `npx playwright` (which resolves a different
+# version and installs the wrong build, leaving launches to fail with
+# "Executable doesn't exist at .../chromium_headless_shell-XXXX").
+# `playwright install` is idempotent and near-instant when the build is
+# already cached. Set SKIP_BROWSER_INSTALL=1 on CI images that pre-bake it.
+if [ "${SKIP_BROWSER_INSTALL:-0}" != "1" ]; then
+  echo "==> Installing Playwright browser (matching the harness's pinned version)"
+  cd "${HERE}/playwright"
+  [ -d node_modules ] || npm install
+  npm run install:browsers
+fi
+
 declare -a RESULTS
 declare -a FAILED
 
