@@ -20,5 +20,6 @@ export interface AnnotationEditorEvent {
   editorType: string;
   value: any;
   previousValue?: any;
-  id?: string; // #3076 added by ngx-extended-pdf-viewer - Unique identifier for the annotation
+  id?: string; // #3076 added by ngx-extended-pdf-viewer - Temporary identifier for the annotation (changes every session)
+  customId?: string; // #3225 added by ngx-extended-pdf-viewer - Stable, developer-supplied identifier that survives the save/restore round-trip (only present when you assigned one)
 }

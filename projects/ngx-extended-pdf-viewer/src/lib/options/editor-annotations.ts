@@ -51,7 +51,8 @@ export type InkEditorAnnotation = {
   rect: Array<number>; // [left, bottom, right, top]
   rotation: 0 | 90 | 180 | 270; // in degrees
   isCopy?: boolean;
-  id?: string; // #3076 added by ngx-extended-pdf-viewer
+  id?: string; // #3076 added by ngx-extended-pdf-viewer - temporary, changes every session; do not persist it
+  customId?: string; // #3225 added by ngx-extended-pdf-viewer - your own stable id (e.g. a UUID); set it before storing and it survives addEditorAnnotation()
 };
 
 export type FreeTextEditorAnnotation = {
@@ -63,7 +64,8 @@ export type FreeTextEditorAnnotation = {
   rect: Array<number>; // rect[1] is the y position; rect[2] is the x position
   rotation: 0 | 90 | 180 | 270; // in degrees
   isCopy?: boolean;
-  id?: string; // #3076 added by ngx-extended-pdf-viewer
+  id?: string; // #3076 added by ngx-extended-pdf-viewer - temporary, changes every session; do not persist it
+  customId?: string; // #3225 added by ngx-extended-pdf-viewer - your own stable id (e.g. a UUID); set it before storing and it survives addEditorAnnotation()
 };
 
 export type StampEditorAnnotation = {
@@ -73,7 +75,8 @@ export type StampEditorAnnotation = {
   rect: Array<number>; // [left, bottom, right, top]
   rotation: 0 | 90 | 180 | 270; // in degrees
   isCopy?: boolean;
-  id?: string; // #3076 added by ngx-extended-pdf-viewer
+  id?: string; // #3076 added by ngx-extended-pdf-viewer - temporary, changes every session; do not persist it
+  customId?: string; // #3225 added by ngx-extended-pdf-viewer - your own stable id (e.g. a UUID); set it before storing and it survives addEditorAnnotation()
 };
 
 export type HighlightEditorAnnotation = {
@@ -88,7 +91,8 @@ export type HighlightEditorAnnotation = {
   rect: Array<number>; // [left, bottom, right, top]
   rotation: 0 | 90 | 180 | 270; // in degrees
   isCopy?: boolean;
-  id?: string; // #3076 added by ngx-extended-pdf-viewer
+  id?: string; // #3076 added by ngx-extended-pdf-viewer - temporary, changes every session; do not persist it
+  customId?: string; // #3225 added by ngx-extended-pdf-viewer - your own stable id (e.g. a UUID); set it before storing and it survives addEditorAnnotation()
 };
 
 export type PopupEditorAnnotation = {
@@ -98,7 +102,8 @@ export type PopupEditorAnnotation = {
   rect: Array<number>; // [left, bottom, right, top]
   rotation: 0 | 90 | 180 | 270; // in degrees
   isCopy?: boolean;
-  id?: string; // #3076 added by ngx-extended-pdf-viewer
+  id?: string; // #3076 added by ngx-extended-pdf-viewer - temporary, changes every session; do not persist it
+  customId?: string; // #3225 added by ngx-extended-pdf-viewer - your own stable id (e.g. a UUID); set it before storing and it survives addEditorAnnotation()
 };
 
 export type EditorAnnotation = InkEditorAnnotation | FreeTextEditorAnnotation | StampEditorAnnotation | HighlightEditorAnnotation | PopupEditorAnnotation;

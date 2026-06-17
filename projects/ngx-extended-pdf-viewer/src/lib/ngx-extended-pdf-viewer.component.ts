@@ -2362,6 +2362,15 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     PDFViewerApplication.eventBus.on(
       'annotation-editor-event',
       (x: AnnotationEditorEvent) => {
+        // #3225 added by ngx-extended-pdf-viewer
+        // Surface the stable, developer-supplied id (if any) on every event by
+        // reading it from the live editor (x.source). pdf.js dispatches dozens
+        // of these events; reading it here keeps the customId current without
+        // patching each individual dispatch site in the fork.
+        if (x?.customId === undefined && x?.source?.customId != null) {
+          x.customId = x.source.customId;
+        }
+        // #3225 end of modification by ngx-extended-pdf-viewer
         queueMicrotask(
           this.asyncWithCD(() => {
             if (this.destroyInitialization) return;

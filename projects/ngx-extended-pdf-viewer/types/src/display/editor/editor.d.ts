@@ -101,6 +101,7 @@ export class AnnotationEditor {
     _uiManager: null;
     _focusEventsAllowed: boolean;
     doNotMove: boolean;
+    customId: null;
     parent: import("./annotation_editor_layer.js").AnnotationEditorLayer;
     id: string;
     width: any;

@@ -688,6 +688,48 @@ describe('NgxExtendedPdfViewerService', () => {
     });
   });
 
+  // #3225 customId round-trip (and #3076 backward-compatibility) for getSerializedAnnotation
+  describe('getSerializedAnnotation (#3076 id / #3225 customId)', () => {
+    let mockPDFViewerApplication: any;
+
+    const annotations = [
+      { annotationType: 3, pageIndex: 0, id: 'pdfjs_internal_editor_0' },
+      { annotationType: 15, pageIndex: 0, id: 'pdfjs_internal_editor_1', customId: 'uuid-A' },
+      { annotationType: 9, pageIndex: 1, id: 'pdfjs_internal_editor_2', customId: 'uuid-B' },
+    ];
+
+    beforeEach(() => {
+      mockPDFViewerApplication = {
+        pdfViewer: {
+          annotationEditorUIManager: { commitOrRemove: jest.fn() },
+          getSerializedAnnotations: jest.fn().mockReturnValue(annotations),
+        },
+      };
+      (service as any).PDFViewerApplication = mockPDFViewerApplication;
+    });
+
+    it('finds an annotation by its temporary id (#3076 behavior preserved)', () => {
+      expect(service.getSerializedAnnotation('pdfjs_internal_editor_1')).toBe(annotations[1]);
+    });
+
+    it('finds an annotation by its stable customId (#3225)', () => {
+      expect(service.getSerializedAnnotation('uuid-B')).toBe(annotations[2]);
+    });
+
+    it('returns null for an unknown identifier', () => {
+      expect(service.getSerializedAnnotation('does-not-exist')).toBeNull();
+    });
+
+    it('a nullish query never matches an annotation that has no customId (backward-compat guard)', () => {
+      expect(service.getSerializedAnnotation(undefined as any)).toBeNull();
+    });
+
+    it('returns null when there are no annotations', () => {
+      mockPDFViewerApplication.pdfViewer.getSerializedAnnotations.mockReturnValue(null);
+      expect(service.getSerializedAnnotation('uuid-A')).toBeNull();
+    });
+  });
+
   describe('filteredPageCount (pure logic)', () => {
     it('should handle "from" only', () => {
       expect(service.filteredPageCount(10, { from: 5 })).toBe(6); // pages 5-10

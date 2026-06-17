@@ -616,25 +616,30 @@ export class NgxExtendedPdfViewerService {
   /**
    * Returns all editor annotations (drawings, text, images, highlights) in serialized format.
    *
-   * **IMPORTANT - ID Behavior:**
-   * - Each annotation includes an `id` field for real-time event tracking via `annotationEditorEvent`
-   * - When re-applying annotations using `addEditorAnnotation()`, **new IDs are always assigned**
-   * - IDs are **not persistent** across sessions - they are temporary identifiers
-   * - If you need to store annotations for later use, you can safely **omit the `id` field**
+   * **Two kinds of identifier:**
+   * - `id` — a **temporary** identifier (`pdfjs_internal_editor_N`) regenerated
+   *   every session. Useful for live event tracking via `annotationEditorEvent`,
+   *   but it is **not** stable, so do not persist it.
+   * - `customId` — a **stable**, developer-supplied identifier (e.g. a UUID).
+   *   It is only present if you set it (see below). Unlike `id`, it survives the
+   *   `getSerializedAnnotations()` → store → `addEditorAnnotation()` round-trip,
+   *   so it is the field to rely on when correlating saved annotations.
    *
-   * **Example - Storing and Re-applying Annotations:**
+   * **Example - Stable IDs across sessions (#3225):**
    * ```typescript
-   * // Save annotations (IDs are optional to store)
-   * const annotations = pdfService.getSerializedAnnotations();
-   * const toStore = annotations.map(({ id, ...rest }) => rest); // Remove IDs
+   * // First save: assign your own stable id to each annotation.
+   * const annotations = pdfService.getSerializedAnnotations() ?? [];
+   * const toStore = annotations.map((a) => ({ ...a, customId: a.customId ?? crypto.randomUUID() }));
    * localStorage.setItem('annotations', JSON.stringify(toStore));
    *
-   * // Re-apply annotations (new IDs will be assigned automatically)
-   * const stored = JSON.parse(localStorage.getItem('annotations'));
+   * // Restore: customId is preserved (the temporary `id` is regenerated).
+   * const stored = JSON.parse(localStorage.getItem('annotations')!);
    * await pdfService.addEditorAnnotation(stored);
+   * // getSerializedAnnotations() now returns the same customId values.
    * ```
    *
-   * @returns Array of serialized annotations with temporary IDs, or null if no annotations exist
+   * @returns Array of serialized annotations (each with a temporary `id`, plus a
+   *          stable `customId` if you assigned one), or null if none exist
    */
   public getSerializedAnnotations(): EditorAnnotation[] | null | undefined {
     // #2424 modified by ngx-extended-pdf-viewer
@@ -647,15 +652,14 @@ export class NgxExtendedPdfViewerService {
 
   // #3076 added by ngx-extended-pdf-viewer
   /**
-   * Returns a single editor annotation by its ID.
+   * Returns a single editor annotation by its identifier.
    *
-   * **IMPORTANT - ID Behavior:**
-   * - IDs are temporary and only valid during the current session
-   * - Useful for responding to `annotationEditorEvent` events
-   * - Do not rely on IDs to persist across document reloads or sessions
+   * Matches against **both** identifiers, so you can look an annotation up by
+   * either the temporary `id` (e.g. the one carried by an `annotationEditorEvent`)
+   * or the stable `customId` you assigned (see {@link getSerializedAnnotations}).
    *
-   * @param id The temporary unique identifier of the annotation (from `annotationEditorEvent` or `getSerializedAnnotations()`)
-   * @returns The serialized annotation matching the ID, or null if not found
+   * @param id The annotation's temporary `id` or its stable `customId`
+   * @returns The serialized annotation matching the identifier, or null if not found
    */
   public getSerializedAnnotation(id: string): EditorAnnotation | null | undefined {
     // #2424: use our wrapper which auto-commits active editors
@@ -663,18 +667,23 @@ export class NgxExtendedPdfViewerService {
     if (!annotations || !Array.isArray(annotations)) {
       return null;
     }
-    return annotations.find((annotation) => annotation.id === id) || null;
+    // #3225 match on the stable customId as well as the temporary id. The
+    // `customId != null` guard keeps a nullish query from matching annotations
+    // that simply have no customId (preserves the #3076 `id`-only behavior).
+    return annotations.find((annotation) => annotation.id === id || (annotation.customId != null && annotation.customId === id)) || null;
   }
   // #3076 end of modification by ngx-extended-pdf-viewer
 
   /**
    * Programmatically adds one or more editor annotations to the PDF.
    *
-   * **IMPORTANT - ID Behavior:**
-   * - Any `id` fields in the provided annotations are **ignored**
-   * - New unique IDs are always assigned automatically
-   * - This ensures no ID conflicts occur
-   * - The `id` field is optional when calling this method
+   * **ID Behavior:**
+   * - The temporary `id` field is **ignored** - a fresh internal id is always
+   *   assigned, so no id conflicts can occur.
+   * - The stable `customId` field, if present, is **preserved** (#3225). Set it
+   *   to your own value (e.g. a UUID) before storing, and the restored
+   *   annotation keeps it - `getSerializedAnnotations()` will return it again.
+   *   Uniqueness of `customId` values is your responsibility.
    *
    * **Supported Annotation Types:**
    * - Ink (drawings)
@@ -702,8 +711,9 @@ export class NgxExtendedPdfViewerService {
    *   value: 'Hello',
    *   pageIndex: 0,
    *   rect: [100, 100, 200, 150],
-   *   rotation: 0
-   *   // id field is optional and will be ignored if provided
+   *   rotation: 0,
+   *   // `id` is ignored; set `customId` if you want a stable id that survives the round-trip
+   *   customId: 'a3f1c2e0-...'
    * });
    */
   public async addEditorAnnotation(serializedAnnotation: string | EditorAnnotation): Promise<void> {
