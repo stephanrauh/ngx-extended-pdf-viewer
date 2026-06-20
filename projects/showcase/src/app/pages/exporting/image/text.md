@@ -1,4 +1,4 @@
-You can export the PDF file as an image. Note that the text of the PDF usually scales smoothlessly; you can print it with high resolution. However, the images embedded in the PDF file usually don't scale as gracefully.
+You can export the PDF file as an image. Note that the text of the PDF usually scales smoothly; you can print it with high resolution. However, the images embedded in the PDF file usually don't scale as gracefully.
 
 ## HTML
 
@@ -16,13 +16,12 @@ You can export the PDF file as an image. Note that the text of the PDF usually s
 ```typescript
 constructor(private pdfViewerService: NgxExtendedPdfViewerService) {}
 
-public exportAsImage(): void {
-  const scale = {width: this.width}; 
+public async exportAsImage(): Promise<void> {
+  const scale = {width: this.width};
   // or: scale = {height: this.height};
   // or: scale = {scale: this.scale};
-  this.pdfViewerService.getPageAsImage(1, scale, (dataURL) =>
-    this.showImage(dataURL)
-  );
+  const dataURL = await this.pdfViewerService.getPageAsImage(1, scale);
+  this.showImage(dataURL);
 }
 
 private showImage(dataURL: any): void {

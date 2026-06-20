@@ -28,6 +28,30 @@ export interface PDFExportScaleFactor {
   scale?: number;
 }
 
+/**
+ * A rectangular region of a page, expressed in normalized, page-relative
+ * coordinates. Every value is a fraction between 0 and 1, measured from the
+ * top-left corner of the page (x grows to the right, y grows downwards).
+ *
+ * This is exactly the coordinate system used by the annotation editor events
+ * (`annotationEditorEvent`): the `x`, `y`, `width` and `height` of an editor are
+ * the same 0..1 fractions. So you can feed an editor's rectangle straight into
+ * {@link NgxExtendedPdfViewerService.getPageAsCanvas} / `getPageAsImage` to take
+ * a screenshot of just that annotation.
+ *
+ * Example: the upper-left quarter of a page is `{ x: 0, y: 0, width: 0.5, height: 0.5 }`.
+ */
+export interface PdfPageCropBox {
+  /** Distance of the left edge from the left of the page, as a fraction (0..1). */
+  x: number;
+  /** Distance of the top edge from the top of the page, as a fraction (0..1). */
+  y: number;
+  /** Width of the region, as a fraction of the page width (0..1). */
+  width: number;
+  /** Height of the region, as a fraction of the page height (0..1). */
+  height: number;
+}
+
 type DirectionType = 'ltr' | 'rtl' | 'both' | undefined;
 
 export interface PdfImageParameters {
@@ -366,29 +390,56 @@ export class NgxExtendedPdfViewerService {
       .join('');
   }
 
+  /**
+   * Renders a single page to an off-screen `<canvas>`.
+   *
+   * @param pageNumber 1-based page number to render.
+   * @param scale How large the rendered page should be. Provide exactly one of
+   *        `width`, `height` (both in pixels) or `scale` (a zoom factor, e.g. `2`).
+   * @param background Optional CSS color painted behind the page (e.g. `'rgba(255,0,0,0.3)'`).
+   * @param backgroundColorToReplace The page background color that is replaced by `background`. Defaults to white.
+   * @param annotationMode Which annotations to render. Defaults to `AnnotationMode.ENABLE`.
+   * @param cropBox Optional region to crop to, in normalized 0..1 page-relative
+   *        coordinates (top-left origin). When set, only that part of the page is
+   *        returned. This matches the coordinate system of the annotation editor
+   *        events, so you can pass an editor's `{ x, y, width, height }` directly
+   *        to screenshot a single annotation. See {@link PdfPageCropBox}.
+   * @returns The rendered (and optionally cropped) canvas, or `undefined` if no document is loaded.
+   */
   public async getPageAsCanvas(
     pageNumber: number,
     scale: PDFExportScaleFactor,
     background?: string,
     backgroundColorToReplace: string = '#FFFFFF',
     annotationMode: AnnotationMode = AnnotationMode.ENABLE,
+    cropBox?: PdfPageCropBox,
   ): Promise<HTMLCanvasElement | undefined> {
     if (!this.PDFViewerApplication) {
       return undefined;
     }
     const pdfDocument = this.PDFViewerApplication.pdfDocument;
     const pdfPage = await pdfDocument.getPage(pageNumber);
-    return this.draw(pdfPage, scale, background, backgroundColorToReplace, annotationMode);
+    return this.draw(pdfPage, scale, background, backgroundColorToReplace, annotationMode, cropBox);
   }
 
+  /**
+   * Renders a single page and returns it as a PNG data URL.
+   *
+   * Same parameters as {@link NgxExtendedPdfViewerService.getPageAsCanvas}; in
+   * particular `cropBox` lets you export just a sub-region (e.g. a single
+   * annotation) using normalized 0..1 page-relative coordinates.
+   *
+   * @returns A `data:image/png;base64,...` string, or `undefined` if no document is loaded.
+   */
   public async getPageAsImage(
     pageNumber: number,
     scale: PDFExportScaleFactor,
     background?: string,
     backgroundColorToReplace: string = '#FFFFFF',
     annotationMode: AnnotationMode = AnnotationMode.ENABLE,
+    cropBox?: PdfPageCropBox,
   ): Promise<string | undefined> {
-    const canvas = await this.getPageAsCanvas(pageNumber, scale, background, backgroundColorToReplace, annotationMode);
+    const canvas = await this.getPageAsCanvas(pageNumber, scale, background, backgroundColorToReplace, annotationMode, cropBox);
     return canvas?.toDataURL();
   }
 
@@ -398,6 +449,7 @@ export class NgxExtendedPdfViewerService {
     background?: string,
     backgroundColorToReplace: string = '#FFFFFF',
     annotationMode: AnnotationMode = AnnotationMode.ENABLE,
+    cropBox?: PdfPageCropBox,
   ): Promise<HTMLCanvasElement> {
     let zoomFactor = 1;
     if (scale.scale) {
@@ -422,9 +474,23 @@ export class NgxExtendedPdfViewerService {
     };
     const renderTask = pdfPage.render(renderContext);
 
-    const dataUrlPromise = () => Promise.resolve(canvas);
+    const result = () => (cropBox ? this.cropCanvas(canvas, cropBox) : canvas);
 
-    return renderTask.promise.then(dataUrlPromise);
+    return renderTask.promise.then(result);
+  }
+
+  /**
+   * Returns a new canvas containing only the region described by `cropBox`
+   * (normalized 0..1 page-relative coordinates, top-left origin) of `source`.
+   */
+  private cropCanvas(source: HTMLCanvasElement, cropBox: PdfPageCropBox): HTMLCanvasElement {
+    const sx = Math.round(cropBox.x * source.width);
+    const sy = Math.round(cropBox.y * source.height);
+    const sw = Math.max(1, Math.round(cropBox.width * source.width));
+    const sh = Math.max(1, Math.round(cropBox.height * source.height));
+    const { ctx, canvas } = this.getPageDrawContext(sw, sh);
+    ctx.drawImage(source, sx, sy, sw, sh, 0, 0, sw, sh);
+    return canvas;
   }
 
   private getPageDrawContext(width: number, height: number): DrawContext {
