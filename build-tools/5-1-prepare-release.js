@@ -51,8 +51,14 @@ runCommand('node ./build-tools/release/check-commit-state.js', 'Error 51: check-
 console.log('\n🧪 Running Jest tests in ngx-extended-pdf-viewer...');
 runCommand('npm test', 'Error 52: Jest tests failed', 52);
 
-console.log('\n🧪 Running Playwright compatibility tests (Angular 19–22)...');
-runCommand('npm run test:compat', 'Error 53: Playwright compatibility tests failed', 53);
+// The compatibility matrix needs Docker. Set SKIP_COMPAT=1 to bypass it on
+// machines without a working Docker daemon (CI still runs the full matrix).
+if (process.env.SKIP_COMPAT === '1') {
+  console.log('\n⏭️  Skipping Playwright compatibility tests (SKIP_COMPAT=1)');
+} else {
+  console.log('\n🧪 Running Playwright compatibility tests (Angular 19–22)...');
+  runCommand('npm run test:compat', 'Error 53: Playwright compatibility tests failed', 53);
+}
 
 console.log('\n🧪 Running Playwright tests of the showcase...');
 process.chdir(path.join('..', 'extended-pdf-viewer-showcase'));

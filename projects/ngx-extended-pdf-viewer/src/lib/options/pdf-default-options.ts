@@ -119,11 +119,19 @@ export const pdfDefaultOptions = {
   workerPort: null as any,
   assetsFolder: 'assets',
   _internalFilenameSuffix: '.min', // don't modify this - it's an internal field
+  // #3232: unlike workerSrc, this path was missing the assets-folder prefix
+  // (`./pdf.sandbox-…` instead of `./assets/pdf.sandbox-…`). It used to work by
+  // accident because pdf.js's dynamic `import()` resolved the bare specifier
+  // relative to the viewer module (which lives in the assets folder). Once
+  // #3209 started resolving against `document.baseURI` (the page root), the
+  // missing folder made it 404 at the site root, so the scripting sandbox no
+  // longer loaded and JS embedded in PDFs stopped running. Prefix the folder
+  // like workerSrc does so it resolves to the file that actually ships.
   sandboxBundleSrc: function () {
     return resolveAssetUrlAgainstBaseHref(
       pdfDefaultOptions.needsES5
-        ? `./pdf.sandbox-${getVersionSuffix(assetsUrl(pdfDefaultOptions.assetsFolder))}-es5.mjs`
-        : `./pdf.sandbox-${getVersionSuffix(assetsUrl(pdfDefaultOptions.assetsFolder))}${pdfDefaultOptions._internalFilenameSuffix}.mjs`
+        ? `${assetsUrl(pdfDefaultOptions.assetsFolder)}/pdf.sandbox-${getVersionSuffix(assetsUrl(pdfDefaultOptions.assetsFolder))}-es5.mjs`
+        : `${assetsUrl(pdfDefaultOptions.assetsFolder)}/pdf.sandbox-${getVersionSuffix(assetsUrl(pdfDefaultOptions.assetsFolder))}${pdfDefaultOptions._internalFilenameSuffix}.mjs`
     );
   },
   workerSrc: function () {

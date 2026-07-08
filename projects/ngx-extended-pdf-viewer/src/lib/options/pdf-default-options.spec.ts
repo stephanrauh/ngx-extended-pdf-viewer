@@ -435,6 +435,11 @@ describe('PDF Default Options Utility Functions', () => {
         const result = pdfDefaultOptions.sandboxBundleSrc();
         expect(result).toContain('pdf.sandbox');
         expect(result).toContain('.mjs');
+        // #3232: the sandbox path must include the assets folder, exactly like
+        // workerSrc. It previously omitted it ("./pdf.sandbox-…"), which #3209
+        // then resolved to the site root and 404'd, so PDF scripting stopped
+        // working. Assert the folder is present to lock the fix in.
+        expect(result).toContain('assets/pdf.sandbox');
       });
 
       it('should return correct workerSrc', () => {
