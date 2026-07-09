@@ -43,6 +43,8 @@ testem.log
 Thumbs.db
 
 *.pdf
+# ...but the compatibility-test fixture PDF must be committed:
+!/compatibility-tests/common/demo/public/assets/pdfs/*.pdf
 **/VG-2021-07-19.pdf
 
 # generated files
