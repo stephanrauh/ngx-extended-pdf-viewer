@@ -17,10 +17,17 @@
  *   *before* the resize. For the current rectangle read it from the live editor:
  *   `event.source.x / .y / .width / .height`.
  *
+ * These raw `x`/`y`/`width`/`height` are stored in whatever rotation the page had
+ * when the annotation was added (for 90°/270° the axes are swapped and `y` is the
+ * bottom edge). For a rotation-independent rectangle in the page's un-rotated
+ * frame — e.g. to take a screenshot — read `event.source.normalizedPageRect`
+ * instead, and hand it straight to
+ * `NgxExtendedPdfViewerService.getPageAsCanvas(page, scale, ..., cropBox)`.
+ *
  * To convert these fractions:
  * - **to canvas pixels** (e.g. for a screenshot): multiply by the canvas width/height (no flip needed,
- *   both use a top-left origin). You can also hand the rectangle straight to
- *   `NgxExtendedPdfViewerService.getPageAsCanvas(page, scale, ..., cropBox)`.
+ *   both use a top-left origin). Prefer `event.source.normalizedPageRect` as the
+ *   `cropBox` so rotated pages work too.
  * - **to PDF user-space points** (bottom-left origin): use
  *   `pdfPage.getViewport({ scale }).convertToViewportRectangle(...)` or call
  *   `event.source.getRect(0, 0)`.

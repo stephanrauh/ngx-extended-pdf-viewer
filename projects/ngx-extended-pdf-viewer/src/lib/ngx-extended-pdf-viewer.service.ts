@@ -29,15 +29,17 @@ export interface PDFExportScaleFactor {
 }
 
 /**
- * A rectangular region of a page, expressed in normalized, page-relative
- * coordinates. Every value is a fraction between 0 and 1, measured from the
- * top-left corner of the page (x grows to the right, y grows downwards).
+ * A rectangular region of a page, expressed in normalized coordinates on the
+ * page's *un-rotated* frame. Every value is a fraction between 0 and 1, measured
+ * from the top-left corner of the un-rotated page (x grows to the right, y grows
+ * downwards).
  *
- * This is exactly the coordinate system used by the annotation editor events
- * (`annotationEditorEvent`): the `x`, `y`, `width` and `height` of an editor are
- * the same 0..1 fractions. So you can feed an editor's rectangle straight into
- * {@link NgxExtendedPdfViewerService.getPageAsCanvas} / `getPageAsImage` to take
- * a screenshot of just that annotation.
+ * To screenshot a single annotation, use the editor's rotation-independent
+ * rectangle `event.source.normalizedPageRect` (from the `annotationEditorEvent`),
+ * which is already in this coordinate system. Note that the editor's raw
+ * `x`/`y`/`width`/`height` are **not** suitable here: they are stored in whatever
+ * rotation the page had when the annotation was added (axes swapped for 90°/270°),
+ * so they only match this frame when the annotation was added un-rotated.
  *
  * Example: the upper-left quarter of a page is `{ x: 0, y: 0, width: 0.5, height: 0.5 }`.
  */
@@ -51,6 +53,16 @@ export interface PdfPageCropBox {
   /** Height of the region, as a fraction of the page height (0..1). */
   height: number;
 }
+
+/**
+ * Rotation (in degrees, clockwise) to render a page at, e.g. when exporting it
+ * via {@link NgxExtendedPdfViewerService.getPageAsCanvas} /
+ * {@link NgxExtendedPdfViewerService.getPageAsImage}. Overrides the rotation the
+ * user applied in the viewer. `0` gives the page in its authored orientation
+ * regardless of how the user rotated it; `90`/`180`/`270` force that rotation.
+ * Omit it to follow the user's current on-screen rotation.
+ */
+export type PdfPageRotation = 0 | 90 | 180 | 270;
 
 type DirectionType = 'ltr' | 'rtl' | 'both' | undefined;
 
@@ -398,12 +410,25 @@ export class NgxExtendedPdfViewerService {
    *        `width`, `height` (both in pixels) or `scale` (a zoom factor, e.g. `2`).
    * @param background Optional CSS color painted behind the page (e.g. `'rgba(255,0,0,0.3)'`).
    * @param backgroundColorToReplace The page background color that is replaced by `background`. Defaults to white.
-   * @param annotationMode Which annotations to render. Defaults to `AnnotationMode.ENABLE`.
-   * @param cropBox Optional region to crop to, in normalized 0..1 page-relative
-   *        coordinates (top-left origin). When set, only that part of the page is
-   *        returned. This matches the coordinate system of the annotation editor
-   *        events, so you can pass an editor's `{ x, y, width, height }` directly
-   *        to screenshot a single annotation. See {@link PdfPageCropBox}.
+   * @param annotationMode Which annotations to render. Defaults to
+   *        `AnnotationMode.ENABLE_STORAGE`, so the screenshot includes what you
+   *        see on screen: saved annotations, current form-field values, and
+   *        annotations you just added with the editor (e.g. an image stamp) that
+   *        haven't been saved into the PDF yet. Pass `AnnotationMode.ENABLE` to
+   *        get only the annotations already baked into the document, or
+   *        `AnnotationMode.DISABLE` for none.
+   * @param cropBox Optional region to crop to, in normalized 0..1 coordinates on
+   *        the page's *un-rotated* frame (top-left origin). When set, only that
+   *        part of the page is returned; the crop is rotated to follow the
+   *        rendered rotation for you. To screenshot a single annotation, pass the
+   *        editor's rotation-independent rectangle: `event.source.normalizedPageRect`
+   *        (do **not** pass the raw `x`/`y`/`width`/`height`, which are stored in
+   *        the rotation the annotation was added at). See {@link PdfPageCropBox}.
+   * @param rotation Optional rotation override (`0`, `90`, `180` or `270`). By
+   *        default the screenshot follows the rotation the user applied in the
+   *        viewer. Pass `0` to always get the page in its authored orientation
+   *        regardless of the user's rotation, or `90`/`180`/`270` to force a
+   *        specific rotation. See {@link PdfPageRotation}.
    * @returns The rendered (and optionally cropped) canvas, or `undefined` if no document is loaded.
    */
   public async getPageAsCanvas(
@@ -411,15 +436,16 @@ export class NgxExtendedPdfViewerService {
     scale: PDFExportScaleFactor,
     background?: string,
     backgroundColorToReplace: string = '#FFFFFF',
-    annotationMode: AnnotationMode = AnnotationMode.ENABLE,
+    annotationMode: AnnotationMode = AnnotationMode.ENABLE_STORAGE,
     cropBox?: PdfPageCropBox,
+    rotation?: PdfPageRotation,
   ): Promise<HTMLCanvasElement | undefined> {
     if (!this.PDFViewerApplication) {
       return undefined;
     }
     const pdfDocument = this.PDFViewerApplication.pdfDocument;
     const pdfPage = await pdfDocument.getPage(pageNumber);
-    return this.draw(pdfPage, scale, background, backgroundColorToReplace, annotationMode, cropBox);
+    return this.draw(pdfPage, scale, background, backgroundColorToReplace, annotationMode, cropBox, rotation);
   }
 
   /**
@@ -436,10 +462,11 @@ export class NgxExtendedPdfViewerService {
     scale: PDFExportScaleFactor,
     background?: string,
     backgroundColorToReplace: string = '#FFFFFF',
-    annotationMode: AnnotationMode = AnnotationMode.ENABLE,
+    annotationMode: AnnotationMode = AnnotationMode.ENABLE_STORAGE,
     cropBox?: PdfPageCropBox,
+    rotation?: PdfPageRotation,
   ): Promise<string | undefined> {
-    const canvas = await this.getPageAsCanvas(pageNumber, scale, background, backgroundColorToReplace, annotationMode, cropBox);
+    const canvas = await this.getPageAsCanvas(pageNumber, scale, background, backgroundColorToReplace, annotationMode, cropBox, rotation);
     return canvas?.toDataURL();
   }
 
@@ -448,20 +475,33 @@ export class NgxExtendedPdfViewerService {
     scale: PDFExportScaleFactor,
     background?: string,
     backgroundColorToReplace: string = '#FFFFFF',
-    annotationMode: AnnotationMode = AnnotationMode.ENABLE,
+    annotationMode: AnnotationMode = AnnotationMode.ENABLE_STORAGE,
     cropBox?: PdfPageCropBox,
+    rotationOverride?: PdfPageRotation,
   ): Promise<HTMLCanvasElement> {
+    // #3234 modified by ngx-extended-pdf-viewer
+    // Render the page in its current on-screen orientation. getViewport() only
+    // defaults to the page's intrinsic /Rotate; it ignores the rotation the user
+    // applied in the viewer. Without passing that in, a screenshot of a rotated
+    // page would come out in the un-rotated orientation (#3234). Callers can
+    // override the user's rotation via `rotationOverride` (e.g. pass 0 to always
+    // get the authored orientation); when omitted the user's current rotation wins.
+    const userRotation = rotationOverride ?? this.PDFViewerApplication?.pdfViewer?.pagesRotation ?? 0;
+    const rotation = (userRotation + pdfPage.rotate) % 360;
+
     let zoomFactor = 1;
     if (scale.scale) {
       zoomFactor = scale.scale;
     } else if (scale.width) {
-      zoomFactor = scale.width / pdfPage.getViewport({ scale: 1 }).width;
+      zoomFactor = scale.width / pdfPage.getViewport({ scale: 1, rotation }).width;
     } else if (scale.height) {
-      zoomFactor = scale.height / pdfPage.getViewport({ scale: 1 }).height;
+      zoomFactor = scale.height / pdfPage.getViewport({ scale: 1, rotation }).height;
     }
     const viewport = pdfPage.getViewport({
       scale: zoomFactor,
+      rotation,
     });
+    // #3234 end of modification by ngx-extended-pdf-viewer
     const { ctx, canvas } = this.getPageDrawContext(viewport.width, viewport.height);
     const drawViewport = viewport.clone();
 
@@ -474,9 +514,35 @@ export class NgxExtendedPdfViewerService {
     };
     const renderTask = pdfPage.render(renderContext);
 
-    const result = () => (cropBox ? this.cropCanvas(canvas, cropBox) : canvas);
+    // #3234 modified by ngx-extended-pdf-viewer
+    // The cropBox is expressed in the page's un-rotated coordinate space (e.g. an
+    // editor's `normalizedPageRect`). The canvas above is rendered at `rotation`
+    // degrees, so we rotate the cropBox by the same amount to hit the right region;
+    // otherwise a rotated screenshot crops the wrong part of the page (#3234).
+    const effectiveCropBox = cropBox ? this.rotateCropBox(cropBox, rotation) : undefined;
+    const result = () => (effectiveCropBox ? this.cropCanvas(canvas, effectiveCropBox) : canvas);
+    // #3234 end of modification by ngx-extended-pdf-viewer
 
     return renderTask.promise.then(result);
+  }
+
+  /**
+   * Rotates a normalized (0..1, top-left origin) cropBox from the page's
+   * un-rotated coordinate space into the space of a canvas rendered at
+   * `rotation` degrees clockwise. For 90°/270° the width and height swap axes.
+   */
+  private rotateCropBox(cropBox: PdfPageCropBox, rotation: number): PdfPageCropBox {
+    const { x, y, width, height } = cropBox;
+    switch (((rotation % 360) + 360) % 360) {
+      case 90:
+        return { x: 1 - y - height, y: x, width: height, height: width };
+      case 180:
+        return { x: 1 - x - width, y: 1 - y - height, width, height };
+      case 270:
+        return { x: y, y: 1 - x - width, width: height, height: width };
+      default:
+        return cropBox;
+    }
   }
 
   /**
