@@ -354,6 +354,21 @@ export class AnnotationEditor {
      * @param {number} [rotation] - the rotation of the page.
      */
     getRect(tx: number, ty: number, rotation?: number): any[];
+    /**
+     * The editor's bounding box in the page's un-rotated coordinate space, as
+     * normalized fractions (0..1) with a top-left origin. Unlike `x`/`y`/`width`/
+     * `height` (stored in whatever rotation the page had when the annotation was
+     * added: for 90/270 the axes swap and `y` is the bottom edge), this is
+     * rotation-independent, so it can be handed straight to the ngx service's
+     * getPageAsCanvas() / getPageAsImage() as a cropBox.
+     * @returns {{ x: number, y: number, width: number, height: number }}
+     */
+    get normalizedPageRect(): {
+        x: number;
+        y: number;
+        width: number;
+        height: number;
+    };
     getRectInCurrentCoords(rect: any, pageHeight: any): any[];
     /**
      * Get the rect in page coordinates without any translation.

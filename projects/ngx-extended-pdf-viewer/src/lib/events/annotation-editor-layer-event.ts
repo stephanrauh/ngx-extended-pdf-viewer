@@ -34,8 +34,51 @@
  *
  * See the "Coordinate systems" page of the showcase for a worked example.
  */
+/**
+ * A rectangle in normalized 0..1 coordinates with a top-left origin.
+ */
+export interface NormalizedRect {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+/**
+ * The subset of the underlying pdf.js `AnnotationEditor` instance that is useful
+ * from application code (`event.source`). It is not an exhaustive type — the
+ * index signature keeps every other editor property reachable — but it surfaces
+ * the members you are most likely to read, with IntelliSense.
+ */
+export interface AnnotationEditorSource {
+  /**
+   * The editor's bounding box in the page's **un-rotated** coordinate space,
+   * as normalized 0..1 fractions with a top-left origin. This is the value to
+   * pass as the `cropBox` of
+   * `NgxExtendedPdfViewerService.getPageAsCanvas()` / `getPageAsImage()`.
+   *
+   * Prefer this over the raw `x`/`y`/`width`/`height` below: those are stored in
+   * whatever rotation the page had when the annotation was added (for 90°/270°
+   * the axes are swapped and `y` is the bottom edge), so they only line up with
+   * the page when the annotation was added un-rotated. `normalizedPageRect` is
+   * rotation-independent.
+   */
+  normalizedPageRect: NormalizedRect;
+  /** Left edge, normalized — in the add-time rotation frame (see `normalizedPageRect`). */
+  x: number;
+  /** Top/bottom edge, normalized — in the add-time rotation frame (see `normalizedPageRect`). */
+  y: number;
+  /** Width, normalized — in the add-time rotation frame (see `normalizedPageRect`). */
+  width: number;
+  /** Height, normalized — in the add-time rotation frame (see `normalizedPageRect`). */
+  height: number;
+  /** The editor's rectangle in PDF user-space points (bottom-left origin). */
+  getRect(tx: number, ty: number): [number, number, number, number];
+  [key: string]: any;
+}
+
 export interface AnnotationEditorEvent {
-  source: any; // AnnotationEditor;
+  source: AnnotationEditorSource; // the underlying pdf.js AnnotationEditor
   type:
     | 'altTextChanged'
     | 'removed'
