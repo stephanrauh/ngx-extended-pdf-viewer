@@ -48,7 +48,7 @@
     "@angular/common": "^19.2.25",
     "@angular/compiler": "^19.2.25",
     "@angular/core": "^19.2.25",
-    "@angular/forms": "^19.2.25",
+    "@angular/forms": "^22.0.1",
     "@angular/platform-browser": "^19.2.25",
     "@angular/platform-browser-dynamic": "^19.2.25",
     "@angular/router": "^19.2.25",
