@@ -380,6 +380,48 @@ ngx-extended-pdf-viewer {
       background-color: transparent;
     }
 
+    // pdf.js 6.1: RichMedia / Screen annotations that play embedded media.
+    // Only present in the bleeding-edge (6.1) engine; inert on stable.
+    .mediaAnnotation {
+      pointer-events: auto;
+
+      .mediaContent {
+        width: 100%;
+      }
+
+      video.mediaContent {
+        height: 100%;
+        object-fit: contain;
+      }
+
+      audio.mediaContent {
+        // An <audio> element has a fixed-height control bar; pin it to the
+        // bottom of the section so it lines up with where <video> shows its bar.
+        position: absolute;
+        bottom: 0;
+      }
+
+      .mediaPlayButton {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        border: none;
+        cursor: pointer;
+        background-color: transparent;
+
+        // A centered, semi-transparent play triangle.
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='rgba(0,0,0,0.55)'/%3E%3Cpath d='M40 32 L70 50 L40 68 Z' fill='white'/%3E%3C/svg%3E");
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: calc(48px * var(--total-scale-factor));
+
+        &:hover {
+          background-color: rgba(255 255 255 / 0.1);
+        }
+      }
+    }
+
     .fileAttachmentAnnotation .popupTriggerArea {
       height: 100%;
       width: 100%;

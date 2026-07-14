@@ -41,7 +41,7 @@ import { SidebarviewChange } from './events/sidebarview-changed';
 import { TextLayerRenderedEvent } from './events/textlayer-rendered';
 import { NgxExtendedPdfViewerService } from './ngx-extended-pdf-viewer.service';
 import { PdfCursorTools } from './options/pdf-cursor-tools';
-import { assetsUrl, getVersionSuffix, pdfDefaultOptions } from './options/pdf-default-options';
+import { assetsUrl, getVersionSuffix, isPdfjsVersionAtLeast, pdfDefaultOptions } from './options/pdf-default-options';
 import { PageViewModeType, ScrollModeChangedEvent, ScrollModeType } from './options/pdf-viewer';
 import { IPDFViewerApplication, PDFDocumentProxy, PDFPageProxy } from './options/pdf-viewer-application';
 import { IPDFViewerApplicationOptions } from './options/pdf-viewer-application-options';
@@ -162,6 +162,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   public showFreeFloatingBar = input(true);
 
   public enableDragAndDrop = input(true);
+
+  /**
+   * pdf.js 6.1 option: when `false`, hides the download and save buttons AND
+   * disables the download manager entirely — a hard "no saving" lock, stronger
+   * than just hiding the button via `showDownloadButton`. Only applied when the
+   * loaded engine is pdf.js 6.1 or newer; a no-op on older engines.
+   */
+  public supportsDownloading = input(true);
 
   public forceUsingLegacyES5 = input(false);
 
@@ -2036,6 +2044,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
           PDFViewerApplicationOptions.set('pageViewMode', this.pageViewMode());
           PDFViewerApplicationOptions.set('verbosity', this.logLevel());
           PDFViewerApplicationOptions.set('pdfBackgroundColor', this.pdfBackgroundColor());
+          // The supportsDownloading option was introduced in pdf.js 6.1; gate on
+          // the engine version (not the bleeding-edge flag, which is a moving
+          // target) so it also applies once stable reaches 6.1.
+          if (isPdfjsVersionAtLeast(6, 1)) {
+            PDFViewerApplicationOptions.set('supportsDownloading', this.supportsDownloading());
+          }
           // #3115 modified by ngx-extended-pdf-viewer
           // Apply color-scheme to the viewer host element instead of letting
           // PDF.js write it to document.documentElement, which would override

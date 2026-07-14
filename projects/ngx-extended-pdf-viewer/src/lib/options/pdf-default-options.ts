@@ -39,6 +39,21 @@ export function isBleedingEdge(): boolean {
   return pdfDefaultOptions.assetsFolder?.includes('bleeding-edge');
 }
 
+/**
+ * True when the pdf.js engine that will be loaded is at least the given
+ * `major.minor` version. Prefer this over {@link isBleedingEdge} for gating a
+ * feature: the bleeding-edge/stable split is a moving target (stable advances
+ * over time), whereas a feature is permanently tied to the pdf.js version that
+ * introduced it. The version is derived from the bundle that `assetsFolder`
+ * selects (`getVersionSuffix`).
+ */
+export function isPdfjsVersionAtLeast(major: number, minor: number): boolean {
+  const [maj = 0, min = 0] = getVersionSuffix(pdfDefaultOptions.assetsFolder)
+    .split('.')
+    .map((part) => parseInt(part, 10) || 0);
+  return maj > major || (maj === major && min >= minor);
+}
+
 declare const process: any;
 
 function isTestEnvironment(): boolean {
