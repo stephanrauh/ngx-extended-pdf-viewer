@@ -597,8 +597,17 @@ export class NgxExtendedPdfViewerService {
         .map((a) => ({ ...a })) // only expose copies of the annotations to avoid side-effects
         .forEach((a) => {
           // get the rectangle that represent the single field
-          // and resize it according to the current DPI
-          const fieldRect: Array<number> = currentPage.getViewport({ scale: dpiRatio }).convertToViewportRectangle(a.rect);
+          // and resize it according to the current DPI.
+          // pdf.js 6.1 removed PageViewport.convertToViewportRectangle, so inline
+          // the equivalent: apply the viewport transform to both rect corners.
+          const { transform } = currentPage.getViewport({ scale: dpiRatio });
+          const toViewport = (x: number, y: number): [number, number] => [
+            x * transform[0] + y * transform[2] + transform[4],
+            x * transform[1] + y * transform[3] + transform[5],
+          ];
+          const [vx1, vy1] = toViewport(a.rect[0], a.rect[1]);
+          const [vx2, vy2] = toViewport(a.rect[2], a.rect[3]);
+          const fieldRect: Array<number> = [vx1, vy1, vx2, vy2];
 
           // add the corresponding input
           if (currentFormValues && a.fieldName) {
