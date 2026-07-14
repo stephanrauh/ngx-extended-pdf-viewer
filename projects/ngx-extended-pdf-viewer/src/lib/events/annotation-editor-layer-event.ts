@@ -28,9 +28,10 @@
  * - **to canvas pixels** (e.g. for a screenshot): multiply by the canvas width/height (no flip needed,
  *   both use a top-left origin). Prefer `event.source.normalizedPageRect` as the
  *   `cropBox` so rotated pages work too.
- * - **to PDF user-space points** (bottom-left origin): use
- *   `pdfPage.getViewport({ scale }).convertToViewportRectangle(...)` or call
- *   `event.source.getRect(0, 0)`.
+ * - **to PDF user-space points** (bottom-left origin): call
+ *   `event.source.getRect(0, 0)`. (On the stable/6.0 engine you can also use
+ *   `pdfPage.getViewport({ scale }).convertToViewportRectangle(...)`, but pdf.js
+ *   6.1 removed that method.)
  *
  * See the "Coordinate systems" page of the showcase for a worked example.
  */

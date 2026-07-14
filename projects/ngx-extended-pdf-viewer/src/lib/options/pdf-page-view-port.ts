@@ -33,6 +33,11 @@ export interface PageViewport {
    * @returns {Array} Array containing corresponding coordinates of the
    *   rectangle in the viewport coordinate space.
    * @see {@link convertToViewportPoint}
+   *
+   * @deprecated Removed in pdf.js 6.1; still available on the stable (6.0)
+   * engine. On 6.1+ apply the viewport `transform` to both corners yourself:
+   * `Util.applyTransform([rect[0], rect[1]], viewport.transform)` (and the
+   * `[rect[2], rect[3]]` corner), or read `viewport.transform` directly.
    */
   convertToViewportRectangle(rect: any[]): any[];
   /**
