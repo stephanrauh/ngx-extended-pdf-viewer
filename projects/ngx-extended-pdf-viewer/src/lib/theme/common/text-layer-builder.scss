@@ -230,10 +230,19 @@ ngx-extended-pdf-viewer {
     }
 
     ::selection {
-      // pdf.js v6 (bug 1879559): text selection visibility now relies on
-      // the `.canvasWrapper > .selection` overlay (see draw_layer_builder),
-      // so the browser-default selection tint is turned off here.
+      // pdf.js 6.1: show a translucent native selection tint by default; it is
+      // only suppressed (below) when draw-layer selection rendering is active,
+      // in favour of the `.canvasWrapper > .selection` overlay (bug 1879559).
+      /* stylelint-disable declaration-block-no-duplicate-properties */
+      background: rgba(0 0 255 / 0.25);
+      /* stylelint-enable declaration-block-no-duplicate-properties */
+      background: color-mix(in srgb, AccentColor, transparent 50%);
+      color: transparent;
+    }
+
+    &.selectionRendering ::selection {
       background: transparent;
+      color: transparent;
     }
 
     /* Avoids https://github.com/mozilla/pdf.js/issues/13840 in Chrome */
