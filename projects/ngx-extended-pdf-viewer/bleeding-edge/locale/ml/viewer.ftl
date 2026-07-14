@@ -479,6 +479,21 @@ pdfjs-editor-add-signature-cancel-button = റദ്ദാക്കുക
 pdfjs-editor-add-signature-add-button = ചേൎക്കുക
 pdfjs-editor-edit-signature-update-button = പുതുക്കുക
 
+##  Edit a comment dialog
+
+pdfjs-editor-edit-comment-dialog-cancel-button = റദ്ദാക്കുക
+
+## The view manager is a sidebar displaying different views:
+##  - thumbnails;
+##  - outline;
+##  - attachments;
+##  - layers.
+## The thumbnails view is used to edit the pdf: remove/insert pages, ...
+
+pdfjs-views-manager-status-close-button =
+    .title = അടയ്ക്കുക
+pdfjs-views-manager-status-close-button-label = അടയ്ക്കുക
+
 ## Main menu for adding/removing signatures
 
 pdfjs-editor-delete-signature-button1 =
@@ -607,7 +622,6 @@ pdfjs-editor-edit-comment-dialog-title-when-adding = Add comment
 pdfjs-editor-edit-comment-dialog-save-button-when-adding = Add
 pdfjs-editor-edit-comment-dialog-text-input =
     .placeholder = Start typing…
-pdfjs-editor-edit-comment-dialog-cancel-button = Cancel
 pdfjs-editor-add-comment-button =
     .title = Add comment
 pdfjs-toggle-views-manager-button1 =
@@ -669,9 +683,6 @@ pdfjs-views-manager-status-warning-delete-label = Couldn’t delete. Refresh pag
 pdfjs-views-manager-status-warning-save-label = Couldn’t save. Refresh page and try again.
 pdfjs-views-manager-status-undo-button-label = Undo
 pdfjs-views-manager-status-done-button-label = Done
-pdfjs-views-manager-status-close-button =
-    .title = Close
-pdfjs-views-manager-status-close-button-label = Close
 pdfjs-views-manager-paste-button-label = Paste
 pdfjs-views-manager-paste-button-before =
     .title = Paste before the first page
