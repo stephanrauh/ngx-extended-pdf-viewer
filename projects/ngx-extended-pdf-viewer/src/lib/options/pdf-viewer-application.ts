@@ -37,7 +37,7 @@ export interface PDFFindParameters {
   findPrevious: boolean;
   highlightAll?: boolean;
   matchDiacritics?: boolean;
-  findMultiple?: boolean;
+  findMultiple?: boolean | undefined;
   matchRegExp?: boolean;
   query: string | string[] | RegExp;
   source: any;

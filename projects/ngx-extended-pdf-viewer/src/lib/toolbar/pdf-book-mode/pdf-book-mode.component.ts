@@ -19,7 +19,7 @@ export class PdfBookModeComponent implements OnDestroy {
 
   public scrollMode = input.required<ScrollModeType>();
 
-  public onClick?: () => void;
+  public onClick?: (() => void) | undefined;
 
   constructor(private readonly cdr: ChangeDetectorRef) {
     this.onClick = () => {

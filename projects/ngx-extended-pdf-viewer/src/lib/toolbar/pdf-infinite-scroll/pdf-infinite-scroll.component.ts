@@ -22,7 +22,7 @@ export class PdfInfiniteScrollComponent implements OnDestroy {
 
   public scrollMode = input.required<ScrollModeType>();
 
-  public onClick?: () => void;
+  public onClick?: (() => void) | undefined;
 
   private PDFViewerApplication: IPDFViewerApplication | undefined;
 

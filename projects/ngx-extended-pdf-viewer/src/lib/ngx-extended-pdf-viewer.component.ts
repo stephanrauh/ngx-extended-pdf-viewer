@@ -599,7 +599,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   public autoHeight = false;
 
   // Protected backing fields
-  protected _minHeight?: string;
+  protected _minHeight?: string | undefined;
   protected _height: string | undefined = '100%';
 
   // Public getters and setters for NgxHasHeight interface

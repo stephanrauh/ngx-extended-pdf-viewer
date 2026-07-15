@@ -14,9 +14,9 @@ export interface PdfShyButtonDescription {
   disabled: boolean;
   order: number;
   image: string | undefined;
-  action?: () => void;
-  eventBusName?: string;
-  closeOnClick?: boolean;
+  action?: (() => void) | undefined;
+  eventBusName?: string | undefined;
+  closeOnClick?: boolean | undefined;
 }
 
 @Injectable({

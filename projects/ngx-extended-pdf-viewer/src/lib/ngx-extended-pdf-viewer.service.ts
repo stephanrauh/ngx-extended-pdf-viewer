@@ -115,7 +115,7 @@ export class NgxExtendedPdfViewerService {
   public secondaryMenuIsEmpty = signal(false);
 
   private readonly renderer: Renderer2;
-  private PDFViewerApplication?: IPDFViewerApplication;
+  private PDFViewerApplication?: IPDFViewerApplication | undefined;
 
   constructor(
     private readonly rendererFactory: RendererFactory2,
@@ -508,7 +508,9 @@ export class NgxExtendedPdfViewerService {
     const renderContext = {
       canvasContext: ctx,
       viewport: drawViewport,
-      background,
+      // Omit `background` when undefined: pdf.js's RenderParameters types it as
+      // `string | Object` (no `undefined`), which trips exactOptionalPropertyTypes.
+      ...(background !== undefined && { background }),
       backgroundColorToReplace,
       annotationMode,
     };

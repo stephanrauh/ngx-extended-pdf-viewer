@@ -22,7 +22,7 @@ export class PdfVerticalScrollModeComponent implements OnDestroy {
 
   public pageViewMode = model.required<PageViewModeType>();
 
-  public onClick?: () => void;
+  public onClick?: (() => void) | undefined;
 
   private PDFViewerApplication: IPDFViewerApplication | undefined;
 
