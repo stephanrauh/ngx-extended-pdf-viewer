@@ -19,6 +19,7 @@ import {
   output,
   PLATFORM_ID,
   Renderer2,
+  signal,
   TemplateRef,
   viewChild,
 } from '@angular/core';
@@ -1133,6 +1134,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   public pdfLoadingStarts = output<PdfLoadingStartsEvent>();
 
   public pdfLoadingFailed = output<Error>();
+
+  public pdfLoadingError = signal<Error | null>(null);
+
+  public loadingErrorMessage = input<string | undefined>(undefined);
 
   public textLayer = input<boolean | undefined>(undefined);
 
@@ -2319,6 +2324,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     }
 
     if (this._src) {
+      this.pdfLoadingError.set(null);
       this.pdfScriptLoaderService.ngxExtendedPdfViewerIncompletelyInitialized = false;
 
       setTimeout(
@@ -2352,7 +2358,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
           }
         }
         options.baseHref = this.baseHref;
-        PDFViewerApplication.onError = (error: Error) => this.pdfLoadingFailed.emit(error);
+        PDFViewerApplication.onError = (error: Error) => {
+          this.pdfLoadingError.set(error);
+          this.pdfLoadingFailed.emit(error);
+        };
         if (typeof this._src === 'string') {
           options.url = this._src;
         } else if (this._src instanceof ArrayBuffer) {
@@ -3001,7 +3010,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       this._lastOpenedSrc = this._src; // #3131
       await PDFViewerApplication.open(options);
     } catch (error) {
-      this.pdfLoadingFailed.emit(error as Error);
+      const loadingError = error as Error;
+      this.pdfLoadingError.set(loadingError);
+      this.pdfLoadingFailed.emit(loadingError);
     }
   }
 
