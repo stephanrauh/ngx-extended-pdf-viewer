@@ -85,6 +85,7 @@ export interface AnnotationEditorEvent {
     | 'removed'
     | 'sizeChanged'
     | 'commit'
+    | 'textChanged' // #3238 added by ngx-extended-pdf-viewer - FreeText content committed; `value` is the new text string (previously mis-named 'commit')
     | 'fontSizeChanged'
     | 'colorChanged'
     | 'thicknessChanged'

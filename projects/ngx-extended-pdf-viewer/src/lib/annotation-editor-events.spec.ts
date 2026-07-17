@@ -69,6 +69,7 @@ const mypdfjsAvailable = fs.existsSync(editorDir);
 
   // ── FreeText events (freetext.js) ──
   it('should dispatch "fontSizeChanged" (freetext)', () => expectEventType('fontSizeChanged'));
+  it('should dispatch "textChanged" (freetext, #3238)', () => expectEventType('textChanged'));
 
   // ── Stamp events (stamp.js) ──
   it('should dispatch "imageAdded" (stamp)', () => expectEventType('imageAdded'));
