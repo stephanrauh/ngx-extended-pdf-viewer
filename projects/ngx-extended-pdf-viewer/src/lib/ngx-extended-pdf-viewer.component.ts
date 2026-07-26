@@ -208,6 +208,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
   private _previousPageViewMode: PageViewModeType = 'multiple';
 
+  // #3140 the hand tool setting book mode replaced, so leaving book mode can restore it
+  private handToolBeforeBookMode: boolean | undefined = undefined;
+
   // @ts-ignore TS6133 - Used for side effects only
   private readonly _pageViewModeEffect = effect(() => {
     const viewMode = this.pageViewMode();
@@ -237,9 +240,18 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
     // #3140 modified by ngx-extended-pdf-viewer
     // When leaving book mode while in PAGE_FLIP cursor mode, switch back to SELECT.
-    if (viewMode !== 'book' && this.showPageFlipButton() && this.initialized) {
-      // #3216 eventBus may be undefined during destroy/recreate transitions of the PDFViewerApplication singleton.
-      PDFViewerApplication?.eventBus?.dispatch('switchcursortool', { tool: PdfCursorTools.SELECT });
+    if (viewMode !== 'book' && this.initialized) {
+      if (this.showPageFlipButton()) {
+        // #3216 eventBus may be undefined during destroy/recreate transitions of the PDFViewerApplication singleton.
+        PDFViewerApplication?.eventBus?.dispatch('switchcursortool', { tool: PdfCursorTools.SELECT });
+      } else if (this.handToolBeforeBookMode !== undefined) {
+        // Book mode had switched the hand tool off, so give the user back the tool they had.
+        const tool = this.handToolBeforeBookMode ? PdfCursorTools.HAND : PdfCursorTools.SELECT;
+        PDFViewerApplication?.eventBus?.dispatch('switchcursortool', { tool });
+      }
+    }
+    if (viewMode !== 'book') {
+      this.handToolBeforeBookMode = undefined;
     }
     // #3140 end of modification by ngx-extended-pdf-viewer
 
@@ -297,10 +309,18 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     // #3140 modified by ngx-extended-pdf-viewer
     // When entering book mode with the page-flip button enabled,
     // automatically switch to PAGE_FLIP cursor tool.
-    if (this.showPageFlipButton() && this.initialized) {
-      const PDFViewerApplication: IPDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
+    if (!this.initialized) {
+      return;
+    }
+    const PDFViewerApplication: IPDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
+    if (this.showPageFlipButton()) {
       // #3216 eventBus may be undefined during destroy/recreate transitions of the PDFViewerApplication singleton.
       PDFViewerApplication?.eventBus?.dispatch('switchcursortool', { tool: PdfCursorTools.PAGE_FLIP });
+    } else if (this.enableFlipByDrag() && this.handTool()) {
+      // Without the page-flip button the hand tool would swallow the drag gesture that
+      // turns the page, so switch it off - and remember it, to restore it later.
+      this.handToolBeforeBookMode = this.handTool();
+      PDFViewerApplication?.eventBus?.dispatch('switchcursortool', { tool: PdfCursorTools.SELECT });
     }
     // #3140 end of modification by ngx-extended-pdf-viewer
   }
