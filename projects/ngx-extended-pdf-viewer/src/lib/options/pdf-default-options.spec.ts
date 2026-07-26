@@ -424,11 +424,13 @@ describe('PDF Default Options Utility Functions', () => {
 
     describe('function properties behavior', () => {
       // #3209: the derived options resolve against document.baseURI, so in jsdom
-      // they return absolute http://localhost/... URLs (with the `assets/..`
-      // segment of cMapUrl / standardFontDataUrl normalized away).
+      // they return absolute http://localhost/... URLs.
       it('should return correct cMapUrl', () => {
         const result = pdfDefaultOptions.cMapUrl();
-        expect(result).toContain('cmaps/');
+        // #3232: the cmaps live inside the assets folder. A stray `assets/..`
+        // used to normalize the folder away, so the URL ended up at the site
+        // root and every CJK document silently lost its cmaps.
+        expect(result).toContain('assets/cmaps/');
       });
 
       it('should return correct sandboxBundleSrc', () => {
@@ -451,7 +453,8 @@ describe('PDF Default Options Utility Functions', () => {
 
       it('should return correct standardFontDataUrl', () => {
         const result = pdfDefaultOptions.standardFontDataUrl();
-        expect(result).toContain('standard_fonts/');
+        // #3232: same story as cMapUrl - the fonts ship inside the assets folder.
+        expect(result).toContain('assets/standard_fonts/');
       });
 
       it('should return correct wasmUrl', () => {

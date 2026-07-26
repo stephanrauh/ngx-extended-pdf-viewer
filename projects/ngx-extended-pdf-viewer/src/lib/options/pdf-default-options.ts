@@ -5,7 +5,7 @@ const isEdge = typeof navigator === 'undefined' || /Edge\/\d./i.test(navigator.u
 const needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
 
 export const pdfjsVersion = '6.0.1169';
-export const pdfjsBleedingEdgeVersion = '6.1.1151';
+export const pdfjsBleedingEdgeVersion = '6.1.1153';
 export function getVersionSuffix(folder: string): string {
   if (folder?.includes('bleeding-edge')) {
     return pdfjsBleedingEdgeVersion;
@@ -120,8 +120,14 @@ export const pdfDefaultOptions = {
   // viewerCssTheme: 0, // not supported by ngx-extended-pdf-viewer, use [theme] instead
   viewOnLoad: 0,
   cMapPacked: true,
+  // #3232 (see the comment on sandboxBundleSrc below): the `/..` cancelled out
+  // the assets folder, so the cmaps and the standard fonts were looked up as
+  // siblings of that folder. They ship *inside* it, exactly like the wasm files.
+  // The mistake used to be masked because the resulting relative path was
+  // resolved against the current route; since #3209 it resolves against
+  // `document.baseURI`, which turns it into a plain 404 at the site root.
   cMapUrl: function () {
-    return resolveAssetUrlAgainstBaseHref(`${assetsUrl(pdfDefaultOptions.assetsFolder, '/..')}/cmaps/`);
+    return resolveAssetUrlAgainstBaseHref(`${assetsUrl(pdfDefaultOptions.assetsFolder)}/cmaps/`);
   },
   disableAutoFetch: false,
   disableFontFace: false,
@@ -158,7 +164,9 @@ export const pdfDefaultOptions = {
           }.mjs`
     );
   },
-  standardFontDataUrl: () => resolveAssetUrlAgainstBaseHref(`${assetsUrl(pdfDefaultOptions.assetsFolder, '/..')}/standard_fonts/`),
+  // #3232: see the comment on cMapUrl - the standard fonts ship inside the
+  // assets folder, too.
+  standardFontDataUrl: () => resolveAssetUrlAgainstBaseHref(`${assetsUrl(pdfDefaultOptions.assetsFolder)}/standard_fonts/`),
   // #3140: wasm files live inside the assets folder (not as a sibling).
   // Resolve against document.baseURI so the path stays correct on sub-routes
   // (pdf.js's QuickJS loader resolves wasmUrl against `location.href`, which
