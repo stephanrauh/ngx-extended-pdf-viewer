@@ -17,7 +17,7 @@ Built on Mozilla’s pdf.js and extended with dozens of enhancements, it's ideal
 
 ### Prerequisites
 
-⚠️ **Versions 26 through 28 require Angular 19, 20, 21, or 22.** If you're using Angular 17 or 18, please continue using version 25.6.4.
+⚠️ **Versions 26 through 29 require Angular 19, 20, 21, or 22.** If you're using Angular 17 or 18, please continue using version 25.6.4.
 
 **Why this breaking change?** There are many reasons: Version 26 supports zone-less Angular and migrates to signals. And Angular 18 exited its Long-Term Support (LTS) phase, and security vulnerability CVE-2025-66035 will not be fixed in Angular 17 or 18. Updating to Angular 19 ensures your application continues to receive critical security patches.
 
@@ -152,6 +152,35 @@ Regarding security: I'm not perfect - it's always a best-effort approach without
 ---
 
 ## 📦 Version Highlights
+
+### Version 29 (release candidate)
+
+Version 29 updates to pdf.js 6.1 and adds an API for building a document out of several files.
+
+(The 29.0.0-rc.0 release candidate still shipped pdf.js 6.0 in the stable bundle; since rc.1 pdf.js 6.1 is the default engine, and the bleeding-edge bundle carries the same engine until Mozilla opens 6.2.)
+
+**New for end users:**
+
+- **Media annotations**: RichMedia and Screen annotations that carry embedded audio or video now render.
+- **Book mode turns pages again**: the hand tool used to swallow the drag gesture that flips a page. It's now switched off automatically while book mode is active, and you get it back when you leave book mode. Previously this only happened if you also set `[showPageFlipButton]="true"`.
+
+**New for developers:**
+
+- **`mergeDocument()`**: add another PDF file or an image to the document on screen, at any position — including **before the first page**, which the sidebar's "Add file" button can't do. Pass a URL, a `File`, a `Blob`, the raw bytes or an `ImageBitmap`, plus optionally `insertAfterPage` (counting from 1; `0` puts the pages in front), `includePages`, `excludePages`, and the `password` of an encrypted file.
+- **`deletePages()`**: remove pages by number, e.g. `deletePages([1, [8, 10]])`. Both methods resolve once the new document is on screen and keep pages the user reordered in the sidebar where they are.
+- **`extractPages()`**: the low-level escape hatch — pdf.js's own (0-based) page descriptions, passed through unchanged.
+- **`[supportsDownloading]="false"`**: hides the download and save buttons *and* switches the download manager off — a stronger lock than `[showDownloadButton]="false"`, which only hides the button.
+- **`exactOptionalPropertyTypes` support**: the library compiles in projects that enable the flag, and it builds with the flag enabled itself, so this stays fixed (#3239).
+
+**Bug fixes:**
+
+- The CMap files and the standard fonts are found again. Both URLs pointed *next to* the assets folder instead of into it, so they ended up at the root of your application: CJK documents silently lost their CMaps, and files using one of the 14 standard fonts fell back to a substitute font. If you set `cMapUrl` or `standardFontDataUrl` yourself to work around this, you can drop that (#3232).
+- `addImageToAnnotationLayer()` and `addHighlightToAnnotationLayer()` no longer crash with "Failed to execute 'transferToImageBitmap'" when a coordinate lands outside the page — easy to hit with pixel values, which refer to the page as it is rendered on screen.
+- Checkboxes and radio buttons keep their familiar plain look instead of the heavier canvas-drawn style pdf.js 6.1 introduced.
+
+#### ❗ Breaking changes:
+
+- **Free-text editor events** (#3238): the `annotationEditorEvent` that carries the typed text now has `type: 'textChanged'` instead of `type: 'commit'`. Two events used to arrive as `commit` — one from the base editor, one from the free-text editor — and you couldn't tell them apart. `commit` now consistently means "an annotation was committed" for every editor type. **If you listen for `commit` to read the entered text, switch to `textChanged`.** That event also gained the `editorType` field it was missing.
 
 ### Version 28
 

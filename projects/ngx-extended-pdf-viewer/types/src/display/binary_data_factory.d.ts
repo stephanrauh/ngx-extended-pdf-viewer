@@ -19,8 +19,4 @@ export class BaseBinaryDataFactory {
     #private;
 }
 export class DOMBinaryDataFactory extends BaseBinaryDataFactory {
-    /**
-     * @ignore
-     */
-    _fetch(url: any, kind: any): Promise<Uint8Array<any>>;
 }

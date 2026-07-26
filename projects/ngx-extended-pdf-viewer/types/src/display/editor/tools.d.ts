@@ -261,11 +261,6 @@ export class AnnotationEditorUIManager {
      * @param {AnnotationEditor} editor
      */
     setSelected(editor: AnnotationEditor): void;
-    /**
-     * Check if the editor is selected.
-     * @param {AnnotationEditor} editor
-     */
-    isSelected(editor: AnnotationEditor): boolean;
     get firstSelectedEditor(): any;
     /**
      * Unselect an editor.
@@ -465,16 +460,39 @@ export class CurrentPointers {
  * non-mac OSes.
  */
 export class KeyboardManager {
+    static ALT: number;
+    static CTRL: number;
+    static META: number;
+    static SHIFT: number;
+    /**
+     * Parse a shortcut string like "ctrl+shift+a" into a `[key, modifiers]`
+     * pair. Modifier names are case-insensitive and may appear in any order;
+     * the key part is matched against `event.key` so `Space` is normalized to
+     * `" "` but other names like `ArrowLeft`, `Enter`, `Backspace`, and
+     * single-letter keys (`a`, `Z`) are preserved.
+     * @param {string} value
+     * @returns {[string|null, number]}
+     */
+    static #parseShortcut(value: string): [string | null, number];
+    /**
+     * Translate `event.code` (a layout-independent physical key identifier) to
+     * the equivalent `event.key` value on a US layout, so a Ctrl+A shortcut
+     * still fires when the user is on a layout where the "A" key produces a
+     * non-Latin character.
+     * @param {string} code
+     * @returns {string|null}
+     */
+    static #codeToKey(code: string): string | null;
     /**
      * Create a new keyboard manager class.
      * @param {Array<Array>} callbacks - an array containing an array of shortcuts
-     * and a callback to call.
-     * A shortcut is a string like `ctrl+c` or `mac+ctrl+c` for mac OS.
+     * and a callback to call. If the array contains no `mac+`-prefixed entry,
+     * every shortcut applies on all platforms. As soon as it contains at least
+     * one `mac+` entry, the `mac+` ones become the macOS-only set and the bare
+     * entries apply only on non-Mac.
      */
     constructor(callbacks: Array<any[]>);
-    buffer: any[];
     callbacks: Map<any, any>;
-    allKeys: Set<any>;
     /**
      * Execute a callback, if any, for a given keyboard event.
      * The self is used as `this` in the callback.
@@ -483,5 +501,4 @@ export class KeyboardManager {
      * @returns
      */
     exec(self: Object, event: KeyboardEvent): void;
-    #private;
 }

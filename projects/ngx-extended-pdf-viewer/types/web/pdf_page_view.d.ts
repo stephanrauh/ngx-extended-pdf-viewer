@@ -163,6 +163,7 @@ export class PDFPageView extends BasePDFPageView {
     deleteMe(isCut: any): void;
     hasEditableAnnotations(): boolean;
     get _textHighlighter(): any;
+    _refreshAnnotationLayer(): void;
     reset({ keepAnnotationLayer, keepAnnotationEditorLayer, keepXfaLayer, keepTextLayer, keepCanvasWrapper, preserveDetailViewState, }?: {
         keepAnnotationLayer?: boolean | undefined;
         keepAnnotationEditorLayer?: boolean | undefined;

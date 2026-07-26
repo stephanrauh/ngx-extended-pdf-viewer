@@ -100,6 +100,13 @@ export namespace AnnotationMode {
     export let ENABLE_STORAGE: number;
 }
 export const AnnotationPrefix: "pdfjs_internal_id_";
+export namespace AnnotationRenditionOperation {
+    let PLAY_OR_RESUME: number;
+    let STOP: number;
+    let PAUSE: number;
+    let RESUME: number;
+    let PLAY: number;
+}
 export namespace AnnotationReplyType {
     let GROUP: string;
     let REPLY: string;
@@ -137,6 +144,7 @@ export namespace AnnotationType {
     export let WATERMARK: number;
     export let THREED: number;
     export let REDACT: number;
+    export let RICHMEDIA: number;
 }
 export function assert(cond: any, msg: any): void;
 /**
@@ -179,6 +187,7 @@ export class FeatureTest {
     static get platform(): any;
     static get isCanvasFilterSupported(): any;
     static get isAlphaColorInputSupported(): any;
+    static get isBackdropFilterSupported(): any;
 }
 export const FONT_IDENTITY_MATRIX: number[];
 declare const FormatError_base: any;
@@ -360,7 +369,7 @@ export class ResponseException extends ResponseException_base {
 }
 export function setVerbosityLevel(level: any): void;
 export function shadow(obj: any, prop: any, value: any, nonSerializable?: boolean): any;
-export function stringToBytes(str: any): Uint8Array<any>;
+export function stringToBytes(str: any): Uint8Array<ArrayBuffer>;
 export function stringToUTF8String(str: any): string;
 export function stripPath(str: any): any;
 export const SVG_NS: "http://www.w3.org/2000/svg";
@@ -383,7 +392,11 @@ export class UnknownErrorException extends UnknownErrorException_base {
     constructor(msg: any, details: any);
     details: any;
 }
-export function unreachable(msg: any): void;
+/**
+ * @param {string} msg
+ * @returns {never}
+ */
+export function unreachable(msg: string): never;
 /**
  * Remove, or replace, the hash property of the URL.
  *

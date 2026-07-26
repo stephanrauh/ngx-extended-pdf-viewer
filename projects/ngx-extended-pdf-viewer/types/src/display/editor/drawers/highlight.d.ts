@@ -30,7 +30,6 @@ declare class HighlightOutline extends Outline {
      */
     serialize([blX, blY, trX, trY]: Array<number>, _rotation: number): Array<Array<number>>;
     get box(): any;
-    get classNamesForOutlining(): string[];
     #private;
 }
 import { Outline } from "./outline.js";

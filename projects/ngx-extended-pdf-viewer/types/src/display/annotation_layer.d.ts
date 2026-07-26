@@ -126,6 +126,8 @@ export class AnnotationLayer {
      * @memberof AnnotationLayer
      */
     update({ viewport, optionalContentConfig }: AnnotationLayerParameters): void;
+    destroy(): void;
+    refreshCanvases(): void;
     getEditableAnnotations(): MapIterator<any>;
     getEditableAnnotation(id: any): any;
     addFakeAnnotation(editor: any): EditorAnnotationElement;
@@ -268,6 +270,7 @@ declare class AnnotationElement {
     updateOC(optionalContentConfig: any): void;
     get width(): number;
     get height(): number;
+    _setBackgroundColor(element: any): void;
     #private;
 }
 export {};

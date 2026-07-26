@@ -122,17 +122,8 @@ export class PageViewport {
      * @returns {Array} Array containing `x`- and `y`-coordinates of the
      *   point in the viewport coordinate space.
      * @see {@link convertToPdfPoint}
-     * @see {@link convertToViewportRectangle}
      */
     convertToViewportPoint(x: number, y: number): any[];
-    /**
-     * Converts PDF rectangle to the viewport coordinates.
-     * @param {Array} rect - The xMin, yMin, xMax and yMax coordinates.
-     * @returns {Array} Array containing corresponding coordinates of the
-     *   rectangle in the viewport coordinate space.
-     * @see {@link convertToViewportPoint}
-     */
-    convertToViewportRectangle(rect: any[]): any[];
     /**
      * Converts viewport coordinates to the PDF location. For examples, useful
      * for converting canvas pixel location into PDF one.

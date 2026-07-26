@@ -6,6 +6,12 @@ const { execSync } = require('child_process');
 const path = require('path');
 const fs = require('fs');
 
+// The branch of the mypdf.js fork that holds the *stable* pdf.js engine; it is
+// built into the library's assets/ folder. Must stay in sync with STABLE_BRANCH
+// in 5-1-prepare-release.js - if the two disagree, npm gets a stable bundle
+// whose file names don't match `pdfjsVersion`, and every worker request 404s.
+const STABLE_BRANCH = '6.1';
+
 // Function to execute a command and handle errors
 function runCommand(command, errorMessage, exitCode) {
   try {
@@ -110,11 +116,11 @@ if (!allBleedingEdgeFilesValid) {
 }
 console.log('✓ All bleeding-edge assets verified');
 
-// Build base library from stable branch (6.0)
-console.log('\n🔨 Building base library (6.0)...');
+// Build base library from the stable branch
+console.log(`\n🔨 Building base library (${STABLE_BRANCH})...`);
 process.chdir(path.join('..', 'mypdf.js'));
 runCommand('git reset --hard', 'Error 68a: Git reset failed', 68);
-runCommand('git checkout 6.0', 'Error 68: Git checkout failed', 68);
+runCommand(`git checkout ${STABLE_BRANCH}`, 'Error 68: Git checkout failed', 68);
 runCommand('npm ci --ignore-scripts', 'Error 68b: npm install failed', 68);
 runCommand('npm audit fix --ignore-scripts || true', 'Error 68c: npm audit fix failed', 68);
 runCommand('../ngx-extended-pdf-viewer/build-tools/search-for-shai-hulud.sh --full', 'Error 68d: shai-hulud scan failed', 68);

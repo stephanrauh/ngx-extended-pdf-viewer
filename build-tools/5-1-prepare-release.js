@@ -6,6 +6,12 @@ const { execSync } = require('child_process');
 const path = require('path');
 const fs = require('fs');
 
+// The branch of the mypdf.js fork that holds the *stable* pdf.js engine. It is
+// built into the library's assets/ folder, whereas 'bleeding-edge' goes to
+// bleeding-edge/ (see build-tools/base-library/updateMozillasPdfViewer.js).
+// Update this single line when a new pdf.js line is promoted to stable.
+const STABLE_BRANCH = '6.1';
+
 // Function to execute a command and handle errors
 function runCommand(command, errorMessage, exitCode) {
   try {
@@ -107,14 +113,14 @@ runCommand('node ./build-tools/1-build-base-library.js --quick', 'Error 67: buil
 process.chdir(path.join('..', 'mypdf.js'));
 runCommand('git reset --hard', 'Error 67a: Git reset failed', 67);
 
-// Build base library from stable branch (6.0) to update pdf-default-options.ts
-console.log('\n🔨 Building base library (6.0) to update version numbers...');
-runCommand('git checkout 6.0', 'Error 59: Git checkout failed', 59);
+// Build base library from the stable branch to update pdf-default-options.ts
+console.log(`\n🔨 Building base library (${STABLE_BRANCH}) to update version numbers...`);
+runCommand(`git checkout ${STABLE_BRANCH}`, 'Error 59: Git checkout failed', 59);
 
 // Update version number
 runCommand(
   'node ../ngx-extended-pdf-viewer/build-tools/base-library/write-version-number-to-base-library.js',
-  'Error 62: write-version-number-to-base-library failed at version 6.0',
+  `Error 62: write-version-number-to-base-library failed at version ${STABLE_BRANCH}`,
   62,
 );
 
@@ -128,7 +134,7 @@ runCommand('npm audit fix --ignore-scripts || true', 'Error 68c: npm audit fix f
 runCommand('../ngx-extended-pdf-viewer/build-tools/search-for-shai-hulud.sh --full', 'Error 68d: shai-hulud scan failed', 68);
 runCommand('npm rebuild', 'Error 68e: npm rebuild failed', 68);
 process.chdir(path.join('..', 'ngx-extended-pdf-viewer'));
-runCommand('node ./build-tools/1-build-base-library.js --quick', 'Error 69: build-base-library.js failed for 6.0', 69);
+runCommand('node ./build-tools/1-build-base-library.js --quick', `Error 69: build-base-library.js failed for ${STABLE_BRANCH}`, 69);
 
 // Clean up package-lock.json changes from audit fix
 process.chdir(path.join('..', 'mypdf.js'));
@@ -148,11 +154,11 @@ runCommand('git push origin --tags', 'Error 72: Pushing tags failed', 72);
 // Push mypdf.js changes and create tags
 process.chdir(path.join('..', 'mypdf.js'));
 
-// Push 6.0 branch
-runCommand('git checkout 6.0', 'Error 73: Git checkout failed', 73);
-runCommand('git push', 'Error 74: Git push in mypdf.js 6.0 failed', 74);
-runCommand(`git tag -a "ngx-extended-pdf-viewer-${newVersion}" -m "ngx-extended-pdf-viewer ${newVersion}"`, 'Error 75: Creating 6.0 tag failed', 75);
-runCommand('git push origin --tags', 'Error 76: Pushing 6.0 tags failed', 76);
+// Push the stable branch
+runCommand(`git checkout ${STABLE_BRANCH}`, 'Error 73: Git checkout failed', 73);
+runCommand('git push', `Error 74: Git push in mypdf.js ${STABLE_BRANCH} failed`, 74);
+runCommand(`git tag -a "ngx-extended-pdf-viewer-${newVersion}" -m "ngx-extended-pdf-viewer ${newVersion}"`, `Error 75: Creating ${STABLE_BRANCH} tag failed`, 75);
+runCommand('git push origin --tags', `Error 76: Pushing ${STABLE_BRANCH} tags failed`, 76);
 
 // Push bleeding-edge branch
 runCommand('git checkout bleeding-edge', 'Error 77: Git checkout failed', 77);

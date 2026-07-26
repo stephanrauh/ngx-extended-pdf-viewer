@@ -1,5 +1,8 @@
 // build/createTag.js
 const { execSync } = require('child_process');
+
+// Keep in sync with STABLE_BRANCH in 5-1-prepare-release.js / 5-2-release-library-ci.js.
+const STABLE_BRANCH = '6.1';
 const fs = require('fs');
 const path = require('path');
 
@@ -61,20 +64,20 @@ console.log(`Created bleeding-edge tag: ngx-extended-pdf-viewer-${version}-bleed
 runCommand('git push origin --tags', 'Error pushing bleeding-edge tag in mypdf.js:');
 console.log('Pushed bleeding-edge tag in mypdf.js.');
 
-// Checkout 6.0 branch
-runCommand('git checkout 6.0', 'Error checking out 6.0 branch:');
-console.log('Checked out 6.0 branch.');
-// Commit changes in 6.0 branch
-runCommand(`git commit -a -m "published ${version}"`, 'Error committing changes in 6.0 branch:');
-console.log('Committed changes in 6.0 branch.');
-runCommand('git push', 'Error pushing changes in 6.0 branch:');
-console.log('Pushed changes in 6.0 branch.');
+// Checkout the stable branch
+runCommand(`git checkout ${STABLE_BRANCH}`, `Error checking out ${STABLE_BRANCH} branch:`);
+console.log(`Checked out ${STABLE_BRANCH} branch.`);
+// Commit changes in the stable branch
+runCommand(`git commit -a -m "published ${version}"`, `Error committing changes in ${STABLE_BRANCH} branch:`);
+console.log(`Committed changes in ${STABLE_BRANCH} branch.`);
+runCommand('git push', `Error pushing changes in ${STABLE_BRANCH} branch:`);
+console.log(`Pushed changes in ${STABLE_BRANCH} branch.`);
 
-// Create and push tag for 6.0
-runCommand(`git tag -a "ngx-extended-pdf-viewer-${version}" -m "ngx-extended-pdf-viewer ${version}"`, 'Error creating 6.0 tag in mypdf.js:');
-console.log(`Created 6.0 tag: ngx-extended-pdf-viewer-${version}`);
-runCommand('git push origin --tags', 'Error pushing 6.0 tag in mypdf.js:');
-console.log('Pushed 6.0 tag in mypdf.js.');
+// Create and push tag for the stable branch
+runCommand(`git tag -a "ngx-extended-pdf-viewer-${version}" -m "ngx-extended-pdf-viewer ${version}"`, `Error creating ${STABLE_BRANCH} tag in mypdf.js:`);
+console.log(`Created ${STABLE_BRANCH} tag: ngx-extended-pdf-viewer-${version}`);
+runCommand('git push origin --tags', `Error pushing ${STABLE_BRANCH} tag in mypdf.js:`);
+console.log(`Pushed ${STABLE_BRANCH} tag in mypdf.js.`);
 
 // Switch back to bleeding-edge
 runCommand('git checkout bleeding-edge', 'Error switching back to bleeding-edge:');

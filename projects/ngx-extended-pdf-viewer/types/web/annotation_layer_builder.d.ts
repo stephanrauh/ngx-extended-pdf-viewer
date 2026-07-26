@@ -97,7 +97,8 @@ export class AnnotationLayerBuilder {
      */
     render({ viewport, intent, structTreeLayer, optionalContentConfigPromise, }: AnnotationLayerBuilderRenderOptions): Promise<void>;
     cancel(): void;
-    hide(internal?: boolean): void;
+    refreshCanvases(): void;
+    hide(): void;
     hasEditableAnnotations(): boolean;
     /**
      * @param {Array<Object>} inferredLinks

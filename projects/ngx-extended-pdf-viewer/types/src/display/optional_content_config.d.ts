@@ -1,8 +1,13 @@
 export class OptionalContentConfig {
-    constructor(data: any, renderingIntent?: number);
+    static fromSerializable({ data, renderingIntent, groupState }: {
+        data: any;
+        renderingIntent: any;
+        groupState: any;
+    }): OptionalContentConfig;
+    constructor(data: any, renderingIntent?: number, groupState?: null);
+    creator: null;
+    name: null;
     renderingIntent: number;
-    name: any;
-    creator: any;
     isVisible(group: any): any;
     setVisibility(id: any, visible?: boolean, preserveRB?: boolean): void;
     setOCGState({ state, preserveRB }: {
@@ -13,6 +18,11 @@ export class OptionalContentConfig {
     getOrder(): any;
     getGroup(id: any): any;
     getHash(): string;
+    get serializable(): {
+        data: any;
+        renderingIntent: number;
+        groupState: Map<any, any>;
+    };
     [Symbol.iterator](): MapIterator<[any, any]>;
     #private;
 }

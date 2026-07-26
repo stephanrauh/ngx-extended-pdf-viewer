@@ -107,6 +107,13 @@ export class PDFLinkService {
      */
     goToXY(pageNumber: number, x: number, y: number, options?: Object): void;
     /**
+     * @param {string} id
+     *   Unique attachment identifier (required).
+     * @returns {Promise<CatalogAttachmentContent>}
+     *   Content.
+     */
+    getAttachmentContent(id: string): Promise<CatalogAttachmentContent>;
+    /**
      * Adds various attributes (href, title, target, rel) to hyperlinks.
      * @param {HTMLAnchorElement} link
      * @param {string} url
@@ -140,3 +147,4 @@ export class PDFLinkService {
 }
 export class SimpleLinkService extends PDFLinkService {
 }
+import type { CatalogAttachmentContent } from "../src/core/catalog.js";

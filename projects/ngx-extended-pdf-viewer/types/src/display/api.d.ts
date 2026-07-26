@@ -577,6 +577,12 @@ export type PDFWorkerParameters = {
 /** @type {string} */
 export const build: string;
 /**
+ * @import {
+ *   CatalogAttachmentContent,
+ *   CatalogAttachment
+ * } from "../core/catalog.js";
+ */
+/**
  * @typedef { Int8Array | Uint8Array | Uint8ClampedArray |
  *            Int16Array | Uint16Array |
  *            Int32Array | Uint32Array | Float32Array |
@@ -929,10 +935,18 @@ export class PDFDocumentProxy {
      */
     getOpenAction(): Promise<any | null>;
     /**
-     * @returns {Promise<any>} A promise that is resolved with a lookup table
-     *   for mapping named attachments to their content.
+     * @returns {Promise<Map<string, CatalogAttachment> | null>}
+     *   Promise that is resolved with a lookup table for mapping named
+     *   attachments to their content.
      */
-    getAttachments(): Promise<any>;
+    getAttachments(): Promise<Map<string, CatalogAttachment> | null>;
+    /**
+     * @param {string} id
+     *   Unique attachment identifier (required).
+     * @returns {Promise<CatalogAttachmentContent>}
+     *   Promise that resolves to attachment content.
+     */
+    getAttachmentContent(id: string): Promise<CatalogAttachmentContent>;
     /**
      * @param {Set<number>} types - The annotation types to retrieve.
      * @param {Set<number>} pageIndexesToSkip
@@ -1625,6 +1639,8 @@ import { OptionalContentConfig } from "./optional_content_config.js";
 import { PrintAnnotationStorage } from "./annotation_storage.js";
 import { PagesMapper } from "./pages_mapper.js";
 import { AnnotationStorage } from "./annotation_storage.js";
+import type { CatalogAttachment } from "../core/catalog.js";
+import type { CatalogAttachmentContent } from "../core/catalog.js";
 import { Metadata } from "./metadata.js";
 import { StatTimer } from "./display_utils.js";
 import { PDFObjects } from "./pdf_objects.js";

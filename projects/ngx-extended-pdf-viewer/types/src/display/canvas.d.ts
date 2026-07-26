@@ -167,7 +167,7 @@ export class CanvasGraphics {
     nextLine(opIdx: any): void;
     paintChar(opIdx: any, character: any, x: any, y: any, patternFillTransform: any, patternStrokeTransform: any): void;
     get isFontSubpixelAAEnabled(): any;
-    showText(opIdx: any, glyphs: any): undefined;
+    showText(opIdx: any, glyphs: any): void;
     showType3Text(opIdx: any, glyphs: any): void;
     setCharWidth(opIdx: any, xWidth: any, yWidth: any): void;
     setCharWidthAndBounds(opIdx: any, xWidth: any, yWidth: any, llx: any, lly: any, urx: any, ury: any): void;
@@ -186,7 +186,7 @@ export class CanvasGraphics {
     paintFormXObjectEnd(opIdx: any): void;
     beginGroup(opIdx: any, group: any): void;
     endGroup(opIdx: any, group: any): void;
-    beginAnnotation(opIdx: any, id: any, rect: any, transform: any, matrix: any, hasOwnCanvas: any): void;
+    beginAnnotation(opIdx: any, id: any, rect: any, transform: any, matrix: any, hasOwnCanvas: any, canvasName: any): void;
     annotationCanvas: any;
     endAnnotation(opIdx: any): void;
     paintImageMaskXObject(opIdx: any, img: any): void;
