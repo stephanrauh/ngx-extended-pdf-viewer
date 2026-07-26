@@ -4,6 +4,7 @@ import { PasswordPrompt } from './password-prompt';
 import { AnnotationStorage, PrintAnnotationStorage } from './pdf-annotation-storage';
 import { IDownloadManager } from './pdf-download-manager';
 import { IEventBus } from './pdf-event-bus';
+import { PdfPageInfo, PdfPagesMapper } from './pdf-page-info';
 import { PageViewport } from './pdf-page-view-port';
 import { PDFPrintService } from './pdf-print-service';
 import { IPDFViewer } from './pdf-viewer';
@@ -1091,6 +1092,22 @@ export interface PDFDocumentProxy {
    */
   saveDocument(): Promise<Uint8Array>;
   /**
+   * Builds a new PDF file from the pages of this document and of the documents
+   * (or images) passed in `pageInfos`. Added in pdf.js 6.0; still experimental
+   * upstream. Use `NgxExtendedPdfViewerService.mergeDocument()` or
+   * `NgxExtendedPdfViewerService.extractPages()` instead of calling this directly -
+   * they also reload the viewer with the result.
+   *
+   * @returns {Promise<Uint8Array | null>} the new document, or `null` if pdf.js
+   *   couldn't build it (e.g. because one of the sources isn't a valid PDF).
+   */
+  extractPages(pageInfos: Array<PdfPageInfo>): Promise<Uint8Array | null>;
+  /**
+   * Keeps track of the pages the user has reordered, copied, or deleted in the
+   * thumbnail sidebar. Added in pdf.js 6.0.
+   */
+  pagesMapper?: PdfPagesMapper | undefined;
+  /**
    * @returns {Promise<{ length: number }>} A promise that is resolved when the
    *   document's data is loaded. It is resolved with an {Object} that contains
    *   the `length` property that indicates size of the PDF data in bytes.
@@ -1195,6 +1212,13 @@ export interface IPDFViewerApplication {
   ngxKeyboardManager: any;
   cspPolicyService: any;
   movePage(prevPageIndex: number, newPageIndex: number): void;
+  /** The file name pdf.js uses when the user downloads the document. */
+  readonly _docFilename: string;
+  /**
+   * Set by pdf.js when pages have been added, removed, or reordered, so the viewer
+   * knows the document on screen is no longer the file it was loaded from.
+   */
+  _mergedDocumentNeedsSaving?: boolean | undefined;
   // #2691 modified by ngx-extended-pdf-viewer
   setInitialAnnotationValues?(): void;
   // #2691 end of modification by ngx-extended-pdf-viewer

@@ -45,6 +45,7 @@ export * from './lib/options/pdf-annotation-storage';
 export * from './lib/options/pdf-cursor-tools';
 export * from './lib/options/pdf-default-options';
 export * from './lib/options/pdf-event-bus';
+export * from './lib/options/pdf-page-info';
 export * from './lib/options/pdf-page-view-port';
 export * from './lib/options/pdf-print-range';
 export * from './lib/options/pdf-print-service';

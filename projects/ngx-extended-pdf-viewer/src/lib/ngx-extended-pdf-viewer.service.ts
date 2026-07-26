@@ -1,6 +1,7 @@
 import { effect, Injectable, Renderer2, RendererFactory2, signal } from '@angular/core';
 import { AnnotationEditorParamsType, AnnotationMode, EditorAnnotation, HighlightEditorAnnotation, StampEditorAnnotation } from './options/editor-annotations';
 import { PdfLayer } from './options/optional_content_config';
+import { PdfPageInfo, PdfPageSelection } from './options/pdf-page-info';
 import { PDFPrintRange } from './options/pdf-print-range';
 import { IPDFViewerApplication, PDFDocumentProxy, PDFFindParameters, PDFPageProxy, TextItem, TextMarkedContent } from './options/pdf-viewer-application';
 import { ZoomType } from './options/zoom-type';
@@ -91,6 +92,37 @@ export interface Section {
   height: number;
   direction: DirectionType;
   lines: Array<Line>;
+}
+
+/**
+ * A PDF file or an image you want to merge into the document that's currently open:
+ * a URL, a `File` from a file picker, a `Blob`, the raw bytes, or an `ImageBitmap`.
+ */
+export type PdfMergeSource = string | URL | Blob | ArrayBuffer | ArrayBufferView | ImageBitmap;
+
+export interface PdfMergeOptions {
+  /**
+   * The page number after which the new pages are inserted, counting from 1.
+   * Pass `0` to insert them **before the first page**. If you omit it, the pages
+   * are appended at the end of the document.
+   */
+  insertAfterPage?: number | undefined;
+
+  /**
+   * Which pages of the added file to insert, counting from 1. Accepts single page
+   * numbers and inclusive ranges, e.g. `[1, [4, 8]]`. Defaults to every page.
+   * Ignored when you add an image.
+   */
+  includePages?: PdfPageSelection | undefined;
+
+  /**
+   * Which pages of the added file to skip, counting from 1. Applied after
+   * `includePages`. Ignored when you add an image.
+   */
+  excludePages?: PdfPageSelection | undefined;
+
+  /** The password of the added file, if it is encrypted. */
+  password?: string | undefined;
 }
 
 @Injectable({
@@ -957,11 +989,20 @@ export class NgxExtendedPdfViewerService {
     const rightPdf = this.convertToPDFCoordinates(right, width, width, imageWidth);
     const topPdf = this.convertToPDFCoordinates(top, height, height, imageHeight);
 
+    const rect = NgxExtendedPdfViewerService.toPageRect(leftPdf, bottomPdf, rightPdf, topPdf, width, height, 'addImageToAnnotationLayer');
+    if (!rect) {
+      this.switchAnnotationEdtorMode(previousAnnotationEditorMode);
+      if (wasHidden && popup) {
+        this.renderer.removeClass(popup, 'ngx-keep-hidden');
+      }
+      return;
+    }
+
     const stampAnnotation: StampEditorAnnotation = {
       annotationType: 13,
       pageIndex: pageToModify,
       bitmapUrl: dataUrl,
-      rect: [leftPdf, bottomPdf, rightPdf, topPdf],
+      rect,
       rotation: rotation ?? 0,
       isCopy: true,
     };
@@ -1048,10 +1089,23 @@ export class NgxExtendedPdfViewerService {
     const pageWidth = this.PDFViewerApplication?.pdfViewer._pages[pageToModify].div.clientWidth;
     const pageHeight = this.PDFViewerApplication?.pdfViewer._pages[pageToModify].div.clientHeight;
 
-    const leftPdf = this.convertToPDFCoordinates(left, width, 0, pageWidth);
-    const bottomPdf = this.convertToPDFCoordinates(bottom, height, 0, pageHeight);
-    const rightPdf = this.convertToPDFCoordinates(right, width, width, pageWidth);
-    const topPdf = this.convertToPDFCoordinates(top, height, height, pageHeight);
+    const rect = NgxExtendedPdfViewerService.toPageRect(
+      this.convertToPDFCoordinates(left, width, 0, pageWidth),
+      this.convertToPDFCoordinates(bottom, height, 0, pageHeight),
+      this.convertToPDFCoordinates(right, width, width, pageWidth),
+      this.convertToPDFCoordinates(top, height, height, pageHeight),
+      width,
+      height,
+      'addHighlightToAnnotationLayer',
+    );
+    if (!rect) {
+      this.switchAnnotationEdtorMode(previousAnnotationEditorMode);
+      if (wasHidden && popup) {
+        this.renderer.removeClass(popup, 'ngx-keep-hidden');
+      }
+      return;
+    }
+    const [leftPdf, bottomPdf, rightPdf, topPdf] = rect;
 
     // Create quadPoints object with numeric keys (matching export format)
     const quadPoints: any = {};
@@ -1105,6 +1159,47 @@ export class NgxExtendedPdfViewerService {
       return viewer.currentPageNumber - 1;
     }
     return undefined;
+  }
+
+  /**
+   * Turns four edge coordinates into a valid PDF rectangle: sorts them, and keeps them on the page.
+   *
+   * Without this, a coordinate outside the page - easy to hit with pixels, because they refer to the
+   * page as it is rendered right now, which may be only a few hundred pixels wide - produced a
+   * rectangle with a negative width or height. pdf.js then failed deep inside the stamp editor with
+   * "Failed to execute 'transferToImageBitmap' on 'OffscreenCanvas'".
+   *
+   * @returns the rectangle, or `undefined` if there's no area left to draw on
+   */
+  private static toPageRect(
+    left: number,
+    bottom: number,
+    right: number,
+    top: number,
+    pageWidth: number,
+    pageHeight: number,
+    method: string,
+  ): [number, number, number, number] | undefined {
+    const edges = [left, bottom, right, top];
+    if (edges.some((edge) => !Number.isFinite(edge))) {
+      console.error(`${method}(): the coordinates [${edges.join(', ')}] aren't valid numbers. Is the page rendered yet?`);
+      return undefined;
+    }
+    const clamp = (value: number, max: number) => Math.min(Math.max(value, 0), max);
+    const x1 = clamp(Math.min(left, right), pageWidth);
+    const x2 = clamp(Math.max(left, right), pageWidth);
+    const y1 = clamp(Math.min(bottom, top), pageHeight);
+    const y2 = clamp(Math.max(bottom, top), pageHeight);
+
+    if (x2 - x1 < 1 || y2 - y1 < 1) {
+      console.error(
+        `${method}(): the coordinates [left=${left.toFixed(1)}, bottom=${bottom.toFixed(1)}, right=${right.toFixed(1)}, top=${top.toFixed(1)}] ` +
+          `leave no room on a page of ${pageWidth.toFixed(1)} x ${pageHeight.toFixed(1)} PDF units, so nothing was added. ` +
+          `Note that pixel values ("250px") refer to the page as it is rendered on screen right now, so they shrink when the user zooms out.`,
+      );
+      return undefined;
+    }
+    return [x1, y1, x2, y2];
   }
 
   private convertToPDFCoordinates(value: ZoomType, maxValue: number, defaultValue: number, imageMaxValue: number): number {
@@ -1218,5 +1313,269 @@ export class NgxExtendedPdfViewerService {
     } catch (error) {
       console.error('Error moving page:', error);
     }
+  }
+
+  /**
+   * Adds the pages of another PDF file - or an image - to the document that's currently
+   * open. This is the programmatic counterpart of the sidebar's "Add file" button, but
+   * it can insert the pages anywhere, including **before the first page**.
+   *
+   * The document on screen is replaced by the merged one. The original file on the server
+   * is never touched; use `getCurrentDocumentAsBlob()` if you want to store the result.
+   * Pending page reorderings and deletions are kept.
+   *
+   * Requires pdf.js 6.0 or newer (i.e. ngx-extended-pdf-viewer 28 or newer). Merging is
+   * still an experimental feature of pdf.js, so the result may change in future versions.
+   *
+   * @param source One or several PDF files or images: a URL, a `File`, a `Blob`,
+   *   the raw bytes, or an `ImageBitmap`. Several sources are inserted in the order given.
+   * @param options Where to insert the pages, and which pages to take
+   * @returns Promise that resolves when the merged document has been loaded and rendered
+   * @throws Error if the viewer isn't ready yet, if a source can't be loaded, or if
+   *   pdf.js can't build the merged document
+   *
+   * @example
+   * // Add a cover page in front of the document
+   * await pdfService.mergeDocument('/assets/cover.pdf', { insertAfterPage: 0 });
+   *
+   * // Append a file the user picked, but only its pages 1 and 4-8
+   * await pdfService.mergeDocument(input.files[0], { includePages: [1, [4, 8]] });
+   *
+   * // Insert a scanned image after page 3
+   * await pdfService.mergeDocument(imageBlob, { insertAfterPage: 3 });
+   */
+  public async mergeDocument(source: PdfMergeSource | Array<PdfMergeSource>, options: PdfMergeOptions = {}): Promise<void> {
+    const application = this.PDFViewerApplication;
+    if (!application?.pdfDocument) {
+      throw new Error('mergeDocument(): the PDF viewer has not been initialized yet.');
+    }
+    const { insertAfterPage } = options;
+    if (insertAfterPage !== undefined && (!Number.isInteger(insertAfterPage) || insertAfterPage < 0)) {
+      throw new Error(`mergeDocument(): insertAfterPage must be a page number >= 0, but it was ${insertAfterPage}. Pass 0 to insert before the first page.`);
+    }
+    const sources = Array.isArray(source) ? source : [source];
+    if (sources.length === 0) {
+      return;
+    }
+
+    // pdf.js counts pages from 0 and wants the page *before* the insertion point,
+    // so page 1 becomes 0 and "before the first page" becomes -1. Insertion points
+    // beyond the last page are clamped by pdf.js, hence appending is the default.
+    const pageCount = this.getPageCount();
+    const insertAfter = Math.min(insertAfterPage ?? pageCount, pageCount) - 1;
+
+    const newPages: Array<PdfPageInfo> = [];
+    for (const singleSource of sources) {
+      newPages.push(await this.toPageInfo(singleSource, insertAfter, options));
+    }
+
+    // Merging replaces the document, so pages the user has already reordered or deleted
+    // have to be part of the description of the new document - otherwise they'd come back.
+    const thumbnailViewer = application.pdfThumbnailViewer;
+    const pendingChanges: Array<PdfPageInfo> | null = thumbnailViewer?.hasStructuralChanges?.() ? thumbnailViewer.getStructuralChanges() : null;
+    const currentDocument: Array<PdfPageInfo> = pendingChanges ?? [{ document: null }];
+
+    await this.extractPages([...currentDocument, ...newPages]);
+  }
+
+  /**
+   * Rebuilds the document that's currently open from the page descriptions you pass in,
+   * and shows the result. This is the low-level escape hatch behind `mergeDocument()`:
+   * it hands `pageInfos` to pdf.js unchanged, so you can combine several documents,
+   * drop pages, and put every page exactly where you want it - at the price of using
+   * pdf.js's own **0-based** semantics.
+   *
+   * Unlike `mergeDocument()`, this method does not add pending page reorderings and
+   * deletions for you; `pageInfos` describes the new document completely.
+   *
+   * Requires pdf.js 6.0 or newer (i.e. ngx-extended-pdf-viewer 28 or newer). This is an
+   * experimental pdf.js API, so its semantics may change in future versions.
+   *
+   * @param pageInfos The sources of the new document, in pdf.js's `PageInfo` format
+   * @returns Promise that resolves when the new document has been loaded and rendered
+   * @throws Error if the viewer isn't ready yet, or if pdf.js can't build the document
+   *
+   * @example
+   * // Put another PDF in front of the current document, minus its third page
+   * await pdfService.extractPages([
+   *   { document: null },                                    // the document on screen
+   *   { document: bytes, excludePages: [2], insertAfter: -1 } // 0-based: page 3, before page 1
+   * ]);
+   */
+  public async extractPages(pageInfos: Array<PdfPageInfo>): Promise<void> {
+    const application = this.PDFViewerApplication;
+    const pdfDocument = application?.pdfDocument;
+    if (!application || !pdfDocument) {
+      throw new Error('extractPages(): the PDF viewer has not been initialized yet.');
+    }
+    if (typeof pdfDocument.extractPages !== 'function') {
+      throw new Error('extractPages(): merging pages requires pdf.js 6.0 or newer.');
+    }
+
+    const mergedDocument = await pdfDocument.extractPages(pageInfos);
+    if (!mergedDocument) {
+      throw new Error("extractPages(): pdf.js couldn't build the document. Is every source a valid PDF file? (XFA files and wrong passwords are rejected, too.)");
+    }
+
+    // Same bookkeeping as pdf.js's own "Add file" button (see onSaveAndLoad() in app.js):
+    // the document on screen is no longer the file it was loaded from.
+    application._mergedDocumentNeedsSaving = true;
+    const rendered = this.waitForPagesLoaded();
+    try {
+      await application.open({ data: mergedDocument, filename: application._docFilename });
+    } catch (error) {
+      rendered.cancel();
+      throw error;
+    }
+    await rendered.promise;
+  }
+
+  /**
+   * Removes pages from the document that's currently open. The pages are gone for good -
+   * unlike the sidebar's delete button, this can't be undone.
+   *
+   * The document on screen is replaced by one without those pages; the original file on the
+   * server is never touched. Pages the user has reordered are kept where they are, so the
+   * page numbers you pass in are always the ones the user sees.
+   *
+   * Requires pdf.js 6.0 or newer (i.e. ngx-extended-pdf-viewer 28 or newer).
+   *
+   * @param pages The pages to delete, counting from 1. Accepts a single page number, and a
+   *   list of page numbers and inclusive ranges, e.g. `[1, [4, 8]]`.
+   * @returns Promise that resolves when the shortened document has been loaded and rendered
+   * @throws Error if the viewer isn't ready yet, if a page number doesn't exist, or if you
+   *   try to delete every page
+   *
+   * @example
+   * await pdfService.deletePages(3);            // delete page 3
+   * await pdfService.deletePages([1, [8, 10]]); // delete page 1 and the pages 8 to 10
+   */
+  public async deletePages(pages: number | PdfPageSelection): Promise<void> {
+    const pdfDocument = this.PDFViewerApplication?.pdfDocument;
+    if (!pdfDocument) {
+      throw new Error('deletePages(): the PDF viewer has not been initialized yet.');
+    }
+    const pageCount = this.getPageCount();
+    const deletedPages = NgxExtendedPdfViewerService.toPageNumbers(typeof pages === 'number' ? [pages] : pages, pageCount, 'deletePages');
+    if (deletedPages.size === 0) {
+      return;
+    }
+    if (deletedPages.size >= pageCount) {
+      throw new Error(`deletePages(): a PDF file needs at least one page, so you can't delete all ${pageCount} of them.`);
+    }
+    const pagesMapper = pdfDocument.pagesMapper;
+    if (!pagesMapper) {
+      throw new Error('deletePages(): deleting pages requires pdf.js 6.0 or newer.');
+    }
+
+    const remainingPages: Array<number> = [];
+    for (let pageNumber = 1; pageNumber <= pageCount; pageNumber++) {
+      if (!deletedPages.has(pageNumber)) {
+        remainingPages.push(pageNumber);
+      }
+    }
+    // The mapper describes the remaining pages the way the user sees them, so pages they've
+    // already reordered or deleted in the sidebar keep their current position.
+    await this.extractPages(pagesMapper.extractPages(remainingPages));
+  }
+
+  /** Expands a list of 1-based page numbers and `[from, to]` ranges into single page numbers. */
+  private static toPageNumbers(pages: PdfPageSelection, pageCount: number, method: string): Set<number> {
+    const pageNumbers = new Set<number>();
+    for (const entry of pages) {
+      const [from, to] = Array.isArray(entry) ? entry : [entry, entry];
+      if (!Number.isInteger(from) || !Number.isInteger(to) || from < 1 || to < from || to > pageCount) {
+        throw new Error(`${method}(): ${JSON.stringify(entry)} is not a valid page number or range. The document has ${pageCount} pages, counting from 1.`);
+      }
+      for (let pageNumber = from; pageNumber <= to; pageNumber++) {
+        pageNumbers.add(pageNumber);
+      }
+    }
+    return pageNumbers;
+  }
+
+  private async toPageInfo(source: PdfMergeSource, insertAfter: number, options: PdfMergeOptions): Promise<PdfPageInfo> {
+    if (typeof ImageBitmap !== 'undefined' && source instanceof ImageBitmap) {
+      return { image: source, insertAfter };
+    }
+
+    let blob: Blob | undefined;
+    if (typeof source === 'string' || source instanceof URL) {
+      const response = await fetch(source);
+      if (!response.ok) {
+        throw new Error(`mergeDocument(): failed to load ${source.toString()}: ${response.status} ${response.statusText}`);
+      }
+      blob = await response.blob();
+    } else if (source instanceof Blob) {
+      blob = source;
+    }
+
+    let bytes: Uint8Array;
+    if (blob) {
+      if (await NgxExtendedPdfViewerService.isImage(blob)) {
+        return { image: await createImageBitmap(blob), insertAfter };
+      }
+      bytes = new Uint8Array(await blob.arrayBuffer());
+    } else if (source instanceof ArrayBuffer) {
+      bytes = new Uint8Array(source);
+    } else if (ArrayBuffer.isView(source)) {
+      bytes = new Uint8Array(source.buffer, source.byteOffset, source.byteLength);
+    } else {
+      throw new Error('mergeDocument(): the source must be a URL, a Blob, a File, an ArrayBuffer, a typed array, or an ImageBitmap.');
+    }
+
+    const pageInfo: PdfPageInfo = { document: bytes, insertAfter };
+    if (options.includePages) {
+      pageInfo.includePages = NgxExtendedPdfViewerService.toZeroBasedPages(options.includePages);
+    }
+    if (options.excludePages) {
+      pageInfo.excludePages = NgxExtendedPdfViewerService.toZeroBasedPages(options.excludePages);
+    }
+    if (options.password !== undefined) {
+      pageInfo.password = options.password;
+    }
+    return pageInfo;
+  }
+
+  private static async isImage(blob: Blob): Promise<boolean> {
+    if (blob.type) {
+      return blob.type.startsWith('image/');
+    }
+    // Some file pickers don't report a MIME type, so fall back to the PDF magic bytes -
+    // the same check pdf.js does when you drop a file onto the thumbnail sidebar.
+    return (await blob.slice(0, 5).text()) !== '%PDF-';
+  }
+
+  private static toZeroBasedPages(pages: PdfPageSelection): PdfPageSelection {
+    return pages.map((page) => (Array.isArray(page) ? ([page[0] - 1, page[1] - 1] as [number, number]) : page - 1));
+  }
+
+  /** Resolves when the (re)loaded document has been rendered. */
+  private waitForPagesLoaded(): { promise: Promise<void>; cancel: () => void } {
+    const eventBus = this.PDFViewerApplication?.eventBus;
+    if (!eventBus) {
+      return { promise: Promise.resolve(), cancel: () => undefined };
+    }
+    let done: () => void = () => undefined;
+    const promise = new Promise<void>((resolve) => (done = resolve));
+    // If the document fails to load, open() rejects - stop waiting for pages that never come.
+    const onPagesLoaded = () => {
+      eventBus.off('documenterror', onDocumentError);
+      done();
+    };
+    const onDocumentError = () => {
+      eventBus.off('pagesloaded', onPagesLoaded);
+      done();
+    };
+    eventBus.on('pagesloaded', onPagesLoaded, { once: true });
+    eventBus.on('documenterror', onDocumentError, { once: true });
+    return {
+      promise,
+      cancel: () => {
+        eventBus.off('pagesloaded', onPagesLoaded);
+        eventBus.off('documenterror', onDocumentError);
+        done();
+      },
+    };
   }
 }

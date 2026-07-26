@@ -780,4 +780,262 @@ describe('NgxExtendedPdfViewerService', () => {
       expect(service.isInPDFPrintRange(5, { to: 5 })).toBe(false); // page 6 > to
     });
   });
+
+  /** A stand-in for pdf.js's EventBus, including its `once` bookkeeping. */
+  const createFakeEventBus = () => {
+    const listeners: Record<string, Array<(event: any) => void>> = {};
+    const off = (name: string, listener: (event: any) => void) => {
+      listeners[name] = (listeners[name] ?? []).filter((l) => l !== listener && (l as any).original !== listener);
+    };
+    return {
+      listeners,
+      dispatch: (name: string) => [...(listeners[name] ?? [])].forEach((listener) => listener({})),
+      eventBus: {
+        // pdf.js drops a `once` listener as soon as it has been called.
+        on: (name: string, listener: (event: any) => void, options?: { once?: boolean }) => {
+          const wrapped = options?.once
+            ? (event: any) => {
+                off(name, wrapped);
+                listener(event);
+              }
+            : listener;
+          (wrapped as any).original = listener;
+          (listeners[name] ??= []).push(wrapped);
+        },
+        off,
+        dispatch: jest.fn(),
+      },
+    };
+  };
+
+  describe('mergeDocument / extractPages', () => {
+    let mockApplication: any;
+    let extractPages: jest.Mock;
+    let listeners: Record<string, Array<(event: any) => void>>;
+
+    const somePdf = () => new Uint8Array([0x25, 0x50, 0x44, 0x46, 0x2d]); // "%PDF-"
+
+    beforeEach(() => {
+      const bus = createFakeEventBus();
+      listeners = bus.listeners;
+      extractPages = jest.fn().mockResolvedValue(new Uint8Array([1, 2, 3]));
+      mockApplication = {
+        pagesCount: 4,
+        _docFilename: 'example.pdf',
+        pdfDocument: { extractPages },
+        pdfThumbnailViewer: {
+          hasStructuralChanges: jest.fn().mockReturnValue(false),
+          getStructuralChanges: jest.fn(),
+        },
+        eventBus: bus.eventBus,
+        // Loading the merged document ends with a "pagesloaded" event, just like in the real viewer.
+        open: jest.fn().mockImplementation(async () => {
+          bus.dispatch('pagesloaded');
+        }),
+      };
+      (service as any).PDFViewerApplication = mockApplication;
+    });
+
+    it('should append the pages of the new document by default', async () => {
+      await service.mergeDocument(somePdf());
+
+      const pageInfos = extractPages.mock.calls[0][0];
+      expect(pageInfos[0]).toEqual({ document: null });
+      // 4 pages, 0-based, "after the last page"
+      expect(pageInfos[1].insertAfter).toBe(3);
+    });
+
+    it('should insert the new document before the first page when insertAfterPage is 0', async () => {
+      await service.mergeDocument(somePdf(), { insertAfterPage: 0 });
+
+      expect(extractPages.mock.calls[0][0][1].insertAfter).toBe(-1);
+    });
+
+    it('should translate the 1-based insertAfterPage into pdf.js 0-based indexes', async () => {
+      await service.mergeDocument(somePdf(), { insertAfterPage: 3 });
+
+      expect(extractPages.mock.calls[0][0][1].insertAfter).toBe(2);
+    });
+
+    it('should clamp insertAfterPage to the end of the document', async () => {
+      await service.mergeDocument(somePdf(), { insertAfterPage: 99 });
+
+      expect(extractPages.mock.calls[0][0][1].insertAfter).toBe(3);
+    });
+
+    it('should reject a negative or fractional insertAfterPage', async () => {
+      await expect(service.mergeDocument(somePdf(), { insertAfterPage: -1 })).rejects.toThrow('insertAfterPage');
+      await expect(service.mergeDocument(somePdf(), { insertAfterPage: 1.5 })).rejects.toThrow('insertAfterPage');
+      expect(extractPages).not.toHaveBeenCalled();
+    });
+
+    it('should convert the 1-based includePages and excludePages to 0-based', async () => {
+      await service.mergeDocument(somePdf(), { includePages: [1, [4, 8]], excludePages: [5] });
+
+      expect(extractPages.mock.calls[0][0][1]).toEqual(
+        expect.objectContaining({ includePages: [0, [3, 7]], excludePages: [4] })
+      );
+    });
+
+    it('should pass the password of an encrypted source document', async () => {
+      await service.mergeDocument(somePdf(), { password: 'secret' });
+
+      expect(extractPages.mock.calls[0][0][1].password).toBe('secret');
+    });
+
+    it('should insert several documents in the given order', async () => {
+      await service.mergeDocument([somePdf(), somePdf()], { insertAfterPage: 0 });
+
+      const pageInfos = extractPages.mock.calls[0][0];
+      expect(pageInfos).toHaveLength(3);
+      expect(pageInfos[1].insertAfter).toBe(-1);
+      expect(pageInfos[2].insertAfter).toBe(-1);
+    });
+
+    it('should add an image as a synthetic page', async () => {
+      const bitmap = {} as ImageBitmap;
+      (globalThis as any).createImageBitmap = jest.fn().mockResolvedValue(bitmap);
+
+      await service.mergeDocument(new Blob(['not really a png'], { type: 'image/png' }), { insertAfterPage: 2 });
+
+      expect(extractPages.mock.calls[0][0][1]).toEqual({ image: bitmap, insertAfter: 1 });
+    });
+
+    it('should keep pages the user has already reordered or deleted', async () => {
+      const structuralChanges = [{ document: null, pageIndices: [1, 0] }];
+      mockApplication.pdfThumbnailViewer.hasStructuralChanges.mockReturnValue(true);
+      mockApplication.pdfThumbnailViewer.getStructuralChanges.mockReturnValue(structuralChanges);
+
+      await service.mergeDocument(somePdf(), { insertAfterPage: 0 });
+
+      expect(extractPages.mock.calls[0][0][0]).toBe(structuralChanges[0]);
+    });
+
+    it('should reload the viewer with the merged document', async () => {
+      await service.mergeDocument(somePdf());
+
+      expect(mockApplication.open).toHaveBeenCalledWith({ data: new Uint8Array([1, 2, 3]), filename: 'example.pdf' });
+      expect(mockApplication._mergedDocumentNeedsSaving).toBe(true);
+    });
+
+    it('should wait until the merged document has been rendered', async () => {
+      let rendered = false;
+      mockApplication.open.mockImplementation(async () => {
+        await Promise.resolve();
+        rendered = true;
+        listeners['pagesloaded']?.forEach((listener) => listener({}));
+      });
+
+      await service.extractPages([{ document: null }]);
+
+      expect(rendered).toBe(true);
+      expect(listeners['pagesloaded']).toHaveLength(0); // the listener has been cleaned up
+    });
+
+    it('should report a document pdf.js refused to build', async () => {
+      extractPages.mockResolvedValue(null);
+
+      await expect(service.extractPages([{ document: null }])).rejects.toThrow("pdf.js couldn't build the document");
+      expect(mockApplication.open).not.toHaveBeenCalled();
+    });
+
+    it('should stop waiting when the merged document fails to load', async () => {
+      mockApplication.open.mockRejectedValue(new Error('Invalid PDF structure'));
+
+      await expect(service.extractPages([{ document: null }])).rejects.toThrow('Invalid PDF structure');
+      expect(listeners['pagesloaded']).toHaveLength(0);
+    });
+
+    it('should complain when the viewer has not been initialized', async () => {
+      (service as any).PDFViewerApplication = undefined;
+
+      await expect(service.mergeDocument(somePdf())).rejects.toThrow('not been initialized');
+      await expect(service.extractPages([{ document: null }])).rejects.toThrow('not been initialized');
+    });
+
+    it('should complain when the PDF engine is too old', async () => {
+      mockApplication.pdfDocument = {};
+
+      await expect(service.extractPages([{ document: null }])).rejects.toThrow('pdf.js 6.0 or newer');
+    });
+  });
+
+  describe('deletePages', () => {
+    let mockApplication: any;
+    let extractPages: jest.Mock;
+    let mapperExtractPages: jest.Mock;
+
+    beforeEach(() => {
+      const bus = createFakeEventBus();
+      extractPages = jest.fn().mockResolvedValue(new Uint8Array([1, 2, 3]));
+      mapperExtractPages = jest.fn().mockReturnValue([{ document: null, includePages: [], pageIndices: [] }]);
+      mockApplication = {
+        pagesCount: 6,
+        _docFilename: 'example.pdf',
+        pdfDocument: { extractPages, pagesMapper: { extractPages: mapperExtractPages } },
+        eventBus: bus.eventBus,
+        open: jest.fn().mockImplementation(async () => {
+          bus.dispatch('pagesloaded');
+        }),
+      };
+      (service as any).PDFViewerApplication = mockApplication;
+    });
+
+    it('should keep every page except the deleted one', async () => {
+      await service.deletePages(3);
+
+      expect(mapperExtractPages).toHaveBeenCalledWith([1, 2, 4, 5, 6]);
+    });
+
+    it('should accept page numbers and ranges', async () => {
+      await service.deletePages([1, [4, 6]]);
+
+      expect(mapperExtractPages).toHaveBeenCalledWith([2, 3]);
+    });
+
+    it('should ignore pages listed twice', async () => {
+      await service.deletePages([2, 2, [2, 3]]);
+
+      expect(mapperExtractPages).toHaveBeenCalledWith([1, 4, 5, 6]);
+    });
+
+    it('should rebuild the document from what the page mapper describes', async () => {
+      const pageInfos = [{ document: null, includePages: [0], pageIndices: [0] }];
+      mapperExtractPages.mockReturnValue(pageInfos);
+
+      await service.deletePages(2);
+
+      expect(extractPages).toHaveBeenCalledWith(pageInfos);
+    });
+
+    it('should refuse to delete pages that do not exist', async () => {
+      await expect(service.deletePages(7)).rejects.toThrow('not a valid page number');
+      await expect(service.deletePages(0)).rejects.toThrow('not a valid page number');
+      await expect(service.deletePages([[4, 2]])).rejects.toThrow('not a valid page number');
+      expect(extractPages).not.toHaveBeenCalled();
+    });
+
+    it('should refuse to delete every page', async () => {
+      await expect(service.deletePages([[1, 6]])).rejects.toThrow('at least one page');
+      expect(extractPages).not.toHaveBeenCalled();
+    });
+
+    it('should do nothing when the list of pages is empty', async () => {
+      await service.deletePages([]);
+
+      expect(extractPages).not.toHaveBeenCalled();
+    });
+
+    it('should complain when the viewer has not been initialized', async () => {
+      (service as any).PDFViewerApplication = undefined;
+
+      await expect(service.deletePages(1)).rejects.toThrow('not been initialized');
+    });
+
+    it('should complain when the PDF engine is too old', async () => {
+      delete mockApplication.pdfDocument.pagesMapper;
+
+      await expect(service.deletePages(1)).rejects.toThrow('pdf.js 6.0 or newer');
+    });
+  });
 });
