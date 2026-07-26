@@ -552,11 +552,14 @@ function updateAngularJson(tree: Tree, projectName: string, stable: boolean): Tr
     console.log('{');
     console.log("  glob: '**/*',");
     if (stable) {
-      const angularVersion = detectAngularVersion(tree);
-      const usePublicFolder = angularVersion && angularVersion.major >= 17;
-      const outputPath = usePublicFolder ? 'public' : 'assets';
+      // The output folder is the path inside the *built* application, so it is
+      // 'assets' no matter whether the project keeps its own files in
+      // `src/assets` or in the `public` folder Angular 17 introduced. It also
+      // has to match `pdfDefaultOptions.assetsFolder`, which defaults to
+      // 'assets' - and the cmaps and the standard fonts are looked up inside
+      // that folder, so a different name would break them (#3232).
       console.log("  input: 'node_modules/ngx-extended-pdf-viewer/assets/',");
-      console.log(`  output: '${outputPath}',`);
+      console.log("  output: 'assets',");
     } else {
       console.log("  input: 'node_modules/ngx-extended-pdf-viewer/bleeding-edge/',");
       console.log("  output: 'bleeding-edge',");
