@@ -1,4 +1,4 @@
-<div id="toolbarSidebar" [style.height]="height">
+<div id="toolbarSidebar" [style.height]="height()">
   <div id="toolbarSidebarLeft">
     <button
       aria-label="Thumbnails"
@@ -7,7 +7,7 @@
       class="toolbarButton"
       title="Show Thumbnails"
       data-l10n-id="pdfjs-thumbs-button"
-      [style.zoom]="mobileFriendlyZoomScale"
+      [style.zoom]="mobileFriendlyZoomScale()"
     >
       <span data-l10n-id="pdfjs-thumbs-button-label">Thumbnails</span>
       <svg aria-hidden="true" focusable="false" width="20px" height="20px" viewBox="0 0 24 24">
@@ -25,7 +25,7 @@
       title="Show Document Outline (double-click to expand/collapse all items)"
       data-l10n-id="pdfjs-document-outline-button"
       hidden="true"
-      [style.zoom]="mobileFriendlyZoomScale"
+      [style.zoom]="mobileFriendlyZoomScale()"
       aria-label="Show Document Outline (double-click to expand/collapse all items)"
     >
       <span data-l10n-id="pdfjs-document-outline-button-label">Document Outline</span>
@@ -41,7 +41,7 @@
       title="Show Attachments"
       data-l10n-id="pdfjs-attachments-button"
       hidden="true"
-      [style.zoom]="mobileFriendlyZoomScale"
+      [style.zoom]="mobileFriendlyZoomScale()"
     >
       <span data-l10n-id="pdfjs-attachments-button-label">Attachments</span>
       <svg aria-hidden="true" focusable="false" width="20px" height="20px" viewBox="0 0 24 24">
@@ -58,7 +58,7 @@
       title="Show Layers (double-click to reset all layers to the default state)"
       data-l10n-id="pdfjs-layers-button"
       hidden="true"
-      [style.zoom]="mobileFriendlyZoomScale"
+      [style.zoom]="mobileFriendlyZoomScale()"
       aria-label="Show Layers (double-click to reset all layers to the default state)"
     >
       <span data-l10n-id="pdfjs-layers-button-label">Layers</span>
@@ -88,7 +88,7 @@
         disabled="disabled"
         title="Find Current Outline Item"
         data-l10n-id="pdfjs-current-outline-item-button"
-        [style.zoom]="mobileFriendlyZoomScale"
+        [style.zoom]="mobileFriendlyZoomScale()"
         aria-label="Find Current Outline Item"
       >
         <span data-l10n-id="pdfjs-current-outline-item-button-label">Current Outline Item</span>
