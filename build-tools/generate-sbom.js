@@ -31,6 +31,7 @@ process.chdir(path.join(__dirname, '..'));
 const LIB_DIR = process.env.NGX_SBOM_LIB_DIR || path.join('projects', 'ngx-extended-pdf-viewer');
 const PROVENANCE_PATH = path.join(LIB_DIR, 'pdfjs-provenance.json');
 const SBOM_PATH = path.join(LIB_DIR, 'sbom.json');
+const VEX_PATH = path.join(LIB_DIR, 'vex.json');
 
 const packageJson = JSON.parse(fs.readFileSync(path.join(LIB_DIR, 'package.json'), 'utf8'));
 
@@ -71,10 +72,14 @@ function deterministicUuid(seed) {
 
 const rootRef = `pkg:npm/${packageJson.name}@${packageJson.version}`;
 
+// Kept free of URI-significant characters so that vex.json can address these components with a
+// CycloneDX bom-link (urn:cdx:<serial>/<version>#<bom-ref>) without any escaping.
+const componentRef = (channel) => `pdfjs-${channel}`;
+
 const components = channels.map(([channel, entry]) => {
   const upstreamPurl = `pkg:npm/pdfjs-dist@${entry.upstream.release}`;
   return {
-    'bom-ref': `${upstreamPurl}?bundle=${entry.bundle}`,
+    'bom-ref': componentRef(channel),
     type: 'library',
     name: 'pdfjs-dist',
     version: entry.upstream.release,
@@ -100,6 +105,25 @@ const components = channels.map(([channel, entry]) => {
         { uid: entry.upstream.commit, url: `${entry.upstream.repository}/commit/${entry.upstream.commit}` },
         { uid: entry.fork.commit, url: `${entry.fork.repository}/commit/${entry.fork.commit}` },
       ],
+      // Security fixes we picked up ahead of the upstream release that carries them. Without
+      // this, the component's version alone would make a scanner report a vulnerability that is
+      // in fact already fixed in the bundled code.
+      patches: (entry.securityFixes || []).map((fix) => ({
+        type: fix.appliedVia === 'cherry-pick' ? 'cherry-pick' : 'backport',
+        resolves: [
+          {
+            type: 'security',
+            id: fix.cve,
+            name: fix.summary,
+            description:
+              `${fix.detail} Fixed upstream in pdf.js ${fix.fixedUpstreamIn}; applied here by ${fix.appliedVia} of ` +
+              `${fix.upstreamCommits.map((c) => c.upstream.slice(0, 10)).join(' and ')}.`,
+            source: { name: 'GitHub Security Advisory', url: fix.url },
+            references: [fix.url, ...fix.upstreamCommits.map((c) => `${entry.upstream.repository}/commit/${c.upstream}`)],
+          },
+        ],
+        diff: { url: `${entry.fork.repository}/commit/${fix.upstreamCommits.at(-1).inFork}` },
+      })),
       notes:
         `The bundled engine is a fork of Mozilla pdf.js ${entry.upstream.release}, maintained at ${entry.fork.repository} ` +
         `(branch ${entry.fork.branch}, commit ${entry.fork.commit}). It carries modifications for Angular integration, ` +
@@ -171,6 +195,66 @@ const sbom = {
 
 fs.writeFileSync(SBOM_PATH, `${JSON.stringify(sbom, null, 2)}\n`);
 console.log(`✓ ${SBOM_PATH} written`);
+
+// ---------------------------------------------------------------- VEX
+// The SBOM says what is in the package; the VEX says whether a known advisory actually affects
+// it. Both are needed here: the bundled engine keeps the version number of the upstream release
+// it derives from, so scanners will flag advisories that the cherry-picked fixes already close.
+// Without this file every consumer has to come and ask us, one ticket at a time.
+//
+// `resolved_with_pedigree` is the exact CycloneDX state for "fixed in this build, and the
+// pedigree in sbom.json shows you how" - stronger and more honest than `not_affected`.
+
+const bomLink = (ref) => `urn:cdx:${sbom.serialNumber.replace('urn:uuid:', '')}/${sbom.version}#${ref}`;
+
+// One statement per advisory, listing every bundle it applies to.
+const byAdvisory = new Map();
+for (const [channel, entry] of channels) {
+  for (const fix of entry.securityFixes || []) {
+    if (!byAdvisory.has(fix.cve)) {
+      byAdvisory.set(fix.cve, { fix, channels: [] });
+    }
+    byAdvisory.get(fix.cve).channels.push({ channel, entry });
+  }
+}
+
+const vulnerabilities = [...byAdvisory.values()].map(({ fix, channels: affected }) => ({
+  'bom-ref': `vex-${fix.cve}`,
+  id: fix.cve,
+  source: { name: 'GitHub Security Advisory', url: fix.url },
+  references: [{ id: fix.id, source: { name: 'GitHub Security Advisory', url: fix.url } }],
+  ratings: [{ source: { name: 'GitHub Security Advisory', url: fix.url }, severity: 'high', method: 'other' }],
+  description: fix.summary,
+  detail: fix.detail,
+  advisories: [{ url: fix.url }],
+  affects: affected.map(({ channel }) => ({ ref: bomLink(componentRef(channel)) })),
+  analysis: {
+    state: 'resolved_with_pedigree',
+    response: ['update'],
+    detail:
+      `Fixed in this build. The bundled engine reports pdf.js ${affected[0].entry.upstream.release} because that is the ` +
+      `upstream release it derives from, but the fix from pdf.js ${fix.fixedUpstreamIn} is applied by ${fix.appliedVia} - ` +
+      `see the pedigree.patches entry for ${fix.cve} in sbom.json. ${fix.detail} ` +
+      'Only the latest published version of ngx-extended-pdf-viewer receives security updates.',
+  },
+}));
+
+const vex = {
+  bomFormat: 'CycloneDX',
+  specVersion: '1.6',
+  serialNumber: `urn:uuid:${deterministicUuid(`vex:${rootRef}`)}`,
+  version: 1,
+  metadata: {
+    timestamp: sbom.metadata.timestamp,
+    tools: sbom.metadata.tools,
+    authors: sbom.metadata.authors,
+    component: sbom.metadata.component,
+  },
+  vulnerabilities,
+};
+
+fs.writeFileSync(VEX_PATH, `${JSON.stringify(vex, null, 2)}\n`);
+console.log(`✓ ${VEX_PATH} written (${vulnerabilities.length} statement(s))`);
 
 // Never leave an invalid SBOM on disk. validate-sbom.js exits non-zero and explains itself.
 execFileSync(process.execPath, [path.join(__dirname, 'validate-sbom.js')], { stdio: 'inherit' });

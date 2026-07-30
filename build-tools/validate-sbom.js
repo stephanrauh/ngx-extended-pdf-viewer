@@ -21,6 +21,7 @@ process.chdir(path.join(__dirname, '..'));
 // See generate-sbom.js - test-sbom.js uses this to validate a fixture.
 const LIB_DIR = process.env.NGX_SBOM_LIB_DIR || path.join('projects', 'ngx-extended-pdf-viewer');
 const SBOM_PATH = path.join(LIB_DIR, 'sbom.json');
+const VEX_PATH = path.join(LIB_DIR, 'vex.json');
 const PROVENANCE_PATH = path.join(LIB_DIR, 'pdfjs-provenance.json');
 const SCHEMA_DIR = path.join('build-tools', 'schema');
 
@@ -50,7 +51,16 @@ const validate = ajv.compile(loadSchema('bom-1.6.schema.json'));
 
 if (!validate(sbom)) {
   for (const e of validate.errors) {
-    fail(`schema: ${e.instancePath || '/'} ${e.message}`);
+    fail(`schema: sbom.json ${e.instancePath || '/'} ${e.message}`);
+  }
+}
+
+const vex = fs.existsSync(VEX_PATH) ? JSON.parse(fs.readFileSync(VEX_PATH, 'utf8')) : null;
+if (!vex) {
+  fail('vex.json is missing - run "npm run build:sbom"');
+} else if (!validate(vex)) {
+  for (const e of validate.errors) {
+    fail(`schema: vex.json ${e.instancePath || '/'} ${e.message}`);
   }
 }
 
@@ -100,6 +110,46 @@ for (const [channel, entry] of channels) {
   const buildVersion = component.properties?.find((p) => p.name === 'ngx-extended-pdf-viewer:pdfjsBuildVersion')?.value;
   if (buildVersion !== entry.pdfjsBuildVersion) {
     fail(`${channel}: SBOM says build ${buildVersion}, pdfjs-provenance.json says ${entry.pdfjsBuildVersion}`);
+  }
+}
+
+// Every applied security fix must show up in BOTH the pedigree and the VEX. If it appears in
+// neither, we silently under-report and consumers chase a vulnerability we already fixed; if it
+// appears in only one, the two documents contradict each other.
+const CDX_STATES = ['resolved', 'resolved_with_pedigree', 'exploitable', 'in_triage', 'false_positive', 'not_affected'];
+const sbomSerial = (sbom.serialNumber || '').replace('urn:uuid:', '');
+
+for (const [channel, entry] of channels) {
+  const component = sbom.components?.find((c) => c.properties?.some((p) => p.name === 'ngx-extended-pdf-viewer:channel' && p.value === channel));
+  for (const fix of entry.securityFixes || []) {
+    const patch = component?.pedigree?.patches?.find((p) => p.resolves?.some((r) => r.id === fix.cve));
+    if (!patch) {
+      fail(`${channel}: ${fix.cve} is applied to the engine but has no pedigree.patches entry`);
+    } else if (!['cherry-pick', 'backport'].includes(patch.type)) {
+      fail(`${channel}: ${fix.cve} patch type "${patch.type}" is not a CycloneDX patch type`);
+    }
+
+    const statement = vex?.vulnerabilities?.find((v) => v.id === fix.cve);
+    if (!statement) {
+      fail(`${channel}: ${fix.cve} has no VEX statement - scanners would report it as unresolved`);
+      continue;
+    }
+    if (!CDX_STATES.includes(statement.analysis?.state)) {
+      fail(`${fix.cve}: analysis.state "${statement.analysis?.state}" is not a CycloneDX analysis state`);
+    }
+    // The statement has to actually point at this bundle, via a bom-link into sbom.json.
+    const expected = `urn:cdx:${sbomSerial}/${sbom.version}#pdfjs-${channel}`;
+    if (!statement.affects?.some((a) => a.ref === expected)) {
+      fail(`${fix.cve}: VEX does not link to the ${channel} component (expected affects.ref ${expected})`);
+    }
+  }
+}
+
+// A VEX statement about something we don't ship is a bug in the other direction.
+for (const statement of vex?.vulnerabilities || []) {
+  const known = channels.some(([, entry]) => (entry.securityFixes || []).some((f) => f.cve === statement.id));
+  if (!known) {
+    fail(`vex.json has a statement for ${statement.id}, which no bundle records as applied`);
   }
 }
 

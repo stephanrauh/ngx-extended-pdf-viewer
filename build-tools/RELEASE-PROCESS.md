@@ -89,6 +89,34 @@ the npm package and attached to the GitHub release, fix that:
 | --- | --- | --- |
 | `projects/ngx-extended-pdf-viewer/pdfjs-provenance.json` | `build-tools/base-library/update-pdfjs-provenance.js` | per bundle: upstream pdf.js release + commit, fork branch + commit, bundled build version |
 | `projects/ngx-extended-pdf-viewer/sbom.json` | `build-tools/generate-sbom.js` | CycloneDX 1.6, with a `purl`/`cpe` for CVE matching and a `pedigree` block declaring the fork |
+| `projects/ngx-extended-pdf-viewer/vex.json` | `build-tools/generate-sbom.js` | CycloneDX VEX: which known advisories actually affect the bundled engine |
+
+### Picking up a pdf.js security fix ahead of upstream
+
+When a pdf.js advisory lands and we cherry-pick the fix rather than waiting for the release that
+carries it, the bundled engine keeps the version number of the release it derives from — so every
+scanner will keep reporting the advisory. Two documents fix that, and both are generated:
+
+1. Add the advisory to **`build-tools/base-library/pdfjs-security-fixes.json`**: the CVE, the
+   GHSA URL, the upstream release that carries the fix, and the **full SHAs of the upstream fix
+   commits**.
+2. Cherry-pick those commits into the fork with **`git cherry-pick -x`**. The `-x` is not
+   optional: it writes the `(cherry picked from commit <sha>)` trailer that detection relies on.
+   Do it on *both* engine branches.
+3. Rebuild (`npm run build:base` per branch). `update-pdfjs-provenance.js` checks each branch for
+   every listed commit — as an ancestor (merged) or via the trailer (cherry-picked) — and records
+   the result under `securityFixes` in the provenance.
+4. `generate-sbom.js` turns that into a `pedigree.patches` entry of type `cherry-pick` resolving
+   a `security` issue, plus a VEX statement with state `resolved_with_pedigree` that bom-links
+   back to the affected components in `sbom.json`.
+
+An advisory only counts as fixed when **every** listed commit is present. A partial application
+exits **93** rather than producing an SBOM that reports a half-patched engine as safe — the one
+failure mode that would be worse than shipping no SBOM at all.
+
+`validate-sbom.js` then enforces that the two documents agree: a fix recorded in the provenance
+must appear in both the pedigree and the VEX, and a VEX statement about something no bundle
+claims is an error too.
 
 The provenance file is refreshed automatically by `1-build-base-library.js`, once per engine
 build — the fork's checked-out branch decides which bundle's entry is updated, the same rule

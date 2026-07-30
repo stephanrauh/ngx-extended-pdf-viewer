@@ -93,6 +93,7 @@ jobs:
             workspace/ngx-extended-pdf-viewer/dist/ngx-extended-pdf-viewer/*.tgz
             workspace/ngx-extended-pdf-viewer/*-source.tar.gz
             workspace/ngx-extended-pdf-viewer/projects/ngx-extended-pdf-viewer/sbom.json
+            workspace/ngx-extended-pdf-viewer/projects/ngx-extended-pdf-viewer/vex.json
             workspace/ngx-extended-pdf-viewer/projects/ngx-extended-pdf-viewer/pdfjs-provenance.json
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

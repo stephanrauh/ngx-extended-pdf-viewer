@@ -72,6 +72,18 @@ function writeFixture() {
       committedAt: '2026-01-02T03:04:05+01:00',
     },
     fork: { repository: 'https://github.com/stephanrauh/pdf.js', branch, commit, committedAt: '2026-02-03T04:05:06+01:00' },
+    securityFixes: [
+      {
+        id: 'GHSA-test-0000-0000',
+        cve: 'CVE-2026-00000',
+        url: 'https://github.com/mozilla/pdf.js/security/advisories/GHSA-test-0000-0000',
+        summary: 'fixture advisory',
+        fixedUpstreamIn: '9.9.999',
+        appliedVia: 'cherry-pick',
+        upstreamCommits: [{ upstream: 'd'.repeat(40), inFork: 'e'.repeat(40), via: 'cherry-pick' }],
+        detail: 'fixture detail',
+      },
+    ],
   });
 
   fs.writeFileSync(
@@ -181,6 +193,54 @@ try {
     fs.writeFileSync(sbomPath, JSON.stringify(tampered, null, 2));
     const output = run('validate-sbom.js', { expectFailure: true });
     assert(output.includes('pedigree'), 'the validator did not complain about the pedigree');
+  });
+
+  check('records applied security fixes as CycloneDX pedigree patches', () => {
+    run('generate-sbom.js');
+    for (const component of readSbom().components) {
+      const patch = component.pedigree.patches?.find((p) => p.resolves?.some((r) => r.id === 'CVE-2026-00000'));
+      assert(patch, `no pedigree patch for the fixture CVE in ${component['bom-ref']}`);
+      assert(patch.type === 'cherry-pick', `patch type is ${patch.type}`);
+      assert(patch.resolves[0].type === 'security', 'the patch does not resolve a security issue');
+    }
+  });
+
+  check('emits a VEX statement linked to every affected bundle', () => {
+    const vex = JSON.parse(fs.readFileSync(path.join(FIXTURE, 'vex.json'), 'utf8'));
+    assert(vex.bomFormat === 'CycloneDX', 'vex.json is not a CycloneDX document');
+    assert(vex.vulnerabilities.length === 1, `expected 1 statement, got ${vex.vulnerabilities.length}`);
+    const v = vex.vulnerabilities[0];
+    assert(v.id === 'CVE-2026-00000', `wrong id ${v.id}`);
+    assert(v.analysis.state === 'resolved_with_pedigree', `wrong state ${v.analysis.state}`);
+    // Both bundles carry the fix, so both must be addressed - by bom-link into sbom.json.
+    const serial = readSbom().serialNumber.replace('urn:uuid:', '');
+    for (const channel of ['stable', 'bleedingEdge']) {
+      const ref = `urn:cdx:${serial}/1#pdfjs-${channel}`;
+      assert(
+        v.affects.some((a) => a.ref === ref),
+        `VEX does not link to ${channel} (${ref})`,
+      );
+    }
+  });
+
+  check('rejects an SBOM that claims a fix the VEX does not cover', () => {
+    run('generate-sbom.js');
+    const vexPath = path.join(FIXTURE, 'vex.json');
+    const tampered = JSON.parse(fs.readFileSync(vexPath, 'utf8'));
+    tampered.vulnerabilities = [];
+    fs.writeFileSync(vexPath, JSON.stringify(tampered, null, 2));
+    const output = run('validate-sbom.js', { expectFailure: true });
+    assert(output.includes('no VEX statement'), 'the missing VEX statement was not reported');
+  });
+
+  check('rejects a VEX statement for something no bundle claims', () => {
+    run('generate-sbom.js');
+    const vexPath = path.join(FIXTURE, 'vex.json');
+    const tampered = JSON.parse(fs.readFileSync(vexPath, 'utf8'));
+    tampered.vulnerabilities[0].id = 'CVE-2026-99999';
+    fs.writeFileSync(vexPath, JSON.stringify(tampered, null, 2));
+    const output = run('validate-sbom.js', { expectFailure: true });
+    assert(output.includes('CVE-2026-99999'), 'the stray VEX statement was not reported');
   });
 
   check('rejects a document that is not valid CycloneDX', () => {

@@ -30,6 +30,11 @@ Every published package now contains two files that close that gap:
 - **`pdfjs-provenance.json`** — the same information in plain form: for each bundle
   (`assets/` = stable, `bleeding-edge/`), the upstream pdf.js release and commit it is derived
   from, plus the fork branch and commit it was built from.
+- **`vex.json`** — a CycloneDX VEX document. When a pdf.js advisory is fixed in the bundled
+  engine before the upstream release carrying that fix, the version number alone would still make
+  your scanner report it. The VEX says otherwise, machine-readably, with a
+  `resolved_with_pedigree` statement pointing at the matching `pedigree.patches` entry in the
+  SBOM. Dependency-Track and Trivy consume it directly.
 
 Both files are also attached to every [GitHub release](https://github.com/stephanrauh/ngx-extended-pdf-viewer/releases).
 The human-readable summary is in `NOTICE`.
@@ -44,3 +49,6 @@ please open a ticket — I would rather answer a false alarm than have you sit o
 Please update to the latest version! At miminum, that should be version 20.0.2, but it's better to opt for the latest version because it contains the latest bugfixes.
 
 - Until 20.0.1 the PDF viewer was affected by [CVE-2024-4367](https://github.com/advisories/GHSA-wgrm-67xf-hhpq). Version 20.0.2 fixes this.
+- [CVE-2026-16633](https://github.com/mozilla/pdf.js/security/advisories/GHSA-hq66-cqwq-w95j) (pdf.js, high, published 2026-07-28): a malicious PDF could execute JavaScript in the context of the hosting page. It affects pdf.js from 5.6.83 onwards, so every ngx-extended-pdf-viewer release bundling such an engine is affected — which includes the 28.x line and the 29.0.0 release candidates. The fix from pdf.js 6.2.108 has been cherry-picked into both bundled engines; see `vex.json` in the package.
+
+  Two notes on exposure. The sandbox half of the issue needs `enableScripting`, which pdf.js enables by default but this library does **not** — so a default configuration was less exposed than upstream's. The other half concerns XFA rich text and is reachable whenever `enableXfa` is true, which **is** the default here. Do not assume the default configuration was safe; please update.
