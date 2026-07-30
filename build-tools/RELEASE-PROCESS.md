@@ -68,15 +68,71 @@ The GitHub Actions workflow triggers automatically when you push a tag:
 2. Checks out both ngx-extended-pdf-viewer and mypdf.js
 3. Verifies tag version matches package.json
 4. Runs `npm run do-release:lib` which:
-   - Generates SBOM (Software Bill of Materials)
    - Builds base library from mypdf.js bleeding-edge
    - Verifies bleeding-edge assets
    - Builds base library from mypdf.js 6.1
    - Verifies stable assets
+   - Generates the SBOM (Software Bill of Materials) — after the engines, because it
+     describes them; see "SBOM and pdf.js provenance" below
    - Builds Angular library
    - Verifies dist output and version
    - Publishes to npm with `--provenance` flag
 5. Creates GitHub Release with artifacts
+
+## SBOM and pdf.js provenance
+
+We bundle a fork of pdf.js, so `pdfjs-dist` never appears in `package.json` and no dependency
+scanner can see the PDF engine on its own (#3244). Two generated files, both published inside
+the npm package and attached to the GitHub release, fix that:
+
+| File | Written by | Contents |
+| --- | --- | --- |
+| `projects/ngx-extended-pdf-viewer/pdfjs-provenance.json` | `build-tools/base-library/update-pdfjs-provenance.js` | per bundle: upstream pdf.js release + commit, fork branch + commit, bundled build version |
+| `projects/ngx-extended-pdf-viewer/sbom.json` | `build-tools/generate-sbom.js` | CycloneDX 1.6, with a `purl`/`cpe` for CVE matching and a `pedigree` block declaring the fork |
+
+The provenance file is refreshed automatically by `1-build-base-library.js`, once per engine
+build — the fork's checked-out branch decides which bundle's entry is updated, the same rule
+`updateMozillasPdfViewer.js` uses. So a release, which builds both branches, ends up with both
+entries current. To backfill an entry without checking that branch out:
+
+```bash
+node ./build-tools/base-library/update-pdfjs-provenance.js --ref 6.1
+```
+
+`generate-sbom.js` (`npm run build:sbom`) turns the provenance into CycloneDX. It runs as part of
+`2-build-library.js`, right before ng-packagr packs, so `dist/` can never ship an SBOM describing
+an older engine.
+
+`pdfjs-provenance.json` is checked in; `sbom.json` is git-ignored build output, like the engine
+bundles themselves.
+
+### How we know the SBOM is valid
+
+Three layers, each catching what the one before it can't:
+
+1. **Every generation self-validates.** `generate-sbom.js` ends by invoking `validate-sbom.js`,
+   which checks the document against the vendored CycloneDX 1.6 JSON schema (see
+   `build-tools/schema/README.md`) *and* against the bundle on disk. A failure is non-zero, so an
+   invalid SBOM is never left behind — and since the SBOM is generated during `build:lib` and the
+   release, a broken one fails the release rather than shipping.
+2. **`npm run test:sbom`** (`build-tools/test-sbom.js`) drives the whole pipeline against a
+   fixture — no pdf.js build needed, runs in under a second on a fresh checkout, and is part of
+   the PR workflow. It asserts the output is schema-valid, carries the purl/cpe/pedigree a
+   scanner needs, is byte-for-byte reproducible, and that the staleness guards actually fire.
+3. **`npm run validate:sbom`** checks the real, currently generated `sbom.json` on demand.
+
+Two deliberate design points that the tests pin down. The SBOM's `metadata.timestamp` is the
+commit date of the newest bundled engine rather than "now", and the serial number is derived from
+the package name and version — so the file only changes when its contents change. That keeps
+local rebuilds from dirtying the working tree and makes releases reproducible. And
+`generate-sbom.js` exits 89 when `pdfjs-provenance.json` disagrees with the `pdf.worker-*.mjs`
+actually present, so a stale provenance file cannot produce an SBOM that misstates the engine.
+
+| Command | Purpose |
+| --- | --- |
+| `npm run build:sbom` | regenerate `sbom.json` (self-validating) |
+| `npm run validate:sbom` | validate the current `sbom.json` |
+| `npm run test:sbom` | fixture-based regression test of the pipeline (CI) |
 
 ## Verification Checklist
 

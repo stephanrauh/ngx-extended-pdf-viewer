@@ -29,9 +29,22 @@ try {
   process.exit(21);
 }
 
+// Refresh the SBOM before packing, so dist/ can never ship one that describes an older engine
+// (#3244). It is generated from pdfjs-provenance.json, which 1-build-base-library.js keeps
+// current, and it self-validates - cheap enough to do on every build.
+try {
+  execSync('node ./build-tools/generate-sbom.js', { stdio: 'inherit', shell: true });
+} catch (error) {
+  console.error('Error 25: Generating the SBOM failed');
+  process.exit(25);
+}
+
 // Pack library
 try {
-  execSync('npx ng-packagr -p projects/ngx-extended-pdf-viewer/ng-package.json -c projects/ngx-extended-pdf-viewer/tsconfig.lib.json', { stdio: 'inherit', shell: true });
+  execSync('npx ng-packagr -p projects/ngx-extended-pdf-viewer/ng-package.json -c projects/ngx-extended-pdf-viewer/tsconfig.lib.json', {
+    stdio: 'inherit',
+    shell: true,
+  });
 } catch (error) {
   console.error('Error 22: Packing library failed');
   process.exit(22);

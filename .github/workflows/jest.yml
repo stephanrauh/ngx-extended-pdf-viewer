@@ -26,6 +26,8 @@ jobs:
         run: npm ci --ignore-scripts && ./build-tools/search-for-shai-hulud.sh --full && npm rebuild esbuild
       - name: Run tests
         run: npm run test:ci
+      - name: Check the SBOM pipeline
+        run: npm run test:sbom
       - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@v6
         env:

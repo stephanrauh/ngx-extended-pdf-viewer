@@ -31,14 +31,8 @@ let packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
 let version = packageJson.version;
 console.log(`Building and publishing version: ${version}`);
 
-// Generate SBOM (non-critical - continue on failure)
-console.log('\n📦 Generating SBOM...');
-try {
-  execSync('npx -y @cyclonedx/cyclonedx-npm --output-file sbom.json --mc-type library', { stdio: 'inherit', shell: true });
-  console.log('✓ SBOM generated successfully');
-} catch (error) {
-  console.warn('⚠️  SBOM generation failed (non-critical, continuing...)');
-}
+// The SBOM is generated further down, once both engines have been built - it describes the
+// bundled pdf.js fork, so it cannot be written before the bundles exist (#3244).
 
 // Build base library from bleeding-edge
 console.log('\n🔨 Building base library (bleeding-edge)...');
@@ -164,6 +158,12 @@ if (!allStableFilesValid) {
   process.exit(82);
 }
 console.log('✓ All stable assets verified');
+
+// Generate the SBOM now that both bundles exist. 1-build-base-library.js has recorded the
+// provenance of each engine as it was built, so this only has to turn it into CycloneDX.
+// Both files are published inside the npm package (see ng-package.json assets).
+console.log('\n📦 Generating SBOM...');
+runCommand('node ./build-tools/generate-sbom.js', 'Error 52: SBOM generation failed', 52);
 
 // Build Angular library
 console.log('\n🔨 Building Angular library...');

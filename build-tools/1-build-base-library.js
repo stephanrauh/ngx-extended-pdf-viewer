@@ -15,4 +15,13 @@ try {
   console.error('Error: updateMozillasPdfViewer.js failed');
   process.exit(1);
 }
+// Record which pdf.js the freshly built bundle is derived from (#3244). The fork is not an
+// npm dependency, so this is the only place that information can come from.
+try {
+  execSync('node ./build-tools/base-library/update-pdfjs-provenance.js', { stdio: 'inherit', shell: true });
+} catch (error) {
+  console.error('Error: update-pdfjs-provenance.js failed');
+  process.exit(1);
+}
+
 console.log('Base library build completed successfully.');

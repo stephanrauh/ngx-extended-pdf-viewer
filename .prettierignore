@@ -1,0 +1,6 @@
+# Third-party files that must stay byte-for-byte identical to upstream.
+# Reformatting the CycloneDX schemas would invalidate the sha256 hashes recorded in
+# build-tools/schema/README.md and turn them into modified copies, which Apache-2.0 §4(b)
+# would then require us to document as changed. Leave them alone.
+build-tools/schema/*.json
+build-tools/schema/LICENSE
