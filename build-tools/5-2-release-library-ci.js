@@ -34,18 +34,20 @@ try {
   console.warn('⚠️  SBOM generation failed (non-critical, continuing...)');
 }
 
-// Build base library from bleeding-edge
-console.log('\n🔨 Building base library (bleeding-edge)...');
+// Build the bleeding-edge bundle - on the 28.x line it comes from the fork's 6.0 branch, NOT
+// from `bleeding-edge`. That branch has moved on to the 6.1 engine and the 29.x viewer, which
+// must not end up in a 28.x patch release. Both 28.x bundles therefore carry the same engine.
+console.log('\n🔨 Building base library (bleeding-edge bundle, from 6.0)...');
 process.chdir(path.join('..', 'mypdf.js'));
 runCommand('git reset --hard', 'Error 66a: Git reset failed', 66);
-runCommand('git checkout bleeding-edge', 'Error 66: Git checkout failed', 66);
+runCommand('git checkout 6.0', 'Error 66: Git checkout failed', 66);
 runCommand('npm ci --ignore-scripts', 'Error 66b: npm install failed', 66);
 runCommand('npm audit fix --ignore-scripts || true', 'Error 66c: npm audit fix failed', 66);
 runCommand('../ngx-extended-pdf-viewer/build-tools/search-for-shai-hulud.sh --full', 'Error 66d: shai-hulud scan failed', 66);
 runCommand('npm rebuild', 'Error 66e: npm rebuild failed', 66);
 process.chdir(path.join('..', 'ngx-extended-pdf-viewer'));
 
-runCommand('node ./build-tools/1-build-base-library.js', 'Error 53: build-base-library.js failed', 53);
+runCommand('NGX_ASSETS_FOLDER=bleeding-edge node ./build-tools/1-build-base-library.js', 'Error 53: build-base-library.js failed', 53);
 
 // Verify bleeding-edge assets were created
 const bleedingEdgePath = path.join('projects', 'ngx-extended-pdf-viewer', 'bleeding-edge');
