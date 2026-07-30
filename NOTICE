@@ -33,13 +33,13 @@ customizations and enhancements for Angular integration.
 
   bleeding-edge/
     based on Mozilla pdf.js 6.1.200 (v6.1.200, commit 6353acefe5007cd4899247a8c4e83cb7c9435a54)
-    built from https://github.com/stephanrauh/pdf.js branch bleeding-edge, commit 3dcafb2b554ec79d490254cd1d77c1ee1cbc21b0
-    bundled build version: 6.1.1155 (fork build number, not an upstream release)
+    built from https://github.com/stephanrauh/pdf.js branch bleeding-edge, commit 58e2b40999686fa5c7c93aa61a3591959314bf01
+    bundled build version: 6.1.1156 (fork build number, not an upstream release)
 
   assets/
     based on Mozilla pdf.js 6.1.200 (v6.1.200, commit 6353acefe5007cd4899247a8c4e83cb7c9435a54)
-    built from https://github.com/stephanrauh/pdf.js branch 6.1, commit cefbb2326206742e40b6c7edebeb372c8066cd6d
-    bundled build version: 6.1.1155 (fork build number, not an upstream release)
+    built from https://github.com/stephanrauh/pdf.js branch 6.1, commit 238c322532ead95b405a81ad0412ef6b1964d0e3
+    bundled build version: 6.1.1156 (fork build number, not an upstream release)
 
   A machine-readable form of the above is published as pdfjs-provenance.json
   and sbom.json (CycloneDX) inside this package.
