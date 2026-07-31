@@ -53,6 +53,15 @@ if (refArgIndex !== -1 && !REF) {
 // Which bundle did we just build? Same rule as updateMozillasPdfViewer.js.
 function detectChannel() {
   const branch = REF === 'HEAD' ? git('rev-parse --abbrev-ref HEAD') : REF;
+  // NGX_ASSETS_FOLDER overrides the branch-derived choice, exactly as it does in
+  // updateMozillasPdfViewer.js - the two must agree on the destination or the provenance would
+  // describe a bundle that was written somewhere else. A maintenance line needs it: both of its
+  // bundles are built from the stable fork branch, so without the override the bleeding-edge
+  // entry would never be written and validate-sbom.js would report the bundle as undocumented.
+  if (process.env.NGX_ASSETS_FOLDER) {
+    const folder = process.env.NGX_ASSETS_FOLDER;
+    return { channel: folder === 'bleeding-edge' ? 'bleedingEdge' : 'stable', folder, branch };
+  }
   if (branch === 'bleeding-edge') {
     return { channel: 'bleedingEdge', folder: 'bleeding-edge', branch };
   }
