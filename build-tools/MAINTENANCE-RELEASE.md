@@ -175,14 +175,18 @@ git diff --stat ngx-extended-pdf-viewer-<previous-version>..HEAD
 
 ## Step 5 — Version number and changelog
 
-On the library branch, set the version you are about to release **minus one patch** — `5-1` bumps it.
+`5-1` bumps the version as its **first** step, so `projects/ngx-extended-pdf-viewer/package.json`
+always holds the **last released** version, not the next one. Branching off tag `28.1.1` therefore
+leaves it at `28.1.1` and the next release becomes `28.1.2` on its own — normally there is nothing
+to edit here. Only correct it by hand if the branch was cut from somewhere other than the release
+tag, or if a release was published without going through `5-1`.
 
-```bash
-# projects/ngx-extended-pdf-viewer/package.json  →  "version": "28.1.1"   to release 28.1.2
-```
+That also fixes the version of the changelog entry you are about to write: it is the **next** one,
+`28.1.2`, not the released `28.1.1` line. (Append to the topmost line only while it is still
+unreleased — see the changelog rules in `CLAUDE.md`.)
 
-Add the changelog entry (`projects/ngx-extended-pdf-viewer/changelog.md`) and update `SECURITY.md`
-if this is a security fix. Commit everything — `5-1` refuses to run on a dirty tree.
+Add the entry to `projects/ngx-extended-pdf-viewer/changelog.md` and update `SECURITY.md` if this is
+a security fix. Commit everything — `5-1` refuses to run on a dirty tree.
 
 ## Step 6 — Prepare the release
 
