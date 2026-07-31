@@ -1,0 +1,6 @@
+{
+  "$comment": "Per-release-line settings. This file is the ONLY thing that differs between main and a maintenance branch - the release scripts themselves are identical everywhere, so they can be cherry-picked between branches without conflicts. See build-tools/MAINTENANCE-RELEASE.md.",
+  "forkStableBranch": "6.1",
+  "forkBleedingEdgeBranch": "bleeding-edge",
+  "npmDistTag": null
+}
