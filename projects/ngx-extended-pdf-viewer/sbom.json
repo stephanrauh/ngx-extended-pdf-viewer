@@ -1,0 +1,290 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "serialNumber": "urn:uuid:2cf5e1c4-3766-5708-81cc-c60daa2f82fc",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-07-31T21:08:05+02:00",
+    "tools": {
+      "components": [
+        {
+          "type": "application",
+          "name": "generate-sbom.js",
+          "group": "ngx-extended-pdf-viewer"
+        }
+      ]
+    },
+    "authors": [
+      {
+        "name": "Stephan Rauh",
+        "email": "security@beyondjava.de"
+      }
+    ],
+    "component": {
+      "bom-ref": "pkg:npm/ngx-extended-pdf-viewer@27.0.1",
+      "type": "library",
+      "name": "ngx-extended-pdf-viewer",
+      "version": "27.0.1",
+      "description": "Embedding PDF files in your Angular application. Highly configurable viewer including the toolbar, sidebar, and all the features you're used to.",
+      "purl": "pkg:npm/ngx-extended-pdf-viewer@27.0.1",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://pdfviewer.net"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/stephanrauh/ngx-extended-pdf-viewer"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues"
+        },
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/ngx-extended-pdf-viewer/-/ngx-extended-pdf-viewer-27.0.1.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ngx-extended-pdf-viewer:peerDependencies",
+          "value": "This package declares only peerDependencies (Angular), which the consuming project resolves in its own dependency tree and its scanners already see. It has no runtime npm dependencies of its own."
+        },
+        {
+          "name": "ngx-extended-pdf-viewer:supportedVersions",
+          "value": "Only the latest published version receives security updates. See SECURITY.md."
+        }
+      ]
+    }
+  },
+  "components": [
+    {
+      "bom-ref": "pdfjs-stable",
+      "type": "library",
+      "name": "pdfjs-dist",
+      "version": "5.6.205",
+      "publisher": "Mozilla Foundation",
+      "scope": "required",
+      "description": "Mozilla pdf.js 5.6.205, bundled in assets/ as a patched fork (build 5.6.1115). Not installed from npm - see pedigree.",
+      "purl": "pkg:npm/pdfjs-dist@5.6.205",
+      "cpe": "cpe:2.3:a:mozilla:pdf.js:5.6.205:*:*:*:*:*:*:*",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ],
+      "pedigree": {
+        "ancestors": [
+          {
+            "type": "library",
+            "name": "pdfjs-dist",
+            "version": "5.6.205",
+            "purl": "pkg:npm/pdfjs-dist@5.6.205",
+            "externalReferences": [
+              {
+                "type": "vcs",
+                "url": "https://github.com/mozilla/pdf.js/tree/v5.6.205"
+              }
+            ]
+          }
+        ],
+        "commits": [
+          {
+            "uid": "ada343803945d977b9a1be8e72184b0422f8e5d1",
+            "url": "https://github.com/mozilla/pdf.js/commit/ada343803945d977b9a1be8e72184b0422f8e5d1"
+          },
+          {
+            "uid": "ed25ebd17c33f449f8c283040982155c9f88fdaf",
+            "url": "https://github.com/stephanrauh/pdf.js/commit/ed25ebd17c33f449f8c283040982155c9f88fdaf"
+          }
+        ],
+        "patches": [
+          {
+            "type": "cherry-pick",
+            "resolves": [
+              {
+                "type": "security",
+                "id": "CVE-2026-16633",
+                "name": "Arbitrary JavaScript execution upon opening a malicious PDF",
+                "description": "Upstream requires enableScripting (true by default in pdf.js) for the sandbox half of this issue; ngx-extended-pdf-viewer ships enableScripting=false by default. The XFA rich-text half is reachable whenever enableXfa is true, which IS the default here, so we do not claim the default configuration was safe. Both upstream fix commits are applied to the bundled engine. Fixed upstream in pdf.js 6.2.108; applied here by cherry-pick of 6c18df5768 and 4ea07c2431.",
+                "source": {
+                  "name": "GitHub Security Advisory",
+                  "url": "https://github.com/mozilla/pdf.js/security/advisories/GHSA-hq66-cqwq-w95j"
+                },
+                "references": [
+                  "https://github.com/mozilla/pdf.js/security/advisories/GHSA-hq66-cqwq-w95j",
+                  "https://github.com/mozilla/pdf.js/commit/6c18df5768a9cf12e725ebf12fc70e32358be1fa",
+                  "https://github.com/mozilla/pdf.js/commit/4ea07c2431141fe66df3a2f53af53cc8ad854191"
+                ]
+              }
+            ],
+            "diff": {
+              "url": "https://github.com/stephanrauh/pdf.js/commit/ed25ebd17c33f449f8c283040982155c9f88fdaf"
+            }
+          }
+        ],
+        "notes": "The bundled engine is a fork of Mozilla pdf.js 5.6.205, maintained at https://github.com/stephanrauh/pdf.js (branch ngx-27.0.x, commit ed25ebd17c33f449f8c283040982155c9f88fdaf). It carries modifications for Angular integration, marked in the sources with \"modified by ngx-extended-pdf-viewer\" comments. The version above identifies the upstream release the fork is derived from so that vulnerability matching works; it does not assert that the bundled files are byte-identical to that release. Fixes for known pdf.js vulnerabilities are picked up by merging upstream, and only the latest release of ngx-extended-pdf-viewer receives them."
+      },
+      "properties": [
+        {
+          "name": "ngx-extended-pdf-viewer:channel",
+          "value": "stable"
+        },
+        {
+          "name": "ngx-extended-pdf-viewer:bundle",
+          "value": "assets"
+        },
+        {
+          "name": "ngx-extended-pdf-viewer:pdfjsBuildVersion",
+          "value": "5.6.1115"
+        },
+        {
+          "name": "ngx-extended-pdf-viewer:forkBranch",
+          "value": "ngx-27.0.x"
+        },
+        {
+          "name": "ngx-extended-pdf-viewer:forkCommit",
+          "value": "ed25ebd17c33f449f8c283040982155c9f88fdaf"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/stephanrauh/pdf.js"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/mozilla/pdf.js"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pdfjs-bleedingEdge",
+      "type": "library",
+      "name": "pdfjs-dist",
+      "version": "5.6.205",
+      "publisher": "Mozilla Foundation",
+      "scope": "required",
+      "description": "Mozilla pdf.js 5.6.205, bundled in bleeding-edge/ as a patched fork (build 5.6.1114). Not installed from npm - see pedigree.",
+      "purl": "pkg:npm/pdfjs-dist@5.6.205",
+      "cpe": "cpe:2.3:a:mozilla:pdf.js:5.6.205:*:*:*:*:*:*:*",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ],
+      "pedigree": {
+        "ancestors": [
+          {
+            "type": "library",
+            "name": "pdfjs-dist",
+            "version": "5.6.205",
+            "purl": "pkg:npm/pdfjs-dist@5.6.205",
+            "externalReferences": [
+              {
+                "type": "vcs",
+                "url": "https://github.com/mozilla/pdf.js/tree/v5.6.205"
+              }
+            ]
+          }
+        ],
+        "commits": [
+          {
+            "uid": "ada343803945d977b9a1be8e72184b0422f8e5d1",
+            "url": "https://github.com/mozilla/pdf.js/commit/ada343803945d977b9a1be8e72184b0422f8e5d1"
+          },
+          {
+            "uid": "83f41cd9fb75c4bc32e54c6875cc42cdbb86566b",
+            "url": "https://github.com/stephanrauh/pdf.js/commit/83f41cd9fb75c4bc32e54c6875cc42cdbb86566b"
+          }
+        ],
+        "patches": [
+          {
+            "type": "cherry-pick",
+            "resolves": [
+              {
+                "type": "security",
+                "id": "CVE-2026-16633",
+                "name": "Arbitrary JavaScript execution upon opening a malicious PDF",
+                "description": "Upstream requires enableScripting (true by default in pdf.js) for the sandbox half of this issue; ngx-extended-pdf-viewer ships enableScripting=false by default. The XFA rich-text half is reachable whenever enableXfa is true, which IS the default here, so we do not claim the default configuration was safe. Both upstream fix commits are applied to the bundled engine. Fixed upstream in pdf.js 6.2.108; applied here by cherry-pick of 6c18df5768 and 4ea07c2431.",
+                "source": {
+                  "name": "GitHub Security Advisory",
+                  "url": "https://github.com/mozilla/pdf.js/security/advisories/GHSA-hq66-cqwq-w95j"
+                },
+                "references": [
+                  "https://github.com/mozilla/pdf.js/security/advisories/GHSA-hq66-cqwq-w95j",
+                  "https://github.com/mozilla/pdf.js/commit/6c18df5768a9cf12e725ebf12fc70e32358be1fa",
+                  "https://github.com/mozilla/pdf.js/commit/4ea07c2431141fe66df3a2f53af53cc8ad854191"
+                ]
+              }
+            ],
+            "diff": {
+              "url": "https://github.com/stephanrauh/pdf.js/commit/83f41cd9fb75c4bc32e54c6875cc42cdbb86566b"
+            }
+          }
+        ],
+        "notes": "The bundled engine is a fork of Mozilla pdf.js 5.6.205, maintained at https://github.com/stephanrauh/pdf.js (branch ngx-27.0.x-bleeding-edge, commit 83f41cd9fb75c4bc32e54c6875cc42cdbb86566b). It carries modifications for Angular integration, marked in the sources with \"modified by ngx-extended-pdf-viewer\" comments. The version above identifies the upstream release the fork is derived from so that vulnerability matching works; it does not assert that the bundled files are byte-identical to that release. Fixes for known pdf.js vulnerabilities are picked up by merging upstream, and only the latest release of ngx-extended-pdf-viewer receives them."
+      },
+      "properties": [
+        {
+          "name": "ngx-extended-pdf-viewer:channel",
+          "value": "bleedingEdge"
+        },
+        {
+          "name": "ngx-extended-pdf-viewer:bundle",
+          "value": "bleeding-edge"
+        },
+        {
+          "name": "ngx-extended-pdf-viewer:pdfjsBuildVersion",
+          "value": "5.6.1114"
+        },
+        {
+          "name": "ngx-extended-pdf-viewer:forkBranch",
+          "value": "ngx-27.0.x-bleeding-edge"
+        },
+        {
+          "name": "ngx-extended-pdf-viewer:forkCommit",
+          "value": "83f41cd9fb75c4bc32e54c6875cc42cdbb86566b"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/stephanrauh/pdf.js"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/mozilla/pdf.js"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "pkg:npm/ngx-extended-pdf-viewer@27.0.1",
+      "dependsOn": [
+        "pdfjs-stable",
+        "pdfjs-bleedingEdge"
+      ]
+    },
+    {
+      "ref": "pdfjs-stable",
+      "dependsOn": []
+    },
+    {
+      "ref": "pdfjs-bleedingEdge",
+      "dependsOn": []
+    }
+  ]
+}

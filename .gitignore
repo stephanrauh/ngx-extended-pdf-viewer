@@ -54,6 +54,9 @@ Thumbs.db
 pdf.*.mjs
 viewer-*.mjs
 sbom.json
+# ...but on this maintenance line the SBOM is not generated during the build - there is no
+# generator here - so the documents are committed artifacts. See build-tools/HOTFIX.md.
+!projects/ngx-extended-pdf-viewer/sbom.json
 .env
 /ftp/.env
 .htaccess
