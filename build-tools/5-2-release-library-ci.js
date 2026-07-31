@@ -16,8 +16,16 @@ function runCommand(command, errorMessage, exitCode) {
   }
 }
 
+// Which fork branches this release line builds from, and which npm dist-tag it publishes under.
+// Kept in release-config.json rather than hardcoded here so that this script stays identical on
+// main and on every maintenance branch - see build-tools/release/release-config.js.
+const { loadReleaseConfig, describeReleaseConfig } = require('./release/release-config');
+
 // Navigate to the root directory
 process.chdir(path.join(__dirname, '..'));
+
+const releaseConfig = loadReleaseConfig();
+console.log(describeReleaseConfig(releaseConfig));
 
 // Read the version number
 const packageJsonPath = path.join('projects', 'ngx-extended-pdf-viewer', 'package.json');
@@ -34,13 +42,14 @@ try {
   console.warn('⚠️  SBOM generation failed (non-critical, continuing...)');
 }
 
-// Build the bleeding-edge bundle - on the 28.x line it comes from the fork's 6.0 branch, NOT
-// from `bleeding-edge`. That branch has moved on to the 6.1 engine and the 29.x viewer, which
-// must not end up in a 28.x patch release. Both 28.x bundles therefore carry the same engine.
-console.log('\n🔨 Building base library (bleeding-edge bundle, from 6.0)...');
+// Build the bleeding-edge bundle. On a maintenance line it comes from the *stable* fork branch,
+// NOT from `bleeding-edge`: that branch has moved on to a newer engine and a newer major, which
+// must not end up in a patch release. Both bundles of such a line carry the same engine.
+const BLEEDING_EDGE_SOURCE = releaseConfig.forkBleedingEdgeBranch || releaseConfig.forkStableBranch;
+console.log(`\n🔨 Building base library (bleeding-edge bundle, from ${BLEEDING_EDGE_SOURCE})...`);
 process.chdir(path.join('..', 'mypdf.js'));
 runCommand('git reset --hard', 'Error 66a: Git reset failed', 66);
-runCommand('git checkout 6.0', 'Error 66: Git checkout failed', 66);
+runCommand(`git checkout ${BLEEDING_EDGE_SOURCE}`, 'Error 66: Git checkout failed', 66);
 runCommand('npm ci --ignore-scripts', 'Error 66b: npm install failed', 66);
 runCommand('npm audit fix --ignore-scripts || true', 'Error 66c: npm audit fix failed', 66);
 runCommand('../ngx-extended-pdf-viewer/build-tools/search-for-shai-hulud.sh --full', 'Error 66d: shai-hulud scan failed', 66);
@@ -113,10 +122,10 @@ if (!allBleedingEdgeFilesValid) {
 console.log('✓ All bleeding-edge assets verified');
 
 // Build base library from stable branch (6.0)
-console.log('\n🔨 Building base library (6.0)...');
+console.log(`\n🔨 Building base library (${releaseConfig.forkStableBranch})...`);
 process.chdir(path.join('..', 'mypdf.js'));
 runCommand('git reset --hard', 'Error 68a: Git reset failed', 68);
-runCommand('git checkout 6.0', 'Error 68: Git checkout failed', 68);
+runCommand(`git checkout ${releaseConfig.forkStableBranch}`, 'Error 68: Git checkout failed', 68);
 runCommand('npm ci --ignore-scripts', 'Error 68b: npm install failed', 68);
 runCommand('npm audit fix --ignore-scripts || true', 'Error 68c: npm audit fix failed', 68);
 runCommand('../ngx-extended-pdf-viewer/build-tools/search-for-shai-hulud.sh --full', 'Error 68d: shai-hulud scan failed', 68);
@@ -233,6 +242,19 @@ if (version.includes('-alpha')) {
   npmTag = 'beta';
 } else if (version.includes('-rc')) {
   npmTag = 'rc';
+}
+
+// A maintenance release of an older line must NOT become the default install. Without an override,
+// publishing e.g. 28.1.2 after 29.0.0 is out would point `latest` back at the older major and every
+// `npm install ngx-extended-pdf-viewer` would silently downgrade. `npmDistTag` in
+// release-config.json pins it; NGX_NPM_TAG wins over both for a one-off.
+if (releaseConfig.npmDistTag) {
+  npmTag = releaseConfig.npmDistTag;
+  console.log(`ℹ️  npm dist-tag pinned by release-config.json: ${npmTag}`);
+}
+if (process.env.NGX_NPM_TAG) {
+  npmTag = process.env.NGX_NPM_TAG;
+  console.log(`ℹ️  npm dist-tag overridden via NGX_NPM_TAG: ${npmTag}`);
 }
 
 console.log(`\n📤 Publishing to npm with provenance (tag: ${npmTag})...`);

@@ -42,23 +42,16 @@ function removeDirectoryWithRetry(dir, errorMessage, exitCode) {
 // Navigate to the root directory
 process.chdir(path.join(__dirname, '..'));
 
-// The fork branch holding the engine for this release line. Must match STABLE_BRANCH in
-// 5-2-release-library-ci.js.
-const STABLE_BRANCH = '6.0';
+// Which fork branches this release line builds from, and whether it has a bleeding-edge channel of
+// its own. Kept in release-config.json rather than hardcoded here so that this script stays
+// identical on main and on every maintenance branch - see build-tools/release/release-config.js.
+const { loadReleaseConfig, describeReleaseConfig } = require('./release/release-config');
 
-// Releasing from `main` or from a maintenance branch (e.g. 28.1.x)?
-//
-// On main the newest engine lives on the fork's `bleeding-edge` branch and gets its own bundle.
-// On a maintenance branch that branch has already moved on to the next major - shipping it would
-// put a newer engine and viewer into a patch release - so both bundles are built from
-// STABLE_BRANCH instead, and the fork's bleeding-edge branch is not touched, committed or tagged.
-// This mirrors what 5-2-release-library-ci.js does in CI.
-const RELEASE_BRANCH = execSync('git rev-parse --abbrev-ref HEAD', { encoding: 'utf8' }).trim();
-const IS_MAINTENANCE_RELEASE = RELEASE_BRANCH !== 'main';
-if (IS_MAINTENANCE_RELEASE) {
-  console.log(`\n🔧 Maintenance release from '${RELEASE_BRANCH}': both bundles come from the fork's ${STABLE_BRANCH} branch,`);
-  console.log("   and the fork's bleeding-edge branch is left untouched.");
-}
+const releaseConfig = loadReleaseConfig();
+const STABLE_BRANCH = releaseConfig.forkStableBranch;
+const BLEEDING_EDGE_BRANCH = releaseConfig.forkBleedingEdgeBranch;
+const IS_MAINTENANCE_RELEASE = releaseConfig.isMaintenanceRelease;
+console.log(describeReleaseConfig(releaseConfig));
 
 // Check commit state - ensure everything is clean before starting
 runCommand('node ./build-tools/release/check-commit-state.js', 'Error 51: check-commit-state.js failed', 51);
@@ -111,7 +104,7 @@ console.log(`New version: ${newVersion}`);
 if (!IS_MAINTENANCE_RELEASE) {
   console.log('\n🔨 Building base library (bleeding-edge) to update version numbers...');
   process.chdir(path.join('..', 'mypdf.js'));
-  runCommand('git checkout bleeding-edge', 'Error 63: Git checkout failed', 63);
+  runCommand(`git checkout ${BLEEDING_EDGE_BRANCH}`, 'Error 63: Git checkout failed', 63);
 
   // Update version number
   runCommand(
@@ -204,7 +197,7 @@ runCommand('git push origin --tags', `Error 76: Pushing ${STABLE_BRANCH} tags fa
 // Push bleeding-edge branch. Skipped on a maintenance release: that branch belongs to the next
 // major, and committing/tagging a patch version onto it would misrepresent what it contains.
 if (!IS_MAINTENANCE_RELEASE) {
-  runCommand('git checkout bleeding-edge', 'Error 77: Git checkout failed', 77);
+  runCommand(`git checkout ${BLEEDING_EDGE_BRANCH}`, 'Error 77: Git checkout failed', 77);
   runCommand('git push', 'Error 78: Git push in mypdf.js bleeding-edge failed', 78);
   runCommand(
     `git tag -a "ngx-extended-pdf-viewer-${newVersion}-bleeding-edge" -m "ngx-extended-pdf-viewer ${newVersion}"`,
@@ -213,7 +206,7 @@ if (!IS_MAINTENANCE_RELEASE) {
   );
   runCommand('git push origin --tags', 'Error 80: Pushing bleeding-edge tags failed', 80);
 } else {
-  console.log(`\n⏭️  Skipped pushing/tagging the fork's bleeding-edge branch (maintenance release from '${RELEASE_BRANCH}')`);
+  console.log("\n⏭️  Skipped pushing/tagging the fork's bleeding-edge branch (maintenance release)");
 }
 
 console.log('\n✅ Release preparation complete!');

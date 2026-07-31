@@ -2,6 +2,11 @@
 
 This document describes the two-stage release process for ngx-extended-pdf-viewer with npm trusted publishing and provenance.
 
+> **Releasing a patch for an older line** (e.g. `28.1.2` while `main` is on 29.x)? This process does
+> not cover it — the scripts build from branch tips and would fold a newer engine into the patch, and
+> the publish would take over the `latest` dist-tag. Follow
+> [MAINTENANCE-RELEASE.md](./MAINTENANCE-RELEASE.md) instead.
+
 ## Overview
 
 The release process has been split into two stages:
@@ -100,22 +105,24 @@ If any verification fails, the publish will abort with a specific error code.
 
 ## Error Codes
 
-| Code  | Description                                  |
-| ----- | -------------------------------------------- |
-| 51    | Git commit state check failed                |
-| 52    | SBOM generation failed                       |
-| 53    | Base library build failed                    |
-| 54    | Angular library build failed                 |
-| 55    | npm publish failed                           |
-| 57    | Version number increase failed               |
-| 58-65 | Git commit/push failed in various repos      |
-| 66-80 | Git operations failed (checkout, push, tags) |
-| 81    | Bleeding-edge assets verification failed     |
-| 82    | Stable assets verification failed            |
-| 83    | Dist folder not created                      |
-| 84    | package.json missing from dist               |
-| 85    | Version mismatch in dist                     |
-| 86    | Suspicious lifecycle scripts found in dist   |
+| Code  | Description                                                                |
+| ----- | -------------------------------------------------------------------------- |
+| 51    | Git commit state check failed                                              |
+| 52    | SBOM generation failed                                                     |
+| 53    | Base library build failed                                                  |
+| 54    | Angular library build failed                                               |
+| 55    | npm publish failed                                                         |
+| 57    | Version number increase failed                                             |
+| 58-65 | Git commit/push failed in various repos                                    |
+| 66-80 | Git operations failed (checkout, push, tags)                               |
+| 81    | Bleeding-edge assets verification failed                                   |
+| 82    | Stable assets verification failed                                          |
+| 83    | Dist folder not created                                                    |
+| 84    | package.json missing from dist                                             |
+| 85    | Version mismatch in dist                                                   |
+| 86    | Suspicious lifecycle scripts found in dist                                 |
+| 94    | Could not resolve a released version's fork commit (`find-fork-commit.js`) |
+| 95    | `build-tools/release/release-config.json` missing or invalid               |
 
 ## Rollback
 
