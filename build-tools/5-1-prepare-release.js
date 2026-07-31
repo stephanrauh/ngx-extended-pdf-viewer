@@ -42,8 +42,47 @@ function removeDirectoryWithRetry(dir, errorMessage, exitCode) {
 // Navigate to the root directory
 process.chdir(path.join(__dirname, '..'));
 
+// Which fork branches this release line builds from, and whether it has a bleeding-edge channel of
+// its own. Kept in release-config.json rather than hardcoded here so that this script stays
+// identical on main and on every maintenance branch - see build-tools/release/release-config.js.
+const { loadReleaseConfig, describeReleaseConfig } = require('./release/release-config');
+
+const releaseConfig = loadReleaseConfig();
+const STABLE_BRANCH = releaseConfig.forkStableBranch;
+const BLEEDING_EDGE_BRANCH = releaseConfig.forkBleedingEdgeBranch;
+const IS_MAINTENANCE_RELEASE = releaseConfig.isMaintenanceRelease;
+console.log(describeReleaseConfig(releaseConfig));
+
 // Check commit state - ensure everything is clean before starting
 runCommand('node ./build-tools/release/check-commit-state.js', 'Error 51: check-commit-state.js failed', 51);
+
+// Run the full test suite before touching version numbers, committing, or
+// pushing. If any of these fail, the working tree stays clean and the
+// release can be retried after fixing the regression — nothing to revert.
+console.log('\n🧪 Running Jest tests in ngx-extended-pdf-viewer...');
+runCommand('npm test', 'Error 52: Jest tests failed', 52);
+
+// The compatibility matrix needs Docker. Set SKIP_COMPAT=1 to bypass it on
+// machines without a working Docker daemon (CI still runs the full matrix).
+if (process.env.SKIP_COMPAT === '1') {
+  console.log('\n⏭️  Skipping Playwright compatibility tests (SKIP_COMPAT=1)');
+} else {
+  console.log('\n🧪 Running Playwright compatibility tests (Angular 19–22)...');
+  runCommand('npm run test:compat', 'Error 53: Playwright compatibility tests failed', 53);
+}
+
+// The showcase is a separate repo that always tracks the newest library API, so it cannot
+// compile against a maintenance branch: releasing 28.1.1 while the showcase is on 29.x fails
+// with "Can't bind to 'supportsDownloading'" and similar. Set SKIP_E2E=1 there. On main, leave
+// it on - a showcase that stops compiling is a real signal about a breaking API change.
+if (process.env.SKIP_E2E === '1') {
+  console.log('\n⏭️  Skipping the showcase Playwright tests (SKIP_E2E=1)');
+} else {
+  console.log('\n🧪 Running Playwright tests of the showcase...');
+  process.chdir(path.join('..', 'extended-pdf-viewer-showcase'));
+  runCommand('npm run test:e2e', 'Error 54: Showcase Playwright tests failed', 54);
+  process.chdir(path.join('..', 'ngx-extended-pdf-viewer'));
+}
 
 // Read the current version number
 const packageJsonPath = path.join('projects', 'ngx-extended-pdf-viewer', 'package.json');
@@ -59,42 +98,48 @@ packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
 let newVersion = packageJson.version;
 console.log(`New version: ${newVersion}`);
 
-// Build base library from bleeding-edge to update pdf-default-options.ts
-console.log('\n🔨 Building base library (bleeding-edge) to update version numbers...');
-process.chdir(path.join('..', 'mypdf.js'));
-runCommand('git checkout bleeding-edge', 'Error 63: Git checkout failed', 63);
+// Build the bleeding-edge bundle to update pdf-default-options.ts. On a maintenance release this
+// is skipped here and produced from STABLE_BRANCH further down, in the same checkout - the fork's
+// bleeding-edge branch is neither built nor committed to.
+if (!IS_MAINTENANCE_RELEASE) {
+  console.log('\n🔨 Building base library (bleeding-edge) to update version numbers...');
+  process.chdir(path.join('..', 'mypdf.js'));
+  runCommand(`git checkout ${BLEEDING_EDGE_BRANCH}`, 'Error 63: Git checkout failed', 63);
+
+  // Update version number
+  runCommand(
+    'node ../ngx-extended-pdf-viewer/build-tools/base-library/write-version-number-to-base-library.js',
+    'Error 64: write-version-number-to-base-library failed at bleeding-edge',
+    64,
+  );
+
+  // Commit version number changes
+  runCommand(`git commit . -m "bumped the version number to ${newVersion}"`, 'Error 65: Git commit in mypdf.js failed', 65);
+
+  // Install dependencies and build
+  removeDirectoryWithRetry('node_modules', 'Error 66a: Removing node_modules failed', 66);
+  runCommand('npm ci --ignore-scripts', 'Error 66b: npm install failed', 66);
+  runCommand('npm audit fix --ignore-scripts || true', 'Error 66c: npm audit fix failed', 66);
+  runCommand('../ngx-extended-pdf-viewer/build-tools/search-for-shai-hulud.sh --full', 'Error 66d: shai-hulud scan failed', 66);
+  runCommand('npm rebuild', 'Error 66e: npm rebuild failed', 66);
+  process.chdir(path.join('..', 'ngx-extended-pdf-viewer'));
+  runCommand('node ./build-tools/1-build-base-library.js --quick', 'Error 67: build-base-library.js failed for bleeding-edge', 67);
+
+  // Clean up package-lock.json changes from audit fix before switching branches
+  process.chdir(path.join('..', 'mypdf.js'));
+  runCommand('git reset --hard', 'Error 67a: Git reset failed', 67);
+} else {
+  process.chdir(path.join('..', 'mypdf.js'));
+}
+
+// Build base library from the stable branch to update pdf-default-options.ts
+console.log(`\n🔨 Building base library (${STABLE_BRANCH}) to update version numbers...`);
+runCommand(`git checkout ${STABLE_BRANCH}`, 'Error 59: Git checkout failed', 59);
 
 // Update version number
 runCommand(
   'node ../ngx-extended-pdf-viewer/build-tools/base-library/write-version-number-to-base-library.js',
-  'Error 64: write-version-number-to-base-library failed at bleeding-edge',
-  64,
-);
-
-// Commit version number changes
-runCommand(`git commit . -m "bumped the version number to ${newVersion}"`, 'Error 65: Git commit in mypdf.js failed', 65);
-
-// Install dependencies and build
-removeDirectoryWithRetry('node_modules', 'Error 66a: Removing node_modules failed', 66);
-runCommand('npm ci --ignore-scripts', 'Error 66b: npm install failed', 66);
-runCommand('npm audit fix --ignore-scripts || true', 'Error 66c: npm audit fix failed', 66);
-runCommand('../ngx-extended-pdf-viewer/build-tools/search-for-shai-hulud.sh --full', 'Error 66d: shai-hulud scan failed', 66);
-runCommand('npm rebuild', 'Error 66e: npm rebuild failed', 66);
-process.chdir(path.join('..', 'ngx-extended-pdf-viewer'));
-runCommand('node ./build-tools/1-build-base-library.js --quick', 'Error 67: build-base-library.js failed for bleeding-edge', 67);
-
-// Clean up package-lock.json changes from audit fix before switching branches
-process.chdir(path.join('..', 'mypdf.js'));
-runCommand('git reset --hard', 'Error 67a: Git reset failed', 67);
-
-// Build base library from stable branch (5.6.205) to update pdf-default-options.ts
-console.log('\n🔨 Building base library (5.6.205) to update version numbers...');
-runCommand('git checkout 5.6.205', 'Error 59: Git checkout failed', 59);
-
-// Update version number
-runCommand(
-  'node ../ngx-extended-pdf-viewer/build-tools/base-library/write-version-number-to-base-library.js',
-  'Error 62: write-version-number-to-base-library failed at version 5.6.205',
+  'Error 62: write-version-number-to-base-library failed at version 6.0',
   62,
 );
 
@@ -108,7 +153,18 @@ runCommand('npm audit fix --ignore-scripts || true', 'Error 68c: npm audit fix f
 runCommand('../ngx-extended-pdf-viewer/build-tools/search-for-shai-hulud.sh --full', 'Error 68d: shai-hulud scan failed', 68);
 runCommand('npm rebuild', 'Error 68e: npm rebuild failed', 68);
 process.chdir(path.join('..', 'ngx-extended-pdf-viewer'));
-runCommand('node ./build-tools/1-build-base-library.js --quick', 'Error 69: build-base-library.js failed for 5.6.205', 69);
+
+// On a maintenance release the bleeding-edge bundle comes from this same stable checkout, so both
+// bundles carry the same engine. NGX_ASSETS_FOLDER overrides the branch-derived destination.
+if (IS_MAINTENANCE_RELEASE) {
+  runCommand(
+    'NGX_ASSETS_FOLDER=bleeding-edge node ./build-tools/1-build-base-library.js --quick',
+    `Error 67: build-base-library.js failed for the bleeding-edge bundle (from ${STABLE_BRANCH})`,
+    67,
+  );
+}
+
+runCommand('node ./build-tools/1-build-base-library.js --quick', `Error 69: build-base-library.js failed for ${STABLE_BRANCH}`, 69);
 
 // Clean up package-lock.json changes from audit fix
 process.chdir(path.join('..', 'mypdf.js'));
@@ -118,31 +174,46 @@ process.chdir(path.join('..', 'ngx-extended-pdf-viewer'));
 // Commit changes in ngx-extended-pdf-viewer (including updated pdf-default-options.ts)
 runCommand(`git commit . -m "bumped the version number to ${newVersion}"`, 'Error 58: Git commit failed', 58);
 
-// Push all changes to ngx-extended-pdf-viewer
-runCommand('git push', 'Error 70: Git push failed', 70);
-
-// Create and push tag
-runCommand(`git tag -a ${newVersion} -m "${newVersion}"`, 'Error 71: Creating tag failed', 71);
-runCommand('git push origin --tags', 'Error 72: Pushing tags failed', 72);
-
-// Push mypdf.js changes and create tags
+// Push mypdf.js first. Pushing the ngx tag further down is what triggers the publish workflow,
+// and that workflow clones the fork and builds the engine from its branch tips. If the fork's
+// bump commit were not there yet, CI would build the *previous* engine while the tagged
+// pdf-default-options.ts already names the new one - and every worker request in the published
+// package would 404. Nothing downstream catches that mismatch (5-2 verifies the bundle against
+// the version it just built, and the SBOM compares the provenance to the files on disk, so both
+// agree with each other while being wrong), which is why the push order is the only guard.
 process.chdir(path.join('..', 'mypdf.js'));
 
-// Push 5.6.205 branch
-runCommand('git checkout 5.6.205', 'Error 73: Git checkout failed', 73);
-runCommand('git push', 'Error 74: Git push in mypdf.js 5.6.205 failed', 74);
-runCommand(`git tag -a "ngx-extended-pdf-viewer-${newVersion}" -m "ngx-extended-pdf-viewer ${newVersion}"`, 'Error 75: Creating 5.6.205 tag failed', 75);
-runCommand('git push origin --tags', 'Error 76: Pushing 5.6.205 tags failed', 76);
-
-// Push bleeding-edge branch
-runCommand('git checkout bleeding-edge', 'Error 77: Git checkout failed', 77);
-runCommand('git push', 'Error 78: Git push in mypdf.js bleeding-edge failed', 78);
+// Push the stable branch
+runCommand(`git checkout ${STABLE_BRANCH}`, 'Error 73: Git checkout failed', 73);
+runCommand('git push', `Error 74: Git push in mypdf.js ${STABLE_BRANCH} failed`, 74);
 runCommand(
-  `git tag -a "ngx-extended-pdf-viewer-${newVersion}-bleeding-edge" -m "ngx-extended-pdf-viewer ${newVersion}"`,
-  'Error 79: Creating bleeding-edge tag failed',
-  79,
+  `git tag -a "ngx-extended-pdf-viewer-${newVersion}" -m "ngx-extended-pdf-viewer ${newVersion}"`,
+  `Error 75: Creating ${STABLE_BRANCH} tag failed`,
+  75,
 );
-runCommand('git push origin --tags', 'Error 80: Pushing bleeding-edge tags failed', 80);
+runCommand('git push origin --tags', `Error 76: Pushing ${STABLE_BRANCH} tags failed`, 76);
+
+// Push bleeding-edge branch. Skipped on a maintenance release: that branch belongs to the next
+// major, and committing/tagging a patch version onto it would misrepresent what it contains.
+if (!IS_MAINTENANCE_RELEASE) {
+  runCommand(`git checkout ${BLEEDING_EDGE_BRANCH}`, 'Error 77: Git checkout failed', 77);
+  runCommand('git push', 'Error 78: Git push in mypdf.js bleeding-edge failed', 78);
+  runCommand(
+    `git tag -a "ngx-extended-pdf-viewer-${newVersion}-bleeding-edge" -m "ngx-extended-pdf-viewer ${newVersion}"`,
+    'Error 79: Creating bleeding-edge tag failed',
+    79,
+  );
+  runCommand('git push origin --tags', 'Error 80: Pushing bleeding-edge tags failed', 80);
+} else {
+  console.log("\n⏭️  Skipped pushing/tagging the fork's bleeding-edge branch (maintenance release)");
+}
+
+// The fork is public now, so the engine CI builds is guaranteed to be the one this version names.
+// Push ngx-extended-pdf-viewer and tag it - the tag push starts the release.
+process.chdir(path.join('..', 'ngx-extended-pdf-viewer'));
+runCommand('git push', 'Error 70: Git push failed', 70);
+runCommand(`git tag -a ${newVersion} -m "${newVersion}"`, 'Error 71: Creating tag failed', 71);
+runCommand('git push origin --tags', 'Error 72: Pushing tags failed', 72);
 
 console.log('\n✅ Release preparation complete!');
 console.log(`Version ${newVersion} has been committed and tagged.`);

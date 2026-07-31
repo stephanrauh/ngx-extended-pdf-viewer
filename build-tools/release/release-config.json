@@ -1,0 +1,7 @@
+{
+  "$comment": "Per-release-line settings for the 27.0.x maintenance line. This file is the ONLY thing that differs between main and a maintenance branch - the release scripts themselves are identical everywhere, so they can be cherry-picked between branches without conflicts. See build-tools/MAINTENANCE-RELEASE.md and build-tools/HOTFIX.md.",
+  "$comment2": "forkBleedingEdgeBranch is a branch name rather than the null a maintenance line normally uses: the CVE-2026-16633 backport was applied to BOTH channels by explicit decision, so this line keeps a bleeding-edge bundle of its own (engine 5.6.1114) alongside the stable one (5.6.1115). Setting it to null would build both bundles from the stable branch and contradict the committed sbom.json.",
+  "forkStableBranch": "ngx-27.0.x",
+  "forkBleedingEdgeBranch": "ngx-27.0.x-bleeding-edge",
+  "npmDistTag": "v27-lts"
+}

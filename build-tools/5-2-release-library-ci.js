@@ -6,6 +6,13 @@ const { execSync } = require('child_process');
 const path = require('path');
 const fs = require('fs');
 
+// Which fork branches this release line builds from, and which npm dist-tag it publishes under.
+// Kept in release-config.json rather than hardcoded here so that this script stays identical on
+// main and on every maintenance branch - see build-tools/release/release-config.js. 5-1 reads the
+// same file, so the two can no longer drift apart; if they did, npm would get a stable bundle
+// whose file names don't match `pdfjsVersion`, and every worker request would 404.
+const { loadReleaseConfig, describeReleaseConfig } = require('./release/release-config');
+
 // Function to execute a command and handle errors
 function runCommand(command, errorMessage, exitCode) {
   try {
@@ -19,37 +26,57 @@ function runCommand(command, errorMessage, exitCode) {
 // Navigate to the root directory
 process.chdir(path.join(__dirname, '..'));
 
+// This *is* a publish, so the SBOM has to match the engines on disk exactly. Set here rather than
+// on the single generate-sbom.js call below, because 2-build-library.js generates it a second
+// time and inherits this environment. Outside a release the same check only warns - see
+// generate-sbom.js.
+process.env.NGX_SBOM_STRICT = '1';
+
+const releaseConfig = loadReleaseConfig();
+console.log(describeReleaseConfig(releaseConfig));
+
 // Read the version number
 const packageJsonPath = path.join('projects', 'ngx-extended-pdf-viewer', 'package.json');
 let packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
 let version = packageJson.version;
 console.log(`Building and publishing version: ${version}`);
 
-// Generate SBOM (non-critical - continue on failure)
-console.log('\n📦 Generating SBOM...');
-try {
-  execSync('npx -y @cyclonedx/cyclonedx-npm --output-file sbom.json --mc-type library', { stdio: 'inherit', shell: true });
-  console.log('✓ SBOM generated successfully');
-} catch (error) {
-  console.warn('⚠️  SBOM generation failed (non-critical, continuing...)');
-}
+// The SBOM is generated further down, once both engines have been built - it describes the
+// bundled pdf.js fork, so it cannot be written before the bundles exist (#3244).
 
-// Build base library from bleeding-edge
-console.log('\n🔨 Building base library (bleeding-edge)...');
+// Build the bleeding-edge bundle. On a maintenance line there is no bleeding-edge branch of its
+// own - that branch has moved on to a newer engine and a newer major, which must not end up in a
+// patch release - so both bundles are built from the stable branch and carry the same engine.
+const BLEEDING_EDGE_SOURCE = releaseConfig.forkBleedingEdgeBranch || releaseConfig.forkStableBranch;
+console.log(`\n🔨 Building base library (bleeding-edge bundle, from ${BLEEDING_EDGE_SOURCE})...`);
 process.chdir(path.join('..', 'mypdf.js'));
 runCommand('git reset --hard', 'Error 66a: Git reset failed', 66);
-runCommand('git checkout bleeding-edge', 'Error 66: Git checkout failed', 66);
+runCommand(`git checkout ${BLEEDING_EDGE_SOURCE}`, 'Error 66: Git checkout failed', 66);
 runCommand('npm ci --ignore-scripts', 'Error 66b: npm install failed', 66);
 runCommand('npm audit fix --ignore-scripts || true', 'Error 66c: npm audit fix failed', 66);
 runCommand('../ngx-extended-pdf-viewer/build-tools/search-for-shai-hulud.sh --full', 'Error 66d: shai-hulud scan failed', 66);
 runCommand('npm rebuild', 'Error 66e: npm rebuild failed', 66);
 process.chdir(path.join('..', 'ngx-extended-pdf-viewer'));
 
-runCommand('node ./build-tools/1-build-base-library.js', 'Error 53: build-base-library.js failed', 53);
+// State the destination explicitly instead of letting it be derived from the checked-out fork
+// branch: on a maintenance line that branch is the *stable* one, which would otherwise send this
+// build into assets/. On main the two are equivalent.
+runCommand('NGX_ASSETS_FOLDER=bleeding-edge node ./build-tools/1-build-base-library.js', 'Error 53: build-base-library.js failed', 53);
 
 // Verify bleeding-edge assets were created
 const bleedingEdgePath = path.join('projects', 'ngx-extended-pdf-viewer', 'bleeding-edge');
-const minFileSize = 700 * 1024; // 700 KB in bytes
+
+// Per-file-type minimum sizes. pdf.js 6.0 shrank the sandbox bundle considerably
+// (from ~1 MB in v5.x to ~140–340 KB), so the previous flat 700 KB threshold
+// would false-positive on legitimate v6 builds. Thresholds chosen ~25% below
+// observed v6 sizes to catch genuinely empty/broken builds without being brittle.
+function expectedMinSize(fileName) {
+  if (fileName.includes('pdf.sandbox-')) {
+    return fileName.endsWith('.min.mjs') ? 100 * 1024 : 250 * 1024;
+  }
+  // pdf.worker-* and viewer-* are always > 1 MB even minified.
+  return 700 * 1024;
+}
 
 function verifyFile(filePath, description) {
   if (!fs.existsSync(filePath)) {
@@ -57,6 +84,7 @@ function verifyFile(filePath, description) {
     return false;
   }
   const stats = fs.statSync(filePath);
+  const minFileSize = expectedMinSize(description);
   if (stats.size < minFileSize) {
     console.error(`Error: File too small (${stats.size} bytes, expected >= ${minFileSize}) - ${description}: ${filePath}`);
     return false;
@@ -98,11 +126,11 @@ if (!allBleedingEdgeFilesValid) {
 }
 console.log('✓ All bleeding-edge assets verified');
 
-// Build base library from stable branch (5.6.205)
-console.log('\n🔨 Building base library (5.6.205)...');
+// Build base library from the stable branch
+console.log(`\n🔨 Building base library (${releaseConfig.forkStableBranch})...`);
 process.chdir(path.join('..', 'mypdf.js'));
 runCommand('git reset --hard', 'Error 68a: Git reset failed', 68);
-runCommand('git checkout 5.6.205', 'Error 68: Git checkout failed', 68);
+runCommand(`git checkout ${releaseConfig.forkStableBranch}`, 'Error 68: Git checkout failed', 68);
 runCommand('npm ci --ignore-scripts', 'Error 68b: npm install failed', 68);
 runCommand('npm audit fix --ignore-scripts || true', 'Error 68c: npm audit fix failed', 68);
 runCommand('../ngx-extended-pdf-viewer/build-tools/search-for-shai-hulud.sh --full', 'Error 68d: shai-hulud scan failed', 68);
@@ -146,6 +174,28 @@ if (!allStableFilesValid) {
   process.exit(82);
 }
 console.log('✓ All stable assets verified');
+
+// Generate the SBOM now that both bundles exist. 1-build-base-library.js has recorded the
+// provenance of each engine as it was built, so this only has to turn it into CycloneDX.
+// Both files are published inside the npm package (see ng-package.json assets).
+//
+// An old maintenance line has no generator: backporting the SBOM toolchain onto a branch built for
+// an older Angular would drag in ajv and the CycloneDX schemas for no benefit, so those lines carry
+// the documents as committed artifacts instead (see build-tools/HOTFIX.md). Detect that case rather
+// than branching on the version number, and still refuse to publish if the documents are simply
+// absent - "no generator" must not become a way to ship a package with no SBOM at all.
+if (fs.existsSync(path.join('build-tools', 'generate-sbom.js'))) {
+  console.log('\n📦 Generating SBOM...');
+  runCommand('node ./build-tools/generate-sbom.js', 'Error 52: SBOM generation failed', 52);
+} else {
+  console.log('\n📦 No SBOM generator on this branch - expecting committed SBOM documents...');
+  const missing = ['sbom.json', 'vex.json', 'pdfjs-provenance.json'].filter((f) => !fs.existsSync(path.join('projects', 'ngx-extended-pdf-viewer', f)));
+  if (missing.length > 0) {
+    console.error(`Error 52: this branch has no build-tools/generate-sbom.js and is missing committed ${missing.join(', ')}`);
+    process.exit(52);
+  }
+  console.log('✓ sbom.json, vex.json and pdfjs-provenance.json are present');
+}
 
 // Build Angular library
 console.log('\n🔨 Building Angular library...');
@@ -219,6 +269,20 @@ if (version.includes('-alpha')) {
   npmTag = 'beta';
 } else if (version.includes('-rc')) {
   npmTag = 'rc';
+}
+
+// A maintenance release of an older line must NOT become the default install. Without an override,
+// publishing e.g. 28.1.2 after 29.0.0 is out would point `latest` back at the older major and every
+// `npm install ngx-extended-pdf-viewer` would silently downgrade. `npmDistTag` in
+// release-config.json pins it; NGX_NPM_TAG wins over both for a one-off. Both are null/unset on
+// main, where deriving the tag from the version string is right.
+if (releaseConfig.npmDistTag) {
+  npmTag = releaseConfig.npmDistTag;
+  console.log(`ℹ️  npm dist-tag pinned by release-config.json: ${npmTag}`);
+}
+if (process.env.NGX_NPM_TAG) {
+  npmTag = process.env.NGX_NPM_TAG;
+  console.log(`ℹ️  npm dist-tag overridden via NGX_NPM_TAG: ${npmTag}`);
 }
 
 console.log(`\n📤 Publishing to npm with provenance (tag: ${npmTag})...`);

@@ -42,9 +42,8 @@ jobs:
         working-directory: workspace/ngx-extended-pdf-viewer
         run: npm ci --ignore-scripts && ./build-tools/search-for-shai-hulud.sh --full && npm rebuild esbuild
 
-      - name: Generate SBOM (before npm upgrade)
-        working-directory: workspace/ngx-extended-pdf-viewer
-        run: npx -y @cyclonedx/cyclonedx-npm --output-file sbom.json --mc-type library || echo "⚠️  SBOM generation failed (will retry in build script)"
+      # The SBOM is generated inside `npm run do-release:lib`, after both pdf.js bundles have
+      # been built - it describes the bundled fork, so it cannot be written before they exist.
 
       - name: Upgrade to npm 11.5.1+ for trusted publishing
         run: |
@@ -93,6 +92,8 @@ jobs:
           files: |
             workspace/ngx-extended-pdf-viewer/dist/ngx-extended-pdf-viewer/*.tgz
             workspace/ngx-extended-pdf-viewer/*-source.tar.gz
-            workspace/ngx-extended-pdf-viewer/sbom.json
+            workspace/ngx-extended-pdf-viewer/projects/ngx-extended-pdf-viewer/sbom.json
+            workspace/ngx-extended-pdf-viewer/projects/ngx-extended-pdf-viewer/vex.json
+            workspace/ngx-extended-pdf-viewer/projects/ngx-extended-pdf-viewer/pdfjs-provenance.json
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

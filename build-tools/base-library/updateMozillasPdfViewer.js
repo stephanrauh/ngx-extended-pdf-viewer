@@ -31,10 +31,15 @@ process.chdir(path.join(__dirname, '..', '..', '..', 'mypdf.js'));
 // Clean build directory
 fs.removeSync('build');
 
-// Determine folder and branch
+// Determine folder and branch.
+// NGX_ASSETS_FOLDER overrides the branch-based choice. The 28.x line needs it: both of its
+// bundles come from the fork's 6.0 branch, because `bleeding-edge` has moved on to the 6.1
+// engine and the 29.x viewer, which must not leak into a 28.x patch release.
 let FOLDER = 'assets';
 const BRANCH = execSync('git rev-parse --abbrev-ref HEAD', { encoding: 'utf8' }).trim();
-if (BRANCH === 'bleeding-edge') {
+if (process.env.NGX_ASSETS_FOLDER) {
+  FOLDER = process.env.NGX_ASSETS_FOLDER;
+} else if (BRANCH === 'bleeding-edge') {
   FOLDER = 'bleeding-edge';
 } else if (BRANCH === 'HEAD') {
   // Detached HEAD — check if we're on a bleeding-edge tag
@@ -123,7 +128,9 @@ runCommand(
 );
 runCommand('node build-tools/add-version-number-to-file-name/add-version-number.js ' + process.argv[2], 'Adding version number failed');
 
-if (BRANCH !== 'bleeding-edge') {
+// Keyed off the destination rather than the branch, so it stays correct when NGX_ASSETS_FOLDER
+// decides the destination. Without an override the two are equivalent.
+if (FOLDER !== 'bleeding-edge') {
   console.log('Generating types');
   process.chdir(path.join('..', 'mypdf.js'));
   runCommand('npx gulp types', 'Generating types failed');
