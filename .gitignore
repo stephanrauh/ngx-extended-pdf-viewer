@@ -57,6 +57,8 @@ pdf.*.mjs
 viewer-*.mjs
 sbom.json
 vex.json
+# staging output of build-tools/hotfix/03-sbom-for-27.js - regenerate it, do not commit it
+/build-tools/hotfix/out-27/
 .env
 /ftp/.env
 .htaccess
