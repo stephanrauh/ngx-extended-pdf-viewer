@@ -217,6 +217,14 @@ git push -u origin 28.1.x
 git push origin --tags
 ```
 
+**Push the fork before the ngx tag.** The workflow clones `mypdf.js` and builds the engine from the
+branch tip, so if the fork's bump commit is not there yet, CI builds the previous engine while the
+tagged `pdf-default-options.ts` already names the new one — and every worker request in the
+published package 404s. Nothing downstream notices: `5-2` checks the bundle against the version it
+just built, and the SBOM checks the provenance against the files on disk, so both agree with each
+other while being wrong. `5-1-prepare-release.js` gets the order right; if you push by hand, do
+`mypdf.js` first and the ngx tag last.
+
 ## Step 7 — Check the npm dist-tag
 
 Pin `npmDistTag` **only once a newer major actually holds `latest` on npm**. Check first:
