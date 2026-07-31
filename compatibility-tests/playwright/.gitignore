@@ -2,3 +2,8 @@ node_modules/
 /test-results/
 /playwright-report/
 /playwright/.cache/
+# playwright.config.ts writes to the dot-prefixed variants, which the two names above do not match
+/.playwright-results/
+/.playwright-report/
+# test.sh copies the showcase's page object in here before each run - generated, never committed
+/poms/
