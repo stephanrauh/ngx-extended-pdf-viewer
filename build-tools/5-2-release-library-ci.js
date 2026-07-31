@@ -178,8 +178,24 @@ console.log('✓ All stable assets verified');
 // Generate the SBOM now that both bundles exist. 1-build-base-library.js has recorded the
 // provenance of each engine as it was built, so this only has to turn it into CycloneDX.
 // Both files are published inside the npm package (see ng-package.json assets).
-console.log('\n📦 Generating SBOM...');
-runCommand('node ./build-tools/generate-sbom.js', 'Error 52: SBOM generation failed', 52);
+//
+// An old maintenance line has no generator: backporting the SBOM toolchain onto a branch built for
+// an older Angular would drag in ajv and the CycloneDX schemas for no benefit, so those lines carry
+// the documents as committed artifacts instead (see build-tools/HOTFIX.md). Detect that case rather
+// than branching on the version number, and still refuse to publish if the documents are simply
+// absent - "no generator" must not become a way to ship a package with no SBOM at all.
+if (fs.existsSync(path.join('build-tools', 'generate-sbom.js'))) {
+  console.log('\n📦 Generating SBOM...');
+  runCommand('node ./build-tools/generate-sbom.js', 'Error 52: SBOM generation failed', 52);
+} else {
+  console.log('\n📦 No SBOM generator on this branch - expecting committed SBOM documents...');
+  const missing = ['sbom.json', 'vex.json', 'pdfjs-provenance.json'].filter((f) => !fs.existsSync(path.join('projects', 'ngx-extended-pdf-viewer', f)));
+  if (missing.length > 0) {
+    console.error(`Error 52: this branch has no build-tools/generate-sbom.js and is missing committed ${missing.join(', ')}`);
+    process.exit(52);
+  }
+  console.log('✓ sbom.json, vex.json and pdfjs-provenance.json are present');
+}
 
 // Build Angular library
 console.log('\n🔨 Building Angular library...');
