@@ -174,14 +174,13 @@ process.chdir(path.join('..', 'ngx-extended-pdf-viewer'));
 // Commit changes in ngx-extended-pdf-viewer (including updated pdf-default-options.ts)
 runCommand(`git commit . -m "bumped the version number to ${newVersion}"`, 'Error 58: Git commit failed', 58);
 
-// Push all changes to ngx-extended-pdf-viewer
-runCommand('git push', 'Error 70: Git push failed', 70);
-
-// Create and push tag
-runCommand(`git tag -a ${newVersion} -m "${newVersion}"`, 'Error 71: Creating tag failed', 71);
-runCommand('git push origin --tags', 'Error 72: Pushing tags failed', 72);
-
-// Push mypdf.js changes and create tags
+// Push mypdf.js first. Pushing the ngx tag further down is what triggers the publish workflow,
+// and that workflow clones the fork and builds the engine from its branch tips. If the fork's
+// bump commit were not there yet, CI would build the *previous* engine while the tagged
+// pdf-default-options.ts already names the new one - and every worker request in the published
+// package would 404. Nothing downstream catches that mismatch (5-2 verifies the bundle against
+// the version it just built, and the SBOM compares the provenance to the files on disk, so both
+// agree with each other while being wrong), which is why the push order is the only guard.
 process.chdir(path.join('..', 'mypdf.js'));
 
 // Push the stable branch
@@ -208,6 +207,13 @@ if (!IS_MAINTENANCE_RELEASE) {
 } else {
   console.log("\n⏭️  Skipped pushing/tagging the fork's bleeding-edge branch (maintenance release)");
 }
+
+// The fork is public now, so the engine CI builds is guaranteed to be the one this version names.
+// Push ngx-extended-pdf-viewer and tag it - the tag push starts the release.
+process.chdir(path.join('..', 'ngx-extended-pdf-viewer'));
+runCommand('git push', 'Error 70: Git push failed', 70);
+runCommand(`git tag -a ${newVersion} -m "${newVersion}"`, 'Error 71: Creating tag failed', 71);
+runCommand('git push origin --tags', 'Error 72: Pushing tags failed', 72);
 
 console.log('\n✅ Release preparation complete!');
 console.log(`Version ${newVersion} has been committed and tagged.`);
