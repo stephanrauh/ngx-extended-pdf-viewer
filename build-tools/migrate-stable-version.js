@@ -21,10 +21,12 @@ if (args.length !== 2) {
 
 const [oldVersion, newVersion] = args;
 
-// Validate version format (e.g., 5.4.149)
-const versionRegex = /^\d+\.\d+\.\d+$/;
+// Validate the branch-name format. Both shapes occur as fork branch names: `6.1` and `5.6.205`,
+// so the patch component is optional - the script's own usage example (`... 5.4.149 6.0`) was
+// rejected by a stricter check.
+const versionRegex = /^\d+\.\d+(\.\d+)?$/;
 if (!versionRegex.test(oldVersion) || !versionRegex.test(newVersion)) {
-  console.error('Error: Versions must be in format X.Y.Z (e.g., 5.4.149)');
+  console.error('Error: Versions must be in format X.Y or X.Y.Z (e.g., 6.1 or 5.4.149)');
   process.exit(1);
 }
 
@@ -34,23 +36,13 @@ const newMajorMinor = newVersion.split('.').slice(0, 2).join('.');
 
 console.log(`\n🔄 Migrating stable version from ${oldVersion} to ${newVersion}\n`);
 
-// Files to update
+// Files to update. The release scripts (5-1, 5-2, createTag.js) used to hardcode the branch name
+// and are listed here no longer: they read it from release-config.json, which is what keeps them
+// identical across release lines. Changing that one file is the whole migration.
 const filesToUpdate = [
   {
-    path: 'build-tools/5-1-prepare-release.js',
-    description: 'Release preparation script',
-  },
-  {
-    path: 'build-tools/5-2-release-library-ci.js',
-    description: 'CI release script',
-  },
-  {
-    path: 'build-tools/release/createTag.js',
-    description: 'Tag creation script',
-  },
-  {
-    path: 'build-tools/RELEASE-PROCESS.md',
-    description: 'Release documentation',
+    path: 'build-tools/release/release-config.json',
+    description: 'Release line configuration (forkStableBranch)',
   },
 ];
 

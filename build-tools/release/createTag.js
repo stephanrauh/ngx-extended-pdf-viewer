@@ -1,10 +1,18 @@
 // build/createTag.js
+//
+// The manual counterpart to the push/tag half of 5-1-prepare-release.js, for a release that had to
+// be finished by hand. It reads the same release-config.json, so it behaves correctly on a
+// maintenance line too, and it pushes in the same order - see the note further down.
 const { execSync } = require('child_process');
-
-// Keep in sync with STABLE_BRANCH in 5-1-prepare-release.js / 5-2-release-library-ci.js.
-const STABLE_BRANCH = '6.1';
 const fs = require('fs');
 const path = require('path');
+const { loadReleaseConfig, describeReleaseConfig } = require('./release-config');
+
+const releaseConfig = loadReleaseConfig();
+const STABLE_BRANCH = releaseConfig.forkStableBranch;
+const BLEEDING_EDGE_BRANCH = releaseConfig.forkBleedingEdgeBranch;
+const IS_MAINTENANCE_RELEASE = releaseConfig.isMaintenanceRelease;
+console.log(describeReleaseConfig(releaseConfig));
 
 function runCommand(command, errorMessage) {
   try {
@@ -29,40 +37,36 @@ console.log(path.join(__dirname, '..', '..'));
 const packageJson = JSON.parse(fs.readFileSync(path.join('projects', 'ngx-extended-pdf-viewer', 'package.json'), 'utf8'));
 const version = packageJson.version;
 
-// Commit all changes
+// Commit the library, but do not tag it yet. Pushing the library tag is what starts the publish
+// workflow, and that workflow builds the engine from the fork's branch tip - so mypdf.js has to be
+// on GitHub first. The other order publishes the previous engine under a pdf-default-options.ts
+// naming the new one, and nothing downstream catches it.
 runCommand(`git commit -a -m "published ${version}"`, 'Error committing changes:');
 console.log('Committed changes.');
-runCommand('git push', 'Error pushing changes:');
-console.log('Pushed changes.');
-
-// Create and push the tag
-runCommand(`git tag -a ${version} -m "${version}"`, 'Error creating tag:');
-console.log(`Created tag: ${version}`);
-runCommand('git push origin --tags', 'Error pushing tags:');
-console.log('Pushed tags.');
 
 // Update mypdf.js repository
 process.chdir(path.join('..', 'mypdf.js'));
 
-runCommand(`git commit -a -m "published ${version}"`, 'Error committing changes in mypdf.js: git commit -a -m "published ${version}"');
+// Push the bleeding-edge branch. Skipped on a maintenance line: that branch belongs to the next
+// major, so committing and tagging a patch version onto it would misrepresent what it contains.
+if (!IS_MAINTENANCE_RELEASE) {
+  runCommand(`git checkout ${BLEEDING_EDGE_BRANCH}`, `Error checking out ${BLEEDING_EDGE_BRANCH} branch:`);
+  console.log(`Checked out ${BLEEDING_EDGE_BRANCH} branch.`);
+  runCommand(`git commit -a -m "published ${version}"`, `Error committing changes in mypdf.js ${BLEEDING_EDGE_BRANCH}:`);
+  console.log('Committed changes in mypdf.js.');
+  runCommand('git push', 'Error pushing changes in mypdf.js:');
+  console.log('Pushed changes in mypdf.js.');
 
-// Checkout bleeding-edge branch
-runCommand('git checkout bleeding-edge', 'Error checking out bleeding-edge branch:');
-console.log('Checked out bleeding-edge branch.');
-// Commit changes in mypdf.js
-runCommand(`git commit -a -m "published ${version}"`, 'Error committing changes in mypdf.js: git commit -a -m "published ${version}"');
-console.log('Committed changes in mypdf.js.');
-runCommand('git push', 'Error pushing changes in mypdf.js:');
-console.log('Pushed changes in mypdf.js.');
-
-// Create and push tag for bleeding-edge
-runCommand(
-  `git tag -a "ngx-extended-pdf-viewer-${version}-bleeding-edge" -m "ngx-extended-pdf-viewer ${version}"`,
-  'Error creating bleeding-edge tag in mypdf.js:',
-);
-console.log(`Created bleeding-edge tag: ngx-extended-pdf-viewer-${version}-bleeding-edge`);
-runCommand('git push origin --tags', 'Error pushing bleeding-edge tag in mypdf.js:');
-console.log('Pushed bleeding-edge tag in mypdf.js.');
+  runCommand(
+    `git tag -a "ngx-extended-pdf-viewer-${version}-bleeding-edge" -m "ngx-extended-pdf-viewer ${version}"`,
+    'Error creating bleeding-edge tag in mypdf.js:',
+  );
+  console.log(`Created bleeding-edge tag: ngx-extended-pdf-viewer-${version}-bleeding-edge`);
+  runCommand('git push origin --tags', 'Error pushing bleeding-edge tag in mypdf.js:');
+  console.log('Pushed bleeding-edge tag in mypdf.js.');
+} else {
+  console.log("⏭️  Skipped pushing/tagging the fork's bleeding-edge branch (maintenance release)");
+}
 
 // Checkout the stable branch
 runCommand(`git checkout ${STABLE_BRANCH}`, `Error checking out ${STABLE_BRANCH} branch:`);
@@ -79,8 +83,20 @@ console.log(`Created ${STABLE_BRANCH} tag: ngx-extended-pdf-viewer-${version}`);
 runCommand('git push origin --tags', `Error pushing ${STABLE_BRANCH} tag in mypdf.js:`);
 console.log(`Pushed ${STABLE_BRANCH} tag in mypdf.js.`);
 
-// Switch back to bleeding-edge
-runCommand('git checkout bleeding-edge', 'Error switching back to bleeding-edge:');
-console.log('Switched back to bleeding-edge branch.');
+// Leave the fork on the branch the next build expects: bleeding-edge on a normal line, the stable
+// branch on a maintenance line, where bleeding-edge is not part of the release at all.
+if (!IS_MAINTENANCE_RELEASE) {
+  runCommand(`git checkout ${BLEEDING_EDGE_BRANCH}`, `Error switching back to ${BLEEDING_EDGE_BRANCH}:`);
+  console.log(`Switched back to ${BLEEDING_EDGE_BRANCH} branch.`);
+}
+
+// The fork is public now - push the library and tag it. The tag push starts the release.
+process.chdir(path.join('..', 'ngx-extended-pdf-viewer'));
+runCommand('git push', 'Error pushing changes:');
+console.log('Pushed changes.');
+runCommand(`git tag -a ${version} -m "${version}"`, 'Error creating tag:');
+console.log(`Created tag: ${version}`);
+runCommand('git push origin --tags', 'Error pushing tags:');
+console.log('Pushed tags.');
 
 console.log('Tag creation and pushing completed successfully.');

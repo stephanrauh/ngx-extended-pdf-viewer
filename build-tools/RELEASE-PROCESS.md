@@ -59,11 +59,20 @@ This script will:
 
 1. ✓ Check that all changes are committed (clean git status)
 2. ✓ Increment the version number in `projects/ngx-extended-pdf-viewer/package.json`
-3. ✓ Update version in mypdf.js (both 6.1 and bleeding-edge branches)
+3. ✓ Update version in mypdf.js (both the stable and the bleeding-edge branch)
 4. ✓ Commit all changes with message "bumped the version number to X.Y.Z"
-5. ✓ Push commits to both repositories
-6. ✓ Create and push git tag (e.g., `25.6.1`)
-7. ✓ Create tags in mypdf.js repository
+5. ✓ Push mypdf.js and tag it — **before** the library, see below
+6. ✓ Push the library and create and push its tag (e.g., `25.6.1`), which starts the workflow
+
+Which fork branches those are is not hardcoded: `build-tools/release/release-config.json` names them
+(`forkStableBranch`, `forkBleedingEdgeBranch`), which is what lets a maintenance line reuse the same
+scripts — see [MAINTENANCE-RELEASE.md](./MAINTENANCE-RELEASE.md).
+
+**The push order matters.** The workflow starts on the library tag and builds the engine from the
+fork's branch tip, so the fork has to be on GitHub first. Otherwise CI builds the previous engine
+while the tagged `pdf-default-options.ts` already names the new one, and every worker request in the
+published package 404s — a mismatch neither the asset verification nor the SBOM detects, because
+both compare the bundle against the engine that was just built.
 
 ### Step 2: CI Publishes Automatically
 
@@ -73,9 +82,10 @@ The GitHub Actions workflow triggers automatically when you push a tag:
 2. Checks out both ngx-extended-pdf-viewer and mypdf.js
 3. Verifies tag version matches package.json
 4. Runs `npm run do-release:lib` which:
-   - Builds base library from mypdf.js bleeding-edge
+   - Builds base library from the fork's bleeding-edge branch (on a maintenance line: from the
+     stable branch, so both bundles carry the same engine)
    - Verifies bleeding-edge assets
-   - Builds base library from mypdf.js 6.1
+   - Builds base library from the fork's stable branch
    - Verifies stable assets
    - Generates the SBOM (Software Bill of Materials) — after the engines, because it
      describes them; see "SBOM and pdf.js provenance" below
@@ -129,7 +139,7 @@ build — the fork's checked-out branch decides which bundle's entry is updated,
 entries current. To backfill an entry without checking that branch out:
 
 ```bash
-node ./build-tools/base-library/update-pdfjs-provenance.js --ref 6.1
+node ./build-tools/base-library/update-pdfjs-provenance.js --ref <stable-branch>
 ```
 
 `generate-sbom.js` (`npm run build:sbom`) turns the provenance into CycloneDX. It runs as part of
@@ -175,7 +185,7 @@ The CI script includes multiple verification steps:
   - `pdf.sandbox-{version}-es5.mjs`, `pdf.sandbox-{version}.min.mjs`, `pdf.sandbox-{version}.mjs`
   - `pdf.worker-{version}-es5.mjs`, `pdf.worker-{version}.min.mjs`, `pdf.worker-{version}.mjs`
   - `viewer-{version}-es5.mjs`, `viewer-{version}.min.mjs`, `viewer-{version}.mjs`
-- ✅ **Stable (6.1) assets** - Verifies same 9 critical files exist and are >= 700 KB each
+- ✅ **Stable assets** - Verifies same 9 critical files exist and are >= 700 KB each
 - ✅ Dist folder is created
 - ✅ package.json exists in dist
 - ✅ Version in dist matches expected version
