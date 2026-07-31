@@ -26,6 +26,12 @@ function runCommand(command, errorMessage, exitCode) {
 // Navigate to the root directory
 process.chdir(path.join(__dirname, '..'));
 
+// This *is* a publish, so the SBOM has to match the engines on disk exactly. Set here rather than
+// on the single generate-sbom.js call below, because 2-build-library.js generates it a second
+// time and inherits this environment. Outside a release the same check only warns - see
+// generate-sbom.js.
+process.env.NGX_SBOM_STRICT = '1';
+
 const releaseConfig = loadReleaseConfig();
 console.log(describeReleaseConfig(releaseConfig));
 

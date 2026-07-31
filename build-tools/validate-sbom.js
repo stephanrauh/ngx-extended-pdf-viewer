@@ -29,6 +29,11 @@ const errors = [];
 const skipped = [];
 const fail = (message) => errors.push(message);
 
+// Release/CI runs demand that the SBOM match the engines on disk; local dev builds only warn.
+// See the note on the same constant in generate-sbom.js, which passes this on when it invokes
+// this script as a child process.
+const STRICT = process.env.NGX_SBOM_STRICT === '1' || (!!process.env.CI && process.env.NGX_SBOM_STRICT !== '0');
+
 if (!fs.existsSync(SBOM_PATH)) {
   console.error(`✗ ${SBOM_PATH} does not exist - run "npm run build:sbom"`);
   process.exit(90);
@@ -105,7 +110,13 @@ for (const [channel, entry] of channels) {
   if (!fs.existsSync(bundleDir)) {
     skipped.push(`${channel}: ${entry.bundle}/ not built, cannot compare the SBOM against the actual engine`);
   } else if (!fs.existsSync(path.join(bundleDir, worker))) {
-    fail(`${channel}: ${entry.bundle}/${worker} is missing - sbom.json is stale, re-run "npm run build:sbom"`);
+    // Same reasoning as the matching check in generate-sbom.js: a local build that only rebuilt
+    // one channel is normal, a release that ships a mismatch is not.
+    if (STRICT) {
+      fail(`${channel}: ${entry.bundle}/${worker} is missing - sbom.json is stale, re-run "npm run build:sbom"`);
+    } else {
+      skipped.push(`${channel}: ${entry.bundle}/${worker} is missing - that bundle was built from another branch, so the SBOM does not describe it`);
+    }
   }
   const buildVersion = component.properties?.find((p) => p.name === 'ngx-extended-pdf-viewer:pdfjsBuildVersion')?.value;
   if (buildVersion !== entry.pdfjsBuildVersion) {

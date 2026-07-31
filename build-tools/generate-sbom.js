@@ -48,13 +48,26 @@ if (channels.length === 0) {
 
 // Cross-check the recorded provenance against the files that are actually about to be shipped,
 // so a stale pdfjs-provenance.json cannot silently produce an SBOM that lies about the engine.
+//
+// This is fatal only when something is actually being published. During local development the
+// two bundles routinely disagree with the provenance: build:base writes to assets/ or to
+// bleeding-edge/ depending on which branch mypdf.js happens to be on, so whichever channel you
+// did not just build keeps whatever engine an earlier checkout left there. Failing the build for
+// that would mean rebuilding both engines after every branch switch, which is why it degrades to
+// a warning outside a release. See NGX_SBOM_STRICT below.
+const STRICT = process.env.NGX_SBOM_STRICT === '1' || (!!process.env.CI && process.env.NGX_SBOM_STRICT !== '0');
 for (const [channel, entry] of channels) {
   const dir = path.join(LIB_DIR, entry.bundle);
   const expected = `pdf.worker-${entry.pdfjsBuildVersion}.mjs`;
   if (!fs.existsSync(path.join(dir, expected))) {
-    console.error(`Error 89: ${PROVENANCE_PATH} claims ${channel} ships ${expected}, but ${dir} does not contain it`);
-    console.error('         Rebuild the engine and re-run update-pdfjs-provenance.js for that branch.');
-    process.exit(89);
+    if (STRICT) {
+      console.error(`Error 89: ${PROVENANCE_PATH} claims ${channel} ships ${expected}, but ${dir} does not contain it`);
+      console.error('         Rebuild the engine and re-run update-pdfjs-provenance.js for that branch.');
+      process.exit(89);
+    }
+    console.warn(`⚠️  ${PROVENANCE_PATH} claims ${channel} ships ${expected}, but ${dir} does not contain it.`);
+    console.warn(`         The generated SBOM describes ${expected}, not what is in ${dir} - do not publish this build.`);
+    console.warn(`         Run "npm run build:base" with mypdf.js on the ${channel === 'stable' ? 'stable' : 'bleeding-edge'} branch to fix it.`);
   }
 }
 

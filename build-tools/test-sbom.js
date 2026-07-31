@@ -16,7 +16,7 @@
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
-const { execFileSync } = require('child_process');
+const { spawnSync } = require('child_process');
 
 process.chdir(path.join(__dirname, '..'));
 
@@ -109,23 +109,27 @@ function writeFixture() {
   }
 }
 
-function run(script, { expectFailure = false } = {}) {
-  try {
-    const stdout = execFileSync(process.execPath, [path.join(__dirname, script)], {
-      env: { ...process.env, NGX_SBOM_LIB_DIR: FIXTURE },
-      encoding: 'utf8',
-      stdio: ['ignore', 'pipe', 'pipe'],
-    });
+// Returns stdout and stderr combined, because warnings (the non-strict provenance mismatch) go to
+// stderr while the regular progress output goes to stdout, and the assertions read both.
+function run(script, { expectFailure = false, strict = false } = {}) {
+  const result = spawnSync(process.execPath, [path.join(__dirname, script)], {
+    // NGX_SBOM_STRICT is pinned on both paths so the tests behave the same locally and in CI,
+    // where the bare presence of $CI would otherwise turn the lenient cases strict.
+    env: { ...process.env, NGX_SBOM_LIB_DIR: FIXTURE, NGX_SBOM_STRICT: strict ? '1' : '0' },
+    encoding: 'utf8',
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
+  const output = `${result.stdout || ''}${result.stderr || ''}`;
+  if (result.status !== 0) {
     if (expectFailure) {
-      throw new Error(`${script} was expected to fail, but it succeeded`);
+      return output;
     }
-    return stdout;
-  } catch (error) {
-    if (expectFailure && error.status) {
-      return `${error.stdout || ''}${error.stderr || ''}`;
-    }
-    throw new Error(`${script} failed: ${error.stderr || error.message}`);
+    throw new Error(`${script} failed: ${result.stderr || result.error?.message}`);
   }
+  if (expectFailure) {
+    throw new Error(`${script} was expected to fail, but it succeeded`);
+  }
+  return output;
 }
 
 const readSbom = () => JSON.parse(fs.readFileSync(path.join(FIXTURE, 'sbom.json'), 'utf8'));
@@ -170,7 +174,8 @@ try {
   });
 
   // The guard that matters most: it must be impossible to ship an SBOM naming an engine that
-  // isn't the one in the package.
+  // isn't the one in the package. Only a release enforces this; a local build where one bundle
+  // was left behind by another branch warns instead, which the second half checks.
   check('refuses to generate when the provenance does not match the bundled engine', () => {
     const provenancePath = path.join(FIXTURE, 'pdfjs-provenance.json');
     const good = fs.readFileSync(provenancePath, 'utf8');
@@ -178,10 +183,15 @@ try {
     stale.channels.stable.pdfjsBuildVersion = '6.1.9999';
     fs.writeFileSync(provenancePath, JSON.stringify(stale, null, 2));
     try {
-      const output = run('generate-sbom.js', { expectFailure: true });
+      const output = run('generate-sbom.js', { expectFailure: true, strict: true });
       assert(output.includes('6.1.9999'), 'the error message does not name the mismatching version');
+
+      const lenient = run('generate-sbom.js');
+      assert(lenient.includes('6.1.9999'), 'the warning does not name the mismatching version');
+      assert(lenient.includes('do not publish'), 'the warning does not say the build is unpublishable');
     } finally {
       fs.writeFileSync(provenancePath, good);
+      run('generate-sbom.js');
     }
   });
 

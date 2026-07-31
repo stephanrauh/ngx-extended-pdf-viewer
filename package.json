@@ -71,7 +71,7 @@
     "@types/jest": "^29.5.14",
     "@types/node": "^24.13.3",
     "@types/trusted-types": "^2.0.7",
-    "ajv": ">=8.18.0",
+    "ajv": "^8.20.0",
     "ajv-formats": "^3.0.1",
     "autoprefixer": "^10.5.4",
     "basic-ftp": "^6.0.2",
@@ -82,7 +82,7 @@
     "jest-preset-angular": "^14.6.2",
     "lodash-es": "^4.18.1",
     "ng-packagr": "^19.2.2",
-    "postcss": "^8.5.23",
+    "postcss": "^8.5.25",
     "postcss-dir-pseudo-class": "^10.0.0",
     "prettier": "^3.9.6",
     "sass": "^1.102.0",
@@ -95,7 +95,7 @@
     "mermaid": {
       "dompurify": "^3.2.0"
     },
-    "ajv": ">=8.18.0",
+    "ajv": "$ajv",
     "tar": ">=7.5.8",
     "minimatch": ">=10.2.1",
     "test-exclude": ">=7.0.2",
