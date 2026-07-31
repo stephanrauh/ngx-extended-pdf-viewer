@@ -212,8 +212,16 @@ git push origin --tags
 
 ## Step 7 — Check the npm dist-tag
 
-Already handled if you set `npmDistTag` in step 2. Users then install the line explicitly
-(`npm i ngx-extended-pdf-viewer@v28-lts`) and `latest` keeps pointing at the current major.
+Pin `npmDistTag` **only once a newer major actually holds `latest` on npm**. Check first:
+
+```bash
+npm view ngx-extended-pdf-viewer dist-tags
+```
+
+If the line you are patching is still `latest`, leave `npmDistTag` at `null` — pinning it early is
+its own bug, because the patch then does not reach anyone who runs a plain `npm install`. Pin it on
+the release _after_ the new major ships. Users then install the old line explicitly
+(`npm i ngx-extended-pdf-viewer@v28-lts`) while `latest` keeps pointing at the current major.
 
 `NGX_NPM_TAG` in the environment overrides the config for a one-off.
 
