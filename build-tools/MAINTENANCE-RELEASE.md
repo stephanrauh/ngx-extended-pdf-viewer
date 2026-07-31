@@ -61,6 +61,13 @@ regenerated it. For `28.1.1` it is wrong: git claims `6.0.1172` for bleeding-edg
 actually shipped `6.0.1174` in _both_ bundles. `--from-npm` reads the real `pdf.worker-<version>.mjs`
 file names out of the tarball and warns when the two sources disagree.
 
+**Why every answer is verified rather than simply trusted.** A fork tag is not proof on its own: it
+is created after the build, so it can sit a commit further along than the commit that was actually
+built. `25.0.0` is a live example — its tag `ngx-extended-pdf-viewer-25.0.0` computes to `5.4.796`,
+but the tarball on npm ships `5.4.795`. The script therefore recomputes the engine version from each
+candidate and only accepts one that matches what the release recorded, falling through to the next
+strategy otherwise. That is also why a tag can be present and the search still runs.
+
 Exit code `94` means a channel could not be resolved — that happens only when neither a tag nor any
 surviving branch contains the commit (e.g. the bleeding-edge half of `20.0.2`, whose `4.2` branch is
 gone). If that happens, the history for that bundle is genuinely lost; build from the closest tag you
