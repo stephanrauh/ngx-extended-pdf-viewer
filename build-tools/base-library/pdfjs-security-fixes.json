@@ -1,0 +1,18 @@
+{
+  "$comment": "Known pdf.js advisories that matter for the bundled engine, and the upstream commits that fix them. Curated by hand; update-pdfjs-provenance.js checks each branch for those commits (merged or cherry-picked) and records the result in pdfjs-provenance.json, which generate-sbom.js turns into CycloneDX pedigree patches and VEX statements. Add an entry whenever we pick up a pdf.js security fix ahead of a full upstream merge.",
+  "advisories": [
+    {
+      "id": "GHSA-hq66-cqwq-w95j",
+      "cve": "CVE-2026-16633",
+      "url": "https://github.com/mozilla/pdf.js/security/advisories/GHSA-hq66-cqwq-w95j",
+      "severity": "high",
+      "published": "2026-07-28",
+      "summary": "Arbitrary JavaScript execution upon opening a malicious PDF",
+      "affectedRange": ">=5.6.83",
+      "fixedUpstreamIn": "6.2.108",
+      "upstreamCommits": ["6c18df5768a9cf12e725ebf12fc70e32358be1fa", "4ea07c2431141fe66df3a2f53af53cc8ad854191"],
+      "notAffectedWithoutScripting": true,
+      "detail": "Upstream requires enableScripting (true by default in pdf.js) for the sandbox half of this issue; ngx-extended-pdf-viewer ships enableScripting=false by default. The XFA rich-text half is reachable whenever enableXfa is true, which IS the default here, so we do not claim the default configuration was safe. Both upstream fix commits are applied to the bundled engine."
+    }
+  ]
+}

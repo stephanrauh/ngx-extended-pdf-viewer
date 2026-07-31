@@ -56,6 +56,7 @@ Thumbs.db
 pdf.*.mjs
 viewer-*.mjs
 sbom.json
+vex.json
 .env
 /ftp/.env
 .htaccess

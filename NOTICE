@@ -29,6 +29,40 @@ License 2.0:
 This product bundles a modified version of PDF.js (mypdf.js) that includes
 customizations and enhancements for Angular integration.
 
+--- BEGIN BUNDLED PDF.JS PROVENANCE (generated) ---
+
+  bleeding-edge/
+    based on Mozilla pdf.js 6.0.227 (v6.0.227, commit 241dbabbf1c6a5024dc4e573356977878317e04f)
+    built from https://github.com/stephanrauh/pdf.js branch 6.0, commit f22a3f58af288e0e782c357afd56843fed46bd85
+    bundled build version: 6.0.1174 (fork build number, not an upstream release)
+    security fix applied ahead of upstream: CVE-2026-16633 (cherry-pick,
+      fixed upstream in pdf.js 6.2.108) - https://github.com/mozilla/pdf.js/security/advisories/GHSA-hq66-cqwq-w95j
+
+  assets/
+    based on Mozilla pdf.js 6.0.227 (v6.0.227, commit 241dbabbf1c6a5024dc4e573356977878317e04f)
+    built from https://github.com/stephanrauh/pdf.js branch 6.0, commit f22a3f58af288e0e782c357afd56843fed46bd85
+    bundled build version: 6.0.1174 (fork build number, not an upstream release)
+    security fix applied ahead of upstream: CVE-2026-16633 (cherry-pick,
+      fixed upstream in pdf.js 6.2.108) - https://github.com/mozilla/pdf.js/security/advisories/GHSA-hq66-cqwq-w95j
+
+  A machine-readable form of the above is published as pdfjs-provenance.json,
+  sbom.json (CycloneDX, incl. pedigree) and vex.json (CycloneDX VEX) inside this
+  package.
+
+--- END BUNDLED PDF.JS PROVENANCE (generated) ---
+
+================================================================================
+
+This repository also contains third-party files that are used only at build time
+and are NOT part of the published npm package:
+
+  CycloneDX JSON schemas (build-tools/schema/)
+  Copyright (c) OWASP Foundation and the CycloneDX community
+  https://github.com/CycloneDX/specification
+  Licensed under the Apache License, Version 2.0; the full license text and the
+  exact upstream commit are recorded in build-tools/schema/. The files are
+  unmodified.
+
 ================================================================================
 
 For a complete list of contributors, please see:
