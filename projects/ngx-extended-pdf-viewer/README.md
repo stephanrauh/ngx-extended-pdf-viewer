@@ -118,9 +118,15 @@ bootstrapApplication(AppComponent, {
 
 ## 🔐 Security Notice
 
-Version `20.0.2` fixes a critical security vulnerability (CVE-2024-4367). Update to this version or newer to stay safe from exploits via malicious PDF files.
+⚠️ **Please use the latest `28.x` release (or newer). Older versions are known to be vulnerable.**
 
-Thanks to GitHub users ScratchPDX and Deepak Shakya for reporting the issue promptly.
+**[CVE-2026-16633](https://github.com/mozilla/pdf.js/security/advisories/GHSA-hq66-cqwq-w95j) (high) - fixed in `28.1.1` and in `29.0.0-rc.3`.** A malicious PDF could run JavaScript in the context of your page. The flaw is in pdf.js 5.6.83 and newer, so **every earlier `28.x` release, and `29.0.0-rc.0` through `rc.2`, are affected** - please update. Mozilla's fix (pdf.js 6.2.108) is cherry-picked into the engine this library bundles.
+
+This library ships `enableScripting=false` by default, unlike pdf.js itself, which limited the exposure - but not for the XFA part of the issue, so don't assume you were safe.
+
+Since `28.1.2` the package also contains `sbom.json` (CycloneDX), `vex.json` and `pdfjs-provenance.json`. Because the patched engine keeps the version number of the pdf.js release it derives from, your dependency scanner would otherwise keep reporting this CVE; the VEX tells it the fix is already in.
+
+**[CVE-2024-4367](https://nvd.nist.gov/vuln/detail/CVE-2024-4367) (critical) - fixed in `20.0.2`.** Exploit via malicious PDF files. Thanks to GitHub users ScratchPDX and Deepak Shakya for reporting the issue promptly.
 
 ---
 
