@@ -18,7 +18,7 @@ jobs:
         with:
           fetch-depth: 0 # Full history needed for SonarCloud blame data
       - name: Set up Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: '22'
           cache: 'npm' # Add caching for faster runs
