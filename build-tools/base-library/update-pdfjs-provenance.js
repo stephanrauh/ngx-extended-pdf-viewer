@@ -7,15 +7,19 @@
 // projects/ngx-extended-pdf-viewer/pdfjs-provenance.json, which is published as part
 // of the npm package and is the input for generate-sbom.js.
 //
-// Run it right after the engine build, from the library root:
-//   node ./build-tools/base-library/update-pdfjs-provenance.js
+// Run it right after the engine build:
+//   npm run build:provenance
+// It resolves the fork as a relative path and does not chdir, so it needs the library root
+// as the working directory - which is what the npm script guarantees. From another
+// directory use `npm --prefix <library-root> run build:provenance`, never `npm exec`.
 //
 // The fork's checked-out branch selects the channel, exactly like updateMozillasPdfViewer.js:
 // branch `bleeding-edge` -> the bleeding-edge/ bundle, anything else -> the stable assets/ bundle.
 //
 // Pass `--ref <branch>` to read the git data from another branch of the fork instead of HEAD.
-// That backfills the entry for a bundle that is already built without checking that branch out:
-//   node ./build-tools/base-library/update-pdfjs-provenance.js --ref 6.1
+// That backfills the entry for a bundle that is already built without checking that branch out
+// (note the `--`, which npm needs in order to forward the flag):
+//   npm run build:provenance -- --ref 6.1
 
 const fs = require('fs');
 const path = require('path');
