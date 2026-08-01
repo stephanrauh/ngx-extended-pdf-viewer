@@ -23,35 +23,31 @@ Bringing Mozilla's pdf.js to the Angular world. That's not only the core PDF vie
 
 There's a showcase at <a href="https://pdfviewer.net">https://pdfviewer.net</a>. Check this page for live demos, source code examples, and a handbook.
 
-## What's new in 27.5
+## What's new in 29
 
-Version `27.5.0-alpha.0` syncs the **bleeding-edge** bundle with Mozilla pdf.js up to **v5.7.284** (≈290 upstream commits past v5.6.205). The **stable** bundle is still at v5.6.205. Once stable is also bumped to v5.7.284, the alpha graduates to `27.5.0`.
-
-New UI elements introduced by this sync are gated behind `pdfDefaultOptions.isBleedingEdge()`, so users on the stable branch see no behavior changes.
+Version `29.0.0` ships **pdf.js 6.1** in both the stable and the bleeding-edge bundle, and adds an API for building a document out of several files.
 
 ### Highlights
 
 | Area | Change |
 |------|--------|
-| **New UI** | Merge-PDF UI (Mozilla bug 2028071) — drag-and-drop another PDF into the thumbnail panel; attachments are preserved; the user is prompted before saving |
-| **New UI** | Ink editor: opacity slider replaced with a single alpha-enabled color input |
-| **Rendering** | Function-based shadings (Mozilla bug 1254066) |
-| **Editor** | Free-highlighting now works on top of image placeholders (Mozilla bug 2034980) |
-| **Performance** | Fewer intermediate canvases; GPU mesh path only triggers for >16 triangles; heavy DataView/TypedArray refactor across font code (CFF, TrueType, JBIG2, JPEG) |
-| **Bug fixes** | Merging PDFs with conflicting `AcroForm /DR`; merging after page deletion; comb fields with RTL text and alignment; thumbnail navigation under screen readers; user/password stripped from URLs (bug 2025109); SMask compositing, radial gradients, tiling patterns and blending |
+| **Engine** | pdf.js 6.1 is the default engine — you no longer need `pdfDefaultOptions.assetsFolder = 'bleeding-edge'` for its features |
+| **New API** | `mergeDocument()`, `deletePages()` and `extractPages()` build a document out of several PDFs or images, at any position — including before the first page |
+| **New input** | `[supportsDownloading]="false"` hides the download and save buttons *and* switches the download manager off — a stronger lock than `[showDownloadButton]="false"` |
+| **Rendering** | RichMedia and Screen annotations with embedded audio or video render |
+| **Supply chain** | The package ships `sbom.json` (CycloneDX), `vex.json` and `pdfjs-provenance.json`, so your dependency scanner can finally see the bundled pdf.js |
+| **Security** | The bundled engine is patched against [CVE-2026-16633](https://github.com/mozilla/pdf.js/security/advisories/GHSA-hq66-cqwq-w95j) (high) |
+| **Bug fixes** | CMaps and standard fonts load again; book mode turns pages without `[showPageFlipButton]`; the findbar's `showFind…` options take effect; the library compiles with `exactOptionalPropertyTypes` |
 
-### Potentially breaking (`api-minor` upstream)
+### Breaking change
 
-These rarely surface to library consumers, but flagging in case you use the low-level pdf.js API directly:
+The `annotationEditorEvent` carrying the text of a free-text annotation now has `type: 'textChanged'` instead of `type: 'commit'`. Two events used to arrive as `commit` — one from the base editor, one from the free-text editor — and you couldn't tell them apart. `commit` now consistently means "an annotation was committed". **If you listen for `commit` to read the entered text, switch to `textChanged`.**
 
-- `PDFDataRangeTransport` now uses a single internal listener.
-- `PostScriptCompiler` / `PostScriptEvaluator` removed; PostScript is parsed via a new Wasm compiler with a JS fallback.
-- CCITT and JBig2 fallback decoders replaced with a JS port of PDFium's.
-- pdf.js itself now requires **Node ≥22** to *build* — but the **published bundle still targets browsers down to iOS 14**, so end-user Angular apps building on Node 20 are unaffected.
+### Angular versions
 
-### Versioning note
+Versions 26 through 29 require Angular 19, 20, 21 or 22. On Angular 17 or 18, stay on version 25.6.4.
 
-Following our existing convention, a pdf.js upstream sync without library API changes ships as a `.5` minor bump (`27.5.0`) rather than a major (`28.0.0`). The current pre-release (`27.5.0-alpha.0`) reflects that only the bleeding-edge bundle has been updated; the alpha graduates to `27.5.0` once the stable bundle is also synced to v5.7.284. The two `api-minor` items above are very unlikely to affect typical consumers — see the changelog if you build directly against pdf.js's low-level API.
+The full list of changes is in the [changelog](projects/ngx-extended-pdf-viewer/changelog.md).
 
 ## Build or update the library from scratch
 

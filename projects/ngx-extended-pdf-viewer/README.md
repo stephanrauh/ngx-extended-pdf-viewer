@@ -118,7 +118,7 @@ bootstrapApplication(AppComponent, {
 
 ## 🔐 Security Notice
 
-⚠️ **Please use the latest `28.x` release (or newer). Older versions are known to be vulnerable.**
+⚠️ **Please use the latest `29.x` release (or the latest `28.x` if you're staying on that line). Older versions are known to be vulnerable.**
 
 **[CVE-2026-16633](https://github.com/mozilla/pdf.js/security/advisories/GHSA-hq66-cqwq-w95j) (high) - fixed in `28.1.1` and in `29.0.0-rc.3`.** A malicious PDF could run JavaScript in the context of your page. The flaw is in pdf.js 5.6.83 and newer, so **every earlier `28.x` release, and `29.0.0-rc.0` through `rc.2`, are affected** - please update. Mozilla's fix (pdf.js 6.2.108) is cherry-picked into the engine this library bundles.
 
@@ -159,11 +159,11 @@ Regarding security: I'm not perfect - it's always a best-effort approach without
 
 ## 📦 Version Highlights
 
-### Version 29 (release candidate)
+### Version 29
 
 Version 29 updates to pdf.js 6.1 and adds an API for building a document out of several files.
 
-(The 29.0.0-rc.0 release candidate still shipped pdf.js 6.0 in the stable bundle; since rc.1 pdf.js 6.1 is the default engine, and the bleeding-edge bundle carries the same engine until Mozilla opens 6.2.)
+(pdf.js 6.1 is the default engine; the bleeding-edge bundle carries the same engine until Mozilla opens 6.2, so switching between the two changes nothing for the time being.)
 
 **New for end users:**
 
