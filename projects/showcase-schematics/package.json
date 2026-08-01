@@ -13,13 +13,13 @@
   "license": "MIT",
   "schematics": "./src/collection.json",
   "dependencies": {
-    "@angular-devkit/core": "^19.2.0",
-    "@angular-devkit/schematics": "^19.2.0",
+    "@angular-devkit/core": "^19.2.27",
+    "@angular-devkit/schematics": "^19.2.27",
     "typescript": "~5.5.2"
   },
   "devDependencies": {
-    "@types/jasmine": "~5.1.0",
-    "@types/node": "^18.19.130",
-    "jasmine": "^5.13.0"
+    "@types/jasmine": "~6.0.0",
+    "@types/node": "^26.1.2",
+    "jasmine": "^6.3.0"
   }
 }
