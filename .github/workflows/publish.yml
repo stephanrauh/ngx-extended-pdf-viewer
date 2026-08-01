@@ -85,7 +85,7 @@ jobs:
           mv ngx-extended-pdf-viewer-${TAG_VERSION}-source.tar.gz "${SOURCE_DIR}/"
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           generate_release_notes: true
           repository: stephanrauh/ngx-extended-pdf-viewer
