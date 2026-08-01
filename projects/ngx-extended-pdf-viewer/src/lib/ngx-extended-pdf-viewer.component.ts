@@ -1594,15 +1594,19 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
   // @ts-ignore TS6133 - Used for side effects only
   private _customComponentsEffect = effect(() => {
-    void this.customFindbar; // NOSONAR — void tracks signal dependency
-    void this.customFindbarButtons; // NOSONAR
-    void this.customFindbarInputArea; // NOSONAR
-    void this.customToolbar(); // NOSONAR
+    // #3242 modified by ngx-extended-pdf-viewer
+    // read the custom template signals so the effect re-runs whenever one of
+    // them changes. Calling them is what registers the dependency - reading the
+    // property alone yields the signal function and tracks nothing. The return
+    // values are deliberately unused.
+    this.customFindbar();
+    this.customFindbarButtons();
+    this.customFindbarInputArea();
+    this.customToolbar();
+    // #3242 end of modification by ngx-extended-pdf-viewer
     if (typeof window === 'undefined') return;
 
-    if (this.dummyComponents) {
-      this.dummyComponents()?.addMissingStandardWidgets();
-    }
+    this.dummyComponents()?.addMissingStandardWidgets();
   });
 
   public serverSideRendering = true;
@@ -1813,7 +1817,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   }
 
   private assignTabindexes() {
-    if (this.startTabindex) {
+    // #3242 modified by ngx-extended-pdf-viewer
+    // only assign tab indexes if the user asked for it. Note that 0 is a valid
+    // start index, so this must not be a plain truthiness check
+    if (this.startTabindex() !== undefined) {
+      // #3242 end of modification by ngx-extended-pdf-viewer
       // #2853 modified by ngx-extended-pdf-viewer
       const rootEl = this.root()?.nativeElement || this.elementRef?.nativeElement?.querySelector('.zoom');
       if (!rootEl) {
@@ -2689,9 +2697,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
             if (x.view > 0) {
               this.activeSidebarView.set(x.view);
             }
-            if (this.sidebarComponent) {
-              this.sidebarComponent()?.showToolbarWhenNecessary();
-            }
+            this.sidebarComponent()?.showToolbarWhenNecessary();
           }),
         );
       },
@@ -2764,9 +2770,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     const hideSidebarToolbar = () => {
       queueMicrotask(
         this.asyncWithCD(() => {
-          if (this.sidebarComponent) {
-            this.sidebarComponent()?.showToolbarWhenNecessary();
-          }
+          this.sidebarComponent()?.showToolbarWhenNecessary();
         }),
       );
     };
@@ -3300,12 +3304,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     if (pdfViewer && pdfViewer.length > 0) {
       const container = document.getElementById('outerContainer');
       if (container) {
-        if (this.secondaryToolbarComponent) {
-          this.secondaryToolbarComponent()?.checkVisibility();
-        }
-        if (this.dynamicCSSComponent) {
-          this.dynamicCSSComponent()?.updateToolbarWidth();
-        }
+        this.secondaryToolbarComponent()?.checkVisibility();
+        this.dynamicCSSComponent()?.updateToolbarWidth();
       }
       this.dynamicCSSComponent()?.checkHeight(this, this.logLevel());
     }

@@ -1077,6 +1077,29 @@ describe('NgxExtendedPdfViewerComponent', () => {
     // brittle. The `?.eventBus?.dispatch` guards are still applied as defensive cleanup
     // and exercised at integration test time.
   });
+
+  describe('#3242 assignTabindexes', () => {
+    beforeEach(() => {
+      // assignTabindexes() bails out unless it finds a root element to measure
+      const zoom = document.createElement('div');
+      zoom.classList.add('zoom');
+      zoom.appendChild(document.createElement('button'));
+      fixture.nativeElement.appendChild(zoom);
+    });
+
+    it('should leave the tab order alone when [startTabindex] is not set', () => {
+      const spy = jest.spyOn(component as any, 'collectElementPositions');
+      component['assignTabindexes']();
+      expect(spy).not.toHaveBeenCalled();
+    });
+
+    it('should assign tab indexes when [startTabindex] is 0, which is a valid start index', () => {
+      fixture.componentRef.setInput('startTabindex', 0);
+      const spy = jest.spyOn(component as any, 'collectElementPositions');
+      component['assignTabindexes']();
+      expect(spy).toHaveBeenCalled();
+    });
+  });
 });
 
 describe('isIOS', () => {
