@@ -20,13 +20,13 @@ jobs:
       cancel-in-progress: false
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           path: workspace/ngx-extended-pdf-viewer
           fetch-depth: 0
 
       - name: Checkout mypdf.js repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           repository: stephanrauh/pdf.js
           path: workspace/mypdf.js
