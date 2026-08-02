@@ -43,6 +43,23 @@ updates:
       # TypeScript is pinned to the range Angular 19 supports.
       - dependency-name: "typescript"
         update-types: [version-update:semver-major, version-update:semver-minor]
+      # Pinned to the Jest 29 line. 14.6.2 is the last jest-preset-angular
+      # release on jest ^29; every version from 15 up requires jest ^30, and
+      # 17 additionally requires Angular 20 and TypeScript 5.8. Moving off 29
+      # means migrating jest + ts-jest + jest-environment-jsdom together, so
+      # it is a deliberate piece of work, not a dependabot merge.
+      - dependency-name: "jest"
+        update-types: [version-update:semver-major]
+      - dependency-name: "jest-preset-angular"
+        update-types: [version-update:semver-major]
+      - dependency-name: "jest-environment-jsdom"
+        update-types: [version-update:semver-major]
+      - dependency-name: "ts-jest"
+        update-types: [version-update:semver-major]
+      # @types/node majors track TypeScript minimums: 26.x already requires
+      # exactly our TS 5.6, so the next major would break the TS pin above.
+      - dependency-name: "@types/node"
+        update-types: [version-update:semver-major]
 
   # Private, unpublished schematic used to scaffold showcase documentation
   # pages (npm run add-documentation-page). It has its own lockfile, which is
