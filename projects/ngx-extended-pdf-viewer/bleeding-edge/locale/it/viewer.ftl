@@ -760,3 +760,6 @@ pdfjs-editor-movePageDown-button-label = Sposta pagina in basso
 pdfjs-cursor-page-flip-tool-button =
     .title = Sfoglia pagine
 pdfjs-cursor-page-flip-tool-button-label = Sfoglia pagine
+pdfjs-loading-error-more-info = Ulteriori informazioni
+pdfjs-loading-error-less-info = Nascondi dettagli
+pdfjs-loading-error-close = Chiudi

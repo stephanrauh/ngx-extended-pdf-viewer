@@ -26,3 +26,6 @@ pdfjs-editor-movePageDown-button-label = Перемістити сторінку
 pdfjs-cursor-page-flip-tool-button =
     .title = Гортання сторінок
 pdfjs-cursor-page-flip-tool-button-label = Гортання сторінок
+pdfjs-loading-error-more-info = Більше інформації
+pdfjs-loading-error-less-info = Менше інформації
+pdfjs-loading-error-close = Закрити

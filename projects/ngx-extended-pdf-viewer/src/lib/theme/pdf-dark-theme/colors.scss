@@ -151,6 +151,17 @@ $placeholder-color: rgba(217, 217, 217, 1);
 
 $error-color: rgba(255, 102, 102, 1);
 
+// Scrim and card of the optional error message (see [showLoadingErrorMessage]).
+// A black scrim and black hairlines are invisible on a dark viewer, so the
+// scrim is deepened and the borders are drawn in light instead.
+$error-overlay-background: rgba(0, 0, 0, 0.45);
+
+$error-message-border: rgba(255, 255, 255, 0.14);
+
+$error-message-shadow: 0 12px 32px rgba(0, 0, 0, 0.55);
+
+$error-details-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+
 $notification-color: rgba(112, 219, 85, 1);
 
 $input-background-color: #4a4a4f;

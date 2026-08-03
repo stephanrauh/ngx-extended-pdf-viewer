@@ -760,3 +760,6 @@ pdfjs-editor-movePageDown-button-label = Mover página para baixo
 pdfjs-cursor-page-flip-tool-button =
     .title = Virar página
 pdfjs-cursor-page-flip-tool-button-label = Virar página
+pdfjs-loading-error-more-info = Mais informações
+pdfjs-loading-error-less-info = Menos informações
+pdfjs-loading-error-close = Fechar

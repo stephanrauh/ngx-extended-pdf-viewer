@@ -767,3 +767,7 @@ pdfjs-editor-movePageDown-button-label = Mută pagina în jos
 pdfjs-cursor-page-flip-tool-button =
     .title = Răsfoire pagini
 pdfjs-cursor-page-flip-tool-button-label = Răsfoire pagini
+# Additional translations for ngx-extended-pdf-viewer (ro)
+pdfjs-loading-error-more-info = Mai multe informații
+pdfjs-loading-error-less-info = Mai puține informații
+pdfjs-loading-error-close = Închide

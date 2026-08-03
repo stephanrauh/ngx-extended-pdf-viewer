@@ -426,7 +426,11 @@
                 (dblclick)="zoomToPageWidth($event)"
               ></div>
             </div>
-            <pdf-error-message></pdf-error-message>
+            <pdf-error-message
+              [show]="showLoadingErrorMessage()"
+              [error]="pdfLoadingError()"
+              [message]="loadingErrorMessage()"
+            ></pdf-error-message>
           </div>
           <!-- mainContainer -->
 

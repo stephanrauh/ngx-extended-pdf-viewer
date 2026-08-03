@@ -760,3 +760,6 @@ pdfjs-editor-movePageDown-button-label = Siirrä sivu alas
 pdfjs-cursor-page-flip-tool-button =
     .title = Sivun kääntö
 pdfjs-cursor-page-flip-tool-button-label = Sivun kääntö
+pdfjs-loading-error-more-info = Lisätietoja
+pdfjs-loading-error-less-info = Vähemmän tietoja
+pdfjs-loading-error-close = Sulje

@@ -19,6 +19,7 @@ import {
   output,
   PLATFORM_ID,
   Renderer2,
+  signal,
   TemplateRef,
   viewChild,
 } from '@angular/core';
@@ -1133,6 +1134,23 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   public pdfLoadingStarts = output<PdfLoadingStartsEvent>();
 
   public pdfLoadingFailed = output<Error>();
+
+  /**
+   * The error of the most recent failed load attempt. Internal state driving
+   * <pdf-error-message>; use the `(pdfLoadingFailed)` output to react to load
+   * errors from outside the viewer.
+   */
+  protected readonly pdfLoadingError = signal<Error | null>(null);
+
+  /**
+   * pdf.js reports load errors on the console and via `(pdfLoadingFailed)`, but
+   * shows nothing. Set this to true to let the viewer render an error card on
+   * top of the empty page instead.
+   */
+  public showLoadingErrorMessage = input(false);
+
+  /** Replaces the default headline of the error card shown by `[showLoadingErrorMessage]`. */
+  public loadingErrorMessage = input<string | undefined>(undefined);
 
   public textLayer = input<boolean | undefined>(undefined);
 
@@ -2319,6 +2337,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     }
 
     if (this._src) {
+      this.pdfLoadingError.set(null);
       this.pdfScriptLoaderService.ngxExtendedPdfViewerIncompletelyInitialized = false;
 
       setTimeout(
@@ -2352,7 +2371,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
           }
         }
         options.baseHref = this.baseHref;
-        PDFViewerApplication.onError = (error: Error) => this.pdfLoadingFailed.emit(error);
+        PDFViewerApplication.onError = (error: Error) => {
+          this.pdfLoadingError.set(error);
+          this.pdfLoadingFailed.emit(error);
+        };
         if (typeof this._src === 'string') {
           options.url = this._src;
         } else if (this._src instanceof ArrayBuffer) {
@@ -3001,7 +3023,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       this._lastOpenedSrc = this._src; // #3131
       await PDFViewerApplication.open(options);
     } catch (error) {
-      this.pdfLoadingFailed.emit(error as Error);
+      const loadingError = error as Error;
+      this.pdfLoadingError.set(loadingError);
+      this.pdfLoadingFailed.emit(loadingError);
     }
   }
 

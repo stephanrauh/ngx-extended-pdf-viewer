@@ -756,3 +756,6 @@ pdfjs-editor-movePageDown-button-label = Déplacer la page vers le bas
 pdfjs-cursor-page-flip-tool-button =
     .title = Feuilleter les pages
 pdfjs-cursor-page-flip-tool-button-label = Feuilleter les pages
+pdfjs-loading-error-more-info = Plus d’informations
+pdfjs-loading-error-less-info = Moins d’informations
+pdfjs-loading-error-close = Fermer

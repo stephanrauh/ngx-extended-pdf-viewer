@@ -736,6 +736,9 @@ pdfjs-editor-movePageDown-button-label = Pomakni stranicu dolje
 pdfjs-cursor-page-flip-tool-button =
     .title = Listanje stranica
 pdfjs-cursor-page-flip-tool-button-label = Listanje stranica
+pdfjs-loading-error-more-info = Više informacija
+pdfjs-loading-error-less-info = Manje informacija
+pdfjs-loading-error-close = Zatvori
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-toggle-views-manager-notification-button =
     .title = Toggle Sidebar (document contains thumbnails/outline/attachments/layers)
