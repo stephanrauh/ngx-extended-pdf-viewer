@@ -26,3 +26,6 @@ pdfjs-editor-movePageDown-button-label = Mover página hacia abajo
 pdfjs-cursor-page-flip-tool-button =
     .title = Pasar página
 pdfjs-cursor-page-flip-tool-button-label = Pasar página
+pdfjs-loading-error-more-info = Más información
+pdfjs-loading-error-less-info = Menos información
+pdfjs-loading-error-close = Cerrar

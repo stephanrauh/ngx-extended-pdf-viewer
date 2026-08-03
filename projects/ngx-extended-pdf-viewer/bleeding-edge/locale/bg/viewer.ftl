@@ -647,3 +647,7 @@ pdfjs-views-manager-paste-button-after =
     .title = Paste after page { $page }
 pdfjs-new-badge-content = NEW
 pdfjs-views-manager-waiting-for-file = Uploading file…
+# Additional translations for ngx-extended-pdf-viewer (bg)
+pdfjs-loading-error-more-info = Повече информация
+pdfjs-loading-error-less-info = По-малко информация
+pdfjs-loading-error-close = Затваряне

@@ -12,6 +12,8 @@ describe('PdfErrorMessageComponent', () => {
 
     fixture = TestBed.createComponent(PdfErrorMessageComponent);
     component = fixture.componentInstance;
+    // The card is opt-in; every test below assumes the host enabled it.
+    fixture.componentRef.setInput('show', true);
     fixture.detectChanges();
   });
 
@@ -27,6 +29,15 @@ describe('PdfErrorMessageComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should stay hidden when the host did not opt in, even if a load fails', () => {
+    fixture.componentRef.setInput('show', false);
+    setError(new Error('The file could not be downloaded.'));
+
+    const wrapper = fixture.nativeElement.querySelector('#errorWrapper') as HTMLDivElement;
+
+    expect(wrapper.hidden).toBe(true);
   });
 
   it('should stay hidden without a loading error', () => {

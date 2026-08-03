@@ -26,3 +26,6 @@ pdfjs-editor-movePageDown-button-label = Flytta sida nedåt
 pdfjs-cursor-page-flip-tool-button =
     .title = Bläddra sidor
 pdfjs-cursor-page-flip-tool-button-label = Bläddra sidor
+pdfjs-loading-error-more-info = Mer information
+pdfjs-loading-error-less-info = Mindre information
+pdfjs-loading-error-close = Stäng

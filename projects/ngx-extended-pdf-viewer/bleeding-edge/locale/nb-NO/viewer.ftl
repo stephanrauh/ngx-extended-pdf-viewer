@@ -760,3 +760,7 @@ pdfjs-editor-movePageDown-button-label = Move Page Down
 pdfjs-cursor-page-flip-tool-button =
     .title = Page Flip
 pdfjs-cursor-page-flip-tool-button-label = Page Flip
+# Additional translations for ngx-extended-pdf-viewer (nb-NO)
+pdfjs-loading-error-more-info = Mer info
+pdfjs-loading-error-less-info = Mindre info
+pdfjs-loading-error-close = Lukk

@@ -4,6 +4,38 @@ const fs = require('fs');
 const file = fs.readFileSync('./projects/ngx-extended-pdf-viewer/' + folder + '/locale/locale.json');
 const content = JSON.parse(file.toString());
 
+const ADDITIONAL_LOCALE_DIR = './projects/ngx-extended-pdf-viewer/assets/additional-locale/';
+
+// The set of languages ngx-extended-pdf-viewer supports is defined by the files in
+// assets/additional-locale: drop a <language>.ftl in there and that language ships.
+// The keys of locale.json are lowercase ("nb-no") while the files keep the canonical
+// spelling ("nb-NO.ftl"), so the lookup has to be case-insensitive - matching on the
+// raw name only works on a case-insensitive filesystem and breaks on Linux CI.
+const ADDITIONAL_LOCALES = new Map(
+  fs
+    .readdirSync(ADDITIONAL_LOCALE_DIR)
+    .filter((name) => name.endsWith('.ftl'))
+    .map((name) => [name.slice(0, -'.ftl'.length).toLowerCase(), name.slice(0, -'.ftl'.length)]),
+);
+
+/**
+ * Exact match first ("nb-no" -> "nb-NO.ftl"), then the two-letter shortcode ("de-de" -> "de.ftl").
+ * The shortcode is only allowed to match a real region variant, i.e. "de" or "de-AT" - never
+ * "skr" (Saraiki), which shares its first two letters with Slovak and would otherwise have been
+ * served Slovak translations.
+ */
+function findAdditionalLocale(lang, shortcode) {
+  const key = lang.toLowerCase();
+  const exact = ADDITIONAL_LOCALES.get(key);
+  if (exact) {
+    return exact;
+  }
+  if (key === shortcode || key.startsWith(shortcode + '-')) {
+    return ADDITIONAL_LOCALES.get(shortcode.toLowerCase());
+  }
+  return undefined;
+}
+
 processOneLanguage('en-us', 'en');
 if (language) {
   const shortcode = language.substring(0, 2);
@@ -21,10 +53,10 @@ function processOneLanguage(lang, shortcode) {
   let originalLines = fs.readFileSync(originalFilename).toString();
   let targetLang = originalLines;
 
-  let additionalFilename = './projects/ngx-extended-pdf-viewer/assets/additional-locale/' + shortcode + '.ftl';
-  if (fs.existsSync(additionalFilename)) {
-    const header = '\n# Additional translations for ngx-extended-pdf-viewer (' + shortcode + ')';
-    targetLang = addTranslationsFromAFile(additionalFilename, targetLang, header);
+  const additionalCode = findAdditionalLocale(lang, shortcode);
+  if (additionalCode) {
+    const header = '\n# Additional translations for ngx-extended-pdf-viewer (' + additionalCode + ')';
+    targetLang = addTranslationsFromAFile(ADDITIONAL_LOCALE_DIR + additionalCode + '.ftl', targetLang, header);
   }
 
   const englishFilename = './projects/ngx-extended-pdf-viewer/' + folder + '/locale/en-US/viewer.ftl';

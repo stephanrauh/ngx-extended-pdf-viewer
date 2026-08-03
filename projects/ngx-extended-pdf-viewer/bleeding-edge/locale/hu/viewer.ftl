@@ -760,3 +760,7 @@ pdfjs-editor-movePageDown-button-label = Oldal mozgatása lefelé
 pdfjs-cursor-page-flip-tool-button =
     .title = Lapozás
 pdfjs-cursor-page-flip-tool-button-label = Lapozás
+# Additional translations for ngx-extended-pdf-viewer (hu)
+pdfjs-loading-error-more-info = További tudnivalók
+pdfjs-loading-error-less-info = Kevesebb információ
+pdfjs-loading-error-close = Bezárás

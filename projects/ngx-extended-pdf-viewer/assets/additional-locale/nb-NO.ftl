@@ -26,3 +26,6 @@ pdfjs-editor-movePageDown-button-label = Flytt side ned
 pdfjs-cursor-page-flip-tool-button =
     .title = Bla i sider
 pdfjs-cursor-page-flip-tool-button-label = Bla i sider
+pdfjs-loading-error-more-info = Mer info
+pdfjs-loading-error-less-info = Mindre info
+pdfjs-loading-error-close = Lukk

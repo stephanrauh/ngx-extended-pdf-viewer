@@ -1,0 +1,118 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "serialNumber": "urn:uuid:decce918-512b-58cc-9573-70ed8610f309",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-07-31T21:08:05+02:00",
+    "tools": {
+      "components": [
+        {
+          "type": "application",
+          "name": "generate-sbom.js",
+          "group": "ngx-extended-pdf-viewer"
+        }
+      ]
+    },
+    "authors": [
+      {
+        "name": "Stephan Rauh",
+        "email": "security@beyondjava.de"
+      }
+    ],
+    "component": {
+      "bom-ref": "pkg:npm/ngx-extended-pdf-viewer@27.0.1",
+      "type": "library",
+      "name": "ngx-extended-pdf-viewer",
+      "version": "27.0.1",
+      "description": "Embedding PDF files in your Angular application. Highly configurable viewer including the toolbar, sidebar, and all the features you're used to.",
+      "purl": "pkg:npm/ngx-extended-pdf-viewer@27.0.1",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://pdfviewer.net"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/stephanrauh/ngx-extended-pdf-viewer"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues"
+        },
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/ngx-extended-pdf-viewer/-/ngx-extended-pdf-viewer-27.0.1.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ngx-extended-pdf-viewer:peerDependencies",
+          "value": "This package declares only peerDependencies (Angular), which the consuming project resolves in its own dependency tree and its scanners already see. It has no runtime npm dependencies of its own."
+        },
+        {
+          "name": "ngx-extended-pdf-viewer:supportedVersions",
+          "value": "Only the latest published version receives security updates. See SECURITY.md."
+        }
+      ]
+    }
+  },
+  "vulnerabilities": [
+    {
+      "bom-ref": "vex-CVE-2026-16633",
+      "id": "CVE-2026-16633",
+      "source": {
+        "name": "GitHub Security Advisory",
+        "url": "https://github.com/mozilla/pdf.js/security/advisories/GHSA-hq66-cqwq-w95j"
+      },
+      "references": [
+        {
+          "id": "GHSA-hq66-cqwq-w95j",
+          "source": {
+            "name": "GitHub Security Advisory",
+            "url": "https://github.com/mozilla/pdf.js/security/advisories/GHSA-hq66-cqwq-w95j"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Security Advisory",
+            "url": "https://github.com/mozilla/pdf.js/security/advisories/GHSA-hq66-cqwq-w95j"
+          },
+          "severity": "high",
+          "method": "other"
+        }
+      ],
+      "description": "Arbitrary JavaScript execution upon opening a malicious PDF",
+      "detail": "Upstream requires enableScripting (true by default in pdf.js) for the sandbox half of this issue; ngx-extended-pdf-viewer ships enableScripting=false by default. The XFA rich-text half is reachable whenever enableXfa is true, which IS the default here, so we do not claim the default configuration was safe. Both upstream fix commits are applied to the bundled engine.",
+      "advisories": [
+        {
+          "url": "https://github.com/mozilla/pdf.js/security/advisories/GHSA-hq66-cqwq-w95j"
+        }
+      ],
+      "affects": [
+        {
+          "ref": "urn:cdx:2cf5e1c4-3766-5708-81cc-c60daa2f82fc/1#pdfjs-stable"
+        },
+        {
+          "ref": "urn:cdx:2cf5e1c4-3766-5708-81cc-c60daa2f82fc/1#pdfjs-bleedingEdge"
+        }
+      ],
+      "analysis": {
+        "state": "resolved_with_pedigree",
+        "response": [
+          "update"
+        ],
+        "detail": "Fixed in this build. The bundled engine reports pdf.js 5.6.205 because that is the upstream release it derives from, but the fix from pdf.js 6.2.108 is applied by cherry-pick - see the pedigree.patches entry for CVE-2026-16633 in sbom.json. Upstream requires enableScripting (true by default in pdf.js) for the sandbox half of this issue; ngx-extended-pdf-viewer ships enableScripting=false by default. The XFA rich-text half is reachable whenever enableXfa is true, which IS the default here, so we do not claim the default configuration was safe. Both upstream fix commits are applied to the bundled engine. Only the latest published version of ngx-extended-pdf-viewer receives security updates."
+      }
+    }
+  ]
+}

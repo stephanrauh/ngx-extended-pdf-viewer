@@ -761,3 +761,7 @@ pdfjs-views-manager-status-warning-cut-label = Couldn’t cut. Refresh page and 
 pdfjs-views-manager-status-warning-copy-label = Couldn’t copy. Refresh page and try again.
 pdfjs-views-manager-status-warning-delete-label = Couldn’t delete. Refresh page and try again.
 pdfjs-views-manager-status-warning-save-label = Couldn’t save. Refresh page and try again.
+# Additional translations for ngx-extended-pdf-viewer (da)
+pdfjs-loading-error-more-info = Mere information
+pdfjs-loading-error-less-info = Mindre information
+pdfjs-loading-error-close = Luk

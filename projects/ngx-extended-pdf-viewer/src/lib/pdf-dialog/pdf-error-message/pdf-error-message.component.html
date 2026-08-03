@@ -1,10 +1,22 @@
-<div id="errorWrapper" [hidden]="!visible()">
+<div
+  id="errorWrapper"
+  [hidden]="!visible()"
+>
   <div class="emptyMessage">
     <div id="errorMessageLeft">
       @if (customMessage()) {
-        <p id="errorMessage" class="emptyMessageHeadline">{{ customMessage() }}</p>
+        <p
+          id="errorMessage"
+          class="emptyMessageHeadline"
+        >
+          {{ customMessage() }}
+        </p>
       } @else {
-        <p id="errorMessage" class="emptyMessageHeadline" data-l10n-id="pdfjs-loading-error">
+        <p
+          id="errorMessage"
+          class="emptyMessageHeadline"
+          data-l10n-id="pdfjs-loading-error"
+        >
           An error occurred while loading the PDF.
         </p>
       }
@@ -34,10 +46,20 @@
       }
     </div>
     <div id="errorMessageRight">
-      <button type="button" id="errorClose" class="dialogButton" data-l10n-id="pdfjs-loading-error-close" (click)="dismiss()">
+      <button
+        type="button"
+        id="errorClose"
+        class="dialogButton"
+        data-l10n-id="pdfjs-loading-error-close"
+        (click)="dismiss()"
+      >
         Close
       </button>
     </div>
   </div>
-  <textarea id="errorMoreInfo" [hidden]="!detailsExpanded()" readonly="readonly">{{ errorDetails() }}</textarea>
+  <textarea
+    id="errorMoreInfo"
+    [hidden]="!detailsExpanded()"
+    readonly="readonly"
+    >{{ errorDetails() }}</textarea>
 </div>

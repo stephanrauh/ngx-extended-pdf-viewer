@@ -1,0 +1,86 @@
+{
+  "channels": {
+    "stable": {
+      "bundle": "assets",
+      "pdfjsBuildVersion": "5.6.1115",
+      "upstream": {
+        "project": "mozilla/pdf.js",
+        "repository": "https://github.com/mozilla/pdf.js",
+        "release": "5.6.205",
+        "tag": "v5.6.205",
+        "commit": "ada343803945d977b9a1be8e72184b0422f8e5d1",
+        "committedAt": "2026-03-29T16:08:21+02:00"
+      },
+      "fork": {
+        "repository": "https://github.com/stephanrauh/pdf.js",
+        "branch": "ngx-27.0.x",
+        "commit": "ed25ebd17c33f449f8c283040982155c9f88fdaf",
+        "committedAt": "2026-07-31T20:46:26+02:00"
+      },
+      "securityFixes": [
+        {
+          "id": "GHSA-hq66-cqwq-w95j",
+          "cve": "CVE-2026-16633",
+          "url": "https://github.com/mozilla/pdf.js/security/advisories/GHSA-hq66-cqwq-w95j",
+          "summary": "Arbitrary JavaScript execution upon opening a malicious PDF",
+          "fixedUpstreamIn": "6.2.108",
+          "appliedVia": "cherry-pick",
+          "upstreamCommits": [
+            {
+              "upstream": "6c18df5768a9cf12e725ebf12fc70e32358be1fa",
+              "inFork": "1625fe7e0fe4daec7170bc972776705e8faf95ff",
+              "via": "cherry-pick"
+            },
+            {
+              "upstream": "4ea07c2431141fe66df3a2f53af53cc8ad854191",
+              "inFork": "ed25ebd17c33f449f8c283040982155c9f88fdaf",
+              "via": "cherry-pick"
+            }
+          ],
+          "detail": "Upstream requires enableScripting (true by default in pdf.js) for the sandbox half of this issue; ngx-extended-pdf-viewer ships enableScripting=false by default. The XFA rich-text half is reachable whenever enableXfa is true, which IS the default here, so we do not claim the default configuration was safe. Both upstream fix commits are applied to the bundled engine."
+        }
+      ]
+    },
+    "bleedingEdge": {
+      "bundle": "bleeding-edge",
+      "pdfjsBuildVersion": "5.6.1114",
+      "upstream": {
+        "project": "mozilla/pdf.js",
+        "repository": "https://github.com/mozilla/pdf.js",
+        "release": "5.6.205",
+        "tag": "v5.6.205",
+        "commit": "ada343803945d977b9a1be8e72184b0422f8e5d1",
+        "committedAt": "2026-03-29T16:08:21+02:00"
+      },
+      "fork": {
+        "repository": "https://github.com/stephanrauh/pdf.js",
+        "branch": "ngx-27.0.x-bleeding-edge",
+        "commit": "83f41cd9fb75c4bc32e54c6875cc42cdbb86566b",
+        "committedAt": "2026-07-31T21:08:05+02:00"
+      },
+      "securityFixes": [
+        {
+          "id": "GHSA-hq66-cqwq-w95j",
+          "cve": "CVE-2026-16633",
+          "url": "https://github.com/mozilla/pdf.js/security/advisories/GHSA-hq66-cqwq-w95j",
+          "summary": "Arbitrary JavaScript execution upon opening a malicious PDF",
+          "fixedUpstreamIn": "6.2.108",
+          "appliedVia": "cherry-pick",
+          "upstreamCommits": [
+            {
+              "upstream": "6c18df5768a9cf12e725ebf12fc70e32358be1fa",
+              "inFork": "064799f6954974bf608194b70bf46724b1b84db7",
+              "via": "cherry-pick"
+            },
+            {
+              "upstream": "4ea07c2431141fe66df3a2f53af53cc8ad854191",
+              "inFork": "83f41cd9fb75c4bc32e54c6875cc42cdbb86566b",
+              "via": "cherry-pick"
+            }
+          ],
+          "detail": "Upstream requires enableScripting (true by default in pdf.js) for the sandbox half of this issue; ngx-extended-pdf-viewer ships enableScripting=false by default. The XFA rich-text half is reachable whenever enableXfa is true, which IS the default here, so we do not claim the default configuration was safe. Both upstream fix commits are applied to the bundled engine."
+        }
+      ]
+    }
+  }
+}

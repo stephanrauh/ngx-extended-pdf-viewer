@@ -1135,8 +1135,21 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
   public pdfLoadingFailed = output<Error>();
 
-  public pdfLoadingError = signal<Error | null>(null);
+  /**
+   * The error of the most recent failed load attempt. Internal state driving
+   * <pdf-error-message>; use the `(pdfLoadingFailed)` output to react to load
+   * errors from outside the viewer.
+   */
+  protected readonly pdfLoadingError = signal<Error | null>(null);
 
+  /**
+   * pdf.js reports load errors on the console and via `(pdfLoadingFailed)`, but
+   * shows nothing. Set this to true to let the viewer render an error card on
+   * top of the empty page instead.
+   */
+  public showLoadingErrorMessage = input(false);
+
+  /** Replaces the default headline of the error card shown by `[showLoadingErrorMessage]`. */
   public loadingErrorMessage = input<string | undefined>(undefined);
 
   public textLayer = input<boolean | undefined>(undefined);

@@ -776,3 +776,7 @@ pdfjs-editor-movePageDown-button-label = Premakni stran navzdol
 pdfjs-cursor-page-flip-tool-button =
     .title = Listanje strani
 pdfjs-cursor-page-flip-tool-button-label = Listanje strani
+# Additional translations for ngx-extended-pdf-viewer (sl)
+pdfjs-loading-error-more-info = Več informacij
+pdfjs-loading-error-less-info = Manj informacij
+pdfjs-loading-error-close = Zapri

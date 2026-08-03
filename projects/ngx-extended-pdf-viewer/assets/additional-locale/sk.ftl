@@ -26,3 +26,6 @@ pdfjs-editor-movePageDown-button-label = Presunúť stránku nadol
 pdfjs-cursor-page-flip-tool-button =
     .title = Listovanie stránok
 pdfjs-cursor-page-flip-tool-button-label = Listovanie stránok
+pdfjs-loading-error-more-info = Ďalšie informácie
+pdfjs-loading-error-less-info = Menej informácií
+pdfjs-loading-error-close = Zavrieť
