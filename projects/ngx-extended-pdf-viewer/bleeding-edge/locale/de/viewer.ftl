@@ -760,7 +760,6 @@ pdfjs-editor-movePageDown-button-label = Seite nach unten verschieben
 pdfjs-cursor-page-flip-tool-button =
     .title = Seitenblättern
 pdfjs-cursor-page-flip-tool-button-label = Seitenblättern
-# Additional translations for ngx-extended-pdf-viewer (de)
 pdfjs-loading-error-more-info = Mehr Informationen
 pdfjs-loading-error-less-info = Weniger Informationen
 pdfjs-loading-error-close = Schließen

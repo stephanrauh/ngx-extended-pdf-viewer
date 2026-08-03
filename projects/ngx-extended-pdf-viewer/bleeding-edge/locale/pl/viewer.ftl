@@ -767,7 +767,6 @@ pdfjs-editor-movePageDown-button-label = Przenieś stronę w dół
 pdfjs-cursor-page-flip-tool-button =
     .title = Przewracanie stron
 pdfjs-cursor-page-flip-tool-button-label = Przewracanie stron
-# Additional translations for ngx-extended-pdf-viewer (pl)
 pdfjs-loading-error-more-info = Więcej informacji
 pdfjs-loading-error-less-info = Mniej informacji
 pdfjs-loading-error-close = Zamknij

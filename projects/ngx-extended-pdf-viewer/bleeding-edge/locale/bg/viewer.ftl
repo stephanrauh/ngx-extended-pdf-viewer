@@ -405,6 +405,9 @@ pdfjs-editor-movePageDown-button-label = Премести страницата �
 pdfjs-cursor-page-flip-tool-button =
     .title = Прелистване на страници
 pdfjs-cursor-page-flip-tool-button-label = Прелистване на страници
+pdfjs-loading-error-more-info = Повече информация
+pdfjs-loading-error-less-info = По-малко информация
+pdfjs-loading-error-close = Затваряне
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-thumb-page-title1 =
     .title = Page { $page } of { $total }
@@ -647,7 +650,3 @@ pdfjs-views-manager-paste-button-after =
     .title = Paste after page { $page }
 pdfjs-new-badge-content = NEW
 pdfjs-views-manager-waiting-for-file = Uploading file…
-# Additional translations for ngx-extended-pdf-viewer (bg)
-pdfjs-loading-error-more-info = Повече информация
-pdfjs-loading-error-less-info = По-малко информация
-pdfjs-loading-error-close = Затваряне

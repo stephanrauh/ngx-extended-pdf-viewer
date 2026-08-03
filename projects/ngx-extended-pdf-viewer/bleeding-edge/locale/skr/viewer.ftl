@@ -464,20 +464,6 @@ pdfjs-editor-undo-bar-close-button =
     .title = بند کرو
 pdfjs-editor-undo-bar-close-button-label = بند کرو
 
-# Additional translations for ngx-extended-pdf-viewer (sk)
-unverified-signature-warning = Tento PDF súbor obsahuje digitálny podpis. PDF prehliadač nemôže overiť, či je podpis platný. Stiahnite si súbor a otvorte ho v Acrobat Reader na overenie platnosti podpisu.
-pdfjs-infinite-scroll-button-label = Nekonečné posúvanie
-pdfjs-find-multiple-checkbox-label = Nájsť každé slovo
-pdfjs-find-regexp-checkbox-label = Regulárny výraz
-pdfjs-editor-movePageUp-button =
-    .title = Presunúť stránku nahor
-pdfjs-editor-movePageUp-button-label = Presunúť stránku nahor
-pdfjs-editor-movePageDown-button =
-    .title = Presunúť stránku nadol
-pdfjs-editor-movePageDown-button-label = Presunúť stránku nadol
-pdfjs-cursor-page-flip-tool-button =
-    .title = Listovanie stránok
-pdfjs-cursor-page-flip-tool-button-label = Listovanie stránok
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-thumb-page-title1 =
     .title = Page { $page } of { $total }
@@ -676,7 +662,19 @@ pdfjs-views-manager-paste-button-after =
     .title = Paste after page { $page }
 pdfjs-new-badge-content = NEW
 pdfjs-views-manager-waiting-for-file = Uploading file…
-# Translations for ngx-extended-pdf-viewer additions only available in en-US
+unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
+pdfjs-infinite-scroll-button-label = Infinite scroll
+pdfjs-find-multiple-checkbox-label = Match Each Word
+pdfjs-find-regexp-checkbox-label = Regular Expression
+pdfjs-editor-movePageUp-button =
+    .title = Move Page Up
+pdfjs-editor-movePageUp-button-label = Move Page Up
+pdfjs-editor-movePageDown-button =
+    .title = Move Page Down
+pdfjs-editor-movePageDown-button-label = Move Page Down
+pdfjs-cursor-page-flip-tool-button =
+    .title = Page Flip
+pdfjs-cursor-page-flip-tool-button-label = Page Flip
 pdfjs-loading-error-more-info = More Information
 pdfjs-loading-error-less-info = Less Information
 pdfjs-loading-error-close = Close
