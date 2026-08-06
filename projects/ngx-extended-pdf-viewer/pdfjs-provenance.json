@@ -4,7 +4,7 @@
   "channels": {
     "bleedingEdge": {
       "bundle": "bleeding-edge",
-      "pdfjsBuildVersion": "6.1.1162",
+      "pdfjsBuildVersion": "6.1.1164",
       "upstream": {
         "project": "mozilla/pdf.js",
         "repository": "https://github.com/mozilla/pdf.js",
@@ -16,8 +16,8 @@
       "fork": {
         "repository": "https://github.com/stephanrauh/pdf.js",
         "branch": "bleeding-edge",
-        "commit": "33587ccc2d0c178fac8cbd13ce2bb7187b04d352",
-        "committedAt": "2026-08-01T23:23:24+02:00"
+        "commit": "14922696fc0b001d328db934f4846f64391ec19d",
+        "committedAt": "2026-08-06T21:50:57+02:00"
       },
       "securityFixes": [
         {
@@ -45,7 +45,7 @@
     },
     "stable": {
       "bundle": "assets",
-      "pdfjsBuildVersion": "6.1.1163",
+      "pdfjsBuildVersion": "6.1.1164",
       "upstream": {
         "project": "mozilla/pdf.js",
         "repository": "https://github.com/mozilla/pdf.js",
@@ -57,8 +57,8 @@
       "fork": {
         "repository": "https://github.com/stephanrauh/pdf.js",
         "branch": "6.1",
-        "commit": "98660b998d0562d61d4d4667702a4dca5fd9b542",
-        "committedAt": "2026-08-06T21:38:35+02:00"
+        "commit": "95ad784282ae10686787b477b0691f5c684bce02",
+        "committedAt": "2026-08-06T21:51:16+02:00"
       },
       "securityFixes": [
         {
