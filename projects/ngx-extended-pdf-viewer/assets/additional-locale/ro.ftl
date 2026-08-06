@@ -26,3 +26,22 @@ pdfjs-editor-movePageDown-button-label = Mută pagina în jos
 pdfjs-cursor-page-flip-tool-button =
     .title = Răsfoire pagini
 pdfjs-cursor-page-flip-tool-button-label = Răsfoire pagini
+
+# #3255 Sidebar buttons. pdf.js removed these keys in commit 2367196a0
+# ("Change the sidebar for a views manager"); ngx-extended-pdf-viewer keeps its
+# own sidebar, so the translations live here now.
+pdfjs-toggle-sidebar-button =
+    .title = Comută bara laterală
+pdfjs-toggle-sidebar-button-label = Comută bara laterală
+pdfjs-document-outline-button =
+    .title = Afișează schița documentului (dă dublu clic pentru a extinde/restrânge toate elementele)
+pdfjs-document-outline-button-label = Schiță a documentului
+pdfjs-attachments-button =
+    .title = Afișează atașamentele
+pdfjs-attachments-button-label = Atașamente
+pdfjs-layers-button =
+    .title = Afișează straturile (dă dublu clic pentru resetarea tuturor straturilor la starea implicită)
+pdfjs-layers-button-label = Straturi
+pdfjs-thumbs-button =
+    .title = Afișează miniaturi
+pdfjs-thumbs-button-label = Miniaturi

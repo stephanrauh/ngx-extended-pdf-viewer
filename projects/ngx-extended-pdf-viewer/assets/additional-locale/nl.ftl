@@ -29,3 +29,22 @@ pdfjs-editor-movePageDown-button-label = Pagina omlaag verplaatsen
 pdfjs-cursor-page-flip-tool-button =
     .title = Pagina omslaan
 pdfjs-cursor-page-flip-tool-button-label = Pagina omslaan
+
+# #3255 Sidebar buttons. pdf.js removed these keys in commit 2367196a0
+# ("Change the sidebar for a views manager"); ngx-extended-pdf-viewer keeps its
+# own sidebar, so the translations live here now.
+pdfjs-toggle-sidebar-button =
+    .title = Zijbalk in-/uitschakelen
+pdfjs-toggle-sidebar-button-label = Zijbalk in-/uitschakelen
+pdfjs-document-outline-button =
+    .title = Documentoverzicht tonen (dubbelklik om alle items uit/samen te vouwen)
+pdfjs-document-outline-button-label = Documentoverzicht
+pdfjs-attachments-button =
+    .title = Bijlagen tonen
+pdfjs-attachments-button-label = Bijlagen
+pdfjs-layers-button =
+    .title = Lagen tonen (dubbelklik om alle lagen naar de standaardstatus terug te zetten)
+pdfjs-layers-button-label = Lagen
+pdfjs-thumbs-button =
+    .title = Miniaturen tonen
+pdfjs-thumbs-button-label = Miniaturen

@@ -26,3 +26,22 @@ pdfjs-editor-movePageDown-button-label = Flyt side ned
 pdfjs-cursor-page-flip-tool-button =
     .title = Bladre i sider
 pdfjs-cursor-page-flip-tool-button-label = Bladre i sider
+
+# #3255 Sidebar buttons. pdf.js removed these keys in commit 2367196a0
+# ("Change the sidebar for a views manager"); ngx-extended-pdf-viewer keeps its
+# own sidebar, so the translations live here now.
+pdfjs-toggle-sidebar-button =
+    .title = Slå sidepanel til eller fra
+pdfjs-toggle-sidebar-button-label = Slå sidepanel til eller fra
+pdfjs-document-outline-button =
+    .title = Vis dokumentets disposition (dobbeltklik for at udvide/sammenfolde alle elementer)
+pdfjs-document-outline-button-label = Dokument-disposition
+pdfjs-attachments-button =
+    .title = Vis vedhæftede filer
+pdfjs-attachments-button-label = Vedhæftede filer
+pdfjs-layers-button =
+    .title = Vis lag (dobbeltklik for at nulstille alle lag til standard-tilstanden)
+pdfjs-layers-button-label = Lag
+pdfjs-thumbs-button =
+    .title = Vis miniaturer
+pdfjs-thumbs-button-label = Miniaturer

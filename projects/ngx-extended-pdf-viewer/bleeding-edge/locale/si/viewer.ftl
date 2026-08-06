@@ -592,3 +592,6 @@ pdfjs-editor-movePageDown-button-label = Move Page Down
 pdfjs-cursor-page-flip-tool-button =
     .title = Page Flip
 pdfjs-cursor-page-flip-tool-button-label = Page Flip
+pdfjs-toggle-sidebar-button =
+    .title = Toggle Sidebar
+pdfjs-toggle-sidebar-button-label = Toggle Sidebar

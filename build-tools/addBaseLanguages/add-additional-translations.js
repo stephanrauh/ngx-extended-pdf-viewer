@@ -21,10 +21,14 @@ function processOneLanguage(lang, shortcode) {
   let originalLines = fs.readFileSync(originalFilename).toString();
   let targetLang = originalLines;
 
-  let additionalFilename = './projects/ngx-extended-pdf-viewer/assets/additional-locale/' + shortcode + '.ftl';
-  if (fs.existsSync(additionalFilename)) {
-    const header = '\n# Additional translations for ngx-extended-pdf-viewer (' + shortcode + ')';
-    targetLang = addTranslationsFromAFile(additionalFilename, targetLang, header);
+  // The full language code wins over the two-letter shortcode (de-AT.ftl before de.ftl),
+  // but both are applied: the shortcode file fills in whatever the regional file lacks.
+  for (const code of additionalLocaleCodes(lang, shortcode)) {
+    const additionalFilename = './projects/ngx-extended-pdf-viewer/assets/additional-locale/' + code + '.ftl';
+    if (fs.existsSync(additionalFilename)) {
+      const header = '\n# Additional translations for ngx-extended-pdf-viewer (' + code + ')';
+      targetLang = addTranslationsFromAFile(additionalFilename, targetLang, header);
+    }
   }
 
   const englishFilename = './projects/ngx-extended-pdf-viewer/' + folder + '/locale/en-US/viewer.ftl';
@@ -50,6 +54,13 @@ function processOneLanguage(lang, shortcode) {
   if (originalLines !== targetLang) {
     fs.writeFileSync(originalFilename, targetLang);
   }
+}
+
+// locale.json keys are lowercase ("nb-no"), the files are named like the locale
+// folders ("nb-NO.ftl"), so try both spellings before falling back to the shortcode.
+function additionalLocaleCodes(lang, shortcode) {
+  const codes = [lang, lang.replace(/-(.+)$/, (_, region) => '-' + region.toUpperCase()), shortcode];
+  return codes.filter((code, index) => codes.indexOf(code) === index);
 }
 
 function addTranslationsFromAFile(englishFilename, targetLang, header) {

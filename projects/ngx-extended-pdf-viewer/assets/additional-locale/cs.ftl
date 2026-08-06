@@ -26,3 +26,22 @@ pdfjs-editor-movePageDown-button-label = Přesunout stránku dolů
 pdfjs-cursor-page-flip-tool-button =
     .title = Listování stránek
 pdfjs-cursor-page-flip-tool-button-label = Listování stránek
+
+# #3255 Sidebar buttons. pdf.js removed these keys in commit 2367196a0
+# ("Change the sidebar for a views manager"); ngx-extended-pdf-viewer keeps its
+# own sidebar, so the translations live here now.
+pdfjs-toggle-sidebar-button =
+    .title = Postranní lišta
+pdfjs-toggle-sidebar-button-label = Postranní lišta
+pdfjs-document-outline-button =
+    .title = Zobrazí osnovu dokumentu (poklepání přepne zobrazení všech položek)
+pdfjs-document-outline-button-label = Osnova dokumentu
+pdfjs-attachments-button =
+    .title = Zobrazí přílohy
+pdfjs-attachments-button-label = Přílohy
+pdfjs-layers-button =
+    .title = Zobrazit vrstvy (poklepáním obnovíte všechny vrstvy do výchozího stavu)
+pdfjs-layers-button-label = Vrstvy
+pdfjs-thumbs-button =
+    .title = Zobrazí náhledy
+pdfjs-thumbs-button-label = Náhledy

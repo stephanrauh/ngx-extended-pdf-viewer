@@ -26,3 +26,22 @@ pdfjs-editor-movePageDown-button-label = Премести страницата �
 pdfjs-cursor-page-flip-tool-button =
     .title = Прелистване на страници
 pdfjs-cursor-page-flip-tool-button-label = Прелистване на страници
+
+# #3255 Sidebar buttons. pdf.js removed these keys in commit 2367196a0
+# ("Change the sidebar for a views manager"); ngx-extended-pdf-viewer keeps its
+# own sidebar, so the translations live here now.
+pdfjs-toggle-sidebar-button =
+    .title = Превключване на страничната лента
+pdfjs-toggle-sidebar-button-label = Превключване на страничната лента
+pdfjs-document-outline-button =
+    .title = Показване на структурата на документа (двукратно щракване за свиване/разгъване на всичко)
+pdfjs-document-outline-button-label = Структура на документа
+pdfjs-attachments-button =
+    .title = Показване на притурките
+pdfjs-attachments-button-label = Притурки
+pdfjs-layers-button =
+    .title = Показване на слоевете (двукратно щракване за възстановяване на всички слоеве към състоянието по подразбиране)
+pdfjs-layers-button-label = Слоеве
+pdfjs-thumbs-button =
+    .title = Показване на миниатюрите
+pdfjs-thumbs-button-label = Миниатюри

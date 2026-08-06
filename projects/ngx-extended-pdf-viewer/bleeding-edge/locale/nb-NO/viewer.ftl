@@ -746,17 +746,17 @@ pdfjs-editor-add-signature-edit-button-label = Rediger beskrivelse
 
 pdfjs-editor-edit-signature-dialog-title = Rediger beskrivelse
 
-# Translations for ngx-extended-pdf-viewer additions only available in en-US
-unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
-pdfjs-infinite-scroll-button-label = Infinite scroll
-pdfjs-find-multiple-checkbox-label = Match Each Word
-pdfjs-find-regexp-checkbox-label = Regular Expression
+# Additional translations for ngx-extended-pdf-viewer (nb-no)
+unverified-signature-warning = Denne PDF-filen inneholder en digital signatur. PDF-viseren kan ikke verifisere om signaturen er gyldig. Last ned filen og åpne den i Acrobat Reader for å verifisere at signaturen er gyldig.
+pdfjs-infinite-scroll-button-label = Uendelig rulling
+pdfjs-find-multiple-checkbox-label = Match hvert ord
+pdfjs-find-regexp-checkbox-label = Regulært uttrykk
 pdfjs-editor-movePageUp-button =
-    .title = Move Page Up
-pdfjs-editor-movePageUp-button-label = Move Page Up
+    .title = Flytt side opp
+pdfjs-editor-movePageUp-button-label = Flytt side opp
 pdfjs-editor-movePageDown-button =
-    .title = Move Page Down
-pdfjs-editor-movePageDown-button-label = Move Page Down
+    .title = Flytt side ned
+pdfjs-editor-movePageDown-button-label = Flytt side ned
 pdfjs-cursor-page-flip-tool-button =
-    .title = Page Flip
-pdfjs-cursor-page-flip-tool-button-label = Page Flip
+    .title = Bla i sider
+pdfjs-cursor-page-flip-tool-button-label = Bla i sider

@@ -162,6 +162,19 @@ pdfjs-page-scale-percent = { $scale }%
 pdfjs-password-ok-button = Ga'ue
 pdfjs-password-cancel-button = Duyichin'
 
+# Additional translations for ngx-extended-pdf-viewer (tr)
+pdfjs-document-outline-button =
+    .title = Belge ana hatlarını göster (Tüm öğeleri genişletmek/daraltmak için çift tıklayın)
+pdfjs-document-outline-button-label = Belge ana hatları
+pdfjs-attachments-button =
+    .title = Ekleri göster
+pdfjs-attachments-button-label = Ekler
+pdfjs-layers-button =
+    .title = Katmanları göster (tüm katmanları varsayılan duruma sıfırlamak için çift tıklayın)
+pdfjs-layers-button-label = Katmanlar
+pdfjs-thumbs-button =
+    .title = Küçük resimleri göster
+pdfjs-thumbs-button-label = Küçük resimler
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-save-button =
     .title = Save

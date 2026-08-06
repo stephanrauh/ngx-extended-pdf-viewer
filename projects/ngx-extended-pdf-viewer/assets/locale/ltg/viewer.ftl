@@ -220,6 +220,10 @@ pdfjs-password-ok-button = Labi
 pdfjs-password-cancel-button = Atceļt
 pdfjs-web-fonts-disabled = Šķārsteikla fonti nav aktivizāti: Navar īgult PDF fontus.
 
+# Additional translations for ngx-extended-pdf-viewer (lt)
+pdfjs-layers-button =
+    .title = Rodyti sluoksnius (spustelėkite dukart, norėdami atstatyti visus sluoksnius į numatytąją būseną)
+pdfjs-layers-button-label = Sluoksniai
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-save-button =
     .title = Save

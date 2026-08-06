@@ -29,3 +29,22 @@ pdfjs-editor-movePageDown-button-label = Déplacer la page vers le bas
 pdfjs-cursor-page-flip-tool-button =
     .title = Feuilleter les pages
 pdfjs-cursor-page-flip-tool-button-label = Feuilleter les pages
+
+# #3255 Sidebar buttons. pdf.js removed these keys in commit 2367196a0
+# ("Change the sidebar for a views manager"); ngx-extended-pdf-viewer keeps its
+# own sidebar, so the translations live here now.
+pdfjs-toggle-sidebar-button =
+    .title = Afficher/Masquer le panneau latéral
+pdfjs-toggle-sidebar-button-label = Afficher/Masquer le panneau latéral
+pdfjs-document-outline-button =
+    .title = Afficher les signets du document (double-cliquer pour développer/réduire tous les éléments)
+pdfjs-document-outline-button-label = Signets du document
+pdfjs-attachments-button =
+    .title = Afficher les pièces jointes
+pdfjs-attachments-button-label = Pièces jointes
+pdfjs-layers-button =
+    .title = Afficher les calques (double-cliquer pour réinitialiser tous les calques à l’état par défaut)
+pdfjs-layers-button-label = Calques
+pdfjs-thumbs-button =
+    .title = Afficher les vignettes
+pdfjs-thumbs-button-label = Vignettes

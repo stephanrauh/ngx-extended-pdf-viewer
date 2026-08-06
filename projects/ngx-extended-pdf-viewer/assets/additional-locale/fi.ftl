@@ -26,3 +26,22 @@ pdfjs-editor-movePageDown-button-label = Siirrä sivu alas
 pdfjs-cursor-page-flip-tool-button =
     .title = Sivun kääntö
 pdfjs-cursor-page-flip-tool-button-label = Sivun kääntö
+
+# #3255 Sidebar buttons. pdf.js removed these keys in commit 2367196a0
+# ("Change the sidebar for a views manager"); ngx-extended-pdf-viewer keeps its
+# own sidebar, so the translations live here now.
+pdfjs-toggle-sidebar-button =
+    .title = Näytä/piilota sivupaneeli
+pdfjs-toggle-sidebar-button-label = Näytä/piilota sivupaneeli
+pdfjs-document-outline-button =
+    .title = Näytä dokumentin sisällys (laajenna tai kutista kohdat kaksoisnapsauttamalla)
+pdfjs-document-outline-button-label = Dokumentin sisällys
+pdfjs-attachments-button =
+    .title = Näytä liitteet
+pdfjs-attachments-button-label = Liitteet
+pdfjs-layers-button =
+    .title = Näytä tasot (kaksoisnapsauta palauttaaksesi kaikki tasot oletustilaan)
+pdfjs-layers-button-label = Tasot
+pdfjs-thumbs-button =
+    .title = Näytä pienoiskuvat
+pdfjs-thumbs-button-label = Pienoiskuvat

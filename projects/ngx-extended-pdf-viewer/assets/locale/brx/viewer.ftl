@@ -188,6 +188,10 @@ pdfjs-password-ok-button = OK
 pdfjs-password-cancel-button = नेवसि
 pdfjs-web-fonts-disabled = वेब फन्टखौ लोरबां खालामबाय: अरजाबहोनाय PDF फन्टखौ बाहायनो हायाखै।
 
+# Additional translations for ngx-extended-pdf-viewer (br)
+pdfjs-layers-button =
+    .title = Diskouez ar gwiskadoù (daou-glikañ evit adderaouekaat an holl gwiskadoù d'o stad dre ziouer)
+pdfjs-layers-button-label = Gwiskadoù
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-save-button =
     .title = Save
