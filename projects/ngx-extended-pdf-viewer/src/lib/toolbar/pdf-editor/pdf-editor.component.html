@@ -1,5 +1,8 @@
 <!-- #2818 modified by ngx-extended-pdf-viewer -->
 <div id="editorModeButtons" class="splitToolbarButton toggled" role="radiogroup">
+  <!-- #3257 modified by ngx-extended-pdf-viewer -->
+  <pdf-signature-properties [show]="showSignaturePropertiesButton()"></pdf-signature-properties>
+  <!-- #3257 end of modification by ngx-extended-pdf-viewer -->
   <pdf-comment-editor [show]="showCommentEditor()" [disable]="disableCommentEditor()"></pdf-comment-editor>
   <pdf-editor-signature [show]="showSignatureEditor()" [disable]="disableSignatureEditor()"></pdf-editor-signature>
   <pdf-highlight-editor [show]="showHighlightEditor()" [disable]="disableHighlightEditor()"></pdf-highlight-editor>

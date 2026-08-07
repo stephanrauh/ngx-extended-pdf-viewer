@@ -87,6 +87,7 @@ pdfjs-scroll-horizontal-button-label = Iscurrimentu orizontale
 pdfjs-scroll-wrapped-button =
     .title = Imprea s'iscurrimentu continu
 pdfjs-scroll-wrapped-button-label = Iscurrimentu continu
+pdfjs-spread-none-button-label = Pàginas individuales
 
 ## Document properties dialog
 
@@ -133,6 +134,19 @@ pdfjs-document-properties-linearized = Visualizatzione web lestra:
 pdfjs-document-properties-linearized-yes = Eja
 pdfjs-document-properties-linearized-no = Nono
 pdfjs-document-properties-close-button = Serra
+pdfjs-digital-signature-properties-view-certificate = Ammustra su tzertificadu
+# Shown beneath an invalid signature card to explain why verification
+# failed. The text comes from NSS (e.g. "Signature integrity has been
+# compromised", "PKCS#7 signature could not be parsed") and is not
+# itself localized — it is the underlying error message produced by
+# the verification backend.
+# Variables:
+#   $reason (String) - error message describing why the signature
+#                      could not be verified.
+pdfjs-digital-signature-properties-reason = Resone: { $reason }
+# Variables:
+#   $dateObj (Date) - the signing time from the /Sig dict's /M entry.
+pdfjs-digital-signature-properties-timestamp = Data e ora: { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 
 ## Print
 
@@ -179,6 +193,15 @@ pdfjs-thumb-page-title =
 #   $page (Number) - the page number
 pdfjs-thumb-page-canvas =
     .aria-label = Miniatura de sa pàgina { $page }
+# Variables:
+#   $page (Number) - the page number
+pdfjs-thumb-page-checkbox1 =
+    .title = Seletziona sa pàgina { $page }
+# Variables:
+#   $page (Number) - the page number
+#   $total (Number) - the number of pages
+pdfjs-thumb-page-title1 =
+    .title = Pàgina { $page } de { $total }
 
 ## Find panel button title and messages
 
@@ -197,10 +220,27 @@ pdfjs-find-match-diacritics-checkbox-label = Respeta is diacrìticos
 pdfjs-find-entire-word-checkbox-label = Faeddos intreos
 pdfjs-find-reached-top = S'est lòmpidu a su cumintzu de su documentu, si sighit dae su bàsciu
 pdfjs-find-reached-bottom = Acabbu de su documentu, si sighit dae s'artu
+# Variables:
+#   $current (Number) - the index of the currently active find result
+#   $total (Number) - the total number of matches in the document
+pdfjs-find-match-count =
+    { $total ->
+        [one] { $current } currispondèntzia de { $total }
+       *[other] { $current } currispondèntzias de { $total }
+    }
+# Variables:
+#   $limit (Number) - the maximum number of matches
+pdfjs-find-match-count-limit =
+    { $limit ->
+        [one] Prus de { $limit } currispondèntzia
+       *[other] Prus de { $limit } currispondèntzias
+    }
 pdfjs-find-not-found = Testu no agatadu
 
 ## Predefined zoom values
 
+pdfjs-page-scale-width = Larghesa de sa pàgina
+pdfjs-page-scale-fit = Pàgina intrea
 pdfjs-page-scale-auto = Ingrandimentu automàticu
 pdfjs-page-scale-actual = Mannària reale
 # Variables:
@@ -222,6 +262,12 @@ pdfjs-missing-file-error = Ammancat s'archìviu PDF.
 pdfjs-unexpected-response-error = Risposta imprevista de su serbidore.
 pdfjs-rendering-error = Faddina in sa visualizatzione de sa pàgina.
 
+## Annotations
+
+# Variables:
+#   $dateObj (Date) - the modification date and time of the annotation
+pdfjs-annotation-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
+
 ## Password
 
 pdfjs-password-label = Inserta sa crae pro abèrrere custu archìviu PDF.
@@ -234,9 +280,13 @@ pdfjs-web-fonts-disabled = Is tipografias web sunt disativadas: is tipografias i
 
 pdfjs-editor-free-text-button =
     .title = Testu
+pdfjs-editor-color-picker-free-text-input =
+    .title = Muda su colore de su testu
 pdfjs-editor-free-text-button-label = Testu
 pdfjs-editor-ink-button =
     .title = Disinnu
+pdfjs-editor-color-picker-ink-input =
+    .title = Muda su colore pro su disinnu
 pdfjs-editor-ink-button-label = Disinnu
 pdfjs-editor-stamp-button =
     .title = Agiunghe o modìfica immàgines
@@ -248,6 +298,33 @@ pdfjs-highlight-floating-button1 =
     .title = Evidèntzia
     .aria-label = Evidèntzia
 pdfjs-highlight-floating-button-label = Evidèntzia
+pdfjs-comment-floating-button =
+    .title = Cummenta
+    .aria-label = Cummenta
+pdfjs-comment-floating-button-label = Cummenta
+pdfjs-editor-comment-button =
+    .title = Cummenta
+    .aria-label = Cummenta
+pdfjs-editor-comment-button-label = Cummenta
+pdfjs-editor-signature-button =
+    .title = Agiunghe una firma
+pdfjs-editor-signature-button-label = Agiunghe una firma
+
+## Default editor aria labels
+
+# “Highlight” is a noun, the string is used on the editor for highlights.
+pdfjs-editor-highlight-editor =
+    .aria-label = Editore de sutaliniadura
+# “Drawing” is a noun, the string is used on the editor for drawings.
+pdfjs-editor-ink-editor =
+    .aria-label = Editore de disinnos
+# Used when a signature editor is selected/hovered.
+# Variables:
+#   $description (String) - a string describing/labeling the signature.
+pdfjs-editor-signature-editor1 =
+    .aria-description = Editore de firmas: { $description }
+pdfjs-editor-stamp-editor =
+    .aria-label = Editore de immàgines
 
 ## Remove button for the various kind of editor.
 
@@ -259,6 +336,8 @@ pdfjs-editor-remove-stamp-button =
     .title = Boga s’immàgine
 pdfjs-editor-remove-highlight-button =
     .title = Boga s’evidèntzia
+pdfjs-editor-remove-signature-button =
+    .title = Boga·nche sa firma
 
 ##
 
@@ -272,19 +351,47 @@ pdfjs-editor-stamp-add-image-button =
 pdfjs-editor-stamp-add-image-button-label = Agiunghe un’immàgine
 # This refers to the thickness of the line used for free highlighting (not bound to text)
 pdfjs-editor-free-highlight-thickness-input = Grussària
+pdfjs-editor-add-signature-container =
+    .aria-label = Controllos de firma e firmas sarvadas
+pdfjs-editor-signature-add-signature-button =
+    .title = Agiunghe una firma noa
+pdfjs-editor-signature-add-signature-button-label = Agiunghe una firma noa
+# Used on the button to use an already saved signature.
+# Variables:
+#   $description (String) - a string describing/labeling the signature.
+pdfjs-editor-add-saved-signature-button =
+    .title = Firma sarvada: { $description }
 # .default-content is used as a placeholder in an empty text editor.
 pdfjs-free-text2 =
     .aria-label = Editore de testu
     .default-content = Cumintza a iscrìere…
+# Used to show how many comments are present in the pdf file.
+# Variables:
+#   $count (Number) - the number of comments.
+pdfjs-editor-comments-sidebar-title =
+    { $count ->
+        [one] Cummentu
+       *[other] Cummentos
+    }
+pdfjs-editor-comments-sidebar-close-button =
+    .title = Serra sa barra laterale
+    .aria-label = Serra sa barra laterale
+pdfjs-editor-comments-sidebar-close-button-label = Serra sa barra laterale
+# Instructional copy to add a comment by selecting text or an annotations.
+pdfjs-editor-comments-sidebar-no-comments1 = As rilevadu una cosa de interessu? Sinnala·dda e agiunghe unu cummentu.
 
 ## Alt-text dialog
 
 pdfjs-editor-alt-text-button-label = Testu alternativu
+pdfjs-editor-alt-text-edit-button =
+    .aria-label = Modifica su testu alternativu
 pdfjs-editor-alt-text-dialog-label = Sèbera un’optzione
 pdfjs-editor-alt-text-dialog-description = Su testu alternativu (“alt text”) est ùtile pro persones chi non podent bìdere s’immàgine o cando non benit carrigada.
 pdfjs-editor-alt-text-add-description-label = Agiunghe una descritzione
+pdfjs-editor-alt-text-mark-decorative-label = Sinnala comente decorativa
 pdfjs-editor-alt-text-cancel-button = Annulla
 pdfjs-editor-alt-text-save-button = Sarva
+pdfjs-editor-alt-text-decorative-tooltip = Sinnalada comente decorativu
 
 ## Color picker
 
@@ -304,7 +411,13 @@ pdfjs-editor-colorpicker-pink =
 ## New alt-text dialog
 ## Group note for entire feature: Alternative text (alt text) helps when people can't see the image. This feature includes a tool to create alt text automatically using an AI model that works locally on the user's device to preserve privacy.
 
+# This is a button that users can click to open the alt text editor and add alt text when it is not present.
+pdfjs-editor-new-alt-text-missing-button =
+    .aria-label = Mancat su testu alternativu
 pdfjs-editor-new-alt-text-missing-button-label = Mancat su testu alternativu
+# This is a button that opens up the alt text modal where users should review the alt text that was automatically generated.
+pdfjs-editor-new-alt-text-to-review-button =
+    .aria-label = Revisiona su testu alternativu
 pdfjs-editor-new-alt-text-to-review-button-label = Revisiona su testu alternativu
 # "Created automatically" is a prefix that will be added to the beginning of any alt text that has been automatically generated. After the colon, the user will see/hear the actual alt text description. If the alt text has been edited by a human, this prefix will not appear.
 # Variables:
@@ -332,6 +445,19 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Mustra deretu s’edit
 pdfjs-editor-alt-text-settings-show-dialog-description = T’agiudat a assegurare chi totu is immàgines tuas tèngiant unu testu alternativu.
 pdfjs-editor-alt-text-settings-close-button = Serra
 
+## "Annotations removed" bar
+
+pdfjs-editor-undo-bar-message-freetext = Testu cantzelladu
+pdfjs-editor-undo-bar-message-ink = Disinnu cantzelladu
+pdfjs-editor-undo-bar-message-stamp = Immàgine cantzellada
+pdfjs-editor-undo-bar-message-signature = Firma cantzellada
+pdfjs-editor-undo-bar-undo-button =
+    .title = Iscontza
+pdfjs-editor-undo-bar-undo-button-label = Iscontza
+pdfjs-editor-undo-bar-close-button =
+    .title = Serra
+pdfjs-editor-undo-bar-close-button-label = Serra
+
 ## Dialog buttons
 
 pdfjs-editor-add-signature-cancel-button = Annulla
@@ -342,9 +468,6 @@ pdfjs-editor-edit-comment-dialog-text-input =
     .placeholder = Cumintza a iscrìere…
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-spread-none-button =
-    .title = Do not join page spreads
-pdfjs-spread-none-button-label = No Spreads
 pdfjs-spread-odd-button =
     .title = Join page spreads starting with odd-numbered pages
 pdfjs-spread-odd-button-label = Odd Spreads
@@ -354,77 +477,14 @@ pdfjs-spread-even-button-label = Even Spreads
 pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } KB ({ $b } bytes)
 pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } bytes)
 pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
-pdfjs-thumb-page-title1 =
-    .title = Page { $page } of { $total }
-pdfjs-thumb-page-checkbox1 =
-    .title = Select page { $page }
-pdfjs-find-match-count =
-    { $total ->
-        [one] { $current } of { $total } match
-       *[other] { $current } of { $total } matches
-    }
-pdfjs-find-match-count-limit =
-    { $limit ->
-        [one] More than { $limit } match
-       *[other] More than { $limit } matches
-    }
-pdfjs-page-scale-width = Page Width
-pdfjs-page-scale-fit = Page Fit
-pdfjs-annotation-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 pdfjs-text-annotation-type =
     .alt = [{ $type } Annotation]
-pdfjs-editor-color-picker-free-text-input =
-    .title = Change text color
-pdfjs-editor-color-picker-ink-input =
-    .title = Change drawing color
-pdfjs-comment-floating-button =
-    .title = Comment
-    .aria-label = Comment
-pdfjs-comment-floating-button-label = Comment
-pdfjs-editor-comment-button =
-    .title = Comment
-    .aria-label = Comment
-pdfjs-editor-comment-button-label = Comment
-pdfjs-editor-signature-button =
-    .title = Add signature
-pdfjs-editor-signature-button-label = Add signature
-pdfjs-editor-highlight-editor =
-    .aria-label = Highlight editor
-pdfjs-editor-ink-editor =
-    .aria-label = Drawing editor
-pdfjs-editor-signature-editor1 =
-    .aria-description = Signature editor: { $description }
-pdfjs-editor-stamp-editor =
-    .aria-label = Image editor
-pdfjs-editor-remove-signature-button =
-    .title = Remove signature
 pdfjs-editor-ink-opacity-input = Opacity
 pdfjs-editor-free-highlight-thickness-title =
     .title = Change thickness when highlighting items other than text
-pdfjs-editor-add-signature-container =
-    .aria-label = Signature controls and saved signatures
-pdfjs-editor-signature-add-signature-button =
-    .title = Add new signature
-pdfjs-editor-signature-add-signature-button-label = Add new signature
-pdfjs-editor-add-saved-signature-button =
-    .title = Saved signature: { $description }
-pdfjs-editor-comments-sidebar-title =
-    { $count ->
-        [one] Comment
-       *[other] Comments
-    }
-pdfjs-editor-comments-sidebar-close-button =
-    .title = Close the sidebar
-    .aria-label = Close the sidebar
-pdfjs-editor-comments-sidebar-close-button-label = Close the sidebar
-pdfjs-editor-comments-sidebar-no-comments1 = See something noteworthy? Highlight it and leave a comment.
 pdfjs-editor-comments-sidebar-no-comments-link = Learn more
-pdfjs-editor-alt-text-edit-button =
-    .aria-label = Edit alt text
 pdfjs-editor-alt-text-add-description-description = Aim for 1-2 sentences that describe the subject, setting, or actions.
-pdfjs-editor-alt-text-mark-decorative-label = Mark as decorative
 pdfjs-editor-alt-text-mark-decorative-description = This is used for ornamental images, like borders or watermarks.
-pdfjs-editor-alt-text-decorative-tooltip = Marked as decorative
 pdfjs-editor-alt-text-textarea =
     .placeholder = For example, “A young man sits down at a table to eat a meal”
 pdfjs-editor-resizer-top-left =
@@ -472,22 +532,12 @@ pdfjs-editor-ink-added-alert = Drawing added
 pdfjs-editor-stamp-added-alert = Image added
 pdfjs-editor-signature-added-alert = Signature added
 pdfjs-editor-undo-bar-message-highlight = Highlight removed
-pdfjs-editor-undo-bar-message-freetext = Text removed
-pdfjs-editor-undo-bar-message-ink = Drawing removed
-pdfjs-editor-undo-bar-message-stamp = Image removed
-pdfjs-editor-undo-bar-message-signature = Signature removed
 pdfjs-editor-undo-bar-message-comment = Comment removed
 pdfjs-editor-undo-bar-message-multiple =
     { $count ->
         [one] { $count } annotation removed
        *[other] { $count } annotations removed
     }
-pdfjs-editor-undo-bar-undo-button =
-    .title = Undo
-pdfjs-editor-undo-bar-undo-button-label = Undo
-pdfjs-editor-undo-bar-close-button =
-    .title = Close
-pdfjs-editor-undo-bar-close-button-label = Close
 pdfjs-editor-add-signature-dialog-label = This modal allows the user to create a signature to add to a PDF document. The user can edit the name (which also serves as the alt text), and optionally save the signature for repeated use.
 pdfjs-editor-add-signature-dialog-title = Add a signature
 pdfjs-editor-add-signature-type-button = Type
@@ -614,6 +664,53 @@ pdfjs-views-manager-paste-button-after =
     .title = Paste after page { $page }
 pdfjs-new-badge-content = NEW
 pdfjs-views-manager-waiting-for-file = Uploading file…
+pdfjs-digital-signature-properties-button =
+    .title = Digital signature properties
+    .aria-label = Digital signature properties
+pdfjs-digital-signature-properties-button-label = Digital signature properties
+pdfjs-digital-signature-properties-banner-verified = Document was signed with a valid digital signature
+pdfjs-digital-signature-properties-banner-unknown =
+    { $count ->
+        [one] Document signed but { $count } digital signature could not be verified
+       *[other] Document signed but { $count } digital signatures could not be verified
+    }
+pdfjs-digital-signature-properties-banner-untrusted =
+    { $count ->
+        [one] Document signed with { $count } certificate that is not trusted
+       *[other] Document signed with { $count } certificates that are not trusted
+    }
+pdfjs-digital-signature-properties-banner-expired =
+    { $count ->
+        [one] Document signed with { $count } expired certificate
+       *[other] Document signed with { $count } expired certificates
+    }
+pdfjs-digital-signature-properties-banner-invalid =
+    { $count ->
+        [one] Document has { $count } invalid digital signature
+       *[other] Document has { $count } invalid digital signatures
+    }
+pdfjs-digital-signature-properties-banner-revoked =
+    { $count ->
+        [one] Document signed with { $count } revoked certificate
+       *[other] Document signed with { $count } revoked certificates
+    }
+pdfjs-digital-signature-properties-status-verified = Status: Signature verified
+pdfjs-digital-signature-properties-status-invalid = Status: Signature invalid
+pdfjs-digital-signature-properties-status-unknown = Status: Unable to verify (unsupported)
+pdfjs-digital-signature-properties-certificate-trusted = Certificate: Trusted ({ $issuer })
+pdfjs-digital-signature-properties-certificate-unknown = Certificate: Unavailable
+pdfjs-digital-signature-properties-certificate-untrusted = Certificate: Untrusted
+pdfjs-digital-signature-properties-certificate-untrusted-unknown-issuer = Certificate: Unknown issuer ({ $issuer })
+pdfjs-digital-signature-properties-certificate-untrusted-self-signed = Certificate: Self-signed ({ $issuer })
+pdfjs-digital-signature-properties-certificate-untrusted-untrusted-issuer = Certificate: Untrusted issuer ({ $issuer })
+pdfjs-digital-signature-properties-certificate-expired = Certificate: Expired
+pdfjs-digital-signature-properties-certificate-expired-with-date = Certificate: Expired ({ DATETIME($dateObj, dateStyle: "medium") })
+pdfjs-digital-signature-properties-certificate-revoked = Certificate: Revoked
+pdfjs-digital-signature-properties-sub-signatures =
+    { $count ->
+        [one] Sub-signature ({ $count })
+       *[other] Sub-signatures ({ $count })
+    }
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = Match Each Word

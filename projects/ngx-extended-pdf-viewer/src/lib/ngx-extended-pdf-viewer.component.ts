@@ -547,6 +547,16 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   // #2818 modified by ngx-extended-pdf-viewer
   public disableSignatureEditor = input<boolean>(false);
 
+  // #3257 modified by ngx-extended-pdf-viewer
+  /**
+   * Shows the "digital signature properties" button. Unlike the editor buttons this
+   * is not an editing tool, so it is not part of the `showEditorButtons` group and it
+   * defaults to `true`: PDF.js keeps the button hidden until the document actually
+   * contains a signature, so unsigned files show nothing either way.
+   */
+  public showSignaturePropertiesButton = input<ResponsiveVisibility>(true);
+  // #3257 end of modification by ngx-extended-pdf-viewer
+
   // Computed signals for effective show values when showEditorButtons group is used
   public effectiveShowTextEditor = computed(() => (this.showEditorButtons() === false ? false : this.showTextEditor()));
   public effectiveShowStampEditor = computed(() => (this.showEditorButtons() === false ? false : this.showStampEditor()));

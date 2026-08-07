@@ -20,6 +20,10 @@ export class PdfEditorComponent {
 
   public showStampEditor = input<ResponsiveVisibility>(true);
 
+  // #3257 modified by ngx-extended-pdf-viewer
+  public showSignaturePropertiesButton = input<ResponsiveVisibility>(true);
+  // #3257 end of modification by ngx-extended-pdf-viewer
+
   // #2818 modified by ngx-extended-pdf-viewer
   public disableCommentEditor = input<boolean>(false);
   public disableDrawEditor = input<boolean>(false);

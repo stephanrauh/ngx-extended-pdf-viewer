@@ -1,0 +1,30 @@
+<!-- #3257 modified by ngx-extended-pdf-viewer
+     Mirrors web/viewer.html of pdf.js 6.2. The ids are part of PDF.js's API
+     (see getViewerConfiguration()), so they must not be renamed. -->
+<div
+  id="signatureProperties"
+  class="toolbarButtonWithContainer"
+  [class]="show() | responsiveCSSClass : 'hiddenTinyView'"
+  hidden="true"
+>
+  <button
+    id="signaturePropertiesButton"
+    class="toolbarButton"
+    type="button"
+    tabindex="0"
+    aria-expanded="false"
+    aria-haspopup="true"
+    aria-controls="signaturePropertiesPanel"
+    data-l10n-id="pdfjs-digital-signature-properties-button"
+  >
+    <span data-l10n-id="pdfjs-digital-signature-properties-button-label"></span>
+  </button>
+  <div class="editorParamsToolbar hidden doorHangerRight" id="signaturePropertiesPanel" role="region">
+    <div id="signaturePropertiesContainer" class="signaturePropertiesContainer">
+      <div id="signaturePropertiesBanner" class="sigBanner" hidden="true" role="status"></div>
+      <ul id="signaturePropertiesList" class="signaturePropertiesList" tabindex="-1"></ul>
+    </div>
+  </div>
+</div>
+<div id="signaturePropertiesSeparator" class="verticalToolbarSeparator" hidden="true"></div>
+<!-- #3257 end of modification by ngx-extended-pdf-viewer -->

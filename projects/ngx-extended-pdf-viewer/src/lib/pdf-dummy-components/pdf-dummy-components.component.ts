@@ -27,6 +27,14 @@ const requiredIds = [
   //  'editorSignatureButton',
   'editorSignatureAddSignature',
   'editorStampAddImage',
+  // #3257 modified by ngx-extended-pdf-viewer
+  'signaturePropertiesButton',
+  'signaturePropertiesPanel',
+  'signaturePropertiesContainer',
+  'signaturePropertiesBanner',
+  'signaturePropertiesList',
+  'signaturePropertiesSeparator',
+  // #3257 end of modification by ngx-extended-pdf-viewer
   'errorClose',
   'errorMessage',
   'errorMoreInfo',

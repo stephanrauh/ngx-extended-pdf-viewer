@@ -31,6 +31,9 @@ import { PdfDocumentPropertiesComponent } from './toolbar/pdf-document-propertie
 import { PdfDownloadComponent } from './toolbar/pdf-download/pdf-download.component';
 import { PdfDrawEditorComponent } from './toolbar/pdf-draw-editor/pdf-draw-editor.component';
 import { PdfEditorSignatureComponent } from './toolbar/pdf-editor-signature/pdf-editor-signature.component';
+// #3257 modified by ngx-extended-pdf-viewer
+import { PdfSignaturePropertiesComponent } from './toolbar/pdf-signature-properties/pdf-signature-properties.component';
+// #3257 end of modification by ngx-extended-pdf-viewer
 import { PdfEditorComponent } from './toolbar/pdf-editor/pdf-editor.component';
 import { PdfEvenSpreadComponent } from './toolbar/pdf-even-spread/pdf-even-spread.component';
 import { PdfFindButtonComponent } from './toolbar/pdf-find-button/pdf-find-button.component';
@@ -117,6 +120,7 @@ if (!(Promise as any)['allSettled']) {
     PdfEditorComponent,
     PdfEditSignatureDialogComponent,
     PdfEditorSignatureComponent,
+    PdfSignaturePropertiesComponent, // #3257 modified by ngx-extended-pdf-viewer
     PdfErrorMessageComponent,
     PdfEvenSpreadComponent,
     PdfFindbarComponent,
@@ -199,6 +203,7 @@ if (!(Promise as any)['allSettled']) {
     PdfEditorComponent,
     PdfEditSignatureDialogComponent,
     PdfEditorSignatureComponent,
+    PdfSignaturePropertiesComponent, // #3257 modified by ngx-extended-pdf-viewer
     PdfErrorMessageComponent,
     PdfEvenSpreadComponent,
     PdfFindbarComponent,

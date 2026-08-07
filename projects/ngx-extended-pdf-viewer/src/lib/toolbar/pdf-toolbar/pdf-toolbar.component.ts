@@ -31,6 +31,10 @@ export class PdfToolbarComponent implements AfterViewInit {
 
   public showStampEditor = input<ResponsiveVisibility>(false);
 
+  // #3257 modified by ngx-extended-pdf-viewer
+  public showSignaturePropertiesButton = input<ResponsiveVisibility>(true);
+  // #3257 end of modification by ngx-extended-pdf-viewer
+
   public showFindButton = input<ResponsiveVisibility | undefined>(undefined);
 
   public showHandToolButton = input<ResponsiveVisibility>(true);

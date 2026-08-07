@@ -5,17 +5,100 @@
 
 ## Main toolbar buttons (tooltips and alt text for images)
 
+pdfjs-previous-button =
+    .title = بلگه دیندایی
+pdfjs-previous-button-label = دیندایی
+pdfjs-next-button =
+    .title = بلگه نیایی
+pdfjs-next-button-label = بئڌی
+# .title: Tooltip for the pageNumber input.
+pdfjs-page-input =
+    .title = بلگه
+# Variables:
+#   $pagesCount (Number) - the total number of pages in the document
+# This string follows an input field with the number of the page currently displayed.
+pdfjs-of-pages = ز { $pagesCount }
+# Variables:
+#   $pageNumber (Number) - the currently visible page
+#   $pagesCount (Number) - the total number of pages in the document
+pdfjs-page-of-pages = ({ $pageNumber } ز { $pagesCount })
+pdfjs-zoom-out-button =
+    .title = کۊچیر نمایی
+pdfjs-zoom-out-button-label = کۊچیر نمایی
+pdfjs-zoom-in-button =
+    .title = گپ نمایی
+pdfjs-zoom-in-button-label = گپ نمایی
+pdfjs-zoom-select =
+    .title = زۊم کردن
+pdfjs-open-file-button =
+    .title = گۊشیڌن فایل
+pdfjs-open-file-button-label = گۊشیڌن
 pdfjs-print-button =
     .title = چاپ
 pdfjs-print-button-label = چاپ
+pdfjs-save-button =
+    .title = زفت
+pdfjs-save-button-label = زفت
+# Used in Firefox for Android as a tooltip for the download button (“download” is a verb).
+pdfjs-download-button =
+    .title = دانلود
+# Used in Firefox for Android as a label for the download button (“download” is a verb).
+# Length of the translation matters since we are in a mobile context, with limited screen estate.
+pdfjs-download-button-label = دانلود
+pdfjs-bookmark-button-label = بلگه هیم سکویی
+
+##  Secondary toolbar and context menu
+
+pdfjs-tools-button =
+    .title = ٱوزارا
+pdfjs-tools-button-label = ٱوزارا
+pdfjs-cursor-text-select-tool-button-label = ٱوزار پسند هؽل
+pdfjs-cursor-hand-tool-button =
+    .title = فعال کردن ٱوزار دست
+pdfjs-cursor-hand-tool-button-label = ٱوزار دست
+
+## Document properties dialog
+
+pdfjs-document-properties-file-name = نوم فایل:
+pdfjs-document-properties-file-size = هندا فایل:
+pdfjs-document-properties-title = عونوان:
+pdfjs-document-properties-author = هؽل کوݩ:
+pdfjs-document-properties-subject = سرتال:
+pdfjs-document-properties-page-size = هندا بلگه:
+pdfjs-document-properties-page-size-unit-inches = اینچ
+pdfjs-document-properties-page-size-unit-millimeters = میلی متر
+pdfjs-document-properties-page-size-name-a-three = A3
+pdfjs-document-properties-page-size-name-a-four = A4
+pdfjs-document-properties-page-size-name-letter = نامه
+pdfjs-document-properties-page-size-name-legal = هۊقۊقی
+
+## Variables:
+##   $width (Number) - the width of the (current) page
+##   $height (Number) - the height of the (current) page
+##   $unit (String) - the unit of measurement of the (current) page
+##   $name (String) - the name of the (current) page
+##   $orientation (String) - the orientation of the (current) page
+
+pdfjs-document-properties-page-size-dimension-string = { $width } × { $height } { $unit } ({ $orientation })
+pdfjs-document-properties-page-size-dimension-name-string = { $width } × { $height } { $unit } ({ $name }, { $orientation })
 
 ##
 
 pdfjs-document-properties-linearized-yes = هری
+pdfjs-document-properties-linearized-no = ن
+pdfjs-document-properties-close-button = بستن
 
 ## Print
 
+# Variables:
+#   $progress (Number) - percent value
+pdfjs-print-progress-percent = { $progress }%
 pdfjs-print-progress-close-button = لقو
+
+## Tooltips and alt text for side panel toolbar buttons
+
+pdfjs-toggle-sidebar-button =
+    .title = آلشت هالت نوار کلی
 
 ## Password
 
@@ -67,42 +150,9 @@ pdfjs-editor-edit-comment-dialog-title-when-editing = آلشت منشڌ
 pdfjs-editor-edit-comment-dialog-cancel-button = لقو
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-previous-button =
-    .title = Previous Page
-pdfjs-previous-button-label = Previous
-pdfjs-next-button =
-    .title = Next Page
-pdfjs-next-button-label = Next
-pdfjs-page-input =
-    .title = Page
-pdfjs-of-pages = of { $pagesCount }
-pdfjs-page-of-pages = ({ $pageNumber } of { $pagesCount })
-pdfjs-zoom-out-button =
-    .title = Zoom Out
-pdfjs-zoom-out-button-label = Zoom Out
-pdfjs-zoom-in-button =
-    .title = Zoom In
-pdfjs-zoom-in-button-label = Zoom In
-pdfjs-zoom-select =
-    .title = Zoom
 pdfjs-presentation-mode-button =
     .title = Switch to Presentation Mode
 pdfjs-presentation-mode-button-label = Presentation Mode
-pdfjs-open-file-button =
-    .title = Open File
-pdfjs-open-file-button-label = Open
-pdfjs-save-button =
-    .title = Save
-pdfjs-save-button-label = Save
-pdfjs-download-button =
-    .title = Download
-pdfjs-download-button-label = Download
-pdfjs-bookmark-button =
-    .title = Current Page (View URL from Current Page)
-pdfjs-bookmark-button-label = Current Page
-pdfjs-tools-button =
-    .title = Tools
-pdfjs-tools-button-label = Tools
 pdfjs-first-page-button =
     .title = Go to First Page
 pdfjs-first-page-button-label = Go to First Page
@@ -115,12 +165,6 @@ pdfjs-page-rotate-cw-button-label = Rotate Clockwise
 pdfjs-page-rotate-ccw-button =
     .title = Rotate Counterclockwise
 pdfjs-page-rotate-ccw-button-label = Rotate Counterclockwise
-pdfjs-cursor-text-select-tool-button =
-    .title = Enable Text Selection Tool
-pdfjs-cursor-text-select-tool-button-label = Text Selection Tool
-pdfjs-cursor-hand-tool-button =
-    .title = Enable Hand Tool
-pdfjs-cursor-hand-tool-button-label = Hand Tool
 pdfjs-scroll-page-button =
     .title = Use Page Scrolling
 pdfjs-scroll-page-button-label = Page Scrolling
@@ -145,13 +189,8 @@ pdfjs-spread-even-button-label = Even Spreads
 pdfjs-document-properties-button =
     .title = Document Properties…
 pdfjs-document-properties-button-label = Document Properties…
-pdfjs-document-properties-file-name = File name:
-pdfjs-document-properties-file-size = File size:
 pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } KB ({ $b } bytes)
 pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } bytes)
-pdfjs-document-properties-title = Title:
-pdfjs-document-properties-author = Author:
-pdfjs-document-properties-subject = Subject:
 pdfjs-document-properties-keywords = Keywords:
 pdfjs-document-properties-creation-date = Creation Date:
 pdfjs-document-properties-modification-date = Modification Date:
@@ -160,21 +199,9 @@ pdfjs-document-properties-creator = Creator:
 pdfjs-document-properties-producer = PDF Producer:
 pdfjs-document-properties-version = PDF Version:
 pdfjs-document-properties-page-count = Page Count:
-pdfjs-document-properties-page-size = Page Size:
-pdfjs-document-properties-page-size-unit-inches = in
-pdfjs-document-properties-page-size-unit-millimeters = mm
 pdfjs-document-properties-page-size-orientation-portrait = portrait
 pdfjs-document-properties-page-size-orientation-landscape = landscape
-pdfjs-document-properties-page-size-name-a-three = A3
-pdfjs-document-properties-page-size-name-a-four = A4
-pdfjs-document-properties-page-size-name-letter = Letter
-pdfjs-document-properties-page-size-name-legal = Legal
-pdfjs-document-properties-page-size-dimension-string = { $width } × { $height } { $unit } ({ $orientation })
-pdfjs-document-properties-page-size-dimension-name-string = { $width } × { $height } { $unit } ({ $name }, { $orientation })
-pdfjs-document-properties-linearized-no = No
-pdfjs-document-properties-close-button = Close
 pdfjs-print-progress-message = Preparing document for printing…
-pdfjs-print-progress-percent = { $progress }%
 pdfjs-printing-not-supported = Warning: Printing is not fully supported by this browser.
 pdfjs-printing-not-ready = Warning: The PDF is not fully loaded for printing.
 pdfjs-current-outline-item-button =
@@ -534,6 +561,56 @@ pdfjs-views-manager-paste-button-after =
     .title = Paste after page { $page }
 pdfjs-new-badge-content = NEW
 pdfjs-views-manager-waiting-for-file = Uploading file…
+pdfjs-digital-signature-properties-button =
+    .title = Digital signature properties
+    .aria-label = Digital signature properties
+pdfjs-digital-signature-properties-button-label = Digital signature properties
+pdfjs-digital-signature-properties-banner-verified = Document was signed with a valid digital signature
+pdfjs-digital-signature-properties-banner-unknown =
+    { $count ->
+        [one] Document signed but { $count } digital signature could not be verified
+       *[other] Document signed but { $count } digital signatures could not be verified
+    }
+pdfjs-digital-signature-properties-banner-untrusted =
+    { $count ->
+        [one] Document signed with { $count } certificate that is not trusted
+       *[other] Document signed with { $count } certificates that are not trusted
+    }
+pdfjs-digital-signature-properties-banner-expired =
+    { $count ->
+        [one] Document signed with { $count } expired certificate
+       *[other] Document signed with { $count } expired certificates
+    }
+pdfjs-digital-signature-properties-banner-invalid =
+    { $count ->
+        [one] Document has { $count } invalid digital signature
+       *[other] Document has { $count } invalid digital signatures
+    }
+pdfjs-digital-signature-properties-banner-revoked =
+    { $count ->
+        [one] Document signed with { $count } revoked certificate
+       *[other] Document signed with { $count } revoked certificates
+    }
+pdfjs-digital-signature-properties-status-verified = Status: Signature verified
+pdfjs-digital-signature-properties-status-invalid = Status: Signature invalid
+pdfjs-digital-signature-properties-status-unknown = Status: Unable to verify (unsupported)
+pdfjs-digital-signature-properties-certificate-trusted = Certificate: Trusted ({ $issuer })
+pdfjs-digital-signature-properties-certificate-unknown = Certificate: Unavailable
+pdfjs-digital-signature-properties-certificate-untrusted = Certificate: Untrusted
+pdfjs-digital-signature-properties-certificate-untrusted-unknown-issuer = Certificate: Unknown issuer ({ $issuer })
+pdfjs-digital-signature-properties-certificate-untrusted-self-signed = Certificate: Self-signed ({ $issuer })
+pdfjs-digital-signature-properties-certificate-untrusted-untrusted-issuer = Certificate: Untrusted issuer ({ $issuer })
+pdfjs-digital-signature-properties-certificate-expired = Certificate: Expired
+pdfjs-digital-signature-properties-certificate-expired-with-date = Certificate: Expired ({ DATETIME($dateObj, dateStyle: "medium") })
+pdfjs-digital-signature-properties-certificate-revoked = Certificate: Revoked
+pdfjs-digital-signature-properties-view-certificate = View certificate
+pdfjs-digital-signature-properties-reason = Reason: { $reason }
+pdfjs-digital-signature-properties-timestamp = Timestamp: { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
+pdfjs-digital-signature-properties-sub-signatures =
+    { $count ->
+        [one] Sub-signature ({ $count })
+       *[other] Sub-signatures ({ $count })
+    }
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = Match Each Word
@@ -547,8 +624,6 @@ pdfjs-editor-movePageDown-button-label = Move Page Down
 pdfjs-cursor-page-flip-tool-button =
     .title = Page Flip
 pdfjs-cursor-page-flip-tool-button-label = Page Flip
-pdfjs-toggle-sidebar-button =
-    .title = Toggle Sidebar
 pdfjs-toggle-sidebar-button-label = Toggle Sidebar
 pdfjs-document-outline-button =
     .title = Show Document Outline (double-click to expand/collapse all items)

@@ -97,10 +97,13 @@ export class Catalog {
      *
      * @param {Ref} ref
      *   File-spec or embedded-file stream reference.
+     * @param {boolean} [isSound]
+     *   When set, the referenced stream holds raw PDF sound samples that
+     *   `attachmentContent` wraps in a WAV container on fetch.
      * @returns {string}
      *   Attachment id.
      */
-    getAttachmentIdForAnnotation(ref: Ref): string;
+    getAttachmentIdForAnnotation(ref: Ref, isSound?: boolean): string;
     get version(): any;
     get lang(): any;
     /**
