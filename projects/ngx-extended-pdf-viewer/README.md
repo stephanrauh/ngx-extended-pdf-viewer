@@ -17,7 +17,7 @@ Built on Mozilla’s pdf.js and extended with dozens of enhancements, it's ideal
 
 ### Prerequisites
 
-⚠️ **Versions 26 through 29 require Angular 19, 20, 21, or 22.** If you're using Angular 17 or 18, please continue using version 25.6.4.
+⚠️ **Versions 26 through 30 require Angular 19, 20, 21, or 22.** If you're using Angular 17 or 18, please continue using version 25.6.4.
 
 **Why this breaking change?** There are many reasons: Version 26 supports zone-less Angular and migrates to signals. And Angular 18 exited its Long-Term Support (LTS) phase, and security vulnerability CVE-2025-66035 will not be fixed in Angular 17 or 18. Updating to Angular 19 ensures your application continues to receive critical security patches.
 

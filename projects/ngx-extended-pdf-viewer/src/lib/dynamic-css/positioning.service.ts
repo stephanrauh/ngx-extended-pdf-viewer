@@ -73,7 +73,11 @@ export class PositioningService {
     const buttonRect = button.getBoundingClientRect();
     const containerRect = popupContainer.getBoundingClientRect();
 
-    const isRTL = document.documentElement.getAttribute('dir') === 'rtl';
+    // #3253 modified by ngx-extended-pdf-viewer
+    // The reading direction is set on the viewer's container, not on <html>,
+    // so ask the nearest ancestor carrying a dir attribute.
+    const isRTL = popup.closest('[dir]')?.getAttribute('dir') === 'rtl';
+    // #3253 end of modification by ngx-extended-pdf-viewer
     let isRightAligned = isRTL;
     if (popup.classList.contains('doorHangerRight')) {
       isRightAligned = !isRTL;

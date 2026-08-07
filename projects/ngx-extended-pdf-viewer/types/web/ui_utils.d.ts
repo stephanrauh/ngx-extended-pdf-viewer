@@ -102,7 +102,6 @@ export namespace CursorTool {
 export const DEFAULT_SCALE: 1;
 export const DEFAULT_SCALE_DELTA: 1.1;
 export const DEFAULT_SCALE_VALUE: "auto";
-export const docStyle: CSSStyleDeclaration | null;
 /**
  * @param {number} x - A positive number to round to a multiple of `div`.
  * @param {number} div - A natural number.
@@ -117,6 +116,7 @@ export function floorToDivide(x: number, div: number): number;
  * @returns {Element} the truly active or focused element.
  */
 export function getActiveOrFocusedElement(): Element;
+export function getDocStyle(element: any): any;
 /**
  * @typedef {Object} GetPageSizeInchesParameters
  * @property {number[]} view

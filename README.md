@@ -23,6 +23,24 @@ Bringing Mozilla's pdf.js to the Angular world. That's not only the core PDF vie
 
 There's a showcase at <a href="https://pdfviewer.net">https://pdfviewer.net</a>. Check this page for live demos, source code examples, and a handbook.
 
+## What's new in 30 (release candidate)
+
+Version `30.0.0-rc.0` stops the viewer from modifying the page it lives on.
+
+Until now the viewer wrote to your application's `<html>` tag: the reading direction of the UI language (so an Arabic PDF flipped your *entire* application to right-to-left, and left it that way after the viewer was destroyed - see [#3253](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/3253)), plus its layout variables `--viewer-container-height`, `--viewsManager-width` and `color-scheme`. All of that now goes to the viewer's own `.html` and `.body` elements, which wrap the viewer inside your page.
+
+### Breaking change
+
+Nothing changes for you unless you style the viewer from the outside or replace its template:
+
+- **CSS overrides keyed on `<html>`.** Selectors like `html[dir='rtl'] ngx-extended-pdf-viewer .toolbarButton` no longer match. Use the viewer's own wrapper instead: `ngx-extended-pdf-viewer .body[dir='rtl'] .toolbarButton`.
+- **Code reading the layout variables from `<html>`.** `--viewer-container-height`, `--viewsManager-width` and `color-scheme` now live on the viewer's `.html` element. Reading them from `document.documentElement` returns nothing.
+- **Custom templates.** If you pass your own template via `[customPdfViewer]`, keep the `.html` and `.body` wrapper elements around `#outerContainer` - the viewer uses them to scope its styles.
+
+### Angular versions
+
+Versions 26 through 30 require Angular 19, 20, 21 or 22. On Angular 17 or 18, stay on version 25.6.4.
+
 ## What's new in 29
 
 Version `29.0.0` ships **pdf.js 6.1** in both the stable and the bleeding-edge bundle, and adds an API for building a document out of several files.
@@ -42,10 +60,6 @@ Version `29.0.0` ships **pdf.js 6.1** in both the stable and the bleeding-edge b
 ### Breaking change
 
 The `annotationEditorEvent` carrying the text of a free-text annotation now has `type: 'textChanged'` instead of `type: 'commit'`. Two events used to arrive as `commit` — one from the base editor, one from the free-text editor — and you couldn't tell them apart. `commit` now consistently means "an annotation was committed". **If you listen for `commit` to read the entered text, switch to `textChanged`.**
-
-### Angular versions
-
-Versions 26 through 29 require Angular 19, 20, 21 or 22. On Angular 17 or 18, stay on version 25.6.4.
 
 The full list of changes is in the [changelog](projects/ngx-extended-pdf-viewer/changelog.md).
 

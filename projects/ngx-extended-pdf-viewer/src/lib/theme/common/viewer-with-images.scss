@@ -452,13 +452,13 @@ ngx-extended-pdf-viewer {
   }
 }
 
-html[dir='ltr'] ngx-extended-pdf-viewer #viewsManager {
+ngx-extended-pdf-viewer .body[dir='ltr'] #viewsManager {
   transition-property: left;
   left: calc(-1 * var(--sidebar-width));
   left: calc(0px - var(--sidebar-width));
 }
 
-html[dir='rtl'] ngx-extended-pdf-viewer #viewsManager {
+ngx-extended-pdf-viewer .body[dir='rtl'] #viewsManager {
   transition-property: right;
   right: calc(0px - var(--sidebar-width));
 }
@@ -480,11 +480,11 @@ ngx-extended-pdf-viewer {
   }
 }
 
-html[dir='ltr'] ngx-extended-pdf-viewer #outerContainer.viewsManagerOpen #viewsManager {
+ngx-extended-pdf-viewer .body[dir='ltr'] #outerContainer.viewsManagerOpen #viewsManager {
   left: 0;
 }
 
-html[dir='rtl'] ngx-extended-pdf-viewer #outerContainer.viewsManagerOpen #viewsManager {
+ngx-extended-pdf-viewer .body[dir='rtl'] #outerContainer.viewsManagerOpen #viewsManager {
   right: 0;
 }
 
@@ -512,11 +512,11 @@ ngx-extended-pdf-viewer {
   }
 }
 
-html[dir='ltr'] ngx-extended-pdf-viewer #sidebarContent {
+ngx-extended-pdf-viewer .body[dir='ltr'] #sidebarContent {
   left: 0;
 }
 
-html[dir='rtl'] ngx-extended-pdf-viewer #sidebarContent {
+ngx-extended-pdf-viewer .body[dir='rtl'] #sidebarContent {
   right: 0;
 }
 
@@ -548,12 +548,12 @@ ngx-extended-pdf-viewer {
   }
 }
 
-html[dir='ltr'] ngx-extended-pdf-viewer #outerContainer.viewsManagerOpen #viewerContainer:not(.pdfPresentationMode) {
+ngx-extended-pdf-viewer .body[dir='ltr'] #outerContainer.viewsManagerOpen #viewerContainer:not(.pdfPresentationMode) {
   transition-property: left;
   left: var(--sidebar-width);
 }
 
-html[dir='rtl'] ngx-extended-pdf-viewer #outerContainer.viewsManagerOpen #viewerContainer:not(.pdfPresentationMode) {
+ngx-extended-pdf-viewer .body[dir='rtl'] #outerContainer.viewsManagerOpen #viewerContainer:not(.pdfPresentationMode) {
   transition-property: right;
   right: var(--sidebar-width);
 }
@@ -585,19 +585,19 @@ ngx-extended-pdf-viewer {
   }
 }
 
-html[dir="ltr"] #toolbarSidebarRight .toolbarButton {
+ngx-extended-pdf-viewer .body[dir='ltr'] #toolbarSidebarRight .toolbarButton {
   margin-right: 3px !important;
 }
 
-html[dir="rtl"] #toolbarSidebarRight .toolbarButton {
+ngx-extended-pdf-viewer .body[dir='rtl'] #toolbarSidebarRight .toolbarButton {
   margin-left: 3px !important;
 }
 
-html[dir="ltr"] #sidebarToggle {
+ngx-extended-pdf-viewer .body[dir='ltr'] #sidebarToggle {
   margin-right: 5px;
 }
 
-html[dir="rtl"] #sidebarToggle {
+ngx-extended-pdf-viewer .body[dir='rtl'] #sidebarToggle {
   margin-left: 5px;
 }
 
@@ -754,11 +754,11 @@ ngx-extended-pdf-viewer {
   }
 }
 
-html[dir='ltr'] ngx-extended-pdf-viewer .findbar {
+ngx-extended-pdf-viewer .body[dir='ltr'] .findbar {
   left: 34px;
 }
 
-html[dir='rtl'] ngx-extended-pdf-viewer .findbar {
+ngx-extended-pdf-viewer .body[dir='rtl'] .findbar {
   right: 34px;
 }
 
@@ -801,7 +801,7 @@ ngx-extended-pdf-viewer {
   }
 }
 
-html[dir='rtl'] ngx-extended-pdf-viewer #findInput[data-status='pending'] {
+ngx-extended-pdf-viewer .body[dir='rtl'] #findInput[data-status='pending'] {
   background-position: left;
 }
 
@@ -936,26 +936,26 @@ ngx-extended-pdf-viewer {
   }
 }
 
-html[dir='ltr'] ngx-extended-pdf-viewer .doorHanger:after,
-html[dir='rtl'] ngx-extended-pdf-viewer .doorHangerRight:after {
+ngx-extended-pdf-viewer .body[dir='ltr'] .doorHanger:after,
+ngx-extended-pdf-viewer .body[dir='rtl'] .doorHangerRight:after {
   left: 13px;
   margin-left: -8px;
 }
 
-html[dir='ltr'] ngx-extended-pdf-viewer .doorHanger:before,
-html[dir='rtl'] ngx-extended-pdf-viewer .doorHangerRight:before {
+ngx-extended-pdf-viewer .body[dir='ltr'] .doorHanger:before,
+ngx-extended-pdf-viewer .body[dir='rtl'] .doorHangerRight:before {
   left: 13px;
   margin-left: -9px;
 }
 
-html[dir='rtl'] ngx-extended-pdf-viewer .doorHanger:after,
-html[dir='ltr'] ngx-extended-pdf-viewer .doorHangerRight:after {
+ngx-extended-pdf-viewer .body[dir='rtl'] .doorHanger:after,
+ngx-extended-pdf-viewer .body[dir='ltr'] .doorHangerRight:after {
   right: 13px;
   margin-right: -8px;
 }
 
-html[dir='rtl'] ngx-extended-pdf-viewer .doorHanger:before,
-html[dir='ltr'] ngx-extended-pdf-viewer .doorHangerRight:before {
+ngx-extended-pdf-viewer .body[dir='rtl'] .doorHanger:before,
+ngx-extended-pdf-viewer .body[dir='ltr'] .doorHangerRight:before {
   right: 13px;
   margin-right: -9px;
 }
@@ -991,38 +991,38 @@ ngx-extended-pdf-viewer {
   }
 }
 
-html[dir='ltr'] ngx-extended-pdf-viewer #toolbarViewerLeft,
-html[dir='rtl'] ngx-extended-pdf-viewer #toolbarViewerRight {
+ngx-extended-pdf-viewer .body[dir='ltr'] #toolbarViewerLeft,
+ngx-extended-pdf-viewer .body[dir='rtl'] #toolbarViewerRight {
   margin-left: 4px;
 }
 
-html[dir='ltr'] ngx-extended-pdf-viewer #toolbarViewerRight,
-html[dir='rtl'] ngx-extended-pdf-viewer #toolbarViewerLeft {
+ngx-extended-pdf-viewer .body[dir='ltr'] #toolbarViewerRight,
+ngx-extended-pdf-viewer .body[dir='rtl'] #toolbarViewerLeft {
   margin-right: 4px;
 }
 
-html[dir='ltr'] ngx-extended-pdf-viewer #toolbarViewerLeft>*,
-html[dir='ltr'] ngx-extended-pdf-viewer #toolbarViewerMiddle>*,
-html[dir='ltr'] ngx-extended-pdf-viewer #toolbarViewerRight>* {
+ngx-extended-pdf-viewer .body[dir='ltr'] #toolbarViewerLeft>*,
+ngx-extended-pdf-viewer .body[dir='ltr'] #toolbarViewerMiddle>*,
+ngx-extended-pdf-viewer .body[dir='ltr'] #toolbarViewerRight>* {
   position: relative;
   float: left;
 }
 
-html[dir="ltr"] #toolbarSidebarLeft *,
-html[dir="ltr"] #toolbarSidebarRight * {
+ngx-extended-pdf-viewer .body[dir='ltr'] #toolbarSidebarLeft *,
+ngx-extended-pdf-viewer .body[dir='ltr'] #toolbarSidebarRight * {
   position: relative;
   float: left;
 }
 
-html[dir='rtl'] ngx-extended-pdf-viewer #toolbarViewerLeft>*,
-html[dir='rtl'] ngx-extended-pdf-viewer #toolbarViewerMiddle>*,
-html[dir='rtl'] ngx-extended-pdf-viewer #toolbarViewerRight>* {
+ngx-extended-pdf-viewer .body[dir='rtl'] #toolbarViewerLeft>*,
+ngx-extended-pdf-viewer .body[dir='rtl'] #toolbarViewerMiddle>*,
+ngx-extended-pdf-viewer .body[dir='rtl'] #toolbarViewerRight>* {
   position: relative;
   float: right;
 }
 
-html[dir="rtl"] #toolbarSidebarLeft *,
-html[dir="rtl"] #toolbarSidebarRight * {
+ngx-extended-pdf-viewer .body[dir='rtl'] #toolbarSidebarLeft *,
+ngx-extended-pdf-viewer .body[dir='rtl'] #toolbarSidebarRight * {
   position: relative;
   float: right;
 }
@@ -1155,23 +1155,23 @@ ngx-extended-pdf-viewer {
   // #2984 end of modification by ngx-extended-pdf-viewer to improve the light and dark mode
 }
 
-html[dir='ltr'] ngx-extended-pdf-viewer .toolbarButton,
-html[dir='ltr'] ngx-extended-pdf-viewer .dialogButton {
+ngx-extended-pdf-viewer .body[dir='ltr'] .toolbarButton,
+ngx-extended-pdf-viewer .body[dir='ltr'] .dialogButton {
   margin: 3px 2px 4px 0;
 }
 
-html[dir='rtl'] ngx-extended-pdf-viewer .toolbarButton,
-html[dir='rtl'] ngx-extended-pdf-viewer .dialogButton {
+ngx-extended-pdf-viewer .body[dir='rtl'] .toolbarButton,
+ngx-extended-pdf-viewer .body[dir='rtl'] .dialogButton {
   margin: 3px 0 4px 2px;
 }
 
 // #3105 fixed the layout of the find bar
 /* Remove vertical margins for findbar buttons only */
-html[dir='ltr'] ngx-extended-pdf-viewer .findbar .toolbarButton {
+ngx-extended-pdf-viewer .body[dir='ltr'] .findbar .toolbarButton {
   margin: 0 2px 0 0;
 }
 
-html[dir='rtl'] ngx-extended-pdf-viewer .findbar .toolbarButton {
+ngx-extended-pdf-viewer .body[dir='rtl'] .findbar .toolbarButton {
   margin: 0 0 0 2px;
 }
 // #3105 end of fix
@@ -1228,13 +1228,13 @@ ngx-extended-pdf-viewer {
   }
 }
 
-html[dir='ltr'] ngx-extended-pdf-viewer .toolbarButton:first-child,
-html[dir='rtl'] ngx-extended-pdf-viewer .toolbarButton:last-child {
+ngx-extended-pdf-viewer .body[dir='ltr'] .toolbarButton:first-child,
+ngx-extended-pdf-viewer .body[dir='rtl'] .toolbarButton:last-child {
   margin-left: 4px;
 }
 
-html[dir='ltr'] ngx-extended-pdf-viewer .toolbarButton:last-child,
-html[dir='rtl'] ngx-extended-pdf-viewer .toolbarButton:first-child {
+ngx-extended-pdf-viewer .body[dir='ltr'] .toolbarButton:last-child,
+ngx-extended-pdf-viewer .body[dir='rtl'] .toolbarButton:first-child {
   margin-right: 4px;
 }
 
@@ -1246,19 +1246,19 @@ ngx-extended-pdf-viewer {
   }
 }
 
-html[dir='ltr'] ngx-extended-pdf-viewer #findPrevious {
+ngx-extended-pdf-viewer .body[dir='ltr'] #findPrevious {
   margin-left: 3px;
 }
 
-html[dir='ltr'] ngx-extended-pdf-viewer #findNext {
+ngx-extended-pdf-viewer .body[dir='ltr'] #findNext {
   margin-right: 3px;
 }
 
-html[dir='rtl'] ngx-extended-pdf-viewer #findPrevious {
+ngx-extended-pdf-viewer .body[dir='rtl'] #findPrevious {
   margin-right: 3px;
 }
 
-html[dir='rtl'] ngx-extended-pdf-viewer #findNext {
+ngx-extended-pdf-viewer .body[dir='rtl'] #findNext {
   margin-left: 3px;
 }
 
@@ -1276,11 +1276,11 @@ ngx-extended-pdf-viewer {
   }
 }
 
-html[dir='ltr'] ngx-extended-pdf-viewer .toolbarButton.pdfSidebarNotification::after {
+ngx-extended-pdf-viewer .body[dir='ltr'] .toolbarButton.pdfSidebarNotification::after {
   left: 17px;
 }
 
-html[dir='rtl'] ngx-extended-pdf-viewer .toolbarButton.pdfSidebarNotification::after {
+ngx-extended-pdf-viewer .body[dir='rtl'] .toolbarButton.pdfSidebarNotification::after {
   right: 17px;
 }
 
@@ -1740,11 +1740,11 @@ ngx-extended-pdf-viewer {
   }
 }
 
-html[dir='ltr'] ngx-extended-pdf-viewer #documentPropertiesDialog .row>* {
+ngx-extended-pdf-viewer .body[dir='ltr'] #documentPropertiesDialog .row>* {
   text-align: left;
 }
 
-html[dir='rtl'] ngx-extended-pdf-viewer #documentPropertiesDialog .row>* {
+ngx-extended-pdf-viewer .body[dir='rtl'] #documentPropertiesDialog .row>* {
   text-align: right;
 }
 
@@ -1845,16 +1845,16 @@ screen and (min-resolution: 1.1dppx) {
   }
 }
 
-html[dir='ltr'] ngx-extended-pdf-viewer .toolbarButton::before,
-html[dir='rtl'] ngx-extended-pdf-viewer .toolbarButton::before {
+ngx-extended-pdf-viewer .body[dir='ltr'] .toolbarButton::before,
+ngx-extended-pdf-viewer .body[dir='rtl'] .toolbarButton::before {
   left: -1px;
 }
 
-html[dir='ltr'] ngx-extended-pdf-viewer .secondaryToolbarButton::before {
+ngx-extended-pdf-viewer .body[dir='ltr'] .secondaryToolbarButton::before {
   left: -2px;
 }
 
-html[dir='rtl'] ngx-extended-pdf-viewer .secondaryToolbarButton::before {
+ngx-extended-pdf-viewer .body[dir='rtl'] .secondaryToolbarButton::before {
   left: 186px;
 }
 
