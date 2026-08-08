@@ -335,7 +335,7 @@ describe('PDFScriptLoaderService', () => {
       const originalWithResolvers = (Promise as any).withResolvers;
       delete (Promise as any).withResolvers;
 
-      (service as any).polyfillPromiseWithResolversIfZoneJSOverwritesIt();
+      (service as any).polyfillPromiseStaticsDroppedByZoneJS();
 
       expect((Promise as any).withResolvers).toBeDefined();
       expect(typeof (Promise as any).withResolvers).toBe('function');
@@ -358,7 +358,7 @@ describe('PDFScriptLoaderService', () => {
       const originalWithResolvers = () => ({ promise: Promise.resolve(), resolve: () => {}, reject: () => {} });
       (Promise as any).withResolvers = originalWithResolvers;
 
-      (service as any).polyfillPromiseWithResolversIfZoneJSOverwritesIt();
+      (service as any).polyfillPromiseStaticsDroppedByZoneJS();
 
       expect((Promise as any).withResolvers).toBe(originalWithResolvers);
     });
@@ -466,6 +466,58 @@ describe('PDFScriptLoaderService', () => {
       const script = (service as any).createInlineScript(code);
 
       expect(script.text).toBe(code);
+    });
+  });
+
+  // #3259 zone.js replaces the global Promise with ZoneAwarePromise, which lacks the
+  // statics added after it was written. Angular 19 and 20 still use zone.js by default,
+  // and pdf.js 6.2 calls Promise.try for every worker round-trip - without the polyfill
+  // nothing renders on those versions (the compat suite failed exactly there).
+  describe('Promise statics dropped by zone.js', () => {
+    const promiseStatics = Promise as any;
+    let originalTry: unknown;
+    let originalWithResolvers: unknown;
+
+    beforeEach(() => {
+      originalTry = promiseStatics.try;
+      originalWithResolvers = promiseStatics.withResolvers;
+    });
+
+    afterEach(() => {
+      promiseStatics.try = originalTry;
+      promiseStatics.withResolvers = originalWithResolvers;
+    });
+
+    it('restores Promise.try when zone.js removed it', async () => {
+      promiseStatics.try = undefined;
+
+      (service as any).polyfillPromiseStaticsDroppedByZoneJS();
+
+      expect(typeof promiseStatics.try).toBe('function');
+      await expect(promiseStatics.try((a: number, b: number) => a + b, 20, 22)).resolves.toBe(42);
+      await expect(
+        promiseStatics.try(() => {
+          throw new Error('sync boom');
+        }),
+      ).rejects.toThrow('sync boom');
+    });
+
+    it('restores Promise.withResolvers when zone.js removed it', async () => {
+      promiseStatics.withResolvers = undefined;
+
+      (service as any).polyfillPromiseStaticsDroppedByZoneJS();
+
+      const { promise, resolve } = promiseStatics.withResolvers();
+      resolve('ok');
+      await expect(promise).resolves.toBe('ok');
+    });
+
+    it('does not replace the native implementations', () => {
+      const nativeTry = promiseStatics.try;
+
+      (service as any).polyfillPromiseStaticsDroppedByZoneJS();
+
+      expect(promiseStatics.try).toBe(nativeTry);
     });
   });
 

@@ -284,6 +284,12 @@ new (function () {
       return false;
     }
     if (this._needsES5 === undefined) {
+      // #3259 modified by ngx-extended-pdf-viewer
+      // Runs before the capability probe and on both paths: zone.js strips these
+      // statics from the global Promise regardless of which bundle we end up
+      // loading. The probe is unaffected because it inspects a pristine iframe realm.
+      this.polyfillPromiseStaticsDroppedByZoneJS();
+      // #3259 end of modification by ngx-extended-pdf-viewer
       const isIE = !!(<any>globalThis).MSInputMethodContext && !!(<any>document).documentMode;
       const isEdge = /Edge\/\d./i.test(navigator.userAgent);
       const isIOs13OrBelow = this.iOSVersionRequiresES5();
@@ -293,17 +299,24 @@ new (function () {
         return true;
       }
       this._needsES5 = !(await this.ngxExtendedPdfViewerCanRunModernJSCode(useInlineScripts));
-      this.polyfillPromiseWithResolversIfZoneJSOverwritesIt();
     }
     return this._needsES5;
   }
 
   /**
-   * Angular 16 uses zone.js 0.13.3, and this version has a problem with Promise.withResolvers.
-   * If your browser supports Promise.withResolvers, zone.js accidentally overwrites it with "undefined".
-   * This method adds a polyfill for Promise.withResolvers if it is not available.
+   * zone.js replaces the global Promise with its own ZoneAwarePromise, which only
+   * implements the static methods that existed when that zone.js was written. Every
+   * newer static silently disappears - even in browsers that support it natively.
+   *
+   * Angular 19 and 20 still use zone.js by default (21 and 22 are zoneless), so this
+   * is not a "very old browser" workaround: it is what keeps pdf.js working on the
+   * current Angular LTS versions.
+   *
+   * - `Promise.withResolvers`: zone.js 0.13.3 (Angular 16) overwrites it with undefined.
+   * - `Promise.try`: pdf.js 6.2 calls it in `src/shared/message_handler.js` for every
+   *   worker round-trip, so without this polyfill nothing renders at all (#3259).
    */
-  private polyfillPromiseWithResolversIfZoneJSOverwritesIt() {
+  private polyfillPromiseStaticsDroppedByZoneJS() {
     const TypelessPromise = Promise as any;
     if (!TypelessPromise.withResolvers) {
       TypelessPromise.withResolvers = function withResolvers() {
@@ -316,6 +329,13 @@ new (function () {
         return { resolve: a, reject: b, promise: c };
       };
     }
+    // #3259 modified by ngx-extended-pdf-viewer
+    if (typeof TypelessPromise.try !== 'function') {
+      TypelessPromise.try = function (callback: (...args: Array<unknown>) => unknown, ...args: Array<unknown>) {
+        return new this((resolve: (value: unknown) => void) => resolve(callback(...args)));
+      };
+    }
+    // #3259 end of modification by ngx-extended-pdf-viewer
   }
 
   private ngxExtendedPdfViewerCanRunModernJSCode(useInlineScripts: boolean): Promise<boolean> {
