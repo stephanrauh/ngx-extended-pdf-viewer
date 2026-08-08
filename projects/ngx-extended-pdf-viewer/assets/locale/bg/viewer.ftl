@@ -391,6 +391,15 @@ pdfjs-editor-alt-text-settings-delete-model-button = Изтриване
 
 pdfjs-editor-add-signature-image-upload-error-description = Проверете мрежовата си връзка или опитайте с друго изображение.
 
+## Per-signature certificate row. The variants with an issuer / date in
+## parentheses embed fully-localized context — no English fall-through.
+##
+## Variables:
+##   $issuer (String) - issuer or subject common name from the cert.
+##   $dateObj (Date)  - notAfter date for the expired-with-date form.
+
+pdfjs-digital-signature-properties-certificate-expired = Сертификат: с изтекъл срок на валидност
+
 # Additional translations for ngx-extended-pdf-viewer (bg)
 unverified-signature-warning = Този PDF файл съдържа цифров подпис. PDF преглядачът не може да провери дали подписът е валиден. Моля, изтеглете файла и го отворете в Acrobat Reader, за да проверите дали подписът е валиден.
 pdfjs-infinite-scroll-button-label = Безкрайно превъртане
@@ -686,7 +695,6 @@ pdfjs-digital-signature-properties-certificate-untrusted = Certificate: Untruste
 pdfjs-digital-signature-properties-certificate-untrusted-unknown-issuer = Certificate: Unknown issuer ({ $issuer })
 pdfjs-digital-signature-properties-certificate-untrusted-self-signed = Certificate: Self-signed ({ $issuer })
 pdfjs-digital-signature-properties-certificate-untrusted-untrusted-issuer = Certificate: Untrusted issuer ({ $issuer })
-pdfjs-digital-signature-properties-certificate-expired = Certificate: Expired
 pdfjs-digital-signature-properties-certificate-expired-with-date = Certificate: Expired ({ DATETIME($dateObj, dateStyle: "medium") })
 pdfjs-digital-signature-properties-certificate-revoked = Certificate: Revoked
 pdfjs-digital-signature-properties-view-certificate = View certificate

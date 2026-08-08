@@ -45,6 +45,9 @@ import { assetsUrl, getVersionSuffix, isPdfjsVersionAtLeast, pdfDefaultOptions }
 import { PageViewModeType, ScrollModeChangedEvent, ScrollModeType } from './options/pdf-viewer';
 import { IPDFViewerApplication, PDFDocumentProxy, PDFPageProxy } from './options/pdf-viewer-application';
 import { IPDFViewerApplicationOptions } from './options/pdf-viewer-application-options';
+// #3258 modified by ngx-extended-pdf-viewer
+import { PdfSignatureVerifier } from './options/signature-verifier';
+// #3258 end of modification by ngx-extended-pdf-viewer
 import { VerbosityLevel } from './options/verbosity-level';
 import { PdfDummyComponentsComponent } from './pdf-dummy-components/pdf-dummy-components.component';
 import { PDFNotificationService } from './pdf-notification-service';
@@ -553,9 +556,21 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
    * is not an editing tool, so it is not part of the `showEditorButtons` group and it
    * defaults to `true`: PDF.js keeps the button hidden until the document actually
    * contains a signature, so unsigned files show nothing either way.
+   *
+   * Note that the panel additionally needs a `[signatureVerifier]`; without one the
+   * browser build of pdf.js never activates it.
    */
   public showSignaturePropertiesButton = input<ResponsiveVisibility>(true);
   // #3257 end of modification by ngx-extended-pdf-viewer
+
+  // #3258 modified by ngx-extended-pdf-viewer
+  /**
+   * Enables the digital signature properties panel by supplying the verifier the
+   * browser build of pdf.js lacks. Without this input the panel never opens - see
+   * `PdfSignatureVerifier`. Set it before the document loads.
+   */
+  public signatureVerifier = input<PdfSignatureVerifier | undefined>(undefined);
+  // #3258 end of modification by ngx-extended-pdf-viewer
 
   // Computed signals for effective show values when showEditorButtons group is used
   public effectiveShowTextEditor = computed(() => (this.showEditorButtons() === false ? false : this.showTextEditor()));
@@ -2155,8 +2170,41 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       this.originalColorScheme = docStyle.getPropertyValue('color-scheme') || '';
     }
 
+    // #3258 modified by ngx-extended-pdf-viewer
+    this.installSignatureVerifier();
+    // #3258 end of modification by ngx-extended-pdf-viewer
+
     queueMicrotask(this.asyncWithCD(() => this.notificationService.onPDFJSInitSignal.set(this.pdfScriptLoaderService.PDFViewerApplication)));
   }
+
+  // #3258 modified by ngx-extended-pdf-viewer
+  /**
+   * The browser build of PDF.js has no signature verifier, so its signature
+   * properties panel never activates (`app.js#_maybeInitSignatureProperties` bails
+   * out on `externalServices.createSignatureVerifier()` returning null). If the
+   * application supplies one, install it and switch the matching option on.
+   *
+   * `externalServices` is a non-writable `shadow()` getter, but its methods live on
+   * the prototype - so an own property on the instance overrides it without patching
+   * PDF.js itself.
+   */
+  private installSignatureVerifier(): void {
+    const verifier = this.signatureVerifier();
+    if (!verifier) {
+      return;
+    }
+    const PDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication as any;
+    const externalServices = PDFViewerApplication?.externalServices;
+    if (!externalServices) {
+      if (this.logLevel() >= VerbosityLevel.WARNINGS) {
+        console.warn('[signatureVerifier] PDF.js is not initialized yet, the signature panel stays hidden.');
+      }
+      return;
+    }
+    externalServices.createSignatureVerifier = () => verifier;
+    this.pdfScriptLoaderService.PDFViewerApplicationOptions?.set('enableSignatureVerification', true);
+  }
+  // #3258 end of modification by ngx-extended-pdf-viewer
 
   public onSpreadChange(newSpread: 'off' | 'even' | 'odd'): void {
     this.spread.set(newSpread);

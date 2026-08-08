@@ -153,6 +153,27 @@ pdfjs-document-properties-linearized = Ñanduti jahecha pya’e:
 pdfjs-document-properties-linearized-yes = Añete
 pdfjs-document-properties-linearized-no = Ahániri
 pdfjs-document-properties-close-button = Mboty
+pdfjs-digital-signature-properties-view-certificate = Mboajapyre jehecha
+# Shown beneath an invalid signature card to explain why verification
+# failed. The text comes from NSS (e.g. "Signature integrity has been
+# compromised", "PKCS#7 signature could not be parsed") and is not
+# itself localized — it is the underlying error message produced by
+# the verification backend.
+# Variables:
+#   $reason (String) - error message describing why the signature
+#                      could not be verified.
+pdfjs-digital-signature-properties-reason = Mba’ére: { $reason }
+# Variables:
+#   $dateObj (Date) - the signing time from the /Sig dict's /M entry.
+pdfjs-digital-signature-properties-timestamp = Ára: { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
+# Variables:
+#   $count (Number) - number of nested sub-signatures (one per earlier
+#                     incremental revision of the document).
+pdfjs-digital-signature-properties-sub-signatures =
+    { $count ->
+        [one] Mboheraguapy’i ({ $count })
+       *[other] Mboheraguapy’ieta ({ $count })
+    }
 
 ## Print
 
@@ -560,6 +581,7 @@ pdfjs-editor-undo-bar-close-button-label = Mboty
 
 ## Add a signature dialog
 
+pdfjs-editor-add-signature-dialog-label = Ko modal omoneĩ poruhárape omoheñóivo mboheraguapy ombojuaju hag̃ua PDF rehe. Upe poruhára ombosako’ikuaa téra (oikóva avei moñe’ẽrã mokõihávarõ) ha, ejaposérõ, eñongatu mboheraguapy eiporujey hag̃ua.
 pdfjs-editor-add-signature-dialog-title = Embojuaju teraguapy
 
 ## Tab names
@@ -731,6 +753,49 @@ pdfjs-views-manager-waiting-for-file = Ehupihína marandurenda…
 pdfjs-toggle-views-manager-button1 =
     .title = Eñangareko kuotiarogue
 
+## Digital signature properties (signature verification panel)
+
+pdfjs-digital-signature-properties-button =
+    .title = Firma digital oguerekóva
+    .aria-label = Firma digital oguerekóva
+pdfjs-digital-signature-properties-button-label = Firma digital oguerekóva
+
+## Banner shown above the signature list summarising the overall
+## verification state of the document. Each variant is selected by the
+## viewer based on the worst per-signature status; one signature is
+## enough to lower the banner.
+##
+## Variables:
+##   $count (Number) - number of signatures at the worst level.
+
+pdfjs-digital-signature-properties-banner-verified = Pe kuatia oñemboheraguapy firma digital oikóvape
+
+## Per-signature status row. Only three distinct strings are needed:
+## the signature crypto either verified (the cert chain may still be
+## untrusted/expired/revoked, but that's surfaced on the cert row
+## below), or it failed, or its sub-format isn't supported.
+
+pdfjs-digital-signature-properties-status-verified = Heko: Mboheraguapy hechajeypyre
+pdfjs-digital-signature-properties-status-invalid = Heko: Mboheraguapy oiko’ỹva
+pdfjs-digital-signature-properties-status-unknown = Heko: Ndojehechajeykuaái (ndojokupytýi)
+
+## Per-signature certificate row. The variants with an issuer / date in
+## parentheses embed fully-localized context — no English fall-through.
+##
+## Variables:
+##   $issuer (String) - issuer or subject common name from the cert.
+##   $dateObj (Date)  - notAfter date for the expired-with-date form.
+
+pdfjs-digital-signature-properties-certificate-trusted = Mboajapyre: Jeroviaha ({ $issuer })
+pdfjs-digital-signature-properties-certificate-unknown = Mboajapyre: Oĩ’ỹva
+pdfjs-digital-signature-properties-certificate-untrusted = Mboajapyre: Jerovia’ỹha
+pdfjs-digital-signature-properties-certificate-untrusted-unknown-issuer = Mboajapyre: Guenohẽha jekuaa’ỹva ({ $issuer })
+pdfjs-digital-signature-properties-certificate-untrusted-self-signed = Mboajapyre: Heraguapejeheguíva { $issuer })
+pdfjs-digital-signature-properties-certificate-untrusted-untrusted-issuer = Mboajapyre: Guenohẽha jerovia’ỹha ({ $issuer })
+pdfjs-digital-signature-properties-certificate-expired = Mboajapyre: Oikove’ỹmava
+pdfjs-digital-signature-properties-certificate-expired-with-date = Mboajapyre: Oikove’ỹmava ({ DATETIME($dateObj, dateStyle: "medium") })
+pdfjs-digital-signature-properties-certificate-revoked = Mboajapyre: Mbojevypyre
+
 ## Main menu for adding/removing signatures
 
 pdfjs-editor-delete-signature-button1 =
@@ -746,12 +811,6 @@ pdfjs-editor-add-signature-edit-button-label = Embosako’i moha’ãnga
 pdfjs-editor-edit-signature-dialog-title = Embosako’i moha’ãnga
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-editor-add-signature-dialog-label = This modal allows the user to create a signature to add to a PDF document. The user can edit the name (which also serves as the alt text), and optionally save the signature for repeated use.
-pdfjs-digital-signature-properties-button =
-    .title = Digital signature properties
-    .aria-label = Digital signature properties
-pdfjs-digital-signature-properties-button-label = Digital signature properties
-pdfjs-digital-signature-properties-banner-verified = Document was signed with a valid digital signature
 pdfjs-digital-signature-properties-banner-unknown =
     { $count ->
         [one] Document signed but { $count } digital signature could not be verified
@@ -776,26 +835,6 @@ pdfjs-digital-signature-properties-banner-revoked =
     { $count ->
         [one] Document signed with { $count } revoked certificate
        *[other] Document signed with { $count } revoked certificates
-    }
-pdfjs-digital-signature-properties-status-verified = Status: Signature verified
-pdfjs-digital-signature-properties-status-invalid = Status: Signature invalid
-pdfjs-digital-signature-properties-status-unknown = Status: Unable to verify (unsupported)
-pdfjs-digital-signature-properties-certificate-trusted = Certificate: Trusted ({ $issuer })
-pdfjs-digital-signature-properties-certificate-unknown = Certificate: Unavailable
-pdfjs-digital-signature-properties-certificate-untrusted = Certificate: Untrusted
-pdfjs-digital-signature-properties-certificate-untrusted-unknown-issuer = Certificate: Unknown issuer ({ $issuer })
-pdfjs-digital-signature-properties-certificate-untrusted-self-signed = Certificate: Self-signed ({ $issuer })
-pdfjs-digital-signature-properties-certificate-untrusted-untrusted-issuer = Certificate: Untrusted issuer ({ $issuer })
-pdfjs-digital-signature-properties-certificate-expired = Certificate: Expired
-pdfjs-digital-signature-properties-certificate-expired-with-date = Certificate: Expired ({ DATETIME($dateObj, dateStyle: "medium") })
-pdfjs-digital-signature-properties-certificate-revoked = Certificate: Revoked
-pdfjs-digital-signature-properties-view-certificate = View certificate
-pdfjs-digital-signature-properties-reason = Reason: { $reason }
-pdfjs-digital-signature-properties-timestamp = Timestamp: { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
-pdfjs-digital-signature-properties-sub-signatures =
-    { $count ->
-        [one] Sub-signature ({ $count })
-       *[other] Sub-signatures ({ $count })
     }
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

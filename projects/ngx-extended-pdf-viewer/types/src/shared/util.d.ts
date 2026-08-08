@@ -218,13 +218,13 @@ export const LINE_FACTOR: 1.35;
 export function makeArr(): never[];
 export function makeMap(): Map<any, any>;
 export function makeObj(): any;
+export function makeSet(): Set<any>;
 export namespace MeshFigureType {
     let TRIANGLES: number;
     let LATTICE: number;
     let PATCH: number;
 }
 export function normalizeUnicode(str: any): any;
-export function objectSize(obj: any): number;
 export namespace OPS {
     export let dependency: number;
     export let setLineWidth: number;

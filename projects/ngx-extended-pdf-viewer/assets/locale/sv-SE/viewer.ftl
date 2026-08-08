@@ -153,6 +153,27 @@ pdfjs-document-properties-linearized = Snabb webbvisning:
 pdfjs-document-properties-linearized-yes = Ja
 pdfjs-document-properties-linearized-no = Nej
 pdfjs-document-properties-close-button = Stäng
+pdfjs-digital-signature-properties-view-certificate = Visa certifikat
+# Shown beneath an invalid signature card to explain why verification
+# failed. The text comes from NSS (e.g. "Signature integrity has been
+# compromised", "PKCS#7 signature could not be parsed") and is not
+# itself localized — it is the underlying error message produced by
+# the verification backend.
+# Variables:
+#   $reason (String) - error message describing why the signature
+#                      could not be verified.
+pdfjs-digital-signature-properties-reason = Orsak: { $reason }
+# Variables:
+#   $dateObj (Date) - the signing time from the /Sig dict's /M entry.
+pdfjs-digital-signature-properties-timestamp = Tidsstämpel: { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
+# Variables:
+#   $count (Number) - number of nested sub-signatures (one per earlier
+#                     incremental revision of the document).
+pdfjs-digital-signature-properties-sub-signatures =
+    { $count ->
+        [one] Undersignatur ({ $count })
+       *[other] Undersignaturer ({ $count })
+    }
 
 ## Print
 
@@ -732,6 +753,74 @@ pdfjs-views-manager-waiting-for-file = Överför fil…
 pdfjs-toggle-views-manager-button1 =
     .title = Hantera sidor
 
+## Digital signature properties (signature verification panel)
+
+pdfjs-digital-signature-properties-button =
+    .title = Egenskaper för digital signatur
+    .aria-label = Egenskaper för digital signatur
+pdfjs-digital-signature-properties-button-label = Egenskaper för digital signatur
+
+## Banner shown above the signature list summarising the overall
+## verification state of the document. Each variant is selected by the
+## viewer based on the worst per-signature status; one signature is
+## enough to lower the banner.
+##
+## Variables:
+##   $count (Number) - number of signatures at the worst level.
+
+pdfjs-digital-signature-properties-banner-verified = Dokumentet signerades med en giltig digital signatur
+pdfjs-digital-signature-properties-banner-unknown =
+    { $count ->
+        [one] Dokument signerat men { $count } digital signatur kunde inte verifieras
+       *[other] Dokument signerat men { $count } digitala signaturer kunde inte verifieras
+    }
+pdfjs-digital-signature-properties-banner-untrusted =
+    { $count ->
+        [one] Dokument signerat med { $count } certifikat som inte är tillförlitligt
+       *[other] Dokument signerat med { $count } certifikat som inte är tillförlitliga
+    }
+pdfjs-digital-signature-properties-banner-expired =
+    { $count ->
+        [one] Dokument signerat med { $count } utgånget certifikat
+       *[other] Dokument signerat med { $count } utgångna certifikat
+    }
+pdfjs-digital-signature-properties-banner-invalid =
+    { $count ->
+        [one] Dokumentet har { $count } ogiltig digital signatur
+       *[other] Dokumentet har { $count } ogiltiga digitala signaturer
+    }
+pdfjs-digital-signature-properties-banner-revoked =
+    { $count ->
+        [one] Dokument signerat med { $count } återkallat certifikat
+       *[other] Dokument signerat med { $count } återkallade certifikat
+    }
+
+## Per-signature status row. Only three distinct strings are needed:
+## the signature crypto either verified (the cert chain may still be
+## untrusted/expired/revoked, but that's surfaced on the cert row
+## below), or it failed, or its sub-format isn't supported.
+
+pdfjs-digital-signature-properties-status-verified = Status: Signatur verifierad
+pdfjs-digital-signature-properties-status-invalid = Status: Ogiltig signatur
+pdfjs-digital-signature-properties-status-unknown = Status: Kan inte verifiera (stöds inte)
+
+## Per-signature certificate row. The variants with an issuer / date in
+## parentheses embed fully-localized context — no English fall-through.
+##
+## Variables:
+##   $issuer (String) - issuer or subject common name from the cert.
+##   $dateObj (Date)  - notAfter date for the expired-with-date form.
+
+pdfjs-digital-signature-properties-certificate-trusted = Certifikat: Tillförlitligt ({ $issuer })
+pdfjs-digital-signature-properties-certificate-unknown = Certifikat: Ej tillgänglig
+pdfjs-digital-signature-properties-certificate-untrusted = Certifikat: Otillförlitligt
+pdfjs-digital-signature-properties-certificate-untrusted-unknown-issuer = Certifikat: Okänd utfärdare ({ $issuer })
+pdfjs-digital-signature-properties-certificate-untrusted-self-signed = Certifikat: Självsignerat ({ $issuer })
+pdfjs-digital-signature-properties-certificate-untrusted-untrusted-issuer = Certifikat: Otillförlitlig utfärdare ({ $issuer })
+pdfjs-digital-signature-properties-certificate-expired = Certifikat: Utgånget
+pdfjs-digital-signature-properties-certificate-expired-with-date = Certifikat: Utgånget ({ DATETIME($dateObj, dateStyle: "medium") })
+pdfjs-digital-signature-properties-certificate-revoked = Certifikat: Återkallat
+
 ## Main menu for adding/removing signatures
 
 pdfjs-editor-delete-signature-button1 =
@@ -760,54 +849,3 @@ pdfjs-editor-movePageDown-button-label = Flytta sida nedåt
 pdfjs-cursor-page-flip-tool-button =
     .title = Bläddra sidor
 pdfjs-cursor-page-flip-tool-button-label = Bläddra sidor
-# Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-digital-signature-properties-button =
-    .title = Digital signature properties
-    .aria-label = Digital signature properties
-pdfjs-digital-signature-properties-button-label = Digital signature properties
-pdfjs-digital-signature-properties-banner-verified = Document was signed with a valid digital signature
-pdfjs-digital-signature-properties-banner-unknown =
-    { $count ->
-        [one] Document signed but { $count } digital signature could not be verified
-       *[other] Document signed but { $count } digital signatures could not be verified
-    }
-pdfjs-digital-signature-properties-banner-untrusted =
-    { $count ->
-        [one] Document signed with { $count } certificate that is not trusted
-       *[other] Document signed with { $count } certificates that are not trusted
-    }
-pdfjs-digital-signature-properties-banner-expired =
-    { $count ->
-        [one] Document signed with { $count } expired certificate
-       *[other] Document signed with { $count } expired certificates
-    }
-pdfjs-digital-signature-properties-banner-invalid =
-    { $count ->
-        [one] Document has { $count } invalid digital signature
-       *[other] Document has { $count } invalid digital signatures
-    }
-pdfjs-digital-signature-properties-banner-revoked =
-    { $count ->
-        [one] Document signed with { $count } revoked certificate
-       *[other] Document signed with { $count } revoked certificates
-    }
-pdfjs-digital-signature-properties-status-verified = Status: Signature verified
-pdfjs-digital-signature-properties-status-invalid = Status: Signature invalid
-pdfjs-digital-signature-properties-status-unknown = Status: Unable to verify (unsupported)
-pdfjs-digital-signature-properties-certificate-trusted = Certificate: Trusted ({ $issuer })
-pdfjs-digital-signature-properties-certificate-unknown = Certificate: Unavailable
-pdfjs-digital-signature-properties-certificate-untrusted = Certificate: Untrusted
-pdfjs-digital-signature-properties-certificate-untrusted-unknown-issuer = Certificate: Unknown issuer ({ $issuer })
-pdfjs-digital-signature-properties-certificate-untrusted-self-signed = Certificate: Self-signed ({ $issuer })
-pdfjs-digital-signature-properties-certificate-untrusted-untrusted-issuer = Certificate: Untrusted issuer ({ $issuer })
-pdfjs-digital-signature-properties-certificate-expired = Certificate: Expired
-pdfjs-digital-signature-properties-certificate-expired-with-date = Certificate: Expired ({ DATETIME($dateObj, dateStyle: "medium") })
-pdfjs-digital-signature-properties-certificate-revoked = Certificate: Revoked
-pdfjs-digital-signature-properties-view-certificate = View certificate
-pdfjs-digital-signature-properties-reason = Reason: { $reason }
-pdfjs-digital-signature-properties-timestamp = Timestamp: { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
-pdfjs-digital-signature-properties-sub-signatures =
-    { $count ->
-        [one] Sub-signature ({ $count })
-       *[other] Sub-signatures ({ $count })
-    }

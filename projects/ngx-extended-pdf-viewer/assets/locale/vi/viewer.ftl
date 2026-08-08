@@ -153,6 +153,23 @@ pdfjs-document-properties-linearized = Xem nhanh trên web:
 pdfjs-document-properties-linearized-yes = Có
 pdfjs-document-properties-linearized-no = Không
 pdfjs-document-properties-close-button = Ðóng
+pdfjs-digital-signature-properties-view-certificate = Xem chứng chỉ
+# Shown beneath an invalid signature card to explain why verification
+# failed. The text comes from NSS (e.g. "Signature integrity has been
+# compromised", "PKCS#7 signature could not be parsed") and is not
+# itself localized — it is the underlying error message produced by
+# the verification backend.
+# Variables:
+#   $reason (String) - error message describing why the signature
+#                      could not be verified.
+pdfjs-digital-signature-properties-reason = Nguyên nhân: { $reason }
+# Variables:
+#   $dateObj (Date) - the signing time from the /Sig dict's /M entry.
+pdfjs-digital-signature-properties-timestamp = Timestamp: { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
+# Variables:
+#   $count (Number) - number of nested sub-signatures (one per earlier
+#                     incremental revision of the document).
+pdfjs-digital-signature-properties-sub-signatures = Chữ ký thành phần ({ $count })
 
 ## Print
 
@@ -700,6 +717,54 @@ pdfjs-views-manager-waiting-for-file = Đang tải lên tập tin…
 pdfjs-toggle-views-manager-button1 =
     .title = Quản lý trang
 
+## Digital signature properties (signature verification panel)
+
+pdfjs-digital-signature-properties-button =
+    .title = Thuộc tính chữ ký điện tử
+    .aria-label = Thuộc tính chữ ký điện tử
+pdfjs-digital-signature-properties-button-label = Thuộc tính chữ ký điện tử
+
+## Banner shown above the signature list summarising the overall
+## verification state of the document. Each variant is selected by the
+## viewer based on the worst per-signature status; one signature is
+## enough to lower the banner.
+##
+## Variables:
+##   $count (Number) - number of signatures at the worst level.
+
+pdfjs-digital-signature-properties-banner-verified = Tài liệu đã được ký bằng chữ ký điện tử hợp lệ
+pdfjs-digital-signature-properties-banner-unknown = Tài liệu đã được ký nhưng không thể xác minh { $count } chữ ký điện tử
+pdfjs-digital-signature-properties-banner-untrusted = Tài liệu được ký bằng { $count } chứng chỉ không đáng tin cậy
+pdfjs-digital-signature-properties-banner-expired = Tài liệu được ký bằng { $count } chứng chỉ đã hết hạn
+pdfjs-digital-signature-properties-banner-invalid = Tài liệu có { $count } chữ ký điện tử không hợp lệ
+pdfjs-digital-signature-properties-banner-revoked = Tài liệu được ký bằng { $count } chứng chỉ đã bị thu hồi
+
+## Per-signature status row. Only three distinct strings are needed:
+## the signature crypto either verified (the cert chain may still be
+## untrusted/expired/revoked, but that's surfaced on the cert row
+## below), or it failed, or its sub-format isn't supported.
+
+pdfjs-digital-signature-properties-status-verified = Trạng thái: Chữ ký đã được xác minh
+pdfjs-digital-signature-properties-status-invalid = Trạng thái: Chữ ký không hợp lệ
+pdfjs-digital-signature-properties-status-unknown = Trạng thái: Không thể xác minh (không được hỗ trợ)
+
+## Per-signature certificate row. The variants with an issuer / date in
+## parentheses embed fully-localized context — no English fall-through.
+##
+## Variables:
+##   $issuer (String) - issuer or subject common name from the cert.
+##   $dateObj (Date)  - notAfter date for the expired-with-date form.
+
+pdfjs-digital-signature-properties-certificate-trusted = Chứng chỉ: Đáng tin cậy ({ $issuer })
+pdfjs-digital-signature-properties-certificate-unknown = Chứng chỉ: Không khả dụng
+pdfjs-digital-signature-properties-certificate-untrusted = Chứng chỉ: Không đáng tin cậy
+pdfjs-digital-signature-properties-certificate-untrusted-unknown-issuer = Chứng chỉ: Người cấp không xác định ({ $issuer })
+pdfjs-digital-signature-properties-certificate-untrusted-self-signed = Chứng chỉ: Tự ký ({ $issuer })
+pdfjs-digital-signature-properties-certificate-untrusted-untrusted-issuer = Chứng chỉ: Người cấp không đáng tin cậy ({ $issuer })
+pdfjs-digital-signature-properties-certificate-expired = Chứng chỉ: Đã hết hạn
+pdfjs-digital-signature-properties-certificate-expired-with-date = Chứng chỉ: Đã hết hạn ({ DATETIME($dateObj, dateStyle: "medium") })
+pdfjs-digital-signature-properties-certificate-revoked = Chứng chỉ: Đã bị thu hồi
+
 ## Main menu for adding/removing signatures
 
 pdfjs-editor-delete-signature-button1 =
@@ -715,56 +780,6 @@ pdfjs-editor-add-signature-edit-button-label = Chỉnh sửa mô tả
 pdfjs-editor-edit-signature-dialog-title = Chỉnh sửa mô tả
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-digital-signature-properties-button =
-    .title = Digital signature properties
-    .aria-label = Digital signature properties
-pdfjs-digital-signature-properties-button-label = Digital signature properties
-pdfjs-digital-signature-properties-banner-verified = Document was signed with a valid digital signature
-pdfjs-digital-signature-properties-banner-unknown =
-    { $count ->
-        [one] Document signed but { $count } digital signature could not be verified
-       *[other] Document signed but { $count } digital signatures could not be verified
-    }
-pdfjs-digital-signature-properties-banner-untrusted =
-    { $count ->
-        [one] Document signed with { $count } certificate that is not trusted
-       *[other] Document signed with { $count } certificates that are not trusted
-    }
-pdfjs-digital-signature-properties-banner-expired =
-    { $count ->
-        [one] Document signed with { $count } expired certificate
-       *[other] Document signed with { $count } expired certificates
-    }
-pdfjs-digital-signature-properties-banner-invalid =
-    { $count ->
-        [one] Document has { $count } invalid digital signature
-       *[other] Document has { $count } invalid digital signatures
-    }
-pdfjs-digital-signature-properties-banner-revoked =
-    { $count ->
-        [one] Document signed with { $count } revoked certificate
-       *[other] Document signed with { $count } revoked certificates
-    }
-pdfjs-digital-signature-properties-status-verified = Status: Signature verified
-pdfjs-digital-signature-properties-status-invalid = Status: Signature invalid
-pdfjs-digital-signature-properties-status-unknown = Status: Unable to verify (unsupported)
-pdfjs-digital-signature-properties-certificate-trusted = Certificate: Trusted ({ $issuer })
-pdfjs-digital-signature-properties-certificate-unknown = Certificate: Unavailable
-pdfjs-digital-signature-properties-certificate-untrusted = Certificate: Untrusted
-pdfjs-digital-signature-properties-certificate-untrusted-unknown-issuer = Certificate: Unknown issuer ({ $issuer })
-pdfjs-digital-signature-properties-certificate-untrusted-self-signed = Certificate: Self-signed ({ $issuer })
-pdfjs-digital-signature-properties-certificate-untrusted-untrusted-issuer = Certificate: Untrusted issuer ({ $issuer })
-pdfjs-digital-signature-properties-certificate-expired = Certificate: Expired
-pdfjs-digital-signature-properties-certificate-expired-with-date = Certificate: Expired ({ DATETIME($dateObj, dateStyle: "medium") })
-pdfjs-digital-signature-properties-certificate-revoked = Certificate: Revoked
-pdfjs-digital-signature-properties-view-certificate = View certificate
-pdfjs-digital-signature-properties-reason = Reason: { $reason }
-pdfjs-digital-signature-properties-timestamp = Timestamp: { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
-pdfjs-digital-signature-properties-sub-signatures =
-    { $count ->
-        [one] Sub-signature ({ $count })
-       *[other] Sub-signatures ({ $count })
-    }
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = Match Each Word

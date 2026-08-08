@@ -39,10 +39,10 @@ customizations and enhancements for Angular integration.
       fixed upstream in pdf.js 6.2.108) - https://github.com/mozilla/pdf.js/security/advisories/GHSA-hq66-cqwq-w95j
 
   assets/
-    based on Mozilla pdf.js 6.1.200 (v6.1.200, commit 6353acefe5007cd4899247a8c4e83cb7c9435a54)
-    built from https://github.com/stephanrauh/pdf.js branch merge/6.2.108, commit f97d907f0f6caf0a00bf240727907e429485ba61
-    bundled build version: 6.1.1209 (fork build number, not an upstream release)
-    security fix applied ahead of upstream: CVE-2026-16633 (cherry-pick,
+    based on Mozilla pdf.js 6.2.108 (v6.2.108, commit 0365cbde028bd92e58f2dab1bb70cd30ac7acfd7)
+    built from https://github.com/stephanrauh/pdf.js branch 6.2, commit 2d2f9b564745b8a2492656bee3c7ad8d96ee6d13
+    bundled build version: 6.2.1081 (fork build number, not an upstream release)
+    security fix applied ahead of upstream: CVE-2026-16633 (merge,
       fixed upstream in pdf.js 6.2.108) - https://github.com/mozilla/pdf.js/security/advisories/GHSA-hq66-cqwq-w95j
 
   A machine-readable form of the above is published as pdfjs-provenance.json,

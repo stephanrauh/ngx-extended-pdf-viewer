@@ -153,6 +153,23 @@ pdfjs-document-properties-linearized = ウェブ表示用に最適化:
 pdfjs-document-properties-linearized-yes = はい
 pdfjs-document-properties-linearized-no = いいえ
 pdfjs-document-properties-close-button = 閉じる
+pdfjs-digital-signature-properties-view-certificate = 証明書を表示
+# Shown beneath an invalid signature card to explain why verification
+# failed. The text comes from NSS (e.g. "Signature integrity has been
+# compromised", "PKCS#7 signature could not be parsed") and is not
+# itself localized — it is the underlying error message produced by
+# the verification backend.
+# Variables:
+#   $reason (String) - error message describing why the signature
+#                      could not be verified.
+pdfjs-digital-signature-properties-reason = 理由: { $reason }
+# Variables:
+#   $dateObj (Date) - the signing time from the /Sig dict's /M entry.
+pdfjs-digital-signature-properties-timestamp = タイムスタンプ: { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
+# Variables:
+#   $count (Number) - number of nested sub-signatures (one per earlier
+#                     incremental revision of the document).
+pdfjs-digital-signature-properties-sub-signatures = サブ署名 ({ $count } 筆)
 
 ## Print
 
@@ -700,6 +717,54 @@ pdfjs-views-manager-waiting-for-file = ファイルをアップロードして�
 pdfjs-toggle-views-manager-button1 =
     .title = ページを管理
 
+## Digital signature properties (signature verification panel)
+
+pdfjs-digital-signature-properties-button =
+    .title = デジタル署名のプロパティ
+    .aria-label = デジタル署名のプロパティ
+pdfjs-digital-signature-properties-button-label = デジタル署名のプロパティ
+
+## Banner shown above the signature list summarising the overall
+## verification state of the document. Each variant is selected by the
+## viewer based on the worst per-signature status; one signature is
+## enough to lower the banner.
+##
+## Variables:
+##   $count (Number) - number of signatures at the worst level.
+
+pdfjs-digital-signature-properties-banner-verified = 文書は検証されたデジタル署名で署名されています
+pdfjs-digital-signature-properties-banner-unknown = 文書は署名されていますが、{ $count } 筆のデジタル署名が検証できません
+pdfjs-digital-signature-properties-banner-untrusted = 文書は { $count } 筆の信頼できないデジタル署名で署名されています
+pdfjs-digital-signature-properties-banner-expired = 文書は { $count } 枚の有効期限が切れた証明書で署名されています
+pdfjs-digital-signature-properties-banner-invalid = 文書には { $count } 筆の不正なデジタル署名があります
+pdfjs-digital-signature-properties-banner-revoked = 文書は { $count } 枚の破棄された証明書で署名されています
+
+## Per-signature status row. Only three distinct strings are needed:
+## the signature crypto either verified (the cert chain may still be
+## untrusted/expired/revoked, but that's surfaced on the cert row
+## below), or it failed, or its sub-format isn't supported.
+
+pdfjs-digital-signature-properties-status-verified = 状態: 検証された証明書
+pdfjs-digital-signature-properties-status-invalid = 状態: 不正な証明書
+pdfjs-digital-signature-properties-status-unknown = 状態: 検証不可 (未サポート)
+
+## Per-signature certificate row. The variants with an issuer / date in
+## parentheses embed fully-localized context — no English fall-through.
+##
+## Variables:
+##   $issuer (String) - issuer or subject common name from the cert.
+##   $dateObj (Date)  - notAfter date for the expired-with-date form.
+
+pdfjs-digital-signature-properties-certificate-trusted = 証明書: 信頼されている ({ $issuer })
+pdfjs-digital-signature-properties-certificate-unknown = 証明書: 利用不可
+pdfjs-digital-signature-properties-certificate-untrusted = 証明書: 信頼できない
+pdfjs-digital-signature-properties-certificate-untrusted-unknown-issuer = 証明書: 発行者不明 ({ $issuer })
+pdfjs-digital-signature-properties-certificate-untrusted-self-signed = 証明書: 自己署名 ({ $issuer })
+pdfjs-digital-signature-properties-certificate-untrusted-untrusted-issuer = 証明書: 信頼できない発行者 ({ $issuer })
+pdfjs-digital-signature-properties-certificate-expired = 証明書: 有効期限切れ
+pdfjs-digital-signature-properties-certificate-expired-with-date = 証明書: 有効期限切れ ({ DATETIME($dateObj, dateStyle: "medium") })
+pdfjs-digital-signature-properties-certificate-revoked = 証明書: 破棄
+
 ## Main menu for adding/removing signatures
 
 pdfjs-editor-delete-signature-button1 =
@@ -715,56 +780,6 @@ pdfjs-editor-add-signature-edit-button-label = 説明を編集
 pdfjs-editor-edit-signature-dialog-title = 説明の編集
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-digital-signature-properties-button =
-    .title = Digital signature properties
-    .aria-label = Digital signature properties
-pdfjs-digital-signature-properties-button-label = Digital signature properties
-pdfjs-digital-signature-properties-banner-verified = Document was signed with a valid digital signature
-pdfjs-digital-signature-properties-banner-unknown =
-    { $count ->
-        [one] Document signed but { $count } digital signature could not be verified
-       *[other] Document signed but { $count } digital signatures could not be verified
-    }
-pdfjs-digital-signature-properties-banner-untrusted =
-    { $count ->
-        [one] Document signed with { $count } certificate that is not trusted
-       *[other] Document signed with { $count } certificates that are not trusted
-    }
-pdfjs-digital-signature-properties-banner-expired =
-    { $count ->
-        [one] Document signed with { $count } expired certificate
-       *[other] Document signed with { $count } expired certificates
-    }
-pdfjs-digital-signature-properties-banner-invalid =
-    { $count ->
-        [one] Document has { $count } invalid digital signature
-       *[other] Document has { $count } invalid digital signatures
-    }
-pdfjs-digital-signature-properties-banner-revoked =
-    { $count ->
-        [one] Document signed with { $count } revoked certificate
-       *[other] Document signed with { $count } revoked certificates
-    }
-pdfjs-digital-signature-properties-status-verified = Status: Signature verified
-pdfjs-digital-signature-properties-status-invalid = Status: Signature invalid
-pdfjs-digital-signature-properties-status-unknown = Status: Unable to verify (unsupported)
-pdfjs-digital-signature-properties-certificate-trusted = Certificate: Trusted ({ $issuer })
-pdfjs-digital-signature-properties-certificate-unknown = Certificate: Unavailable
-pdfjs-digital-signature-properties-certificate-untrusted = Certificate: Untrusted
-pdfjs-digital-signature-properties-certificate-untrusted-unknown-issuer = Certificate: Unknown issuer ({ $issuer })
-pdfjs-digital-signature-properties-certificate-untrusted-self-signed = Certificate: Self-signed ({ $issuer })
-pdfjs-digital-signature-properties-certificate-untrusted-untrusted-issuer = Certificate: Untrusted issuer ({ $issuer })
-pdfjs-digital-signature-properties-certificate-expired = Certificate: Expired
-pdfjs-digital-signature-properties-certificate-expired-with-date = Certificate: Expired ({ DATETIME($dateObj, dateStyle: "medium") })
-pdfjs-digital-signature-properties-certificate-revoked = Certificate: Revoked
-pdfjs-digital-signature-properties-view-certificate = View certificate
-pdfjs-digital-signature-properties-reason = Reason: { $reason }
-pdfjs-digital-signature-properties-timestamp = Timestamp: { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
-pdfjs-digital-signature-properties-sub-signatures =
-    { $count ->
-        [one] Sub-signature ({ $count })
-       *[other] Sub-signatures ({ $count })
-    }
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = Match Each Word

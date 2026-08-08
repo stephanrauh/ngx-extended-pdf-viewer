@@ -82,6 +82,7 @@ export class AnnotationEditorUIManager {
     }): void;
     highlightSelection(methodOfCreation?: string, comment?: boolean): void;
     commentSelection(methodOfCreation?: string): void;
+    endCurrentEditing(): void;
     /**
      * Some annotations may have been modified in the annotation layer
      * (e.g. comments added or modified).

@@ -153,6 +153,7 @@ pdfjs-document-properties-linearized = Vista rápida de la web:
 pdfjs-document-properties-linearized-yes = Sí
 pdfjs-document-properties-linearized-no = No
 pdfjs-document-properties-close-button = Cerrar
+pdfjs-digital-signature-properties-view-certificate = Ver certificado
 
 ## Print
 
@@ -803,7 +804,6 @@ pdfjs-digital-signature-properties-certificate-untrusted-untrusted-issuer = Cert
 pdfjs-digital-signature-properties-certificate-expired = Certificate: Expired
 pdfjs-digital-signature-properties-certificate-expired-with-date = Certificate: Expired ({ DATETIME($dateObj, dateStyle: "medium") })
 pdfjs-digital-signature-properties-certificate-revoked = Certificate: Revoked
-pdfjs-digital-signature-properties-view-certificate = View certificate
 pdfjs-digital-signature-properties-reason = Reason: { $reason }
 pdfjs-digital-signature-properties-timestamp = Timestamp: { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 pdfjs-digital-signature-properties-sub-signatures =

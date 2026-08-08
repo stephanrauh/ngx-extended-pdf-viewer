@@ -52,10 +52,11 @@ export class Name {
 export class Ref {
     static fromString(str: any): any;
     static get(num: any, gen: any): any;
-    constructor(num: any, gen: any);
+    constructor(str: any, num: any, gen: any);
     num: any;
     gen: any;
-    toString(): string;
+    toString(): any;
+    #private;
 }
 export class RefSet {
     constructor(parent?: null);
@@ -73,6 +74,7 @@ export class RefSetCache {
     has(ref: any): boolean;
     put(ref: any, obj: any): void;
     putAlias(ref: any, aliasRef: any): void;
+    getOrPutComputed(ref: any, callback: any): any;
     clear(): void;
     values(): Generator<any, void, unknown>;
     items(): Generator<any[], void, unknown>;

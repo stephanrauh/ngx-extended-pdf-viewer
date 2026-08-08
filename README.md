@@ -25,7 +25,7 @@ There's a showcase at <a href="https://pdfviewer.net">https://pdfviewer.net</a>.
 
 ## What's new in 30 (release candidate)
 
-Version `30.0.0-rc.0` stops the viewer from modifying the page it lives on.
+Version `30.0.0-rc.0` ships **pdf.js 6.2** in both the stable and the bleeding-edge bundle - including the new digital signature properties panel, which you can switch on with your own `[signatureVerifier]` - and stops the viewer from modifying the page it lives on.
 
 Until now the viewer wrote to your application's `<html>` tag: the reading direction of the UI language (so an Arabic PDF flipped your *entire* application to right-to-left, and left it that way after the viewer was destroyed - see [#3253](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/3253)), plus its layout variables `--viewer-container-height`, `--viewsManager-width` and `color-scheme`. All of that now goes to the viewer's own `.html` and `.body` elements, which wrap the viewer inside your page.
 
@@ -36,6 +36,13 @@ Nothing changes for you unless you style the viewer from the outside or replace 
 - **CSS overrides keyed on `<html>`.** Selectors like `html[dir='rtl'] ngx-extended-pdf-viewer .toolbarButton` no longer match. Use the viewer's own wrapper instead: `ngx-extended-pdf-viewer .body[dir='rtl'] .toolbarButton`.
 - **Code reading the layout variables from `<html>`.** `--viewer-container-height`, `--viewsManager-width` and `color-scheme` now live on the viewer's `.html` element. Reading them from `document.documentElement` returns nothing.
 - **Custom templates.** If you pass your own template via `[customPdfViewer]`, keep the `.html` and `.body` wrapper elements around `#outerContainer` - the viewer uses them to scope its styles.
+
+### Older browsers
+
+The library ships two builds and picks one at runtime. Two things changed here:
+
+- The legacy (`-es5`) bundle is now compiled for an **explicit** list - Chrome/Edge 80, Firefox 78, Safari 13.1, iOS 13.4 - instead of whatever a `> 1%` popularity query happened to select (which pulled in Opera Mini and KaiOS while leaving the iOS 13 users the library routes there uncovered). It grew from 2.51 MB to 2.76 MB; browsers that load the modern bundle are unaffected.
+- The switch that chooses between the two now tests what the modern bundle actually needs. pdf.js 6.x uses iterator helpers (`map.values().some(…)`) and the modern bundle carries no polyfills, so **Safari/iOS 17.4-18.3, Chrome/Edge 119-121 and Firefox 121-130 now get the legacy bundle** - they used to receive the modern one and fail on it.
 
 ### Angular versions
 

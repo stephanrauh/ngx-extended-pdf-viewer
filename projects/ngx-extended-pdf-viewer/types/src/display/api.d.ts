@@ -891,14 +891,12 @@ export class PDFDocumentProxy {
      */
     getPageIndex(ref: RefProxy): Promise<number>;
     /**
-     * @returns {Promise<Object<string, Array<any>>>} A promise that is resolved
+     * @returns {Promise<Map<string, Array<any>>>} A promise that is resolved
      *   with a mapping from named destinations to references.
      *
      * This can be slow for large documents. Use `getDestination` instead.
      */
-    getDestinations(): Promise<{
-        [x: string]: Array<any>;
-    }>;
+    getDestinations(): Promise<Map<string, Array<any>>>;
     /**
      * @param {string} id - The named destination to get.
      * @returns {Promise<Array<any> | null>} A promise that is resolved with all
@@ -923,17 +921,17 @@ export class PDFDocumentProxy {
      */
     getPageMode(): Promise<string>;
     /**
-     * @returns {Promise<Object | null>} A promise that is resolved with an
-     *   {Object} containing the viewer preferences, or `null` when no viewer
-     *   preferences are present in the PDF file.
+     * @returns {Promise<Map | null>} A promise that is resolved with a {Map}
+     *   containing the viewer preferences, or `null` when no viewer preferences
+     *   are present in the PDF file.
      */
-    getViewerPreferences(): Promise<Object | null>;
+    getViewerPreferences(): Promise<Map<any, any> | null>;
     /**
-     * @returns {Promise<any | null>} A promise that is resolved with an {Array}
-     *   containing the destination, or `null` when no open action is present
-     *   in the PDF.
+     * @returns {Promise<Map | null>} A promise that is resolved with a {Map}
+     *   containing a destination or action, or `null` when no open action is
+     *   present in the PDF.
      */
-    getOpenAction(): Promise<any | null>;
+    getOpenAction(): Promise<Map<any, any> | null>;
     /**
      * @returns {Promise<Map<string, CatalogAttachment> | null>}
      *   Promise that is resolved with a lookup table for mapping named

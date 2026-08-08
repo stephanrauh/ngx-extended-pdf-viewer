@@ -97,6 +97,9 @@ export * from './lib/toolbar/pdf-editor-signature/pdf-editor-signature.component
 // #3257 modified by ngx-extended-pdf-viewer
 export * from './lib/toolbar/pdf-signature-properties/pdf-signature-properties.component';
 // #3257 end of modification by ngx-extended-pdf-viewer
+// #3258 modified by ngx-extended-pdf-viewer
+export * from './lib/options/signature-verifier';
+// #3258 end of modification by ngx-extended-pdf-viewer
 export * from './lib/toolbar/pdf-editor/pdf-editor.component';
 export * from './lib/toolbar/pdf-even-spread/pdf-even-spread.component';
 export * from './lib/toolbar/pdf-find-button/pdf-find-button.component';

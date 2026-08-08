@@ -1,16 +1,10 @@
-export namespace CharacterType {
-    let SPACE: number;
-    let ALPHA_LETTER: number;
-    let PUNCT: number;
-    let HAN_LETTER: number;
-    let KATAKANA_LETTER: number;
-    let HIRAGANA_LETTER: number;
-    let HALFWIDTH_KATAKANA_LETTER: number;
-    let THAI_LETTER: number;
-}
-/**
- * This function is based on the word-break detection implemented in:
- * https://hg.mozilla.org/mozilla-central/file/tip/intl/lwbrk/WordBreaker.cpp
- */
-export function getCharacterType(charCode: any): number;
 export function getNormalizeWithNFKC(): any;
+/**
+ * Determine if the match spanning `[startIdx, startIdx + length)` in `content`
+ * is a whole word, i.e. there's a word break on each side of it. Each boundary
+ * is tested on its two adjacent characters in isolation rather than on the
+ * whole string, so a contraction such as "can't" doesn't prevent "can" from
+ * being an entire word, matching Firefox's find:
+ * https://searchfox.org/firefox-main/source/toolkit/components/find/nsFind.cpp
+ */
+export function isEntireWord(content: any, startIdx: any, length: any): boolean;

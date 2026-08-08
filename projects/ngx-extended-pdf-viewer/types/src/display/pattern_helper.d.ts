@@ -51,7 +51,6 @@ declare class RadialAxialShadingPattern extends BaseShadingPattern {
     _p1: any;
     _r0: any;
     _r1: any;
-    matrix: any;
     isOriginBased(): boolean;
     isRadial(): boolean;
     areConic(): boolean;
@@ -67,7 +66,6 @@ declare class MeshShadingPattern extends BaseShadingPattern {
     _bounds: any;
     _bbox: any;
     _background: any;
-    matrix: any;
     _createMeshCanvas(combinedScale: any, backgroundColor: any, canvasFactory: any): {
         canvas: any;
         offsetX: number;
@@ -81,6 +79,7 @@ declare class DummyShadingPattern extends BaseShadingPattern {
     getPattern(): string;
 }
 declare class BaseShadingPattern {
+    matrix: null;
     isModifyingCurrentTransform(): boolean;
     getPattern(): void;
 }

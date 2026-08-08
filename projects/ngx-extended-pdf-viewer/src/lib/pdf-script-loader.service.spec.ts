@@ -433,6 +433,23 @@ describe('PDFScriptLoaderService', () => {
 
       addScriptOpChainingSupportSpy.mockRestore();
     });
+
+    // #2687 An old browser cannot parse the inline probe, so the global is never set.
+    // Before the deadline was added this promise stayed pending forever and the viewer
+    // never started - on precisely the browsers the legacy bundle exists for.
+    it('falls back to the legacy bundle when the inline probe never answers', async () => {
+      jest.useFakeTimers();
+      try {
+        delete (globalThis as any).ngxExtendedPdfViewerCanRunModernJSCode;
+        // The inline probe is appended as a <script> that jsdom never executes,
+        // which is exactly the "probe did not run" situation.
+        const pending = (service as any).addScriptOpChainingSupport(true);
+        jest.advanceTimersByTime(600);
+        await expect(pending).resolves.toBe(false);
+      } finally {
+        jest.useRealTimers();
+      }
+    });
   });
 
   describe('edge cases and error handling', () => {
@@ -452,4 +469,34 @@ describe('PDFScriptLoaderService', () => {
     });
   });
 
+  // #2687 #2536 The browser-capability probe exists three times: as a static asset in
+  // both bundles and inline in this service. They drifted once already (the
+  // bleeding-edge copy missed the AbortSignal.any polyfill for months), which sends
+  // Safari 17.4 users to a bundle that crashes. These tests fail on the next drift.
+  describe('browser capability probe copies', () => {
+    const fs = require('fs');
+    const path = require('path');
+    const root = path.resolve(__dirname, '../..');
+    const read = (p: string) => fs.readFileSync(path.join(root, p), 'utf8');
+
+    it('ships an identical probe in the stable and the bleeding-edge bundle', () => {
+      expect(read('bleeding-edge/op-chaining-support.js')).toBe(read('assets/op-chaining-support.js'));
+    });
+
+    it('keeps the inline probe semantically in sync with the asset file', () => {
+      const asset = read('assets/op-chaining-support.js');
+      const inline = read('src/lib/pdf-script-loader.service.ts');
+      // Every capability check and polyfill of the asset must exist inline, too.
+      for (const marker of [
+        'withResolvers',
+        'supportsOptionalChaining',
+        'supportsIteratorHelpers',
+        'ngxExtendedPdfViewerCanRunModernJSCode',
+        'AbortSignal.any',
+      ]) {
+        expect(asset).toContain(marker);
+        expect(inline).toContain(marker);
+      }
+    });
+  });
 });

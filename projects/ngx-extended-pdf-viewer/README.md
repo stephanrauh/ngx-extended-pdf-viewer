@@ -118,9 +118,9 @@ bootstrapApplication(AppComponent, {
 
 ## 🔐 Security Notice
 
-⚠️ **Please use the latest `29.x` release (or the latest `28.x` if you're staying on that line). Older versions are known to be vulnerable.**
+⚠️ **Please use the latest `30.x` or `29.x` release (or the latest `28.x` if you're staying on that line). Older versions are known to be vulnerable.**
 
-**[CVE-2026-16633](https://github.com/mozilla/pdf.js/security/advisories/GHSA-hq66-cqwq-w95j) (high) - fixed in `28.1.1` and in `29.0.0-rc.3`.** A malicious PDF could run JavaScript in the context of your page. The flaw is in pdf.js 5.6.83 and newer, so **every earlier `28.x` release, and `29.0.0-rc.0` through `rc.2`, are affected** - please update. Mozilla's fix (pdf.js 6.2.108) is cherry-picked into the engine this library bundles.
+**[CVE-2026-16633](https://github.com/mozilla/pdf.js/security/advisories/GHSA-hq66-cqwq-w95j) (high) - fixed in `28.1.1` and in `29.0.0-rc.3`.** A malicious PDF could run JavaScript in the context of your page. The flaw is in pdf.js 5.6.83 and newer, so **every earlier `28.x` release, and `29.0.0-rc.0` through `rc.2`, are affected** - please update. Mozilla's fix landed in pdf.js 6.2.108; version 29 cherry-picked it, and since version 30 the bundled engine *is* 6.2.108, so it carries the fix natively.
 
 This library ships `enableScripting=false` by default, unlike pdf.js itself, which limited the exposure - but not for the XFA part of the issue, so don't assume you were safe.
 
@@ -159,11 +159,37 @@ Regarding security: I'm not perfect - it's always a best-effort approach without
 
 ## 📦 Version Highlights
 
+### Version 30 (release candidate)
+
+Version 30 updates to pdf.js 6.2 in both bundles and stops the viewer from modifying the page it lives on.
+
+**New for end users:**
+
+- **Digital signature properties**: pdf.js 6.2's panel lists every signature of a signed PDF, with a banner summarising the result. It stays hidden until you supply a verifier - see below.
+- **Older browsers get a bundle that fits them**: the `-es5` bundle is now compiled for Chrome/Edge 80, Firefox 78, Safari 13.1 and iOS 13.4, and the switch that picks it detects what the modern bundle actually needs. Safari 17.4 to 18.3 in particular used to load the modern bundle and fail on it.
+
+**Verifying signatures is your decision.** Firefox's viewer validates signatures through NSS; a web page has no equivalent, and the hard part isn't parsing the PKCS#7 blob but choosing which root certificates to trust. That's why pdf.js ships no verifier for the browser and why this library doesn't invent one. Pass your own and the panel comes to life:
+
+```typescript
+verifier: PdfSignatureVerifier = {
+  async verify(signature) {
+    // your PKCS#7 check and trust decision
+    return { status: 'verified', certificate: { subjectCN: 'Jane Doe' } };
+  },
+};
+```
+
+```html
+<ngx-extended-pdf-viewer [src]="pdf" [signatureVerifier]="verifier"></ngx-extended-pdf-viewer>
+```
+
+Reporting `verified` is a claim your application makes; the library forwards it to the panel unchanged.
+
+**Breaking:** the viewer no longer writes to your `<html>` tag. If you style the viewer from the outside with selectors like `html[dir='rtl'] ngx-extended-pdf-viewer .toolbarButton`, switch to `ngx-extended-pdf-viewer .body[dir='rtl'] .toolbarButton`; if you read `--viewer-container-height`, `--viewsManager-width` or `color-scheme` from `document.documentElement`, they now live on the viewer's own `.html` element. Custom templates passed via `[customPdfViewer]` must keep the `.html` and `.body` wrappers around `#outerContainer`.
+
 ### Version 29
 
 Version 29 updates to pdf.js 6.1 and adds an API for building a document out of several files.
-
-(pdf.js 6.1 is the default engine; the bleeding-edge bundle carries the same engine until Mozilla opens 6.2, so switching between the two changes nothing for the time being.)
 
 **New for end users:**
 

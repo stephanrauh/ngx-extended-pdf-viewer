@@ -98,20 +98,69 @@ new (function () {
     return useLegacyPdfViewer;
   }
 
+  // #2687 The discriminator: the newest thing the modern bundle needs.
+  // Iterator helpers arrive later than Promise.withResolvers in every engine
+  // (Chrome/Edge 122+, Firefox 131+, Safari/iOS 18.4+), and the modern bundle
+  // ships no core-js polyfills, so this check decides whether it can run at all.
+  function supportsIteratorHelpers() {
+    try {
+      const iterator = [].values();
+      return typeof iterator.map === 'function' && typeof iterator.toArray === 'function';
+    } catch (e) {
+      return false;
+    }
+  }
+
   const supportsOptionalChaining = new BrowserCompatibilityTester().supportsOptionalChaining();
   const supportModernPromises = supportsPromiseWithResolvers();
-  window.ngxExtendedPdfViewerCanRunModernJSCode = supportsOptionalChaining && supportModernPromises;
+  window.ngxExtendedPdfViewerCanRunModernJSCode =
+    supportsOptionalChaining && supportModernPromises && supportsIteratorHelpers();
+
+  // #1321 AbortSignal.any() polyfill for the modern build's main thread.
+  // pdf.js v6 calls AbortSignal.any() directly; Safari 17.4 shipped
+  // Promise.withResolvers (our "modern" gate) before AbortSignal.any was
+  // added in 17.5. Shimming it here keeps that thin window on the modern
+  // build instead of forcing a fallback to viewer-es5.mjs. The legacy
+  // build gets the same polyfill via core-js + Babel.
+  if (typeof AbortSignal !== 'undefined' && typeof AbortSignal.any !== 'function') {
+    AbortSignal.any = function (signals) {
+      const controller = new AbortController();
+      for (const signal of signals) {
+        if (signal.aborted) {
+          controller.abort(signal.reason);
+          return controller.signal;
+        }
+        signal.addEventListener(
+          'abort',
+          () => controller.abort(signal.reason),
+          { once: true }
+        );
+      }
+      return controller.signal;
+    };
+  }
 })();
 `;
       const script = this.createInlineScript(code);
       document.getElementsByTagName('head')[0].appendChild(script);
       return new Promise((resolve) => {
+        // #2687 modified by ngx-extended-pdf-viewer
+        // The probe uses modern syntax on purpose, so an old browser fails to parse
+        // it and never sets the global. Without a deadline this promise stays pending
+        // and the viewer never starts - on exactly the browsers the legacy bundle
+        // exists for. Anything that hasn't answered in time counts as "not modern".
+        const deadline = Date.now() + 500;
         const interval = setInterval(() => {
-          if ((globalThis as any).ngxExtendedPdfViewerCanRunModernJSCode !== undefined) {
+          const canRunModernJSCode = (globalThis as any).ngxExtendedPdfViewerCanRunModernJSCode;
+          if (canRunModernJSCode !== undefined) {
             clearInterval(interval);
-            resolve((globalThis as any).ngxExtendedPdfViewerCanRunModernJSCode);
+            resolve(canRunModernJSCode);
+          } else if (Date.now() > deadline) {
+            clearInterval(interval);
+            resolve(false);
           }
         }, 1);
+        // #2687 end of modification by ngx-extended-pdf-viewer
       });
     }
   }
