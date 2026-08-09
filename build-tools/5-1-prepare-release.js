@@ -56,33 +56,11 @@ console.log(describeReleaseConfig(releaseConfig));
 // Check commit state - ensure everything is clean before starting
 runCommand('node ./build-tools/release/check-commit-state.js', 'Error 51: check-commit-state.js failed', 51);
 
-// Run the full test suite before touching version numbers, committing, or
-// pushing. If any of these fail, the working tree stays clean and the
-// release can be retried after fixing the regression — nothing to revert.
+// Jest needs no built bundles, so it runs here: it is the cheapest way to abort while the
+// working tree is still pristine. The browser-based suites moved further down, after the
+// bundles are rebuilt - see "Browser test suites" below.
 console.log('\n🧪 Running Jest tests in ngx-extended-pdf-viewer...');
 runCommand('npm test', 'Error 52: Jest tests failed', 52);
-
-// The compatibility matrix needs Docker. Set SKIP_COMPAT=1 to bypass it on
-// machines without a working Docker daemon (CI still runs the full matrix).
-if (process.env.SKIP_COMPAT === '1') {
-  console.log('\n⏭️  Skipping Playwright compatibility tests (SKIP_COMPAT=1)');
-} else {
-  console.log('\n🧪 Running Playwright compatibility tests (Angular 19–22)...');
-  runCommand('npm run test:compat', 'Error 53: Playwright compatibility tests failed', 53);
-}
-
-// The showcase is a separate repo that always tracks the newest library API, so it cannot
-// compile against a maintenance branch: releasing 28.1.1 while the showcase is on 29.x fails
-// with "Can't bind to 'supportsDownloading'" and similar. Set SKIP_E2E=1 there. On main, leave
-// it on - a showcase that stops compiling is a real signal about a breaking API change.
-if (process.env.SKIP_E2E === '1') {
-  console.log('\n⏭️  Skipping the showcase Playwright tests (SKIP_E2E=1)');
-} else {
-  console.log('\n🧪 Running Playwright tests of the showcase...');
-  process.chdir(path.join('..', 'extended-pdf-viewer-showcase'));
-  runCommand('npm run test:e2e', 'Error 54: Showcase Playwright tests failed', 54);
-  process.chdir(path.join('..', 'ngx-extended-pdf-viewer'));
-}
 
 // Read the current version number
 const packageJsonPath = path.join('projects', 'ngx-extended-pdf-viewer', 'package.json');
@@ -170,6 +148,50 @@ runCommand('node ./build-tools/1-build-base-library.js --quick', `Error 69: buil
 process.chdir(path.join('..', 'mypdf.js'));
 runCommand('git reset --hard', 'Error 69a: Git reset failed', 69);
 process.chdir(path.join('..', 'ngx-extended-pdf-viewer'));
+
+// ---------------------------------------------------------------------------
+// Browser test suites
+//
+// These run HERE, not before the version bump, because they are the only checks that
+// exercise the actual release artefacts. Both bundles have just been rebuilt and
+// pdf-default-options.ts now names those exact builds; running the suites earlier tested
+// whatever happened to be on disk from a previous session - and since `build:base` writes
+// only the bundle selected by the fork's checked-out branch, "earlier" could mean the
+// stable bundle was never rebuilt at all.
+//
+// The price is that a failure now leaves work to undo, unlike the Jest step above:
+//   - ngx-extended-pdf-viewer: package.json + pdf-default-options.ts are bumped but NOT
+//     committed  ->  `git checkout .` to discard;
+//   - mypdf.js: a "bumped the version number" commit exists on each built branch but was
+//     NOT pushed  ->  `git reset --hard HEAD~1` on each of them.
+// Nothing has been pushed and nothing has been published at this point.
+// ---------------------------------------------------------------------------
+console.log('\n🔨 Building the library so the browser suites test the release artefacts...');
+runCommand('npm run build:lib', 'Error 55: Building the library before the browser tests failed', 55);
+
+// The compatibility matrix needs Docker. Set SKIP_COMPAT=1 to bypass it on
+// machines without a working Docker daemon (CI still runs the full matrix).
+if (process.env.SKIP_COMPAT === '1') {
+  console.log('\n⏭️  Skipping Playwright compatibility tests (SKIP_COMPAT=1)');
+} else {
+  console.log('\n🧪 Running Playwright compatibility tests (Angular 19–22)...');
+  // SKIP_LIBRARY_BUILD=1: the harness must not rebuild, or it would replace the artefacts
+  // under test with a fresh build of whichever branch the fork happens to be on.
+  runCommand('SKIP_LIBRARY_BUILD=1 npm run test:compat', 'Error 53: Playwright compatibility tests failed', 53);
+}
+
+// The showcase is a separate repo that always tracks the newest library API, so it cannot
+// compile against a maintenance branch: releasing 28.1.1 while the showcase is on 29.x fails
+// with "Can't bind to 'supportsDownloading'" and similar. Set SKIP_E2E=1 there. On main, leave
+// it on - a showcase that stops compiling is a real signal about a breaking API change.
+if (process.env.SKIP_E2E === '1') {
+  console.log('\n⏭️  Skipping the showcase Playwright tests (SKIP_E2E=1)');
+} else {
+  console.log('\n🧪 Running Playwright tests of the showcase...');
+  process.chdir(path.join('..', 'extended-pdf-viewer-showcase'));
+  runCommand('npm run test:e2e', 'Error 54: Showcase Playwright tests failed', 54);
+  process.chdir(path.join('..', 'ngx-extended-pdf-viewer'));
+}
 
 // Commit changes in ngx-extended-pdf-viewer (including updated pdf-default-options.ts)
 runCommand(`git commit . -m "bumped the version number to ${newVersion}"`, 'Error 58: Git commit failed', 58);
