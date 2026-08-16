@@ -166,7 +166,12 @@ ngx-extended-pdf-viewer {
 
   .annotationEditorLayer.inkEditing {
     cursor: var(--editorInk-editing-cursor);
-    touch-action: none;
+    // #3260: no `touch-action: none` here. pdf.js dropped it in #2527 ("write
+    // with the pen, scroll with the hand"): the drawing session now cancels
+    // exactly those touchmove events it uses to draw, so every other finger
+    // gesture still scrolls and pinches the document. This copy of Mozilla's
+    // stylesheet kept the old rule and, being loaded after the engine's own
+    // CSS, re-broke finger scrolling whenever the ink editor was active.
   }
 
   .annotationEditorLayer .draw {

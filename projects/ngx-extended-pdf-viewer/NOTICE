@@ -40,8 +40,8 @@ customizations and enhancements for Angular integration.
 
   assets/
     based on Mozilla pdf.js 6.2.108 (v6.2.108, commit 0365cbde028bd92e58f2dab1bb70cd30ac7acfd7)
-    built from https://github.com/stephanrauh/pdf.js branch 6.2, commit 374cc1e6b1c47fc905e424444f98136a8fa96b56
-    bundled build version: 6.2.1083 (fork build number, not an upstream release)
+    built from https://github.com/stephanrauh/pdf.js branch 6.2, commit 8327daf46ff772644a08b001660843d1c201059f
+    bundled build version: 6.2.1084 (fork build number, not an upstream release)
     security fix applied ahead of upstream: CVE-2026-16633 (merge,
       fixed upstream in pdf.js 6.2.108) - https://github.com/mozilla/pdf.js/security/advisories/GHSA-hq66-cqwq-w95j
 

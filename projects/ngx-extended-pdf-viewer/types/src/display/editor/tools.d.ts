@@ -443,6 +443,20 @@ export class CurrentPointers {
     static #pointerIds: null;
     static #moveTimestamp: number;
     static #pointerType: null;
+    static #lastPointerType: null;
+    static #lastPointerTimeStamp: number;
+    static #OWNERSHIP_WINDOW_MS: number;
+    static observePointerType(signal: any): void;
+    /**
+     * Give the editor to the pointer that just switched it on. Called only on a
+     * user-initiated mode change, so a re-render, a page change, a zoom or a
+     * pinch can never re-assign the editor to another pointer.
+     * @param {boolean} isFromKeyboard - the mode was changed with the keyboard,
+     *   so there is no owning pointer and the first one to draw wins.
+     */
+    static claimForCurrentPointer(isFromKeyboard?: boolean): void;
+    /** Claim the editor for this pointer type unless one already owns it. */
+    static setPointerTypeIfUnset(pointerType: any): void;
     static initializeAndAddPointerId(pointerId: any): void;
     static setPointer(pointerType: any, pointerId: any): void;
     static setTimeStamp(timeStamp: any): void;
@@ -452,7 +466,6 @@ export class CurrentPointers {
     static isInitializedAndDifferentPointerType(pointerType: any): boolean;
     static isSameTimeStamp(timeStamp: any): boolean;
     static isUsingMultiplePointers(): boolean;
-    static clearPointerType(): void;
     static clearPointerIds(): void;
     static clearTimeStamp(): void;
 }
