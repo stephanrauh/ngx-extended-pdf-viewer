@@ -164,6 +164,12 @@ export class AnnotationEditorUIManager {
     getLayer(pageIndex: any): any;
     get currentPageIndex(): number;
     /**
+     * The pointers of this viewer and this document. Everything that has to know
+     * which pointer owns the editor goes through here.
+     * @type {CurrentPointers}
+     */
+    get currentPointers(): CurrentPointers;
+    /**
      * Add a new layer for a page which will contains the editors.
      * @param {AnnotationEditorLayer} layer
      */
@@ -435,41 +441,6 @@ export class CommandManager {
     #private;
 }
 /**
- * Class to store current pointers used by the editor to be able to handle
- * multiple pointers (e.g. two fingers, a pen, a mouse, ...).
- */
-export class CurrentPointers {
-    static #pointerId: number;
-    static #pointerIds: null;
-    static #moveTimestamp: number;
-    static #pointerType: null;
-    static #lastPointerType: null;
-    static #lastPointerTimeStamp: number;
-    static #OWNERSHIP_WINDOW_MS: number;
-    static observePointerType(signal: any): void;
-    /**
-     * Give the editor to the pointer that just switched it on. Called only on a
-     * user-initiated mode change, so a re-render, a page change, a zoom or a
-     * pinch can never re-assign the editor to another pointer.
-     * @param {boolean} isFromKeyboard - the mode was changed with the keyboard,
-     *   so there is no owning pointer and the first one to draw wins.
-     */
-    static claimForCurrentPointer(isFromKeyboard?: boolean): void;
-    /** Claim the editor for this pointer type unless one already owns it. */
-    static setPointerTypeIfUnset(pointerType: any): void;
-    static initializeAndAddPointerId(pointerId: any): void;
-    static setPointer(pointerType: any, pointerId: any): void;
-    static setTimeStamp(timeStamp: any): void;
-    static isSamePointerId(pointerId: any): boolean;
-    static isSamePointerIdOrRemove(pointerId: any): boolean;
-    static isSamePointerType(pointerType: any): boolean;
-    static isInitializedAndDifferentPointerType(pointerType: any): boolean;
-    static isSameTimeStamp(timeStamp: any): boolean;
-    static isUsingMultiplePointers(): boolean;
-    static clearPointerIds(): void;
-    static clearTimeStamp(): void;
-}
-/**
  * Class to handle the different keyboards shortcuts we can have on mac or
  * non-mac OSes.
  */
@@ -516,3 +487,55 @@ export class KeyboardManager {
      */
     exec(self: Object, event: KeyboardEvent): void;
 }
+/**
+ * Class to store current pointers used by the editor to be able to handle
+ * multiple pointers (e.g. two fingers, a pen, a mouse, ...).
+ */
+declare class CurrentPointers {
+    static #OWNERSHIP_WINDOW_MS: number;
+    /**
+     * One instance per `AnnotationEditorUIManager`, i.e. per viewer and per
+     * document. This used to be a static class, so a pointer that owned the
+     * editor kept owning it after the document had been closed and reopened -
+     * and, with two viewers on the same page, across both of them.
+     * @param {AbortSignal} signal - the ui manager's signal, so the observer dies
+     *   together with the ui manager.
+     */
+    constructor(signal: AbortSignal);
+    /**
+     * Take note of the pointer that is switching the editor on, at the moment the
+     * mode change is requested. `updateMode` awaits several things (the previous
+     * mode change, the signature list) before it can hand the editor over, and
+     * measuring the age of the pointerdown after those awaits made the claim miss
+     * its own window.
+     * @param {boolean} isFromUser - a mode change nobody asked for (a re-render,
+     *   a document being loaded) has no owning pointer.
+     * @param {boolean} isFromKeyboard - the mode was changed with the keyboard,
+     *   so there is no owning pointer and the first one to draw wins.
+     * @returns {string|null} the pointer type to hand the editor to, if any.
+     */
+    pickOwner(isFromUser: boolean, isFromKeyboard: boolean): string | null;
+    /**
+     * Give the editor to the pointer that switched it on, and to nobody when the
+     * mode changed on its own. Called on every mode change, so a stale owner can
+     * never outlive the mode it was claimed for - but never in between two
+     * strokes, so a pinching finger cannot take the editor from a drawing pen.
+     * @param {string|null} pointerType - as returned by `pickOwner`.
+     */
+    claimFor(pointerType: string | null): void;
+    /** Claim the editor for this pointer type unless one already owns it. */
+    setPointerTypeIfUnset(pointerType: any): void;
+    initializeAndAddPointerId(pointerId: any): void;
+    setPointer(pointerType: any, pointerId: any): void;
+    setTimeStamp(timeStamp: any): void;
+    isSamePointerId(pointerId: any): boolean;
+    isSamePointerIdOrRemove(pointerId: any): boolean;
+    isSamePointerType(pointerType: any): boolean;
+    isInitializedAndDifferentPointerType(pointerType: any): boolean;
+    isSameTimeStamp(timeStamp: any): boolean;
+    isUsingMultiplePointers(): boolean;
+    clearPointerIds(): void;
+    clearTimeStamp(): void;
+    #private;
+}
+export {};

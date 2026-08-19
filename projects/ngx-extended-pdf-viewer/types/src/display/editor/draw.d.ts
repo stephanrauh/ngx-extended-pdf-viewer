@@ -7,6 +7,7 @@ export class DrawingEditor extends AnnotationEditor {
     static #currentDraw: null;
     static #currentDrawingAC: null;
     static #currentDrawingOptions: null;
+    static #currentPointers: null;
     static _INNER_MARGIN: number;
     static _mergeSVGProperties(p1: any, p2: any): any;
     /**
