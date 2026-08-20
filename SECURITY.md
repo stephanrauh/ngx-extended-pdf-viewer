@@ -44,6 +44,43 @@ is derived from. It is the right answer for vulnerability matching, but it does 
 bundled files are identical to that release. If a pdf.js advisory looks like it affects you,
 please open a ticket — I would rather answer a false alarm than have you sit on a real one.
 
+## Where this project stands on the EU Cyber Resilience Act
+
+The Cyber Resilience Act — Regulation (EU) 2024/2847 — applies in stages: vulnerability and
+incident reporting from **11 September 2026**, everything else (essential requirements, SBOM in
+the technical documentation, CE marking) from **11 December 2027**.
+
+**ngx-extended-pdf-viewer is outside the scope of the CRA**, on two independent grounds:
+
+- It is not placed on the market *in the course of a commercial activity*. There is no paid
+  version, no enterprise tier and no advertising, and nothing about the software or its security
+  updates is gated behind payment. The Commission's guidance on free and open-source
+  software is explicit that publishing under an open source licence, by itself, does not create
+  CRA obligations.
+- It is maintained by an individual. An *open-source software steward* under Article 3(14) must be
+  a legal person, so that category — the one written for foundations such as Eclipse, OpenSSL or
+  the PSF — does not apply here either.
+
+**What that means if you ship this library in a commercial product.** You are the manufacturer in
+the CRA's sense, for your product including the components you integrate. That obligation is
+yours, not this project's, and it cannot be delegated upstream. What this project does provide, so
+you can discharge it:
+
+- a machine-readable **SBOM**, **VEX** and pdf.js provenance in every published package and on
+  every GitHub release (see the section above) — including the bundled PDF engine your scanner
+  cannot otherwise see;
+- a documented **vulnerability disclosure channel** and a public advisory history (see the
+  sections above and the repository's Security Advisories);
+- a stated **support period policy**: security fixes go into the latest version. There is no
+  backporting to older major versions, so plan your upgrade cadence accordingly.
+
+Please treat the response times in "Reporting a Vulnerability" as what they are — a best effort by
+one person, not a contractual SLA. If your compliance process needs guaranteed response times, that
+is a gap you have to close on your side.
+
+This section describes the project's factual situation and is not legal advice. If the project's
+funding model ever changes in a way that affects the analysis above, this section will be updated.
+
 ## Known vulnerabilities
 
 Please update to the latest version! At miminum, that should be version 20.0.2, but it's better to opt for the latest version because it contains the latest bugfixes.
