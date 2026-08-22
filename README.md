@@ -37,6 +37,17 @@ Nothing changes for you unless you style the viewer from the outside or replace 
 - **Code reading the layout variables from `<html>`.** `--viewer-container-height`, `--viewsManager-width` and `color-scheme` now live on the viewer's `.html` element. Reading them from `document.documentElement` returns nothing.
 - **Custom templates.** If you pass your own template via `[customPdfViewer]`, keep the `.html` and `.body` wrapper elements around `#outerContainer` - the viewer uses them to scope its styles.
 
+### Restoring annotations
+
+Adding annotations programmatically with `addEditorAnnotation()` got a round of fixes ([#3240](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/3240), [#3237](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/3237), [#3254](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/3254)). None of them break your build, but four of them change what you observe:
+
+- **The `annotationEditorEvent` stream.** Restoring three annotations used to send one `added` (only the highlight editor announced itself), one `moved` with `x` and `y` `undefined` for the free text, and nothing at all for the drawing. You now get exactly one `added` per annotation, whatever its type, and no `moved`. **If you count `added` events, or use `moved` to notice a restore, adjust your listener.**
+- **Restored annotations are no longer selected**, and they no longer take the keyboard focus. That focus was what opened the highlight editor and left it open - from the second annotation onwards, because the first one was covered by a guard of pdf.js. If you relied on the last restored annotation being selected so the user can drag or resize it right away, select it yourself.
+- **A batch no longer stops at the first annotation the viewer can't read.** That annotation is skipped with a console message naming its type, and the rest of the batch is added - so you may see annotations that silently went missing before.
+- **Comments come back.** A comment (`popup`) on a free text annotation was dropped on restore, and one on a highlight came back but was gone from the next export. Both work now, so stored annotations will show comments they used to lose. `popup` is part of the annotation types now, and a restored highlight also keeps the stable `customId` of [#3225](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/3225).
+
+`addEditorAnnotation()` also accepts an array now - it always did, but its TypeScript signature didn't say so. Pass the whole batch in one call and it is added in one step: one undo step, one re-render.
+
 ### Older browsers
 
 The library ships two builds and picks one at runtime. Two things changed here:

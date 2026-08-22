@@ -34,6 +34,13 @@ export class HighlightEditor extends AnnotationEditor {
     opacity: any;
     defaultL10nId: string;
     /** @inheritdoc */
+    get addedEventValue(): {
+        color: any;
+        thickness: any;
+        isFreeHighlight: boolean;
+        text: string;
+    };
+    /** @inheritdoc */
     get telemetryInitialData(): {
         action: string;
         type: string;

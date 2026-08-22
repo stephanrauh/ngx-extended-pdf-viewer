@@ -263,7 +263,7 @@ export class PDFViewer {
     eventBus: import("./event_utils").EventBus;
     set pageViewMode(viewMode: string);
     get pageViewMode(): string;
-    /** end of modification */
+    /** #495 end of modification by ngx-extended-pdf-viewer */
     defaultCacheSize: any;
     linkService: import("./pdf_link_service.js").PDFLinkService;
     downloadManager: import("./base_download_manager.js").BaseDownloadManager | null;
@@ -331,7 +331,7 @@ export class PDFViewer {
     /** #495 modified by ngx-extended-pdf-viewer */
     hidePagesDependingOnpageViewMode(): void;
     pageFlip: PageFlip | null | undefined;
-    /** end of modification */
+    /** #495 end of modification by ngx-extended-pdf-viewer */
     /**
      * @returns {boolean} Whether the pageNumber is valid (within bounds).
      * @private

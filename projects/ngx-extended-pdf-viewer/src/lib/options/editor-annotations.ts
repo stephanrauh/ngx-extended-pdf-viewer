@@ -36,6 +36,21 @@ export const AnnotationEditorParamsType = {
 
 export type AnnotationEditorTypeValue = -1 | 0 | 3 | 9 | 13 | 15 | 16;
 
+/**
+ * #3237 The comment (a.k.a. popup) attached to an annotation. Every editor type can carry one:
+ * `getSerializedAnnotations()` returns it, and `addEditorAnnotation()` restores it.
+ */
+export type AnnotationPopup = {
+  /** the text of the comment */
+  contents: string;
+  /** `true` if the user deleted the comment of an annotation that already was in the PDF file */
+  deleted?: boolean;
+  /** the position of the popup, in PDF user space: [left, bottom, right, top] */
+  rect?: Array<number>;
+  /** the time the comment was written, as an ISO string; restored unchanged, so a round-trip keeps the original timestamp */
+  date?: string;
+};
+
 export type InkPaths = {
   lines: Array<Array<number>>; // Array of bezier curve arrays
   points: Array<Array<number>>; // Array of raw point arrays
@@ -53,6 +68,7 @@ export type InkEditorAnnotation = {
   isCopy?: boolean;
   id?: string; // #3076 added by ngx-extended-pdf-viewer - temporary, changes every session; do not persist it
   customId?: string; // #3225 added by ngx-extended-pdf-viewer - your own stable id (e.g. a UUID); set it before storing and it survives addEditorAnnotation()
+  popup?: AnnotationPopup; // #3237 added by ngx-extended-pdf-viewer - the comment attached to this annotation
 };
 
 export type FreeTextEditorAnnotation = {
@@ -66,6 +82,7 @@ export type FreeTextEditorAnnotation = {
   isCopy?: boolean;
   id?: string; // #3076 added by ngx-extended-pdf-viewer - temporary, changes every session; do not persist it
   customId?: string; // #3225 added by ngx-extended-pdf-viewer - your own stable id (e.g. a UUID); set it before storing and it survives addEditorAnnotation()
+  popup?: AnnotationPopup; // #3237 added by ngx-extended-pdf-viewer - the comment attached to this annotation
 };
 
 export type StampEditorAnnotation = {
@@ -77,6 +94,7 @@ export type StampEditorAnnotation = {
   isCopy?: boolean;
   id?: string; // #3076 added by ngx-extended-pdf-viewer - temporary, changes every session; do not persist it
   customId?: string; // #3225 added by ngx-extended-pdf-viewer - your own stable id (e.g. a UUID); set it before storing and it survives addEditorAnnotation()
+  popup?: AnnotationPopup; // #3237 added by ngx-extended-pdf-viewer - the comment attached to this annotation
 };
 
 export type HighlightEditorAnnotation = {
@@ -93,6 +111,7 @@ export type HighlightEditorAnnotation = {
   isCopy?: boolean;
   id?: string; // #3076 added by ngx-extended-pdf-viewer - temporary, changes every session; do not persist it
   customId?: string; // #3225 added by ngx-extended-pdf-viewer - your own stable id (e.g. a UUID); set it before storing and it survives addEditorAnnotation()
+  popup?: AnnotationPopup; // #3237 added by ngx-extended-pdf-viewer - the comment attached to this annotation
 };
 
 export type PopupEditorAnnotation = {
@@ -104,6 +123,7 @@ export type PopupEditorAnnotation = {
   isCopy?: boolean;
   id?: string; // #3076 added by ngx-extended-pdf-viewer - temporary, changes every session; do not persist it
   customId?: string; // #3225 added by ngx-extended-pdf-viewer - your own stable id (e.g. a UUID); set it before storing and it survives addEditorAnnotation()
+  popup?: AnnotationPopup; // #3237 added by ngx-extended-pdf-viewer - the comment attached to this annotation
 };
 
 export type EditorAnnotation = InkEditorAnnotation | FreeTextEditorAnnotation | StampEditorAnnotation | HighlightEditorAnnotation | PopupEditorAnnotation;

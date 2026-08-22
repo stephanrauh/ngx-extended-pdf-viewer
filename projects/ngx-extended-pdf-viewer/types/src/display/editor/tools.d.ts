@@ -123,7 +123,7 @@ export class AnnotationEditorUIManager {
      * @param {ClipboardEvent} event
      */
     paste(event: ClipboardEvent): Promise<void>;
-    addSerializedEditor(data: any, activateEditorIfNecessary?: boolean, doNotMove?: boolean, ignorePageNumber?: boolean): Promise<void>;
+    addSerializedEditor(data: any, activateEditorIfNecessary?: boolean, doNotMove?: boolean, ignorePageNumber?: boolean, selectNewEditors?: boolean): Promise<void>;
     /**
      * Keydown callback.
      * @param {KeyboardEvent} event
@@ -162,6 +162,13 @@ export class AnnotationEditorUIManager {
     getId(): string;
     get currentLayer(): any;
     getLayer(pageIndex: any): any;
+    /**
+     * True while annotations are being restored programmatically, i.e. from
+     * within addSerializedEditor(). Used by editors that dispatch their own
+     * "added" event, so a restore doesn't announce the same annotation twice.
+     * @type {boolean}
+     */
+    get isRestoringAnnotations(): boolean;
     get currentPageIndex(): number;
     /**
      * The pointers of this viewer and this document. Everything that has to know

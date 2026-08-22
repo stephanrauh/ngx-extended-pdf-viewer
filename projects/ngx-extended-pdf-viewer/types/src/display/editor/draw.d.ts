@@ -108,6 +108,20 @@ export class DrawingEditor extends AnnotationEditor {
     serializeDraw(isForCopying: any): any;
     /** @inheritdoc */
     renderAnnotationElement(annotation: any): null;
+    /**
+     * Report a change of the stroke colour, its width or its opacity.
+     * @param {string} name - the SVG property that changed
+     * @param {*} value - its new value
+     */
+    _dispatchDrawPropertyEvent(name: string, value: any): void;
+    /**
+     * Report that drawing started or stopped. These two carry neither a page nor
+     * an id, and their `editorType` is the editor's name rather than its class.
+     * @param {string} type - "drawingStarted" or "drawingStopped"
+     */
+    _dispatchDrawingEvent(type: string): void;
+    /** Report that the drawn path changed. */
+    _dispatchBezierPathChangedEvent(): void;
     #private;
 }
 export class DrawingOptions {

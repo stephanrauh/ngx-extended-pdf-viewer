@@ -206,6 +206,34 @@ export class AnnotationEditor {
      * @param {number} y - in page coordinates.
      */
     _onTranslated(x: number, y: number): void;
+    /**
+     * Tell the application that something about this annotation changed.
+     *
+     * This lives in the base class on purpose: the call sites sit inside methods
+     * Mozilla owns, and a one-line call survives an upstream merge far better
+     * than a dozen lines of object literal wedged into their code.
+     *
+     * `extra` adds to the payload and can override any of the default fields.
+     * Setting a field to `undefined` drops it, which some events rely on - not
+     * every event carries a page or an id, and some report `this.name` rather
+     * than the class name as their `editorType`.
+     *
+     * @param {string} type - the event type, e.g. "colorChanged"
+     * @param {Object} [extra] - fields to add to or override in the payload
+     */
+    _dispatchEditorEvent(type: string, extra?: Object): void;
+    /**
+     * The editor-specific payload of the "added" event. Override it to describe
+     * the annotation that has just been added.
+     * @returns {Object}
+     */
+    get addedEventValue(): Object;
+    /**
+     * Tell the application that this annotation is now part of the document.
+     * Every editor type sends this event, so restoring a batch of annotations
+     * gives you one "added" event per annotation.
+     */
+    _dispatchAddedEvent(): void;
     get _hasBeenMoved(): boolean;
     get _hasBeenResized(): boolean;
     /**
