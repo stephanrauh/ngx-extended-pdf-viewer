@@ -1,30 +1,46 @@
 <!-- #3257 modified by ngx-extended-pdf-viewer
-     Mirrors web/viewer.html of pdf.js 6.2. The ids are part of PDF.js's API
-     (see getViewerConfiguration()), so they must not be renamed. -->
-<div
-  id="signatureProperties"
-  class="toolbarButtonWithContainer"
-  [class]="show() | responsiveCSSClass : 'hiddenTinyView'"
-  hidden="true"
+     The ids below are part of PDF.js's API (see getViewerConfiguration() in
+     web/viewer.js and digital_signature_properties_manager.js), so they must
+     not be renamed.
+
+     The button is a <pdf-shy-button> like every other toolbar button, so it
+     takes part in the responsive layout: when the toolbar runs out of room it
+     moves into the secondary menu instead of wrapping the toolbar onto a
+     second row.
+
+     PDF.js shows and hides the button by setting `hidden` on
+     `signaturePropertiesButton.parentElement`, which is the <pdf-shy-button>
+     host element - hence the plain `hidden` attribute here rather than an
+     Angular binding: the state belongs to PDF.js, and a binding would fight
+     it. The copy in the secondary menu is a separate element that PDF.js does
+     not know about; the component mirrors both the hidden state and the
+     `state-*` verification class onto it.
+
+     Upstream also puts a `verticalToolbarSeparator` next to the button. It is
+     deliberately not rendered here: the library ships no CSS for that class,
+     so it was an unstyled block box that broke the toolbar onto a second row,
+     and a fixed separator makes little sense in a toolbar whose buttons move
+     into the secondary menu. PDF.js only ever sets `hidden` on it, and does so
+     defensively, so it is happy with the invisible placeholder that
+     PdfDummyComponentsComponent creates for the id. -->
+<pdf-shy-button
+  hidden
+  primaryToolbarId="signaturePropertiesButton"
+  [cssClass]="show() | responsiveCSSClass : 'hiddenTinyView'"
+  l10nId="pdfjs-digital-signature-properties-button"
+  l10nLabel="pdfjs-digital-signature-properties-button-label"
+  title="Signature properties"
+  ariaHasPopup="true"
+  ariaControls="signaturePropertiesPanel"
+  [order]="3850"
+  [action]="onClick"
+  [closeOnClick]="true"
 >
-  <button
-    id="signaturePropertiesButton"
-    class="toolbarButton"
-    type="button"
-    tabindex="0"
-    aria-expanded="false"
-    aria-haspopup="true"
-    aria-controls="signaturePropertiesPanel"
-    data-l10n-id="pdfjs-digital-signature-properties-button"
-  >
-    <span data-l10n-id="pdfjs-digital-signature-properties-button-label"></span>
-  </button>
-  <div class="editorParamsToolbar hidden doorHangerRight" id="signaturePropertiesPanel" role="region">
-    <div id="signaturePropertiesContainer" class="signaturePropertiesContainer">
-      <div id="signaturePropertiesBanner" class="sigBanner" hidden="true" role="status"></div>
-      <ul id="signaturePropertiesList" class="signaturePropertiesList" tabindex="-1"></ul>
-    </div>
+</pdf-shy-button>
+<div class="editorParamsToolbar hidden doorHangerRight" id="signaturePropertiesPanel" role="region">
+  <div id="signaturePropertiesContainer" class="signaturePropertiesContainer">
+    <div id="signaturePropertiesBanner" class="sigBanner" hidden="true" role="status"></div>
+    <ul id="signaturePropertiesList" class="signaturePropertiesList" tabindex="-1"></ul>
   </div>
 </div>
-<div id="signaturePropertiesSeparator" class="verticalToolbarSeparator" hidden="true"></div>
 <!-- #3257 end of modification by ngx-extended-pdf-viewer -->

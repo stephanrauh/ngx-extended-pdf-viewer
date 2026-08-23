@@ -1100,6 +1100,86 @@ describe('NgxExtendedPdfViewerComponent', () => {
       expect(spy).toHaveBeenCalled();
     });
   });
+
+  describe('#3257 isZoneless', () => {
+    /** `ngZone` is readonly, so swap it the way Angular's own injector would. */
+    const setZone = (zone: unknown) => Object.defineProperty(component, 'ngZone', { value: zone, configurable: true });
+
+    /** Angular injects NoopNgZone for zoneless apps; it implements NgZone without extending it. */
+    const noopNgZone = () => ({
+      hasPendingMicrotasks: false,
+      hasPendingMacrotasks: false,
+      isStable: true,
+      run: (fn: () => unknown) => fn(),
+      runGuarded: (fn: () => unknown) => fn(),
+      runOutsideAngular: (fn: () => unknown) => fn(),
+      runTask: (fn: () => unknown) => fn(),
+    });
+
+    it('should report zoneless when Angular injected a NoopNgZone', () => {
+      setZone(noopNgZone() as any);
+      expect(component['isZoneless']()).toBe(true);
+    });
+
+    it('should not report zoneless when Angular injected a real NgZone', () => {
+      setZone(new NgZone({ enableLongStackTrace: false }));
+      expect(component['isZoneless']()).toBe(false);
+    });
+
+    it('should ignore the global Zone object, which says nothing about the change detection mode', () => {
+      // The regression this guards: `zone.js` sits in the `polyfills` array of
+      // every project scaffolded before Angular 22, while zoneless is the
+      // default from Angular 22 on. Loading zone.js does not mean Angular uses it.
+      const globalScope = globalThis as any;
+      const hadZone = 'Zone' in globalScope;
+      const previousZone = globalScope.Zone;
+      globalScope.Zone = { current: {} };
+      try {
+        setZone(noopNgZone() as any);
+        expect(component['isZoneless']()).toBe(true);
+      } finally {
+        if (hadZone) {
+          globalScope.Zone = previousZone;
+        } else {
+          delete globalScope.Zone;
+        }
+      }
+    });
+
+    it('should not run change detection through asyncWithCD when zone.js drives it', () => {
+      setZone(new NgZone({ enableLongStackTrace: false }));
+      const detectChanges = jest.spyOn(component['cdr'], 'detectChanges').mockImplementation(() => undefined);
+      const callback = jest.fn();
+
+      component['asyncWithCD'](callback)();
+
+      expect(callback).toHaveBeenCalled();
+      expect(detectChanges).not.toHaveBeenCalled();
+    });
+
+    it('should run change detection through asyncWithCD when zoneless', () => {
+      setZone(noopNgZone() as any);
+      const detectChanges = jest.spyOn(component['cdr'], 'detectChanges').mockImplementation(() => undefined);
+      const callback = jest.fn();
+
+      component['asyncWithCD'](callback)();
+
+      expect(callback).toHaveBeenCalled();
+      expect(detectChanges).toHaveBeenCalled();
+    });
+
+    it('should skip change detection when the view is already destroyed', () => {
+      setZone(noopNgZone() as any);
+      const detectChanges = jest.spyOn(component['cdr'], 'detectChanges').mockImplementation(() => undefined);
+      Object.defineProperty(component['cdr'], 'destroyed', { value: true, configurable: true });
+      const callback = jest.fn();
+
+      component['asyncWithCD'](callback)();
+
+      expect(callback).toHaveBeenCalled();
+      expect(detectChanges).not.toHaveBeenCalled();
+    });
+  });
 });
 
 describe('isIOS', () => {

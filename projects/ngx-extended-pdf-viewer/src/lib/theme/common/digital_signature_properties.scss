@@ -110,14 +110,42 @@
 ngx-extended-pdf-viewer {
 
   #signaturePropertiesButton {
+    /* Positioning context for the icon below. */
+    position: relative;
+
     /* Default (no state class yet): use the regular signature icon.
      * Mirror under RTL via the shared --dir-factor so the icon stays
      * visually aligned with the rest of the toolbar (same pattern as
      * the comment button). The state-* rules below override
      * `mask-image` only — the transform is inherited. */
+    /* The library renders every other toolbar icon as an inline <svg> and
+     * therefore does not ship upstream's `.toolbarButton::before` base rule.
+     * This button is the one exception: it needs a mask box, because pdf.js
+     * swaps `mask-image` to signal the verification state. Recreate that base
+     * box here, or the button renders as an empty 23x23 gap. `--icon-size`,
+     * `--toolbar-icon-opacity` and `--dir-factor` are upstream variables the
+     * library does not define in the toolbar's scope, so each carries the
+     * upstream default as a fallback. */
     &::before {
+      content: '';
+      /* Out of flow, exactly like the inline <svg> every other toolbar button
+       * carries. The buttons are `inline-flex`, so an in-flow ::before becomes
+       * the first flex item and hands the button its baseline - which lifted
+       * this button ~8px above its neighbours and made the editor buttons next
+       * to it look pushed down. */
+      position: absolute;
+      inset: 0;
+      margin: auto;
+      display: inline-block;
+      width: var(--icon-size, 16px);
+      height: var(--icon-size, 16px);
+      opacity: var(--toolbar-icon-opacity, 1);
+      background-color: var(--toolbar-icon-bg-color);
+      mask-size: cover;
+      mask-position: center;
+      mask-repeat: no-repeat;
       mask-image: var(--toolbarButton-editorSignature-icon);
-      transform: scaleX(var(--dir-factor));
+      transform: scaleX(var(--dir-factor, 1));
     }
 
     /* When a verification state is set, switch the mask to the matching
@@ -147,6 +175,11 @@ ngx-extended-pdf-viewer {
      * to the `.toolbarButton > span` rule — they only become visible when
      * this `state-loading` modifier is set. */
     &.state-loading {
+      /* The dots are real children, so unlike the icon they are laid out by
+       * the button's own flex box. */
+      justify-content: center;
+      align-items: center;
+
       &::before {
         display: none;
       }
@@ -423,4 +456,46 @@ ngx-extended-pdf-viewer {
     }
   }
 
+}
+
+/* The copy of the button in the secondary (overflow) menu.
+ *
+ * `<pdf-shy-button>` normally hands the menu an inline SVG, but this button's
+ * icon has to stay a `mask-image`: PDF.js swaps the mask to signal the
+ * verification state, and the menu entry should say the same thing as the
+ * toolbar. So paint the same mask into the entry's icon span. The `state-*`
+ * class is mirrored onto this button by `PdfSignaturePropertiesComponent` -
+ * PDF.js only ever touches the primary button.
+ *
+ * `state-loading` deliberately has no rule: the pulsing dots live in three
+ * spans PDF.js appended to the primary button, so the menu keeps the plain
+ * signature icon while verification runs. */
+ngx-extended-pdf-viewer {
+  #secondarySignaturePropertiesButton {
+    .icon {
+      /* `.icon` ships a width but no height (it usually only positions an
+       * absolutely placed <svg>), so the mask box needs both. */
+      width: 24px;
+      height: 16px;
+      background-color: var(--toolbar-icon-bg-color, currentcolor);
+      mask-size: 16px 16px;
+      mask-position: center;
+      mask-repeat: no-repeat;
+      mask-image: var(--toolbarButton-editorSignature-icon);
+      transform: scaleX(var(--dir-factor, 1));
+    }
+
+    &.state-verified .icon {
+      mask-image: var(--toolbarButton-signaturePropertiesVerified-icon);
+      background-color: var(--sig-icon-verified);
+    }
+    &.state-warn .icon {
+      mask-image: var(--toolbarButton-signaturePropertiesError-icon);
+      background-color: var(--sig-icon-warn);
+    }
+    &.state-error .icon {
+      mask-image: var(--toolbarButton-signaturePropertiesError-icon);
+      background-color: var(--sig-icon-error);
+    }
+  }
 }

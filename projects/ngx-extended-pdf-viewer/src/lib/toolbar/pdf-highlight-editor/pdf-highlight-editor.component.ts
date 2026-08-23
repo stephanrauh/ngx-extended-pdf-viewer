@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, effect, input, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, Component, effect, input, OnDestroy, ViewRef } from '@angular/core';
 import { PositioningService } from '../../dynamic-css/positioning.service';
 import { AnnotationEditorEditorModeChangedEvent } from '../../events/annotation-editor-mode-changed-event';
 import { FocusManagementService } from '../../focus-management.service';
@@ -41,15 +41,20 @@ export class PdfHighlightEditorComponent implements OnDestroy {
     });
   }
 
-  private isZoneless(): boolean {
-    const Zone = (globalThis as any).Zone;
-    return typeof Zone === 'undefined' || !Zone?.current;
-  }
-
+  /**
+   * Runs `callback` and re-renders this component.
+   *
+   * The callback is scheduled from a pdf.js event bus listener, which runs
+   * outside Angular's zone, so neither zone.js nor a signal write schedules a
+   * change detection run for us - the button kept showing the previous state
+   * until an unrelated click happened to trigger one. The view can already be
+   * destroyed by the time a queued callback runs, and `detectChanges()` throws
+   * on a destroyed view, so that case is skipped.
+   */
   private asyncWithCD(callback: () => void): () => void {
     return () => {
       callback();
-      if (this.isZoneless()) {
+      if (!(this.cdr as ViewRef).destroyed) {
         this.cdr.detectChanges();
       }
     };
@@ -74,8 +79,6 @@ export class PdfHighlightEditorComponent implements OnDestroy {
           // Dialog just closed
           this.focusManagement.returnFocusToPrevious('Highlight editor toolbar closed');
         }
-
-        // No manual change detection needed - signals handle this automatically
       }));
     }, opts);
   }

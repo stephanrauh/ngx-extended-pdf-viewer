@@ -21,6 +21,7 @@ import {
   Renderer2,
   TemplateRef,
   viewChild,
+  ViewRef,
 } from '@angular/core';
 import { PositioningService } from './dynamic-css/positioning.service';
 import { PdfDocumentLoadedEvent } from './events/document-loaded-event';
@@ -1209,9 +1210,42 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
   private toolbar: HTMLElement | undefined = undefined;
 
+  // #3257 modified by ngx-extended-pdf-viewer
+  /**
+   * Watches the toolbar's own height. Buttons can appear long after the viewer
+   * has been laid out — pdf.js unhides the digital-signature button only once it
+   * has found signatures in the document — and the extra button may wrap the
+   * toolbar onto a second row. `calcViewerPositionTop()` runs at init and on
+   * zoom changes only, so without this observer `#viewerContainer` keeps the
+   * one-row offset and the toolbar covers the top of the page (most visibly the
+   * "unverified signature" warning bar).
+   */
+  private toolbarResizeObserver: ResizeObserver | undefined;
+
   public onToolbarLoaded(toolbarElement: HTMLElement): void {
     this.toolbar = toolbarElement;
+    this.observeToolbarHeight(toolbarElement);
   }
+
+  private observeToolbarHeight(toolbarElement: HTMLElement): void {
+    if (!this.isBrowser() || typeof ResizeObserver === 'undefined') {
+      return;
+    }
+    // A custom toolbar can replace the element, so drop the previous observer.
+    this.toolbarResizeObserver?.disconnect();
+    try {
+      // ResizeObserver callbacks run outside Angular, so the new offset is
+      // computed but never rendered until something else triggers change
+      // detection. Re-enter the zone; calcViewerPositionTop() ends in
+      // markForCheck(), which schedules the tick in either setup.
+      this.toolbarResizeObserver = new ResizeObserver(() => this.ngZone.run(() => this.calcViewerPositionTop()));
+      this.toolbarResizeObserver.observe(toolbarElement);
+    } catch {
+      // Same fallback as initResizeObserver(): no observer, no recalculation.
+      this.toolbarResizeObserver = undefined;
+    }
+  }
+  // #3257 end of modification by ngx-extended-pdf-viewer
 
   public secondaryToolbarTop: string | undefined = undefined;
 
@@ -1706,12 +1740,26 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   }
 
   /**
-   * Detects if the application is running in zoneless mode (Angular 21+)
-   * @returns true if zone.js is not present
+   * Detects whether the application uses zoneless change detection.
+   *
+   * #3257 modified by ngx-extended-pdf-viewer: this used to look for the global
+   * `Zone` object, which answers a different question. Whether zone.js is loaded
+   * and whether Angular uses it are independent: `zone.js` sits in the
+   * `polyfills` array of every project scaffolded before Angular 22, while
+   * zoneless is the default from Angular 22 on (`provideZoneChangeDetection()`
+   * is the opt-in). In that very common combination the old check reported
+   * "not zoneless" while `NgZone` was a no-op - so neither the zone nor
+   * `asyncWithCD()` ever triggered change detection, and every asynchronous
+   * update the viewer made stayed invisible until something else ticked.
+   *
+   * Angular injects `NoopNgZone` for zoneless applications. It implements the
+   * `NgZone` interface but does not extend the class, on every version this
+   * library supports (19-22), which makes the instance type the reliable answer.
+   *
+   * @returns true if Angular runs without zone.js change detection
    */
   private isZoneless(): boolean {
-    const Zone = (globalThis as any).Zone;
-    return typeof Zone === 'undefined' || !Zone?.current;
+    return !(this.ngZone instanceof NgZone);
   }
 
   /**
@@ -1732,9 +1780,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   private asyncWithCD(callback: () => void): () => void {
     return () => {
       callback();
-      if (this.isZoneless()) {
+      // #3257 modified by ngx-extended-pdf-viewer
+      // These callbacks are deferred (setTimeout / queueMicrotask / event bus),
+      // so they can land after the component has been destroyed - and
+      // detectChanges() on a destroyed view throws.
+      if (this.isZoneless() && !(this.cdr as ViewRef).destroyed) {
         this.cdr.detectChanges();
       }
+      // #3257 end of modification by ngx-extended-pdf-viewer
     };
   }
   // #TODO End of zoneless support
@@ -2189,16 +2242,35 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
    * PDF.js itself.
    */
   private installSignatureVerifier(): void {
-    const verifier = this.signatureVerifier();
-    if (!verifier) {
-      return;
-    }
     const PDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication as any;
+    // #3257 modified by ngx-extended-pdf-viewer
+    // PDF.js creates the signature properties manager once (`??=`) and the
+    // manager captures `appConfig.toolbar` in its constructor. That holds in
+    // Firefox, where the viewer DOM is built once - but this component rebuilds
+    // the whole viewer (and `appConfig`) every time it is re-created, so a
+    // manager kept from a previous instance unhides detached elements and the
+    // button stays invisible for the rest of the session. Drop it here, right
+    // before `openPDF()`, so PDF.js builds a fresh one from the current DOM.
+    if (PDFViewerApplication) {
+      PDFViewerApplication.signaturePropertiesManager = null;
+    }
+    // #3257 end of modification by ngx-extended-pdf-viewer
+    const verifier = this.signatureVerifier();
     const externalServices = PDFViewerApplication?.externalServices;
     if (!externalServices) {
-      if (this.logLevel() >= VerbosityLevel.WARNINGS) {
+      if (verifier && this.logLevel() >= VerbosityLevel.WARNINGS) {
         console.warn('[signatureVerifier] PDF.js is not initialized yet, the signature panel stays hidden.');
       }
+      return;
+    }
+    if (!verifier) {
+      // #3257 modified by ngx-extended-pdf-viewer
+      // `externalServices` is a singleton that outlives this component, so an
+      // override installed by an earlier instance would keep the panel active
+      // after the application has dropped its verifier. Take it back off.
+      delete externalServices.createSignatureVerifier;
+      this.pdfScriptLoaderService.PDFViewerApplicationOptions?.set('enableSignatureVerification', false);
+      // #3257 end of modification by ngx-extended-pdf-viewer
       return;
     }
     externalServices.createSignatureVerifier = () => verifier;
@@ -3097,6 +3169,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     if (this.checkRootElementTimeout) {
       clearTimeout(this.checkRootElementTimeout);
     }
+    // #3257 Stop the toolbar observer synchronously: its callback touches the
+    // ChangeDetectorRef, which must not happen after the view is destroyed.
+    this.toolbarResizeObserver?.disconnect();
+    this.toolbarResizeObserver = undefined;
     // #3131 Unregister all eventBus listeners synchronously before async cleanup.
     this.eventBusAbortController?.abort();
     this.eventBusAbortController = null;
@@ -3389,17 +3465,29 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
   public async scrollSignatureWarningIntoView(pdf: PDFDocumentProxy): Promise<void> {
     /** This method has been inspired by https://medium.com/factory-mind/angular-pdf-forms-fa72b15c3fbd. Thanks, Jonny Fox! */
-    this.hasSignature = false;
+    let found = false;
 
     for (let i = 1; i <= pdf?.numPages; i++) {
       // track the current page
       const page = await pdf.getPage(i);
 
       if (await this.pageHasVisibleSignature(page)) {
-        this.hasSignature = true;
+        found = true;
         break; // stop looping through the pages as soon as we find a signature
       }
     }
+    // #3257 modified by ngx-extended-pdf-viewer
+    // PDF.js dispatches `documentloaded` outside Angular, and the caller's
+    // `asyncWithCD` has already run by the time this async method resolves - so
+    // assigning the field on its own leaves the warning bar unrendered until
+    // something else happens to trigger change detection. `markForCheck()` inside
+    // the zone covers both setups: it schedules the tick when zoneless, and the
+    // zone delivers it otherwise.
+    this.ngZone.run(() => {
+      this.hasSignature = found;
+      this.cdr.markForCheck();
+    });
+    // #3257 end of modification by ngx-extended-pdf-viewer
     if (this.hasSignature) {
       queueMicrotask(
         this.asyncWithCD(() => {

@@ -14,6 +14,9 @@ export class PositioningService {
     ['primaryEditorStamp', 'editorStampParamsToolbar'],
     ['editorCommentButton', 'editorCommentParamsToolbar'],
     ['primaryEditorSignatureButton', 'editorSignatureParamsToolbar'],
+    // #3257 modified by ngx-extended-pdf-viewer
+    ['signaturePropertiesButton', 'signaturePropertiesPanel'],
+    // #3257 end of modification by ngx-extended-pdf-viewer
   ];
 
   public positionPopupBelowItsButton(buttonId: string, popupId: string): void {
