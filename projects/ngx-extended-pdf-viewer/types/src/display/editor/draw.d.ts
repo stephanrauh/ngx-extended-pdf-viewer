@@ -72,6 +72,21 @@ export class DrawingEditor extends AnnotationEditor {
     static deserializeDraw(_pageX: any, _pageY: any, _pageWidth: any, _pageHeight: any, _innerWidth: any, _data: any): Object;
     /** @inheritdoc */
     static deserialize(data: any, parent: any, uiManager: any): Promise<AnnotationEditor | null>;
+    /**
+     * Report that drawing started or stopped. These two carry neither a page nor
+     * an id, and their `editorType` is the editor's name rather than its class.
+     *
+     * `static`, because a drawing session is: `startDrawing()` and `_endDraw()`
+     * run on the class - there is no editor instance until the stroke is
+     * committed. That also rules out `_dispatchEditorEvent()`, which needs an
+     * instance for its `page` and `id`; the event goes straight to the event bus
+     * `AnnotationEditorLayer` puts on the editor class instead.
+     *
+     * @param {string} type - "drawingStarted" or "drawingStopped"
+     */
+    static _dispatchDrawingEvent(type: string): void;
+    /** Report that the drawn path changed. `static` for the reason above. */
+    static _dispatchBezierPathChangedEvent(): void;
     constructor(params: any);
     _colorPicker: null;
     _drawId: null;
@@ -114,14 +129,6 @@ export class DrawingEditor extends AnnotationEditor {
      * @param {*} value - its new value
      */
     _dispatchDrawPropertyEvent(name: string, value: any): void;
-    /**
-     * Report that drawing started or stopped. These two carry neither a page nor
-     * an id, and their `editorType` is the editor's name rather than its class.
-     * @param {string} type - "drawingStarted" or "drawingStopped"
-     */
-    _dispatchDrawingEvent(type: string): void;
-    /** Report that the drawn path changed. */
-    _dispatchBezierPathChangedEvent(): void;
     #private;
 }
 export class DrawingOptions {
