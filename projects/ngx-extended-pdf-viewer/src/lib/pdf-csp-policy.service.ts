@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { CSP_NONCE, Inject, Injectable, Optional } from '@angular/core';
 import { TrustedTypesWindow } from 'trusted-types/lib';
 
 @Injectable({
@@ -7,7 +7,7 @@ import { TrustedTypesWindow } from 'trusted-types/lib';
 export class PdfCspPolicyService {
   private sanitizer: any = undefined; // TrustedTypePolicy;
 
-  constructor() {}
+  constructor(@Inject(CSP_NONCE) @Optional() private readonly nonce?: string | null) {}
 
   public init() {
     /* istanbul ignore next -- SSR guard, untestable in JSDOM */
@@ -35,6 +35,15 @@ export class PdfCspPolicyService {
       return;
     }
     this.init();
+    // #3264 modified by ngx-extended-pdf-viewer
+    // A <style> element is subject to `style-src`, so an application that replaces
+    // 'unsafe-inline' with a nonce needs the nonce on every stylesheet we create -
+    // pdf.js's `@page { size: ... }` print stylesheet included, which is otherwise
+    // dropped and makes the printout fall back to the browser's paper size.
+    if (this.nonce) {
+      (styles as HTMLStyleElement).nonce = this.nonce;
+    }
+    // #3264 end of modification by ngx-extended-pdf-viewer
     if (this.sanitizer) {
       styles.textContent = this.sanitizer.createHTML(css) as unknown as any;
     } else {

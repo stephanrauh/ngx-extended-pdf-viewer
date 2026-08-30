@@ -44,22 +44,7 @@ export class PDFScriptLoaderService implements OnDestroy {
 
   private addScriptOpChainingSupport(useInlineScripts: boolean): Promise<boolean> {
     if (!useInlineScripts || this.isCSPApplied()) {
-      return new Promise((resolve) => {
-        const script = this.createScriptElement(pdfDefaultOptions.assetsFolder + '/op-chaining-support.js');
-        script.onload = () => {
-          script.remove();
-          script.onload = null;
-          resolve((<any>globalThis).ngxExtendedPdfViewerCanRunModernJSCode as boolean);
-        };
-        script.onerror = () => {
-          script.remove();
-          (<any>globalThis).ngxExtendedPdfViewerCanRunModernJSCode = false;
-          resolve(false);
-          script.onerror = null;
-        };
-
-        document.body.appendChild(script);
-      });
+      return this.loadProbeFromFile();
     } else {
       const code = `
 new (function () {
@@ -142,27 +127,79 @@ new (function () {
 })();
 `;
       const script = this.createInlineScript(code);
-      document.getElementsByTagName('head')[0].appendChild(script);
       return new Promise((resolve) => {
+        let settled = false;
+        let interval: ReturnType<typeof setInterval>;
+
+        const settle = (result: boolean | Promise<boolean>) => {
+          if (settled) {
+            return;
+          }
+          settled = true;
+          clearInterval(interval);
+          document.removeEventListener('securitypolicyviolation', onViolation);
+          Promise.resolve(result).then(resolve);
+        };
+
+        // #3264 modified by ngx-extended-pdf-viewer
+        // A CSP that arrives as an HTTP header is invisible to `isCSPApplied()`, which
+        // can only see a <meta> tag. The inline probe is then blocked, nothing sets the
+        // global, the deadline below expires and *every* browser - however modern - is
+        // sent to the legacy ES5 bundle without a word. The violation event is the only
+        // way to learn that this happened, so we load the identical probe from a file
+        // instead. `useInlineScripts` stays a pure optimisation this way.
+        const onViolation = (event: SecurityPolicyViolationEvent) => {
+          const directive = event.effectiveDirective || event.violatedDirective || '';
+          if (event.blockedURI === 'inline' && directive.startsWith('script-src')) {
+            script.remove();
+            settle(this.loadProbeFromFile());
+          }
+        };
+        document.addEventListener('securitypolicyviolation', onViolation);
+        // #3264 end of modification by ngx-extended-pdf-viewer
+
         // #2687 modified by ngx-extended-pdf-viewer
         // The probe uses modern syntax on purpose, so an old browser fails to parse
         // it and never sets the global. Without a deadline this promise stays pending
         // and the viewer never starts - on exactly the browsers the legacy bundle
         // exists for. Anything that hasn't answered in time counts as "not modern".
         const deadline = Date.now() + 500;
-        const interval = setInterval(() => {
+        interval = setInterval(() => {
           const canRunModernJSCode = (globalThis as any).ngxExtendedPdfViewerCanRunModernJSCode;
           if (canRunModernJSCode !== undefined) {
-            clearInterval(interval);
-            resolve(canRunModernJSCode);
+            settle(canRunModernJSCode);
           } else if (Date.now() > deadline) {
-            clearInterval(interval);
-            resolve(false);
+            settle(false);
           }
         }, 1);
         // #2687 end of modification by ngx-extended-pdf-viewer
+
+        document.getElementsByTagName('head')[0].appendChild(script);
       });
     }
+  }
+
+  /**
+   * Loads the browser-capability probe as a file (`assets/op-chaining-support.js`).
+   * Same code as the inline probe, but it needs no `'unsafe-inline'` in the CSP.
+   */
+  private loadProbeFromFile(): Promise<boolean> {
+    return new Promise((resolve) => {
+      const script = this.createScriptElement(pdfDefaultOptions.assetsFolder + '/op-chaining-support.js');
+      script.onload = () => {
+        script.remove();
+        script.onload = null;
+        resolve((<any>globalThis).ngxExtendedPdfViewerCanRunModernJSCode as boolean);
+      };
+      script.onerror = () => {
+        script.remove();
+        (<any>globalThis).ngxExtendedPdfViewerCanRunModernJSCode = false;
+        resolve(false);
+        script.onerror = null;
+      };
+
+      document.body.appendChild(script);
+    });
   }
 
   private createInlineScript(code: string): HTMLScriptElement {

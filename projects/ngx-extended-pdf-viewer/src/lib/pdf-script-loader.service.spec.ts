@@ -434,6 +434,47 @@ describe('PDFScriptLoaderService', () => {
       addScriptOpChainingSupportSpy.mockRestore();
     });
 
+    // #3264 A CSP sent as an HTTP header cannot be detected up front (only a <meta>
+    // tag can), so the inline probe is injected and blocked. Before the violation
+    // listener existed, the deadline expired and every browser was sent to the legacy
+    // bundle. Now the probe is re-loaded from the file, which needs no 'unsafe-inline'.
+    it('loads the probe from a file when the CSP blocks the inline script', async () => {
+      delete (globalThis as any).ngxExtendedPdfViewerCanRunModernJSCode;
+      const fromFile = jest.spyOn(service as any, 'loadProbeFromFile').mockResolvedValue(true);
+
+      const pending = (service as any).addScriptOpChainingSupport(true);
+      // jsdom has no SecurityPolicyViolationEvent, so mimic the fields we read
+      const violation: any = new Event('securitypolicyviolation');
+      violation.blockedURI = 'inline';
+      violation.effectiveDirective = 'script-src-elem';
+      document.dispatchEvent(violation);
+
+      await expect(pending).resolves.toBe(true);
+      expect(fromFile).toHaveBeenCalled();
+      fromFile.mockRestore();
+    });
+
+    it('ignores violations that were not caused by the probe', async () => {
+      jest.useFakeTimers();
+      try {
+        delete (globalThis as any).ngxExtendedPdfViewerCanRunModernJSCode;
+        const fromFile = jest.spyOn(service as any, 'loadProbeFromFile').mockResolvedValue(true);
+
+        const pending = (service as any).addScriptOpChainingSupport(true);
+        const violation: any = new Event('securitypolicyviolation');
+        violation.blockedURI = 'https://example.com/tracker.js';
+        violation.effectiveDirective = 'img-src';
+        document.dispatchEvent(violation);
+
+        jest.advanceTimersByTime(600);
+        await expect(pending).resolves.toBe(false);
+        expect(fromFile).not.toHaveBeenCalled();
+        fromFile.mockRestore();
+      } finally {
+        jest.useRealTimers();
+      }
+    });
+
     // #2687 An old browser cannot parse the inline probe, so the global is never set.
     // Before the deadline was added this promise stayed pending forever and the viewer
     // never started - on precisely the browsers the legacy bundle exists for.
