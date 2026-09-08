@@ -1,4 +1,4 @@
-import { Component, computed, effect, input, OnDestroy, output, TemplateRef, viewChild } from '@angular/core';
+import { Component, computed, effect, EmbeddedViewRef, input, OnDestroy, output, TemplateRef, viewChild } from '@angular/core';
 import { PdfThumbnailDrawnEvent } from '../../../events/pdf-thumbnail-drawn-event';
 import { IPDFViewerApplication } from '../../../options/pdf-viewer-application';
 import { PDFNotificationService } from '../../../pdf-notification-service';
@@ -44,6 +44,8 @@ export class PdfSidebarContentComponent implements OnDestroy {
 
   public defaultThumbnail = viewChild.required<TemplateRef<any>>('defaultThumbnail');
 
+  private readonly thumbnailViews = new Map<number, EmbeddedViewRef<unknown>>();
+
   private linkService: PDFLinkService | undefined;
 
   public thumbnailDrawn = output<PdfThumbnailDrawnEvent>();
@@ -78,19 +80,35 @@ export class PdfSidebarContentComponent implements OnDestroy {
           // #3135 end of modification by ngx-extended-pdf-viewer
           // #3216 eventBus may be undefined when the init signal fires before PDFViewerApplication finishes wiring up.
           this.PDFViewerApplication.eventBus?.on('rendercustomthumbnail', this.createThumbnail.bind(this), opts);
+          this.PDFViewerApplication.eventBus?.on('pagesdestroy', () => this.destroyThumbnailViews(), opts);
         }
       });
     }
   }
 
   public ngOnDestroy(): void {
+    this.destroyThumbnailViews();
     this.linkService = undefined;
     // #3135 modified by ngx-extended-pdf-viewer
     this.eventBusAbortController?.abort();
     // #3135 end of modification by ngx-extended-pdf-viewer
   }
 
-  /* istanbul ignore next -- requires real Angular template and embedded view, untestable in unit tests */
+  private destroyThumbnailViews(): void {
+    for (const view of this.thumbnailViews.values()) {
+      this.destroyThumbnailView(view);
+    }
+    this.thumbnailViews.clear();
+  }
+
+  private destroyThumbnailView(view: EmbeddedViewRef<unknown>): void {
+    // These nodes are appended manually, outside an Angular view container.
+    for (const node of view.rootNodes as Node[]) {
+      node.parentNode?.removeChild(node);
+    }
+    view.destroy();
+  }
+
   private createThumbnail({
     pdfThumbnailView: _pdfThumbnailView, // #3111: Not used - PDF.js v5.4.530+ populates this after we append the element
     linkService,
@@ -100,7 +118,12 @@ export class PdfSidebarContentComponent implements OnDestroy {
   }: RenderCustomThumbnailEvent): HTMLImageElement | undefined {
     this.linkService = linkService;
     const template = this.customThumbnail() ?? this.defaultThumbnail();
+    const previousView = this.thumbnailViews.get(id);
+    if (previousView) {
+      this.destroyThumbnailView(previousView);
+    }
     const view = template.createEmbeddedView(null);
+    this.thumbnailViews.set(id, view);
     const newElement = view.rootNodes[0] as HTMLElement;
     newElement.classList.remove('pdf-viewer-template');
 
