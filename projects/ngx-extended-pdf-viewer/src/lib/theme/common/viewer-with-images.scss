@@ -1699,6 +1699,11 @@ ngx-extended-pdf-viewer {
     background-color: $border-dark;
   }
 
+  /* pdf.js 6.3 lays this row out with `display: flex; justify-content: center;
+     align-items: center; gap: 8px`. Deliberately not adopted: our dialog buttons
+     carry their own `margin: 4px`, so upstream's gap would stack on top of it and
+     widen every dialog's button spacing from 8px to 16px. Keep the margins as the
+     single source of spacing. Re-check when upstream next touches this rule. */
   dialog .buttonRow {
     text-align: center;
     vertical-align: middle;

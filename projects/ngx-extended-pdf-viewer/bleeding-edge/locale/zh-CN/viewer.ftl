@@ -713,6 +713,39 @@ pdfjs-views-manager-waiting-for-file = 正在上传文件…
 pdfjs-toggle-views-manager-button1 =
     .title = 管理页面
 
+## Digital signature properties (signature verification panel)
+
+pdfjs-digital-signature-properties-button =
+    .title = 数字签名属性
+    .aria-label = 数字签名属性
+pdfjs-digital-signature-properties-button-label = 数字签名属性
+
+## Per-signature status row. Only three distinct strings are needed:
+## the signature crypto either verified (the cert chain may still be
+## untrusted/expired/revoked, but that's surfaced on the cert row
+## below), or it failed, or its sub-format isn't supported.
+
+pdfjs-digital-signature-properties-status-verified = 状态：签名已验证
+pdfjs-digital-signature-properties-status-invalid = 状态：签名无效
+pdfjs-digital-signature-properties-status-unknown = 状态：无法验证（不支持）
+
+## Per-signature certificate row. The variants with an issuer / date in
+## parentheses embed fully-localized context — no English fall-through.
+##
+## Variables:
+##   $issuer (String) - issuer or subject common name from the cert.
+##   $dateObj (Date)  - notAfter date for the expired-with-date form.
+
+pdfjs-digital-signature-properties-certificate-trusted = 证书：受信任（{ $issuer }）
+pdfjs-digital-signature-properties-certificate-unknown = 证书：不可用
+pdfjs-digital-signature-properties-certificate-untrusted = 证书：不可信
+pdfjs-digital-signature-properties-certificate-untrusted-unknown-issuer = 证书：颁发者未知（{ $issuer }）
+pdfjs-digital-signature-properties-certificate-untrusted-self-signed = 证书：自签名（{ $issuer }）
+pdfjs-digital-signature-properties-certificate-untrusted-untrusted-issuer = 证书: 颁发者不可信（{ $issuer }）
+pdfjs-digital-signature-properties-certificate-expired = 证书: 已过期
+pdfjs-digital-signature-properties-certificate-expired-with-date = 证书：已过期（{ DATETIME($dateObj, dateStyle: "medium") }）
+pdfjs-digital-signature-properties-certificate-revoked = 证书：已吊销
+
 ## Main menu for adding/removing signatures
 
 pdfjs-editor-delete-signature-button1 =
@@ -728,10 +761,6 @@ pdfjs-editor-add-signature-edit-button-label = 编辑描述
 pdfjs-editor-edit-signature-dialog-title = 编辑描述
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-digital-signature-properties-button =
-    .title = Digital signature properties
-    .aria-label = Digital signature properties
-pdfjs-digital-signature-properties-button-label = Digital signature properties
 pdfjs-digital-signature-properties-banner-verified = Document was signed with a valid digital signature
 pdfjs-digital-signature-properties-banner-unknown =
     { $count ->
@@ -758,18 +787,6 @@ pdfjs-digital-signature-properties-banner-revoked =
         [one] Document signed with { $count } revoked certificate
        *[other] Document signed with { $count } revoked certificates
     }
-pdfjs-digital-signature-properties-status-verified = Status: Signature verified
-pdfjs-digital-signature-properties-status-invalid = Status: Signature invalid
-pdfjs-digital-signature-properties-status-unknown = Status: Unable to verify (unsupported)
-pdfjs-digital-signature-properties-certificate-trusted = Certificate: Trusted ({ $issuer })
-pdfjs-digital-signature-properties-certificate-unknown = Certificate: Unavailable
-pdfjs-digital-signature-properties-certificate-untrusted = Certificate: Untrusted
-pdfjs-digital-signature-properties-certificate-untrusted-unknown-issuer = Certificate: Unknown issuer ({ $issuer })
-pdfjs-digital-signature-properties-certificate-untrusted-self-signed = Certificate: Self-signed ({ $issuer })
-pdfjs-digital-signature-properties-certificate-untrusted-untrusted-issuer = Certificate: Untrusted issuer ({ $issuer })
-pdfjs-digital-signature-properties-certificate-expired = Certificate: Expired
-pdfjs-digital-signature-properties-certificate-expired-with-date = Certificate: Expired ({ DATETIME($dateObj, dateStyle: "medium") })
-pdfjs-digital-signature-properties-certificate-revoked = Certificate: Revoked
 pdfjs-digital-signature-properties-sub-signatures =
     { $count ->
         [one] Sub-signature ({ $count })

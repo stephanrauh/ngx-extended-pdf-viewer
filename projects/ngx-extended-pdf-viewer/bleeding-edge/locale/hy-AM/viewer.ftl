@@ -223,8 +223,8 @@ pdfjs-find-next-button =
     .title = Գտիր արտահայտության հաջորդ հանդիպումը
 pdfjs-find-next-button-label = Հաջորդը
 pdfjs-find-highlight-checkbox = Գունանշել բոլորը
-pdfjs-find-match-case-checkbox-label = Մեծ(փոքր)ատառ հաշվի առնել
-pdfjs-find-match-diacritics-checkbox-label = Համապատասխանեցնել տարբերիչները
+pdfjs-find-match-case-checkbox-label = Հաշվի առնել մեծ/փոքրատառը
+pdfjs-find-match-diacritics-checkbox-label = Համընկել հնչյունատարբերիչ նշանները
 pdfjs-find-entire-word-checkbox-label = Ամբողջ բառերը
 pdfjs-find-reached-top = Հասել եք փաստաթղթի վերևին, կշարունակվի ներքևից
 pdfjs-find-reached-bottom = Հասել եք փաստաթղթի վերջին, կշարունակվի վերևից
@@ -717,12 +717,6 @@ pdfjs-views-manager-pages-status-undo-delete-label =
         [one] 1 page deleted
         *[other] { $count } pages deleted
     }
-pdfjs-views-manager-pages-status-waiting-ready-label = Getting your file ready…
-pdfjs-views-manager-pages-status-waiting-uploading-label = Uploading file…
-pdfjs-views-manager-status-warning-cut-label = Couldn’t cut. Refresh page and try again.
-pdfjs-views-manager-status-warning-copy-label = Couldn’t copy. Refresh page and try again.
-pdfjs-views-manager-status-warning-delete-label = Couldn’t delete. Refresh page and try again.
-pdfjs-views-manager-status-warning-save-label = Couldn’t save. Refresh page and try again.
 pdfjs-views-manager-status-undo-button-label = Undo
 pdfjs-views-manager-status-done-button-label = Done
 pdfjs-views-manager-status-close-button =

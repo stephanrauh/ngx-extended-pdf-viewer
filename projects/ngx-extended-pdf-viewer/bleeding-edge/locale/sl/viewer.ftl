@@ -132,8 +132,8 @@ pdfjs-document-properties-page-size-orientation-portrait = pokončno
 pdfjs-document-properties-page-size-orientation-landscape = ležeče
 pdfjs-document-properties-page-size-name-a-three = A3
 pdfjs-document-properties-page-size-name-a-four = A4
-pdfjs-document-properties-page-size-name-letter = Pismo
-pdfjs-document-properties-page-size-name-legal = Pravno
+pdfjs-document-properties-page-size-name-letter = Letter
+pdfjs-document-properties-page-size-name-legal = Legal
 
 ## Variables:
 ##   $width (Number) - the width of the (current) page
@@ -787,6 +787,67 @@ pdfjs-digital-signature-properties-button-label = Lastnosti digitalnega podpisa
 ##   $count (Number) - number of signatures at the worst level.
 
 pdfjs-digital-signature-properties-banner-verified = Dokument je bil podpisan z veljavnim digitalnim podpisom
+pdfjs-digital-signature-properties-banner-unknown =
+    { $count ->
+        [one] Dokument je podpisan, vendar { $count } digitalnega podpisa ni bilo mogoče preveriti
+        [two] Dokument je podpisan, vendar { $count } digitalnih podpisov ni bilo mogoče preveriti
+        [few] Dokument je podpisan, vendar { $count } digitalnih podpisov ni bilo mogoče preveriti
+       *[other] Dokument je podpisan, vendar { $count } digitalnih podpisov ni bilo mogoče preveriti
+    }
+pdfjs-digital-signature-properties-banner-untrusted =
+    { $count ->
+        [one] Dokument je podpisan z { $count } digitalnim potrdilom, ki ni zaupanja vredno
+        [two] Dokument je podpisan z { $count } digitalnima potrdiloma, ki nista zaupanja vredni
+        [few] Dokument je podpisan s { $count } digitalnimi potrdili, ki niso zaupanja vredna
+       *[other] Dokument je podpisan s { $count } digitalnimi potrdili, ki niso zaupanja vredna
+    }
+pdfjs-digital-signature-properties-banner-expired =
+    { $count ->
+        [one] Dokument je podpisan z { $count } pretečenim digitalnim potrdilom
+        [two] Dokument je podpisan z { $count } pretečenima digitalnima potrdiloma
+        [few] Dokument je podpisan s { $count } pretečenimi digitalnimi potrdili
+       *[other] Dokument je podpisan s { $count } pretečenimi digitalnimi potrdili
+    }
+pdfjs-digital-signature-properties-banner-invalid =
+    { $count ->
+        [one] Dokument vsebuje { $count } neveljaven digitalni podpis
+        [two] Dokument vsebuje { $count } neveljavna digitalna podpisa
+        [few] Dokument vsebuje { $count } neveljavne digitalne podpise
+       *[other] Dokument vsebuje { $count } neveljavnih digitalnih podpisov
+    }
+pdfjs-digital-signature-properties-banner-revoked =
+    { $count ->
+        [one] Dokument je podpisan z { $count } preklicanim digitalnim potrdilom
+        [two] Dokument je podpisan z { $count } preklicanima digitalnima potrdiloma
+        [few] Dokument je podpisan s { $count } preklicanimi digitalnimi potrdili
+       *[other] Dokument je podpisan s { $count } preklicanimi digitalnimi potrdili
+    }
+
+## Per-signature status row. Only three distinct strings are needed:
+## the signature crypto either verified (the cert chain may still be
+## untrusted/expired/revoked, but that's surfaced on the cert row
+## below), or it failed, or its sub-format isn't supported.
+
+pdfjs-digital-signature-properties-status-verified = Stanje: podpis preverjen
+pdfjs-digital-signature-properties-status-invalid = Stanje: podpis neveljaven
+pdfjs-digital-signature-properties-status-unknown = Stanje: podpisa ni mogoče preveriti (nepodprt)
+
+## Per-signature certificate row. The variants with an issuer / date in
+## parentheses embed fully-localized context — no English fall-through.
+##
+## Variables:
+##   $issuer (String) - issuer or subject common name from the cert.
+##   $dateObj (Date)  - notAfter date for the expired-with-date form.
+
+pdfjs-digital-signature-properties-certificate-trusted = Digitalno potrdilo: zaupanja vredno ({ $issuer })
+pdfjs-digital-signature-properties-certificate-unknown = Digitalno potrdilo: ni na voljo
+pdfjs-digital-signature-properties-certificate-untrusted = Digitalno potrdilo: ni zaupanja vredno
+pdfjs-digital-signature-properties-certificate-untrusted-unknown-issuer = Digitalno potrdilo: neznan izdajatelj ({ $issuer })
+pdfjs-digital-signature-properties-certificate-untrusted-self-signed = Digitalno potrdilo: samopodpisano ({ $issuer })
+pdfjs-digital-signature-properties-certificate-untrusted-untrusted-issuer = Digitalno potrdilo: izdajatelj ni zaupanja vreden ({ $issuer })
+pdfjs-digital-signature-properties-certificate-expired = Digitalno potrdilo: pretečeno
+pdfjs-digital-signature-properties-certificate-expired-with-date = Digitalno potrdilo: pretečeno ({ DATETIME($dateObj, dateStyle: "medium") })
+pdfjs-digital-signature-properties-certificate-revoked = Digitalno potrdilo: preklicano
 
 ## Main menu for adding/removing signatures
 
@@ -816,41 +877,3 @@ pdfjs-editor-movePageDown-button-label = Premakni stran navzdol
 pdfjs-cursor-page-flip-tool-button =
     .title = Listanje strani
 pdfjs-cursor-page-flip-tool-button-label = Listanje strani
-# Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-digital-signature-properties-banner-unknown =
-    { $count ->
-        [one] Document signed but { $count } digital signature could not be verified
-       *[other] Document signed but { $count } digital signatures could not be verified
-    }
-pdfjs-digital-signature-properties-banner-untrusted =
-    { $count ->
-        [one] Document signed with { $count } certificate that is not trusted
-       *[other] Document signed with { $count } certificates that are not trusted
-    }
-pdfjs-digital-signature-properties-banner-expired =
-    { $count ->
-        [one] Document signed with { $count } expired certificate
-       *[other] Document signed with { $count } expired certificates
-    }
-pdfjs-digital-signature-properties-banner-invalid =
-    { $count ->
-        [one] Document has { $count } invalid digital signature
-       *[other] Document has { $count } invalid digital signatures
-    }
-pdfjs-digital-signature-properties-banner-revoked =
-    { $count ->
-        [one] Document signed with { $count } revoked certificate
-       *[other] Document signed with { $count } revoked certificates
-    }
-pdfjs-digital-signature-properties-status-verified = Status: Signature verified
-pdfjs-digital-signature-properties-status-invalid = Status: Signature invalid
-pdfjs-digital-signature-properties-status-unknown = Status: Unable to verify (unsupported)
-pdfjs-digital-signature-properties-certificate-trusted = Certificate: Trusted ({ $issuer })
-pdfjs-digital-signature-properties-certificate-unknown = Certificate: Unavailable
-pdfjs-digital-signature-properties-certificate-untrusted = Certificate: Untrusted
-pdfjs-digital-signature-properties-certificate-untrusted-unknown-issuer = Certificate: Unknown issuer ({ $issuer })
-pdfjs-digital-signature-properties-certificate-untrusted-self-signed = Certificate: Self-signed ({ $issuer })
-pdfjs-digital-signature-properties-certificate-untrusted-untrusted-issuer = Certificate: Untrusted issuer ({ $issuer })
-pdfjs-digital-signature-properties-certificate-expired = Certificate: Expired
-pdfjs-digital-signature-properties-certificate-expired-with-date = Certificate: Expired ({ DATETIME($dateObj, dateStyle: "medium") })
-pdfjs-digital-signature-properties-certificate-revoked = Certificate: Revoked

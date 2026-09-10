@@ -769,6 +769,11 @@ pdfjs-digital-signature-properties-button-label = Firma digital oguerekóva
 ##   $count (Number) - number of signatures at the worst level.
 
 pdfjs-digital-signature-properties-banner-verified = Pe kuatia oñemboheraguapy firma digital oikóvape
+pdfjs-digital-signature-properties-banner-revoked =
+    { $count ->
+        [one] Kuatia mboheraguapypyre { $count } mboajepyre oikove’ỹva ndive
+       *[other] Kuatia mboheraguapypyre { $count } mboajepyreita oikove’ỹva ndive
+    }
 
 ## Per-signature status row. Only three distinct strings are needed:
 ## the signature crypto either verified (the cert chain may still be
@@ -830,11 +835,6 @@ pdfjs-digital-signature-properties-banner-invalid =
     { $count ->
         [one] Document has { $count } invalid digital signature
        *[other] Document has { $count } invalid digital signatures
-    }
-pdfjs-digital-signature-properties-banner-revoked =
-    { $count ->
-        [one] Document signed with { $count } revoked certificate
-       *[other] Document signed with { $count } revoked certificates
     }
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

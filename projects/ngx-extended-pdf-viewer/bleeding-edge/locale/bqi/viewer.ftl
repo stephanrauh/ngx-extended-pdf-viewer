@@ -52,21 +52,61 @@ pdfjs-bookmark-button-label = بلگه هیم سکویی
 pdfjs-tools-button =
     .title = ٱوزارا
 pdfjs-tools-button-label = ٱوزارا
+pdfjs-first-page-button =
+    .title = رئڌن و بلگه نیایی
+pdfjs-first-page-button-label = رئڌن و بلگه نیایی
+pdfjs-last-page-button =
+    .title = رئڌن و بلگه دیندایی
+pdfjs-last-page-button-label = رئڌن و بلگه دیندایی
+pdfjs-page-rotate-cw-button =
+    .title = لر خردن ساعتگرد
+pdfjs-page-rotate-cw-button-label = لر خردن ساعتگرد
+pdfjs-page-rotate-ccw-button =
+    .title = لر خردن خلاف ساعتگرد
+pdfjs-page-rotate-ccw-button-label = لر خردن خلاف ساعتگرد
+pdfjs-cursor-text-select-tool-button =
+    .title = فعال کردن ٱوزار پسند هؽل
 pdfjs-cursor-text-select-tool-button-label = ٱوزار پسند هؽل
 pdfjs-cursor-hand-tool-button =
     .title = فعال کردن ٱوزار دست
 pdfjs-cursor-hand-tool-button-label = ٱوزار دست
+pdfjs-scroll-page-button =
+    .title = و کار گرؽڌن اسکرۊل بلگه
+pdfjs-scroll-page-button-label = اسکرۊل بلگه
+pdfjs-scroll-vertical-button =
+    .title = و کار گرؽڌن اسکرۊل عمۊدی
+pdfjs-scroll-vertical-button-label = اسکرۊل عمۊدی
+pdfjs-scroll-horizontal-button =
+    .title = و کار گرؽڌن اسکرۊل اوفوقی
+pdfjs-scroll-horizontal-button-label = اسکرۊل اوفوقی
+pdfjs-scroll-wrapped-button =
+    .title = و کار گرؽڌن اسکرۊل پؽچسته
+pdfjs-scroll-wrapped-button-label = اسکرۊل پؽچسته
 
 ## Document properties dialog
 
+pdfjs-document-properties-button =
+    .title = خۊسۊسیات سند…
+pdfjs-document-properties-button-label = خۊسۊسیات سند…
 pdfjs-document-properties-file-name = نوم فایل:
 pdfjs-document-properties-file-size = هندا فایل:
 pdfjs-document-properties-title = عونوان:
 pdfjs-document-properties-author = هؽل کوݩ:
 pdfjs-document-properties-subject = سرتال:
+pdfjs-document-properties-creation-date = تاریخ وورکل وابیڌن:
+pdfjs-document-properties-modification-date = تاریخ آلشتکاری:
+# Variables:
+#   $dateObj (Date) - the creation/modification date and time of the PDF file
+pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
+pdfjs-document-properties-creator = وورکل کون:
+pdfjs-document-properties-producer = وورکل کون PDF:
+pdfjs-document-properties-version = نوسخه PDF:
+pdfjs-document-properties-page-count = تئداد بلگه یل:
 pdfjs-document-properties-page-size = هندا بلگه:
 pdfjs-document-properties-page-size-unit-inches = اینچ
 pdfjs-document-properties-page-size-unit-millimeters = میلی متر
+pdfjs-document-properties-page-size-orientation-portrait = portrait
+pdfjs-document-properties-page-size-orientation-landscape = landscape
 pdfjs-document-properties-page-size-name-a-three = A3
 pdfjs-document-properties-page-size-name-a-four = A4
 pdfjs-document-properties-page-size-name-letter = نامه
@@ -84,12 +124,16 @@ pdfjs-document-properties-page-size-dimension-name-string = { $width } × { $hei
 
 ##
 
+# The linearization status of the document; usually called "Fast Web View" in
+# English locales of Adobe software.
+pdfjs-document-properties-linearized = نیشتن زل وب:
 pdfjs-document-properties-linearized-yes = هری
 pdfjs-document-properties-linearized-no = ن
 pdfjs-document-properties-close-button = بستن
 
 ## Print
 
+pdfjs-print-progress-message = ٱماڌه کردن سند سی چاپ کردن…
 # Variables:
 #   $progress (Number) - percent value
 pdfjs-print-progress-percent = { $progress }%
@@ -99,6 +143,55 @@ pdfjs-print-progress-close-button = لقو
 
 pdfjs-toggle-sidebar-button =
     .title = آلشت هالت نوار کلی
+pdfjs-toggle-sidebar-button-label = آلشت هالت نوار کلی
+pdfjs-document-outline-button-label = تئر سند
+pdfjs-attachments-button =
+    .title = نشووݩ داڌن پیوستا
+pdfjs-attachments-button-label = پیوستا
+pdfjs-layers-button-label = لایه یل
+pdfjs-thumbs-button =
+    .title = نشووݩ داڌن شؽواتا کۊچیر
+pdfjs-thumbs-button-label = شؽواتا کۊچیر
+pdfjs-findbar-button =
+    .title = جوستن من سند
+pdfjs-findbar-button-label = جوستن
+pdfjs-additional-layers = لایه یل ازافه
+
+## Thumbnails panel item (tooltip and alt text for images)
+
+# Variables:
+#   $page (Number) - the page number
+pdfjs-thumb-page-title =
+    .title = بلگه { $page }
+
+## Find panel button title and messages
+
+pdfjs-find-previous-button-label = دیندایی
+pdfjs-find-next-button-label = بئڌی
+pdfjs-find-highlight-checkbox = هایلایت کردن پوی
+
+## Predefined zoom values
+
+pdfjs-page-scale-width = پئنا بلگه
+pdfjs-page-scale-fit = هندا کردن بلگه
+pdfjs-page-scale-auto = زۊم کردن خوتکار
+pdfjs-page-scale-actual = هندا واقعی‌
+# Variables:
+#   $scale (Number) - percent value for page scale
+pdfjs-page-scale-percent = { $scale }%
+
+## PDF page
+
+# Variables:
+#   $page (Number) - the page number
+pdfjs-page-landmark =
+    .aria-label = بلگه { $page }
+
+## Annotations
+
+# Variables:
+#   $dateObj (Date) - the modification date and time of the annotation
+pdfjs-annotation-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 
 ## Password
 
@@ -107,6 +200,12 @@ pdfjs-password-cancel-button = لقو
 
 ## Editing
 
+pdfjs-editor-free-text-button =
+    .title = هؽل
+pdfjs-editor-free-text-button-label = هؽل
+pdfjs-editor-ink-button =
+    .title = کشیڌن
+pdfjs-editor-ink-button-label = کشیڌن
 pdfjs-editor-stamp-button =
     .title = ٱووردن یا آلشت شؽواتا
 pdfjs-editor-stamp-button-label = ٱووردن یا آلشت شؽواتا
@@ -118,6 +217,14 @@ pdfjs-editor-stamp-editor =
 
 ##
 
+# Editor Parameters
+pdfjs-editor-free-text-color-input = رنگ
+pdfjs-editor-free-text-size-input = هندا
+pdfjs-editor-ink-color-input = رنگ
+pdfjs-editor-ink-thickness-input = کۊلۊفتی
+pdfjs-editor-ink-opacity-input = کر بیڌن
+# This refers to the thickness of the line used for free highlighting (not bound to text)
+pdfjs-editor-free-highlight-thickness-input = کۊلۊفتی
 # .default-content is used as a placeholder in an empty text editor.
 pdfjs-free-text2 =
     .aria-label = آلشتگر هؽل
@@ -127,15 +234,55 @@ pdfjs-editor-comments-sidebar-no-comments-link = قلوه دووسته بۊین
 ## Alt-text dialog
 
 pdfjs-editor-alt-text-cancel-button = لقو
+pdfjs-editor-alt-text-save-button = زفت
+
+## Color picker
+
+pdfjs-editor-colorpicker-yellow =
+    .title = هیل
+pdfjs-editor-colorpicker-green =
+    .title = ساوز
+pdfjs-editor-colorpicker-blue =
+    .title = کوۊ
+pdfjs-editor-colorpicker-pink =
+    .title = آل
+pdfjs-editor-colorpicker-red =
+    .title = سوئر
+
+## Show all highlights
+## This is a toggle button to show/hide all the highlights.
+
+pdfjs-editor-highlight-show-all-button-label = نشووݩ داڌن پوی
+pdfjs-editor-highlight-show-all-button =
+    .title = نشووݩ داڌن پوی
 
 ## New alt-text dialog
 ## Group note for entire feature: Alternative text (alt text) helps when people can't see the image. This feature includes a tool to create alt text automatically using an AI model that works locally on the user's device to preserve privacy.
 
 pdfjs-editor-new-alt-text-disclaimer-learn-more-url = قلوه دووسته بۊین
+pdfjs-editor-new-alt-text-not-now-button = سکو ن
+pdfjs-editor-new-alt-text-error-close-button = بستن
+
+## "Annotations removed" bar
+
+pdfjs-editor-undo-bar-undo-button-label = وورگندن
+pdfjs-editor-undo-bar-close-button =
+    .title = بستن
+pdfjs-editor-undo-bar-close-button-label = بستن
+
+## Tab panels
+
+pdfjs-editor-add-signature-draw-thickness-range-label = کۊلۊفتی
+
+## Controls
+
+pdfjs-editor-add-signature-error-close-button = بستن
 
 ## Dialog buttons
 
 pdfjs-editor-add-signature-cancel-button = لقو
+pdfjs-editor-add-signature-add-button = ٱووردن
+pdfjs-editor-edit-signature-update-button = ورۊ رسۊوی
 
 ## Comment popup
 
@@ -147,36 +294,40 @@ pdfjs-editor-edit-comment-popup-button =
 
 # An existing comment is edited
 pdfjs-editor-edit-comment-dialog-title-when-editing = آلشت منشڌ
+pdfjs-editor-edit-comment-dialog-save-button-when-editing = ورۊ رسۊوی
+pdfjs-editor-edit-comment-dialog-save-button-when-adding = ٱووردن
+pdfjs-editor-edit-comment-dialog-text-input =
+    .placeholder = ناهاڌن پا هؽل کردن…
 pdfjs-editor-edit-comment-dialog-cancel-button = لقو
+
+## The view manager is a sidebar displaying different views:
+##  - thumbnails;
+##  - outline;
+##  - attachments;
+##  - layers.
+## The thumbnails view is used to edit the pdf: remove/insert pages, ...
+
+pdfjs-views-manager-sidebar =
+    .aria-label = نوار کلی
+pdfjs-views-manager-layers-option-label = لایه یل
+pdfjs-views-manager-pages-status-action-button-label = دؽوۉداری
+pdfjs-views-manager-pages-status-copy-button-label = لف گیری
+pdfjs-views-manager-pages-status-cut-button-label = بۊریڌن
+pdfjs-views-manager-pages-status-delete-button-label = پاک کردن
+pdfjs-views-manager-status-undo-button-label = وورگندن
+pdfjs-views-manager-status-done-button-label = ٱنجوم وابی
+pdfjs-views-manager-status-close-button =
+    .title = بستن
+pdfjs-views-manager-status-close-button-label = بستن
+pdfjs-views-manager-paste-button-label = جا وندن
+# Badge used to promote a new feature in the UI, keep it as short as possible.
+# It's spelled uppercase for English, but it can be translated as usual.
+pdfjs-new-badge-content = نۊ
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-presentation-mode-button =
     .title = Switch to Presentation Mode
 pdfjs-presentation-mode-button-label = Presentation Mode
-pdfjs-first-page-button =
-    .title = Go to First Page
-pdfjs-first-page-button-label = Go to First Page
-pdfjs-last-page-button =
-    .title = Go to Last Page
-pdfjs-last-page-button-label = Go to Last Page
-pdfjs-page-rotate-cw-button =
-    .title = Rotate Clockwise
-pdfjs-page-rotate-cw-button-label = Rotate Clockwise
-pdfjs-page-rotate-ccw-button =
-    .title = Rotate Counterclockwise
-pdfjs-page-rotate-ccw-button-label = Rotate Counterclockwise
-pdfjs-scroll-page-button =
-    .title = Use Page Scrolling
-pdfjs-scroll-page-button-label = Page Scrolling
-pdfjs-scroll-vertical-button =
-    .title = Use Vertical Scrolling
-pdfjs-scroll-vertical-button-label = Vertical Scrolling
-pdfjs-scroll-horizontal-button =
-    .title = Use Horizontal Scrolling
-pdfjs-scroll-horizontal-button-label = Horizontal Scrolling
-pdfjs-scroll-wrapped-button =
-    .title = Use Wrapped Scrolling
-pdfjs-scroll-wrapped-button-label = Wrapped Scrolling
 pdfjs-spread-none-button =
     .title = Do not join page spreads
 pdfjs-spread-none-button-label = No Spreads
@@ -186,31 +337,14 @@ pdfjs-spread-odd-button-label = Odd Spreads
 pdfjs-spread-even-button =
     .title = Join page spreads starting with even-numbered pages
 pdfjs-spread-even-button-label = Even Spreads
-pdfjs-document-properties-button =
-    .title = Document Properties…
-pdfjs-document-properties-button-label = Document Properties…
 pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } KB ({ $b } bytes)
 pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } bytes)
 pdfjs-document-properties-keywords = Keywords:
-pdfjs-document-properties-creation-date = Creation Date:
-pdfjs-document-properties-modification-date = Modification Date:
-pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
-pdfjs-document-properties-creator = Creator:
-pdfjs-document-properties-producer = PDF Producer:
-pdfjs-document-properties-version = PDF Version:
-pdfjs-document-properties-page-count = Page Count:
-pdfjs-document-properties-page-size-orientation-portrait = portrait
-pdfjs-document-properties-page-size-orientation-landscape = landscape
-pdfjs-print-progress-message = Preparing document for printing…
 pdfjs-printing-not-supported = Warning: Printing is not fully supported by this browser.
 pdfjs-printing-not-ready = Warning: The PDF is not fully loaded for printing.
 pdfjs-current-outline-item-button =
     .title = Find Current Outline Item
 pdfjs-current-outline-item-button-label = Current Outline Item
-pdfjs-findbar-button =
-    .title = Find in Document
-pdfjs-findbar-button-label = Find
-pdfjs-additional-layers = Additional Layers
 pdfjs-thumb-page-title1 =
     .title = Page { $page } of { $total }
 pdfjs-thumb-page-canvas =
@@ -220,13 +354,6 @@ pdfjs-thumb-page-checkbox1 =
 pdfjs-find-input =
     .title = Find
     .placeholder = Find in document…
-pdfjs-find-previous-button =
-    .title = Find the previous occurrence of the phrase
-pdfjs-find-previous-button-label = Previous
-pdfjs-find-next-button =
-    .title = Find the next occurrence of the phrase
-pdfjs-find-next-button-label = Next
-pdfjs-find-highlight-checkbox = Highlight All
 pdfjs-find-match-case-checkbox-label = Match Case
 pdfjs-find-match-diacritics-checkbox-label = Match Diacritics
 pdfjs-find-entire-word-checkbox-label = Whole Words
@@ -243,34 +370,20 @@ pdfjs-find-match-count-limit =
        *[other] More than { $limit } matches
     }
 pdfjs-find-not-found = Phrase not found
-pdfjs-page-scale-width = Page Width
-pdfjs-page-scale-fit = Page Fit
-pdfjs-page-scale-auto = Automatic Zoom
-pdfjs-page-scale-actual = Actual Size
-pdfjs-page-scale-percent = { $scale }%
-pdfjs-page-landmark =
-    .aria-label = Page { $page }
 pdfjs-loading-error = An error occurred while loading the PDF.
 pdfjs-invalid-file-error = Invalid or corrupted PDF file.
 pdfjs-missing-file-error = Missing PDF file.
 pdfjs-unexpected-response-error = Unexpected server response.
 pdfjs-rendering-error = An error occurred while rendering the page.
-pdfjs-annotation-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 pdfjs-text-annotation-type =
     .alt = [{ $type } Annotation]
 pdfjs-password-label = Enter the password to open this PDF file.
 pdfjs-password-invalid = Invalid password. Please try again.
 pdfjs-web-fonts-disabled = Web fonts are disabled: unable to use embedded PDF fonts.
-pdfjs-editor-free-text-button =
-    .title = Text
 pdfjs-editor-color-picker-free-text-input =
     .title = Change text color
-pdfjs-editor-free-text-button-label = Text
-pdfjs-editor-ink-button =
-    .title = Draw
 pdfjs-editor-color-picker-ink-input =
     .title = Change drawing color
-pdfjs-editor-ink-button-label = Draw
 pdfjs-editor-highlight-button =
     .title = Highlight
 pdfjs-editor-highlight-button-label = Highlight
@@ -305,15 +418,9 @@ pdfjs-editor-remove-highlight-button =
     .title = Remove highlight
 pdfjs-editor-remove-signature-button =
     .title = Remove signature
-pdfjs-editor-free-text-color-input = Color
-pdfjs-editor-free-text-size-input = Size
-pdfjs-editor-ink-color-input = Color
-pdfjs-editor-ink-thickness-input = Thickness
-pdfjs-editor-ink-opacity-input = Opacity
 pdfjs-editor-stamp-add-image-button =
     .title = Add image
 pdfjs-editor-stamp-add-image-button-label = Add image
-pdfjs-editor-free-highlight-thickness-input = Thickness
 pdfjs-editor-free-highlight-thickness-title =
     .title = Change thickness when highlighting items other than text
 pdfjs-editor-add-signature-container =
@@ -344,7 +451,6 @@ pdfjs-editor-alt-text-add-description-label = Add a description
 pdfjs-editor-alt-text-add-description-description = Aim for 1-2 sentences that describe the subject, setting, or actions.
 pdfjs-editor-alt-text-mark-decorative-label = Mark as decorative
 pdfjs-editor-alt-text-mark-decorative-description = This is used for ornamental images, like borders or watermarks.
-pdfjs-editor-alt-text-save-button = Save
 pdfjs-editor-alt-text-decorative-tooltip = Marked as decorative
 pdfjs-editor-alt-text-textarea =
     .placeholder = For example, “A young man sits down at a table to eat a meal”
@@ -369,19 +475,6 @@ pdfjs-editor-colorpicker-button =
     .title = Change color
 pdfjs-editor-colorpicker-dropdown =
     .aria-label = Color choices
-pdfjs-editor-colorpicker-yellow =
-    .title = Yellow
-pdfjs-editor-colorpicker-green =
-    .title = Green
-pdfjs-editor-colorpicker-blue =
-    .title = Blue
-pdfjs-editor-colorpicker-pink =
-    .title = Pink
-pdfjs-editor-colorpicker-red =
-    .title = Red
-pdfjs-editor-highlight-show-all-button-label = Show all
-pdfjs-editor-highlight-show-all-button =
-    .title = Show all
 pdfjs-editor-new-alt-text-dialog-edit-label = Edit alt text (image description)
 pdfjs-editor-new-alt-text-dialog-add-label = Add alt text (image description)
 pdfjs-editor-new-alt-text-textarea =
@@ -389,10 +482,8 @@ pdfjs-editor-new-alt-text-textarea =
 pdfjs-editor-new-alt-text-description = Short description for people who can’t see the image or when the image doesn’t load.
 pdfjs-editor-new-alt-text-disclaimer1 = This alt text was created automatically and may be inaccurate.
 pdfjs-editor-new-alt-text-create-automatically-button-label = Create alt text automatically
-pdfjs-editor-new-alt-text-not-now-button = Not now
 pdfjs-editor-new-alt-text-error-title = Couldn’t create alt text automatically
 pdfjs-editor-new-alt-text-error-description = Please write your own alt text or try again later.
-pdfjs-editor-new-alt-text-error-close-button = Close
 pdfjs-editor-new-alt-text-ai-model-downloading-progress = Downloading alt text AI model ({ $downloadedSize } of { $totalSize } MB)
     .aria-valuetext = Downloading alt text AI model ({ $downloadedSize } of { $totalSize } MB)
 pdfjs-editor-new-alt-text-added-button =
@@ -432,12 +523,6 @@ pdfjs-editor-undo-bar-message-multiple =
         [one] { $count } annotation removed
        *[other] { $count } annotations removed
     }
-pdfjs-editor-undo-bar-undo-button =
-    .title = Undo
-pdfjs-editor-undo-bar-undo-button-label = Undo
-pdfjs-editor-undo-bar-close-button =
-    .title = Close
-pdfjs-editor-undo-bar-close-button-label = Close
 pdfjs-editor-add-signature-dialog-label = This modal allows the user to create a signature to add to a PDF document. The user can edit the name (which also serves as the alt text), and optionally save the signature for repeated use.
 pdfjs-editor-add-signature-dialog-title = Add a signature
 pdfjs-editor-add-signature-type-button = Type
@@ -450,9 +535,6 @@ pdfjs-editor-add-signature-type-input =
     .aria-label = Type your signature
     .placeholder = Type your signature
 pdfjs-editor-add-signature-draw-placeholder = Draw your signature
-pdfjs-editor-add-signature-draw-thickness-range-label = Thickness
-pdfjs-editor-add-signature-draw-thickness-range =
-    .title = Drawing thickness: { $thickness }
 pdfjs-editor-add-signature-image-placeholder = Drag a file here to upload
 pdfjs-editor-add-signature-image-browse-link =
     { PLATFORM() ->
@@ -472,24 +554,17 @@ pdfjs-editor-add-signature-image-upload-error-title = Couldn’t upload image
 pdfjs-editor-add-signature-image-upload-error-description = Check your network connection or try another image.
 pdfjs-editor-add-signature-image-no-data-error-title = Can’t convert this image into a signature
 pdfjs-editor-add-signature-image-no-data-error-description = Please try uploading a different image.
-pdfjs-editor-add-signature-error-close-button = Close
-pdfjs-editor-add-signature-add-button = Add
 pdfjs-editor-delete-signature-button1 =
     .title = Remove saved signature
 pdfjs-editor-delete-signature-button-label1 = Remove saved signature
 pdfjs-editor-add-signature-edit-button-label = Edit description
 pdfjs-editor-edit-signature-dialog-title = Edit description
-pdfjs-editor-edit-signature-update-button = Update
 pdfjs-show-comment-button =
     .title = Show comment
 pdfjs-editor-delete-comment-popup-button-label = Remove comment
 pdfjs-editor-delete-comment-popup-button =
     .title = Remove comment
-pdfjs-editor-edit-comment-dialog-save-button-when-editing = Update
 pdfjs-editor-edit-comment-dialog-title-when-adding = Add comment
-pdfjs-editor-edit-comment-dialog-save-button-when-adding = Add
-pdfjs-editor-edit-comment-dialog-text-input =
-    .placeholder = Start typing…
 pdfjs-editor-add-comment-button =
     .title = Add comment
 pdfjs-toggle-views-manager-button1 =
@@ -497,8 +572,6 @@ pdfjs-toggle-views-manager-button1 =
 pdfjs-toggle-views-manager-notification-button =
     .title = Toggle Sidebar (document contains thumbnails/outline/attachments/layers)
 pdfjs-toggle-views-manager-button1-label = Manage pages
-pdfjs-views-manager-sidebar =
-    .aria-label = Sidebar
 pdfjs-views-manager-sidebar-resizer =
     .aria-label = Sidebar resizer
 pdfjs-views-manager-view-selector-button =
@@ -513,7 +586,6 @@ pdfjs-views-manager-layers-title1 = Layers
 pdfjs-views-manager-pages-option-label = Pages
 pdfjs-views-manager-outlines-option-label = Document outline
 pdfjs-views-manager-attachments-option-label = Attachments
-pdfjs-views-manager-layers-option-label = Layers
 pdfjs-views-manager-add-file-button =
     .title = Add file
 pdfjs-views-manager-add-file-button-label = Add file
@@ -523,10 +595,6 @@ pdfjs-views-manager-pages-status-action-label =
         *[other] { $count } selected
     }
 pdfjs-views-manager-pages-status-none-action-label = Select pages
-pdfjs-views-manager-pages-status-action-button-label = Manage
-pdfjs-views-manager-pages-status-copy-button-label = Copy
-pdfjs-views-manager-pages-status-cut-button-label = Cut
-pdfjs-views-manager-pages-status-delete-button-label = Delete
 pdfjs-views-manager-pages-status-export-selected-button-label = Export selected…
 pdfjs-views-manager-status-undo-cut-label =
     { $count ->
@@ -543,23 +611,10 @@ pdfjs-views-manager-pages-status-undo-delete-label =
         [one] 1 page deleted
         *[other] { $count } pages deleted
     }
-pdfjs-views-manager-pages-status-waiting-ready-label = Getting your file ready…
-pdfjs-views-manager-pages-status-waiting-uploading-label = Uploading file…
-pdfjs-views-manager-status-warning-cut-label = Couldn’t cut. Refresh page and try again.
-pdfjs-views-manager-status-warning-copy-label = Couldn’t copy. Refresh page and try again.
-pdfjs-views-manager-status-warning-delete-label = Couldn’t delete. Refresh page and try again.
-pdfjs-views-manager-status-warning-save-label = Couldn’t save. Refresh page and try again.
-pdfjs-views-manager-status-undo-button-label = Undo
-pdfjs-views-manager-status-done-button-label = Done
-pdfjs-views-manager-status-close-button =
-    .title = Close
-pdfjs-views-manager-status-close-button-label = Close
-pdfjs-views-manager-paste-button-label = Paste
 pdfjs-views-manager-paste-button-before =
     .title = Paste before the first page
 pdfjs-views-manager-paste-button-after =
     .title = Paste after page { $page }
-pdfjs-new-badge-content = NEW
 pdfjs-views-manager-waiting-for-file = Uploading file…
 pdfjs-digital-signature-properties-button =
     .title = Digital signature properties
@@ -624,16 +679,3 @@ pdfjs-editor-movePageDown-button-label = Move Page Down
 pdfjs-cursor-page-flip-tool-button =
     .title = Page Flip
 pdfjs-cursor-page-flip-tool-button-label = Page Flip
-pdfjs-toggle-sidebar-button-label = Toggle Sidebar
-pdfjs-document-outline-button =
-    .title = Show Document Outline (double-click to expand/collapse all items)
-pdfjs-document-outline-button-label = Document Outline
-pdfjs-attachments-button =
-    .title = Show Attachments
-pdfjs-attachments-button-label = Attachments
-pdfjs-layers-button =
-    .title = Show Layers (double-click to reset all layers to the default state)
-pdfjs-layers-button-label = Layers
-pdfjs-thumbs-button =
-    .title = Show Thumbnails
-pdfjs-thumbs-button-label = Thumbnails

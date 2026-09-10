@@ -178,12 +178,13 @@ pdfjs-find-previous-button-label = Iepriekšējā
 pdfjs-find-next-button =
     .title = Atrast nākamo
 pdfjs-find-next-button-label = Nākamā
-pdfjs-find-highlight-checkbox = Iekrāsot visas
-pdfjs-find-match-case-checkbox-label = Lielo, mazo burtu jutīgs
+pdfjs-find-highlight-checkbox = Izcelt visus
+pdfjs-find-match-case-checkbox-label = Lielo un mazo burtu atbilstība
+pdfjs-find-match-diacritics-checkbox-label = Diakritisko zīmju atbilstība
 pdfjs-find-entire-word-checkbox-label = Veselus vārdus
 pdfjs-find-reached-top = Sasniegts dokumenta sākums, turpinām no beigām
 pdfjs-find-reached-bottom = Sasniegtas dokumenta beigas, turpinām no sākuma
-pdfjs-find-not-found = Frāze nav atrasta
+pdfjs-find-not-found = Vārdkopa nav atrasta
 
 ## Predefined zoom values
 
@@ -198,8 +199,8 @@ pdfjs-page-scale-percent = { $scale }%
 ## Loading indicator messages
 
 pdfjs-loading-error = Ielādējot PDF notika kļūda.
-pdfjs-invalid-file-error = Nederīgs vai bojāts PDF fails.
-pdfjs-missing-file-error = PDF fails nav atrasts.
+pdfjs-invalid-file-error = Nederīga vai bojāt PDF datne.
+pdfjs-missing-file-error = PDF datne nav atrasta.
 pdfjs-unexpected-response-error = Negaidīa servera atbilde.
 pdfjs-rendering-error = Attēlojot lapu radās kļūda
 
@@ -220,6 +221,58 @@ pdfjs-password-invalid = Nepareiza parole, mēģiniet vēlreiz.
 pdfjs-password-ok-button = Labi
 pdfjs-password-cancel-button = Atcelt
 pdfjs-web-fonts-disabled = Tīmekļa fonti nav aktivizēti: Nevar iegult PDF fontus.
+
+## Editing
+
+pdfjs-editor-stamp-button =
+    .title = Pievienot vai labot attēlus
+pdfjs-editor-stamp-button-label = Pievienot vai labot attēlus
+pdfjs-editor-signature-button =
+    .title = Pievienot parakstu
+pdfjs-editor-signature-button-label = Pievienot parakstu
+
+##
+
+pdfjs-editor-stamp-add-image-button =
+    .title = Pievienot attēlu
+pdfjs-editor-stamp-add-image-button-label = Pievienot attēlu
+pdfjs-editor-signature-add-signature-button =
+    .title = Pievienot jaunu parakstu
+pdfjs-editor-signature-add-signature-button-label = Pievienot jaunu parakstu
+
+## Alt-text dialog
+
+pdfjs-editor-alt-text-add-description-label = Pievienot aprakstu
+
+## Add a signature dialog
+
+pdfjs-editor-add-signature-dialog-title = Pievienot parakstu
+
+## Dialog buttons
+
+pdfjs-editor-add-signature-add-button = Pievienot
+
+##  Edit a comment dialog
+
+# No existing comment
+pdfjs-editor-edit-comment-dialog-title-when-adding = Pievienot piebildi
+pdfjs-editor-edit-comment-dialog-save-button-when-adding = Pievienot
+
+## Edit a comment button in the editor toolbar
+
+pdfjs-editor-add-comment-button =
+    .title = Pievienot piebildi
+
+## The view manager is a sidebar displaying different views:
+##  - thumbnails;
+##  - outline;
+##  - attachments;
+##  - layers.
+## The thumbnails view is used to edit the pdf: remove/insert pages, ...
+
+pdfjs-views-manager-add-file-button =
+    .title = Pievienot datni
+pdfjs-views-manager-add-file-button-label = Pievienot datni
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-save-button =
@@ -245,7 +298,6 @@ pdfjs-thumb-page-title1 =
     .title = Page { $page } of { $total }
 pdfjs-thumb-page-checkbox1 =
     .title = Select page { $page }
-pdfjs-find-match-diacritics-checkbox-label = Match Diacritics
 pdfjs-find-match-count =
     { $total ->
         [one] { $current } of { $total } match
@@ -269,9 +321,6 @@ pdfjs-editor-ink-button =
 pdfjs-editor-color-picker-ink-input =
     .title = Change drawing color
 pdfjs-editor-ink-button-label = Draw
-pdfjs-editor-stamp-button =
-    .title = Add or edit images
-pdfjs-editor-stamp-button-label = Add or edit images
 pdfjs-editor-highlight-button =
     .title = Highlight
 pdfjs-editor-highlight-button-label = Highlight
@@ -287,9 +336,6 @@ pdfjs-editor-comment-button =
     .title = Comment
     .aria-label = Comment
 pdfjs-editor-comment-button-label = Comment
-pdfjs-editor-signature-button =
-    .title = Add signature
-pdfjs-editor-signature-button-label = Add signature
 pdfjs-editor-highlight-editor =
     .aria-label = Highlight editor
 pdfjs-editor-ink-editor =
@@ -313,17 +359,11 @@ pdfjs-editor-free-text-size-input = Size
 pdfjs-editor-ink-color-input = Color
 pdfjs-editor-ink-thickness-input = Thickness
 pdfjs-editor-ink-opacity-input = Opacity
-pdfjs-editor-stamp-add-image-button =
-    .title = Add image
-pdfjs-editor-stamp-add-image-button-label = Add image
 pdfjs-editor-free-highlight-thickness-input = Thickness
 pdfjs-editor-free-highlight-thickness-title =
     .title = Change thickness when highlighting items other than text
 pdfjs-editor-add-signature-container =
     .aria-label = Signature controls and saved signatures
-pdfjs-editor-signature-add-signature-button =
-    .title = Add new signature
-pdfjs-editor-signature-add-signature-button-label = Add new signature
 pdfjs-editor-add-saved-signature-button =
     .title = Saved signature: { $description }
 pdfjs-free-text2 =
@@ -347,7 +387,6 @@ pdfjs-editor-alt-text-edit-button =
     .aria-label = Edit alt text
 pdfjs-editor-alt-text-dialog-label = Choose an option
 pdfjs-editor-alt-text-dialog-description = Alt text (alternative text) helps when people can’t see the image or when it doesn’t load.
-pdfjs-editor-alt-text-add-description-label = Add a description
 pdfjs-editor-alt-text-add-description-description = Aim for 1-2 sentences that describe the subject, setting, or actions.
 pdfjs-editor-alt-text-mark-decorative-label = Mark as decorative
 pdfjs-editor-alt-text-mark-decorative-description = This is used for ornamental images, like borders or watermarks.
@@ -448,7 +487,6 @@ pdfjs-editor-undo-bar-close-button =
     .title = Close
 pdfjs-editor-undo-bar-close-button-label = Close
 pdfjs-editor-add-signature-dialog-label = This modal allows the user to create a signature to add to a PDF document. The user can edit the name (which also serves as the alt text), and optionally save the signature for repeated use.
-pdfjs-editor-add-signature-dialog-title = Add a signature
 pdfjs-editor-add-signature-type-button = Type
     .title = Type
 pdfjs-editor-add-signature-draw-button = Draw
@@ -483,7 +521,6 @@ pdfjs-editor-add-signature-image-no-data-error-title = Can’t convert this imag
 pdfjs-editor-add-signature-image-no-data-error-description = Please try uploading a different image.
 pdfjs-editor-add-signature-error-close-button = Close
 pdfjs-editor-add-signature-cancel-button = Cancel
-pdfjs-editor-add-signature-add-button = Add
 pdfjs-editor-delete-signature-button1 =
     .title = Remove saved signature
 pdfjs-editor-delete-signature-button-label1 = Remove saved signature
@@ -500,13 +537,9 @@ pdfjs-editor-delete-comment-popup-button =
     .title = Remove comment
 pdfjs-editor-edit-comment-dialog-title-when-editing = Edit comment
 pdfjs-editor-edit-comment-dialog-save-button-when-editing = Update
-pdfjs-editor-edit-comment-dialog-title-when-adding = Add comment
-pdfjs-editor-edit-comment-dialog-save-button-when-adding = Add
 pdfjs-editor-edit-comment-dialog-text-input =
     .placeholder = Start typing…
 pdfjs-editor-edit-comment-dialog-cancel-button = Cancel
-pdfjs-editor-add-comment-button =
-    .title = Add comment
 pdfjs-toggle-views-manager-button1 =
     .title = Manage pages
 pdfjs-toggle-views-manager-notification-button =
@@ -529,9 +562,6 @@ pdfjs-views-manager-pages-option-label = Pages
 pdfjs-views-manager-outlines-option-label = Document outline
 pdfjs-views-manager-attachments-option-label = Attachments
 pdfjs-views-manager-layers-option-label = Layers
-pdfjs-views-manager-add-file-button =
-    .title = Add file
-pdfjs-views-manager-add-file-button-label = Add file
 pdfjs-views-manager-pages-status-action-label =
     { $count ->
         [one] { $count } selected
@@ -558,12 +588,6 @@ pdfjs-views-manager-pages-status-undo-delete-label =
         [one] 1 page deleted
         *[other] { $count } pages deleted
     }
-pdfjs-views-manager-pages-status-waiting-ready-label = Getting your file ready…
-pdfjs-views-manager-pages-status-waiting-uploading-label = Uploading file…
-pdfjs-views-manager-status-warning-cut-label = Couldn’t cut. Refresh page and try again.
-pdfjs-views-manager-status-warning-copy-label = Couldn’t copy. Refresh page and try again.
-pdfjs-views-manager-status-warning-delete-label = Couldn’t delete. Refresh page and try again.
-pdfjs-views-manager-status-warning-save-label = Couldn’t save. Refresh page and try again.
 pdfjs-views-manager-status-undo-button-label = Undo
 pdfjs-views-manager-status-done-button-label = Done
 pdfjs-views-manager-status-close-button =
