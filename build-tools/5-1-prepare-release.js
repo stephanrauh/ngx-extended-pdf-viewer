@@ -142,7 +142,11 @@ if (IS_MAINTENANCE_RELEASE) {
   );
 }
 
-runCommand('node ./build-tools/1-build-base-library.js --quick', `Error 69: build-base-library.js failed for ${STABLE_BRANCH}`, 69);
+// Deliberately NOT --quick: the full build also produces viewer-*.min.mjs and the *-es5.mjs
+// legacy bundles. The showcase e2e suite (T34-shipped-bundles) loads exactly those variants,
+// which is the only check the minified/legacy artefacts get before CI publishes them. With
+// --quick the files don't exist and T34 skips itself.
+runCommand('node ./build-tools/1-build-base-library.js', `Error 69: build-base-library.js failed for ${STABLE_BRANCH}`, 69);
 
 // Clean up package-lock.json changes from audit fix
 process.chdir(path.join('..', 'mypdf.js'));

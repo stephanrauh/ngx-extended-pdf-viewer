@@ -33,8 +33,8 @@ customizations and enhancements for Angular integration.
 
   bleeding-edge/
     based on Mozilla pdf.js 6.3.289 (v6.3.289, commit 1c8020a7d4e43668ac287a3ecf9a8dbea17e4c56)
-    built from https://github.com/stephanrauh/pdf.js branch bleeding-edge, commit 34e62db1560c6f1dbcb199582c3f36e590d8eb8a
-    bundled build version: 6.3.1287 (fork build number, not an upstream release)
+    built from https://github.com/stephanrauh/pdf.js branch bleeding-edge, commit ff5df8295206fdb7cbe04e922e3e0080b079dc0f
+    bundled build version: 6.3.1288 (fork build number, not an upstream release)
     security fix applied ahead of upstream: CVE-2026-16633 (merge,
       fixed upstream in pdf.js 6.2.108) - https://github.com/mozilla/pdf.js/security/advisories/GHSA-hq66-cqwq-w95j
 

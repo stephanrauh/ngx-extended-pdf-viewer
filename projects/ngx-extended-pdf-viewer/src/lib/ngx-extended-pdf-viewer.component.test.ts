@@ -176,11 +176,64 @@ describe('NgxExtendedPdfViewerComponent', () => {
     expect(component.toolbarMarginTop).toBe('8px');
   });
 
-  // Skip: Requires complex Angular component mocking and event bus setup
-  it.skip('should call ngOnDestroy and clean up', () => {
-    const spy = jest.spyOn(component['pdfScriptLoaderService'].PDFViewerApplication, 'close');
-    component.ngOnDestroy();
-    expect(spy).toHaveBeenCalled();
+  describe('ngOnDestroy', () => {
+    // ngOnDestroy runs the pdf.js teardown as a fire-and-forget async function
+    // (Angular does not await ngOnDestroy), so the observable effects land a
+    // few microtasks later. Drain microtasks only: a macrotask wait would also
+    // fire the component's requestAnimationFrame callbacks, which this test
+    // setup does not mock.
+    const flushCleanup = async () => {
+      for (let i = 0; i < 10; i++) {
+        await Promise.resolve();
+      }
+    };
+
+    it('closes the pdf.js application and tears down its event bus', async () => {
+      const app = component['pdfScriptLoaderService'].PDFViewerApplication;
+      (component as any).initialized = true;
+      component['service'].ngxExtendedPdfViewerInitialized = true;
+
+      component.ngOnDestroy();
+      await flushCleanup();
+
+      expect(app.close).toHaveBeenCalledTimes(1);
+      expect(app.pdfViewer.destroyBookMode).toHaveBeenCalled();
+      expect(app.pdfViewer.stopRendering).toHaveBeenCalled();
+      expect(app.pdfThumbnailViewer.stopRendering).toHaveBeenCalled();
+      expect(app.unbindEvents).toHaveBeenCalled();
+      expect(app.unbindWindowEvents).toHaveBeenCalled();
+      expect(app._cleanup).toHaveBeenCalled();
+      // #3131 the captured bus is destroyed and detached, so a later dispatch
+      // from a stale listener cannot reach a half-torn-down viewer.
+      expect(app.eventBus).toBeUndefined();
+      expect((component as any).initialized).toBe(false);
+      expect(component['service'].ngxExtendedPdfViewerInitialized).toBe(false);
+      expect(component['notificationService'].onPDFJSInitSignal()).toBeUndefined();
+    });
+
+    it('aborts the event bus listeners synchronously, before the async teardown', () => {
+      const abortController = new AbortController();
+      const abortSpy = jest.spyOn(abortController, 'abort');
+      (component as any).eventBusAbortController = abortController;
+
+      component.ngOnDestroy();
+
+      // No await: #3131 requires the listeners to be gone by the time
+      // ngOnDestroy returns, so a viewer mounted in the same tick starts clean.
+      expect(abortSpy).toHaveBeenCalledTimes(1);
+      expect((component as any).eventBusAbortController).toBeNull();
+      expect((component as any).initialized).toBe(false);
+    });
+
+    it('does not let the pending initialization promise wedge the cleanup when it rejects', async () => {
+      const app = component['pdfScriptLoaderService'].PDFViewerApplication;
+      (component as any).initializationPromise = Promise.reject(new Error('init failed'));
+
+      component.ngOnDestroy();
+      await flushCleanup();
+
+      expect(app.close).toHaveBeenCalledTimes(1);
+    });
   });
 
   it('should have zoom as a model signal', () => {
