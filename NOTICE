@@ -33,15 +33,15 @@ customizations and enhancements for Angular integration.
 
   bleeding-edge/
     based on Mozilla pdf.js 6.3.289 (v6.3.289, commit 1c8020a7d4e43668ac287a3ecf9a8dbea17e4c56)
-    built from https://github.com/stephanrauh/pdf.js branch bleeding-edge, commit b90ccb8a72b39aac06eea6e38939061c1d858935
-    bundled build version: 6.3.1293 (fork build number, not an upstream release)
+    built from https://github.com/stephanrauh/pdf.js branch bleeding-edge, commit d317bfd6783f535f84f0482cda53a6e1cd7c84db
+    bundled build version: 6.3.1294 (fork build number, not an upstream release)
     security fix applied ahead of upstream: CVE-2026-16633 (merge,
       fixed upstream in pdf.js 6.2.108) - https://github.com/mozilla/pdf.js/security/advisories/GHSA-hq66-cqwq-w95j
 
   assets/
     based on Mozilla pdf.js 6.2.108 (v6.2.108, commit 0365cbde028bd92e58f2dab1bb70cd30ac7acfd7)
-    built from https://github.com/stephanrauh/pdf.js branch 6.2, commit c1ea088a5e08798634ae02a0fdf20e9d66adf90c
-    bundled build version: 6.2.1102 (fork build number, not an upstream release)
+    built from https://github.com/stephanrauh/pdf.js branch 6.2, commit 12965c8d8af45a8e641c85015a6c69285eb4d4ff
+    bundled build version: 6.2.1103 (fork build number, not an upstream release)
     security fix applied ahead of upstream: CVE-2026-16633 (merge,
       fixed upstream in pdf.js 6.2.108) - https://github.com/mozilla/pdf.js/security/advisories/GHSA-hq66-cqwq-w95j
 
