@@ -662,3 +662,7 @@ pdfjs-editor-movePageDown-button-label = Move Page Down
 pdfjs-cursor-page-flip-tool-button =
     .title = Page Flip
 pdfjs-cursor-page-flip-tool-button-label = Page Flip
+# Additional translations for ngx-extended-pdf-viewer from the ca bleeding edge branch
+pdfjs-editor-alt-text-settings-delete-model-button = Suprimeix
+pdfjs-editor-alt-text-settings-download-model-button = Baixa
+pdfjs-editor-alt-text-settings-downloading-model-button = S'està descarregant…
