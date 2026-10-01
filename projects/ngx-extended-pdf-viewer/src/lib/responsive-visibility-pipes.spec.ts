@@ -79,6 +79,10 @@ describe('ResponsiveCSSClassPipe', () => {
     it('should return hiddenXXLView for "xxl"', () => {
       expect(pipe.transform('xxl')).toBe('hiddenXXLView');
     });
+
+    it('should return hiddenXXXLView for "xxxl"', () => {
+      expect(pipe.transform('xxxl')).toBe('hiddenXXXLView');
+    });
   });
 
   describe('comprehensive transform scenarios', () => {
@@ -224,7 +228,9 @@ describe('NegativeResponsiveCSSClassPipe', () => {
         { input: 'xl', expected: 'visibleXLView' },
         { input: 'hiddenXLView', expected: 'visibleXLView' },
         { input: 'xxl', expected: 'visibleXXLView' },
-        { input: 'hiddenXXLView', expected: 'visibleXXLView' }
+        { input: 'hiddenXXLView', expected: 'visibleXXLView' },
+        { input: 'xxxl', expected: 'visibleXXXLView' },
+        { input: 'hiddenXXXLView', expected: 'visibleXXXLView' }
       ];
 
       breakpointMapping.forEach(({ input, expected }) => {

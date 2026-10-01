@@ -30,6 +30,8 @@ import { PdfContextMenuComponent } from './toolbar/pdf-context-menu/pdf-context-
 import { PdfDocumentPropertiesComponent } from './toolbar/pdf-document-properties/pdf-document-properties.component';
 import { PdfDownloadComponent } from './toolbar/pdf-download/pdf-download.component';
 import { PdfDrawEditorComponent } from './toolbar/pdf-draw-editor/pdf-draw-editor.component';
+import { PdfEraserEditorComponent } from './toolbar/pdf-eraser-editor/pdf-eraser-editor.component';
+import { PdfUndoRedoComponent } from './toolbar/pdf-undo-redo/pdf-undo-redo.component';
 import { PdfEditorSignatureComponent } from './toolbar/pdf-editor-signature/pdf-editor-signature.component';
 // #3257 modified by ngx-extended-pdf-viewer
 import { PdfSignaturePropertiesComponent } from './toolbar/pdf-signature-properties/pdf-signature-properties.component';
@@ -111,6 +113,8 @@ if (!(Promise as any)['allSettled']) {
     PdfContextMenuComponent,
     PdfDarkThemeComponent,
     PdfDrawEditorComponent,
+    PdfEraserEditorComponent,
+    PdfUndoRedoComponent,
     PdfAltTextDialogComponent,
     PdfAltTextSettingsDialogComponent,
     PdfDocumentPropertiesComponent,
@@ -197,6 +201,8 @@ if (!(Promise as any)['allSettled']) {
     PdfDarkThemeComponent,
     PdfDocumentPropertiesComponent,
     PdfDrawEditorComponent,
+    PdfEraserEditorComponent,
+    PdfUndoRedoComponent,
     PdfDocumentPropertiesDialogComponent,
     PdfDownloadComponent,
     PdfDummyComponentsComponent,

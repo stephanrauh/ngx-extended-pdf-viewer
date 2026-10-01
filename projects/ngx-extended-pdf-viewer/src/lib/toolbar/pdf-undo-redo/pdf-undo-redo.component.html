@@ -1,0 +1,29 @@
+<!-- stephanrauh/pdf.js#15 modified by ngx-extended-pdf-viewer - undo/redo toolbar buttons -->
+<!-- Icons "undo" and "redo": Material Symbols by Google (https://github.com/google/material-design-icons), Apache License 2.0 -->
+<pdf-shy-button
+  title="Undo"
+  primaryToolbarId="primaryEditorUndo"
+  [cssClass]="show() | responsiveCSSClass : 'hiddenTinyView'"
+  l10nId="pdfjs-editor-undo-button"
+  l10nLabel="pdfjs-editor-undo-button-label"
+  [order]="3860"
+  [action]="onUndo"
+  [closeOnClick]="false"
+  [disabled]="disable() || !canUndo"
+  image="<svg aria-hidden='true' focusable='false' width='20px' height='20px' viewBox='0 -960 960 960' xmlns='http://www.w3.org/2000/svg' fill='currentColor'><path d='M280-200v-80h284q63 0 109.5-40T720-420q0-60-46.5-100T564-560H312l104 104-56 56-200-200 200-200 56 56-104 104h252q97 0 166.5 63T800-420q0 94-69.5 157T564-200H280Z'/></svg>"
+>
+</pdf-shy-button>
+<pdf-shy-button
+  title="Redo"
+  primaryToolbarId="primaryEditorRedo"
+  [cssClass]="show() | responsiveCSSClass : 'hiddenTinyView'"
+  l10nId="pdfjs-editor-redo-button"
+  l10nLabel="pdfjs-editor-redo-button-label"
+  [order]="3870"
+  [action]="onRedo"
+  [closeOnClick]="false"
+  [disabled]="disable() || !canRedo"
+  image="<svg aria-hidden='true' focusable='false' width='20px' height='20px' viewBox='0 -960 960 960' xmlns='http://www.w3.org/2000/svg' fill='currentColor'><path d='M396-200q-97 0-166.5-63T160-420q0-94 69.5-157T396-640h252L544-744l56-56 200 200-200 200-56-56 104-104H396q-63 0-109.5 40T240-420q0 60 46.5 100T396-280h284v80H396Z'/></svg>"
+>
+</pdf-shy-button>
+<!-- stephanrauh/pdf.js#15 end of modification by ngx-extended-pdf-viewer -->

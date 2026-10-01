@@ -10,6 +10,7 @@ export class PositioningService {
     ['secondaryToolbarToggle', 'secondaryToolbar'],
     ['primaryEditorFreeText', 'editorFreeTextParamsToolbar'],
     ['primaryEditorInk', 'editorInkParamsToolbar'],
+    ['primaryEditorEraser', 'editorEraserParamsToolbar'], // stephanrauh/pdf.js#14 - the eraser
     ['primaryEditorHighlight', 'editorHighlightParamsToolbar'],
     ['primaryEditorStamp', 'editorStampParamsToolbar'],
     ['editorCommentButton', 'editorCommentParamsToolbar'],

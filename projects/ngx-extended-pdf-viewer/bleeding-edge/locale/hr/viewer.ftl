@@ -736,6 +736,17 @@ pdfjs-editor-movePageDown-button-label = Pomakni stranicu dolje
 pdfjs-cursor-page-flip-tool-button =
     .title = Listanje stranica
 pdfjs-cursor-page-flip-tool-button-label = Listanje stranica
+pdfjs-editor-eraser-button =
+    .title = Obriši
+pdfjs-editor-eraser-button-label = Obriši
+pdfjs-editor-eraser-editor =
+    .aria-label = Gumica
+pdfjs-editor-undo-button =
+    .title = Poništi
+pdfjs-editor-undo-button-label = Poništi
+pdfjs-editor-redo-button =
+    .title = Ponovi
+pdfjs-editor-redo-button-label = Ponovi
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-toggle-views-manager-notification-button =
     .title = Toggle Sidebar (document contains thumbnails/outline/attachments/layers)

@@ -15,6 +15,8 @@ export enum AnnotationEditorType {
   POPUP = 16,
   SIGNATURE = 101,
   COMMENT = 102,
+  /** stephanrauh/pdf.js#14: the eraser. Only available with the bleeding-edge bundle (pdf.js 6.3 and up). */
+  ERASER = 103,
 }
 
 export const AnnotationEditorParamsType = {
@@ -26,12 +28,14 @@ export const AnnotationEditorParamsType = {
   INK_COLOR: 21,
   INK_THICKNESS: 22,
   INK_OPACITY: 23,
+  ERASER_THICKNESS: 25, // stephanrauh/pdf.js#14 - bleeding edge only
   HIGHLIGHT_COLOR: 31,
   HIGHLIGHT_THICKNESS: 32,
   HIGHLIGHT_FREE: 33,
   HIGHLIGHT_SHOW_ALL: 34,
   HIGHLIGHT_DEFAULT_COLOR: 35,
   DRAW_STEP: 41,
+  ERASER_STEP: 42, // stephanrauh/pdf.js#14 - bleeding edge only
 };
 
 export type AnnotationEditorTypeValue = -1 | 0 | 3 | 9 | 13 | 15 | 16;

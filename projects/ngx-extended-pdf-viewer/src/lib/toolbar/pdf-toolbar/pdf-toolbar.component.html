@@ -141,9 +141,16 @@
       <pdf-move-up [showMoveUpButton]="showMovePageButton()" [disable]="disableMovePageButton()"></pdf-move-up>
       <!-- #2943 end of modification by ngx-extended-pdf-viewer -->
 
+      <!-- stephanrauh/pdf.js#15 modified by ngx-extended-pdf-viewer - undo/redo toolbar buttons -->
+      @if (showUndoRedoButtons() !== false) {
+        <pdf-undo-redo [show]="showUndoRedoButtons()" [disable]="disableUndoRedoButtons()"></pdf-undo-redo>
+      }
+      <!-- stephanrauh/pdf.js#15 end of modification by ngx-extended-pdf-viewer -->
       <pdf-editor
         [showCommentEditor]="showCommentEditor()"
         [showDrawEditor]="showDrawEditor()"
+        [showEraserEditor]="showEraserEditor()"
+        [disableEraserEditor]="disableEraserEditor()"
         [showHighlightEditor]="showHighlightEditor()"
         [showTextEditor]="showTextEditor()"
         [showStampEditor]="showStampEditor()"

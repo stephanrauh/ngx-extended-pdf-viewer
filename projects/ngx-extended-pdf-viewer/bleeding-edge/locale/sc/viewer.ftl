@@ -479,6 +479,11 @@ pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) }
 pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 pdfjs-text-annotation-type =
     .alt = [{ $type } Annotation]
+pdfjs-editor-eraser-button =
+    .title = Erase
+pdfjs-editor-eraser-button-label = Erase
+pdfjs-editor-eraser-editor =
+    .aria-label = Eraser
 pdfjs-editor-ink-opacity-input = Opacity
 pdfjs-editor-free-highlight-thickness-title =
     .title = Change thickness when highlighting items other than text
@@ -538,6 +543,12 @@ pdfjs-editor-undo-bar-message-multiple =
         [one] { $count } annotation removed
        *[other] { $count } annotations removed
     }
+pdfjs-editor-undo-button =
+    .title = Undo
+pdfjs-editor-undo-button-label = Undo
+pdfjs-editor-redo-button =
+    .title = Redo
+pdfjs-editor-redo-button-label = Redo
 pdfjs-editor-add-signature-dialog-label = This modal allows the user to create a signature to add to a PDF document. The user can edit the name (which also serves as the alt text), and optionally save the signature for repeated use.
 pdfjs-editor-add-signature-dialog-title = Add a signature
 pdfjs-editor-add-signature-type-button = Type

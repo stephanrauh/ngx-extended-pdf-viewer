@@ -835,6 +835,18 @@ pdfjs-editor-add-signature-edit-button-label = Mudar descrição
 
 pdfjs-editor-edit-signature-dialog-title = Mudar descrição
 
+# Additional translations for ngx-extended-pdf-viewer (pt-br)
+pdfjs-editor-eraser-button =
+    .title = Apagar
+pdfjs-editor-eraser-button-label = Apagar
+pdfjs-editor-eraser-editor =
+    .aria-label = Borracha
+pdfjs-editor-undo-button =
+    .title = Desfazer
+pdfjs-editor-undo-button-label = Desfazer
+pdfjs-editor-redo-button =
+    .title = Refazer
+pdfjs-editor-redo-button-label = Refazer
 # Additional translations for ngx-extended-pdf-viewer (pt)
 unverified-signature-warning = Este arquivo PDF contém uma assinatura digital. O visualizador de PDF não pode verificar se a assinatura é válida. Faça download do arquivo e abra-o no Acrobat Reader para verificar se a assinatura é válida.
 pdfjs-infinite-scroll-button-label = Rolagem infinita

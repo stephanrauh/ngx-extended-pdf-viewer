@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-export type ResponsiveVisibility = boolean | 'always-visible' | 'always-in-secondary-menu' | 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
+export type ResponsiveVisibility = boolean | 'always-visible' | 'always-in-secondary-menu' | 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'xxxl';
 
 export class PdfBreakpoints {
   static xs = 490;
@@ -14,6 +14,12 @@ export class PdfBreakpoints {
   static xl = 790;
 
   static xxl = 910;
+
+  // stephanrauh/pdf.js#14 and stephanrauh/pdf.js#15 modified by ngx-extended-pdf-viewer
+  // The default toolbar is full at 910 px. The eraser and the undo/redo
+  // buttons only fit into the primary toolbar above this width.
+  static xxxl = 1000;
+  // stephanrauh/pdf.js#14 and stephanrauh/pdf.js#15 end of modification by ngx-extended-pdf-viewer
 }
 
 export type ResponsiveCSSClass =
@@ -24,6 +30,7 @@ export type ResponsiveCSSClass =
   | 'hiddenLargeView'
   | 'hiddenXLView'
   | 'hiddenXXLView'
+  | 'hiddenXXXLView'
   | 'invisible'
   | 'always-visible'
   | 'always-in-secondary-menu';
@@ -36,6 +43,7 @@ export type ResponsiveCSSClassInSecondaryToolbar =
   | 'visibleLargeView'
   | 'visibleXLView'
   | 'visibleXXLView'
+  | 'visibleXXXLView'
   | 'invisible'
   | 'always-visible'
   | 'always-in-secondary-menu';
@@ -71,6 +79,8 @@ export class ResponsiveCSSClassPipe implements PipeTransform {
         return 'hiddenXLView';
       case 'xxl':
         return 'hiddenXXLView';
+      case 'xxxl':
+        return 'hiddenXXXLView';
     }
   }
 }
@@ -113,6 +123,9 @@ export class NegativeResponsiveCSSClassPipe implements PipeTransform {
       case 'xxl':
       case 'hiddenXXLView':
         return 'visibleXXLView';
+      case 'xxxl':
+      case 'hiddenXXXLView':
+        return 'visibleXXXLView';
     }
   }
 }

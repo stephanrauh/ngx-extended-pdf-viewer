@@ -582,6 +582,51 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   public effectiveShowSignatureEditor = computed(() => (this.showEditorButtons() === false ? false : this.showSignatureEditor()));
   // #2818 end of modification by ngx-extended-pdf-viewer
 
+  // stephanrauh/pdf.js#14 modified by ngx-extended-pdf-viewer - the eraser
+  /**
+   * Shows the eraser button. It erases parts of drawings and free-hand highlights.
+   * Only available with the bleeding-edge bundle (pdf.js 6.3 and up); with the stable
+   * bundle the button is never shown. The default `'xxxl'` keeps it in the primary
+   * toolbar only if the toolbar is at least 1000 pixels wide.
+   */
+  public showEraserEditor = input<ResponsiveVisibility>('xxxl');
+
+  public disableEraserEditor = input<boolean>(false);
+  // stephanrauh/pdf.js#14 end of modification by ngx-extended-pdf-viewer
+
+  // stephanrauh/pdf.js#15 modified by ngx-extended-pdf-viewer - undo/redo toolbar buttons
+  /**
+   * Shows the undo and redo buttons of the annotation editor. They're meant for touch
+   * devices; with a keyboard, Ctrl+Z / Ctrl+Y (Cmd+Z / Cmd+Shift+Z) do the same. The
+   * buttons are disabled outside an editor mode and when there's nothing to undo or redo.
+   * Only available with the bleeding-edge bundle (pdf.js 6.3 and up).
+   *
+   * The default `'xxxl'` applies to the 31.0.0 alpha versions only: from 31.0.0 on, the
+   * buttons are hidden by default.
+   */
+  public showUndoRedoButtons = input<ResponsiveVisibility>('xxxl');
+
+  public disableUndoRedoButtons = input<boolean>(false);
+  // stephanrauh/pdf.js#15 end of modification by ngx-extended-pdf-viewer
+
+  // stephanrauh/pdf.js#14 and stephanrauh/pdf.js#15 modified by ngx-extended-pdf-viewer
+  // Methods instead of computed signals: the pdf.js version depends on
+  // pdfDefaultOptions.assetsFolder, which isn't a signal.
+  public effectiveShowEraserEditor(): ResponsiveVisibility {
+    if (!isPdfjsVersionAtLeast(6, 3) || this.showEditorButtons() === false) {
+      return false;
+    }
+    return this.showEraserEditor();
+  }
+
+  public effectiveShowUndoRedoButtons(): ResponsiveVisibility {
+    if (!isPdfjsVersionAtLeast(6, 3) || this.showEditorButtons() === false) {
+      return false;
+    }
+    return this.showUndoRedoButtons();
+  }
+  // stephanrauh/pdf.js#14 and stephanrauh/pdf.js#15 end of modification by ngx-extended-pdf-viewer
+
   /** How many log messages should be printed?
    * Legal values: VerbosityLevel.INFOS (= 5), VerbosityLevel.WARNINGS (= 1), VerbosityLevel.ERRORS (= 0) */
   public logLevel = input(VerbosityLevel.WARNINGS);
@@ -1944,12 +1989,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     const classesToRemove = [
       'hidden',
       'invisible',
+      'hiddenXXXLView',
       'hiddenXXLView',
       'hiddenXLView',
       'hiddenLargeView',
       'hiddenMediumView',
       'hiddenSmallView',
       'hiddenTinyView',
+      'visibleXXXLView',
       'visibleXXLView',
       'visibleXLView',
       'visibleLargeView',

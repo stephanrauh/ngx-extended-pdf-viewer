@@ -9,5 +9,10 @@
   <pdf-text-editor [show]="showTextEditor()" [disable]="disableTextEditor()"></pdf-text-editor>
   <pdf-stamp-editor [show]="showStampEditor()" [disable]="disableStampEditor()"></pdf-stamp-editor>
   <pdf-draw-editor [show]="showDrawEditor()" [disable]="disableDrawEditor()"></pdf-draw-editor>
+  <!-- stephanrauh/pdf.js#14 modified by ngx-extended-pdf-viewer - the eraser -->
+  @if (showEraserEditor() !== false) {
+    <pdf-eraser-editor [show]="showEraserEditor()" [disable]="disableEraserEditor()"></pdf-eraser-editor>
+  }
+  <!-- stephanrauh/pdf.js#14 end of modification by ngx-extended-pdf-viewer -->
 </div>
 <!-- #2818 end of modification by ngx-extended-pdf-viewer -->
