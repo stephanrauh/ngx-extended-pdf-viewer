@@ -55,7 +55,7 @@
     "@angular/forms": "^19.2.25",
     "@angular/platform-browser": "^19.2.25",
     "@angular/platform-browser-dynamic": "^19.2.25",
-    "@angular/router": "^19.2.25",
+    "@angular/router": "^22.2.0",
     "angular2-smart-table": "^4.2.0",
     "prismjs": "^1.30.0",
     "rxjs": "^7.8.2",
