@@ -478,6 +478,17 @@ pdfjs-editor-movePageDown-button-label = Presunúť stránku nadol
 pdfjs-cursor-page-flip-tool-button =
     .title = Listovanie stránok
 pdfjs-cursor-page-flip-tool-button-label = Listovanie stránok
+pdfjs-editor-eraser-button =
+    .title = Gumovať
+pdfjs-editor-eraser-button-label = Gumovať
+pdfjs-editor-eraser-editor =
+    .aria-label = Guma
+pdfjs-editor-undo-button =
+    .title = Späť
+pdfjs-editor-undo-button-label = Späť
+pdfjs-editor-redo-button =
+    .title = Znova
+pdfjs-editor-redo-button-label = Znova
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-thumb-page-title1 =
     .title = Page { $page } of { $total }

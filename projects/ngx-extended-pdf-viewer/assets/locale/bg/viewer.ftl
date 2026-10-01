@@ -414,6 +414,17 @@ pdfjs-editor-movePageDown-button-label = Премести страницата �
 pdfjs-cursor-page-flip-tool-button =
     .title = Прелистване на страници
 pdfjs-cursor-page-flip-tool-button-label = Прелистване на страници
+pdfjs-editor-eraser-button =
+    .title = Изтриване
+pdfjs-editor-eraser-button-label = Изтриване
+pdfjs-editor-eraser-editor =
+    .aria-label = Гума
+pdfjs-editor-undo-button =
+    .title = Отмяна
+pdfjs-editor-undo-button-label = Отмяна
+pdfjs-editor-redo-button =
+    .title = Повторение
+pdfjs-editor-redo-button-label = Повторение
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-thumb-page-title1 =
     .title = Page { $page } of { $total }

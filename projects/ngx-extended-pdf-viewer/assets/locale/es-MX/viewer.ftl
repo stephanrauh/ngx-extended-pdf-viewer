@@ -761,6 +761,17 @@ pdfjs-editor-movePageDown-button-label = Mover página hacia abajo
 pdfjs-cursor-page-flip-tool-button =
     .title = Pasar página
 pdfjs-cursor-page-flip-tool-button-label = Pasar página
+pdfjs-editor-eraser-button =
+    .title = Borrar
+pdfjs-editor-eraser-button-label = Borrar
+pdfjs-editor-eraser-editor =
+    .aria-label = Borrador
+pdfjs-editor-undo-button =
+    .title = Deshacer
+pdfjs-editor-undo-button-label = Deshacer
+pdfjs-editor-redo-button =
+    .title = Rehacer
+pdfjs-editor-redo-button-label = Rehacer
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-digital-signature-properties-button =
     .title = Digital signature properties

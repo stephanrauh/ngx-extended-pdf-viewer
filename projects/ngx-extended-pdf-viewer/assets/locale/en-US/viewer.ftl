@@ -908,3 +908,15 @@ pdfjs-layers-button-label = Layers
 pdfjs-thumbs-button =
     .title = Show Thumbnails
 pdfjs-thumbs-button-label = Thumbnails
+# Additional translations for ngx-extended-pdf-viewer from the en-us bleeding edge branch
+pdfjs-editor-eraser-button =
+    .title = Erase
+pdfjs-editor-eraser-button-label = Erase
+pdfjs-editor-eraser-editor =
+    .aria-label = Eraser
+pdfjs-editor-undo-button =
+    .title = Undo
+pdfjs-editor-undo-button-label = Undo
+pdfjs-editor-redo-button =
+    .title = Redo
+pdfjs-editor-redo-button-label = Redo

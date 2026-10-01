@@ -816,6 +816,17 @@ pdfjs-editor-movePageDown-button-label = Premakni stran navzdol
 pdfjs-cursor-page-flip-tool-button =
     .title = Listanje strani
 pdfjs-cursor-page-flip-tool-button-label = Listanje strani
+pdfjs-editor-eraser-button =
+    .title = Radiraj
+pdfjs-editor-eraser-button-label = Radiraj
+pdfjs-editor-eraser-editor =
+    .aria-label = Radirka
+pdfjs-editor-undo-button =
+    .title = Razveljavi
+pdfjs-editor-undo-button-label = Razveljavi
+pdfjs-editor-redo-button =
+    .title = Uveljavi znova
+pdfjs-editor-redo-button-label = Uveljavi znova
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-digital-signature-properties-banner-unknown =
     { $count ->

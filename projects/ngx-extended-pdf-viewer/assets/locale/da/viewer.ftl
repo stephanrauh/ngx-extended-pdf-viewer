@@ -752,6 +752,17 @@ pdfjs-editor-movePageDown-button-label = Flyt side ned
 pdfjs-cursor-page-flip-tool-button =
     .title = Bladre i sider
 pdfjs-cursor-page-flip-tool-button-label = Bladre i sider
+pdfjs-editor-eraser-button =
+    .title = Visk ud
+pdfjs-editor-eraser-button-label = Visk ud
+pdfjs-editor-eraser-editor =
+    .aria-label = Viskelæder
+pdfjs-editor-undo-button =
+    .title = Fortryd
+pdfjs-editor-undo-button-label = Fortryd
+pdfjs-editor-redo-button =
+    .title = Gentag
+pdfjs-editor-redo-button-label = Gentag
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-views-manager-sidebar-resizer =
     .aria-label = Sidebar resizer
