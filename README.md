@@ -21,11 +21,15 @@ Bringing Mozilla's pdf.js to the Angular world. That's not only the core PDF vie
 
 ## Showcase and manual
 
-There's a showcase at <a href="https://pdfviewer.net">https://pdfviewer.net</a>. Check this page for live demos, source code examples, and a handbook.
+There's a showcase at <a href="https://pdfviewer.net">https://pdfviewer.net</a>. Check this page for live demos, source code examples, and a handbook. If something doesn't work, have a look at the <a href="https://pdfviewer.net/extended-pdf-viewer/troubleshooting">troubleshooting page</a>.
 
-## What's new in 30 (release candidate)
+## What's new in 31 (alpha)
 
-Version `30.0.0-rc.0` ships **pdf.js 6.2** in both the stable and the bleeding-edge bundle - including the new digital signature properties panel, which you can switch on with your own `[signatureVerifier]` - and stops the viewer from modifying the page it lives on.
+The bleeding-edge bundle runs **pdf.js 6.3**; the stable bundle stays on pdf.js 6.2. New in the bleeding-edge bundle, contributed by legraina: an **eraser** for drawings and free-hand highlights (`[showEraserEditor]`), and **undo/redo buttons** for the annotation editor (`[showUndoRedoButtons]`). If you style the viewer with your own CSS, check the [changelog](projects/ngx-extended-pdf-viewer/changelog.md) entry of 31.0.0-alpha.0 for four changed rules.
+
+## What's new in 30
+
+Version 30 ships **pdf.js 6.2** in both the stable and the bleeding-edge bundle - including the new digital signature properties panel, which you can switch on with your own `[signatureVerifier]` - and stops the viewer from modifying the page it lives on.
 
 Until now the viewer wrote to your application's `<html>` tag: the reading direction of the UI language (so an Arabic PDF flipped your *entire* application to right-to-left, and left it that way after the viewer was destroyed - see [#3253](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/3253)), plus its layout variables `--viewer-container-height`, `--viewsManager-width` and `color-scheme`. All of that now goes to the viewer's own `.html` and `.body` elements, which wrap the viewer inside your page.
 
@@ -57,7 +61,7 @@ The library ships two builds and picks one at runtime. Two things changed here:
 
 ### Angular versions
 
-Versions 26 through 30 require Angular 19, 20, 21 or 22. On Angular 17 or 18, stay on version 25.6.4.
+Versions 26 and later require Angular 19, 20, 21 or 22. On Angular 17 or 18, stay on version 25.6.4.
 
 ## What's new in 29
 

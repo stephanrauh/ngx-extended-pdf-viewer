@@ -17,7 +17,7 @@ Built on Mozilla’s pdf.js and extended with dozens of enhancements, it's ideal
 
 ### Prerequisites
 
-⚠️ **Versions 26 through 30 require Angular 19, 20, 21, or 22.** If you're using Angular 17 or 18, please continue using version 25.6.4.
+⚠️ **Versions 26 and later require Angular 19, 20, 21, or 22.** If you're using Angular 17 or 18, please continue using version 25.6.4.
 
 **Why this breaking change?** There are many reasons: Version 26 supports zone-less Angular and migrates to signals. And Angular 18 exited its Long-Term Support (LTS) phase, and security vulnerability CVE-2025-66035 will not be fixed in Angular 17 or 18. Updating to Angular 19 ensures your application continues to receive critical security patches.
 
@@ -159,7 +159,20 @@ Regarding security: I'm not perfect - it's always a best-effort approach without
 
 ## 📦 Version Highlights
 
-### Version 30 (release candidate)
+### Version 31 (alpha)
+
+Version 31 brings pdf.js 6.3 to the bleeding-edge bundle. The stable bundle stays on pdf.js 6.2.
+
+**New in the bleeding-edge bundle:**
+
+- **Eraser**: erases parts of drawings and free-hand highlights (`[showEraserEditor]`, `[disableEraserEditor]`). Contributed by legraina.
+- **Undo and redo buttons** for the annotation editor, handy on tablets (`[showUndoRedoButtons]`, `[disableUndoRedoButtons]`). Contributed by legraina. They are shown by default during the alphas only; from 31.0.0 on, they are hidden by default.
+- **Responsive visibility level `'xxxl'`**: the new buttons stay in the toolbar when it's at least 1000 pixels wide and move to the secondary menu otherwise.
+- **pdf.js 6.3**: highlighting and drawing are built on Mozilla's reworked editors, a two-finger gesture pans the document while you pinch, and large JPEG images need noticeably less memory.
+
+**Breaking:** if you style the viewer with your own CSS, check the button classes, the menu checkmark and the view switcher padding. The [changelog](./changelog.md) (31.0.0-alpha.0) lists the details.
+
+### Version 30
 
 Version 30 updates to pdf.js 6.2 in both bundles and stops the viewer from modifying the page it lives on.
 
@@ -380,7 +393,9 @@ Use `NgxExtendedPdfViewerService` for:
 
 ---
 
-## 🧪 Troubleshooting: try the Showcase Locally
+## 🧪 Troubleshooting
+
+The [troubleshooting page](https://pdfviewer.net/extended-pdf-viewer/troubleshooting) of the showcase collects the solutions to the most common problems: server configuration (MIME types for `.mjs` and `.ftl` files), the assets folder, an empty viewer, printing, missing buttons, and more.
 
 If you're stuck on a feature, try cloning the showcase repository. It’s a clean and working example, and comparing it to your app often helps locate the issue. And if the showcase doesn’t work - you can blame me!
 
