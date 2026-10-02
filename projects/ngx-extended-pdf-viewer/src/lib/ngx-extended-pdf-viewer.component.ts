@@ -598,7 +598,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   /**
    * Shows the undo and redo buttons of the annotation editor. They're meant for touch
    * devices; with a keyboard, Ctrl+Z / Ctrl+Y (Cmd+Z / Cmd+Shift+Z) do the same. The
-   * buttons are disabled outside an editor mode and when there's nothing to undo or redo.
+   * buttons also work with no editor selected, and are disabled only when there's nothing
+   * to undo or redo.
    * Only available with the bleeding-edge bundle (pdf.js 6.3 and up).
    *
    * The default `'xxxl'` applies to the 31.0.0 alpha versions only: from 31.0.0 on, the
