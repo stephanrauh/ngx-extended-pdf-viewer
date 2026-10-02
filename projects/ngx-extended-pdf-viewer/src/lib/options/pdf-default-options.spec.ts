@@ -458,15 +458,16 @@ describe('PDF Default Options Utility Functions', () => {
         expect(result).toContain('assets/standard_fonts/');
       });
 
+      it('should return correct iccUrl', () => {
+        // #3275: the CMYK ICC profile ships inside the assets folder.
+        expect(pdfDefaultOptions.iccUrl()).toBe(new URL('./assets/iccs/', document.baseURI).href);
+      });
+
       it('should return correct wasmUrl', () => {
         const result = pdfDefaultOptions.wasmUrl();
         // #3140: wasmUrl now resolves against document.baseURI so it works on sub-routes.
         // In jsdom that gives an http://localhost/... URL; in SSR it falls back to ./assets/wasm/.
         expect(result).toContain('assets/wasm/');
-      });
-
-      it('should return correct iccUrl', () => {
-        expect(pdfDefaultOptions.iccUrl()).toContain('assets/iccs/');
       });
 
       it('should return ES5 versions when needsES5 is true', () => {

@@ -167,6 +167,10 @@ export const pdfDefaultOptions = {
   // #3232: see the comment on cMapUrl - the standard fonts ship inside the
   // assets folder, too.
   standardFontDataUrl: () => resolveAssetUrlAgainstBaseHref(`${assetsUrl(pdfDefaultOptions.assetsFolder)}/standard_fonts/`),
+  // #3275: the ICC profile pdf.js uses to convert DeviceCMYK colors ships inside
+  // the assets folder, too. pdf.js's default (`../web/iccs/`) is resolved by the
+  // worker against its own URL, so it pointed to a folder that doesn't exist.
+  iccUrl: () => resolveAssetUrlAgainstBaseHref(`${assetsUrl(pdfDefaultOptions.assetsFolder)}/iccs/`),
   // #3140: wasm files live inside the assets folder (not as a sibling).
   // Resolve against document.baseURI so the path stays correct on sub-routes
   // (pdf.js's QuickJS loader resolves wasmUrl against `location.href`, which
@@ -180,21 +184,6 @@ export const pdfDefaultOptions = {
       return new URL(`${folder}/wasm/`, document.baseURI).href;
     }
     return `./${folder}/wasm/`;
-  },
-
-  // #3275: pdf.js fetches the CMYK ICC profile with a synchronous XHR from
-  // the worker. The engine's default (`../web/iccs/`) only exists in the pdf.js
-  // repository layout, so it 404s in packaged apps. The profile ships in the
-  // assets folder; resolve against document.baseURI like the worker expects.
-  iccUrl: () => {
-    const folder = pdfDefaultOptions.assetsFolder;
-    if (folder?.includes('://')) {
-      return `${folder}/iccs/`;
-    }
-    if (typeof document !== 'undefined') {
-      return new URL(`${folder}/iccs/`, document.baseURI).href;
-    }
-    return `./${folder}/iccs/`;
   },
 
   // options specific to ngx-extended-pdf-viewer (as opposed to being used by pdf.js)
