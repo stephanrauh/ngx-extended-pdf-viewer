@@ -182,6 +182,21 @@ export const pdfDefaultOptions = {
     return `./${folder}/wasm/`;
   },
 
+  // #3275: pdf.js fetches the CMYK ICC profile with a synchronous XHR from
+  // the worker. The engine's default (`../web/iccs/`) only exists in the pdf.js
+  // repository layout, so it 404s in packaged apps. The profile ships in the
+  // assets folder; resolve against document.baseURI like the worker expects.
+  iccUrl: () => {
+    const folder = pdfDefaultOptions.assetsFolder;
+    if (folder?.includes('://')) {
+      return `${folder}/iccs/`;
+    }
+    if (typeof document !== 'undefined') {
+      return new URL(`${folder}/iccs/`, document.baseURI).href;
+    }
+    return `./${folder}/iccs/`;
+  },
+
   // options specific to ngx-extended-pdf-viewer (as opposed to being used by pdf.js)
   doubleTapZoomFactor: 'page-width',
   doubleTapZoomsInHandMode: true,
