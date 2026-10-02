@@ -6,7 +6,6 @@ import { ResponsiveVisibility } from '../../responsive-visibility';
 /** The payload of pdf.js's `editingstateschanged` event (only the fields used here). */
 interface EditingStatesChangedEvent {
   details: {
-    isEditing?: boolean;
     hasSomethingToUndo?: boolean;
     hasSomethingToRedo?: boolean;
   };
@@ -15,9 +14,10 @@ interface EditingStatesChangedEvent {
 /**
  * stephanrauh/pdf.js#15: undo and redo buttons for the annotation editor, so
  * touch users can undo without a keyboard. They send pdf.js's own
- * `editingaction` event, the same route Ctrl+Z / Ctrl+Y take. Like these
- * shortcuts, they only work while an editor mode is active, so the buttons
- * are disabled outside editing mode and when there's nothing to undo or redo.
+ * `editingaction` event, the same route Ctrl+Z / Ctrl+Y take. Unlike these
+ * shortcuts, which only listen while an editor mode is active, the buttons
+ * also work with no editor selected - pdf.js undoes and redoes in that mode
+ * too - so they're only disabled when there's nothing to undo or redo.
  *
  * The buttons deliberately don't use the ids `undoButton` / `redoButton`:
  * the bleeding-edge pdf.js toolbar binds its own click handler to these, and
@@ -71,20 +71,16 @@ export class PdfUndoRedoComponent implements OnDestroy {
     this.eventBusAbortController?.abort();
     this.eventBusAbortController = new AbortController();
     const opts = { signal: this.eventBusAbortController.signal };
-    // The event carries the merged editor states, so `isEditing` is present
-    // once the editor has reported it - same logic as the pdf.js toolbar.
-    let isEditing = false;
     this.PDFViewerApplication?.eventBus.on(
       'editingstateschanged',
       ({ details }: EditingStatesChangedEvent) => {
         setTimeout(
           this.asyncWithCD(() => {
-            isEditing = details.isEditing ?? isEditing;
             if ('hasSomethingToUndo' in details) {
-              this.canUndo = isEditing && !!details.hasSomethingToUndo;
+              this.canUndo = !!details.hasSomethingToUndo;
             }
             if ('hasSomethingToRedo' in details) {
-              this.canRedo = isEditing && !!details.hasSomethingToRedo;
+              this.canRedo = !!details.hasSomethingToRedo;
             }
           }),
         );
@@ -97,7 +93,6 @@ export class PdfUndoRedoComponent implements OnDestroy {
       () => {
         setTimeout(
           this.asyncWithCD(() => {
-            isEditing = false;
             this.canUndo = false;
             this.canRedo = false;
           }),

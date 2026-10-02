@@ -58,7 +58,7 @@ describe('PdfUndoRedoComponent (stephanrauh/pdf.js#15)', () => {
     expect(component.canRedo).toBe(false);
   });
 
-  it('enables the buttons while editing when there is something to undo or redo', () => {
+  it('enables the buttons when there is something to undo or redo', () => {
     statesChanged({ isEditing: true, hasSomethingToUndo: true, hasSomethingToRedo: false });
     expect(component.canUndo).toBe(true);
     expect(component.canRedo).toBe(false);
@@ -68,9 +68,14 @@ describe('PdfUndoRedoComponent (stephanrauh/pdf.js#15)', () => {
     expect(component.canRedo).toBe(true);
   });
 
-  it('disables the buttons outside editing mode, like Ctrl+Z', () => {
-    statesChanged({ isEditing: false, hasSomethingToUndo: true, hasSomethingToRedo: true });
-    expect(component.canUndo).toBe(false);
+  it('keeps the buttons enabled outside editing mode, pdf.js undoes there too', () => {
+    statesChanged({ isEditing: true, hasSomethingToUndo: true, hasSomethingToRedo: true });
+    statesChanged({ isEditing: false });
+    expect(component.canUndo).toBe(true);
+    expect(component.canRedo).toBe(true);
+
+    statesChanged({ isEditing: false, hasSomethingToUndo: true, hasSomethingToRedo: false });
+    expect(component.canUndo).toBe(true);
     expect(component.canRedo).toBe(false);
   });
 
