@@ -172,6 +172,8 @@ Version 31 brings pdf.js 6.3 to the bleeding-edge bundle. The stable bundle stay
 
 **Breaking:** if you style the viewer with your own CSS, check the button classes, the menu checkmark and the view switcher padding. The [changelog](./changelog.md) (31.0.0-alpha.0) lists the details.
 
+**Breaking:** `[textLayer]="false"` now really switches the text layer off and hides the select tool button ([#3292](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/3292), reported long ago in [#1004](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/1004)). Until now the text layer was rendered anyway, so text remained selectable. If you need text selection, highlighting selected text, or screen reader support, remove the attribute.
+
 ### Version 30
 
 Version 30 updates to pdf.js 6.2 in both bundles and stops the viewer from modifying the page it lives on.

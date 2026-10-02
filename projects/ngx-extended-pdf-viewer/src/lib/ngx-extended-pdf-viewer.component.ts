@@ -2373,6 +2373,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
           }
         }
       }
+    } else if (this.textLayer() === false) {
+      // #3292 modified by ngx-extended-pdf-viewer
+      // [textLayer]="false" used to render the text layer anyway
+      setTextLayerMode(0);
+      // #3292 end of modification by ngx-extended-pdf-viewer
     } else {
       setTextLayerMode(pdfDefaultOptions.textLayerMode);
       if (this.showFindButton() === undefined) {

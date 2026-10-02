@@ -120,11 +120,14 @@
         [handTool]="handTool()"
         [disable]="disableHandToolButton()"
       ></pdf-hand-tool>
+      <!-- #3292 modified by ngx-extended-pdf-viewer -->
+      <!-- without a text layer, there's nothing to select -->
       <pdf-select-tool
-        [showSelectToolButton]="showHandToolButton()"
+        [showSelectToolButton]="textLayer() === false ? false : showHandToolButton()"
         [handTool]="handTool()"
         [disable]="disableHandToolButton()"
       ></pdf-select-tool>
+      <!-- #3292 end of modification by ngx-extended-pdf-viewer -->
       <pdf-page-flip-tool
         [showPageFlipButton]="showPageFlipButton()"
         [disable]="disablePageFlipButton()"

@@ -27,6 +27,8 @@ There's a showcase at <a href="https://pdfviewer.net">https://pdfviewer.net</a>.
 
 The bleeding-edge bundle runs **pdf.js 6.3**; the stable bundle stays on pdf.js 6.2. New in the bleeding-edge bundle, contributed by legraina: an **eraser** for drawings and free-hand highlights (`[showEraserEditor]`), and **undo/redo buttons** for the annotation editor (`[showUndoRedoButtons]`). If you style the viewer with your own CSS, check the [changelog](projects/ngx-extended-pdf-viewer/changelog.md) entry of 31.0.0-alpha.0 for four changed rules.
 
+**Breaking:** `[textLayer]="false"` now really switches the text layer off and hides the select tool button ([#3292](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/3292), reported long ago in [#1004](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/1004)). Until now, the text layer was rendered anyway, so text remained selectable. If you need text selection, highlighting selected text, or screen reader support, remove the attribute.
+
 ## What's new in 30
 
 Version 30 ships **pdf.js 6.2** in both the stable and the bleeding-edge bundle - including the new digital signature properties panel, which you can switch on with your own `[signatureVerifier]` - and stops the viewer from modifying the page it lives on.
