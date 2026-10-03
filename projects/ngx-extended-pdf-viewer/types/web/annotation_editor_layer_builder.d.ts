@@ -5,12 +5,12 @@ export type TextAccessibilityManager = import("./text_accessibility.js").TextAcc
 export type AnnotationLayer = import("../src/display/annotation_layer.js").AnnotationLayer;
 export type StructTreeLayerBuilder = any;
 export type AnnotationEditorLayerBuilderOptions = {
-    uiManager?: import("../src/pdf").AnnotationEditorUIManager | undefined;
+    uiManager?: import("../src/pdf.js").AnnotationEditorUIManager | undefined;
     pageIndex: number;
     l10n?: L10n;
     structTreeLayer?: StructTreeLayerBuilder;
     accessibilityManager?: import("./text_accessibility.js").TextAccessibilityManager | undefined;
-    annotationLayer?: import("../src/pdf").AnnotationLayer | undefined;
+    annotationLayer?: import("../src/pdf.js").AnnotationLayer | undefined;
     textLayer?: TextLayer;
     drawLayer?: DrawLayer;
     onAppend?: Function | undefined;
@@ -57,9 +57,11 @@ export class AnnotationEditorLayerBuilder {
      * @returns {Promise<void>}
      */
     render({ viewport, intent }: AnnotationEditorLayerBuilderRenderOptions): Promise<void>;
+    /** @param {PageViewport} viewport */
+    update(viewport: PageViewport): void;
     cancel(): void;
     hide(): void;
     show(): void;
     #private;
 }
-import { AnnotationEditorLayer } from "../src/pdf";
+import { AnnotationEditorLayer } from "../src/pdf.js";

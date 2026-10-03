@@ -1,11 +1,15 @@
 /**
+ * Converts `src` and hands the result to `copy_result`, laid out as RGB, or as
+ * RGBA with an opaque alpha when `add_alpha` is set.
+ *
  * # Safety
  *
  * This function is called directly from JavaScript.
  * @param {number} transformer
  * @param {Uint8Array} src
+ * @param {boolean} add_alpha
  */
-export function qcms_convert_array(transformer: number, src: Uint8Array): void;
+export function qcms_convert_array(transformer: number, src: Uint8Array, add_alpha: boolean): void;
 /**
  * # Safety
  *
@@ -15,18 +19,18 @@ export function qcms_convert_array(transformer: number, src: Uint8Array): void;
  * @param {number} src2
  * @param {number} src3
  * @param {number} src4
- * @param {boolean} css
+ * @returns {number}
  */
-export function qcms_convert_four(transformer: number, src1: number, src2: number, src3: number, src4: number, css: boolean): void;
+export function qcms_convert_four(transformer: number, src1: number, src2: number, src3: number, src4: number): number;
 /**
  * # Safety
  *
  * This function is called directly from JavaScript.
  * @param {number} transformer
  * @param {number} src
- * @param {boolean} css
+ * @returns {number}
  */
-export function qcms_convert_one(transformer: number, src: number, css: boolean): void;
+export function qcms_convert_one(transformer: number, src: number): number;
 /**
  * # Safety
  *
@@ -35,9 +39,9 @@ export function qcms_convert_one(transformer: number, src: number, css: boolean)
  * @param {number} src1
  * @param {number} src2
  * @param {number} src3
- * @param {boolean} css
+ * @returns {number}
  */
-export function qcms_convert_three(transformer: number, src1: number, src2: number, src3: number, css: boolean): void;
+export function qcms_convert_three(transformer: number, src1: number, src2: number, src3: number): number;
 /**
  * # Safety
  *

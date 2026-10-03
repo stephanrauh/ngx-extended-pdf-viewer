@@ -132,8 +132,8 @@ pdfjs-document-properties-page-size-orientation-portrait = pokončno
 pdfjs-document-properties-page-size-orientation-landscape = ležeče
 pdfjs-document-properties-page-size-name-a-three = A3
 pdfjs-document-properties-page-size-name-a-four = A4
-pdfjs-document-properties-page-size-name-letter = Pismo
-pdfjs-document-properties-page-size-name-legal = Pravno
+pdfjs-document-properties-page-size-name-letter = Letter
+pdfjs-document-properties-page-size-name-legal = Legal
 
 ## Variables:
 ##   $width (Number) - the width of the (current) page
@@ -153,6 +153,29 @@ pdfjs-document-properties-linearized = Hitri spletni ogled:
 pdfjs-document-properties-linearized-yes = Da
 pdfjs-document-properties-linearized-no = Ne
 pdfjs-document-properties-close-button = Zapri
+pdfjs-digital-signature-properties-view-certificate = Ogled digitalnega potrdila
+# Shown beneath an invalid signature card to explain why verification
+# failed. The text comes from NSS (e.g. "Signature integrity has been
+# compromised", "PKCS#7 signature could not be parsed") and is not
+# itself localized — it is the underlying error message produced by
+# the verification backend.
+# Variables:
+#   $reason (String) - error message describing why the signature
+#                      could not be verified.
+pdfjs-digital-signature-properties-reason = Razlog: { $reason }
+# Variables:
+#   $dateObj (Date) - the signing time from the /Sig dict's /M entry.
+pdfjs-digital-signature-properties-timestamp = Časovni žig: { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
+# Variables:
+#   $count (Number) - number of nested sub-signatures (one per earlier
+#                     incremental revision of the document).
+pdfjs-digital-signature-properties-sub-signatures =
+    { $count ->
+        [one] Podpodpis ({ $count })
+        [two] Podpodpisi ({ $count })
+        [few] Podpodpisi ({ $count })
+       *[other] Podpodpisi ({ $count })
+    }
 
 ## Print
 
@@ -748,6 +771,84 @@ pdfjs-views-manager-waiting-for-file = Nalaganje datoteke …
 pdfjs-toggle-views-manager-button1 =
     .title = Upravljanje strani
 
+## Digital signature properties (signature verification panel)
+
+pdfjs-digital-signature-properties-button =
+    .title = Lastnosti digitalnega podpisa
+    .aria-label = Lastnosti digitalnega podpisa
+pdfjs-digital-signature-properties-button-label = Lastnosti digitalnega podpisa
+
+## Banner shown above the signature list summarising the overall
+## verification state of the document. Each variant is selected by the
+## viewer based on the worst per-signature status; one signature is
+## enough to lower the banner.
+##
+## Variables:
+##   $count (Number) - number of signatures at the worst level.
+
+pdfjs-digital-signature-properties-banner-verified = Dokument je bil podpisan z veljavnim digitalnim podpisom
+pdfjs-digital-signature-properties-banner-unknown =
+    { $count ->
+        [one] Dokument je podpisan, vendar { $count } digitalnega podpisa ni bilo mogoče preveriti
+        [two] Dokument je podpisan, vendar { $count } digitalnih podpisov ni bilo mogoče preveriti
+        [few] Dokument je podpisan, vendar { $count } digitalnih podpisov ni bilo mogoče preveriti
+       *[other] Dokument je podpisan, vendar { $count } digitalnih podpisov ni bilo mogoče preveriti
+    }
+pdfjs-digital-signature-properties-banner-untrusted =
+    { $count ->
+        [one] Dokument je podpisan z { $count } digitalnim potrdilom, ki ni zaupanja vredno
+        [two] Dokument je podpisan z { $count } digitalnima potrdiloma, ki nista zaupanja vredni
+        [few] Dokument je podpisan s { $count } digitalnimi potrdili, ki niso zaupanja vredna
+       *[other] Dokument je podpisan s { $count } digitalnimi potrdili, ki niso zaupanja vredna
+    }
+pdfjs-digital-signature-properties-banner-expired =
+    { $count ->
+        [one] Dokument je podpisan z { $count } pretečenim digitalnim potrdilom
+        [two] Dokument je podpisan z { $count } pretečenima digitalnima potrdiloma
+        [few] Dokument je podpisan s { $count } pretečenimi digitalnimi potrdili
+       *[other] Dokument je podpisan s { $count } pretečenimi digitalnimi potrdili
+    }
+pdfjs-digital-signature-properties-banner-invalid =
+    { $count ->
+        [one] Dokument vsebuje { $count } neveljaven digitalni podpis
+        [two] Dokument vsebuje { $count } neveljavna digitalna podpisa
+        [few] Dokument vsebuje { $count } neveljavne digitalne podpise
+       *[other] Dokument vsebuje { $count } neveljavnih digitalnih podpisov
+    }
+pdfjs-digital-signature-properties-banner-revoked =
+    { $count ->
+        [one] Dokument je podpisan z { $count } preklicanim digitalnim potrdilom
+        [two] Dokument je podpisan z { $count } preklicanima digitalnima potrdiloma
+        [few] Dokument je podpisan s { $count } preklicanimi digitalnimi potrdili
+       *[other] Dokument je podpisan s { $count } preklicanimi digitalnimi potrdili
+    }
+
+## Per-signature status row. Only three distinct strings are needed:
+## the signature crypto either verified (the cert chain may still be
+## untrusted/expired/revoked, but that's surfaced on the cert row
+## below), or it failed, or its sub-format isn't supported.
+
+pdfjs-digital-signature-properties-status-verified = Stanje: podpis preverjen
+pdfjs-digital-signature-properties-status-invalid = Stanje: podpis neveljaven
+pdfjs-digital-signature-properties-status-unknown = Stanje: podpisa ni mogoče preveriti (nepodprt)
+
+## Per-signature certificate row. The variants with an issuer / date in
+## parentheses embed fully-localized context — no English fall-through.
+##
+## Variables:
+##   $issuer (String) - issuer or subject common name from the cert.
+##   $dateObj (Date)  - notAfter date for the expired-with-date form.
+
+pdfjs-digital-signature-properties-certificate-trusted = Digitalno potrdilo: zaupanja vredno ({ $issuer })
+pdfjs-digital-signature-properties-certificate-unknown = Digitalno potrdilo: ni na voljo
+pdfjs-digital-signature-properties-certificate-untrusted = Digitalno potrdilo: ni zaupanja vredno
+pdfjs-digital-signature-properties-certificate-untrusted-unknown-issuer = Digitalno potrdilo: neznan izdajatelj ({ $issuer })
+pdfjs-digital-signature-properties-certificate-untrusted-self-signed = Digitalno potrdilo: samopodpisano ({ $issuer })
+pdfjs-digital-signature-properties-certificate-untrusted-untrusted-issuer = Digitalno potrdilo: izdajatelj ni zaupanja vreden ({ $issuer })
+pdfjs-digital-signature-properties-certificate-expired = Digitalno potrdilo: pretečeno
+pdfjs-digital-signature-properties-certificate-expired-with-date = Digitalno potrdilo: pretečeno ({ DATETIME($dateObj, dateStyle: "medium") })
+pdfjs-digital-signature-properties-certificate-revoked = Digitalno potrdilo: preklicano
+
 ## Main menu for adding/removing signatures
 
 pdfjs-editor-delete-signature-button1 =
@@ -776,6 +877,17 @@ pdfjs-editor-movePageDown-button-label = Premakni stran navzdol
 pdfjs-cursor-page-flip-tool-button =
     .title = Listanje strani
 pdfjs-cursor-page-flip-tool-button-label = Listanje strani
+pdfjs-editor-eraser-button =
+    .title = Radiraj
+pdfjs-editor-eraser-button-label = Radiraj
+pdfjs-editor-eraser-editor =
+    .aria-label = Radirka
+pdfjs-editor-undo-button =
+    .title = Razveljavi
+pdfjs-editor-undo-button-label = Razveljavi
+pdfjs-editor-redo-button =
+    .title = Uveljavi znova
+pdfjs-editor-redo-button-label = Uveljavi znova
 # Additional translations for ngx-extended-pdf-viewer (sl)
 pdfjs-loading-error-more-info = Več informacij
 pdfjs-loading-error-less-info = Manj informacij

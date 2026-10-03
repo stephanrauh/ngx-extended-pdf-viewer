@@ -303,6 +303,9 @@ pdfjs-editor-ink-button =
 pdfjs-editor-color-picker-ink-input =
     .title = Change drawing color
 pdfjs-editor-ink-button-label = Draw
+pdfjs-editor-eraser-button =
+    .title = Erase
+pdfjs-editor-eraser-button-label = Erase
 pdfjs-editor-stamp-button =
     .title = Add or edit images
 pdfjs-editor-stamp-button-label = Add or edit images
@@ -333,6 +336,8 @@ pdfjs-editor-highlight-editor =
 # “Drawing” is a noun, the string is used on the editor for drawings.
 pdfjs-editor-ink-editor =
     .aria-label = Drawing editor
+pdfjs-editor-eraser-editor =
+    .aria-label = Eraser
 
 # Used when a signature editor is selected/hovered.
 # Variables:
@@ -574,6 +579,15 @@ pdfjs-editor-undo-bar-close-button =
     .title = Close
 pdfjs-editor-undo-bar-close-button-label = Close
 
+## Undo/redo toolbar buttons (ngx-extended-pdf-viewer addition)
+
+pdfjs-editor-undo-button =
+    .title = Undo
+pdfjs-editor-undo-button-label = Undo
+pdfjs-editor-redo-button =
+    .title = Redo
+pdfjs-editor-redo-button-label = Redo
+
 ## Add a signature dialog
 
 pdfjs-editor-add-signature-dialog-label = This modal allows the user to create a signature to add to a PDF document. The user can edit the name (which also serves as the alt text), and optionally save the signature for repeated use.
@@ -758,13 +772,6 @@ pdfjs-views-manager-pages-status-undo-delete-label =
         *[other] { $count } pages deleted
     }
 
-pdfjs-views-manager-pages-status-waiting-ready-label = Getting your file ready…
-pdfjs-views-manager-pages-status-waiting-uploading-label = Uploading file…
-
-pdfjs-views-manager-status-warning-cut-label = Couldn’t cut. Refresh page and try again.
-pdfjs-views-manager-status-warning-copy-label = Couldn’t copy. Refresh page and try again.
-pdfjs-views-manager-status-warning-delete-label = Couldn’t delete. Refresh page and try again.
-pdfjs-views-manager-status-warning-save-label = Couldn’t save. Refresh page and try again.
 pdfjs-views-manager-status-undo-button-label = Undo
 pdfjs-views-manager-status-done-button-label = Done
 pdfjs-views-manager-status-close-button =
@@ -786,11 +793,101 @@ pdfjs-new-badge-content = NEW
 
 pdfjs-views-manager-waiting-for-file = Uploading file…
 
+## Digital signature properties (signature verification panel)
+
+pdfjs-digital-signature-properties-button =
+    .title = Digital signature properties
+    .aria-label = Digital signature properties
+pdfjs-digital-signature-properties-button-label = Digital signature properties
+
+## Banner shown above the signature list summarising the overall
+## verification state of the document. Each variant is selected by the
+## viewer based on the worst per-signature status; one signature is
+## enough to lower the banner.
+##
+## Variables:
+##   $count (Number) - number of signatures at the worst level.
+
+pdfjs-digital-signature-properties-banner-verified = Document was signed with a valid digital signature
+pdfjs-digital-signature-properties-banner-unknown =
+    { $count ->
+        [one] Document signed but { $count } digital signature could not be verified
+       *[other] Document signed but { $count } digital signatures could not be verified
+    }
+pdfjs-digital-signature-properties-banner-untrusted =
+    { $count ->
+        [one] Document signed with { $count } certificate that is not trusted
+       *[other] Document signed with { $count } certificates that are not trusted
+    }
+pdfjs-digital-signature-properties-banner-expired =
+    { $count ->
+        [one] Document signed with { $count } expired certificate
+       *[other] Document signed with { $count } expired certificates
+    }
+pdfjs-digital-signature-properties-banner-invalid =
+    { $count ->
+        [one] Document has { $count } invalid digital signature
+       *[other] Document has { $count } invalid digital signatures
+    }
+pdfjs-digital-signature-properties-banner-revoked =
+    { $count ->
+        [one] Document signed with { $count } revoked certificate
+       *[other] Document signed with { $count } revoked certificates
+    }
+
+## Per-signature status row. Only three distinct strings are needed:
+## the signature crypto either verified (the cert chain may still be
+## untrusted/expired/revoked, but that's surfaced on the cert row
+## below), or it failed, or its sub-format isn't supported.
+
+pdfjs-digital-signature-properties-status-verified = Status: Signature verified
+pdfjs-digital-signature-properties-status-invalid = Status: Signature invalid
+pdfjs-digital-signature-properties-status-unknown = Status: Unable to verify (unsupported)
+
+## Per-signature certificate row. The variants with an issuer / date in
+## parentheses embed fully-localized context — no English fall-through.
+##
+## Variables:
+##   $issuer (String) - issuer or subject common name from the cert.
+##   $dateObj (Date)  - notAfter date for the expired-with-date form.
+
+pdfjs-digital-signature-properties-certificate-trusted = Certificate: Trusted ({ $issuer })
+pdfjs-digital-signature-properties-certificate-unknown = Certificate: Unavailable
+pdfjs-digital-signature-properties-certificate-untrusted = Certificate: Untrusted
+pdfjs-digital-signature-properties-certificate-untrusted-unknown-issuer = Certificate: Unknown issuer ({ $issuer })
+pdfjs-digital-signature-properties-certificate-untrusted-self-signed = Certificate: Self-signed ({ $issuer })
+pdfjs-digital-signature-properties-certificate-untrusted-untrusted-issuer = Certificate: Untrusted issuer ({ $issuer })
+pdfjs-digital-signature-properties-certificate-expired = Certificate: Expired
+pdfjs-digital-signature-properties-certificate-expired-with-date = Certificate: Expired ({ DATETIME($dateObj, dateStyle: "medium") })
+pdfjs-digital-signature-properties-certificate-revoked = Certificate: Revoked
+
+##
+
+pdfjs-digital-signature-properties-view-certificate = View certificate
+
+# Shown beneath an invalid signature card to explain why verification
+# failed. The text comes from NSS (e.g. "Signature integrity has been
+# compromised", "PKCS#7 signature could not be parsed") and is not
+# itself localized — it is the underlying error message produced by
+# the verification backend.
+# Variables:
+#   $reason (String) - error message describing why the signature
+#                      could not be verified.
+pdfjs-digital-signature-properties-reason = Reason: { $reason }
+# Variables:
+#   $dateObj (Date) - the signing time from the /Sig dict's /M entry.
+pdfjs-digital-signature-properties-timestamp = Timestamp: { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
+# Variables:
+#   $count (Number) - number of nested sub-signatures (one per earlier
+#                     incremental revision of the document).
+pdfjs-digital-signature-properties-sub-signatures =
+    { $count ->
+        [one] Sub-signature ({ $count })
+       *[other] Sub-signatures ({ $count })
+    }
+
 # Additional translations for ngx-extended-pdf-viewer (en)
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
-pdfjs-loading-error-more-info = More Information
-pdfjs-loading-error-less-info = Less Information
-pdfjs-loading-error-close = Close
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = Match Each Word
 pdfjs-find-regexp-checkbox-label = Regular Expression
@@ -803,3 +900,22 @@ pdfjs-editor-movePageDown-button-label = Move Page Down
 pdfjs-cursor-page-flip-tool-button =
     .title = Page Flip
 pdfjs-cursor-page-flip-tool-button-label = Page Flip
+pdfjs-toggle-sidebar-button =
+    .title = Toggle Sidebar
+pdfjs-toggle-sidebar-button-label = Toggle Sidebar
+pdfjs-document-outline-button =
+    .title = Show Document Outline (double-click to expand/collapse all items)
+pdfjs-document-outline-button-label = Document Outline
+pdfjs-attachments-button =
+    .title = Show Attachments
+pdfjs-attachments-button-label = Attachments
+pdfjs-layers-button =
+    .title = Show Layers (double-click to reset all layers to the default state)
+pdfjs-layers-button-label = Layers
+pdfjs-thumbs-button =
+    .title = Show Thumbnails
+pdfjs-thumbs-button-label = Thumbnails
+# Additional translations for ngx-extended-pdf-viewer (en)
+pdfjs-loading-error-more-info = More Information
+pdfjs-loading-error-less-info = Less Information
+pdfjs-loading-error-close = Close

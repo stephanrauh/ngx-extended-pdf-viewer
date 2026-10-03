@@ -31,3 +31,33 @@ pdfjs-loading-error-more-info = Lisätietoja
 # made them indistinguishable; corrected here.
 pdfjs-loading-error-less-info = Vähemmän tietoja
 pdfjs-loading-error-close = Sulje
+
+# #3255 Sidebar buttons. pdf.js removed these keys in commit 2367196a0
+# ("Change the sidebar for a views manager"); ngx-extended-pdf-viewer keeps its
+# own sidebar, so the translations live here now.
+pdfjs-toggle-sidebar-button =
+    .title = Näytä/piilota sivupaneeli
+pdfjs-toggle-sidebar-button-label = Näytä/piilota sivupaneeli
+pdfjs-document-outline-button =
+    .title = Näytä dokumentin sisällys (laajenna tai kutista kohdat kaksoisnapsauttamalla)
+pdfjs-document-outline-button-label = Dokumentin sisällys
+pdfjs-attachments-button =
+    .title = Näytä liitteet
+pdfjs-attachments-button-label = Liitteet
+pdfjs-layers-button =
+    .title = Näytä tasot (kaksoisnapsauta palauttaaksesi kaikki tasot oletustilaan)
+pdfjs-layers-button-label = Tasot
+pdfjs-thumbs-button =
+    .title = Näytä pienoiskuvat
+pdfjs-thumbs-button-label = Pienoiskuvat
+pdfjs-editor-eraser-button =
+    .title = Pyyhi
+pdfjs-editor-eraser-button-label = Pyyhi
+pdfjs-editor-eraser-editor =
+    .aria-label = Pyyhekumi
+pdfjs-editor-undo-button =
+    .title = Kumoa
+pdfjs-editor-undo-button-label = Kumoa
+pdfjs-editor-redo-button =
+    .title = Tee uudelleen
+pdfjs-editor-redo-button-label = Tee uudelleen

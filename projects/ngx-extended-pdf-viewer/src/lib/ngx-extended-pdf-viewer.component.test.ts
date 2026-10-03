@@ -176,11 +176,64 @@ describe('NgxExtendedPdfViewerComponent', () => {
     expect(component.toolbarMarginTop).toBe('8px');
   });
 
-  // Skip: Requires complex Angular component mocking and event bus setup
-  it.skip('should call ngOnDestroy and clean up', () => {
-    const spy = jest.spyOn(component['pdfScriptLoaderService'].PDFViewerApplication, 'close');
-    component.ngOnDestroy();
-    expect(spy).toHaveBeenCalled();
+  describe('ngOnDestroy', () => {
+    // ngOnDestroy runs the pdf.js teardown as a fire-and-forget async function
+    // (Angular does not await ngOnDestroy), so the observable effects land a
+    // few microtasks later. Drain microtasks only: a macrotask wait would also
+    // fire the component's requestAnimationFrame callbacks, which this test
+    // setup does not mock.
+    const flushCleanup = async () => {
+      for (let i = 0; i < 10; i++) {
+        await Promise.resolve();
+      }
+    };
+
+    it('closes the pdf.js application and tears down its event bus', async () => {
+      const app = component['pdfScriptLoaderService'].PDFViewerApplication;
+      (component as any).initialized = true;
+      component['service'].ngxExtendedPdfViewerInitialized = true;
+
+      component.ngOnDestroy();
+      await flushCleanup();
+
+      expect(app.close).toHaveBeenCalledTimes(1);
+      expect(app.pdfViewer.destroyBookMode).toHaveBeenCalled();
+      expect(app.pdfViewer.stopRendering).toHaveBeenCalled();
+      expect(app.pdfThumbnailViewer.stopRendering).toHaveBeenCalled();
+      expect(app.unbindEvents).toHaveBeenCalled();
+      expect(app.unbindWindowEvents).toHaveBeenCalled();
+      expect(app._cleanup).toHaveBeenCalled();
+      // #3131 the captured bus is destroyed and detached, so a later dispatch
+      // from a stale listener cannot reach a half-torn-down viewer.
+      expect(app.eventBus).toBeUndefined();
+      expect((component as any).initialized).toBe(false);
+      expect(component['service'].ngxExtendedPdfViewerInitialized).toBe(false);
+      expect(component['notificationService'].onPDFJSInitSignal()).toBeUndefined();
+    });
+
+    it('aborts the event bus listeners synchronously, before the async teardown', () => {
+      const abortController = new AbortController();
+      const abortSpy = jest.spyOn(abortController, 'abort');
+      (component as any).eventBusAbortController = abortController;
+
+      component.ngOnDestroy();
+
+      // No await: #3131 requires the listeners to be gone by the time
+      // ngOnDestroy returns, so a viewer mounted in the same tick starts clean.
+      expect(abortSpy).toHaveBeenCalledTimes(1);
+      expect((component as any).eventBusAbortController).toBeNull();
+      expect((component as any).initialized).toBe(false);
+    });
+
+    it('does not let the pending initialization promise wedge the cleanup when it rejects', async () => {
+      const app = component['pdfScriptLoaderService'].PDFViewerApplication;
+      (component as any).initializationPromise = Promise.reject(new Error('init failed'));
+
+      component.ngOnDestroy();
+      await flushCleanup();
+
+      expect(app.close).toHaveBeenCalledTimes(1);
+    });
   });
 
   it('should have zoom as a model signal', () => {
@@ -1098,6 +1151,86 @@ describe('NgxExtendedPdfViewerComponent', () => {
       const spy = jest.spyOn(component as any, 'collectElementPositions');
       component['assignTabindexes']();
       expect(spy).toHaveBeenCalled();
+    });
+  });
+
+  describe('#3257 isZoneless', () => {
+    /** `ngZone` is readonly, so swap it the way Angular's own injector would. */
+    const setZone = (zone: unknown) => Object.defineProperty(component, 'ngZone', { value: zone, configurable: true });
+
+    /** Angular injects NoopNgZone for zoneless apps; it implements NgZone without extending it. */
+    const noopNgZone = () => ({
+      hasPendingMicrotasks: false,
+      hasPendingMacrotasks: false,
+      isStable: true,
+      run: (fn: () => unknown) => fn(),
+      runGuarded: (fn: () => unknown) => fn(),
+      runOutsideAngular: (fn: () => unknown) => fn(),
+      runTask: (fn: () => unknown) => fn(),
+    });
+
+    it('should report zoneless when Angular injected a NoopNgZone', () => {
+      setZone(noopNgZone() as any);
+      expect(component['isZoneless']()).toBe(true);
+    });
+
+    it('should not report zoneless when Angular injected a real NgZone', () => {
+      setZone(new NgZone({ enableLongStackTrace: false }));
+      expect(component['isZoneless']()).toBe(false);
+    });
+
+    it('should ignore the global Zone object, which says nothing about the change detection mode', () => {
+      // The regression this guards: `zone.js` sits in the `polyfills` array of
+      // every project scaffolded before Angular 22, while zoneless is the
+      // default from Angular 22 on. Loading zone.js does not mean Angular uses it.
+      const globalScope = globalThis as any;
+      const hadZone = 'Zone' in globalScope;
+      const previousZone = globalScope.Zone;
+      globalScope.Zone = { current: {} };
+      try {
+        setZone(noopNgZone() as any);
+        expect(component['isZoneless']()).toBe(true);
+      } finally {
+        if (hadZone) {
+          globalScope.Zone = previousZone;
+        } else {
+          delete globalScope.Zone;
+        }
+      }
+    });
+
+    it('should not run change detection through asyncWithCD when zone.js drives it', () => {
+      setZone(new NgZone({ enableLongStackTrace: false }));
+      const detectChanges = jest.spyOn(component['cdr'], 'detectChanges').mockImplementation(() => undefined);
+      const callback = jest.fn();
+
+      component['asyncWithCD'](callback)();
+
+      expect(callback).toHaveBeenCalled();
+      expect(detectChanges).not.toHaveBeenCalled();
+    });
+
+    it('should run change detection through asyncWithCD when zoneless', () => {
+      setZone(noopNgZone() as any);
+      const detectChanges = jest.spyOn(component['cdr'], 'detectChanges').mockImplementation(() => undefined);
+      const callback = jest.fn();
+
+      component['asyncWithCD'](callback)();
+
+      expect(callback).toHaveBeenCalled();
+      expect(detectChanges).toHaveBeenCalled();
+    });
+
+    it('should skip change detection when the view is already destroyed', () => {
+      setZone(noopNgZone() as any);
+      const detectChanges = jest.spyOn(component['cdr'], 'detectChanges').mockImplementation(() => undefined);
+      Object.defineProperty(component['cdr'], 'destroyed', { value: true, configurable: true });
+      const callback = jest.fn();
+
+      component['asyncWithCD'](callback)();
+
+      expect(callback).toHaveBeenCalled();
+      expect(detectChanges).not.toHaveBeenCalled();
     });
   });
 });

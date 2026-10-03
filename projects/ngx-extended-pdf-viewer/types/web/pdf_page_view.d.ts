@@ -254,4 +254,4 @@ import { BasePDFPageView } from "./base_pdf_page_view.js";
 import { AnnotationLayerBuilder } from "./annotation_layer_builder.js";
 import { TextLayerBuilder } from "./text_layer_builder.js";
 import { XfaLayerBuilder } from "./xfa_layer_builder.js";
-import { OutputScale } from "../src/pdf";
+import { OutputScale } from "../src/pdf.js";

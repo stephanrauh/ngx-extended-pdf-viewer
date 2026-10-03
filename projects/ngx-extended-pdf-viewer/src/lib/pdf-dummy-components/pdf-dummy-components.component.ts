@@ -27,6 +27,16 @@ const requiredIds = [
   //  'editorSignatureButton',
   'editorSignatureAddSignature',
   'editorStampAddImage',
+  // #3257 modified by ngx-extended-pdf-viewer
+  'signaturePropertiesButton',
+  'signaturePropertiesPanel',
+  'signaturePropertiesContainer',
+  'signaturePropertiesBanner',
+  'signaturePropertiesList',
+  // Not rendered by pdf-signature-properties (see its template): PDF.js just
+  // toggles `hidden` on it, so the invisible placeholder is all it needs.
+  'signaturePropertiesSeparator',
+  // #3257 end of modification by ngx-extended-pdf-viewer
   'errorClose',
   'errorMessage',
   'errorMoreInfo',

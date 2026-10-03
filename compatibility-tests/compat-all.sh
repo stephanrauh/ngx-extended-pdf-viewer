@@ -21,6 +21,17 @@ if [ "${SKIP_LIBRARY_BUILD:-0}" != "1" ]; then
   npm run build:lib
 fi
 
+# The apps under test load the STABLE bundle, but `build:base` above refreshes
+# whichever bundle the branch checked out in ../mypdf.js selects - so it may not
+# have touched assets/ at all. If the version constant and the files disagree, every
+# module request 404s, the dev server returns index.html and Chromium reports a MIME
+# type error, which costs a 60s timeout per test and names nothing useful. Fail fast.
+cd "${REPO_ROOT}"
+if ! node ./build-tools/release/check-bundle-consistency.js; then
+  echo "==> Aborting the compatibility matrix: the bundles on disk are inconsistent (see above)."
+  exit 1
+fi
+
 # Provision the Playwright browser once up front, using the harness's OWN
 # pinned Playwright (compatibility-tests/playwright). Every Angular runner
 # shares this single install, and each minor of Playwright requires a

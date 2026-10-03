@@ -31,6 +31,8 @@ export class DynamicCssComponent implements OnDestroy {
 
   public xxl = signal(830);
 
+  public xxxl = signal(1000);
+
   public toolbarWidth = signal(0);
 
   public style = computed(() => {
@@ -55,7 +57,8 @@ export class DynamicCssComponent implements OnDestroy {
 #outerContainer #mainContainer .visibleMediumView,
 #outerContainer #mainContainer .visibleLargeView,
 #outerContainer #mainContainer .visibleXLView,
-#outerContainer #mainContainer .visibleXXLView {
+#outerContainer #mainContainer .visibleXXLView,
+#outerContainer #mainContainer .visibleXXXLView {
   display: none;
 }
 
@@ -131,6 +134,7 @@ export class DynamicCssComponent implements OnDestroy {
 
 #outerContainer .visibleXLView,
 #outerContainer .visibleXXLView,
+#outerContainer .visibleXXXLView,
 #outerContainer .visibleTinyView {
   display: none;
 }
@@ -140,6 +144,15 @@ export class DynamicCssComponent implements OnDestroy {
     display: none;
   }
   #outerContainer .visibleXLView {
+    display: inherit;
+  }
+}
+
+@media all and (max-width: ${this.xxxl()}px) {
+  #outerContainer .hiddenXXXLView {
+    display: none;
+  }
+  #outerContainer  #mainContainer .visibleXXXLView {
     display: inherit;
   }
 }
@@ -221,6 +234,7 @@ export class DynamicCssComponent implements OnDestroy {
     this.lg.set(scaleFactor * PdfBreakpoints.lg);
     this.xl.set(scaleFactor * PdfBreakpoints.xl);
     this.xxl.set(scaleFactor * PdfBreakpoints.xxl);
+    this.xxxl.set(scaleFactor * PdfBreakpoints.xxxl);
 
     let styles = this.document.getElementById('pdf-dynamic-css') as HTMLStyleElement;
     if (!styles) {

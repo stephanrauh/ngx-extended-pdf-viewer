@@ -14,6 +14,7 @@ describe('PdfBreakpoints', () => {
     expect(PdfBreakpoints.lg).toBe(660);
     expect(PdfBreakpoints.xl).toBe(790);
     expect(PdfBreakpoints.xxl).toBe(910);
+    expect(PdfBreakpoints.xxxl).toBe(1000);
   });
 
   it('should have breakpoints in ascending order', () => {
@@ -22,6 +23,7 @@ describe('PdfBreakpoints', () => {
     expect(PdfBreakpoints.md).toBeLessThan(PdfBreakpoints.lg);
     expect(PdfBreakpoints.lg).toBeLessThan(PdfBreakpoints.xl);
     expect(PdfBreakpoints.xl).toBeLessThan(PdfBreakpoints.xxl);
+    expect(PdfBreakpoints.xxl).toBeLessThan(PdfBreakpoints.xxxl);
   });
 });
 

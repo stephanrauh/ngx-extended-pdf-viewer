@@ -29,3 +29,33 @@ pdfjs-cursor-page-flip-tool-button-label = Гортання сторінок
 pdfjs-loading-error-more-info = Більше інформації
 pdfjs-loading-error-less-info = Менше інформації
 pdfjs-loading-error-close = Закрити
+
+# #3255 Sidebar buttons. pdf.js removed these keys in commit 2367196a0
+# ("Change the sidebar for a views manager"); ngx-extended-pdf-viewer keeps its
+# own sidebar, so the translations live here now.
+pdfjs-toggle-sidebar-button =
+    .title = Бічна панель
+pdfjs-toggle-sidebar-button-label = Перемкнути бічну панель
+pdfjs-document-outline-button =
+    .title = Показати схему документу (подвійний клік для розгортання/згортання елементів)
+pdfjs-document-outline-button-label = Схема документа
+pdfjs-attachments-button =
+    .title = Показати вкладення
+pdfjs-attachments-button-label = Вкладення
+pdfjs-layers-button =
+    .title = Показати шари (двічі клацніть, щоб скинути всі шари до типового стану)
+pdfjs-layers-button-label = Шари
+pdfjs-thumbs-button =
+    .title = Показати мініатюри
+pdfjs-thumbs-button-label = Мініатюри
+pdfjs-editor-eraser-button =
+    .title = Стерти
+pdfjs-editor-eraser-button-label = Стерти
+pdfjs-editor-eraser-editor =
+    .aria-label = Гумка
+pdfjs-editor-undo-button =
+    .title = Повернути
+pdfjs-editor-undo-button-label = Повернути
+pdfjs-editor-redo-button =
+    .title = Повторити
+pdfjs-editor-redo-button-label = Повторити

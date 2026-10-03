@@ -58,13 +58,12 @@ export class FileSpec {
      */
     constructor(root: Dict | null | undefined);
     root: Dict | undefined;
-    fs: any;
-    get filename(): string;
-    get description(): string;
+    get filename(): any;
+    get description(): any;
     get serializable(): {
-        rawFilename: string;
+        rawFilename: any;
         filename: any;
-        description: string;
+        description: any;
     };
 }
 import { Dict } from "./primitives.js";

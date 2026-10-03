@@ -66,13 +66,28 @@ runCommand('NGX_ASSETS_FOLDER=bleeding-edge node ./build-tools/1-build-base-libr
 // Verify bleeding-edge assets were created
 const bleedingEdgePath = path.join('projects', 'ngx-extended-pdf-viewer', 'bleeding-edge');
 
-// Per-file-type minimum sizes. pdf.js 6.0 shrank the sandbox bundle considerably
-// (from ~1 MB in v5.x to ~140–340 KB), so the previous flat 700 KB threshold
-// would false-positive on legitimate v6 builds. Thresholds chosen ~25% below
-// observed v6 sizes to catch genuinely empty/broken builds without being brittle.
+// Per-file-type minimum sizes, chosen ~25% below observed sizes: big enough to catch an
+// empty or truncated build, loose enough not to fire on every legitimate shrink.
+//
+// The sandbox has shrunk twice for legitimate reasons, so resist the urge to "restore" a
+// bigger threshold when it trips:
+//   - pdf.js 6.0 cut it from ~1 MB (v5.x) to ~140-340 KB;
+//   - pdf.js 6.2 (Babel 8) cut the MODERN flavours again, to ~126 KB plain / ~73 KB
+//     minified. Until then the fork polyfilled twice - preset-env with
+//     `useBuiltIns: "usage"` AND babel-plugin-polyfill-corejs3. Babel 8 dropped the
+//     preset options, so core-js now comes only from the plugin, which the build gates on
+//     `!SKIP_BABEL`. Modern bundles therefore contain no core-js at all.
+//
+// That is why the flavours need different numbers: `-es5` still carries the polyfills
+// (~353 KB) and is the one place a missing-polyfill regression would show up as a size drop.
 function expectedMinSize(fileName) {
   if (fileName.includes('pdf.sandbox-')) {
-    return fileName.endsWith('.min.mjs') ? 100 * 1024 : 250 * 1024;
+    if (fileName.includes('-es5')) {
+      return 250 * 1024; // observed ~353 KB - polyfilled
+    }
+    return fileName.endsWith('.min.mjs')
+      ? 50 * 1024 // observed ~73 KB
+      : 90 * 1024; // observed ~126 KB
   }
   // pdf.worker-* and viewer-* are always > 1 MB even minified.
   return 700 * 1024;

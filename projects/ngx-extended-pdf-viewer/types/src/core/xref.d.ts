@@ -2,13 +2,6 @@ export class XRef {
     constructor(stream: any, pdfManager: any);
     stream: any;
     pdfManager: any;
-    entries: any[];
-    _xrefStms: Set<any>;
-    _cacheMap: Map<any, any>;
-    _pendingRefs: RefSet;
-    _newPersistentRefNum: number | null;
-    _newTemporaryRefNum: number | null;
-    _persistentRefsCache: Map<any, any> | null;
     getNewPersistentRef(obj: any): any;
     getNewTemporaryRef(): any;
     resetNewTemporaryRef(): void;
@@ -19,12 +12,6 @@ export class XRef {
     encrypt: CipherTransformFactory | undefined;
     root: Dict | undefined;
     processXRefTable(parser: any): Dict;
-    tableState: {
-        entryNum: number;
-        streamPos: any;
-        parserBuf1: any;
-        parserBuf2: any;
-    } | undefined;
     readXRefTable(parser: any): any;
     processXRefStream(stream: any): any;
     streamState: {
@@ -37,7 +24,7 @@ export class XRef {
     indexObjects(): any;
     _generationFallback: boolean | undefined;
     readXRef(recoveryMode?: boolean): any;
-    topDict: any;
+    countUpdatesAfter(offset: any): number | null;
     getEntry(i: any): any;
     fetchIfRef(obj: any, suppressEncryption?: boolean): any;
     fetch(ref: any, suppressEncryption?: boolean): any;
@@ -46,7 +33,7 @@ export class XRef {
     fetchIfRefAsync(obj: any, suppressEncryption: any): Promise<any>;
     fetchAsync(ref: any, suppressEncryption: any): any;
     getCatalogObj(): Dict | undefined;
+    #private;
 }
-import { RefSet } from "./primitives.js";
 import { CipherTransformFactory } from "./crypto.js";
 import { Dict } from "./primitives.js";

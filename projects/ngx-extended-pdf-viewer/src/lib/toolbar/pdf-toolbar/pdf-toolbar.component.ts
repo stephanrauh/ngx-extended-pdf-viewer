@@ -25,11 +25,25 @@ export class PdfToolbarComponent implements AfterViewInit {
 
   public showDrawEditor = input<ResponsiveVisibility>(false);
 
+  // stephanrauh/pdf.js#14 and stephanrauh/pdf.js#15 modified by ngx-extended-pdf-viewer
+  public showEraserEditor = input<ResponsiveVisibility>(false);
+
+  public showUndoRedoButtons = input<ResponsiveVisibility>(false);
+
+  public disableEraserEditor = input<boolean>(false);
+
+  public disableUndoRedoButtons = input<boolean>(false);
+  // stephanrauh/pdf.js#14 and stephanrauh/pdf.js#15 end of modification by ngx-extended-pdf-viewer
+
   public showHighlightEditor = input<ResponsiveVisibility>(true);
 
   public showTextEditor = input<ResponsiveVisibility>(false);
 
   public showStampEditor = input<ResponsiveVisibility>(false);
+
+  // #3257 modified by ngx-extended-pdf-viewer
+  public showSignaturePropertiesButton = input<ResponsiveVisibility>(true);
+  // #3257 end of modification by ngx-extended-pdf-viewer
 
   public showFindButton = input<ResponsiveVisibility | undefined>(undefined);
 

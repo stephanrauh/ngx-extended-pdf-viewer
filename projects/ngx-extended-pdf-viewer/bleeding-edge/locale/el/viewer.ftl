@@ -153,6 +153,27 @@ pdfjs-document-properties-linearized = Ταχεία προβολή ιστού:
 pdfjs-document-properties-linearized-yes = Ναι
 pdfjs-document-properties-linearized-no = Όχι
 pdfjs-document-properties-close-button = Κλείσιμο
+pdfjs-digital-signature-properties-view-certificate = Προβολή πιστοποιητικού
+# Shown beneath an invalid signature card to explain why verification
+# failed. The text comes from NSS (e.g. "Signature integrity has been
+# compromised", "PKCS#7 signature could not be parsed") and is not
+# itself localized — it is the underlying error message produced by
+# the verification backend.
+# Variables:
+#   $reason (String) - error message describing why the signature
+#                      could not be verified.
+pdfjs-digital-signature-properties-reason = Αιτία: { $reason }
+# Variables:
+#   $dateObj (Date) - the signing time from the /Sig dict's /M entry.
+pdfjs-digital-signature-properties-timestamp = Χρονοσήμανση: { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
+# Variables:
+#   $count (Number) - number of nested sub-signatures (one per earlier
+#                     incremental revision of the document).
+pdfjs-digital-signature-properties-sub-signatures =
+    { $count ->
+        [one] Δευτερεύουσα υπογραφή ({ $count })
+       *[other] Δευτερεύουσες υπογραφές ({ $count })
+    }
 
 ## Print
 
@@ -732,6 +753,74 @@ pdfjs-views-manager-waiting-for-file = Μεταφόρτωση αρχείου…
 pdfjs-toggle-views-manager-button1 =
     .title = Διαχείριση σελίδων
 
+## Digital signature properties (signature verification panel)
+
+pdfjs-digital-signature-properties-button =
+    .title = Ιδιότητες ψηφιακής υπογραφής
+    .aria-label = Ιδιότητες ψηφιακής υπογραφής
+pdfjs-digital-signature-properties-button-label = Ιδιότητες ψηφιακής υπογραφής
+
+## Banner shown above the signature list summarising the overall
+## verification state of the document. Each variant is selected by the
+## viewer based on the worst per-signature status; one signature is
+## enough to lower the banner.
+##
+## Variables:
+##   $count (Number) - number of signatures at the worst level.
+
+pdfjs-digital-signature-properties-banner-verified = Το έγγραφο έχει υπογραφεί με έγκυρη ψηφιακή υπογραφή
+pdfjs-digital-signature-properties-banner-unknown =
+    { $count ->
+        [one] Το έγγραφο έχει υπογραφεί, αλλά δεν ήταν δυνατή η επαλήθευση { $count } ψηφιακής υπογραφής
+       *[other] Το έγγραφο έχει υπογραφεί, αλλά δεν ήταν δυνατή η επαλήθευση { $count } ψηφιακών υπογραφών
+    }
+pdfjs-digital-signature-properties-banner-untrusted =
+    { $count ->
+        [one] Το έγγραφο έχει υπογραφεί με { $count } πιστοποιητικό που δεν είναι αξιόπιστο
+       *[other] Το έγγραφο έχει υπογραφεί με { $count } πιστοποιητικά που δεν είναι αξιόπιστα
+    }
+pdfjs-digital-signature-properties-banner-expired =
+    { $count ->
+        [one] Το έγγραφο έχει υπογραφεί με { $count } ληγμένο πιστοποιητικό
+       *[other] Το έγγραφο έχει υπογραφεί με { $count } ληγμένα πιστοποιητικά
+    }
+pdfjs-digital-signature-properties-banner-invalid =
+    { $count ->
+        [one] Το έγγραφο διαθέτει { $count } μη έγκυρη ψηφιακή υπογραφή
+       *[other] Το έγγραφο διαθέτει { $count } μη έγκυρες ψηφιακές υπογραφές
+    }
+pdfjs-digital-signature-properties-banner-revoked =
+    { $count ->
+        [one] Το έγγραφο έχει υπογραφεί με { $count } ανακληθέν πιστοποιητικό
+       *[other] Το έγγραφο έχει υπογραφεί με { $count } ανακληθέντα πιστοποιητικά
+    }
+
+## Per-signature status row. Only three distinct strings are needed:
+## the signature crypto either verified (the cert chain may still be
+## untrusted/expired/revoked, but that's surfaced on the cert row
+## below), or it failed, or its sub-format isn't supported.
+
+pdfjs-digital-signature-properties-status-verified = Κατάσταση: Επαληθευμένη υπογραφή
+pdfjs-digital-signature-properties-status-invalid = Κατάσταση: Μη έγκυρη υπογραφή
+pdfjs-digital-signature-properties-status-unknown = Κατάσταση: Αδυναμία επαλήθευσης (δεν υποστηρίζεται)
+
+## Per-signature certificate row. The variants with an issuer / date in
+## parentheses embed fully-localized context — no English fall-through.
+##
+## Variables:
+##   $issuer (String) - issuer or subject common name from the cert.
+##   $dateObj (Date)  - notAfter date for the expired-with-date form.
+
+pdfjs-digital-signature-properties-certificate-trusted = Πιστοποιητικό: Έμπιστο ({ $issuer })
+pdfjs-digital-signature-properties-certificate-unknown = Πιστοποιητικό: Μη διαθέσιμο
+pdfjs-digital-signature-properties-certificate-untrusted = Πιστοποιητικό: Μη αξιόπιστο
+pdfjs-digital-signature-properties-certificate-untrusted-unknown-issuer = Πιστοποιητικό: Άγνωστος εκδότης ({ $issuer })
+pdfjs-digital-signature-properties-certificate-untrusted-self-signed = Πιστοποιητικό: Αυτοϋπογεγραμμένο ({ $issuer })
+pdfjs-digital-signature-properties-certificate-untrusted-untrusted-issuer = Πιστοποιητικό: Μη αξιόπιστος εκδότης ({ $issuer })
+pdfjs-digital-signature-properties-certificate-expired = Πιστοποιητικό: Έχει λήξει
+pdfjs-digital-signature-properties-certificate-expired-with-date = Πιστοποιητικό: Έχει λήξει ({ DATETIME($dateObj, dateStyle: "medium") })
+pdfjs-digital-signature-properties-certificate-revoked = Πιστοποιητικό: Έχει ανακληθεί
+
 ## Main menu for adding/removing signatures
 
 pdfjs-editor-delete-signature-button1 =
@@ -747,6 +836,17 @@ pdfjs-editor-add-signature-edit-button-label = Επεξεργασία περιγ
 pdfjs-editor-edit-signature-dialog-title = Επεξεργασία περιγραφής
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
+pdfjs-editor-eraser-button =
+    .title = Erase
+pdfjs-editor-eraser-button-label = Erase
+pdfjs-editor-eraser-editor =
+    .aria-label = Eraser
+pdfjs-editor-undo-button =
+    .title = Undo
+pdfjs-editor-undo-button-label = Undo
+pdfjs-editor-redo-button =
+    .title = Redo
+pdfjs-editor-redo-button-label = Redo
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = Match Each Word
@@ -760,6 +860,7 @@ pdfjs-editor-movePageDown-button-label = Move Page Down
 pdfjs-cursor-page-flip-tool-button =
     .title = Page Flip
 pdfjs-cursor-page-flip-tool-button-label = Page Flip
+# Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-loading-error-more-info = More Information
 pdfjs-loading-error-less-info = Less Information
 pdfjs-loading-error-close = Close

@@ -107,11 +107,11 @@ pdfjs-document-properties-file-size = Veľkosť súboru:
 # Variables:
 #   $kb (Number) - the PDF file size in kilobytes
 #   $b (Number) - the PDF file size in bytes
-pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } kB ({ $b } bajtov)
+pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } kB ({ $b } bajtov)
 # Variables:
 #   $mb (Number) - the PDF file size in megabytes
 #   $b (Number) - the PDF file size in bytes
-pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } bajtov)
+pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } bajtov)
 pdfjs-document-properties-title = Názov:
 pdfjs-document-properties-author = Autor:
 pdfjs-document-properties-subject = Predmet:
@@ -153,6 +153,29 @@ pdfjs-document-properties-linearized = Rýchle zobrazovanie z webu:
 pdfjs-document-properties-linearized-yes = Áno
 pdfjs-document-properties-linearized-no = Nie
 pdfjs-document-properties-close-button = Zavrieť
+pdfjs-digital-signature-properties-view-certificate = Zobraziť certifikát
+# Shown beneath an invalid signature card to explain why verification
+# failed. The text comes from NSS (e.g. "Signature integrity has been
+# compromised", "PKCS#7 signature could not be parsed") and is not
+# itself localized — it is the underlying error message produced by
+# the verification backend.
+# Variables:
+#   $reason (String) - error message describing why the signature
+#                      could not be verified.
+pdfjs-digital-signature-properties-reason = Dôvod: { $reason }
+# Variables:
+#   $dateObj (Date) - the signing time from the /Sig dict's /M entry.
+pdfjs-digital-signature-properties-timestamp = Časová pečiatka: { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
+# Variables:
+#   $count (Number) - number of nested sub-signatures (one per earlier
+#                     incremental revision of the document).
+pdfjs-digital-signature-properties-sub-signatures =
+    { $count ->
+        [one] Podpodpis ({ $count })
+        [few] Podpodpisy ({ $count })
+        [many] Podpodpisy ({ $count })
+       *[other] Podpodpisy ({ $count })
+    }
 
 ## Print
 
@@ -494,8 +517,8 @@ pdfjs-editor-new-alt-text-error-close-button = Zavrieť
 # Variables:
 #   $totalSize (Number) - the total size (in MB) of the AI model.
 #   $downloadedSize (Number) - the downloaded size (in MB) of the AI model.
-pdfjs-editor-new-alt-text-ai-model-downloading-progress = Sťahuje sa model AI pre alternatívne texty ({ $downloadedSize } z { $totalSize } MB)
-    .aria-valuetext = Sťahuje sa model AI pre alternatívne texty ({ $downloadedSize } z { $totalSize } MB)
+pdfjs-editor-new-alt-text-ai-model-downloading-progress = Sťahuje sa model AI pre alternatívne texty ({ $downloadedSize } z { $totalSize } MB)
+    .aria-valuetext = Sťahuje sa model AI pre alternatívne texty ({ $downloadedSize } z { $totalSize } MB)
 # This is a button that users can click to edit the alt text they have already added.
 pdfjs-editor-new-alt-text-added-button =
     .aria-label = Alternatívny text bol pridaný
@@ -748,6 +771,84 @@ pdfjs-views-manager-waiting-for-file = Nahráva sa súbor…
 pdfjs-toggle-views-manager-button1 =
     .title = Spravovať strany
 
+## Digital signature properties (signature verification panel)
+
+pdfjs-digital-signature-properties-button =
+    .title = Vlastnosti digitálneho podpisu
+    .aria-label = Vlastnosti digitálneho podpisu
+pdfjs-digital-signature-properties-button-label = Vlastnosti digitálneho podpisu
+
+## Banner shown above the signature list summarising the overall
+## verification state of the document. Each variant is selected by the
+## viewer based on the worst per-signature status; one signature is
+## enough to lower the banner.
+##
+## Variables:
+##   $count (Number) - number of signatures at the worst level.
+
+pdfjs-digital-signature-properties-banner-verified = Dokument bol podpísaný platným digitálnym podpisom
+pdfjs-digital-signature-properties-banner-unknown =
+    { $count ->
+        [one] Dokument bol podpísaný, ale { $count } digitálny podpis sa nepodarilo overiť
+        [few] Dokument bol podpísaný, ale { $count } digitálne podpisy sa nepodarilo overiť
+        [many] Dokument bol podpísaný, ale { $count } digitálnych podpisov sa nepodarilo overiť
+       *[other] Dokument bol podpísaný, ale { $count } digitálnych podpisov sa nepodarilo overiť
+    }
+pdfjs-digital-signature-properties-banner-untrusted =
+    { $count ->
+        [one] Dokument bol podpísaný { $count } certifikátom, ktorý nie je dôveryhodný
+        [few] Dokument bol podpísaný { $count } certifikátmi, ktoré nie sú dôveryhodné
+        [many] Dokument bol podpísaný { $count } certifikátmi, ktoré nie sú dôveryhodné
+       *[other] Dokument bol podpísaný { $count } certifikátmi, ktoré nie sú dôveryhodné
+    }
+pdfjs-digital-signature-properties-banner-expired =
+    { $count ->
+        [one] Dokument bol podpísaný { $count } certifikátom, ktorému vypršala platnosť
+        [few] Dokument bol podpísaný { $count } certifikátmi, ktorých platnosť vypršala
+        [many] Dokument bol podpísaný { $count } certifikátmi, ktorých platnosť vypršala
+       *[other] Dokument bol podpísaný { $count } certifikátmi, ktorých platnosť vypršala
+    }
+pdfjs-digital-signature-properties-banner-invalid =
+    { $count ->
+        [one] Dokument má { $count } neplatný digitálny podpis
+        [few] Dokument má { $count } neplatné digitálne podpisy
+        [many] Dokument má { $count } neplatných digitálnych podpisov
+       *[other] Dokument má { $count } neplatných digitálnych podpisov
+    }
+pdfjs-digital-signature-properties-banner-revoked =
+    { $count ->
+        [one] Dokument bol podpísaný { $count } zrušeným certifikátom
+        [few] Dokument bol podpísaný { $count } zrušenými certifikátmi
+        [many] Dokument bol podpísaný { $count } zrušenými certifikátmi
+       *[other] Dokument bol podpísaný { $count } zrušenými certifikátmi
+    }
+
+## Per-signature status row. Only three distinct strings are needed:
+## the signature crypto either verified (the cert chain may still be
+## untrusted/expired/revoked, but that's surfaced on the cert row
+## below), or it failed, or its sub-format isn't supported.
+
+pdfjs-digital-signature-properties-status-verified = Stav: Podpis overený
+pdfjs-digital-signature-properties-status-invalid = Stav: Podpis neplatný
+pdfjs-digital-signature-properties-status-unknown = Stav: Nedá sa overiť (nepodporovaný)
+
+## Per-signature certificate row. The variants with an issuer / date in
+## parentheses embed fully-localized context — no English fall-through.
+##
+## Variables:
+##   $issuer (String) - issuer or subject common name from the cert.
+##   $dateObj (Date)  - notAfter date for the expired-with-date form.
+
+pdfjs-digital-signature-properties-certificate-trusted = Certifikát: Dôveryhodný ({ $issuer })
+pdfjs-digital-signature-properties-certificate-unknown = Certifikát: Nie je k dispozícii
+pdfjs-digital-signature-properties-certificate-untrusted = Certifikát: Nedôveryhodný
+pdfjs-digital-signature-properties-certificate-untrusted-unknown-issuer = Certifikát: Neznámy vydavateľ ({ $issuer })
+pdfjs-digital-signature-properties-certificate-untrusted-self-signed = Certifikát: Samopodpísaný ({ $issuer })
+pdfjs-digital-signature-properties-certificate-untrusted-untrusted-issuer = Certifikát: Nedôveryhodný vydavateľ ({ $issuer })
+pdfjs-digital-signature-properties-certificate-expired = Certifikát: Platnosť vypršala
+pdfjs-digital-signature-properties-certificate-expired-with-date = Certifikát: Platnosť vypršala ({ DATETIME($dateObj, dateStyle: "medium") })
+pdfjs-digital-signature-properties-certificate-revoked = Certifikát: Zrušený
+
 ## Main menu for adding/removing signatures
 
 pdfjs-editor-delete-signature-button1 =
@@ -776,6 +877,18 @@ pdfjs-editor-movePageDown-button-label = Presunúť stránku nadol
 pdfjs-cursor-page-flip-tool-button =
     .title = Listovanie stránok
 pdfjs-cursor-page-flip-tool-button-label = Listovanie stránok
+pdfjs-editor-eraser-button =
+    .title = Gumovať
+pdfjs-editor-eraser-button-label = Gumovať
+pdfjs-editor-eraser-editor =
+    .aria-label = Guma
+pdfjs-editor-undo-button =
+    .title = Späť
+pdfjs-editor-undo-button-label = Späť
+pdfjs-editor-redo-button =
+    .title = Znova
+pdfjs-editor-redo-button-label = Znova
+# Additional translations for ngx-extended-pdf-viewer (sk)
 pdfjs-loading-error-more-info = Ďalšie informácie
 pdfjs-loading-error-less-info = Menej informácií
 pdfjs-loading-error-close = Zavrieť

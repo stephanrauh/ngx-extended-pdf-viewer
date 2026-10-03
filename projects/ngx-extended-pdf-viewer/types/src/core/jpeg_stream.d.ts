@@ -18,7 +18,7 @@ export class JpegStream extends DecodeStream {
     get jpegOptions(): any;
     decodeImage(bytes: any): Uint8Array<ArrayBuffer>;
     get canAsyncDecodeImageFromBuffer(): any;
-    getTransferableImage(): Promise<VideoFrame | null>;
+    getTransferableImage(width: any, height: any): Promise<VideoFrame | null>;
     #private;
 }
 import { DecodeStream } from "./decode_stream.js";

@@ -20,6 +20,28 @@ describe('PdfCspPolicyService', () => {
     }
   });
 
+  // #3264 Applications that replace `style-src 'unsafe-inline'` with a nonce need it
+  // on every <style> the viewer creates - pdf.js's `@page` print stylesheet included.
+  describe('CSP nonce', () => {
+    it('stamps the nonce on stylesheets when the application provides one', () => {
+      const withNonce = new PdfCspPolicyService('nonce-from-the-server');
+      const styles = document.createElement('style');
+
+      withNonce.addTrustedCSS(styles, 'body { margin: 0; }');
+
+      expect(styles.nonce).toBe('nonce-from-the-server');
+      expect(styles.textContent).toBe('body { margin: 0; }');
+    });
+
+    it('leaves the nonce alone when the application provides none', () => {
+      const styles = document.createElement('style');
+
+      service.addTrustedCSS(styles, 'body { margin: 0; }');
+
+      expect(styles.nonce).toBeFalsy();
+    });
+  });
+
   describe('service creation', () => {
     it('should be created', () => {
       expect(service).toBeTruthy();

@@ -867,15 +867,20 @@ export class NgxExtendedPdfViewerService {
    * - Highlight
    * - Popup (comments)
    *
+   * **Adding many annotations at once (#3254):** pass an array. The whole batch
+   * is added in one go - one undo step, one re-render, and one `added` event per
+   * annotation - which is what you want when you restore a stored document.
+   * Calling this method once per annotation works too, but it is slower and it
+   * makes every annotation its own undo step.
+   *
    * **Timing:** an annotation is added to a page's annotation _editor_ layer,
    * which is created only after that page has been rendered (slightly after the
    * display annotation layer). Wait for the page's `(annotationEditorLayerRendered)`
    * event before calling this method - **not** `(annotationLayerRendered)`, which
-   * fires too early. Calling it before the editor layer exists logs
-   * `paste: "Cannot read properties of undefined (reading 'deserialize')"` and adds
-   * nothing (see issue #2656).
+   * fires too early. Annotations for pages that haven't been rendered yet are
+   * skipped with an explanatory warning on the console (see issue #2656).
    *
-   * @param serializedAnnotation A single annotation object, array of annotations, or JSON string
+   * @param serializedAnnotation A single annotation object, an array of annotations, or a JSON string containing either
    * @returns Promise that resolves when the annotation(s) have been added
    *
    * @example
@@ -890,8 +895,13 @@ export class NgxExtendedPdfViewerService {
    *   // `id` is ignored; set `customId` if you want a stable id that survives the round-trip
    *   customId: 'a3f1c2e0-...'
    * });
+   *
+   * @example
+   * // #3254 Restore an entire page's worth of annotations in a single call
+   * const stored: EditorAnnotation[] = JSON.parse(localStorage.getItem('annotations')!);
+   * await pdfService.addEditorAnnotation(stored.filter((a) => a.pageIndex === pageIndex));
    */
-  public async addEditorAnnotation(serializedAnnotation: string | EditorAnnotation): Promise<void> {
+  public async addEditorAnnotation(serializedAnnotation: string | EditorAnnotation | Array<EditorAnnotation>): Promise<void> {
     // #3061 When the editor mode is NONE, PDF.js internally switches to FREETEXT mode temporarily,
     // which causes the FreeText popup to flash. Prevent this by hiding the popup during the operation.
     const currentMode = this.PDFViewerApplication?.pdfViewer.annotationEditorMode;

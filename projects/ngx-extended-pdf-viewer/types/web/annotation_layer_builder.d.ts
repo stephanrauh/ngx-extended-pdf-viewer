@@ -26,7 +26,7 @@ export type AnnotationLayerBuilderOptions = {
     } | null> | undefined;
     annotationCanvasMap?: Map<string, HTMLCanvasElement> | undefined;
     accessibilityManager?: import("./text_accessibility.js").TextAccessibilityManager | undefined;
-    annotationEditorUIManager?: import("../src/pdf").AnnotationEditorUIManager | undefined;
+    annotationEditorUIManager?: import("../src/pdf.js").AnnotationEditorUIManager | undefined;
     onAppend?: Function | undefined;
     commentManager?: import("./comment_manager.js").CommentManager | undefined;
 };
@@ -85,7 +85,7 @@ export class AnnotationLayerBuilder {
     } | null>;
     _annotationCanvasMap: Map<string, HTMLCanvasElement>;
     _accessibilityManager: import("./text_accessibility.js").TextAccessibilityManager;
-    _annotationEditorUIManager: import("../src/pdf").AnnotationEditorUIManager;
+    _annotationEditorUIManager: import("../src/pdf.js").AnnotationEditorUIManager;
     annotationLayer: AnnotationLayer | null;
     div: HTMLDivElement | null;
     _cancelled: boolean;
@@ -108,4 +108,4 @@ export class AnnotationLayerBuilder {
     injectLinkAnnotations(inferredLinks: Array<Object>): Promise<void>;
     #private;
 }
-import { AnnotationLayer } from "../src/pdf";
+import { AnnotationLayer } from "../src/pdf.js";

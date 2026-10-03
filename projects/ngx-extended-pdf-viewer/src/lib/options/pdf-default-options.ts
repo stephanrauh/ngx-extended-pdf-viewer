@@ -4,8 +4,8 @@ const _isIE11 = typeof window === 'undefined' ? false : !!(<any>globalThis).MSIn
 const isEdge = typeof navigator === 'undefined' || /Edge\/\d./i.test(navigator.userAgent);
 const needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
 
-export const pdfjsVersion = '6.1.1162';
-export const pdfjsBleedingEdgeVersion = '6.1.1162';
+export const pdfjsVersion = '6.3.1319';
+export const pdfjsBleedingEdgeVersion = '6.3.1319';
 export function getVersionSuffix(folder: string): string {
   if (folder?.includes('bleeding-edge')) {
     return pdfjsBleedingEdgeVersion;
@@ -167,6 +167,10 @@ export const pdfDefaultOptions = {
   // #3232: see the comment on cMapUrl - the standard fonts ship inside the
   // assets folder, too.
   standardFontDataUrl: () => resolveAssetUrlAgainstBaseHref(`${assetsUrl(pdfDefaultOptions.assetsFolder)}/standard_fonts/`),
+  // #3275: the ICC profile pdf.js uses to convert DeviceCMYK colors ships inside
+  // the assets folder, too. pdf.js's default (`../web/iccs/`) is resolved by the
+  // worker against its own URL, so it pointed to a folder that doesn't exist.
+  iccUrl: () => resolveAssetUrlAgainstBaseHref(`${assetsUrl(pdfDefaultOptions.assetsFolder)}/iccs/`),
   // #3140: wasm files live inside the assets folder (not as a sibling).
   // Resolve against document.baseURI so the path stays correct on sub-routes
   // (pdf.js's QuickJS loader resolves wasmUrl against `location.href`, which

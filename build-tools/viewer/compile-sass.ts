@@ -52,8 +52,19 @@ const componentScss = removeComments(fs.readFileSync('./projects/ngx-extended-pd
 const signature_manager = removeComments(fs.readFileSync('./projects/ngx-extended-pdf-viewer/src/lib/theme/common/signature_manager.scss', 'utf8'));
 const viewsManagerScss = removeComments(fs.readFileSync('./projects/ngx-extended-pdf-viewer/src/lib/theme/common/views_manager.scss', 'utf8'));
 const menuScss = removeComments(fs.readFileSync('./projects/ngx-extended-pdf-viewer/src/lib/theme/common/menu.scss', 'utf8'));
-const dark = sass.compileString(darkScss + signature_manager + textLayerBuildScss + viewerWithImageScss + viewsManagerScss + menuScss + componentScss, options);
-const light = sass.compileString(lightScss + signature_manager + textLayerBuildScss + viewerWithImageScss + viewsManagerScss + menuScss + componentScss, options);
+// #3257 modified by ngx-extended-pdf-viewer
+const digitalSignaturePropertiesScss = removeComments(
+  fs.readFileSync('./projects/ngx-extended-pdf-viewer/src/lib/theme/common/digital_signature_properties.scss', 'utf8'),
+);
+// #3257 end of modification by ngx-extended-pdf-viewer
+const dark = sass.compileString(
+  darkScss + signature_manager + digitalSignaturePropertiesScss + textLayerBuildScss + viewerWithImageScss + viewsManagerScss + menuScss + componentScss,
+  options,
+);
+const light = sass.compileString(
+  lightScss + signature_manager + digitalSignaturePropertiesScss + textLayerBuildScss + viewerWithImageScss + viewsManagerScss + menuScss + componentScss,
+  options,
+);
 const print = sass.compile('./projects/ngx-extended-pdf-viewer/src/lib/theme/common/print.scss', options);
 const toggleButton = sass.compile('./projects/ngx-extended-pdf-viewer/src/lib/theme/common/toggle_button.css', options);
 const bookMode = sass.compile('./projects/ngx-extended-pdf-viewer/src/lib/theme/common/book-mode.scss', options);

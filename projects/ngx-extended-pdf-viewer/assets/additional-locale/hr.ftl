@@ -29,3 +29,33 @@ pdfjs-cursor-page-flip-tool-button-label = Listanje stranica
 pdfjs-loading-error-more-info = Više informacija
 pdfjs-loading-error-less-info = Manje informacija
 pdfjs-loading-error-close = Zatvori
+
+# #3255 Sidebar buttons. pdf.js removed these keys in commit 2367196a0
+# ("Change the sidebar for a views manager"); ngx-extended-pdf-viewer keeps its
+# own sidebar, so the translations live here now.
+pdfjs-toggle-sidebar-button =
+    .title = Prikaži/sakrij bočnu traku
+pdfjs-toggle-sidebar-button-label = Prikaži/sakrij bočnu traku
+pdfjs-document-outline-button =
+    .title = Prikaži strukturu dokumenta (dvoklik za rasklapanje/sklapanje svih stavki)
+pdfjs-document-outline-button-label = Struktura dokumenta
+pdfjs-attachments-button =
+    .title = Prikaži privitke
+pdfjs-attachments-button-label = Privitci
+pdfjs-layers-button =
+    .title = Prikaži slojeve (dvoklik za vraćanje svih slojeva u standardno stanje)
+pdfjs-layers-button-label = Slojevi
+pdfjs-thumbs-button =
+    .title = Prikaži minijature
+pdfjs-thumbs-button-label = Minijature
+pdfjs-editor-eraser-button =
+    .title = Obriši
+pdfjs-editor-eraser-button-label = Obriši
+pdfjs-editor-eraser-editor =
+    .aria-label = Gumica
+pdfjs-editor-undo-button =
+    .title = Poništi
+pdfjs-editor-undo-button-label = Poništi
+pdfjs-editor-redo-button =
+    .title = Ponovi
+pdfjs-editor-redo-button-label = Ponovi

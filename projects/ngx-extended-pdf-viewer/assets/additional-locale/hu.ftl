@@ -29,3 +29,33 @@ pdfjs-cursor-page-flip-tool-button-label = Lapozás
 pdfjs-loading-error-more-info = További tudnivalók
 pdfjs-loading-error-less-info = Kevesebb információ
 pdfjs-loading-error-close = Bezárás
+
+# #3255 Sidebar buttons. pdf.js removed these keys in commit 2367196a0
+# ("Change the sidebar for a views manager"); ngx-extended-pdf-viewer keeps its
+# own sidebar, so the translations live here now.
+pdfjs-toggle-sidebar-button =
+    .title = Oldalsáv be/ki
+pdfjs-toggle-sidebar-button-label = Oldalsáv be/ki
+pdfjs-document-outline-button =
+    .title = Dokumentum megjelenítése online (dupla kattintás minden elem kinyitásához/összecsukásához)
+pdfjs-document-outline-button-label = Dokumentumvázlat
+pdfjs-attachments-button =
+    .title = Mellékletek megjelenítése
+pdfjs-attachments-button-label = Van melléklet
+pdfjs-layers-button =
+    .title = Rétegek megjelenítése (dupla kattintás az összes réteg alapértelmezett állapotra visszaállításához)
+pdfjs-layers-button-label = Rétegek
+pdfjs-thumbs-button =
+    .title = Bélyegképek megjelenítése
+pdfjs-thumbs-button-label = Bélyegképek
+pdfjs-editor-eraser-button =
+    .title = Radírozás
+pdfjs-editor-eraser-button-label = Radírozás
+pdfjs-editor-eraser-editor =
+    .aria-label = Radír
+pdfjs-editor-undo-button =
+    .title = Visszavonás
+pdfjs-editor-undo-button-label = Visszavonás
+pdfjs-editor-redo-button =
+    .title = Újra
+pdfjs-editor-redo-button-label = Újra

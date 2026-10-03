@@ -29,3 +29,33 @@ pdfjs-cursor-page-flip-tool-button-label = Bläddra sidor
 pdfjs-loading-error-more-info = Mer information
 pdfjs-loading-error-less-info = Mindre information
 pdfjs-loading-error-close = Stäng
+
+# #3255 Sidebar buttons. pdf.js removed these keys in commit 2367196a0
+# ("Change the sidebar for a views manager"); ngx-extended-pdf-viewer keeps its
+# own sidebar, so the translations live here now.
+pdfjs-toggle-sidebar-button =
+    .title = Visa/dölj sidofält
+pdfjs-toggle-sidebar-button-label = Visa/dölj sidofält
+pdfjs-document-outline-button =
+    .title = Visa dokumentdisposition (dubbelklicka för att expandera/komprimera alla objekt)
+pdfjs-document-outline-button-label = Dokumentöversikt
+pdfjs-attachments-button =
+    .title = Visa Bilagor
+pdfjs-attachments-button-label = Bilagor
+pdfjs-layers-button =
+    .title = Visa lager (dubbelklicka för att återställa alla lager till standardläge)
+pdfjs-layers-button-label = Lager
+pdfjs-thumbs-button =
+    .title = Visa miniatyrer
+pdfjs-thumbs-button-label = Miniatyrer
+pdfjs-editor-eraser-button =
+    .title = Sudda
+pdfjs-editor-eraser-button-label = Sudda
+pdfjs-editor-eraser-editor =
+    .aria-label = Suddgummi
+pdfjs-editor-undo-button =
+    .title = Ångra
+pdfjs-editor-undo-button-label = Ångra
+pdfjs-editor-redo-button =
+    .title = Gör om
+pdfjs-editor-redo-button-label = Gör om

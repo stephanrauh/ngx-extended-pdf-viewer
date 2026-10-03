@@ -26,8 +26,12 @@ export class CanvasBBoxTracker {
     recordFullPageBBox(idx: any): this;
     /**
      * @param {number} idx
+     * @param {boolean} [preserve=false] - When false, the pending bounding box is
+     *   cleared once recorded; pass true to keep it for subsequent operations.
+     * @param {Iterable<Iterable<number>>} [dependencyLists] - Groups of operation
+     *   indices whose bounding boxes are also expanded to cover this operation.
      */
-    recordOperation(idx: number, preserve: boolean | undefined, dependencyLists: any): this;
+    recordOperation(idx: number, preserve?: boolean, dependencyLists?: Iterable<Iterable<number>>): this;
     bboxToClipBoxDropOperation(idx: any): this;
     take(): BBoxReader;
     takeDebugMetadata(): void;
@@ -109,6 +113,8 @@ export class CanvasDependencyTracker {
     recordNamedDependency(idx: any, name: any): this;
     /**
      * @param {number} idx
+     * @param {boolean} [preserve=false] - When false, the pending dependencies
+     *   are cleared once recorded; pass true to keep them for later operations.
      */
     recordOperation(idx: number, preserve?: boolean): this;
     recordShowTextOperation(idx: any, preserve?: boolean): this;

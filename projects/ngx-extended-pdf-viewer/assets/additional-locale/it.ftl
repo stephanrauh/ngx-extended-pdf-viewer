@@ -29,3 +29,33 @@ pdfjs-cursor-page-flip-tool-button-label = Sfoglia pagine
 pdfjs-loading-error-more-info = Ulteriori informazioni
 pdfjs-loading-error-less-info = Nascondi dettagli
 pdfjs-loading-error-close = Chiudi
+
+# #3255 Sidebar buttons. pdf.js removed these keys in commit 2367196a0
+# ("Change the sidebar for a views manager"); ngx-extended-pdf-viewer keeps its
+# own sidebar, so the translations live here now.
+pdfjs-toggle-sidebar-button =
+    .title = Attiva/disattiva barra laterale
+pdfjs-toggle-sidebar-button-label = Attiva/disattiva barra laterale
+pdfjs-document-outline-button =
+    .title = Visualizza la struttura del documento (doppio clic per visualizzare/comprimere tutti gli elementi)
+pdfjs-document-outline-button-label = Struttura documento
+pdfjs-attachments-button =
+    .title = Visualizza allegati
+pdfjs-attachments-button-label = Allegati
+pdfjs-layers-button =
+    .title = Visualizza livelli (doppio clic per ripristinare tutti i livelli allo stato predefinito)
+pdfjs-layers-button-label = Livelli
+pdfjs-thumbs-button =
+    .title = Mostra le miniature
+pdfjs-thumbs-button-label = Miniature
+pdfjs-editor-eraser-button =
+    .title = Cancella
+pdfjs-editor-eraser-button-label = Cancella
+pdfjs-editor-eraser-editor =
+    .aria-label = Gomma
+pdfjs-editor-undo-button =
+    .title = Annulla
+pdfjs-editor-undo-button-label = Annulla
+pdfjs-editor-redo-button =
+    .title = Ripeti
+pdfjs-editor-redo-button-label = Ripeti

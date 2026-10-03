@@ -43,10 +43,17 @@ export class PagesMapper {
     /**
      * Gets the current page mapping suitable for saving.
      * @param {Map<number, Array<number>>} [idToPageNumber]
-     * @returns {Array<Object>}
+     * @param {Int32Array} [copyLevels]
+     * @returns {{pageInfos: Array<Object>, copyLevels: Int32Array|null}}
      */
-    getPageMappingForSaving(idToPageNumber?: Map<number, Array<number>>): Array<Object>;
-    extractPages(extractedPageNumbers: any): Object[];
+    getPageMappingForSaving(idToPageNumber?: Map<number, Array<number>>, copyLevels?: Int32Array): {
+        pageInfos: Array<Object>;
+        copyLevels: Int32Array | null;
+    };
+    extractPages(extractedPageNumbers: any): {
+        pageInfos: Array<Object>;
+        copyLevels: Int32Array | null;
+    };
     /**
      * Gets the previous page number for a given page number.
      * Negative values indicate a copied page (the absolute value is the source).

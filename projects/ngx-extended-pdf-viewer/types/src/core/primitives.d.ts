@@ -19,9 +19,9 @@ export class Dict {
     xref: any;
     assignXref(newXref: any): void;
     get size(): number;
-    get(key1: any, key2: any, key3: any): any;
-    getAsync(key1: any, key2: any, key3: any): Promise<any>;
-    getArray(key1: any, key2: any, key3: any): any;
+    get(key1: any, key2: any): any;
+    getAsync(key1: any, key2: any): Promise<any>;
+    getArray(key1: any, key2: any): any;
     getRaw(key: any): any;
     getKeys(): MapIterator<any>;
     getRawValues(): MapIterator<any>;
@@ -52,30 +52,32 @@ export class Name {
 export class Ref {
     static fromString(str: any): any;
     static get(num: any, gen: any): any;
-    constructor(num: any, gen: any);
+    constructor(str: any, num: any, gen: any);
     num: any;
     gen: any;
-    toString(): string;
+    toString(): any;
+    #private;
 }
-export class RefSet {
-    constructor(parent?: null);
-    _set: Set<any>;
-    has(ref: any): boolean;
-    put(ref: any): void;
-    remove(ref: any): void;
-    clear(): void;
-    [Symbol.iterator](): SetIterator<any>;
-}
-export class RefSetCache {
-    _map: Map<any, any>;
+export class RefMap {
     get size(): number;
     get(ref: any): any;
     has(ref: any): boolean;
     put(ref: any, obj: any): void;
     putAlias(ref: any, aliasRef: any): void;
+    getOrPutComputed(ref: any, callback: any): any;
     clear(): void;
     values(): Generator<any, void, unknown>;
     items(): Generator<any[], void, unknown>;
     keys(): Generator<any, void, unknown>;
     [Symbol.iterator](): MapIterator<any>;
+    #private;
+}
+export class RefSet {
+    constructor(parent?: null);
+    has(ref: any): boolean;
+    put(ref: any): void;
+    remove(ref: any): void;
+    clear(): void;
+    [Symbol.iterator](): SetIterator<any>;
+    #private;
 }

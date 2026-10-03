@@ -30,7 +30,12 @@ import { PdfContextMenuComponent } from './toolbar/pdf-context-menu/pdf-context-
 import { PdfDocumentPropertiesComponent } from './toolbar/pdf-document-properties/pdf-document-properties.component';
 import { PdfDownloadComponent } from './toolbar/pdf-download/pdf-download.component';
 import { PdfDrawEditorComponent } from './toolbar/pdf-draw-editor/pdf-draw-editor.component';
+import { PdfEraserEditorComponent } from './toolbar/pdf-eraser-editor/pdf-eraser-editor.component';
+import { PdfUndoRedoComponent } from './toolbar/pdf-undo-redo/pdf-undo-redo.component';
 import { PdfEditorSignatureComponent } from './toolbar/pdf-editor-signature/pdf-editor-signature.component';
+// #3257 modified by ngx-extended-pdf-viewer
+import { PdfSignaturePropertiesComponent } from './toolbar/pdf-signature-properties/pdf-signature-properties.component';
+// #3257 end of modification by ngx-extended-pdf-viewer
 import { PdfEditorComponent } from './toolbar/pdf-editor/pdf-editor.component';
 import { PdfEvenSpreadComponent } from './toolbar/pdf-even-spread/pdf-even-spread.component';
 import { PdfFindButtonComponent } from './toolbar/pdf-find-button/pdf-find-button.component';
@@ -108,6 +113,8 @@ if (!(Promise as any)['allSettled']) {
     PdfContextMenuComponent,
     PdfDarkThemeComponent,
     PdfDrawEditorComponent,
+    PdfEraserEditorComponent,
+    PdfUndoRedoComponent,
     PdfAltTextDialogComponent,
     PdfAltTextSettingsDialogComponent,
     PdfDocumentPropertiesComponent,
@@ -117,6 +124,7 @@ if (!(Promise as any)['allSettled']) {
     PdfEditorComponent,
     PdfEditSignatureDialogComponent,
     PdfEditorSignatureComponent,
+    PdfSignaturePropertiesComponent, // #3257 modified by ngx-extended-pdf-viewer
     PdfErrorMessageComponent,
     PdfEvenSpreadComponent,
     PdfFindbarComponent,
@@ -193,12 +201,15 @@ if (!(Promise as any)['allSettled']) {
     PdfDarkThemeComponent,
     PdfDocumentPropertiesComponent,
     PdfDrawEditorComponent,
+    PdfEraserEditorComponent,
+    PdfUndoRedoComponent,
     PdfDocumentPropertiesDialogComponent,
     PdfDownloadComponent,
     PdfDummyComponentsComponent,
     PdfEditorComponent,
     PdfEditSignatureDialogComponent,
     PdfEditorSignatureComponent,
+    PdfSignaturePropertiesComponent, // #3257 modified by ngx-extended-pdf-viewer
     PdfErrorMessageComponent,
     PdfEvenSpreadComponent,
     PdfFindbarComponent,

@@ -5,7 +5,7 @@
  */
 export function arrayBuffersToBytes(arr: Array<ArrayBuffer>): Uint8Array;
 export function codePointIter(str: any): Generator<any, void, unknown>;
-export function collectActions(xref: any, dict: any, eventType: any): any;
+export function collectActions(xref: any, dict: any, eventType: any): Map<any, any> | null;
 export function deepCompare(a: any, b: any): boolean;
 export function encodeToXmlString(str: any): any;
 export function escapePDFName(str: any): any;
@@ -32,7 +32,7 @@ export function fetchBinaryData(url: any): Promise<Uint8Array<ArrayBuffer>>;
  *   levels of the tree. The default value is `true`.
  */
 export function getInheritableProperty({ dict, key, getArray, stopWhenFound, }: Dict): any;
-export function getLookupTableFactory(initializer: any): () => any;
+export function getLookupTableFactory(initializer: any, useArray?: boolean): () => any;
 export function getModificationDate(date?: Date): string;
 export function getNewAnnotationsMap(annotationStorage: any): Map<any, any> | null;
 /**
@@ -84,6 +84,7 @@ export class MissingDataException extends MissingDataException_base {
     begin: any;
     end: any;
 }
+export function normalizeCSSFontFamily(fontFamily: any): any;
 export function numberToString(value: any): any;
 declare const ParserEOFException_base: any;
 export class ParserEOFException extends ParserEOFException_base {

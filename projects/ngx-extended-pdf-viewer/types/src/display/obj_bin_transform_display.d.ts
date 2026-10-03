@@ -1,8 +1,8 @@
 export class CssFontInfo {
     constructor(buffer: any);
-    get fontFamily(): string;
-    get fontWeight(): string;
-    get italicAngle(): string;
+    get fontFamily(): any;
+    get fontWeight(): any;
+    get italicAngle(): any;
     #private;
 }
 export class FontInfo {
@@ -26,10 +26,10 @@ export class FontInfo {
     get bbox(): any[] | undefined;
     get fontMatrix(): any[] | undefined;
     get defaultVMetrics(): any[] | undefined;
-    get fallbackName(): string;
-    get loadedName(): string;
-    get mimetype(): string;
-    get name(): string;
+    get fallbackName(): any;
+    get loadedName(): any;
+    get mimetype(): any;
+    get name(): any;
     get data(): Uint8Array<any> | undefined;
     clearData(): void;
     get cssFontInfo(): CssFontInfo | null;
@@ -51,13 +51,13 @@ export class PatternInfo {
 export class SystemFontInfo {
     constructor(buffer: any);
     get guessFallback(): boolean;
-    get css(): string;
-    get loadedName(): string;
-    get baseFontName(): string;
-    get src(): string;
+    get css(): any;
+    get loadedName(): any;
+    get baseFontName(): any;
+    get src(): any;
     get style(): {
-        style: string;
-        weight: string;
+        style: any;
+        weight: any;
     };
     #private;
 }

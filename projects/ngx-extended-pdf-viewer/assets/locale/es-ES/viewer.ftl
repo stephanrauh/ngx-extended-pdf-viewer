@@ -404,8 +404,8 @@ pdfjs-editor-comments-sidebar-no-comments-link = Saber más
 pdfjs-editor-alt-text-button-label = Texto alternativo
 pdfjs-editor-alt-text-edit-button =
     .aria-label = Editar el texto alternativo
-pdfjs-editor-alt-text-dialog-label = Eligir una opción
-pdfjs-editor-alt-text-dialog-description = El texto alternativo (texto alternativo) ayuda cuando las personas no pueden ver la imagen o cuando no se carga.
+pdfjs-editor-alt-text-dialog-label = Elegir una opción
+pdfjs-editor-alt-text-dialog-description = El texto alternativo ayuda cuando las personas no pueden ver la imagen o cuando no se carga.
 pdfjs-editor-alt-text-add-description-label = Añadir una descripción
 pdfjs-editor-alt-text-add-description-description = Intente escribir 1 o 2 frases que describan el tema, el entorno o las acciones.
 pdfjs-editor-alt-text-mark-decorative-label = Marcar como decorativa
@@ -698,7 +698,7 @@ pdfjs-views-manager-status-undo-cut-label =
 pdfjs-views-manager-pages-status-undo-copy-label =
     { $count ->
         [one] 1 página copiada
-       *[other] { $count } páginas cortadas
+       *[other] { $count } páginas copiadas
     }
 # Variables:
 #   $count (Number) - the number of selected pages to be deleted.
@@ -711,8 +711,8 @@ pdfjs-views-manager-pages-status-waiting-ready-label = Preparando su archivo…
 pdfjs-views-manager-pages-status-waiting-uploading-label = Subiendo el archivo…
 pdfjs-views-manager-status-warning-cut-label = No se pudo cortar. Refresque la página y pruebe de nuevo.
 pdfjs-views-manager-status-warning-copy-label = No se pudo copiar. Refresque la página y pruebe de nuevo.
-pdfjs-views-manager-status-warning-delete-label = No se pudo cortar. Refresque la página y pruebe de nuevo.
-pdfjs-views-manager-status-warning-save-label = No se pudo cortar. Refresque la página y pruebe de nuevo.
+pdfjs-views-manager-status-warning-delete-label = No se pudo eliminar. Refresque la página y pruebe de nuevo.
+pdfjs-views-manager-status-warning-save-label = No se pudo guardar. Refresque la página y pruebe de nuevo.
 pdfjs-views-manager-status-undo-button-label = Deshacer
 pdfjs-views-manager-status-done-button-label = Hecho
 pdfjs-views-manager-status-close-button =
@@ -760,6 +760,68 @@ pdfjs-editor-movePageDown-button-label = Mover página hacia abajo
 pdfjs-cursor-page-flip-tool-button =
     .title = Pasar página
 pdfjs-cursor-page-flip-tool-button-label = Pasar página
+pdfjs-editor-eraser-button =
+    .title = Borrar
+pdfjs-editor-eraser-button-label = Borrar
+pdfjs-editor-eraser-editor =
+    .aria-label = Borrador
+pdfjs-editor-undo-button =
+    .title = Deshacer
+pdfjs-editor-undo-button-label = Deshacer
+pdfjs-editor-redo-button =
+    .title = Rehacer
+pdfjs-editor-redo-button-label = Rehacer
+# Translations for ngx-extended-pdf-viewer additions only available in en-US
+pdfjs-digital-signature-properties-button =
+    .title = Digital signature properties
+    .aria-label = Digital signature properties
+pdfjs-digital-signature-properties-button-label = Digital signature properties
+pdfjs-digital-signature-properties-banner-verified = Document was signed with a valid digital signature
+pdfjs-digital-signature-properties-banner-unknown =
+    { $count ->
+        [one] Document signed but { $count } digital signature could not be verified
+       *[other] Document signed but { $count } digital signatures could not be verified
+    }
+pdfjs-digital-signature-properties-banner-untrusted =
+    { $count ->
+        [one] Document signed with { $count } certificate that is not trusted
+       *[other] Document signed with { $count } certificates that are not trusted
+    }
+pdfjs-digital-signature-properties-banner-expired =
+    { $count ->
+        [one] Document signed with { $count } expired certificate
+       *[other] Document signed with { $count } expired certificates
+    }
+pdfjs-digital-signature-properties-banner-invalid =
+    { $count ->
+        [one] Document has { $count } invalid digital signature
+       *[other] Document has { $count } invalid digital signatures
+    }
+pdfjs-digital-signature-properties-banner-revoked =
+    { $count ->
+        [one] Document signed with { $count } revoked certificate
+       *[other] Document signed with { $count } revoked certificates
+    }
+pdfjs-digital-signature-properties-status-verified = Status: Signature verified
+pdfjs-digital-signature-properties-status-invalid = Status: Signature invalid
+pdfjs-digital-signature-properties-status-unknown = Status: Unable to verify (unsupported)
+pdfjs-digital-signature-properties-certificate-trusted = Certificate: Trusted ({ $issuer })
+pdfjs-digital-signature-properties-certificate-unknown = Certificate: Unavailable
+pdfjs-digital-signature-properties-certificate-untrusted = Certificate: Untrusted
+pdfjs-digital-signature-properties-certificate-untrusted-unknown-issuer = Certificate: Unknown issuer ({ $issuer })
+pdfjs-digital-signature-properties-certificate-untrusted-self-signed = Certificate: Self-signed ({ $issuer })
+pdfjs-digital-signature-properties-certificate-untrusted-untrusted-issuer = Certificate: Untrusted issuer ({ $issuer })
+pdfjs-digital-signature-properties-certificate-expired = Certificate: Expired
+pdfjs-digital-signature-properties-certificate-expired-with-date = Certificate: Expired ({ DATETIME($dateObj, dateStyle: "medium") })
+pdfjs-digital-signature-properties-certificate-revoked = Certificate: Revoked
+pdfjs-digital-signature-properties-view-certificate = View certificate
+pdfjs-digital-signature-properties-reason = Reason: { $reason }
+pdfjs-digital-signature-properties-timestamp = Timestamp: { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
+pdfjs-digital-signature-properties-sub-signatures =
+    { $count ->
+        [one] Sub-signature ({ $count })
+       *[other] Sub-signatures ({ $count })
+    }
 # Additional translations for ngx-extended-pdf-viewer (es)
 pdfjs-loading-error-more-info = Más información
 pdfjs-loading-error-less-info = Menos información

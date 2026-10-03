@@ -29,3 +29,33 @@ pdfjs-cursor-page-flip-tool-button-label = Listování stránek
 pdfjs-loading-error-more-info = Více informací
 pdfjs-loading-error-less-info = Méně informací
 pdfjs-loading-error-close = Zavřít
+
+# #3255 Sidebar buttons. pdf.js removed these keys in commit 2367196a0
+# ("Change the sidebar for a views manager"); ngx-extended-pdf-viewer keeps its
+# own sidebar, so the translations live here now.
+pdfjs-toggle-sidebar-button =
+    .title = Postranní lišta
+pdfjs-toggle-sidebar-button-label = Postranní lišta
+pdfjs-document-outline-button =
+    .title = Zobrazí osnovu dokumentu (poklepání přepne zobrazení všech položek)
+pdfjs-document-outline-button-label = Osnova dokumentu
+pdfjs-attachments-button =
+    .title = Zobrazí přílohy
+pdfjs-attachments-button-label = Přílohy
+pdfjs-layers-button =
+    .title = Zobrazit vrstvy (poklepáním obnovíte všechny vrstvy do výchozího stavu)
+pdfjs-layers-button-label = Vrstvy
+pdfjs-thumbs-button =
+    .title = Zobrazí náhledy
+pdfjs-thumbs-button-label = Náhledy
+pdfjs-editor-eraser-button =
+    .title = Gumovat
+pdfjs-editor-eraser-button-label = Gumovat
+pdfjs-editor-eraser-editor =
+    .aria-label = Guma
+pdfjs-editor-undo-button =
+    .title = Zpět
+pdfjs-editor-undo-button-label = Zpět
+pdfjs-editor-redo-button =
+    .title = Znovu
+pdfjs-editor-redo-button-label = Znovu

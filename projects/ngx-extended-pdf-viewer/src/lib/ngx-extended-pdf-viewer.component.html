@@ -61,6 +61,8 @@
               [showDownloadButton]="showDownloadButton()"
               [showCommentEditor]="effectiveShowCommentEditor()"
               [showDrawEditor]="effectiveShowDrawEditor()"
+              [showEraserEditor]="effectiveShowEraserEditor()"
+              [showUndoRedoButtons]="effectiveShowUndoRedoButtons()"
               [showHighlightEditor]="effectiveShowHighlightEditor()"
               [showFindButton]="showFindButton()"
               [showHandToolButton]="showHandToolButton()"
@@ -83,6 +85,7 @@
               [showSidebarButton]="showSidebarButton()"
               [showSinglePageModeButton]="showSinglePageModeButton()"
               [showSignatureEditor]="enableSignatureEditor ? effectiveShowSignatureEditor() : false"
+              [showSignaturePropertiesButton]="showSignaturePropertiesButton()"
               [showSpreadButton]="showSpreadButton()"
               [showStampEditor]="effectiveShowStampEditor()"
               [showTextEditor]="effectiveShowTextEditor()"
@@ -126,6 +129,8 @@
               [disableStampEditor]="disableEditorButtons() || disableStampEditor()"
               [disableCommentEditor]="disableEditorButtons() || disableCommentEditor()"
               [disableDrawEditor]="disableEditorButtons() || disableDrawEditor()"
+              [disableEraserEditor]="disableEditorButtons() || disableEraserEditor()"
+              [disableUndoRedoButtons]="disableEditorButtons() || disableUndoRedoButtons()"
               [disableHighlightEditor]="disableEditorButtons() || disableHighlightEditor()"
               [disableSignatureEditor]="disableEditorButtons() || disableSignatureEditor()"
               [disableSecondaryToolbarButton]="disableSecondaryToolbarButton()"
@@ -371,6 +376,37 @@
               </div>
             </div>
 
+            <!-- stephanrauh/pdf.js#14 modified by ngx-extended-pdf-viewer - the eraser -->
+            @if (effectiveShowEraserEditor() !== false) {
+              <div
+                class="editorParamsToolbar hidden doorHangerRight"
+                id="editorEraserParamsToolbar"
+                [style.transform]="'scale(' + mobileFriendlyZoomScale + ')'"
+                [class.server-side-rendering]="serverSideRendering"
+              >
+                <div class="editorParamsToolbarContainer">
+                  <div class="editorParamsSetter">
+                    <label
+                      for="editorEraserThickness"
+                      class="editorParamsLabel"
+                      data-l10n-id="pdfjs-editor-ink-thickness-input"
+                      >Thickness</label
+                    >
+                    <input
+                      type="range"
+                      id="editorEraserThickness"
+                      class="editorParamsSlider"
+                      value="20"
+                      min="20"
+                      max="100"
+                      step="1"
+                    />
+                  </div>
+                </div>
+              </div>
+            }
+            <!-- stephanrauh/pdf.js#14 end of modification by ngx-extended-pdf-viewer -->
+
             <pdf-secondary-toolbar
               #pdfSecondaryToolbarComponent
               [class.server-side-rendering]="serverSideRendering"
@@ -461,9 +497,11 @@
                 class="description"
               ></span>
             </div>
+            <!-- .undoButton for the 6.2 bundle, .secondaryButton for 6.3 (pdf.js replaced the
+                 dedicated undo-button styling with the shared secondary button). -->
             <button
               id="editorUndoBarUndoButton"
-              class="undoButton"
+              class="undoButton secondaryButton"
               type="button"
               tabindex="0"
               title="Undo"

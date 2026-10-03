@@ -23,11 +23,30 @@ export type RenderEditorLayerOptions = {
     viewport: PageViewport;
 };
 /**
+ * @typedef {Object} AnnotationEditorLayerOptions
+ * @property {Object} mode
+ * @property {HTMLDivElement} div
+ * @property {StructTreeLayerBuilder} structTreeLayer
+ * @property {AnnotationEditorUIManager} uiManager
+ * @property {boolean} enabled
+ * @property {TextAccessibilityManager} [accessibilityManager]
+ * @property {number} pageIndex
+ * @property {L10n} l10n
+ * @property {AnnotationLayer} [annotationLayer]
+ * @property {HTMLDivElement} [textLayer]
+ * @property {DrawLayer} drawLayer
+ * @property {PageViewport} viewport
+ */
+/**
+ * @typedef {Object} RenderEditorLayerOptions
+ * @property {PageViewport} viewport
+ */
+/**
  * Manage all the different editors on a page.
  */
 export class AnnotationEditorLayer {
     static _initialized: boolean;
-    static #editorTypes: Map<number, typeof FreeTextEditor | typeof HighlightEditor | typeof InkEditor | typeof SignatureEditor | typeof StampEditor>;
+    static #editorTypes: Map<number, typeof EraserEditor | typeof FreeTextEditor | typeof HighlightEditor | typeof InkEditor | typeof SignatureEditor | typeof StampEditor>;
     /**
      * @param {AnnotationEditorLayerOptions} options
      */
@@ -202,6 +221,7 @@ export class AnnotationEditorLayer {
     #private;
 }
 import { AnnotationEditor } from "./editor.js";
+import { EraserEditor } from "./eraser.js";
 import { FreeTextEditor } from "./freetext.js";
 import { HighlightEditor } from "./highlight.js";
 import { InkEditor } from "./ink.js";

@@ -85,7 +85,7 @@ pdfFiles.forEach((file) => fs.removeSync(file));
 const viewerFiles = glob.sync(path.join(targetDir, 'viewer*.mjs'));
 viewerFiles.forEach((file) => fs.removeSync(file));
 
-// Copy locale, cmaps, standard_fonts, and wasm from appropriate source
+// Copy locale, cmaps, standard_fonts, wasm, and iccs from appropriate source
 const localeSource = quickMode ? path.join('..', 'mypdf.js', 'build', 'generic', 'web', 'locale') : path.join('..', 'mypdf.js', 'build', 'minified', 'web', 'locale');
 const cmapsSource = quickMode ? path.join('..', 'mypdf.js', 'build', 'generic', 'web', 'cmaps') : path.join('..', 'mypdf.js', 'build', 'minified', 'web', 'cmaps');
 const fontsSource = quickMode ? path.join('..', 'mypdf.js', 'build', 'generic', 'web', 'standard_fonts') : path.join('..', 'mypdf.js', 'build', 'minified', 'web', 'standard_fonts');
@@ -94,6 +94,8 @@ fs.copySync(localeSource, path.join(targetDir, 'locale'));
 copyFilesWithoutRecursion(cmapsSource, path.join(targetDir, 'cmaps'));
 copyFilesWithoutRecursion(fontsSource, path.join(targetDir, 'standard_fonts'));
 fs.copySync(path.join('..', 'mypdf.js', 'build', 'generic', 'web', 'wasm'), path.join(targetDir, 'wasm'));
+// #3275: the ICC profile pdf.js needs to convert DeviceCMYK colors
+fs.copySync(path.join('..', 'mypdf.js', 'build', 'generic', 'web', 'iccs'), path.join(targetDir, 'iccs'));
 
 // Copy build files
 copyFilesWithoutRecursion(path.join('..', 'mypdf.js', 'build', 'generic', 'build'), targetDir);

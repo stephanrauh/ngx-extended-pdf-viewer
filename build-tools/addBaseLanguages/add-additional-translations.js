@@ -19,21 +19,19 @@ const ADDITIONAL_LOCALES = new Map(
 );
 
 /**
- * Exact match first ("nb-no" -> "nb-NO.ftl"), then the two-letter shortcode ("de-de" -> "de.ftl").
+ * Exact match first ("nb-no" -> "nb-NO.ftl"), then the two-letter shortcode ("de-at" -> "de.ftl").
+ * Both are applied: the shortcode file fills in whatever the regional file lacks.
  * The shortcode is only allowed to match a real region variant, i.e. "de" or "de-AT" - never
  * "skr" (Saraiki), which shares its first two letters with Slovak and would otherwise have been
  * served Slovak translations.
  */
-function findAdditionalLocale(lang, shortcode) {
+function findAdditionalLocales(lang, shortcode) {
   const key = lang.toLowerCase();
-  const exact = ADDITIONAL_LOCALES.get(key);
-  if (exact) {
-    return exact;
-  }
+  const codes = [ADDITIONAL_LOCALES.get(key)];
   if (key === shortcode || key.startsWith(shortcode + '-')) {
-    return ADDITIONAL_LOCALES.get(shortcode.toLowerCase());
+    codes.push(ADDITIONAL_LOCALES.get(shortcode.toLowerCase()));
   }
-  return undefined;
+  return codes.filter((code, index) => code && codes.indexOf(code) === index);
 }
 
 processOneLanguage('en-us', 'en');
@@ -53,10 +51,9 @@ function processOneLanguage(lang, shortcode) {
   let originalLines = fs.readFileSync(originalFilename).toString();
   let targetLang = originalLines;
 
-  const additionalCode = findAdditionalLocale(lang, shortcode);
-  if (additionalCode) {
-    const header = '\n# Additional translations for ngx-extended-pdf-viewer (' + additionalCode + ')';
-    targetLang = addTranslationsFromAFile(ADDITIONAL_LOCALE_DIR + additionalCode + '.ftl', targetLang, header);
+  for (const code of findAdditionalLocales(lang, shortcode)) {
+    const header = '\n# Additional translations for ngx-extended-pdf-viewer (' + code + ')';
+    targetLang = addTranslationsFromAFile(ADDITIONAL_LOCALE_DIR + code + '.ftl', targetLang, header);
   }
 
   const englishFilename = './projects/ngx-extended-pdf-viewer/' + folder + '/locale/en-US/viewer.ftl';

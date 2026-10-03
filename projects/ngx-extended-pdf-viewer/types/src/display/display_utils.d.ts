@@ -2,6 +2,7 @@ export function applyOpacity(color: any, opacity: any): any;
 export class ColorScheme {
     static get isDarkMode(): any;
 }
+export function computeLuminance(x: any): number;
 export class CSSConstants {
     static get commentForegroundColor(): any;
 }

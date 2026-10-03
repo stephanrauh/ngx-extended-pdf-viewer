@@ -369,6 +369,7 @@ describe('PDF Default Options Utility Functions', () => {
       expect(typeof pdfDefaultOptions.workerSrc).toBe('function');
       expect(typeof pdfDefaultOptions.standardFontDataUrl).toBe('function');
       expect(typeof pdfDefaultOptions.wasmUrl).toBe('function');
+      expect(typeof pdfDefaultOptions.iccUrl).toBe('function');
     });
 
     it('should have null/undefined properties', () => {
@@ -455,6 +456,11 @@ describe('PDF Default Options Utility Functions', () => {
         const result = pdfDefaultOptions.standardFontDataUrl();
         // #3232: same story as cMapUrl - the fonts ship inside the assets folder.
         expect(result).toContain('assets/standard_fonts/');
+      });
+
+      it('should return correct iccUrl', () => {
+        // #3275: the CMYK ICC profile ships inside the assets folder.
+        expect(pdfDefaultOptions.iccUrl()).toBe(new URL('./assets/iccs/', document.baseURI).href);
       });
 
       it('should return correct wasmUrl', () => {

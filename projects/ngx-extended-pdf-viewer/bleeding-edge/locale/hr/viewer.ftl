@@ -736,9 +736,17 @@ pdfjs-editor-movePageDown-button-label = Pomakni stranicu dolje
 pdfjs-cursor-page-flip-tool-button =
     .title = Listanje stranica
 pdfjs-cursor-page-flip-tool-button-label = Listanje stranica
-pdfjs-loading-error-more-info = Više informacija
-pdfjs-loading-error-less-info = Manje informacija
-pdfjs-loading-error-close = Zatvori
+pdfjs-editor-eraser-button =
+    .title = Obriši
+pdfjs-editor-eraser-button-label = Obriši
+pdfjs-editor-eraser-editor =
+    .aria-label = Gumica
+pdfjs-editor-undo-button =
+    .title = Poništi
+pdfjs-editor-undo-button-label = Poništi
+pdfjs-editor-redo-button =
+    .title = Ponovi
+pdfjs-editor-redo-button-label = Ponovi
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-toggle-views-manager-notification-button =
     .title = Toggle Sidebar (document contains thumbnails/outline/attachments/layers)
@@ -760,6 +768,58 @@ pdfjs-views-manager-pages-status-undo-delete-label =
         [one] 1 page deleted
         *[other] { $count } pages deleted
     }
-pdfjs-views-manager-pages-status-waiting-ready-label = Getting your file ready…
-pdfjs-views-manager-pages-status-waiting-uploading-label = Uploading file…
 pdfjs-views-manager-waiting-for-file = Uploading file…
+pdfjs-digital-signature-properties-button =
+    .title = Digital signature properties
+    .aria-label = Digital signature properties
+pdfjs-digital-signature-properties-button-label = Digital signature properties
+pdfjs-digital-signature-properties-banner-verified = Document was signed with a valid digital signature
+pdfjs-digital-signature-properties-banner-unknown =
+    { $count ->
+        [one] Document signed but { $count } digital signature could not be verified
+       *[other] Document signed but { $count } digital signatures could not be verified
+    }
+pdfjs-digital-signature-properties-banner-untrusted =
+    { $count ->
+        [one] Document signed with { $count } certificate that is not trusted
+       *[other] Document signed with { $count } certificates that are not trusted
+    }
+pdfjs-digital-signature-properties-banner-expired =
+    { $count ->
+        [one] Document signed with { $count } expired certificate
+       *[other] Document signed with { $count } expired certificates
+    }
+pdfjs-digital-signature-properties-banner-invalid =
+    { $count ->
+        [one] Document has { $count } invalid digital signature
+       *[other] Document has { $count } invalid digital signatures
+    }
+pdfjs-digital-signature-properties-banner-revoked =
+    { $count ->
+        [one] Document signed with { $count } revoked certificate
+       *[other] Document signed with { $count } revoked certificates
+    }
+pdfjs-digital-signature-properties-status-verified = Status: Signature verified
+pdfjs-digital-signature-properties-status-invalid = Status: Signature invalid
+pdfjs-digital-signature-properties-status-unknown = Status: Unable to verify (unsupported)
+pdfjs-digital-signature-properties-certificate-trusted = Certificate: Trusted ({ $issuer })
+pdfjs-digital-signature-properties-certificate-unknown = Certificate: Unavailable
+pdfjs-digital-signature-properties-certificate-untrusted = Certificate: Untrusted
+pdfjs-digital-signature-properties-certificate-untrusted-unknown-issuer = Certificate: Unknown issuer ({ $issuer })
+pdfjs-digital-signature-properties-certificate-untrusted-self-signed = Certificate: Self-signed ({ $issuer })
+pdfjs-digital-signature-properties-certificate-untrusted-untrusted-issuer = Certificate: Untrusted issuer ({ $issuer })
+pdfjs-digital-signature-properties-certificate-expired = Certificate: Expired
+pdfjs-digital-signature-properties-certificate-expired-with-date = Certificate: Expired ({ DATETIME($dateObj, dateStyle: "medium") })
+pdfjs-digital-signature-properties-certificate-revoked = Certificate: Revoked
+pdfjs-digital-signature-properties-view-certificate = View certificate
+pdfjs-digital-signature-properties-reason = Reason: { $reason }
+pdfjs-digital-signature-properties-timestamp = Timestamp: { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
+pdfjs-digital-signature-properties-sub-signatures =
+    { $count ->
+        [one] Sub-signature ({ $count })
+       *[other] Sub-signatures ({ $count })
+    }
+# Additional translations for ngx-extended-pdf-viewer (hr)
+pdfjs-loading-error-more-info = Više informacija
+pdfjs-loading-error-less-info = Manje informacija
+pdfjs-loading-error-close = Zatvori

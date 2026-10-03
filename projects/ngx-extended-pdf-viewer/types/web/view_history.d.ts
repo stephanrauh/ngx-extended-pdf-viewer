@@ -9,8 +9,6 @@
  */
 export class ViewHistory {
     constructor(fingerprint: any, cacheSize?: number);
-    fingerprint: any;
-    cacheSize: number;
     _initializedPromise: Promise<void>;
     file: any;
     database: any;

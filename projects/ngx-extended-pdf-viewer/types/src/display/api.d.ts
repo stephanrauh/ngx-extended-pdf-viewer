@@ -530,6 +530,39 @@ export type StructTreeNode = {
      * in the PDF.
      */
     role: string;
+    /**
+     * - A table header's structure element
+     * identifier, i.e. its `ID` entry. Note that this is unrelated to the `id`
+     * property of a {@link StructTreeContent} object.
+     */
+    structId?: string | undefined;
+    /**
+     * - The number of rows spanned by a table cell.
+     */
+    rowSpan?: number | undefined;
+    /**
+     * - The number of columns spanned by a table cell.
+     */
+    colSpan?: number | undefined;
+    /**
+     * - The `structId` values of the table
+     * headers associated with a table cell.
+     */
+    headers?: string[] | undefined;
+    /**
+     * - The cells to which a table
+     * header applies.
+     */
+    scope?: "Row" | "Column" | "Both" | undefined;
+    /**
+     * - An abbreviated version of a table header's
+     * content.
+     */
+    short?: string | undefined;
+    /**
+     * - A summary of a table's purpose and structure.
+     */
+    summary?: string | undefined;
 };
 /**
  * Structure tree content.
@@ -891,14 +924,12 @@ export class PDFDocumentProxy {
      */
     getPageIndex(ref: RefProxy): Promise<number>;
     /**
-     * @returns {Promise<Object<string, Array<any>>>} A promise that is resolved
+     * @returns {Promise<Map<string, Array<any>>>} A promise that is resolved
      *   with a mapping from named destinations to references.
      *
      * This can be slow for large documents. Use `getDestination` instead.
      */
-    getDestinations(): Promise<{
-        [x: string]: Array<any>;
-    }>;
+    getDestinations(): Promise<Map<string, Array<any>>>;
     /**
      * @param {string} id - The named destination to get.
      * @returns {Promise<Array<any> | null>} A promise that is resolved with all
@@ -923,17 +954,17 @@ export class PDFDocumentProxy {
      */
     getPageMode(): Promise<string>;
     /**
-     * @returns {Promise<Object | null>} A promise that is resolved with an
-     *   {Object} containing the viewer preferences, or `null` when no viewer
-     *   preferences are present in the PDF file.
+     * @returns {Promise<Map | null>} A promise that is resolved with a {Map}
+     *   containing the viewer preferences, or `null` when no viewer preferences
+     *   are present in the PDF file.
      */
-    getViewerPreferences(): Promise<Object | null>;
+    getViewerPreferences(): Promise<Map<any, any> | null>;
     /**
-     * @returns {Promise<any | null>} A promise that is resolved with an {Array}
-     *   containing the destination, or `null` when no open action is present
-     *   in the PDF.
+     * @returns {Promise<Map | null>} A promise that is resolved with a {Map}
+     *   containing a destination or action, or `null` when no open action is
+     *   present in the PDF.
      */
-    getOpenAction(): Promise<any | null>;
+    getOpenAction(): Promise<Map<any, any> | null>;
     /**
      * @returns {Promise<Map<string, CatalogAttachment> | null>}
      *   Promise that is resolved with a lookup table for mapping named
@@ -955,13 +986,13 @@ export class PDFDocumentProxy {
      */
     getAnnotationsByType(types: Set<number>, pageIndexesToSkip: Set<number>): Promise<Array<Object>>;
     /**
-     * @returns {Promise<Object | null>} A promise that is resolved with
-     *   an {Object} with the JavaScript actions:
+     * @returns {Promise<Map | null>} A promise that is resolved with a {Map} with
+     *   the JavaScript actions:
      *     - from the name tree.
      *     - from A or AA entries in the catalog dictionary.
      *   , or `null` if no JavaScript exists.
      */
-    getJSActions(): Promise<Object | null>;
+    getJSActions(): Promise<Map<any, any> | null>;
     /**
      * @typedef {Object} OutlineNode
      * @property {string} title
@@ -1024,11 +1055,11 @@ export class PDFDocumentProxy {
         intent?: string | undefined;
     }): Promise<OptionalContentConfig>;
     /**
-     * @returns {Promise<Array<number> | null>} A promise that is resolved with
-     *   an {Array} that contains the permission flags for the PDF document, or
-     *   `null` when no permissions are present in the PDF file.
+     * @returns {Promise<Set<number> | null>} A promise that is resolved with
+     *   a {Set} that contains the permission flags for the PDF document,
+     *   or `null` when no permissions are present in the PDF file.
      */
-    getPermissions(): Promise<Array<number> | null>;
+    getPermissions(): Promise<Set<number> | null>;
     /**
      * @returns {Promise<{ info: Object, metadata: Metadata }>} A promise that is
      *   resolved with an {Object} that has `info` and `metadata` properties.
@@ -1099,6 +1130,10 @@ export class PDFDocumentProxy {
      */
     /**
      * @param {Array<PageInfo>} pageInfos - The pages to extract.
+     * @param {Int32Array} [copyLevels] - For each viewer page, its rank among the
+     *  extracted pages sharing the same source page, or -1 if it isn't extracted.
+     *  This routes editor annotations when the viewer contains multiple copies
+     *  of a source page.
      * @returns {Promise<Uint8Array>} A promise that is resolved with a
      *   {Uint8Array} containing the full data of the saved document.
      */
@@ -1142,7 +1177,7 @@ export class PDFDocumentProxy {
          * same entry.
          */
         insertAfter?: number | undefined;
-    }>): Promise<Uint8Array>;
+    }>, copyLevels?: Int32Array): Promise<Uint8Array>;
     /**
      * @returns {Promise<{ length: number }>} A promise that is resolved when the
      *   document's data is loaded. It is resolved with an {Object} that contains
@@ -1151,7 +1186,6 @@ export class PDFDocumentProxy {
     getDownloadInfo(): Promise<{
         length: number;
     }>;
-    getRawData(data: any): any;
     /**
      * Cleans up resources allocated by the document on both the main and worker
      * threads.
@@ -1180,12 +1214,30 @@ export class PDFDocumentProxy {
      */
     get loadingTask(): PDFDocumentLoadingTask;
     /**
-     * @returns {Promise<Object<string, Array<Object>> | null>} A promise that is
-     *   resolved with an {Object} containing /AcroForm field data for the JS
-     *   sandbox, or `null` when no field data is present in the PDF file.
+     * @returns {Promise<Map<string, Array<Object>> | null>} A promise that is
+     *   resolved with a {Map} containing /AcroForm field data for the JS sandbox,
+     *   or `null` when no field data is present in the PDF file.
      */
-    getFieldObjects(): Promise<{
-        [x: string]: Array<Object>;
+    getFieldObjects(): Promise<Map<string, Array<Object>> | null>;
+    /**
+     * @returns {Promise<Array<Object> | null>} A promise that is resolved
+     *   with an {Array} of digital signature metadata (signerName, reason,
+     *   signingTime, byteRange, subFilter, …), or `null` when the document
+     *   has no signatures. The PKCS#7 blob and signed-data byte spans
+     *   needed for verification are fetched separately via
+     *   {@link PDFDocumentProxy.getSignatureData} so they don't ride the
+     *   worker boundary unless verification is actually requested.
+     */
+    getSignatures(): Promise<Array<Object> | null>;
+    /**
+     * @param {string} id Signature `id` from a {@link getSignatures} entry.
+     * @returns {Promise<{ data: Uint8Array[], pkcs7: Uint8Array } | null>}
+     *   The byte payload needed to verify the signature, or `null` if the
+     *   id is unknown.
+     */
+    getSignatureData(id: string): Promise<{
+        data: Uint8Array[];
+        pkcs7: Uint8Array;
     } | null>;
     /**
      * @returns {Promise<boolean>} A promise that is resolved with `true`
@@ -1363,6 +1415,18 @@ export class PDFDocumentProxy {
  *   {@link StructTreeNode} and {@link StructTreeContent} objects.
  * @property {string} role - element's role, already mapped if a role map exists
  * in the PDF.
+ * @property {string} [structId] - A table header's structure element
+ *   identifier, i.e. its `ID` entry. Note that this is unrelated to the `id`
+ *   property of a {@link StructTreeContent} object.
+ * @property {number} [rowSpan] - The number of rows spanned by a table cell.
+ * @property {number} [colSpan] - The number of columns spanned by a table cell.
+ * @property {Array<string>} [headers] - The `structId` values of the table
+ *   headers associated with a table cell.
+ * @property {"Row" | "Column" | "Both"} [scope] - The cells to which a table
+ *   header applies.
+ * @property {string} [short] - An abbreviated version of a table header's
+ *   content.
+ * @property {string} [summary] - A summary of a table's purpose and structure.
  */
 /**
  * Structure tree content.
@@ -1436,10 +1500,10 @@ export class PDFPageProxy {
      */
     getAnnotations({ intent }?: GetAnnotationsParameters): Promise<Array<any>>;
     /**
-     * @returns {Promise<Object>} A promise that is resolved with an
-     *   {Object} with JS actions.
+     * @returns {Promise<Map | null>} A promise that is resolved with a {Map} with
+     *   the JavaScript actions, or `null` if no JavaScript exists.
      */
-    getJSActions(): Promise<Object>;
+    getJSActions(): Promise<Map<any, any> | null>;
     /**
      * @type {Object} The filter factory instance.
      */

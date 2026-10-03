@@ -29,3 +29,33 @@ pdfjs-cursor-page-flip-tool-button-label = Прелистване на стра�
 pdfjs-loading-error-more-info = Повече информация
 pdfjs-loading-error-less-info = По-малко информация
 pdfjs-loading-error-close = Затваряне
+
+# #3255 Sidebar buttons. pdf.js removed these keys in commit 2367196a0
+# ("Change the sidebar for a views manager"); ngx-extended-pdf-viewer keeps its
+# own sidebar, so the translations live here now.
+pdfjs-toggle-sidebar-button =
+    .title = Превключване на страничната лента
+pdfjs-toggle-sidebar-button-label = Превключване на страничната лента
+pdfjs-document-outline-button =
+    .title = Показване на структурата на документа (двукратно щракване за свиване/разгъване на всичко)
+pdfjs-document-outline-button-label = Структура на документа
+pdfjs-attachments-button =
+    .title = Показване на притурките
+pdfjs-attachments-button-label = Притурки
+pdfjs-layers-button =
+    .title = Показване на слоевете (двукратно щракване за възстановяване на всички слоеве към състоянието по подразбиране)
+pdfjs-layers-button-label = Слоеве
+pdfjs-thumbs-button =
+    .title = Показване на миниатюрите
+pdfjs-thumbs-button-label = Миниатюри
+pdfjs-editor-eraser-button =
+    .title = Изтриване
+pdfjs-editor-eraser-button-label = Изтриване
+pdfjs-editor-eraser-editor =
+    .aria-label = Гума
+pdfjs-editor-undo-button =
+    .title = Отмяна
+pdfjs-editor-undo-button-label = Отмяна
+pdfjs-editor-redo-button =
+    .title = Повторение
+pdfjs-editor-redo-button-label = Повторение

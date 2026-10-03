@@ -335,7 +335,7 @@ describe('PDFScriptLoaderService', () => {
       const originalWithResolvers = (Promise as any).withResolvers;
       delete (Promise as any).withResolvers;
 
-      (service as any).polyfillPromiseWithResolversIfZoneJSOverwritesIt();
+      (service as any).polyfillPromiseStaticsDroppedByZoneJS();
 
       expect((Promise as any).withResolvers).toBeDefined();
       expect(typeof (Promise as any).withResolvers).toBe('function');
@@ -358,7 +358,7 @@ describe('PDFScriptLoaderService', () => {
       const originalWithResolvers = () => ({ promise: Promise.resolve(), resolve: () => {}, reject: () => {} });
       (Promise as any).withResolvers = originalWithResolvers;
 
-      (service as any).polyfillPromiseWithResolversIfZoneJSOverwritesIt();
+      (service as any).polyfillPromiseStaticsDroppedByZoneJS();
 
       expect((Promise as any).withResolvers).toBe(originalWithResolvers);
     });
@@ -372,6 +372,49 @@ describe('PDFScriptLoaderService', () => {
       expect(result).toBe(true);
     });
 
+    // #3273 workerSrc() and sandboxBundleSrc() read pdfDefaultOptions.needsES5, so the
+    // probe's verdict must reach it - not only an explicit forceUsingLegacyES5.
+    describe('syncs the ES5 decision into pdfDefaultOptions', () => {
+      let originalNeedsES5: boolean;
+
+      beforeEach(() => {
+        originalNeedsES5 = pdfDefaultOptions.needsES5;
+        jest.spyOn(service as any, 'loadViewer').mockResolvedValue(undefined);
+      });
+
+      afterEach(() => {
+        pdfDefaultOptions.needsES5 = originalNeedsES5;
+      });
+
+      it('sets it when the browser probe picks the legacy bundle', async () => {
+        pdfDefaultOptions.needsES5 = false;
+        jest.spyOn(service as any, 'needsES5').mockResolvedValue(true);
+
+        await service.ensurePdfJsHasBeenLoaded(false, false, false);
+
+        expect(pdfDefaultOptions.needsES5).toBe(true);
+        expect(pdfDefaultOptions.workerSrc()).toContain('-es5.mjs');
+        expect(pdfDefaultOptions.sandboxBundleSrc()).toContain('-es5.mjs');
+      });
+
+      it('clears it when the browser probe picks the modern bundle', async () => {
+        pdfDefaultOptions.needsES5 = true;
+        jest.spyOn(service as any, 'needsES5').mockResolvedValue(false);
+
+        await service.ensurePdfJsHasBeenLoaded(false, false, false);
+
+        expect(pdfDefaultOptions.needsES5).toBe(false);
+        expect(pdfDefaultOptions.workerSrc()).not.toContain('-es5.mjs');
+      });
+
+      it('sets it when the legacy bundle is forced', async () => {
+        pdfDefaultOptions.needsES5 = false;
+
+        await service.ensurePdfJsHasBeenLoaded(false, true, false);
+
+        expect(pdfDefaultOptions.needsES5).toBe(true);
+      });
+    });
   });
 
   describe('ngOnDestroy', () => {
@@ -433,6 +476,64 @@ describe('PDFScriptLoaderService', () => {
 
       addScriptOpChainingSupportSpy.mockRestore();
     });
+
+    // #3264 A CSP sent as an HTTP header cannot be detected up front (only a <meta>
+    // tag can), so the inline probe is injected and blocked. Before the violation
+    // listener existed, the deadline expired and every browser was sent to the legacy
+    // bundle. Now the probe is re-loaded from the file, which needs no 'unsafe-inline'.
+    it('loads the probe from a file when the CSP blocks the inline script', async () => {
+      delete (globalThis as any).ngxExtendedPdfViewerCanRunModernJSCode;
+      const fromFile = jest.spyOn(service as any, 'loadProbeFromFile').mockResolvedValue(true);
+
+      const pending = (service as any).addScriptOpChainingSupport(true);
+      // jsdom has no SecurityPolicyViolationEvent, so mimic the fields we read
+      const violation: any = new Event('securitypolicyviolation');
+      violation.blockedURI = 'inline';
+      violation.effectiveDirective = 'script-src-elem';
+      document.dispatchEvent(violation);
+
+      await expect(pending).resolves.toBe(true);
+      expect(fromFile).toHaveBeenCalled();
+      fromFile.mockRestore();
+    });
+
+    it('ignores violations that were not caused by the probe', async () => {
+      jest.useFakeTimers();
+      try {
+        delete (globalThis as any).ngxExtendedPdfViewerCanRunModernJSCode;
+        const fromFile = jest.spyOn(service as any, 'loadProbeFromFile').mockResolvedValue(true);
+
+        const pending = (service as any).addScriptOpChainingSupport(true);
+        const violation: any = new Event('securitypolicyviolation');
+        violation.blockedURI = 'https://example.com/tracker.js';
+        violation.effectiveDirective = 'img-src';
+        document.dispatchEvent(violation);
+
+        jest.advanceTimersByTime(600);
+        await expect(pending).resolves.toBe(false);
+        expect(fromFile).not.toHaveBeenCalled();
+        fromFile.mockRestore();
+      } finally {
+        jest.useRealTimers();
+      }
+    });
+
+    // #2687 An old browser cannot parse the inline probe, so the global is never set.
+    // Before the deadline was added this promise stayed pending forever and the viewer
+    // never started - on precisely the browsers the legacy bundle exists for.
+    it('falls back to the legacy bundle when the inline probe never answers', async () => {
+      jest.useFakeTimers();
+      try {
+        delete (globalThis as any).ngxExtendedPdfViewerCanRunModernJSCode;
+        // The inline probe is appended as a <script> that jsdom never executes,
+        // which is exactly the "probe did not run" situation.
+        const pending = (service as any).addScriptOpChainingSupport(true);
+        jest.advanceTimersByTime(600);
+        await expect(pending).resolves.toBe(false);
+      } finally {
+        jest.useRealTimers();
+      }
+    });
   });
 
   describe('edge cases and error handling', () => {
@@ -452,4 +553,95 @@ describe('PDFScriptLoaderService', () => {
     });
   });
 
+  // #3259 zone.js replaces the global Promise with ZoneAwarePromise, which lacks the
+  // statics added after it was written. Angular 19 and 20 still use zone.js by default,
+  // and pdf.js 6.2 calls Promise.try for every worker round-trip - without the polyfill
+  // nothing renders on those versions (the compat suite failed exactly there).
+  describe('Promise statics dropped by zone.js', () => {
+    const promiseStatics = Promise as any;
+    let originalTry: unknown;
+    let originalWithResolvers: unknown;
+
+    beforeEach(() => {
+      originalTry = promiseStatics.try;
+      originalWithResolvers = promiseStatics.withResolvers;
+    });
+
+    afterEach(() => {
+      promiseStatics.try = originalTry;
+      promiseStatics.withResolvers = originalWithResolvers;
+    });
+
+    it('restores Promise.try when zone.js removed it', async () => {
+      promiseStatics.try = undefined;
+
+      (service as any).polyfillPromiseStaticsDroppedByZoneJS();
+
+      expect(typeof promiseStatics.try).toBe('function');
+      await expect(promiseStatics.try((a: number, b: number) => a + b, 20, 22)).resolves.toBe(42);
+      await expect(
+        promiseStatics.try(() => {
+          throw new Error('sync boom');
+        }),
+      ).rejects.toThrow('sync boom');
+    });
+
+    it('restores Promise.withResolvers when zone.js removed it', async () => {
+      promiseStatics.withResolvers = undefined;
+
+      (service as any).polyfillPromiseStaticsDroppedByZoneJS();
+
+      const { promise, resolve } = promiseStatics.withResolvers();
+      resolve('ok');
+      await expect(promise).resolves.toBe('ok');
+    });
+
+    it('does not replace the native implementations', () => {
+      const nativeTry = promiseStatics.try;
+
+      (service as any).polyfillPromiseStaticsDroppedByZoneJS();
+
+      expect(promiseStatics.try).toBe(nativeTry);
+    });
+  });
+
+  // #2687 #2536 The browser-capability probe exists three times: as a static asset in
+  // both bundles and inline in this service. They drifted once already (the
+  // bleeding-edge copy missed the AbortSignal.any polyfill for months), which sends
+  // Safari 17.4 users to a bundle that crashes. These tests fail on the next drift.
+  describe('browser capability probe copies', () => {
+    const fs = require('fs');
+    const path = require('path');
+    const root = path.resolve(__dirname, '../..');
+    const read = (p: string) => fs.readFileSync(path.join(root, p), 'utf8');
+
+    it('ships an identical probe in the stable and the bleeding-edge bundle', () => {
+      expect(read('bleeding-edge/op-chaining-support.js')).toBe(read('assets/op-chaining-support.js'));
+    });
+
+    it('keeps the inline probe semantically in sync with the asset file', () => {
+      const asset = read('assets/op-chaining-support.js');
+      const inline = read('src/lib/pdf-script-loader.service.ts');
+      // Every capability check and polyfill of the asset must exist inline, too.
+      for (const marker of [
+        'supportsOptionalChaining',
+        'supportsModernBuiltIns',
+        'ngxExtendedPdfViewerCanRunModernJSCode',
+        'AbortSignal.any',
+      ]) {
+        expect(asset).toContain(marker);
+        expect(inline).toContain(marker);
+      }
+    });
+
+    // #3273 The built-in checks are the part that decides the bundle, so compare them
+    // line by line instead of trusting a marker.
+    it('checks the same built-ins inline and in the asset file', () => {
+      const checks = (source: string) => source.match(/typeof w\.[\w.]+ === 'function'/g);
+      const asset = checks(read('assets/op-chaining-support.js'));
+      expect(asset).toContain("typeof w.Promise.try === 'function'");
+      expect(asset).toContain("typeof w.Uint8Array.prototype.toHex === 'function'");
+      expect(checks(read('src/lib/pdf-script-loader.service.ts'))).toEqual(asset);
+    });
+  });
 });

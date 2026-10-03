@@ -95,6 +95,7 @@ export class AnnotationEditor {
     isSelected: boolean;
     _isCopy: boolean;
     _editToolbar: null;
+    _erasable: boolean;
     _initialOptions: any;
     _initialData: null;
     _isVisible: boolean;
@@ -127,6 +128,7 @@ export class AnnotationEditor {
     updatePageIndex(newPageIndex: any): void;
     get editorType(): any;
     get mode(): any;
+    get erasable(): boolean;
     /**
      * Get the properties to update in the UI for this editor.
      * @returns {Array}
@@ -186,6 +188,38 @@ export class AnnotationEditor {
      */
     translate(x: number, y: number): void;
     /**
+     * Start an erase session: snapshot the editor geometry once so that the
+     * hit tests done on every pointer move stay cheap.
+     * @param {DOMRect} layerRect - Bounding rect of the annotation editor layer.
+     * @returns {Array<number>|null} The editor bbox in layer pixels
+     *   ([left, top, right, bottom]), or null when nothing can be erased.
+     */
+    startErase(layerRect: DOMRect): Array<number> | null;
+    /**
+     * Erase everything swept by the eraser circle moving from (prevX, prevY)
+     * to (x, y). All values are in layer pixels.
+     * @param {number} x
+     * @param {number} y
+     * @param {number} radius
+     * @param {number} [prevX]
+     * @param {number} [prevY]
+     */
+    erase(x: number, y: number, radius: number, prevX?: number, prevY?: number): void;
+    /**
+     * Update the rendering after one or more erase calls.
+     * Called at most once per animation frame.
+     */
+    renderErase(): void;
+    /**
+     * Call once the erasing session is done.
+     * @returns {{cmd?: Function, undo?: Function}} The commands to (re)do and
+     *   undo the erasing, or an empty object when nothing was erased.
+     */
+    endErase(): {
+        cmd?: Function;
+        undo?: Function;
+    };
+    /**
      * Translate the editor position within its page and adjust the scroll
      * in order to have the editor in the view.
      * @param {number} x - x-translation in page coordinates.
@@ -206,6 +240,34 @@ export class AnnotationEditor {
      * @param {number} y - in page coordinates.
      */
     _onTranslated(x: number, y: number): void;
+    /**
+     * Tell the application that something about this annotation changed.
+     *
+     * This lives in the base class on purpose: the call sites sit inside methods
+     * Mozilla owns, and a one-line call survives an upstream merge far better
+     * than a dozen lines of object literal wedged into their code.
+     *
+     * `extra` adds to the payload and can override any of the default fields.
+     * Setting a field to `undefined` drops it, which some events rely on - not
+     * every event carries a page or an id, and some report `this.name` rather
+     * than the class name as their `editorType`.
+     *
+     * @param {string} type - the event type, e.g. "colorChanged"
+     * @param {Object} [extra] - fields to add to or override in the payload
+     */
+    _dispatchEditorEvent(type: string, extra?: Object): void;
+    /**
+     * The editor-specific payload of the "added" event. Override it to describe
+     * the annotation that has just been added.
+     * @returns {Object}
+     */
+    get addedEventValue(): Object;
+    /**
+     * Tell the application that this annotation is now part of the document.
+     * Every editor type sends this event, so restoring a batch of annotations
+     * gives you one "added" event per annotation.
+     */
+    _dispatchAddedEvent(): void;
     get _hasBeenMoved(): boolean;
     get _hasBeenResized(): boolean;
     /**
@@ -482,7 +544,10 @@ export class AnnotationEditor {
      * Add the resizers to this editor.
      */
     makeResizable(): void;
-    get toolbarPosition(): null;
+    /**
+     * @returns {Array<number>|null}
+     */
+    get toolbarPosition(): Array<number> | null;
     /**
      * Get the position of the comment button.
      * @returns {Array<number>|null}

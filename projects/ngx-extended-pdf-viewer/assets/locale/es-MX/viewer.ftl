@@ -153,6 +153,7 @@ pdfjs-document-properties-linearized = Vista rápida de la web:
 pdfjs-document-properties-linearized-yes = Sí
 pdfjs-document-properties-linearized-no = No
 pdfjs-document-properties-close-button = Cerrar
+pdfjs-digital-signature-properties-view-certificate = Ver certificado
 
 ## Print
 
@@ -161,8 +162,8 @@ pdfjs-print-progress-message = Preparando documento para impresión…
 #   $progress (Number) - percent value
 pdfjs-print-progress-percent = { $progress }%
 pdfjs-print-progress-close-button = Cancelar
-pdfjs-printing-not-supported = Advertencia: La impresión no esta completamente soportada por este navegador.
-pdfjs-printing-not-ready = Advertencia: El PDF no cargo completamente para impresión.
+pdfjs-printing-not-supported = Advertencia: La impresión no está completamente soportada por este navegador.
+pdfjs-printing-not-ready = Advertencia: El PDF no cargó completamente para impresión.
 
 ## Tooltips and alt text for side panel toolbar buttons
 
@@ -265,7 +266,7 @@ pdfjs-page-landmark =
 ## Loading indicator messages
 
 pdfjs-loading-error = Un error ocurrió al cargar el PDF.
-pdfjs-invalid-file-error = Archivo PDF invalido o dañado.
+pdfjs-invalid-file-error = Archivo PDF inválido o dañado.
 pdfjs-missing-file-error = Archivo PDF no encontrado.
 pdfjs-unexpected-response-error = Respuesta inesperada del servidor.
 pdfjs-rendering-error = Un error ocurrió al renderizar la página.
@@ -360,7 +361,7 @@ pdfjs-editor-remove-signature-button =
 pdfjs-editor-free-text-color-input = Color
 pdfjs-editor-free-text-size-input = Tamaño
 pdfjs-editor-ink-color-input = Color
-pdfjs-editor-ink-thickness-input = Grossor
+pdfjs-editor-ink-thickness-input = Grosor
 pdfjs-editor-ink-opacity-input = Opacidad
 pdfjs-editor-stamp-add-image-button =
     .title = Agregar imagen
@@ -580,7 +581,7 @@ pdfjs-editor-add-signature-type-input =
     .aria-label = Escribe tu firma
     .placeholder = Escribe tu firma
 pdfjs-editor-add-signature-draw-placeholder = Dibuja tu firma
-pdfjs-editor-add-signature-draw-thickness-range-label = Grossor
+pdfjs-editor-add-signature-draw-thickness-range-label = Grosor
 # Variables:
 #   $thickness (Number) - the thickness (in pixels) of the line used to draw a signature.
 pdfjs-editor-add-signature-draw-thickness-range =
@@ -697,15 +698,15 @@ pdfjs-views-manager-status-undo-cut-label =
 #   $count (Number) - the number of selected pages to be copied.
 pdfjs-views-manager-pages-status-undo-copy-label =
     { $count ->
-        [one] 1 pagina copiada
-       *[other] { $count } paginas copiadas
+        [one] 1 página copiada
+       *[other] { $count } páginas copiadas
     }
 # Variables:
 #   $count (Number) - the number of selected pages to be deleted.
 pdfjs-views-manager-pages-status-undo-delete-label =
     { $count ->
-        [one] 1 pagina eliminada
-       *[other] { $count } paginas eliminadas
+        [one] 1 página eliminada
+       *[other] { $count } páginas eliminadas
     }
 pdfjs-views-manager-pages-status-waiting-ready-label = Preparando tu archivo…
 pdfjs-views-manager-pages-status-waiting-uploading-label = Subiendo archivo…
@@ -760,6 +761,67 @@ pdfjs-editor-movePageDown-button-label = Mover página hacia abajo
 pdfjs-cursor-page-flip-tool-button =
     .title = Pasar página
 pdfjs-cursor-page-flip-tool-button-label = Pasar página
+pdfjs-editor-eraser-button =
+    .title = Borrar
+pdfjs-editor-eraser-button-label = Borrar
+pdfjs-editor-eraser-editor =
+    .aria-label = Borrador
+pdfjs-editor-undo-button =
+    .title = Deshacer
+pdfjs-editor-undo-button-label = Deshacer
+pdfjs-editor-redo-button =
+    .title = Rehacer
+pdfjs-editor-redo-button-label = Rehacer
+# Translations for ngx-extended-pdf-viewer additions only available in en-US
+pdfjs-digital-signature-properties-button =
+    .title = Digital signature properties
+    .aria-label = Digital signature properties
+pdfjs-digital-signature-properties-button-label = Digital signature properties
+pdfjs-digital-signature-properties-banner-verified = Document was signed with a valid digital signature
+pdfjs-digital-signature-properties-banner-unknown =
+    { $count ->
+        [one] Document signed but { $count } digital signature could not be verified
+       *[other] Document signed but { $count } digital signatures could not be verified
+    }
+pdfjs-digital-signature-properties-banner-untrusted =
+    { $count ->
+        [one] Document signed with { $count } certificate that is not trusted
+       *[other] Document signed with { $count } certificates that are not trusted
+    }
+pdfjs-digital-signature-properties-banner-expired =
+    { $count ->
+        [one] Document signed with { $count } expired certificate
+       *[other] Document signed with { $count } expired certificates
+    }
+pdfjs-digital-signature-properties-banner-invalid =
+    { $count ->
+        [one] Document has { $count } invalid digital signature
+       *[other] Document has { $count } invalid digital signatures
+    }
+pdfjs-digital-signature-properties-banner-revoked =
+    { $count ->
+        [one] Document signed with { $count } revoked certificate
+       *[other] Document signed with { $count } revoked certificates
+    }
+pdfjs-digital-signature-properties-status-verified = Status: Signature verified
+pdfjs-digital-signature-properties-status-invalid = Status: Signature invalid
+pdfjs-digital-signature-properties-status-unknown = Status: Unable to verify (unsupported)
+pdfjs-digital-signature-properties-certificate-trusted = Certificate: Trusted ({ $issuer })
+pdfjs-digital-signature-properties-certificate-unknown = Certificate: Unavailable
+pdfjs-digital-signature-properties-certificate-untrusted = Certificate: Untrusted
+pdfjs-digital-signature-properties-certificate-untrusted-unknown-issuer = Certificate: Unknown issuer ({ $issuer })
+pdfjs-digital-signature-properties-certificate-untrusted-self-signed = Certificate: Self-signed ({ $issuer })
+pdfjs-digital-signature-properties-certificate-untrusted-untrusted-issuer = Certificate: Untrusted issuer ({ $issuer })
+pdfjs-digital-signature-properties-certificate-expired = Certificate: Expired
+pdfjs-digital-signature-properties-certificate-expired-with-date = Certificate: Expired ({ DATETIME($dateObj, dateStyle: "medium") })
+pdfjs-digital-signature-properties-certificate-revoked = Certificate: Revoked
+pdfjs-digital-signature-properties-reason = Reason: { $reason }
+pdfjs-digital-signature-properties-timestamp = Timestamp: { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
+pdfjs-digital-signature-properties-sub-signatures =
+    { $count ->
+        [one] Sub-signature ({ $count })
+       *[other] Sub-signatures ({ $count })
+    }
 # Additional translations for ngx-extended-pdf-viewer (es)
 pdfjs-loading-error-more-info = Más información
 pdfjs-loading-error-less-info = Menos información

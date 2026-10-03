@@ -3,6 +3,7 @@ export function createResponseError(status: any, url: any): ResponseException;
 export function ensureResponseOrigin(rangeOrigin: any, origin: any): void;
 export function extractFilenameFromHeader(responseHeaders: any): string | null;
 export function getResponseOrigin(url: any): string | null;
+export function trimHeadersEnd(str: any): any;
 export function validateRangeRequestCapabilities({ responseHeaders, isHttp, rangeChunkSize, disableRange, }: {
     responseHeaders: any;
     isHttp: any;

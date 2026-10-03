@@ -153,6 +153,27 @@ pdfjs-document-properties-linearized = მსუბუქი ვებჩვე�
 pdfjs-document-properties-linearized-yes = დიახ
 pdfjs-document-properties-linearized-no = არა
 pdfjs-document-properties-close-button = დახურვა
+pdfjs-digital-signature-properties-view-certificate = სერტიფიკატის ნახვა
+# Shown beneath an invalid signature card to explain why verification
+# failed. The text comes from NSS (e.g. "Signature integrity has been
+# compromised", "PKCS#7 signature could not be parsed") and is not
+# itself localized — it is the underlying error message produced by
+# the verification backend.
+# Variables:
+#   $reason (String) - error message describing why the signature
+#                      could not be verified.
+pdfjs-digital-signature-properties-reason = მიზეზი: { $reason }
+# Variables:
+#   $dateObj (Date) - the signing time from the /Sig dict's /M entry.
+pdfjs-digital-signature-properties-timestamp = დროის ნიშნული: { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
+# Variables:
+#   $count (Number) - number of nested sub-signatures (one per earlier
+#                     incremental revision of the document).
+pdfjs-digital-signature-properties-sub-signatures =
+    { $count ->
+        [one] ქვეხელმოწერები ({ $count })
+       *[other] ქვეხელმოწერები ({ $count })
+    }
 
 ## Print
 
@@ -732,6 +753,74 @@ pdfjs-views-manager-waiting-for-file = ფაილი აიტვირთე�
 pdfjs-toggle-views-manager-button1 =
     .title = გვერდების მართვა
 
+## Digital signature properties (signature verification panel)
+
+pdfjs-digital-signature-properties-button =
+    .title = ციფრული ხელმოწერის პარამეტრები
+    .aria-label = ციფრული ხელმოწერის პარამეტრები
+pdfjs-digital-signature-properties-button-label = ციფრული ხელმოწერის პარამეტრები
+
+## Banner shown above the signature list summarising the overall
+## verification state of the document. Each variant is selected by the
+## viewer based on the worst per-signature status; one signature is
+## enough to lower the banner.
+##
+## Variables:
+##   $count (Number) - number of signatures at the worst level.
+
+pdfjs-digital-signature-properties-banner-verified = დოკუმენტი ხელმოწერილია მართებული ციფრული ხელმოწერით
+pdfjs-digital-signature-properties-banner-unknown =
+    { $count ->
+        [one] დოკუმენტი ხელმოწერილია, მაგრამ { $count } ციფრული ხელმოწერა ვერ დამოწმდა
+       *[other] დოკუმენტი ხელმოწერილია, მაგრამ { $count } ციფრული ხელმოწერა ვერ დამოწმდა
+    }
+pdfjs-digital-signature-properties-banner-untrusted =
+    { $count ->
+        [one] დოკუმენტი ხელმოწერილია { $count } არასანდო სერტიფიკატით
+       *[other] დოკუმენტი ხელმოწერილია { $count } არასანდო სერტიფიკატით
+    }
+pdfjs-digital-signature-properties-banner-expired =
+    { $count ->
+        [one] დოკუმენტი ხელმოწერილია { $count } ვადაგასული სერტიფიკატით
+       *[other] დოკუმენტი ხელმოწერილია { $count } ვადაგასული სერტიფიკატით
+    }
+pdfjs-digital-signature-properties-banner-invalid =
+    { $count ->
+        [one] დოკუმენტი ხელმოწერილია { $count } უმართებულო ციფრული სერტიფიკატით
+       *[other] დოკუმენტი ხელმოწერილია { $count } უმართებულო ციფრული სერტიფიკატით
+    }
+pdfjs-digital-signature-properties-banner-revoked =
+    { $count ->
+        [one] დოკუმენტი ხელმოწერილია { $count } ძალადაკარგული სერტიფიკატით
+       *[other] დოკუმენტი ხელმოწერილია { $count } ძალადაკარგული სერტიფიკატით
+    }
+
+## Per-signature status row. Only three distinct strings are needed:
+## the signature crypto either verified (the cert chain may still be
+## untrusted/expired/revoked, but that's surfaced on the cert row
+## below), or it failed, or its sub-format isn't supported.
+
+pdfjs-digital-signature-properties-status-verified = მდგომარეობა: ხელმოწერა დამოწმებულია
+pdfjs-digital-signature-properties-status-invalid = მდგომარეობა: ხელმოწერა უმართებულოა
+pdfjs-digital-signature-properties-status-unknown = მდგომარეობა: ვერ მოწმდება (მხარდაუჭერელია)
+
+## Per-signature certificate row. The variants with an issuer / date in
+## parentheses embed fully-localized context — no English fall-through.
+##
+## Variables:
+##   $issuer (String) - issuer or subject common name from the cert.
+##   $dateObj (Date)  - notAfter date for the expired-with-date form.
+
+pdfjs-digital-signature-properties-certificate-trusted = სერტიფიკატი: სანდოა ({ $issuer })
+pdfjs-digital-signature-properties-certificate-unknown = სერტიფიკატი: მიუწვდომელია
+pdfjs-digital-signature-properties-certificate-untrusted = სერტიფიკატი: არასანდოა
+pdfjs-digital-signature-properties-certificate-untrusted-unknown-issuer = სერტიფიკატი: უცნობი გამცემი ({ $issuer })
+pdfjs-digital-signature-properties-certificate-untrusted-self-signed = სერტიფიკატი: თვითხელმოწერით ({ $issuer })
+pdfjs-digital-signature-properties-certificate-untrusted-untrusted-issuer = სერტიფიკატი: არასანდო გამცემი ({ $issuer })
+pdfjs-digital-signature-properties-certificate-expired = სერტიფიკატი: ვადაგასული
+pdfjs-digital-signature-properties-certificate-expired-with-date = სერტიფიკატი: ვადაგასული ({ DATETIME($dateObj, dateStyle: "medium") })
+pdfjs-digital-signature-properties-certificate-revoked = სერტიფიკატი: ძალადაკარგულია
+
 ## Main menu for adding/removing signatures
 
 pdfjs-editor-delete-signature-button1 =
@@ -747,6 +836,17 @@ pdfjs-editor-add-signature-edit-button-label = აღწერილობის
 pdfjs-editor-edit-signature-dialog-title = აღწერილობის ჩასწორება
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
+pdfjs-editor-eraser-button =
+    .title = Erase
+pdfjs-editor-eraser-button-label = Erase
+pdfjs-editor-eraser-editor =
+    .aria-label = Eraser
+pdfjs-editor-undo-button =
+    .title = Undo
+pdfjs-editor-undo-button-label = Undo
+pdfjs-editor-redo-button =
+    .title = Redo
+pdfjs-editor-redo-button-label = Redo
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = Match Each Word
@@ -760,6 +860,7 @@ pdfjs-editor-movePageDown-button-label = Move Page Down
 pdfjs-cursor-page-flip-tool-button =
     .title = Page Flip
 pdfjs-cursor-page-flip-tool-button-label = Page Flip
+# Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-loading-error-more-info = More Information
 pdfjs-loading-error-less-info = Less Information
 pdfjs-loading-error-close = Close

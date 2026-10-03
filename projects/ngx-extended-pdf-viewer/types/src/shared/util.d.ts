@@ -40,11 +40,13 @@ export namespace AnnotationEditorParamsType {
     let INK_THICKNESS: number;
     let INK_OPACITY: number;
     let INK_COLOR_AND_OPACITY: number;
+    let ERASER_THICKNESS: number;
     let HIGHLIGHT_COLOR: number;
     let HIGHLIGHT_THICKNESS: number;
     let HIGHLIGHT_FREE: number;
     let HIGHLIGHT_SHOW_ALL: number;
     let DRAW_STEP: number;
+    let ERASER_STEP: number;
 }
 export const AnnotationEditorPrefix: "pdfjs_internal_editor_";
 export namespace AnnotationEditorType {
@@ -57,6 +59,7 @@ export namespace AnnotationEditorType {
     let POPUP: number;
     let SIGNATURE: number;
     let COMMENT: number;
+    let ERASER: number;
 }
 export namespace AnnotationFieldFlag {
     let READONLY: number;
@@ -218,13 +221,13 @@ export const LINE_FACTOR: 1.35;
 export function makeArr(): never[];
 export function makeMap(): Map<any, any>;
 export function makeObj(): any;
+export function makeSet(): Set<any>;
 export namespace MeshFigureType {
     let TRIANGLES: number;
     let LATTICE: number;
     let PATCH: number;
 }
 export function normalizeUnicode(str: any): any;
-export function objectSize(obj: any): number;
 export namespace OPS {
     export let dependency: number;
     export let setLineWidth: number;

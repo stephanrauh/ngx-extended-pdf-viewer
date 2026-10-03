@@ -17,7 +17,7 @@ Built on Mozilla’s pdf.js and extended with dozens of enhancements, it's ideal
 
 ### Prerequisites
 
-⚠️ **Versions 26 through 29 require Angular 19, 20, 21, or 22.** If you're using Angular 17 or 18, please continue using version 25.6.4.
+⚠️ **Versions 26 and later require Angular 19, 20, 21, or 22.** If you're using Angular 17 or 18, please continue using version 25.6.4.
 
 **Why this breaking change?** There are many reasons: Version 26 supports zone-less Angular and migrates to signals. And Angular 18 exited its Long-Term Support (LTS) phase, and security vulnerability CVE-2025-66035 will not be fixed in Angular 17 or 18. Updating to Angular 19 ensures your application continues to receive critical security patches.
 
@@ -118,9 +118,9 @@ bootstrapApplication(AppComponent, {
 
 ## 🔐 Security Notice
 
-⚠️ **Please use the latest `29.x` release (or the latest `28.x` if you're staying on that line). Older versions are known to be vulnerable.**
+⚠️ **Please use the latest `30.x` or `29.x` release (or the latest `28.x` if you're staying on that line). Older versions are known to be vulnerable.**
 
-**[CVE-2026-16633](https://github.com/mozilla/pdf.js/security/advisories/GHSA-hq66-cqwq-w95j) (high) - fixed in `28.1.1` and in `29.0.0-rc.3`.** A malicious PDF could run JavaScript in the context of your page. The flaw is in pdf.js 5.6.83 and newer, so **every earlier `28.x` release, and `29.0.0-rc.0` through `rc.2`, are affected** - please update. Mozilla's fix (pdf.js 6.2.108) is cherry-picked into the engine this library bundles.
+**[CVE-2026-16633](https://github.com/mozilla/pdf.js/security/advisories/GHSA-hq66-cqwq-w95j) (high) - fixed in `28.1.1` and in `29.0.0-rc.3`.** A malicious PDF could run JavaScript in the context of your page. The flaw is in pdf.js 5.6.83 and newer, so **every earlier `28.x` release, and `29.0.0-rc.0` through `rc.2`, are affected** - please update. Mozilla's fix landed in pdf.js 6.2.108; version 29 cherry-picked it, and since version 30 the bundled engine *is* 6.2.108, so it carries the fix natively.
 
 This library ships `enableScripting=false` by default, unlike pdf.js itself, which limited the exposure - but not for the XFA part of the issue, so don't assume you were safe.
 
@@ -159,11 +159,52 @@ Regarding security: I'm not perfect - it's always a best-effort approach without
 
 ## 📦 Version Highlights
 
+### Version 31 (alpha)
+
+Version 31 brings pdf.js 6.3 to the bleeding-edge bundle. The stable bundle stays on pdf.js 6.2.
+
+**New in the bleeding-edge bundle:**
+
+- **Eraser**: erases parts of drawings and free-hand highlights (`[showEraserEditor]`, `[disableEraserEditor]`). Contributed by legraina.
+- **Undo and redo buttons** for the annotation editor, handy on tablets (`[showUndoRedoButtons]`, `[disableUndoRedoButtons]`). Contributed by legraina. They are shown by default during the alphas only; from 31.0.0 on, they are hidden by default.
+- **Responsive visibility level `'xxxl'`**: the new buttons stay in the toolbar when it's at least 1000 pixels wide and move to the secondary menu otherwise.
+- **pdf.js 6.3**: highlighting and drawing are built on Mozilla's reworked editors, a two-finger gesture pans the document while you pinch, and large JPEG images need noticeably less memory.
+
+**Breaking:** if you style the viewer with your own CSS, check the button classes, the menu checkmark and the view switcher padding. The [changelog](./changelog.md) (31.0.0-alpha.0) lists the details.
+
+**Breaking:** `[textLayer]="false"` now really switches the text layer off and hides the select tool button ([#3292](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/3292), reported long ago in [#1004](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/1004)). Until now the text layer was rendered anyway, so text remained selectable. If you need text selection, highlighting selected text, or screen reader support, remove the attribute.
+
+### Version 30
+
+Version 30 updates to pdf.js 6.2 in both bundles and stops the viewer from modifying the page it lives on.
+
+**New for end users:**
+
+- **Digital signature properties**: pdf.js 6.2's panel lists every signature of a signed PDF, with a banner summarising the result. It stays hidden until you supply a verifier - see below.
+- **Older browsers get a bundle that fits them**: the `-es5` bundle is now compiled for Chrome/Edge 80, Firefox 78, Safari 13.1 and iOS 13.4, and the switch that picks it detects what the modern bundle actually needs. Safari 17.4 to 18.3 in particular used to load the modern bundle and fail on it.
+
+**Verifying signatures is your decision.** Firefox's viewer validates signatures through NSS; a web page has no equivalent, and the hard part isn't parsing the PKCS#7 blob but choosing which root certificates to trust. That's why pdf.js ships no verifier for the browser and why this library doesn't invent one. Pass your own and the panel comes to life:
+
+```typescript
+verifier: PdfSignatureVerifier = {
+  async verify(signature) {
+    // your PKCS#7 check and trust decision
+    return { status: 'verified', certificate: { subjectCN: 'Jane Doe' } };
+  },
+};
+```
+
+```html
+<ngx-extended-pdf-viewer [src]="pdf" [signatureVerifier]="verifier"></ngx-extended-pdf-viewer>
+```
+
+Reporting `verified` is a claim your application makes; the library forwards it to the panel unchanged.
+
+**Breaking:** the viewer no longer writes to your `<html>` tag. If you style the viewer from the outside with selectors like `html[dir='rtl'] ngx-extended-pdf-viewer .toolbarButton`, switch to `ngx-extended-pdf-viewer .body[dir='rtl'] .toolbarButton`; if you read `--viewer-container-height`, `--viewsManager-width` or `color-scheme` from `document.documentElement`, they now live on the viewer's own `.html` element. Custom templates passed via `[customPdfViewer]` must keep the `.html` and `.body` wrappers around `#outerContainer`.
+
 ### Version 29
 
 Version 29 updates to pdf.js 6.1 and adds an API for building a document out of several files.
-
-(pdf.js 6.1 is the default engine; the bleeding-edge bundle carries the same engine until Mozilla opens 6.2, so switching between the two changes nothing for the time being.)
 
 **New for end users:**
 
@@ -354,7 +395,9 @@ Use `NgxExtendedPdfViewerService` for:
 
 ---
 
-## 🧪 Troubleshooting: try the Showcase Locally
+## 🧪 Troubleshooting
+
+The [troubleshooting page](https://pdfviewer.net/extended-pdf-viewer/troubleshooting) of the showcase collects the solutions to the most common problems: server configuration (MIME types for `.mjs` and `.ftl` files), the assets folder, an empty viewer, printing, missing buttons, and more.
 
 If you're stuck on a feature, try cloning the showcase repository. It’s a clean and working example, and comparing it to your app often helps locate the issue. And if the showcase doesn’t work - you can blame me!
 

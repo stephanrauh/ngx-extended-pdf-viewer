@@ -74,13 +74,13 @@ export class Catalog {
     }): void;
     constructor(pdfManager: any, xref: any, options?: {});
     builtInCMapCache: Map<any, any>;
-    fontCache: RefSetCache;
+    fontCache: RefMap;
     globalColorSpaceCache: GlobalColorSpaceCache;
     globalImageCache: GlobalImageCache;
     nonBlendModesSet: RefSet;
-    pageDictCache: RefSetCache;
-    pageIndexCache: RefSetCache;
-    pageKidsCountCache: RefSetCache;
+    pageDictCache: RefMap;
+    pageIndexCache: RefMap;
+    pageKidsCountCache: RefMap;
     standardFontDataCache: Map<any, any>;
     systemFontCache: Map<any, any>;
     pdfManager: any;
@@ -97,10 +97,13 @@ export class Catalog {
      *
      * @param {Ref} ref
      *   File-spec or embedded-file stream reference.
+     * @param {boolean} [isSound]
+     *   When set, the referenced stream holds raw PDF sound samples that
+     *   `attachmentContent` wraps in a WAV container on fetch.
      * @returns {string}
      *   Attachment id.
      */
-    getAttachmentIdForAnnotation(ref: Ref): string;
+    getAttachmentIdForAnnotation(ref: Ref, isSound?: boolean): string;
     get version(): any;
     get lang(): any;
     /**
@@ -162,7 +165,7 @@ export class Catalog {
     get baseUrl(): any;
     #private;
 }
-import { RefSetCache } from "./primitives.js";
+import { RefMap } from "./primitives.js";
 import { GlobalColorSpaceCache } from "./image_utils.js";
 import { GlobalImageCache } from "./image_utils.js";
 import { RefSet } from "./primitives.js";

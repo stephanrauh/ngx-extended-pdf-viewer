@@ -1,4 +1,4 @@
-import { Component, computed, effect, input, OnDestroy, output, TemplateRef, viewChild } from '@angular/core';
+import { Component, computed, effect, EmbeddedViewRef, input, OnDestroy, output, TemplateRef, viewChild } from '@angular/core';
 import { PdfThumbnailDrawnEvent } from '../../../events/pdf-thumbnail-drawn-event';
 import { IPDFViewerApplication } from '../../../options/pdf-viewer-application';
 import { PDFNotificationService } from '../../../pdf-notification-service';
@@ -44,6 +44,10 @@ export class PdfSidebarContentComponent implements OnDestroy {
 
   public defaultThumbnail = viewChild.required<TemplateRef<any>>('defaultThumbnail');
 
+  // #3268 Not keyed by page id: pasting a copied page creates a second thumbnail
+  // with an id that an existing (renumbered) thumbnail still uses.
+  private readonly thumbnailViews = new Set<EmbeddedViewRef<unknown>>();
+
   private linkService: PDFLinkService | undefined;
 
   public thumbnailDrawn = output<PdfThumbnailDrawnEvent>();
@@ -78,19 +82,31 @@ export class PdfSidebarContentComponent implements OnDestroy {
           // #3135 end of modification by ngx-extended-pdf-viewer
           // #3216 eventBus may be undefined when the init signal fires before PDFViewerApplication finishes wiring up.
           this.PDFViewerApplication.eventBus?.on('rendercustomthumbnail', this.createThumbnail.bind(this), opts);
+          this.PDFViewerApplication.eventBus?.on('pagesdestroy', () => this.destroyThumbnailViews(), opts);
         }
       });
     }
   }
 
   public ngOnDestroy(): void {
+    this.destroyThumbnailViews();
     this.linkService = undefined;
     // #3135 modified by ngx-extended-pdf-viewer
     this.eventBusAbortController?.abort();
     // #3135 end of modification by ngx-extended-pdf-viewer
   }
 
-  /* istanbul ignore next -- requires real Angular template and embedded view, untestable in unit tests */
+  private destroyThumbnailViews(): void {
+    for (const view of this.thumbnailViews) {
+      // These nodes are appended manually, outside an Angular view container.
+      for (const node of view.rootNodes as Node[]) {
+        node.parentNode?.removeChild(node);
+      }
+      view.destroy();
+    }
+    this.thumbnailViews.clear();
+  }
+
   private createThumbnail({
     pdfThumbnailView: _pdfThumbnailView, // #3111: Not used - PDF.js v5.4.530+ populates this after we append the element
     linkService,
@@ -101,6 +117,7 @@ export class PdfSidebarContentComponent implements OnDestroy {
     this.linkService = linkService;
     const template = this.customThumbnail() ?? this.defaultThumbnail();
     const view = template.createEmbeddedView(null);
+    this.thumbnailViews.add(view);
     const newElement = view.rootNodes[0] as HTMLElement;
     newElement.classList.remove('pdf-viewer-template');
 
@@ -108,7 +125,8 @@ export class PdfSidebarContentComponent implements OnDestroy {
     // PDF.js v5.4.530+ uses direct div structure without anchor wrapper
     // Add the thumbnail ID class (e.g., "thumbnail1") while keeping existing "thumbnail" class
     newElement.classList.add(`thumbnail${id}`);
-    newElement.setAttribute('data-l10n-id', 'pdfjs-thumb-page-title'); // NOSONAR — matches pdf.js upstream pattern which uses setAttribute for l10n attributes
+    // #3255 pdf.js renamed pdfjs-thumb-page-title to pdfjs-thumb-page-title1 (it now includes the page count)
+    newElement.setAttribute('data-l10n-id', 'pdfjs-thumb-page-title1'); // NOSONAR — matches pdf.js upstream pattern which uses setAttribute for l10n attributes
     newElement.setAttribute('data-l10n-args', thumbPageTitlePromiseOrPageL10nArgs); // NOSONAR
 
     this.replacePageNumberEverywhere(newElement, id.toString());

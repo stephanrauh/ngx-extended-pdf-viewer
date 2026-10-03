@@ -54,7 +54,8 @@
               <button class="clearInputButton" type="button" tabindex="0" aria-hidden="true"></button>
             </span>
           </div>
-          <button id="clearSignatureButton" type="button" data-l10n-id="pdfjs-editor-add-signature-clear-button"
+          <!-- pdf.js 6.3 gives this button the shared .secondaryButton style; harmless on 6.2. -->
+          <button id="clearSignatureButton" class="secondaryButton" type="button" data-l10n-id="pdfjs-editor-add-signature-clear-button"
             tabindex="0"><span data-l10n-id="pdfjs-editor-add-signature-clear-button-label"></span></button>
         </div>
         <div id="addSignatureSaveContainer">

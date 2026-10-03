@@ -44,22 +44,7 @@ export class PDFScriptLoaderService implements OnDestroy {
 
   private addScriptOpChainingSupport(useInlineScripts: boolean): Promise<boolean> {
     if (!useInlineScripts || this.isCSPApplied()) {
-      return new Promise((resolve) => {
-        const script = this.createScriptElement(pdfDefaultOptions.assetsFolder + '/op-chaining-support.js');
-        script.onload = () => {
-          script.remove();
-          script.onload = null;
-          resolve((<any>globalThis).ngxExtendedPdfViewerCanRunModernJSCode as boolean);
-        };
-        script.onerror = () => {
-          script.remove();
-          (<any>globalThis).ngxExtendedPdfViewerCanRunModernJSCode = false;
-          resolve(false);
-          script.onerror = null;
-        };
-
-        document.body.appendChild(script);
-      });
+      return this.loadProbeFromFile();
     } else {
       const code = `
 new (function () {
@@ -89,31 +74,140 @@ new (function () {
     }
   }
 
-  function supportsPromiseWithResolvers() {
+  // #2687 #3273 The discriminator: the newest built-ins the modern bundle calls.
+  // The modern bundle ships no core-js polyfills, and pdf.js calls these without
+  // feature detection, many of them in the worker. A browser missing any of them
+  // gets the legacy bundle, which polyfills them all. Extend the list whenever
+  // pdf.js starts using a newer built-in. The checks run in a fresh iframe because
+  // zone.js drops the newer Promise statics from the page's own Promise.
+  function supportsModernBuiltIns() {
     const iframe = document.createElement('iframe');
     document.firstElementChild.append(iframe);
-    const useLegacyPdfViewer = 'withResolvers' in iframe.contentWindow['Promise'];
-    iframe.parentElement.removeChild(iframe);
-
-    return useLegacyPdfViewer;
+    try {
+      const w = iframe.contentWindow;
+      return (
+        typeof w.Promise.withResolvers === 'function' &&
+        typeof w.Promise.try === 'function' &&
+        typeof w.Iterator === 'function' &&
+        typeof w.Iterator.prototype.toArray === 'function' &&
+        typeof w.Set.prototype.difference === 'function' &&
+        typeof w.Map.prototype.getOrInsertComputed === 'function' &&
+        typeof w.Math.sumPrecise === 'function' &&
+        typeof w.Uint8Array.prototype.toHex === 'function' &&
+        typeof w.Uint8Array.fromBase64 === 'function' &&
+        typeof w.RegExp.escape === 'function' &&
+        typeof w.URL.parse === 'function' &&
+        typeof w.Response.prototype.bytes === 'function'
+      );
+    } catch (e) {
+      return false;
+    } finally {
+      iframe.remove();
+    }
   }
 
   const supportsOptionalChaining = new BrowserCompatibilityTester().supportsOptionalChaining();
-  const supportModernPromises = supportsPromiseWithResolvers();
-  window.ngxExtendedPdfViewerCanRunModernJSCode = supportsOptionalChaining && supportModernPromises;
+  window.ngxExtendedPdfViewerCanRunModernJSCode = supportsOptionalChaining && supportsModernBuiltIns();
+
+  // #1321 AbortSignal.any() polyfill for the modern build's main thread.
+  // pdf.js v6 calls AbortSignal.any() directly; Safari 17.4 shipped
+  // Promise.withResolvers (our "modern" gate) before AbortSignal.any was
+  // added in 17.5. Shimming it here keeps that thin window on the modern
+  // build instead of forcing a fallback to viewer-es5.mjs. The legacy
+  // build gets the same polyfill via core-js + Babel.
+  if (typeof AbortSignal !== 'undefined' && typeof AbortSignal.any !== 'function') {
+    AbortSignal.any = function (signals) {
+      const controller = new AbortController();
+      for (const signal of signals) {
+        if (signal.aborted) {
+          controller.abort(signal.reason);
+          return controller.signal;
+        }
+        signal.addEventListener(
+          'abort',
+          () => controller.abort(signal.reason),
+          { once: true }
+        );
+      }
+      return controller.signal;
+    };
+  }
 })();
 `;
       const script = this.createInlineScript(code);
-      document.getElementsByTagName('head')[0].appendChild(script);
       return new Promise((resolve) => {
-        const interval = setInterval(() => {
-          if ((globalThis as any).ngxExtendedPdfViewerCanRunModernJSCode !== undefined) {
-            clearInterval(interval);
-            resolve((globalThis as any).ngxExtendedPdfViewerCanRunModernJSCode);
+        let settled = false;
+        let interval: ReturnType<typeof setInterval>;
+
+        const settle = (result: boolean | Promise<boolean>) => {
+          if (settled) {
+            return;
+          }
+          settled = true;
+          clearInterval(interval);
+          document.removeEventListener('securitypolicyviolation', onViolation);
+          Promise.resolve(result).then(resolve);
+        };
+
+        // #3264 modified by ngx-extended-pdf-viewer
+        // A CSP that arrives as an HTTP header is invisible to `isCSPApplied()`, which
+        // can only see a <meta> tag. The inline probe is then blocked, nothing sets the
+        // global, the deadline below expires and *every* browser - however modern - is
+        // sent to the legacy ES5 bundle without a word. The violation event is the only
+        // way to learn that this happened, so we load the identical probe from a file
+        // instead. `useInlineScripts` stays a pure optimisation this way.
+        const onViolation = (event: SecurityPolicyViolationEvent) => {
+          const directive = event.effectiveDirective || event.violatedDirective || '';
+          if (event.blockedURI === 'inline' && directive.startsWith('script-src')) {
+            script.remove();
+            settle(this.loadProbeFromFile());
+          }
+        };
+        document.addEventListener('securitypolicyviolation', onViolation);
+        // #3264 end of modification by ngx-extended-pdf-viewer
+
+        // #2687 modified by ngx-extended-pdf-viewer
+        // The probe uses modern syntax on purpose, so an old browser fails to parse
+        // it and never sets the global. Without a deadline this promise stays pending
+        // and the viewer never starts - on exactly the browsers the legacy bundle
+        // exists for. Anything that hasn't answered in time counts as "not modern".
+        const deadline = Date.now() + 500;
+        interval = setInterval(() => {
+          const canRunModernJSCode = (globalThis as any).ngxExtendedPdfViewerCanRunModernJSCode;
+          if (canRunModernJSCode !== undefined) {
+            settle(canRunModernJSCode);
+          } else if (Date.now() > deadline) {
+            settle(false);
           }
         }, 1);
+        // #2687 end of modification by ngx-extended-pdf-viewer
+
+        document.getElementsByTagName('head')[0].appendChild(script);
       });
     }
+  }
+
+  /**
+   * Loads the browser-capability probe as a file (`assets/op-chaining-support.js`).
+   * Same code as the inline probe, but it needs no `'unsafe-inline'` in the CSP.
+   */
+  private loadProbeFromFile(): Promise<boolean> {
+    return new Promise((resolve) => {
+      const script = this.createScriptElement(pdfDefaultOptions.assetsFolder + '/op-chaining-support.js');
+      script.onload = () => {
+        script.remove();
+        script.onload = null;
+        resolve((<any>globalThis).ngxExtendedPdfViewerCanRunModernJSCode as boolean);
+      };
+      script.onerror = () => {
+        script.remove();
+        (<any>globalThis).ngxExtendedPdfViewerCanRunModernJSCode = false;
+        resolve(false);
+        script.onerror = null;
+      };
+
+      document.body.appendChild(script);
+    });
   }
 
   private createInlineScript(code: string): HTMLScriptElement {
@@ -195,9 +289,12 @@ new (function () {
       return true;
     }
     this._needsES5 = forceUsingLegacyES5 || (await this.needsES5(useInlineScripts));
-    if (forceUsingLegacyES5) {
-      pdfDefaultOptions.needsES5 = true;
-    }
+    // #3273 modified by ngx-extended-pdf-viewer
+    // workerSrc() and sandboxBundleSrc() read the global flag, not this._needsES5.
+    // Syncing it only when the legacy bundle was forced sent every browser that the
+    // probe routed to the ES5 viewer the modern worker, which it can't run.
+    pdfDefaultOptions.needsES5 = this._needsES5;
+    // #3273 end of modification by ngx-extended-pdf-viewer
     await this.loadViewer(forceReload);
     return this.PDFViewerApplication !== undefined;
   }
@@ -235,6 +332,12 @@ new (function () {
       return false;
     }
     if (this._needsES5 === undefined) {
+      // #3259 modified by ngx-extended-pdf-viewer
+      // Runs before the capability probe and on both paths: zone.js strips these
+      // statics from the global Promise regardless of which bundle we end up
+      // loading. The probe is unaffected because it inspects a pristine iframe realm.
+      this.polyfillPromiseStaticsDroppedByZoneJS();
+      // #3259 end of modification by ngx-extended-pdf-viewer
       const isIE = !!(<any>globalThis).MSInputMethodContext && !!(<any>document).documentMode;
       const isEdge = /Edge\/\d./i.test(navigator.userAgent);
       const isIOs13OrBelow = this.iOSVersionRequiresES5();
@@ -244,17 +347,24 @@ new (function () {
         return true;
       }
       this._needsES5 = !(await this.ngxExtendedPdfViewerCanRunModernJSCode(useInlineScripts));
-      this.polyfillPromiseWithResolversIfZoneJSOverwritesIt();
     }
     return this._needsES5;
   }
 
   /**
-   * Angular 16 uses zone.js 0.13.3, and this version has a problem with Promise.withResolvers.
-   * If your browser supports Promise.withResolvers, zone.js accidentally overwrites it with "undefined".
-   * This method adds a polyfill for Promise.withResolvers if it is not available.
+   * zone.js replaces the global Promise with its own ZoneAwarePromise, which only
+   * implements the static methods that existed when that zone.js was written. Every
+   * newer static silently disappears - even in browsers that support it natively.
+   *
+   * Angular 19 and 20 still use zone.js by default (21 and 22 are zoneless), so this
+   * is not a "very old browser" workaround: it is what keeps pdf.js working on the
+   * current Angular LTS versions.
+   *
+   * - `Promise.withResolvers`: zone.js 0.13.3 (Angular 16) overwrites it with undefined.
+   * - `Promise.try`: pdf.js 6.2 calls it in `src/shared/message_handler.js` for every
+   *   worker round-trip, so without this polyfill nothing renders at all (#3259).
    */
-  private polyfillPromiseWithResolversIfZoneJSOverwritesIt() {
+  private polyfillPromiseStaticsDroppedByZoneJS() {
     const TypelessPromise = Promise as any;
     if (!TypelessPromise.withResolvers) {
       TypelessPromise.withResolvers = function withResolvers() {
@@ -267,6 +377,13 @@ new (function () {
         return { resolve: a, reject: b, promise: c };
       };
     }
+    // #3259 modified by ngx-extended-pdf-viewer
+    if (typeof TypelessPromise.try !== 'function') {
+      TypelessPromise.try = function (callback: (...args: Array<unknown>) => unknown, ...args: Array<unknown>) {
+        return new this((resolve: (value: unknown) => void) => resolve(callback(...args)));
+      };
+    }
+    // #3259 end of modification by ngx-extended-pdf-viewer
   }
 
   private ngxExtendedPdfViewerCanRunModernJSCode(useInlineScripts: boolean): Promise<boolean> {

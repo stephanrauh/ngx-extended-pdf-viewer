@@ -120,11 +120,14 @@
         [handTool]="handTool()"
         [disable]="disableHandToolButton()"
       ></pdf-hand-tool>
+      <!-- #3292 modified by ngx-extended-pdf-viewer -->
+      <!-- without a text layer, there's nothing to select -->
       <pdf-select-tool
-        [showSelectToolButton]="showHandToolButton()"
+        [showSelectToolButton]="textLayer() === false ? false : showHandToolButton()"
         [handTool]="handTool()"
         [disable]="disableHandToolButton()"
       ></pdf-select-tool>
+      <!-- #3292 end of modification by ngx-extended-pdf-viewer -->
       <pdf-page-flip-tool
         [showPageFlipButton]="showPageFlipButton()"
         [disable]="disablePageFlipButton()"
@@ -141,13 +144,21 @@
       <pdf-move-up [showMoveUpButton]="showMovePageButton()" [disable]="disableMovePageButton()"></pdf-move-up>
       <!-- #2943 end of modification by ngx-extended-pdf-viewer -->
 
+      <!-- stephanrauh/pdf.js#15 modified by ngx-extended-pdf-viewer - undo/redo toolbar buttons -->
+      @if (showUndoRedoButtons() !== false) {
+        <pdf-undo-redo [show]="showUndoRedoButtons()" [disable]="disableUndoRedoButtons()"></pdf-undo-redo>
+      }
+      <!-- stephanrauh/pdf.js#15 end of modification by ngx-extended-pdf-viewer -->
       <pdf-editor
         [showCommentEditor]="showCommentEditor()"
         [showDrawEditor]="showDrawEditor()"
+        [showEraserEditor]="showEraserEditor()"
+        [disableEraserEditor]="disableEraserEditor()"
         [showHighlightEditor]="showHighlightEditor()"
         [showTextEditor]="showTextEditor()"
         [showStampEditor]="showStampEditor()"
         [showSignatureEditor]="showSignatureEditor()"
+        [showSignaturePropertiesButton]="showSignaturePropertiesButton()"
         [disableCommentEditor]="disableCommentEditor()"
         [disableDrawEditor]="disableDrawEditor()"
         [disableHighlightEditor]="disableHighlightEditor()"

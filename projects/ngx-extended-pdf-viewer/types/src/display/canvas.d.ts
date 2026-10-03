@@ -1,4 +1,5 @@
 export class CanvasGraphics {
+    static #SCALE_MATRIX: null;
     constructor(canvasCtx: any, commonObjs: any, objs: any, canvasFactory: any, filterFactory: any, { optionalContentConfig, markedContentStack }: {
         optionalContentConfig: any;
         markedContentStack?: null | undefined;
