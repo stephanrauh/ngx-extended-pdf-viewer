@@ -2553,10 +2553,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
           }
         }
         options.baseHref = this.baseHref;
-        PDFViewerApplication.onError = (error: Error) => {
-          this.pdfLoadingError.set(error);
-          this.pdfLoadingFailed.emit(error);
-        };
+        PDFViewerApplication.onError = (error: Error) => this.reportLoadingError(error);
         if (typeof this._src === 'string') {
           options.url = this._src;
         } else if (this._src instanceof ArrayBuffer) {
@@ -2574,7 +2571,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
         PDFViewerApplication.eventBus?.dispatch('annotationeditormodechanged', { mode: 0 });
 
         this._lastOpenedSrc = this._src; // #3131
-        await PDFViewerApplication.open(options);
+        try {
+          await PDFViewerApplication.open(options);
+        } catch (error) {
+          // #3241 pdf.js rethrows after reporting the error via onError. Without
+          // this catch, every failed load ended up as "Uncaught (in promise)".
+          this.reportLoadingError(error as Error);
+          return;
+        }
         this.pdfLoadingStarts.emit({});
         // #3131 Set zoom synchronously (awaited) instead of via setTimeout to avoid
         // a timing window where the zoom change could cancel in-progress first page rendering.
@@ -3203,12 +3207,23 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       }
       options.rangeChunkSize = pdfDefaultOptions.rangeChunkSize;
       this._lastOpenedSrc = this._src; // #3131
+      this.pdfLoadingError.set(null); // #3241 a new file hides the error card of the previous one
       await PDFViewerApplication.open(options);
     } catch (error) {
-      const loadingError = error as Error;
-      this.pdfLoadingError.set(loadingError);
-      this.pdfLoadingFailed.emit(loadingError);
+      this.reportLoadingError(error as Error);
     }
+  }
+
+  /**
+   * #3241 pdf.js reports a failed load twice: first via `PDFViewerApplication.onError`,
+   * then by rejecting `open()` with the same error. Report it only once.
+   */
+  private reportLoadingError(error: Error): void {
+    if (this.pdfLoadingError() === error) {
+      return;
+    }
+    this.pdfLoadingError.set(error);
+    this.pdfLoadingFailed.emit(error);
   }
 
   private selectCursorTool() {

@@ -760,6 +760,9 @@ pdfjs-editor-movePageDown-button-label = Mover página hacia abajo
 pdfjs-cursor-page-flip-tool-button =
     .title = Pasar página
 pdfjs-cursor-page-flip-tool-button-label = Pasar página
+pdfjs-loading-error-more-info = Más información
+pdfjs-loading-error-less-info = Menos información
+pdfjs-loading-error-close = Cerrar
 pdfjs-editor-eraser-button =
     .title = Borrar
 pdfjs-editor-eraser-button-label = Borrar
@@ -822,7 +825,3 @@ pdfjs-digital-signature-properties-sub-signatures =
         [one] Sub-signature ({ $count })
        *[other] Sub-signatures ({ $count })
     }
-# Additional translations for ngx-extended-pdf-viewer (es)
-pdfjs-loading-error-more-info = Más información
-pdfjs-loading-error-less-info = Menos información
-pdfjs-loading-error-close = Cerrar

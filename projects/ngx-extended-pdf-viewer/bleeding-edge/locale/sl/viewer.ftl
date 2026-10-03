@@ -877,6 +877,9 @@ pdfjs-editor-movePageDown-button-label = Premakni stran navzdol
 pdfjs-cursor-page-flip-tool-button =
     .title = Listanje strani
 pdfjs-cursor-page-flip-tool-button-label = Listanje strani
+pdfjs-loading-error-more-info = Več informacij
+pdfjs-loading-error-less-info = Manj informacij
+pdfjs-loading-error-close = Zapri
 pdfjs-editor-eraser-button =
     .title = Radiraj
 pdfjs-editor-eraser-button-label = Radiraj
@@ -888,7 +891,3 @@ pdfjs-editor-undo-button-label = Razveljavi
 pdfjs-editor-redo-button =
     .title = Uveljavi znova
 pdfjs-editor-redo-button-label = Uveljavi znova
-# Additional translations for ngx-extended-pdf-viewer (sl)
-pdfjs-loading-error-more-info = Več informacij
-pdfjs-loading-error-less-info = Manj informacij
-pdfjs-loading-error-close = Zapri

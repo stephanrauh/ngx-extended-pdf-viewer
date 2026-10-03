@@ -377,6 +377,69 @@ describe('NgxExtendedPdfViewerComponent', () => {
     });
   });
 
+  describe('openPDF2 - loading errors (#3241)', () => {
+    let mockPDFViewerApp: any;
+
+    beforeEach(() => {
+      mockPDFViewerApp = {
+        eventBus: { dispatch: jest.fn(), on: jest.fn(), destroy: jest.fn() },
+        findBar: { close: jest.fn() },
+        secondaryToolbar: { close: jest.fn() },
+        pdfViewer: {
+          currentScale: 1,
+          setScale: jest.fn(),
+          setTextLayerMode: jest.fn(),
+          update: jest.fn(),
+          destroyBookMode: jest.fn(),
+          stopRendering: jest.fn(),
+        },
+        pdfThumbnailViewer: { stopRendering: jest.fn() },
+        pdfDocument: { annotationStorage: { resetModified: jest.fn() } },
+        appConfig: { filenameForDownload: '' },
+        close: jest.fn().mockResolvedValue(undefined),
+        open: jest.fn().mockResolvedValue(undefined),
+        unbindEvents: jest.fn(),
+        unbindWindowEvents: jest.fn(),
+        _cleanup: jest.fn(),
+        toolbar: { pageNumber: 1, setPageScale: jest.fn() },
+      };
+      component['pdfScriptLoaderService'].PDFViewerApplication = mockPDFViewerApp;
+      component['overrideDefaultSettings'] = jest.fn();
+      component['_src'] = 'http://example.com/missing.pdf';
+    });
+
+    it('reports an error once, although pdf.js reports it via onError and rejects open() with it', async () => {
+      const failed = jest.fn();
+      component.pdfLoadingFailed.subscribe(failed);
+      const error = new Error('Missing PDF file.');
+      // openPDF() wires onError to store and emit the error; pdf.js calls it, then rejects open().
+      mockPDFViewerApp.onError = (e: Error) => {
+        component['pdfLoadingError'].set(e);
+        component.pdfLoadingFailed.emit(e);
+      };
+      mockPDFViewerApp.open.mockImplementation(async () => {
+        mockPDFViewerApp.onError(error);
+        throw error;
+      });
+
+      await component.openPDF2();
+
+      expect(failed).toHaveBeenCalledTimes(1);
+      expect(failed).toHaveBeenCalledWith(error);
+      expect(component['pdfLoadingError']()).toBe(error);
+    });
+
+    it('clears the previous error when another file is opened', async () => {
+      mockPDFViewerApp.open.mockRejectedValueOnce(new Error('Missing PDF file.'));
+      await component.openPDF2();
+      expect(component['pdfLoadingError']()).not.toBeNull();
+
+      await component.openPDF2();
+
+      expect(component['pdfLoadingError']()).toBeNull();
+    });
+  });
+
   describe('openPDF2 - _lastOpenedSrc tracking (#3131)', () => {
     let mockPDFViewerApp: any;
 

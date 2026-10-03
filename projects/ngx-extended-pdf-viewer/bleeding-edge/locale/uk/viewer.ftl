@@ -740,6 +740,9 @@ pdfjs-editor-movePageDown-button-label = Перемістити сторінку
 pdfjs-cursor-page-flip-tool-button =
     .title = Гортання сторінок
 pdfjs-cursor-page-flip-tool-button-label = Гортання сторінок
+pdfjs-loading-error-more-info = Більше інформації
+pdfjs-loading-error-less-info = Менше інформації
+pdfjs-loading-error-close = Закрити
 pdfjs-editor-eraser-button =
     .title = Стерти
 pdfjs-editor-eraser-button-label = Стерти
@@ -821,7 +824,3 @@ pdfjs-digital-signature-properties-sub-signatures =
         [one] Sub-signature ({ $count })
        *[other] Sub-signatures ({ $count })
     }
-# Additional translations for ngx-extended-pdf-viewer (uk)
-pdfjs-loading-error-more-info = Більше інформації
-pdfjs-loading-error-less-info = Менше інформації
-pdfjs-loading-error-close = Закрити

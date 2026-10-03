@@ -736,6 +736,9 @@ pdfjs-editor-movePageDown-button-label = Pomakni stranicu dolje
 pdfjs-cursor-page-flip-tool-button =
     .title = Listanje stranica
 pdfjs-cursor-page-flip-tool-button-label = Listanje stranica
+pdfjs-loading-error-more-info = Više informacija
+pdfjs-loading-error-less-info = Manje informacija
+pdfjs-loading-error-close = Zatvori
 pdfjs-editor-eraser-button =
     .title = Obriši
 pdfjs-editor-eraser-button-label = Obriši
@@ -819,7 +822,3 @@ pdfjs-digital-signature-properties-sub-signatures =
         [one] Sub-signature ({ $count })
        *[other] Sub-signatures ({ $count })
     }
-# Additional translations for ngx-extended-pdf-viewer (hr)
-pdfjs-loading-error-more-info = Više informacija
-pdfjs-loading-error-less-info = Manje informacija
-pdfjs-loading-error-close = Zatvori

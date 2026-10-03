@@ -188,10 +188,6 @@ pdfjs-password-ok-button = OK
 pdfjs-password-cancel-button = नेवसि
 pdfjs-web-fonts-disabled = वेब फन्टखौ लोरबां खालामबाय: अरजाबहोनाय PDF फन्टखौ बाहायनो हायाखै।
 
-# Additional translations for ngx-extended-pdf-viewer (br)
-pdfjs-layers-button =
-    .title = Diskouez ar gwiskadoù (daou-glikañ evit adderaouekaat an holl gwiskadoù d'o stad dre ziouer)
-pdfjs-layers-button-label = Gwiskadoù
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-save-button =
     .title = Save
@@ -642,7 +638,9 @@ pdfjs-editor-movePageDown-button-label = Move Page Down
 pdfjs-cursor-page-flip-tool-button =
     .title = Page Flip
 pdfjs-cursor-page-flip-tool-button-label = Page Flip
-# Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-loading-error-more-info = More Information
 pdfjs-loading-error-less-info = Less Information
 pdfjs-loading-error-close = Close
+pdfjs-layers-button =
+    .title = Show Layers (double-click to reset all layers to the default state)
+pdfjs-layers-button-label = Layers

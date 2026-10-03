@@ -845,6 +845,9 @@ pdfjs-editor-movePageDown-button-label = Déplacer la page vers le bas
 pdfjs-cursor-page-flip-tool-button =
     .title = Feuilleter les pages
 pdfjs-cursor-page-flip-tool-button-label = Feuilleter les pages
+pdfjs-loading-error-more-info = Plus d’informations
+pdfjs-loading-error-less-info = Moins d’informations
+pdfjs-loading-error-close = Fermer
 pdfjs-editor-eraser-button =
     .title = Gommer
 pdfjs-editor-eraser-button-label = Gommer
@@ -856,7 +859,3 @@ pdfjs-editor-undo-button-label = Annuler
 pdfjs-editor-redo-button =
     .title = Rétablir
 pdfjs-editor-redo-button-label = Rétablir
-# Additional translations for ngx-extended-pdf-viewer (fr)
-pdfjs-loading-error-more-info = Plus d’informations
-pdfjs-loading-error-less-info = Moins d’informations
-pdfjs-loading-error-close = Fermer

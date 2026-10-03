@@ -849,6 +849,9 @@ pdfjs-editor-movePageDown-button-label = Pagina omlaag verplaatsen
 pdfjs-cursor-page-flip-tool-button =
     .title = Pagina omslaan
 pdfjs-cursor-page-flip-tool-button-label = Pagina omslaan
+pdfjs-loading-error-more-info = Meer informatie
+pdfjs-loading-error-less-info = Minder informatie
+pdfjs-loading-error-close = Sluiten
 pdfjs-editor-eraser-button =
     .title = Gummen
 pdfjs-editor-eraser-button-label = Gummen
@@ -860,7 +863,3 @@ pdfjs-editor-undo-button-label = Ongedaan maken
 pdfjs-editor-redo-button =
     .title = Opnieuw
 pdfjs-editor-redo-button-label = Opnieuw
-# Additional translations for ngx-extended-pdf-viewer (nl)
-pdfjs-loading-error-more-info = Meer informatie
-pdfjs-loading-error-less-info = Minder informatie
-pdfjs-loading-error-close = Sluiten
