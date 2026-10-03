@@ -874,3 +874,7 @@ pdfjs-editor-undo-button-label = Anulează
 pdfjs-editor-redo-button =
     .title = Refă
 pdfjs-editor-redo-button-label = Refă
+# Additional translations for ngx-extended-pdf-viewer (ro)
+pdfjs-loading-error-more-info = Mai multe informații
+pdfjs-loading-error-less-info = Mai puține informații
+pdfjs-loading-error-close = Închide

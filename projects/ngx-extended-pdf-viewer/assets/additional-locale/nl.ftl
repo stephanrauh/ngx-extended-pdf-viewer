@@ -29,6 +29,9 @@ pdfjs-editor-movePageDown-button-label = Pagina omlaag verplaatsen
 pdfjs-cursor-page-flip-tool-button =
     .title = Pagina omslaan
 pdfjs-cursor-page-flip-tool-button-label = Pagina omslaan
+pdfjs-loading-error-more-info = Meer informatie
+pdfjs-loading-error-less-info = Minder informatie
+pdfjs-loading-error-close = Sluiten
 
 # #3255 Sidebar buttons. pdf.js removed these keys in commit 2367196a0
 # ("Change the sidebar for a views manager"); ngx-extended-pdf-viewer keeps its

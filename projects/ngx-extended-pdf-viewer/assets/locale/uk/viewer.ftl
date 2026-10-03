@@ -821,3 +821,7 @@ pdfjs-digital-signature-properties-sub-signatures =
         [one] Sub-signature ({ $count })
        *[other] Sub-signatures ({ $count })
     }
+# Additional translations for ngx-extended-pdf-viewer (uk)
+pdfjs-loading-error-more-info = Більше інформації
+pdfjs-loading-error-less-info = Менше інформації
+pdfjs-loading-error-close = Закрити

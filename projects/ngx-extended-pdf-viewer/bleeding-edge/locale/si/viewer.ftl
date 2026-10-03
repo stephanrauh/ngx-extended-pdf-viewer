@@ -650,3 +650,7 @@ pdfjs-cursor-page-flip-tool-button-label = Page Flip
 pdfjs-toggle-sidebar-button =
     .title = Toggle Sidebar
 pdfjs-toggle-sidebar-button-label = Toggle Sidebar
+# Translations for ngx-extended-pdf-viewer additions only available in en-US
+pdfjs-loading-error-more-info = More Information
+pdfjs-loading-error-less-info = Less Information
+pdfjs-loading-error-close = Close

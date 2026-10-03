@@ -26,6 +26,9 @@ pdfjs-editor-movePageDown-button-label = Premakni stran navzdol
 pdfjs-cursor-page-flip-tool-button =
     .title = Listanje strani
 pdfjs-cursor-page-flip-tool-button-label = Listanje strani
+pdfjs-loading-error-more-info = Več informacij
+pdfjs-loading-error-less-info = Manj informacij
+pdfjs-loading-error-close = Zapri
 
 # #3255 Sidebar buttons. pdf.js removed these keys in commit 2367196a0
 # ("Change the sidebar for a views manager"); ngx-extended-pdf-viewer keeps its

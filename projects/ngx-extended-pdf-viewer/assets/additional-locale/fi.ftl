@@ -26,6 +26,11 @@ pdfjs-editor-movePageDown-button-label = Siirrä sivu alas
 pdfjs-cursor-page-flip-tool-button =
     .title = Sivun kääntö
 pdfjs-cursor-page-flip-tool-button-label = Sivun kääntö
+pdfjs-loading-error-more-info = Lisätietoja
+# Mozilla's own Finnish translation used "Lisätietoja" for both buttons, which
+# made them indistinguishable; corrected here.
+pdfjs-loading-error-less-info = Vähemmän tietoja
+pdfjs-loading-error-close = Sulje
 
 # #3255 Sidebar buttons. pdf.js removed these keys in commit 2367196a0
 # ("Change the sidebar for a views manager"); ngx-extended-pdf-viewer keeps its

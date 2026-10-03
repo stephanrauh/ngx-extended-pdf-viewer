@@ -860,3 +860,7 @@ pdfjs-editor-undo-button-label = Rückgängig
 pdfjs-editor-redo-button =
     .title = Wiederholen
 pdfjs-editor-redo-button-label = Wiederholen
+# Additional translations for ngx-extended-pdf-viewer (de)
+pdfjs-loading-error-more-info = Mehr Informationen
+pdfjs-loading-error-less-info = Weniger Informationen
+pdfjs-loading-error-close = Schließen

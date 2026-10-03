@@ -152,6 +152,15 @@ $placeholder-color: rgba(191, 191, 191, 1);
 
 $error-color: rgba(255, 102, 102, 1);
 
+// Scrim and card of the optional error message (see [showLoadingErrorMessage]).
+$error-overlay-background: rgba(0, 0, 0, 0.08);
+
+$error-message-border: rgba(0, 0, 0, 0.08);
+
+$error-message-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+
+$error-details-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+
 $notification-color: rgba(112, 219, 85, 1);
 
 $input-background-color: #ffffff;

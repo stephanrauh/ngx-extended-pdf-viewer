@@ -26,6 +26,9 @@ pdfjs-editor-movePageDown-button-label = Oldal mozgatása lefelé
 pdfjs-cursor-page-flip-tool-button =
     .title = Lapozás
 pdfjs-cursor-page-flip-tool-button-label = Lapozás
+pdfjs-loading-error-more-info = További tudnivalók
+pdfjs-loading-error-less-info = Kevesebb információ
+pdfjs-loading-error-close = Bezárás
 
 # #3255 Sidebar buttons. pdf.js removed these keys in commit 2367196a0
 # ("Change the sidebar for a views manager"); ngx-extended-pdf-viewer keeps its

@@ -873,3 +873,7 @@ pdfjs-editor-undo-button-label = Cofnij
 pdfjs-editor-redo-button =
     .title = Ponów
 pdfjs-editor-redo-button-label = Ponów
+# Additional translations for ngx-extended-pdf-viewer (pl)
+pdfjs-loading-error-more-info = Więcej informacji
+pdfjs-loading-error-less-info = Mniej informacji
+pdfjs-loading-error-close = Zamknij

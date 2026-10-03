@@ -26,6 +26,9 @@ pdfjs-editor-movePageDown-button-label = Flytta sida nedåt
 pdfjs-cursor-page-flip-tool-button =
     .title = Bläddra sidor
 pdfjs-cursor-page-flip-tool-button-label = Bläddra sidor
+pdfjs-loading-error-more-info = Mer information
+pdfjs-loading-error-less-info = Mindre information
+pdfjs-loading-error-close = Stäng
 
 # #3255 Sidebar buttons. pdf.js removed these keys in commit 2367196a0
 # ("Change the sidebar for a views manager"); ngx-extended-pdf-viewer keeps its

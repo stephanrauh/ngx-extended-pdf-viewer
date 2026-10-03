@@ -622,3 +622,7 @@ pdfjs-toggle-sidebar-button-label = Toggle Sidebar
 pdfjs-document-outline-button =
     .title = Show Document Outline (double-click to expand/collapse all items)
 pdfjs-document-outline-button-label = Document Outline
+# Translations for ngx-extended-pdf-viewer additions only available in en-US
+pdfjs-loading-error-more-info = More Information
+pdfjs-loading-error-less-info = Less Information
+pdfjs-loading-error-close = Close

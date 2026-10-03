@@ -861,3 +861,7 @@ pdfjs-editor-undo-button-label = Undo
 pdfjs-editor-redo-button =
     .title = Redo
 pdfjs-editor-redo-button-label = Redo
+# Additional translations for ngx-extended-pdf-viewer (en)
+pdfjs-loading-error-more-info = More Information
+pdfjs-loading-error-less-info = Less Information
+pdfjs-loading-error-close = Close

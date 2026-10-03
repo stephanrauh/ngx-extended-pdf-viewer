@@ -1626,30 +1626,75 @@ ngx-extended-pdf-viewer {
   }
 
   #errorWrapper {
-    background: none repeat scroll 0 0 $error-color;
-    color: $page-background;
-    left: 0;
+    align-items: center;
+    background: $error-overlay-background;
+    color: $text-color;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    inset: 0;
+    justify-content: center;
     position: absolute;
-    right: 0;
+    padding: 24px;
     z-index: 5;
-    padding: 3px;
-    font-size: 0.8em;
+  }
+
+  #errorWrapper[hidden] {
+    display: none !important;
+  }
+
+  .emptyMessage {
+    align-items: flex-start;
+    background: $page-background;
+    border: 1px solid $error-message-border;
+    border-left: 6px solid $error-color;
+    border-radius: 12px;
+    box-shadow: $error-message-shadow;
+    display: flex;
+    gap: 16px;
+    justify-content: space-between;
+    max-width: 640px;
+    padding: 24px;
+    width: min(100%, 640px);
   }
 
   #errorMessageLeft {
-    float: left;
+    flex: 1 1 auto;
   }
 
   #errorMessageRight {
-    float: right;
+    flex: 0 0 auto;
+  }
+
+  #errorMessage {
+    display: block;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .emptyMessageActions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
   }
 
   #errorMoreInfo {
     background-color: $page-background;
     color: $error-color;
-    padding: 3px;
-    margin: 3px;
-    width: 98%;
+    border: 1px solid $error-message-border;
+    border-radius: 12px;
+    box-shadow: $error-details-shadow;
+    display: block;
+    margin: 0;
+    max-height: 40vh;
+    max-width: 640px;
+    min-height: 160px;
+    padding: 16px;
+    resize: vertical;
+    width: min(100%, 640px);
   }
 
   .dialogButton {

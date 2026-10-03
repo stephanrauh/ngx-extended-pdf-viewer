@@ -888,3 +888,7 @@ pdfjs-editor-undo-button-label = Späť
 pdfjs-editor-redo-button =
     .title = Znova
 pdfjs-editor-redo-button-label = Znova
+# Additional translations for ngx-extended-pdf-viewer (sk)
+pdfjs-loading-error-more-info = Ďalšie informácie
+pdfjs-loading-error-less-info = Menej informácií
+pdfjs-loading-error-close = Zavrieť
