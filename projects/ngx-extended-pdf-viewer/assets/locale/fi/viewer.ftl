@@ -849,6 +849,9 @@ pdfjs-editor-movePageDown-button-label = Siirrä sivu alas
 pdfjs-cursor-page-flip-tool-button =
     .title = Sivun kääntö
 pdfjs-cursor-page-flip-tool-button-label = Sivun kääntö
+pdfjs-loading-error-more-info = Lisätietoja
+pdfjs-loading-error-less-info = Vähemmän tietoja
+pdfjs-loading-error-close = Sulje
 pdfjs-editor-eraser-button =
     .title = Pyyhi
 pdfjs-editor-eraser-button-label = Pyyhi
@@ -860,7 +863,3 @@ pdfjs-editor-undo-button-label = Kumoa
 pdfjs-editor-redo-button =
     .title = Tee uudelleen
 pdfjs-editor-redo-button-label = Tee uudelleen
-# Additional translations for ngx-extended-pdf-viewer (fi)
-pdfjs-loading-error-more-info = Lisätietoja
-pdfjs-loading-error-less-info = Vähemmän tietoja
-pdfjs-loading-error-close = Sulje

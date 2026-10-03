@@ -835,7 +835,7 @@ pdfjs-editor-add-signature-edit-button-label = Redigera beskrivning
 
 pdfjs-editor-edit-signature-dialog-title = Redigera beskrivning
 
-# Additional translations for ngx-extended-pdf-viewer (sv-se)
+# Additional translations for ngx-extended-pdf-viewer (sv-SE)
 unverified-signature-warning = Denna PDF-fil innehåller en digital signatur. PDF-visaren kan inte verifiera om signaturen är giltig. Ladda ner filen och öppna den i Acrobat Reader för att verifiera att signaturen är giltig.
 pdfjs-infinite-scroll-button-label = Oändlig rullning
 pdfjs-find-multiple-checkbox-label = Matcha varje ord
@@ -849,6 +849,9 @@ pdfjs-editor-movePageDown-button-label = Flytta sida nedåt
 pdfjs-cursor-page-flip-tool-button =
     .title = Bläddra sidor
 pdfjs-cursor-page-flip-tool-button-label = Bläddra sidor
+pdfjs-loading-error-more-info = Mer information
+pdfjs-loading-error-less-info = Mindre information
+pdfjs-loading-error-close = Stäng
 pdfjs-editor-eraser-button =
     .title = Sudda
 pdfjs-editor-eraser-button-label = Sudda
@@ -860,7 +863,3 @@ pdfjs-editor-undo-button-label = Ångra
 pdfjs-editor-redo-button =
     .title = Gör om
 pdfjs-editor-redo-button-label = Gör om
-# Additional translations for ngx-extended-pdf-viewer (sv-SE)
-pdfjs-loading-error-more-info = Mer information
-pdfjs-loading-error-less-info = Mindre information
-pdfjs-loading-error-close = Stäng

@@ -752,6 +752,9 @@ pdfjs-editor-movePageDown-button-label = Flyt side ned
 pdfjs-cursor-page-flip-tool-button =
     .title = Bladre i sider
 pdfjs-cursor-page-flip-tool-button-label = Bladre i sider
+pdfjs-loading-error-more-info = Mere information
+pdfjs-loading-error-less-info = Mindre information
+pdfjs-loading-error-close = Luk
 pdfjs-editor-eraser-button =
     .title = Visk ud
 pdfjs-editor-eraser-button-label = Visk ud
@@ -818,7 +821,3 @@ pdfjs-digital-signature-properties-sub-signatures =
         [one] Sub-signature ({ $count })
        *[other] Sub-signatures ({ $count })
     }
-# Additional translations for ngx-extended-pdf-viewer (da)
-pdfjs-loading-error-more-info = Mere information
-pdfjs-loading-error-less-info = Mindre information
-pdfjs-loading-error-close = Luk

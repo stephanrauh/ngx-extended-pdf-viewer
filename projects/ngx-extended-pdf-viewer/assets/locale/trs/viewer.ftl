@@ -162,19 +162,6 @@ pdfjs-page-scale-percent = { $scale }%
 pdfjs-password-ok-button = Ga'ue
 pdfjs-password-cancel-button = Duyichin'
 
-# Additional translations for ngx-extended-pdf-viewer (tr)
-pdfjs-document-outline-button =
-    .title = Belge ana hatlarını göster (Tüm öğeleri genişletmek/daraltmak için çift tıklayın)
-pdfjs-document-outline-button-label = Belge ana hatları
-pdfjs-attachments-button =
-    .title = Ekleri göster
-pdfjs-attachments-button-label = Ekler
-pdfjs-layers-button =
-    .title = Katmanları göster (tüm katmanları varsayılan duruma sıfırlamak için çift tıklayın)
-pdfjs-layers-button-label = Katmanlar
-pdfjs-thumbs-button =
-    .title = Küçük resimleri göster
-pdfjs-thumbs-button-label = Küçük resimler
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-save-button =
     .title = Save
@@ -622,7 +609,18 @@ pdfjs-editor-movePageDown-button-label = Move Page Down
 pdfjs-cursor-page-flip-tool-button =
     .title = Page Flip
 pdfjs-cursor-page-flip-tool-button-label = Page Flip
-# Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-loading-error-more-info = More Information
 pdfjs-loading-error-less-info = Less Information
 pdfjs-loading-error-close = Close
+pdfjs-document-outline-button =
+    .title = Show Document Outline (double-click to expand/collapse all items)
+pdfjs-document-outline-button-label = Document Outline
+pdfjs-attachments-button =
+    .title = Show Attachments
+pdfjs-attachments-button-label = Attachments
+pdfjs-layers-button =
+    .title = Show Layers (double-click to reset all layers to the default state)
+pdfjs-layers-button-label = Layers
+pdfjs-thumbs-button =
+    .title = Show Thumbnails
+pdfjs-thumbs-button-label = Thumbnails

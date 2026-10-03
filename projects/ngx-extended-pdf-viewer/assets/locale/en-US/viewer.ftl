@@ -900,6 +900,9 @@ pdfjs-editor-movePageDown-button-label = Move Page Down
 pdfjs-cursor-page-flip-tool-button =
     .title = Page Flip
 pdfjs-cursor-page-flip-tool-button-label = Page Flip
+pdfjs-loading-error-more-info = More Information
+pdfjs-loading-error-less-info = Less Information
+pdfjs-loading-error-close = Close
 pdfjs-toggle-sidebar-button =
     .title = Toggle Sidebar
 pdfjs-toggle-sidebar-button-label = Toggle Sidebar
@@ -915,7 +918,3 @@ pdfjs-layers-button-label = Layers
 pdfjs-thumbs-button =
     .title = Show Thumbnails
 pdfjs-thumbs-button-label = Thumbnails
-# Additional translations for ngx-extended-pdf-viewer (en)
-pdfjs-loading-error-more-info = More Information
-pdfjs-loading-error-less-info = Less Information
-pdfjs-loading-error-close = Close

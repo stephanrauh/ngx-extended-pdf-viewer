@@ -31,20 +31,6 @@ pdfjs-page-scale-width = Larghizza dâ pàggina
 
 pdfjs-password-cancel-button = Sfai
 
-# Additional translations for ngx-extended-pdf-viewer (sc)
-pdfjs-toggle-sidebar-button =
-    .title = Ativa/disativa sa barra laterale
-pdfjs-toggle-sidebar-button-label = Ativa/disativa sa barra laterale
-pdfjs-document-outline-button-label = Ischema de su documentu
-pdfjs-attachments-button =
-    .title = Ammustra alligongiados
-pdfjs-attachments-button-label = Alliongiados
-pdfjs-layers-button =
-    .title = Ammustra livellos (clic dòpiu pro ripristinare totu is livellos a s'istadu predefinidu)
-pdfjs-layers-button-label = Livellos
-pdfjs-thumbs-button =
-    .title = Ammustra miniaturas
-pdfjs-thumbs-button-label = Miniaturas
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-previous-button =
     .title = Previous Page
@@ -595,7 +581,21 @@ pdfjs-editor-movePageDown-button-label = Move Page Down
 pdfjs-cursor-page-flip-tool-button =
     .title = Page Flip
 pdfjs-cursor-page-flip-tool-button-label = Page Flip
-# Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-loading-error-more-info = More Information
 pdfjs-loading-error-less-info = Less Information
 pdfjs-loading-error-close = Close
+pdfjs-toggle-sidebar-button =
+    .title = Toggle Sidebar
+pdfjs-toggle-sidebar-button-label = Toggle Sidebar
+pdfjs-document-outline-button =
+    .title = Show Document Outline (double-click to expand/collapse all items)
+pdfjs-document-outline-button-label = Document Outline
+pdfjs-attachments-button =
+    .title = Show Attachments
+pdfjs-attachments-button-label = Attachments
+pdfjs-layers-button =
+    .title = Show Layers (double-click to reset all layers to the default state)
+pdfjs-layers-button-label = Layers
+pdfjs-thumbs-button =
+    .title = Show Thumbnails
+pdfjs-thumbs-button-label = Thumbnails

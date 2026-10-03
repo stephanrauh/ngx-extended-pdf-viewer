@@ -464,31 +464,6 @@ pdfjs-editor-undo-bar-close-button =
     .title = بند کرو
 pdfjs-editor-undo-bar-close-button-label = بند کرو
 
-# Additional translations for ngx-extended-pdf-viewer (sk)
-unverified-signature-warning = Tento PDF súbor obsahuje digitálny podpis. PDF prehliadač nemôže overiť, či je podpis platný. Stiahnite si súbor a otvorte ho v Acrobat Reader na overenie platnosti podpisu.
-pdfjs-infinite-scroll-button-label = Nekonečné posúvanie
-pdfjs-find-multiple-checkbox-label = Nájsť každé slovo
-pdfjs-find-regexp-checkbox-label = Regulárny výraz
-pdfjs-editor-movePageUp-button =
-    .title = Presunúť stránku nahor
-pdfjs-editor-movePageUp-button-label = Presunúť stránku nahor
-pdfjs-editor-movePageDown-button =
-    .title = Presunúť stránku nadol
-pdfjs-editor-movePageDown-button-label = Presunúť stránku nadol
-pdfjs-cursor-page-flip-tool-button =
-    .title = Listovanie stránok
-pdfjs-cursor-page-flip-tool-button-label = Listovanie stránok
-pdfjs-editor-eraser-button =
-    .title = Gumovať
-pdfjs-editor-eraser-button-label = Gumovať
-pdfjs-editor-eraser-editor =
-    .aria-label = Guma
-pdfjs-editor-undo-button =
-    .title = Späť
-pdfjs-editor-undo-button-label = Späť
-pdfjs-editor-redo-button =
-    .title = Znova
-pdfjs-editor-redo-button-label = Znova
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-thumb-page-title1 =
     .title = Page { $page } of { $total }
@@ -498,6 +473,9 @@ pdfjs-editor-color-picker-free-text-input =
     .title = Change text color
 pdfjs-editor-color-picker-ink-input =
     .title = Change drawing color
+pdfjs-editor-eraser-button =
+    .title = Erase
+pdfjs-editor-eraser-button-label = Erase
 pdfjs-comment-floating-button =
     .title = Comment
     .aria-label = Comment
@@ -513,6 +491,8 @@ pdfjs-editor-highlight-editor =
     .aria-label = Highlight editor
 pdfjs-editor-ink-editor =
     .aria-label = Drawing editor
+pdfjs-editor-eraser-editor =
+    .aria-label = Eraser
 pdfjs-editor-signature-editor1 =
     .aria-description = Signature editor: { $description }
 pdfjs-editor-stamp-editor =
@@ -558,6 +538,12 @@ pdfjs-editor-undo-bar-message-multiple =
         [one] { $count } annotation removed
        *[other] { $count } annotations removed
     }
+pdfjs-editor-undo-button =
+    .title = Undo
+pdfjs-editor-undo-button-label = Undo
+pdfjs-editor-redo-button =
+    .title = Redo
+pdfjs-editor-redo-button-label = Redo
 pdfjs-editor-add-signature-dialog-label = This modal allows the user to create a signature to add to a PDF document. The user can edit the name (which also serves as the alt text), and optionally save the signature for repeated use.
 pdfjs-editor-add-signature-dialog-title = Add a signature
 pdfjs-editor-add-signature-type-button = Type
@@ -731,7 +717,19 @@ pdfjs-digital-signature-properties-sub-signatures =
         [one] Sub-signature ({ $count })
        *[other] Sub-signatures ({ $count })
     }
-# Translations for ngx-extended-pdf-viewer additions only available in en-US
+unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
+pdfjs-infinite-scroll-button-label = Infinite scroll
+pdfjs-find-multiple-checkbox-label = Match Each Word
+pdfjs-find-regexp-checkbox-label = Regular Expression
+pdfjs-editor-movePageUp-button =
+    .title = Move Page Up
+pdfjs-editor-movePageUp-button-label = Move Page Up
+pdfjs-editor-movePageDown-button =
+    .title = Move Page Down
+pdfjs-editor-movePageDown-button-label = Move Page Down
+pdfjs-cursor-page-flip-tool-button =
+    .title = Page Flip
+pdfjs-cursor-page-flip-tool-button-label = Page Flip
 pdfjs-loading-error-more-info = More Information
 pdfjs-loading-error-less-info = Less Information
 pdfjs-loading-error-close = Close
