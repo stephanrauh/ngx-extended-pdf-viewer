@@ -16,8 +16,8 @@
       "fork": {
         "repository": "https://github.com/stephanrauh/pdf.js",
         "branch": "bleeding-edge",
-        "commit": "95881cfac7d26a64d08654f4ebb27c4c9f96480c",
-        "committedAt": "2026-10-03T19:02:40+02:00"
+        "commit": "23d2301b3edeae8826e3ee0798fec7263a08dcfd",
+        "committedAt": "2026-10-03T19:37:48+02:00"
       },
       "securityFixes": [
         {
@@ -57,8 +57,8 @@
       "fork": {
         "repository": "https://github.com/stephanrauh/pdf.js",
         "branch": "6.3",
-        "commit": "3fa9ee49110d7d28a100c642212c4835e7c8b855",
-        "committedAt": "2026-10-03T19:02:59+02:00"
+        "commit": "32a0f634603507e9c2ba76938e04d6b442569f74",
+        "committedAt": "2026-10-03T19:38:21+02:00"
       },
       "securityFixes": [
         {
