@@ -826,7 +826,10 @@ ngx-extended-pdf-viewer {
   }
 
   /* Comment manager dialog styles (for individual comment editing) */
-  #commentManagerDialog {
+  // #3241 the document properties dialog and the loading error card share this look
+  #commentManagerDialog,
+  #documentPropertiesDialog,
+  #loadingErrorDialog {
     // #3113 modified by ngx-extended-pdf-viewer
     // #3219 Pin color-scheme to the active viewer theme (not the OS) so the
     // comment manager dialog's light-dark() colors track the chosen theme
@@ -889,6 +892,17 @@ ngx-extended-pdf-viewer {
     }
 
     // #3113 end of modification by ngx-extended-pdf-viewer
+  }
+
+  // #3241 the shared rule above is sized for the comment dialog
+  #documentPropertiesDialog.dialog {
+    width: fit-content;
+  }
+
+  #loadingErrorDialog.dialog {
+    // a <div>, not a <dialog>: dialog.scss hides every `.dialog` that isn't an open <dialog>
+    display: block;
+    width: 460px;
   }
 
   .commentManagerHeader {

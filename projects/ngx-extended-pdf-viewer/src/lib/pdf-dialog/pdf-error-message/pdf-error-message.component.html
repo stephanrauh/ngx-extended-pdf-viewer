@@ -2,60 +2,64 @@
   id="errorWrapper"
   [hidden]="!visible()"
 >
-  <!-- #3241 laid out like the viewer's dialogs (see viewer-with-images.scss) -->
+  <!-- #3241 laid out like the comment dialog (.dialog in dialog.scss) -->
   <div
-    class="emptyMessage"
+    id="loadingErrorDialog"
+    class="dialog"
     role="alertdialog"
     aria-labelledby="errorMessage"
   >
-    @if (customMessage()) {
-      <p id="errorMessage">{{ customMessage() }}</p>
-    } @else {
-      <p
-        id="errorMessage"
-        data-l10n-id="pdfjs-loading-error"
+    <div class="mainContainer">
+      <div class="title">
+        @if (customMessage()) {
+          <span id="errorMessage">{{ customMessage() }}</span>
+        } @else {
+          <span
+            id="errorMessage"
+            data-l10n-id="pdfjs-loading-error"
+            >An error occurred while loading the PDF.</span
+          >
+        }
+      </div>
+      <textarea
+        id="errorMoreInfo"
+        [hidden]="!detailsExpanded()"
+        readonly="readonly"
+        >{{ errorDetails() }}</textarea
       >
-        An error occurred while loading the PDF.
-      </p>
-    }
-    <textarea
-      id="errorMoreInfo"
-      [hidden]="!detailsExpanded()"
-      readonly="readonly"
-      >{{ errorDetails() }}</textarea
-    >
-    <div class="buttonRow">
-      @if (hasDetails()) {
+      <div class="dialogButtonsGroup">
+        @if (hasDetails()) {
+          <button
+            type="button"
+            id="errorShowMore"
+            class="secondaryButton"
+            data-l10n-id="pdfjs-loading-error-more-info"
+            [hidden]="detailsExpanded()"
+            (click)="expandDetails()"
+          >
+            More Information
+          </button>
+          <button
+            type="button"
+            id="errorShowLess"
+            class="secondaryButton"
+            data-l10n-id="pdfjs-loading-error-less-info"
+            [hidden]="!detailsExpanded()"
+            (click)="collapseDetails()"
+          >
+            Less Information
+          </button>
+        }
         <button
           type="button"
-          id="errorShowMore"
-          class="dialogButton secondaryButton"
-          data-l10n-id="pdfjs-loading-error-more-info"
-          [hidden]="detailsExpanded()"
-          (click)="expandDetails()"
+          id="errorClose"
+          class="primaryButton"
+          data-l10n-id="pdfjs-loading-error-close"
+          (click)="dismiss()"
         >
-          More Information
+          Close
         </button>
-        <button
-          type="button"
-          id="errorShowLess"
-          class="dialogButton secondaryButton"
-          data-l10n-id="pdfjs-loading-error-less-info"
-          [hidden]="!detailsExpanded()"
-          (click)="collapseDetails()"
-        >
-          Less Information
-        </button>
-      }
-      <button
-        type="button"
-        id="errorClose"
-        class="dialogButton secondaryButton"
-        data-l10n-id="pdfjs-loading-error-close"
-        (click)="dismiss()"
-      >
-        Close
-      </button>
+      </div>
     </div>
   </div>
 </div>

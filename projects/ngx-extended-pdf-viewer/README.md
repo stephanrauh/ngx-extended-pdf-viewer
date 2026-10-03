@@ -174,6 +174,8 @@ Version 31 brings pdf.js 6.3 to the bleeding-edge bundle. The stable bundle stay
 
 **Breaking:** `[textLayer]="false"` now really switches the text layer off and hides the select tool button ([#3292](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/3292), reported long ago in [#1004](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/1004)). Until now the text layer was rendered anyway, so text remained selectable. If you need text selection, highlighting selected text, or screen reader support, remove the attribute.
 
+**Minor breaking change:** the document properties dialog now looks like the comment dialog: rounded corners, 13px text, and a blue "Close" button ([#3241](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/3241)). If you style it with your own CSS, note that its markup has changed: the rows sit inside a `.mainContainer`, the separators are `.dialogSeparator` and the button row is a `.dialogButtonsGroup`. The Close button has the class `primaryButton` instead of `dialogButton secondaryButton`. The SCSS variables `$document-properties-*` are gone. The ids are unchanged.
+
 ### Version 30
 
 Version 30 updates to pdf.js 6.2 in both bundles and stops the viewer from modifying the page it lives on.

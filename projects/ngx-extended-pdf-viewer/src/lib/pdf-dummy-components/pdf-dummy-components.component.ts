@@ -37,12 +37,6 @@ const requiredIds = [
   // toggles `hidden` on it, so the invisible placeholder is all it needs.
   'signaturePropertiesSeparator',
   // #3257 end of modification by ngx-extended-pdf-viewer
-  'errorClose',
-  'errorMessage',
-  'errorMoreInfo',
-  'errorShowLess',
-  'errorShowMore',
-  'errorWrapper',
   'fileNameField',
   'fileSizeField',
   'findbar',

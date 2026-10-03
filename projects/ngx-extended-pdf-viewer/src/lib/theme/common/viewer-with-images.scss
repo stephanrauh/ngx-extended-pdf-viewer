@@ -1625,14 +1625,15 @@ ngx-extended-pdf-viewer {
     background: $selection-background;
   }
 
-  // #3241 the loading error card looks like the viewer's dialogs: it shares the
-  // `dialog`, `dialog::backdrop` and `dialog .buttonRow` rules below.
+  // #3241 the loading error card. Its box looks like the comment dialog
+  // (see ngx-extended-pdf-viewer.component.scss); this is the scrim around it.
   #errorWrapper {
     align-items: center;
+    background-color: rgba(0, 0, 0, 0.2);
     display: flex;
     inset: 0;
     justify-content: center;
-    padding: 15px;
+    padding: 16px;
     position: absolute;
     z-index: 5;
   }
@@ -1641,28 +1642,13 @@ ngx-extended-pdf-viewer {
     display: none !important;
   }
 
-  #errorWrapper .emptyMessage {
-    box-sizing: border-box;
-    max-width: 100%;
-    width: 460px;
-  }
-
-  #errorMessage {
-    margin: 4px 0;
-  }
-
   #errorMoreInfo {
-    background-color: $page-background;
-    border: 1px solid $border-dark;
-    box-sizing: border-box;
-    color: $text-color;
-    display: block;
+    // like #commentManagerTextInput: the viewer's reset makes textareas content-box
+    box-sizing: border-box !important;
     font-family: monospace;
     font-size: 11px;
-    margin: 0 0 8px;
     max-height: 40vh;
-    min-height: 120px;
-    padding: 3px;
+    min-height: 132px;
     resize: vertical;
     width: 100%;
   }
@@ -1676,8 +1662,7 @@ ngx-extended-pdf-viewer {
     border: $toolbar-background !important;
   }
 
-  dialog,
-  #errorWrapper .emptyMessage {
+  dialog {
     margin: auto;
     padding: 15px;
     border-spacing: 4px;
@@ -1690,8 +1675,7 @@ ngx-extended-pdf-viewer {
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
   }
 
-  dialog::backdrop,
-  #errorWrapper {
+  dialog::backdrop {
     background-color: rgba(0, 0, 0, 0.2);
     user-select: none;
   }
@@ -1721,8 +1705,7 @@ ngx-extended-pdf-viewer {
      carry their own `margin: 4px`, so upstream's gap would stack on top of it and
      widen every dialog's button spacing from 8px to 16px. Keep the margins as the
      single source of spacing. Re-check when upstream next touches this rule. */
-  dialog .buttonRow,
-  #errorWrapper .buttonRow {
+  dialog .buttonRow {
     text-align: center;
     vertical-align: middle;
   }
@@ -1739,36 +1722,25 @@ ngx-extended-pdf-viewer {
     width: 200px;
   }
 
-  #documentPropertiesDialog {
-    text-align: left;
-  }
-
-  #documentPropertiesDialog .row>* {
-    min-width: 100px;
+  // #3241 the document properties dialog uses the look of the comment dialog
+  // (see ngx-extended-pdf-viewer.component.scss), so its rows are flex rows
+  // inside `.mainContainer` instead of table rows.
+  #documentPropertiesDialog .row {
+    display: flex;
+    gap: 12px;
     text-align: start;
   }
 
   #documentPropertiesDialog .row>span {
-    width: 125px;
+    flex: 0 0 125px;
     word-wrap: break-word;
   }
 
   #documentPropertiesDialog .row>p {
+    margin: 0;
     max-width: 225px;
     word-wrap: break-word;
   }
-
-  #documentPropertiesDialog .buttonRow {
-    margin-top: 10px;
-  }
-}
-
-ngx-extended-pdf-viewer .body[dir='ltr'] #documentPropertiesDialog .row>* {
-  text-align: left;
-}
-
-ngx-extended-pdf-viewer .body[dir='rtl'] #documentPropertiesDialog .row>* {
-  text-align: right;
 }
 
 .fileInput {
@@ -1782,41 +1754,6 @@ ngx-extended-pdf-viewer .body[dir='rtl'] #documentPropertiesDialog .row>* {
 }
 
 ngx-extended-pdf-viewer {
-  #documentPropertiesDialog .row>span {
-    width: 125px;
-    word-wrap: break-word;
-  }
-
-  #documentPropertiesDialog .row>p {
-    max-width: 225px;
-    word-wrap: break-word;
-  }
-
-  #documentPropertiesDialog .buttonRow,
-  #errorWrapper .buttonRow {
-    margin-top: 10px;
-  }
-
-  // #2984 modified by ngx-extended-pdf-viewer to improve the light and dark mode
-  // #3241 the loading error card shares the look of the document properties dialog
-  #documentPropertiesDialog,
-  #errorWrapper .emptyMessage {
-    background-color: $document-properties-dialog-background;
-    border-color: $document-properties-border;
-
-    #documentPropertiesClose,
-    .dialogButton {
-      background-color: $document-properties-button;
-      color: $document-properties-button-text;
-
-      &:hover {
-        background-color: $document-properties-button-hover;
-      }
-    }
-  }
-
-  // #2984 end of modification by ngx-extended-pdf-viewer to improve the light and dark mode
-
   .clearBoth {
     clear: both;
   }
