@@ -95,6 +95,7 @@ export class AnnotationEditor {
     isSelected: boolean;
     _isCopy: boolean;
     _editToolbar: null;
+    _erasable: boolean;
     _initialOptions: any;
     _initialData: null;
     _isVisible: boolean;
@@ -127,6 +128,7 @@ export class AnnotationEditor {
     updatePageIndex(newPageIndex: any): void;
     get editorType(): any;
     get mode(): any;
+    get erasable(): boolean;
     /**
      * Get the properties to update in the UI for this editor.
      * @returns {Array}
@@ -185,6 +187,38 @@ export class AnnotationEditor {
      * @param {number} y - y-translation in screen coordinates.
      */
     translate(x: number, y: number): void;
+    /**
+     * Start an erase session: snapshot the editor geometry once so that the
+     * hit tests done on every pointer move stay cheap.
+     * @param {DOMRect} layerRect - Bounding rect of the annotation editor layer.
+     * @returns {Array<number>|null} The editor bbox in layer pixels
+     *   ([left, top, right, bottom]), or null when nothing can be erased.
+     */
+    startErase(layerRect: DOMRect): Array<number> | null;
+    /**
+     * Erase everything swept by the eraser circle moving from (prevX, prevY)
+     * to (x, y). All values are in layer pixels.
+     * @param {number} x
+     * @param {number} y
+     * @param {number} radius
+     * @param {number} [prevX]
+     * @param {number} [prevY]
+     */
+    erase(x: number, y: number, radius: number, prevX?: number, prevY?: number): void;
+    /**
+     * Update the rendering after one or more erase calls.
+     * Called at most once per animation frame.
+     */
+    renderErase(): void;
+    /**
+     * Call once the erasing session is done.
+     * @returns {{cmd?: Function, undo?: Function}} The commands to (re)do and
+     *   undo the erasing, or an empty object when nothing was erased.
+     */
+    endErase(): {
+        cmd?: Function;
+        undo?: Function;
+    };
     /**
      * Translate the editor position within its page and adjust the scroll
      * in order to have the editor in the view.
@@ -510,7 +544,10 @@ export class AnnotationEditor {
      * Add the resizers to this editor.
      */
     makeResizable(): void;
-    get toolbarPosition(): null;
+    /**
+     * @returns {Array<number>|null}
+     */
+    get toolbarPosition(): Array<number> | null;
     /**
      * Get the position of the comment button.
      * @returns {Array<number>|null}

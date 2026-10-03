@@ -77,6 +77,11 @@ export class AnnotationEditorUIManager {
     onScaleChanging({ scale }: {
         scale: any;
     }): void;
+    /**
+     * Called before the pages are rotated (onRotationChanging comes after).
+     * @param {number} pagesRotation
+     */
+    onRotationWillChange(pagesRotation: number): void;
     onRotationChanging({ pagesRotation }: {
         pagesRotation: any;
     }): void;

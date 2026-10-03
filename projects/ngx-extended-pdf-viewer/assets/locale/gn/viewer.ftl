@@ -769,6 +769,11 @@ pdfjs-digital-signature-properties-button-label = Firma digital oguerekóva
 ##   $count (Number) - number of signatures at the worst level.
 
 pdfjs-digital-signature-properties-banner-verified = Pe kuatia oñemboheraguapy firma digital oikóvape
+pdfjs-digital-signature-properties-banner-revoked =
+    { $count ->
+        [one] Kuatia mboheraguapypyre { $count } mboajepyre oikove’ỹva ndive
+       *[other] Kuatia mboheraguapypyre { $count } mboajepyreita oikove’ỹva ndive
+    }
 
 ## Per-signature status row. Only three distinct strings are needed:
 ## the signature crypto either verified (the cert chain may still be
@@ -811,6 +816,17 @@ pdfjs-editor-add-signature-edit-button-label = Embosako’i moha’ãnga
 pdfjs-editor-edit-signature-dialog-title = Embosako’i moha’ãnga
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
+pdfjs-editor-eraser-button =
+    .title = Erase
+pdfjs-editor-eraser-button-label = Erase
+pdfjs-editor-eraser-editor =
+    .aria-label = Eraser
+pdfjs-editor-undo-button =
+    .title = Undo
+pdfjs-editor-undo-button-label = Undo
+pdfjs-editor-redo-button =
+    .title = Redo
+pdfjs-editor-redo-button-label = Redo
 pdfjs-digital-signature-properties-banner-unknown =
     { $count ->
         [one] Document signed but { $count } digital signature could not be verified
@@ -831,11 +847,6 @@ pdfjs-digital-signature-properties-banner-invalid =
         [one] Document has { $count } invalid digital signature
        *[other] Document has { $count } invalid digital signatures
     }
-pdfjs-digital-signature-properties-banner-revoked =
-    { $count ->
-        [one] Document signed with { $count } revoked certificate
-       *[other] Document signed with { $count } revoked certificates
-    }
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = Match Each Word
@@ -849,14 +860,3 @@ pdfjs-editor-movePageDown-button-label = Move Page Down
 pdfjs-cursor-page-flip-tool-button =
     .title = Page Flip
 pdfjs-cursor-page-flip-tool-button-label = Page Flip
-pdfjs-editor-eraser-button =
-    .title = Erase
-pdfjs-editor-eraser-button-label = Erase
-pdfjs-editor-eraser-editor =
-    .aria-label = Eraser
-pdfjs-editor-undo-button =
-    .title = Undo
-pdfjs-editor-undo-button-label = Undo
-pdfjs-editor-redo-button =
-    .title = Redo
-pdfjs-editor-redo-button-label = Redo

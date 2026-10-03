@@ -42,8 +42,6 @@ export class Parser {
     xref: any;
     allowStreams: boolean;
     recoveryMode: boolean;
-    imageCache: any;
-    _imageId: number;
     refill(): void;
     buf1: any;
     buf2: any;

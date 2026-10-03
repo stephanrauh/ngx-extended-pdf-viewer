@@ -290,7 +290,6 @@ export class PDFViewer {
         down: boolean;
         lastX: any;
         lastY: any;
-        _eventHandler: (evt: any) => void;
     };
     presentationModeState: number;
     cspPolicyService: any;
@@ -411,8 +410,8 @@ export class PDFViewer {
     _location: {
         pageNumber: any;
         scale: any;
-        top: number;
-        left: number;
+        top: any;
+        left: any;
         rotation: any;
         pdfOpenParams: string;
     } | null | undefined;
@@ -423,6 +422,13 @@ export class PDFViewer {
     _spreadMode: any;
     _scrollUpdate(): void;
     scrollPagePosIntoView(pageNumber: any, pageSpot: any): void;
+    /**
+     * Scroll the viewer by the given gesture deltas: like `GrabToPan` does, the
+     * content follows the gesture.
+     * @param {number} dx - Horizontal delta.
+     * @param {number} dy - Vertical delta.
+     */
+    panBy(dx: number, dy: number): void;
     /**
      * @param {string} label - The page label.
      * @returns {number|null} The page number corresponding to the page label,
@@ -577,12 +583,13 @@ export class PDFViewer {
      * @property {number} [steps]
      * @property {Array} [origin] x and y coordinates of the scale
      *                            transformation origin.
+     * @property {Array<number>} [pan] - Horizontal and vertical gesture deltas.
      */
     /**
      * Changes the current zoom level by the specified amount.
      * @param {ChangeScaleOptions} [options]
      */
-    updateScale({ drawingDelay, scaleFactor, steps, origin }?: {
+    updateScale({ drawingDelay, scaleFactor, steps, origin, pan, }?: {
         drawingDelay?: number | undefined;
         scaleFactor?: number | undefined;
         steps?: number | undefined;
@@ -591,6 +598,10 @@ export class PDFViewer {
          *  transformation origin.
          */
         origin?: any[] | undefined;
+        /**
+         * - Horizontal and vertical gesture deltas.
+         */
+        pan?: number[] | undefined;
     }): void;
     /**
      * Increase the current zoom level one, or more, times.
@@ -605,6 +616,10 @@ export class PDFViewer {
          *  transformation origin.
          */
         origin?: any[] | undefined;
+        /**
+         * - Horizontal and vertical gesture deltas.
+         */
+        pan?: number[] | undefined;
     }): void;
     /**
      * Decrease the current zoom level one, or more, times.
@@ -619,6 +634,10 @@ export class PDFViewer {
          *  transformation origin.
          */
         origin?: any[] | undefined;
+        /**
+         * - Horizontal and vertical gesture deltas.
+         */
+        pan?: number[] | undefined;
     }): void;
     get containerTopLeft(): number[];
     /**

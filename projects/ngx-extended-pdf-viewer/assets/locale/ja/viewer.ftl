@@ -685,7 +685,7 @@ pdfjs-views-manager-pages-status-delete-button-label = 削除
 pdfjs-views-manager-pages-status-export-selected-button-label = 選択したページをエクスポート...
 # Variables:
 #   $count (Number) - the number of selected pages to be cut.
-pdfjs-views-manager-status-undo-cut-label = { $count } ページを切り取りしました
+pdfjs-views-manager-status-undo-cut-label = { $count } ページを切り取りました
 # Variables:
 #   $count (Number) - the number of selected pages to be copied.
 pdfjs-views-manager-pages-status-undo-copy-label = { $count } ページをコピーしました
@@ -780,6 +780,17 @@ pdfjs-editor-add-signature-edit-button-label = 説明を編集
 pdfjs-editor-edit-signature-dialog-title = 説明の編集
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
+pdfjs-editor-eraser-button =
+    .title = Erase
+pdfjs-editor-eraser-button-label = Erase
+pdfjs-editor-eraser-editor =
+    .aria-label = Eraser
+pdfjs-editor-undo-button =
+    .title = Undo
+pdfjs-editor-undo-button-label = Undo
+pdfjs-editor-redo-button =
+    .title = Redo
+pdfjs-editor-redo-button-label = Redo
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = Match Each Word
@@ -793,14 +804,3 @@ pdfjs-editor-movePageDown-button-label = Move Page Down
 pdfjs-cursor-page-flip-tool-button =
     .title = Page Flip
 pdfjs-cursor-page-flip-tool-button-label = Page Flip
-pdfjs-editor-eraser-button =
-    .title = Erase
-pdfjs-editor-eraser-button-label = Erase
-pdfjs-editor-eraser-editor =
-    .aria-label = Eraser
-pdfjs-editor-undo-button =
-    .title = Undo
-pdfjs-editor-undo-button-label = Undo
-pdfjs-editor-redo-button =
-    .title = Redo
-pdfjs-editor-redo-button-label = Redo

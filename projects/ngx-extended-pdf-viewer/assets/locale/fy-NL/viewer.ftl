@@ -182,8 +182,8 @@ pdfjs-print-progress-message = Dokumint tariede oar ôfdrukken…
 #   $progress (Number) - percent value
 pdfjs-print-progress-percent = { $progress }%
 pdfjs-print-progress-close-button = Annulearje
-pdfjs-printing-not-supported = Warning: Printen is net folslein stipe troch dizze browser.
-pdfjs-printing-not-ready = Warning: PDF is net folslein laden om ôf te drukken.
+pdfjs-printing-not-supported = Warskôging: ôfdrukken wurdt net folslein stipe troch dizze browser.
+pdfjs-printing-not-ready = Warskôging: PDF is net folslein laden om ôf te drukken.
 
 ## Tooltips and alt text for side panel toolbar buttons
 
@@ -476,7 +476,7 @@ pdfjs-editor-colorpicker-green =
 pdfjs-editor-colorpicker-blue =
     .title = Blau
 pdfjs-editor-colorpicker-pink =
-    .title = Roze
+    .title = Rôs
 pdfjs-editor-colorpicker-red =
     .title = Read
 
@@ -581,7 +581,7 @@ pdfjs-editor-undo-bar-close-button-label = Slute
 
 ## Add a signature dialog
 
-pdfjs-editor-add-signature-dialog-label = Mei dizze modal kin de brûker in hantekening meitsje om oan in PDF-dokumint ta te foegjen. De brûker kin de namme bewurkje (dy't ek tsjinnet as alternative tekst), en opsjoneel de ûndertekening bewarje foar werhelle gebrûk.
+pdfjs-editor-add-signature-dialog-label = Mei dizze modal kin de brûker in hantekening meitsje om oan in PDF-dokumint ta te foegjen. De brûker kin de namme bewurkje (dy’t ek tsjinnet as alternative tekst), en opsjoneel de ûndertekening bewarje foar werhelle gebrûk.
 pdfjs-editor-add-signature-dialog-title = In hantekening tafoegje
 
 ## Tab names
@@ -623,7 +623,7 @@ pdfjs-editor-add-signature-clear-button-label = Hantekening wiskje
 pdfjs-editor-add-signature-clear-button =
     .title = Hantekening wiskje
 pdfjs-editor-add-signature-save-checkbox = Hantekening bewarje
-pdfjs-editor-add-signature-save-warning-message = Jo hawwe de limyt fan 5 bewarre hantekeningen berikt. Ferwiderje ien om in oar te bewarjen.
+pdfjs-editor-add-signature-save-warning-message = Jo hawwe de limyt fan 5 bewarre hantekeningen berikt. Smyt ien fuort om in oar te bewarjen.
 pdfjs-editor-add-signature-image-upload-error-title = Kin de ôfbylding net oplade
 pdfjs-editor-add-signature-image-upload-error-description = Kontrolearje jo netwurkferbining of probearje in oare ôfbylding.
 pdfjs-editor-add-signature-image-no-data-error-title = Kin dizze ôfbylding net nei in hantekening konvertearje
@@ -836,6 +836,17 @@ pdfjs-editor-add-signature-edit-button-label = Beskriuwing bewurkje
 pdfjs-editor-edit-signature-dialog-title = Beskriuwing bewurkje
 
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
+pdfjs-editor-eraser-button =
+    .title = Erase
+pdfjs-editor-eraser-button-label = Erase
+pdfjs-editor-eraser-editor =
+    .aria-label = Eraser
+pdfjs-editor-undo-button =
+    .title = Undo
+pdfjs-editor-undo-button-label = Undo
+pdfjs-editor-redo-button =
+    .title = Redo
+pdfjs-editor-redo-button-label = Redo
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = Match Each Word
@@ -849,14 +860,3 @@ pdfjs-editor-movePageDown-button-label = Move Page Down
 pdfjs-cursor-page-flip-tool-button =
     .title = Page Flip
 pdfjs-cursor-page-flip-tool-button-label = Page Flip
-pdfjs-editor-eraser-button =
-    .title = Erase
-pdfjs-editor-eraser-button-label = Erase
-pdfjs-editor-eraser-editor =
-    .aria-label = Eraser
-pdfjs-editor-undo-button =
-    .title = Undo
-pdfjs-editor-undo-button-label = Undo
-pdfjs-editor-redo-button =
-    .title = Redo
-pdfjs-editor-redo-button-label = Redo

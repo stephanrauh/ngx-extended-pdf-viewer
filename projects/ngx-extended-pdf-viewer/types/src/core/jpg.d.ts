@@ -5,18 +5,15 @@ export class JpegError extends JpegError_base {
 }
 export class JpegImage {
     static canUseImageDecoder(data: any, colorTransform?: number): {
-        exifStart: any;
-        exifEnd: any;
-    } | {
-        exifStart?: undefined;
-        exifEnd?: undefined;
+        width: number;
+        height: number;
+        exifStart: number;
+        exifEnd: number;
     } | null;
-    constructor({ decodeTransform, colorTransform }?: {
-        decodeTransform?: null | undefined;
-        colorTransform?: number | undefined;
-    });
+    constructor(options: any);
+    _colorTransform: any;
     _decodeTransform: any;
-    _colorTransform: number;
+    _isSourcePDF: boolean | undefined;
     parse(data: any, { dnlScanLines }?: {
         dnlScanLines?: null | undefined;
     }): any;
@@ -50,13 +47,12 @@ export class JpegImage {
     _convertYcckToCmyk(data: any): any;
     _convertCmykToRgb(data: any): any;
     _convertCmykToRgba(data: any): any;
-    getData({ width, height, forceRGBA, forceRGB, isSourcePDF, }: {
+    getData({ width, height, forceRGBA, forceRGB }: {
         width: any;
         height: any;
         forceRGBA?: boolean | undefined;
         forceRGB?: boolean | undefined;
-        isSourcePDF?: boolean | undefined;
-    }): any;
+    }, ...args: any[]): any;
     #private;
 }
 export {};

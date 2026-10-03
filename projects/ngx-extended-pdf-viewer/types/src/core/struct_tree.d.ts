@@ -78,7 +78,7 @@ export class StructTreeRoot {
     dict: any;
     ref: Ref | null;
     getKidPosition(kidRef: any): any;
-    addAnnotationIdToPage(pageRef: any, id: any): void;
+    addAnnotationIdToPage(pageRef: any, id: any, ref: any): void;
     canUpdateStructTree({ pdfManager, newAnnotationsByPage }: {
         pdfManager: any;
         newAnnotationsByPage: any;

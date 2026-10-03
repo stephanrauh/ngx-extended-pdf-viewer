@@ -11,6 +11,10 @@ export class FONT_INFO {
     static OFFSET_DEFAULT_VMETRICS: number;
     static OFFSET_STRINGS: number;
 }
+export class InfoUtils {
+    static get decoder(): any;
+    static get encoder(): any;
+}
 export class PATTERN_INFO {
     static KIND: number;
     static HAS_BBOX: number;

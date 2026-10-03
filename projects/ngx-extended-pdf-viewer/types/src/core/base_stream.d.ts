@@ -25,7 +25,11 @@ export class BaseStream {
     get isAsyncDecoder(): boolean;
     get isImageStream(): boolean;
     get canAsyncDecodeImageFromBuffer(): boolean;
-    getTransferableImage(): Promise<null>;
+    /**
+     * @param {number} width - The width from the image dictionary.
+     * @param {number} height - The height from the image dictionary.
+     */
+    getTransferableImage(width: number, height: number): Promise<null>;
     peekByte(): void;
     peekBytes(length: any): Uint8Array<ArrayBufferLike>;
     getUint16(): any;

@@ -16,7 +16,6 @@ export class IccColorSpace extends ColorSpace {
     }): void;
     static get isUsable(): any;
     constructor(iccProfile: any, name: any, numComps: any);
-    getOutputLength(inputLength: any, alpha01: any): number;
     #private;
 }
 import { ColorSpace } from "./colorspace.js";

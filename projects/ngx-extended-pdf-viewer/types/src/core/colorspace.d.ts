@@ -11,7 +11,6 @@ export class AlternateCS extends ColorSpace {
     base: any;
     tintFn: any;
     tmpBuf: Float32Array<any>;
-    getOutputLength(inputLength: any, alpha01: any): any;
 }
 /**
  * CalGrayCS: Based on "PDF Reference, Sixth Ed", p.245
@@ -24,7 +23,6 @@ export class CalGrayCS extends ColorSpace {
     XB: any;
     YB: any;
     ZB: any;
-    getOutputLength(inputLength: any, alpha01: any): number;
     #private;
 }
 /**
@@ -47,7 +45,6 @@ export class CalRGBCS extends ColorSpace {
     GR: any;
     GG: any;
     GB: any;
-    getOutputLength(inputLength: any, alpha01: any): number;
     #private;
 }
 export class ColorSpace {
@@ -95,12 +92,6 @@ export class ColorSpace {
      */
     getRgbItems(src: any, count: any, dest: any, destOffset: any, alpha01: any): void;
     /**
-     * Determines the number of bytes required to store the result of the
-     * conversion done by the getRgbBuffer method. As in getRgbBuffer,
-     * |alpha01| is either 0 (RGB output) or 1 (RGBA output).
-     */
-    getOutputLength(inputLength: any, alpha01: any): void;
-    /**
      * Returns true if source data will be equal the result/output data.
      */
     isPassthrough(bits: any): boolean;
@@ -126,7 +117,6 @@ export class ColorSpace {
  */
 export class DeviceCmykCS extends ColorSpace {
     constructor();
-    getOutputLength(inputLength: any, alpha01: any): number;
     #private;
 }
 /**
@@ -134,21 +124,18 @@ export class DeviceCmykCS extends ColorSpace {
  */
 export class DeviceGrayCS extends ColorSpace {
     constructor();
-    getOutputLength(inputLength: any, alpha01: any): number;
 }
 /**
  * The default color is `new Float32Array([0, 0, 0, 1])`.
  */
 export class DeviceRgbaCS extends ColorSpace {
     constructor();
-    getOutputLength(inputLength: any, _alpha01: any): number;
 }
 /**
  * The default color is `new Float32Array([0, 0, 0])`.
  */
 export class DeviceRgbCS extends ColorSpace {
     constructor();
-    getOutputLength(inputLength: any, alpha01: any): number;
 }
 /**
  * The default color is `new Uint8Array([0])`.
@@ -156,7 +143,6 @@ export class DeviceRgbCS extends ColorSpace {
 export class IndexedCS extends ColorSpace {
     constructor(base: any, highVal: any, lookup: any);
     highVal: any;
-    getOutputLength(inputLength: any, alpha01: any): number;
     #private;
 }
 /**
@@ -173,7 +159,6 @@ export class LabCS extends ColorSpace {
     amax: any;
     bmin: any;
     bmax: any;
-    getOutputLength(inputLength: any, alpha01: any): number;
     #private;
 }
 export class PatternCS extends ColorSpace {

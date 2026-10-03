@@ -34,7 +34,7 @@ export class ColorPicker {
     _moveToEnd(event: any): void;
     hideDropdown(): void;
     _hideDropdownFromKeyboard(): void;
-    updateColor(color: any): void;
+    update(color: any): void;
     destroy(): void;
     #private;
 }

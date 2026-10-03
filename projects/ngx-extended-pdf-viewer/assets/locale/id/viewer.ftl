@@ -593,10 +593,15 @@ pdfjs-thumb-page-title1 =
     .title = Page { $page } of { $total }
 pdfjs-thumb-page-checkbox1 =
     .title = Select page { $page }
+pdfjs-editor-eraser-button =
+    .title = Erase
+pdfjs-editor-eraser-button-label = Erase
 pdfjs-editor-comment-button =
     .title = Comment
     .aria-label = Comment
 pdfjs-editor-comment-button-label = Comment
+pdfjs-editor-eraser-editor =
+    .aria-label = Eraser
 pdfjs-editor-comments-sidebar-title =
     { $count ->
         [one] Comment
@@ -609,6 +614,12 @@ pdfjs-editor-comments-sidebar-close-button-label = Close the sidebar
 pdfjs-editor-comments-sidebar-no-comments1 = See something noteworthy? Highlight it and leave a comment.
 pdfjs-editor-comments-sidebar-no-comments-link = Learn more
 pdfjs-editor-undo-bar-message-comment = Comment removed
+pdfjs-editor-undo-button =
+    .title = Undo
+pdfjs-editor-undo-button-label = Undo
+pdfjs-editor-redo-button =
+    .title = Redo
+pdfjs-editor-redo-button-label = Redo
 pdfjs-show-comment-button =
     .title = Show comment
 pdfjs-editor-edit-comment-popup-button-label = Edit comment
@@ -677,12 +688,6 @@ pdfjs-views-manager-pages-status-undo-delete-label =
         [one] 1 page deleted
         *[other] { $count } pages deleted
     }
-pdfjs-views-manager-pages-status-waiting-ready-label = Getting your file ready…
-pdfjs-views-manager-pages-status-waiting-uploading-label = Uploading file…
-pdfjs-views-manager-status-warning-cut-label = Couldn’t cut. Refresh page and try again.
-pdfjs-views-manager-status-warning-copy-label = Couldn’t copy. Refresh page and try again.
-pdfjs-views-manager-status-warning-delete-label = Couldn’t delete. Refresh page and try again.
-pdfjs-views-manager-status-warning-save-label = Couldn’t save. Refresh page and try again.
 pdfjs-views-manager-status-undo-button-label = Undo
 pdfjs-views-manager-status-done-button-label = Done
 pdfjs-views-manager-status-close-button =
@@ -758,14 +763,3 @@ pdfjs-editor-movePageDown-button-label = Move Page Down
 pdfjs-cursor-page-flip-tool-button =
     .title = Page Flip
 pdfjs-cursor-page-flip-tool-button-label = Page Flip
-pdfjs-editor-eraser-button =
-    .title = Erase
-pdfjs-editor-eraser-button-label = Erase
-pdfjs-editor-eraser-editor =
-    .aria-label = Eraser
-pdfjs-editor-undo-button =
-    .title = Undo
-pdfjs-editor-undo-button-label = Undo
-pdfjs-editor-redo-button =
-    .title = Redo
-pdfjs-editor-redo-button-label = Redo

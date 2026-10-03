@@ -92,12 +92,17 @@ export class InkDrawOutliner {
         path: {
             d: string;
         };
-    } | null;
+    };
+    addPoints(points: any): {
+        path: {
+            d: string;
+        };
+    };
     end(x: any, y: any): {
         path: {
             d: string;
         };
-    } | null;
+    };
     startNew(x: any, y: any, parentWidth: any, parentHeight: any, rotation: any): null;
     getLastElement(): {
         line: any[];

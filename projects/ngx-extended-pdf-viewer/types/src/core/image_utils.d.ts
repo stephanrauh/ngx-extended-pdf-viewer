@@ -6,8 +6,8 @@ export class GlobalImageCache {
     static NUM_PAGES_THRESHOLD: number;
     static MIN_IMAGES_TO_CACHE: number;
     static MAX_BYTE_SIZE: number;
-    _refCache: RefSetCache;
-    _imageCache: RefSetCache;
+    _refCache: RefMap;
+    _imageCache: RefMap;
     shouldCache(ref: any, pageIndex: any): boolean;
     addDecodeFailed(ref: any): void;
     hasDecodeFailed(ref: any): boolean;
@@ -43,10 +43,10 @@ declare class BaseLocalCache {
     _onlyRefs: boolean;
     _nameRefMap: Map<any, any> | undefined;
     _imageMap: Map<any, any> | undefined;
-    _imageCache: RefSetCache;
+    _imageCache: RefMap;
     getByName(name: any): any;
     getByRef(ref: any): any;
     set(name: any, ref: any, data: any): void;
 }
-import { RefSetCache } from "./primitives.js";
+import { RefMap } from "./primitives.js";
 export {};

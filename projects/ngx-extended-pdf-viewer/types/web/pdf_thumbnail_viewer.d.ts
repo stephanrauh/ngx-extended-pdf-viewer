@@ -152,7 +152,6 @@ export class PDFThumbnailViewer {
         down: boolean;
         lastX: any;
         lastY: any;
-        _eventHandler: (evt: any) => void;
     };
     getThumbnail(index: any): any;
     _currentPageNumber: any;

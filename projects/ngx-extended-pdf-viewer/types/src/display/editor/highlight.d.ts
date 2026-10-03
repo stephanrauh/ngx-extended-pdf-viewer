@@ -1,38 +1,50 @@
 /**
- * Basic draw editor in order to generate an Highlight annotation.
+ * Editor for text-selection and freehand highlights.
+ * Their geometry comes from separate outline implementations.
  */
-export class HighlightEditor extends AnnotationEditor {
-    static _defaultColor: null;
-    static _defaultOpacity: number;
-    static _defaultThickness: number;
+export class HighlightEditor extends DrawingEditor {
+    static _DEFAULT_OPACITY: number;
+    static _DEFAULT_THICKNESS: number;
+    static _defaultDrawingOptions: null;
     static _type: string;
     static _editorType: number;
-    static _freeHighlightId: number;
-    static _freeHighlight: null;
-    static _freeHighlightClipId: string;
     static get _keyboardManager(): any;
+    /** @inheritdoc */
+    static initialize(l10n: any, uiManager: any): void;
+    /** @inheritdoc */
+    static getDefaultDrawingOptions(options: any): any;
+    /** @inheritdoc */
+    static get typesMap(): any;
     static computeTelemetryFinalData(data: any): {
         numberOfColors: any;
     };
     /** @inheritdoc */
-    static initialize(l10n: any, uiManager: any): void;
-    /** @inheritdoc */
-    static updateDefaultParams(type: any, value: any): void;
-    static get defaultPropertiesToUpdate(): (number | null)[][];
-    static #rotateBbox([x, y, width, height]: [any, any, any, any], angle: any): any[];
-    static startHighlighting(parent: any, isLTR: any, { target: textLayer, x, y }: {
-        target: any;
+    static createDrawerInstance({ x, y, box, parent, isLTR }: {
         x: any;
         y: any;
-    }): void;
-    static #highlightMove(parent: any, event: any): void;
-    static #endHighlight(parent: any, event: any): void;
+        box: any;
+        parent: any;
+        isLTR: any;
+    }): FreeHighlightDrawer;
     /** @inheritdoc */
-    static deserialize(data: any, parent: any, uiManager: any): Promise<AnnotationEditor | null>;
-    constructor(params: any);
-    color: any;
-    opacity: any;
+    static _getDrawingTarget(parent: any, { target }: {
+        target: any;
+    }): any;
+    /** @inheritdoc */
+    static _getPointerCoords({ x, y }: {
+        x: any;
+        y: any;
+    }): any[];
+    /** @inheritdoc */
+    static _addDrawingListeners(target: any, signal: any): void;
+    /** @inheritdoc */
+    static deserializeDraw(pageX: any, pageY: any, pageWidth: any, pageHeight: any, _innerMargin: any, data: any, uiManager: any): import("./drawers/freedraw.js").FreeDrawOutline | HighlightOutline;
     defaultL10nId: string;
+    get colorType(): number;
+    get color(): any;
+    get opacity(): any;
+    /** @inheritdoc */
+    get _opacityName(): string;
     /** @inheritdoc */
     get addedEventValue(): {
         color: any;
@@ -56,28 +68,37 @@ export class HighlightEditor extends AnnotationEditor {
     /** @inheritdoc */
     translateInPage(x: any, y: any): void;
     /** @inheritdoc */
-    get commentButtonPosition(): null;
+    get toolbarPosition(): number[];
     /** @inheritdoc */
-    updateParams(type: any, value: any): void;
-    /** @inheritdoc */
-    get propertiesToUpdate(): any[][];
-    /** @inheritdoc */
-    get toolbarButtons(): any;
+    get commentButtonPosition(): number[];
     /** @inheritdoc */
     fixAndSetPosition(): void;
     /** @inheritdoc */
     getRect(tx: any, ty: any): any[];
     /** @inheritdoc */
-    onceAdded(focus: any): void;
+    startErase(layerRect: any): number[] | null;
     /** @inheritdoc */
-    rotate(angle: any): void;
-    pointerover(): void;
-    pointerleave(): void;
+    erase(x: any, y: any, radius: any, prevX?: any, prevY?: any): void;
+    /** @inheritdoc */
+    endErase(): {
+        cmd?: undefined;
+        undo?: undefined;
+    } | {
+        cmd: () => void;
+        undo: () => void;
+    };
     _moveCaret(direction: any): void;
     /** @inheritdoc */
-    serialize(isForCopying?: boolean, context?: null, includeId?: boolean): Object | null;
+    createDrawingOptions({ color, opacity, thickness }: {
+        color: any;
+        opacity: any;
+        thickness: any;
+    }): void;
+    _drawingOptions: any;
     /** @inheritdoc */
-    renderAnnotationElement(annotation: any): null;
+    serialize(isForCopying?: boolean, context?: null, includeId?: boolean): Object | null;
     #private;
 }
-import { AnnotationEditor } from "./editor.js";
+import { DrawingEditor } from "./draw.js";
+import { FreeHighlightDrawer } from "./drawers/highlight.js";
+import { HighlightOutline } from "./drawers/highlight.js";

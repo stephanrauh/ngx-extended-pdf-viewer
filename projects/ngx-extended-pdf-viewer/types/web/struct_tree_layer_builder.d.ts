@@ -17,7 +17,20 @@ export class StructTreeLayerBuilder {
      * @returns {Promise<void>}
      */
     render(): Promise<void>;
-    getAriaAttributes(annotationId: any): Promise<any>;
+    /**
+     * @param {string} annotationId
+     * @param {Object} [options]
+     * @param {boolean} [options.enableLinkOwnership]
+     * @returns {Promise<Map<string, string>|null|undefined>}
+     */
+    getAriaAttributes(annotationId: string, { enableLinkOwnership }?: {
+        enableLinkOwnership?: boolean | undefined;
+    }): Promise<Map<string, string> | null | undefined>;
+    /**
+     * Get the ids of annotations owned by the structure tree.
+     * @returns {Promise<Set<string>|null>}
+     */
+    getAnnotationIds(): Promise<Set<string> | null>;
     hide(): void;
     show(): void;
     updateTextLayer(): void;

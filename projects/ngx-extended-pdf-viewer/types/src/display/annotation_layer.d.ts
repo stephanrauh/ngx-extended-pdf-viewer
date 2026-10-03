@@ -22,7 +22,7 @@ export type AnnotationElementParameters = {
     svgFactory: Object;
     enableScripting?: boolean | undefined;
     hasJSActions?: boolean | undefined;
-    fieldObjects?: Object | undefined;
+    fieldObjects?: Map<any, any> | undefined;
 };
 export type AnnotationLayerParameters = {
     viewport: PageViewport;
@@ -47,9 +47,7 @@ export type AnnotationLayerParameters = {
      * The default value is `false`.
      */
     hasJSActions?: boolean | undefined;
-    fieldObjects?: {
-        [x: string]: Object[];
-    } | null | undefined;
+    fieldObjects?: Map<string, Object[]> | null | undefined;
     annotationCanvasMap?: Map<string, HTMLCanvasElement> | undefined;
     accessibilityManager?: import("../../web/text_accessibility.js").TextAccessibilityManager | undefined;
     annotationEditorUIManager?: AnnotationEditorUIManager;
@@ -71,7 +69,7 @@ export type AnnotationLayerParameters = {
  * @property {boolean} [enableScripting] - Enable embedded script execution.
  * @property {boolean} [hasJSActions] - Some fields have JS actions.
  *   The default value is `false`.
- * @property {Object<string, Array<Object>> | null} [fieldObjects]
+ * @property {Map<string, Array<Object>> | null} [fieldObjects]
  * @property {Map<string, HTMLCanvasElement>} [annotationCanvasMap]
  * @property {TextAccessibilityManager} [accessibilityManager]
  * @property {AnnotationEditorUIManager} [annotationEditorUIManager]

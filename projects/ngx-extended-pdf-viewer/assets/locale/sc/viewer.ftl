@@ -479,6 +479,11 @@ pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) }
 pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 pdfjs-text-annotation-type =
     .alt = [{ $type } Annotation]
+pdfjs-editor-eraser-button =
+    .title = Erase
+pdfjs-editor-eraser-button-label = Erase
+pdfjs-editor-eraser-editor =
+    .aria-label = Eraser
 pdfjs-editor-ink-opacity-input = Opacity
 pdfjs-editor-free-highlight-thickness-title =
     .title = Change thickness when highlighting items other than text
@@ -538,6 +543,12 @@ pdfjs-editor-undo-bar-message-multiple =
         [one] { $count } annotation removed
        *[other] { $count } annotations removed
     }
+pdfjs-editor-undo-button =
+    .title = Undo
+pdfjs-editor-undo-button-label = Undo
+pdfjs-editor-redo-button =
+    .title = Redo
+pdfjs-editor-redo-button-label = Redo
 pdfjs-editor-add-signature-dialog-label = This modal allows the user to create a signature to add to a PDF document. The user can edit the name (which also serves as the alt text), and optionally save the signature for repeated use.
 pdfjs-editor-add-signature-dialog-title = Add a signature
 pdfjs-editor-add-signature-type-button = Type
@@ -646,12 +657,6 @@ pdfjs-views-manager-pages-status-undo-delete-label =
         [one] 1 page deleted
         *[other] { $count } pages deleted
     }
-pdfjs-views-manager-pages-status-waiting-ready-label = Getting your file ready…
-pdfjs-views-manager-pages-status-waiting-uploading-label = Uploading file…
-pdfjs-views-manager-status-warning-cut-label = Couldn’t cut. Refresh page and try again.
-pdfjs-views-manager-status-warning-copy-label = Couldn’t copy. Refresh page and try again.
-pdfjs-views-manager-status-warning-delete-label = Couldn’t delete. Refresh page and try again.
-pdfjs-views-manager-status-warning-save-label = Couldn’t save. Refresh page and try again.
 pdfjs-views-manager-status-undo-button-label = Undo
 pdfjs-views-manager-status-done-button-label = Done
 pdfjs-views-manager-status-close-button =
@@ -724,14 +729,3 @@ pdfjs-editor-movePageDown-button-label = Move Page Down
 pdfjs-cursor-page-flip-tool-button =
     .title = Page Flip
 pdfjs-cursor-page-flip-tool-button-label = Page Flip
-pdfjs-editor-eraser-button =
-    .title = Erase
-pdfjs-editor-eraser-button-label = Erase
-pdfjs-editor-eraser-editor =
-    .aria-label = Eraser
-pdfjs-editor-undo-button =
-    .title = Undo
-pdfjs-editor-undo-button-label = Undo
-pdfjs-editor-redo-button =
-    .title = Redo
-pdfjs-editor-redo-button-label = Redo
