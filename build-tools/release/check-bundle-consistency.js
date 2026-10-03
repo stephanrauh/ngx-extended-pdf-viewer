@@ -16,9 +16,8 @@
  * How the two get out of sync in normal use:
  *   - `build:base` writes assets/ or bleeding-edge/ depending on the branch checked
  *     out in ../mypdf.js, and stamps only that channel's constant;
- *   - a release run builds with `--quick` (gulp generic only) and bumps the
- *     constant; a later `git reset` in the library reverts the constant but not
- *     the generated files.
+ *   - a release run rebuilds both bundles and bumps the constant; a later
+ *     `git reset` in the library reverts the constant but not the generated files.
  *
  * Only the plain `.mjs` files are required: `--quick` builds legitimately omit the
  * `-es5` and `.min` variants, which CI produces for the published package.

@@ -101,7 +101,8 @@ if (!IS_MAINTENANCE_RELEASE) {
   runCommand('../ngx-extended-pdf-viewer/build-tools/search-for-shai-hulud.sh --full', 'Error 66d: shai-hulud scan failed', 66);
   runCommand('npm rebuild', 'Error 66e: npm rebuild failed', 66);
   process.chdir(path.join('..', 'ngx-extended-pdf-viewer'));
-  runCommand('node ./build-tools/1-build-base-library.js --quick', 'Error 67: build-base-library.js failed for bleeding-edge', 67);
+  // Not --quick, for the reason given at the stable build below.
+  runCommand('node ./build-tools/1-build-base-library.js', 'Error 67: build-base-library.js failed for bleeding-edge', 67);
 
   // Clean up package-lock.json changes from audit fix before switching branches
   process.chdir(path.join('..', 'mypdf.js'));
@@ -136,7 +137,7 @@ process.chdir(path.join('..', 'ngx-extended-pdf-viewer'));
 // bundles carry the same engine. NGX_ASSETS_FOLDER overrides the branch-derived destination.
 if (IS_MAINTENANCE_RELEASE) {
   runCommand(
-    'NGX_ASSETS_FOLDER=bleeding-edge node ./build-tools/1-build-base-library.js --quick',
+    'NGX_ASSETS_FOLDER=bleeding-edge node ./build-tools/1-build-base-library.js',
     `Error 67: build-base-library.js failed for the bleeding-edge bundle (from ${STABLE_BRANCH})`,
     67,
   );
@@ -145,7 +146,9 @@ if (IS_MAINTENANCE_RELEASE) {
 // Deliberately NOT --quick: the full build also produces viewer-*.min.mjs and the *-es5.mjs
 // legacy bundles. The showcase e2e suite (T34-shipped-bundles) loads exactly those variants,
 // which is the only check the minified/legacy artefacts get before CI publishes them. With
-// --quick the files don't exist and T34 skips itself.
+// --quick the files don't exist and T34 skips itself. The same goes for the bleeding-edge build
+// above: demos that force the bleeding-edge bundle (e.g. /options) load its *-es5.mjs files in the
+// old-Chrome e2e projects. CI (5-2-release-library-ci.js) builds both bundles in full, too.
 runCommand('node ./build-tools/1-build-base-library.js', `Error 69: build-base-library.js failed for ${STABLE_BRANCH}`, 69);
 
 // Clean up package-lock.json changes from audit fix
