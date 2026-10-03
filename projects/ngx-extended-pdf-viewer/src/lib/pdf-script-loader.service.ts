@@ -74,32 +74,40 @@ new (function () {
     }
   }
 
-  function supportsPromiseWithResolvers() {
+  // #2687 #3273 The discriminator: the newest built-ins the modern bundle calls.
+  // The modern bundle ships no core-js polyfills, and pdf.js calls these without
+  // feature detection, many of them in the worker. A browser missing any of them
+  // gets the legacy bundle, which polyfills them all. Extend the list whenever
+  // pdf.js starts using a newer built-in. The checks run in a fresh iframe because
+  // zone.js drops the newer Promise statics from the page's own Promise.
+  function supportsModernBuiltIns() {
     const iframe = document.createElement('iframe');
     document.firstElementChild.append(iframe);
-    const useLegacyPdfViewer = 'withResolvers' in iframe.contentWindow['Promise'];
-    iframe.parentElement.removeChild(iframe);
-
-    return useLegacyPdfViewer;
-  }
-
-  // #2687 The discriminator: the newest thing the modern bundle needs.
-  // Iterator helpers arrive later than Promise.withResolvers in every engine
-  // (Chrome/Edge 122+, Firefox 131+, Safari/iOS 18.4+), and the modern bundle
-  // ships no core-js polyfills, so this check decides whether it can run at all.
-  function supportsIteratorHelpers() {
     try {
-      const iterator = [].values();
-      return typeof iterator.map === 'function' && typeof iterator.toArray === 'function';
+      const w = iframe.contentWindow;
+      return (
+        typeof w.Promise.withResolvers === 'function' &&
+        typeof w.Promise.try === 'function' &&
+        typeof w.Iterator === 'function' &&
+        typeof w.Iterator.prototype.toArray === 'function' &&
+        typeof w.Set.prototype.difference === 'function' &&
+        typeof w.Map.prototype.getOrInsertComputed === 'function' &&
+        typeof w.Math.sumPrecise === 'function' &&
+        typeof w.Uint8Array.prototype.toHex === 'function' &&
+        typeof w.Uint8Array.fromBase64 === 'function' &&
+        typeof w.RegExp.escape === 'function' &&
+        typeof w.URL.parse === 'function' &&
+        typeof w.Response.prototype.bytes === 'function'
+      );
     } catch (e) {
       return false;
+    } finally {
+      iframe.remove();
     }
   }
 
   const supportsOptionalChaining = new BrowserCompatibilityTester().supportsOptionalChaining();
-  const supportModernPromises = supportsPromiseWithResolvers();
-  window.ngxExtendedPdfViewerCanRunModernJSCode =
-    supportsOptionalChaining && supportModernPromises && supportsIteratorHelpers();
+  window.ngxExtendedPdfViewerCanRunModernJSCode = supportsOptionalChaining && supportsModernBuiltIns();
 
   // #1321 AbortSignal.any() polyfill for the modern build's main thread.
   // pdf.js v6 calls AbortSignal.any() directly; Safari 17.4 shipped
@@ -281,9 +289,12 @@ new (function () {
       return true;
     }
     this._needsES5 = forceUsingLegacyES5 || (await this.needsES5(useInlineScripts));
-    if (forceUsingLegacyES5) {
-      pdfDefaultOptions.needsES5 = true;
-    }
+    // #3273 modified by ngx-extended-pdf-viewer
+    // workerSrc() and sandboxBundleSrc() read the global flag, not this._needsES5.
+    // Syncing it only when the legacy bundle was forced sent every browser that the
+    // probe routed to the ES5 viewer the modern worker, which it can't run.
+    pdfDefaultOptions.needsES5 = this._needsES5;
+    // #3273 end of modification by ngx-extended-pdf-viewer
     await this.loadViewer(forceReload);
     return this.PDFViewerApplication !== undefined;
   }

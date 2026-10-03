@@ -372,6 +372,49 @@ describe('PDFScriptLoaderService', () => {
       expect(result).toBe(true);
     });
 
+    // #3273 workerSrc() and sandboxBundleSrc() read pdfDefaultOptions.needsES5, so the
+    // probe's verdict must reach it - not only an explicit forceUsingLegacyES5.
+    describe('syncs the ES5 decision into pdfDefaultOptions', () => {
+      let originalNeedsES5: boolean;
+
+      beforeEach(() => {
+        originalNeedsES5 = pdfDefaultOptions.needsES5;
+        jest.spyOn(service as any, 'loadViewer').mockResolvedValue(undefined);
+      });
+
+      afterEach(() => {
+        pdfDefaultOptions.needsES5 = originalNeedsES5;
+      });
+
+      it('sets it when the browser probe picks the legacy bundle', async () => {
+        pdfDefaultOptions.needsES5 = false;
+        jest.spyOn(service as any, 'needsES5').mockResolvedValue(true);
+
+        await service.ensurePdfJsHasBeenLoaded(false, false, false);
+
+        expect(pdfDefaultOptions.needsES5).toBe(true);
+        expect(pdfDefaultOptions.workerSrc()).toContain('-es5.mjs');
+        expect(pdfDefaultOptions.sandboxBundleSrc()).toContain('-es5.mjs');
+      });
+
+      it('clears it when the browser probe picks the modern bundle', async () => {
+        pdfDefaultOptions.needsES5 = true;
+        jest.spyOn(service as any, 'needsES5').mockResolvedValue(false);
+
+        await service.ensurePdfJsHasBeenLoaded(false, false, false);
+
+        expect(pdfDefaultOptions.needsES5).toBe(false);
+        expect(pdfDefaultOptions.workerSrc()).not.toContain('-es5.mjs');
+      });
+
+      it('sets it when the legacy bundle is forced', async () => {
+        pdfDefaultOptions.needsES5 = false;
+
+        await service.ensurePdfJsHasBeenLoaded(false, true, false);
+
+        expect(pdfDefaultOptions.needsES5).toBe(true);
+      });
+    });
   });
 
   describe('ngOnDestroy', () => {
@@ -581,15 +624,24 @@ describe('PDFScriptLoaderService', () => {
       const inline = read('src/lib/pdf-script-loader.service.ts');
       // Every capability check and polyfill of the asset must exist inline, too.
       for (const marker of [
-        'withResolvers',
         'supportsOptionalChaining',
-        'supportsIteratorHelpers',
+        'supportsModernBuiltIns',
         'ngxExtendedPdfViewerCanRunModernJSCode',
         'AbortSignal.any',
       ]) {
         expect(asset).toContain(marker);
         expect(inline).toContain(marker);
       }
+    });
+
+    // #3273 The built-in checks are the part that decides the bundle, so compare them
+    // line by line instead of trusting a marker.
+    it('checks the same built-ins inline and in the asset file', () => {
+      const checks = (source: string) => source.match(/typeof w\.[\w.]+ === 'function'/g);
+      const asset = checks(read('assets/op-chaining-support.js'));
+      expect(asset).toContain("typeof w.Promise.try === 'function'");
+      expect(asset).toContain("typeof w.Uint8Array.prototype.toHex === 'function'");
+      expect(checks(read('src/lib/pdf-script-loader.service.ts'))).toEqual(asset);
     });
   });
 });

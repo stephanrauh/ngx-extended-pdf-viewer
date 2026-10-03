@@ -1,12 +1,11 @@
-// #2687 #2536 Which pdf.js bundle can this browser run?
+// #2687 #2536 #3273 Which pdf.js bundle can this browser run?
 //
 // Sets window.ngxExtendedPdfViewerCanRunModernJSCode; false routes the viewer to
-// the `*-es5.mjs` (legacy) bundle. The deciding check is Promise.withResolvers,
-// so the modern bundle starts at Chrome 119 / Edge 119 / Firefox 121 / Safari 17.4,
-// and everything below that must be covered by LEGACY_ENV_TARGETS in the fork's
-// gulpfile.mjs (currently Chrome/Edge 80, Firefox 78, Safari 13.1, iOS 13.4).
-// Change one side and you must change the other, or old browsers receive code
-// they cannot parse.
+// the `*-es5.mjs` (legacy) bundle. The modern bundle is for browsers that have
+// every built-in listed in supportsModernBuiltIns(); everything else must be
+// covered by LEGACY_ENV_TARGETS in the fork's gulpfile.mjs (currently Chrome/Edge
+// 80, Firefox 78, Safari 13.1, iOS 13.4). Change one side and you must change the
+// other, or old browsers receive code they cannot run.
 //
 // THIS FILE EXISTS THREE TIMES and the copies must stay identical:
 //   assets/op-chaining-support.js, bleeding-edge/op-chaining-support.js, and the
@@ -39,38 +38,47 @@ new (function () {
     }
   }
 
-  function supportsPromiseWithResolvers() {
+  // #2687 #3273 The discriminator: the newest built-ins the modern bundle calls.
+  //
+  // The modern bundle ships NO core-js polyfills (SKIP_BABEL, and Babel transpiles
+  // syntax but never APIs), and pdf.js calls these without feature detection, many
+  // of them in the worker, where no polyfill of the page reaches. A browser missing
+  // any of them gets the legacy bundle, which polyfills them all via core-js.
+  //
+  // Extend the list whenever pdf.js starts using a newer built-in. It went stale
+  // once already: the check stopped at iterator helpers, so Chrome 126 loaded the
+  // modern bundle and died on Promise.try and Uint8Array.prototype.toHex (#3273).
+  //
+  // The checks run in a fresh iframe because zone.js replaces the page's Promise
+  // and drops its newer statics, even in browsers that support them natively.
+  function supportsModernBuiltIns() {
     const iframe = document.createElement('iframe');
     document.firstElementChild.append(iframe);
-    const useLegacyPdfViewer = 'withResolvers' in iframe.contentWindow['Promise'];
-    iframe.parentElement.removeChild(iframe);
-
-    return useLegacyPdfViewer;
-  }
-
-  // #2687 The discriminator: the newest thing the modern bundle needs.
-  //
-  // pdf.js 6.x calls iterator helpers on Map/Set (`.values().some()`,
-  // `.keys().filter().toArray()`, ...) and the modern bundle ships NO core-js
-  // polyfills (SKIP_BABEL, and Babel transpiles syntax but never APIs). Iterator
-  // helpers arrived later than Promise.withResolvers in every engine
-  // (Chrome/Edge 122+, Firefox 131+, Safari/iOS 18.4+ versus 119/121/17.4), so
-  // this single check subsumes the Promise one and is what actually decides
-  // whether the modern bundle will run. Without it, e.g. Safari 17.4-18.3 loads
-  // the modern viewer and dies on the first Map iterator.
-  function supportsIteratorHelpers() {
     try {
-      const iterator = [].values();
-      return typeof iterator.map === 'function' && typeof iterator.toArray === 'function';
+      const w = iframe.contentWindow;
+      return (
+        typeof w.Promise.withResolvers === 'function' &&
+        typeof w.Promise.try === 'function' &&
+        typeof w.Iterator === 'function' &&
+        typeof w.Iterator.prototype.toArray === 'function' &&
+        typeof w.Set.prototype.difference === 'function' &&
+        typeof w.Map.prototype.getOrInsertComputed === 'function' &&
+        typeof w.Math.sumPrecise === 'function' &&
+        typeof w.Uint8Array.prototype.toHex === 'function' &&
+        typeof w.Uint8Array.fromBase64 === 'function' &&
+        typeof w.RegExp.escape === 'function' &&
+        typeof w.URL.parse === 'function' &&
+        typeof w.Response.prototype.bytes === 'function'
+      );
     } catch (e) {
       return false;
+    } finally {
+      iframe.remove();
     }
   }
 
   const supportsOptionalChaining = new BrowserCompatibilityTester().supportsOptionalChaining();
-  const supportModernPromises = supportsPromiseWithResolvers();
-  window.ngxExtendedPdfViewerCanRunModernJSCode =
-    supportsOptionalChaining && supportModernPromises && supportsIteratorHelpers();
+  window.ngxExtendedPdfViewerCanRunModernJSCode = supportsOptionalChaining && supportsModernBuiltIns();
 
   // #1321 AbortSignal.any() polyfill for the modern build's main thread.
   // pdf.js v6 calls AbortSignal.any() directly; Safari 17.4 shipped
