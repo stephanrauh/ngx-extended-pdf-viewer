@@ -54,14 +54,17 @@ describe('Thumbnail embedded view lifecycle', () => {
     expect(container.querySelectorAll('img')).toHaveLength(0);
   });
 
-  it('destroys a replaced page view without accumulating duplicate thumbnails', () => {
+  it('keeps the existing thumbnail when a pasted page reuses its id', () => {
+    // Pasting a copy of page 1 after page 1: pdf.js renumbers the old page 2 to 3
+    // (updateId) and clones the copy as a new thumbnail with id 2.
     const { fixture, container, render } = setup();
     render(1);
-    render(1);
-    expect(TrackThumbnailDirective.destroyed).toHaveBeenCalledTimes(1);
-    expect(container.querySelectorAll('img')).toHaveLength(1);
+    render(2);
+    render(2);
+    expect(TrackThumbnailDirective.destroyed).not.toHaveBeenCalled();
+    expect(container.querySelectorAll('img')).toHaveLength(3);
     fixture.destroy();
-    expect(TrackThumbnailDirective.destroyed).toHaveBeenCalledTimes(2);
+    expect(TrackThumbnailDirective.destroyed).toHaveBeenCalledTimes(3);
   });
 
   it('releases the old document and independently owns the next document views', () => {

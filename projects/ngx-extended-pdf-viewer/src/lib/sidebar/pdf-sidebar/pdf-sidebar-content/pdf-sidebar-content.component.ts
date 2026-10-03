@@ -44,7 +44,9 @@ export class PdfSidebarContentComponent implements OnDestroy {
 
   public defaultThumbnail = viewChild.required<TemplateRef<any>>('defaultThumbnail');
 
-  private readonly thumbnailViews = new Map<number, EmbeddedViewRef<unknown>>();
+  // #3268 Not keyed by page id: pasting a copied page creates a second thumbnail
+  // with an id that an existing (renumbered) thumbnail still uses.
+  private readonly thumbnailViews = new Set<EmbeddedViewRef<unknown>>();
 
   private linkService: PDFLinkService | undefined;
 
@@ -95,18 +97,14 @@ export class PdfSidebarContentComponent implements OnDestroy {
   }
 
   private destroyThumbnailViews(): void {
-    for (const view of this.thumbnailViews.values()) {
-      this.destroyThumbnailView(view);
+    for (const view of this.thumbnailViews) {
+      // These nodes are appended manually, outside an Angular view container.
+      for (const node of view.rootNodes as Node[]) {
+        node.parentNode?.removeChild(node);
+      }
+      view.destroy();
     }
     this.thumbnailViews.clear();
-  }
-
-  private destroyThumbnailView(view: EmbeddedViewRef<unknown>): void {
-    // These nodes are appended manually, outside an Angular view container.
-    for (const node of view.rootNodes as Node[]) {
-      node.parentNode?.removeChild(node);
-    }
-    view.destroy();
   }
 
   private createThumbnail({
@@ -118,12 +116,8 @@ export class PdfSidebarContentComponent implements OnDestroy {
   }: RenderCustomThumbnailEvent): HTMLImageElement | undefined {
     this.linkService = linkService;
     const template = this.customThumbnail() ?? this.defaultThumbnail();
-    const previousView = this.thumbnailViews.get(id);
-    if (previousView) {
-      this.destroyThumbnailView(previousView);
-    }
     const view = template.createEmbeddedView(null);
-    this.thumbnailViews.set(id, view);
+    this.thumbnailViews.add(view);
     const newElement = view.rootNodes[0] as HTMLElement;
     newElement.classList.remove('pdf-viewer-template');
 
