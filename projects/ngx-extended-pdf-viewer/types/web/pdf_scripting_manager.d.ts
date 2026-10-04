@@ -14,7 +14,7 @@ export type PDFScriptingManagerOptions = {
      * initializing scripting; must contain a `createScripting` method.
      * PLEASE NOTE: Primarily intended for the default viewer use-case.
      */
-    externalServices?: Object | undefined;
+    externalServices?: object | undefined;
     /**
      * - The function that is used to lookup
      * the necessary document properties.
@@ -22,14 +22,14 @@ export type PDFScriptingManagerOptions = {
     docProperties?: Function | undefined;
 };
 /**
- * @typedef {Object} PDFScriptingManagerOptions
+ * @typedef {object} PDFScriptingManagerOptions
  * @property {EventBus} eventBus - The application event bus.
  * @property {string} [sandboxBundleSrc] - The path and filename of the
  *   scripting bundle.
- * @property {Object} [externalServices] - The factory that is used when
+ * @property {object} [externalServices] - The factory that is used when
  *   initializing scripting; must contain a `createScripting` method.
  *   PLEASE NOTE: Primarily intended for the default viewer use-case.
- * @property {function} [docProperties] - The function that is used to lookup
+ * @property {Function} [docProperties] - The function that is used to lookup
  *   the necessary document properties.
  */
 export class PDFScriptingManager {

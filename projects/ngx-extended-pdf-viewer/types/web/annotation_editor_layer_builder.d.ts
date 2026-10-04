@@ -23,7 +23,7 @@ export type AnnotationEditorLayerBuilderRenderOptions = {
     intent?: string | undefined;
 };
 /**
- * @typedef {Object} AnnotationEditorLayerBuilderOptions
+ * @typedef {object} AnnotationEditorLayerBuilderOptions
  * @property {AnnotationEditorUIManager} [uiManager]
  * @property {number} pageIndex
  * @property {L10n} [l10n]
@@ -32,10 +32,10 @@ export type AnnotationEditorLayerBuilderRenderOptions = {
  * @property {AnnotationLayer} [annotationLayer]
  * @property {TextLayer} [textLayer]
  * @property {DrawLayer} [drawLayer]
- * @property {function} [onAppend]
+ * @property {Function} [onAppend]
  */
 /**
- * @typedef {Object} AnnotationEditorLayerBuilderRenderOptions
+ * @typedef {object} AnnotationEditorLayerBuilderRenderOptions
  * @property {PageViewport} viewport
  * @property {string} [intent] - The default value is "display".
  */

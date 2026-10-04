@@ -1,25 +1,26 @@
 export type PDFPageProxy = import("../src/display/api").PDFPageProxy;
 export type StructTreeLayerBuilderOptions = {
     pdfPage: PDFPageProxy;
-    rawDims: Object;
+    rawDims: object;
 };
 /**
- * @typedef {Object} StructTreeLayerBuilderOptions
+ * @typedef {object} StructTreeLayerBuilderOptions
  * @property {PDFPageProxy} pdfPage
- * @property {Object} rawDims
+ * @property {object} rawDims
  */
 export class StructTreeLayerBuilder {
     /**
-     * @param {StructTreeLayerBuilderOptions} options
+     * @param {PDFPageProxy} pdfPage
+     * @param {object} rawDims
      */
-    constructor(pdfPage: any, rawDims: any);
+    constructor(pdfPage: PDFPageProxy, rawDims: object);
     /**
      * @returns {Promise<void>}
      */
     render(): Promise<void>;
     /**
      * @param {string} annotationId
-     * @param {Object} [options]
+     * @param {object} [options]
      * @param {boolean} [options.enableLinkOwnership]
      * @returns {Promise<Map<string, string>|null|undefined>}
      */

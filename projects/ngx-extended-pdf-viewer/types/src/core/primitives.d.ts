@@ -1,6 +1,10 @@
 export const CIRCULAR_REF: unique symbol;
 export function clearPrimitiveCaches(): void;
 export class Cmd {
+    /**
+     * NOTE: This method is invoked a lot, hence `getOrInsertComputed` is
+     *       purposely *not* used to avoid creating unneeded callback functions.
+     */
     static get(cmd: any): any;
     constructor(cmd: any);
     cmd: any;
@@ -45,12 +49,20 @@ export function isDict(v: any, type: any): boolean;
 export function isName(v: any, name: any): boolean;
 export function isRefsEqual(v1: any, v2: any): boolean;
 export class Name {
+    /**
+     * NOTE: This method is invoked a lot, hence `getOrInsertComputed` is
+     *       purposely *not* used to avoid creating unneeded callback functions.
+     */
     static get(name: any): any;
     constructor(name: any);
     name: any;
 }
 export class Ref {
     static fromString(str: any): any;
+    /**
+     * NOTE: This method is invoked a lot, hence `getOrInsertComputed` is
+     *       purposely *not* used to avoid creating unneeded callback functions.
+     */
     static get(num: any, gen: any): any;
     constructor(str: any, num: any, gen: any);
     num: any;

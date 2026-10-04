@@ -14,12 +14,14 @@ export class DrawingEditor extends AnnotationEditor {
     static _INNER_MARGIN: number;
     static _mergeSVGProperties(p1: any, p2: any): any;
     /**
-     * @param {Object} options
-     * @return {DrawingOptions} the default options to use for a new editor.
+     * @abstract
+     * @param {object} _options
+     * @returns {DrawingOptions} the default options to use for a new editor.
      */
-    static getDefaultDrawingOptions(_options: any): DrawingOptions;
+    static getDefaultDrawingOptions(_options: object): DrawingOptions;
     /**
-     * @return {Map<AnnotationEditorParamsType, string>} a map between the
+     * @abstract
+     * @returns {Map<AnnotationEditorParamsType, string>} a map between the
      *   parameter types and the name of the options.
      */
     static get typesMap(): Map<{
@@ -53,15 +55,24 @@ export class DrawingEditor extends AnnotationEditor {
     static get defaultPropertiesToUpdate(): any[][];
     static onScaleChangingWhenDrawing(): void;
     /**
-     * @param {Object} params
-     * @param {number} params.x - The x coordinate of the event.
-     * @param {number} params.y - The y coordinate of the event.
-     * @param {Array<number>} params.box - The target's client bounding box.
-     * @param {number} params.rotation - The viewport rotation.
-     * @param {AnnotationEditorLayer} params.parent - The parent layer.
-     * @param {boolean} params.isLTR - Whether the direction is left-to-right.
+     * @abstract
+     * @param {object} _params
+     * @param {number} _params.x - The x coordinate of the event.
+     * @param {number} _params.y - The y coordinate of the event.
+     * @param {[number, number, number, number]} _params.box - The target's
+     *   client bounding box.
+     * @param {number} _params.rotation - The viewport rotation.
+     * @param {AnnotationEditorLayer} _params.parent - The parent layer.
+     * @param {boolean} _params.isLTR - Whether the direction is left-to-right.
      */
-    static createDrawerInstance(_params: any): void;
+    static createDrawerInstance(_params: {
+        x: number;
+        y: number;
+        box: [number, number, number, number];
+        rotation: number;
+        parent: AnnotationEditorLayer;
+        isLTR: boolean;
+    }): void;
     /**
      * @param {AnnotationEditorLayer} _parent
      * @param {PointerEvent} event
@@ -88,16 +99,17 @@ export class DrawingEditor extends AnnotationEditor {
     static endDrawing(isAborted: any): any;
     /**
      * Deserialize the drawing outlines.
-     * @param {number} pageX - The x coordinate of the page.
-     * @param {number} pageY - The y coordinate of the page.
-     * @param {number} pageWidth - The width of the page.
-     * @param {number} pageHeight - The height of the page.
-     * @param {number} innerMargin - The outline's inner margin.
-     * @param {Object} data - The data to deserialize.
-     * @param {AnnotationEditorUIManager} uiManager
-     * @returns {Object} The deserialized outlines.
+     * @abstract
+     * @param {number} _pageX - The x coordinate of the page.
+     * @param {number} _pageY - The y coordinate of the page.
+     * @param {number} _pageWidth - The width of the page.
+     * @param {number} _pageHeight - The height of the page.
+     * @param {number} _innerMargin - The outline's inner margin.
+     * @param {object} _data - The data to deserialize.
+     * @param {AnnotationEditorUIManager} _uiManager
+     * @returns {object} The deserialized outlines.
      */
-    static deserializeDraw(_pageX: any, _pageY: any, _pageWidth: any, _pageHeight: any, _innerMargin: any, _data: any, _uiManager: any): Object;
+    static deserializeDraw(_pageX: number, _pageY: number, _pageWidth: number, _pageHeight: number, _innerMargin: number, _data: object, _uiManager: AnnotationEditorUIManager): object;
     /** @inheritdoc */
     static deserialize(data: any, parent: any, uiManager: any): Promise<AnnotationEditor | null>;
     /**
@@ -132,9 +144,11 @@ export class DrawingEditor extends AnnotationEditor {
     get propertiesToUpdate(): any[][];
     /**
      * Update a property and make this action undoable.
-     * @param {string} color
+     * @param {number} type
+     * @param {string} name
+     * @param {*} value
      */
-    _updateProperty(type: any, name: any, value: any): void;
+    _updateProperty(type: number, name: string, value: any): void;
     /**
      * Update color and opacity atomically as one undoable command.
      */
@@ -156,9 +170,9 @@ export class DrawingEditor extends AnnotationEditor {
     onScaleChanging(): void;
     /**
      * Create the drawing options.
-     * @param {Object} _data
+     * @param {object} _data
      */
-    createDrawingOptions(_data: Object): void;
+    createDrawingOptions(_data: object): void;
     serializeDraw(isForCopying: any): any;
     /** @inheritdoc */
     renderAnnotationElement(annotation: any): null;

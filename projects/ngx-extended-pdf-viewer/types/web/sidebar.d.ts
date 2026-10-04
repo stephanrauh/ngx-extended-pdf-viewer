@@ -3,7 +3,7 @@
  */
 export class Sidebar {
     /**
-     * @typedef {Object} SidebarElements
+     * @typedef {object} SidebarElements
      * @property {HTMLElement} sidebar - The sidebar element.
      * @property {HTMLElement} resizer - The sidebar resizer element.
      * @property {HTMLElement} toggleButton - The button used to toggle the
@@ -52,9 +52,9 @@ export class Sidebar {
     onStopResizing(): void;
     /**
      * Callback to be executed when the sidebar is being resized.
-     * @param {number} newWidth - The new width of the sidebar in pixels.
+     * @param {number} _newWidth - The new width of the sidebar in pixels.
      */
-    onResizing(_newWidth: any): void;
+    onResizing(_newWidth: number): void;
     /**
      * Toggle the sidebar's visibility.
      * @param {boolean} [visibility] - The visibility state to set.

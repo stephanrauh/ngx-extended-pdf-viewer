@@ -3,7 +3,7 @@ export type WaitOnEventOrTimeoutParameters = {
      * - The event target, can for example be:
      * `window`, `document`, a DOM element, or an {EventBus} instance.
      */
-    target: Object;
+    target: object;
     /**
      * - The name of the event.
      */
@@ -23,21 +23,21 @@ export class EventBus {
     _off(eventName: any, listener: any, options?: null): void;
     /**
      * @param {string} eventName
-     * @param {function} listener
-     * @param {Object} [options]
+     * @param {Function} listener
+     * @param {object} [options]
      */
-    on(eventName: string, listener: Function, options?: Object): void;
+    on(eventName: string, listener: Function, options?: object): void;
     /**
      * @param {string} eventName
-     * @param {function} listener
-     * @param {Object} [options]
+     * @param {Function} listener
+     * @param {object} [options]
      */
-    off(eventName: string, listener: Function, options?: Object): void;
+    off(eventName: string, listener: Function, options?: object): void;
     /**
      * @param {string} eventName
-     * @param {Object} data
+     * @param {object} data
      */
-    dispatch(eventName: string, data: Object): void;
+    dispatch(eventName: string, data: object): void;
     destroy(): void;
     #private;
 }
@@ -50,8 +50,8 @@ export class FirefoxEventBus extends EventBus {
     #private;
 }
 /**
- * @typedef {Object} WaitOnEventOrTimeoutParameters
- * @property {Object} target - The event target, can for example be:
+ * @typedef {object} WaitOnEventOrTimeoutParameters
+ * @property {object} target - The event target, can for example be:
  *   `window`, `document`, a DOM element, or an {EventBus} instance.
  * @property {string} name - The name of the event.
  * @property {number} delay - The delay, in milliseconds, after which the
@@ -61,8 +61,7 @@ export class FirefoxEventBus extends EventBus {
  * Allows waiting for an event or a timeout, whichever occurs first.
  * Can be used to ensure that an action always occurs, even when an event
  * arrives late or not at all.
- *
- * @param {WaitOnEventOrTimeoutParameters}
+ * @param {WaitOnEventOrTimeoutParameters} params
  * @returns {Promise} A promise that is resolved with a {WaitOnType} value.
  */
 export function waitOnEventOrTimeout({ target, name, delay }: WaitOnEventOrTimeoutParameters): Promise<any>;

@@ -6,7 +6,6 @@ export class PdfTextExtractor {
     constructor(externalServices: any, pdfViewer: any, eventBus: any);
     /**
      * Builds up all of the text from a PDF.
-     *
      * @param {number} requestId
      */
     extractTextContent(requestId: number): Promise<void>;

@@ -18,7 +18,6 @@ export class BasePDFStream {
      *
      * NOTE: Currently this method is only expected to be invoked *after*
      * the `BasePDFStreamReader.prototype.headersReady` promise has resolved.
-     *
      * @param {number} begin - the start offset of the data.
      * @param {number} end - the end offset of the data.
      * @returns {BasePDFStreamRangeReader}
@@ -26,9 +25,9 @@ export class BasePDFStream {
     getRangeReader(begin: number, end: number): BasePDFStreamRangeReader;
     /**
      * Cancels all opened reader and closes all their opened requests.
-     * @param {Object} reason - the reason for cancelling
+     * @param {object} reason - the reason for cancelling
      */
-    cancelAllRequests(reason: Object): void;
+    cancelAllRequests(reason: object): void;
     #private;
 }
 /**
@@ -48,9 +47,9 @@ export class BasePDFStreamRangeReader {
     read(): Promise<any>;
     /**
      * Cancels all pending read requests and closes the stream.
-     * @param {Object} reason
+     * @param {object} reason
      */
-    cancel(reason: Object): void;
+    cancel(reason: object): void;
 }
 /**
  * Interface for a PDF binary data reader.
@@ -115,7 +114,7 @@ export class BasePDFStreamReader {
     read(): Promise<any>;
     /**
      * Cancels all pending read requests and closes the stream.
-     * @param {Object} reason
+     * @param {object} reason
      */
-    cancel(reason: Object): void;
+    cancel(reason: object): void;
 }

@@ -10,7 +10,6 @@ export class PagesMapper {
     get pagesNumber(): number;
     /**
      * Move a set of pages to a new position.
-     *
      * @param {Set<number>} selectedPages - Page numbers being moved (1-indexed).
      * @param {number[]} pagesToMove - Ordered list of page numbers to move.
      * @param {number} index - Zero-based insertion index in the page-number list.
@@ -44,14 +43,14 @@ export class PagesMapper {
      * Gets the current page mapping suitable for saving.
      * @param {Map<number, Array<number>>} [idToPageNumber]
      * @param {Int32Array} [copyLevels]
-     * @returns {{pageInfos: Array<Object>, copyLevels: Int32Array|null}}
+     * @returns {{pageInfos: Array<object>, copyLevels: Int32Array | null}}
      */
     getPageMappingForSaving(idToPageNumber?: Map<number, Array<number>>, copyLevels?: Int32Array): {
-        pageInfos: Array<Object>;
+        pageInfos: Array<object>;
         copyLevels: Int32Array | null;
     };
     extractPages(extractedPageNumbers: any): {
-        pageInfos: Array<Object>;
+        pageInfos: Array<object>;
         copyLevels: Int32Array | null;
     };
     /**

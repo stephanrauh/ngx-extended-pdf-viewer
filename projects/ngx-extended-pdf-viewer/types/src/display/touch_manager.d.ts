@@ -18,16 +18,16 @@ export type TouchManagerOptions = {
     signal: AbortSignal;
 };
 /**
- * @typedef {Object} TouchManagerOptions
+ * @typedef {object} TouchManagerOptions
  * @property {HTMLElement | Window} container
- * @property {function} [isPinchingDisabled]
- * @property {function} [isPinchingStopped]
- * @property {function} [onPinchStart]
- * @property {function} [onPinching] - Called with the previous client
+ * @property {Function} [isPinchingDisabled]
+ * @property {Function} [isPinchingStopped]
+ * @property {Function} [onPinchStart]
+ * @property {Function} [onPinching] - Called with the previous client
  *   midpoint, the previous/current screen distance, and the client midpoint
  *   delta.
- * @property {function} [onPinchEnd]
- * @property {function} [onPanning] - Called with the client midpoint delta
+ * @property {Function} [onPinchEnd]
+ * @property {Function} [onPanning] - Called with the client midpoint delta
  *   when no scale update is emitted.
  * @property {AbortSignal} signal
  */

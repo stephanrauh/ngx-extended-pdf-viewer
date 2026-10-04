@@ -5,11 +5,11 @@ export type DrawLayerOptions = {
     /**
      * Filter factory used to style selections (optional).
      */
-    filterFactory?: Object | null | undefined;
+    filterFactory?: object | null | undefined;
     /**
      * Page foreground/background colors for HCM (optional).
      */
-    pageColors?: Object | null | undefined;
+    pageColors?: object | null | undefined;
     /**
      *   Zero-based page index.
      */
@@ -95,7 +95,6 @@ export class DrawLayer {
     static #textLayers: WeakMap<Element, TextLayerSelectionData>;
     /**
      * Clean up the selection for a text layer.
-     *
      * @param {Element} textLayer
      *   Text layer.
      * @returns {undefined}
@@ -117,7 +116,6 @@ export class DrawLayer {
      * We want to display the selection in a separate layer on top of the text
      * layer because the text layer has `mix-blend-mode: multiply` and we want
      * the selection to have a different blend mode.
-     *
      * @returns {undefined}
      *   Nothing.
      */
@@ -127,8 +125,6 @@ export class DrawLayer {
     /**
      * @param {DrawLayerOptions} options
      *   Configuration.
-     * @returns
-     *   Instance.
      */
     constructor({ filterFactory, pageColors, pageIndex, textLayer, }: DrawLayerOptions);
     pageIndex: number;

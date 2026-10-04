@@ -60,7 +60,7 @@ export type PageViewportCloneParameters = {
     dontFlip?: boolean | undefined;
 };
 /**
- * @typedef {Object} PageViewportParameters
+ * @typedef {object} PageViewportParameters
  * @property {Array<number>} viewBox - The xMin, yMin, xMax and
  *   yMax coordinates.
  * @property {number} userUnit - The size of units.
@@ -74,7 +74,7 @@ export type PageViewportCloneParameters = {
  *   The default value is `false`.
  */
 /**
- * @typedef {Object} PageViewportCloneParameters
+ * @typedef {object} PageViewportCloneParameters
  * @property {number} [scale] - The scale, overriding the one in the cloned
  *   viewport. The default value is `this.scale`.
  * @property {number} [rotation] - The rotation, in degrees, overriding the one
@@ -91,7 +91,7 @@ export type PageViewportCloneParameters = {
  */
 export class PageViewport {
     /**
-     * @param {PageViewportParameters}
+     * @param {PageViewportParameters} params
      */
     constructor({ viewBox, userUnit, scale, rotation, offsetX, offsetY, dontFlip, }: PageViewportParameters);
     viewBox: number[];
@@ -105,9 +105,9 @@ export class PageViewport {
     height: number;
     /**
      * The original, un-scaled, viewport dimensions.
-     * @type {Object}
+     * @type {object}
      */
-    get rawDims(): Object;
+    get rawDims(): object;
     /**
      * Clones viewport, with optional additional properties.
      * @param {PageViewportCloneParameters} [params]

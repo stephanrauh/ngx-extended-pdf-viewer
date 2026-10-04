@@ -88,7 +88,6 @@ export class PDFDateString {
      * Moreover, Adobe Acrobat doesn't handle changing the date to universal time
      * and doesn't use the user's time zone (effectively ignoring the HH' and mm'
      * parts of the date string).
-     *
      * @param {string} input
      * @returns {Date|null}
      */
@@ -125,6 +124,6 @@ export class StatTimer {
     #private;
 }
 export function stopEvent(e: any): void;
-export const SupportedImageMimeTypes: string[];
+export const SupportedImageMimeTypes: Set<string>;
 import { PageViewport } from "./page_viewport.js";
 export {};

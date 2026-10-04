@@ -64,11 +64,11 @@ pdfjs-cursor-hand-tool-button =
     .title = Aktivēt rokas rīku
 pdfjs-cursor-hand-tool-button-label = Rokas rīks
 pdfjs-scroll-vertical-button =
-    .title = Izmantot vertikālo ritināšanu
-pdfjs-scroll-vertical-button-label = Vertikālā ritināšana
+    .title = Izmantot statenisko ritināšanu
+pdfjs-scroll-vertical-button-label = Stateniskā ritināšana
 pdfjs-scroll-horizontal-button =
-    .title = Izmantot horizontālo ritināšanu
-pdfjs-scroll-horizontal-button-label = Horizontālā ritināšana
+    .title = Izmantot līmenisko ritināšanu
+pdfjs-scroll-horizontal-button-label = Līmeniskā ritināšana
 pdfjs-scroll-wrapped-button =
     .title = Izmantot apkļauto ritināšanu
 pdfjs-scroll-wrapped-button-label = Apkļautā ritināšana
@@ -87,7 +87,7 @@ pdfjs-spread-even-button-label = Pāra izpletumi
 pdfjs-document-properties-button =
     .title = Dokumenta iestatījumi…
 pdfjs-document-properties-button-label = Dokumenta iestatījumi…
-pdfjs-document-properties-file-name = Faila nosaukums:
+pdfjs-document-properties-file-name = Datnes nosaukums:
 pdfjs-document-properties-file-size = Faila izmērs:
 pdfjs-document-properties-title = Nosaukums:
 pdfjs-document-properties-author = Autors:
@@ -127,6 +127,7 @@ pdfjs-document-properties-linearized = Ātrā tīmekļa skats:
 pdfjs-document-properties-linearized-yes = Jā
 pdfjs-document-properties-linearized-no = Nē
 pdfjs-document-properties-close-button = Aizvērt
+pdfjs-digital-signature-properties-view-certificate = Apskatīt sertifikātu
 
 ## Print
 
@@ -140,18 +141,6 @@ pdfjs-printing-not-ready = Uzmanību: PDF nav pilnībā ielādēts drukāšanai.
 
 ## Tooltips and alt text for side panel toolbar buttons
 
-pdfjs-toggle-sidebar-button =
-    .title = Pārslēgt sānu joslu
-pdfjs-toggle-sidebar-button-label = Pārslēgt sānu joslu
-pdfjs-document-outline-button =
-    .title = Rādīt dokumenta struktūru (veiciet dubultklikšķi lai izvērstu/sakļautu visus vienumus)
-pdfjs-document-outline-button-label = Dokumenta saturs
-pdfjs-attachments-button =
-    .title = Rādīt pielikumus
-pdfjs-attachments-button-label = Pielikumi
-pdfjs-thumbs-button =
-    .title = Parādīt sīktēlus
-pdfjs-thumbs-button-label = Sīktēli
 pdfjs-findbar-button =
     .title = Meklēt dokumentā
 pdfjs-findbar-button-label = Meklēt
@@ -160,18 +149,14 @@ pdfjs-findbar-button-label = Meklēt
 
 # Variables:
 #   $page (Number) - the page number
-pdfjs-thumb-page-title =
-    .title = Lapa { $page }
-# Variables:
-#   $page (Number) - the page number
 pdfjs-thumb-page-canvas =
     .aria-label = Lapas { $page } sīktēls
 
 ## Find panel button title and messages
 
 pdfjs-find-input =
-    .title = Meklēt
     .placeholder = Meklēt dokumentā…
+    .title = Meklēt
 pdfjs-find-previous-button =
     .title = Atrast iepriekšējo
 pdfjs-find-previous-button-label = Iepriekšējā
@@ -244,9 +229,18 @@ pdfjs-editor-signature-add-signature-button-label = Pievienot jaunu parakstu
 
 pdfjs-editor-alt-text-add-description-label = Pievienot aprakstu
 
+## New alt-text dialog
+## Group note for entire feature: Alternative text (alt text) helps when people can't see the image. This feature includes a tool to create alt text automatically using an AI model that works locally on the user's device to preserve privacy.
+
+pdfjs-editor-new-alt-text-disclaimer-learn-more-url = Uzzināt vairāk
+
 ## Add a signature dialog
 
 pdfjs-editor-add-signature-dialog-title = Pievienot parakstu
+
+## Controls
+
+pdfjs-editor-add-signature-image-upload-error-description = Jāpŗabauda savienojums ar internetu vai jāmēģina cits attēls.
 
 ## Dialog buttons
 
@@ -274,6 +268,19 @@ pdfjs-views-manager-add-file-button =
     .title = Pievienot datni
 pdfjs-views-manager-add-file-button-label = Pievienot datni
 
+# Additional translations for ngx-extended-pdf-viewer (lv)
+pdfjs-toggle-sidebar-button =
+    .title = Pārslēgt sānu joslu
+pdfjs-toggle-sidebar-button-label = Pārslēgt sānu joslu
+pdfjs-document-outline-button =
+    .title = Rādīt dokumenta struktūru (veiciet dubultklikšķi lai izvērstu/sakļautu visus vienumus)
+pdfjs-document-outline-button-label = Dokumenta saturs
+pdfjs-attachments-button =
+    .title = Rādīt pielikumus
+pdfjs-attachments-button-label = Pielikumi
+pdfjs-thumbs-button =
+    .title = Parādīt sīktēlus
+pdfjs-thumbs-button-label = Sīktēli
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-save-button =
     .title = Save
@@ -440,7 +447,6 @@ pdfjs-editor-new-alt-text-textarea =
     .placeholder = Write your description here…
 pdfjs-editor-new-alt-text-description = Short description for people who can’t see the image or when the image doesn’t load.
 pdfjs-editor-new-alt-text-disclaimer1 = This alt text was created automatically and may be inaccurate.
-pdfjs-editor-new-alt-text-disclaimer-learn-more-url = Learn more
 pdfjs-editor-new-alt-text-create-automatically-button-label = Create alt text automatically
 pdfjs-editor-new-alt-text-not-now-button = Not now
 pdfjs-editor-new-alt-text-error-title = Couldn’t create alt text automatically
@@ -527,7 +533,6 @@ pdfjs-editor-add-signature-clear-button =
 pdfjs-editor-add-signature-save-checkbox = Save signature
 pdfjs-editor-add-signature-save-warning-message = You’ve reached the limit of 5 saved signatures. Remove one to save more.
 pdfjs-editor-add-signature-image-upload-error-title = Couldn’t upload image
-pdfjs-editor-add-signature-image-upload-error-description = Check your network connection or try another image.
 pdfjs-editor-add-signature-image-no-data-error-title = Can’t convert this image into a signature
 pdfjs-editor-add-signature-image-no-data-error-description = Please try uploading a different image.
 pdfjs-editor-add-signature-error-close-button = Close
@@ -653,7 +658,6 @@ pdfjs-digital-signature-properties-certificate-untrusted-untrusted-issuer = Cert
 pdfjs-digital-signature-properties-certificate-expired = Certificate: Expired
 pdfjs-digital-signature-properties-certificate-expired-with-date = Certificate: Expired ({ DATETIME($dateObj, dateStyle: "medium") })
 pdfjs-digital-signature-properties-certificate-revoked = Certificate: Revoked
-pdfjs-digital-signature-properties-view-certificate = View certificate
 pdfjs-digital-signature-properties-reason = Reason: { $reason }
 pdfjs-digital-signature-properties-timestamp = Timestamp: { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 pdfjs-digital-signature-properties-sub-signatures =

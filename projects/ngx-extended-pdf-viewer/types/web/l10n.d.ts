@@ -16,7 +16,7 @@ export class L10n {
     /** @inheritdoc */
     getDirection(): string;
     /** @inheritdoc */
-    get(ids: any, args: null | undefined, fallback: any): Promise<any>;
+    get(ids: any, args?: null): Promise<any>;
     /** @inheritdoc */
     translate(element: any): Promise<void>;
     /** @inheritdoc */

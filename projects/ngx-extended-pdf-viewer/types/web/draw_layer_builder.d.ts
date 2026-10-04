@@ -13,11 +13,11 @@ export type DrawLayerBuilderOptions = {
     /**
      * Filter factory used to style selections (optional).
      */
-    filterFactory?: Object | null | undefined;
+    filterFactory?: object | null | undefined;
     /**
      * Page foreground/background colors for HCM (optional).
      */
-    pageColors?: Object | null | undefined;
+    pageColors?: object | null | undefined;
 };
 export type DrawLayerBuilderRenderOptions = {
     /**
@@ -32,27 +32,25 @@ export type DrawLayerBuilderRenderOptions = {
  *   Zero-based page index.
  * @property {Element | null} [textLayer]
  *   Text layer element (optional).
- * @property {Object | null} [filterFactory]
+ * @property {object | null} [filterFactory]
  *   Filter factory used to style selections (optional).
- * @property {Object | null} [pageColors]
+ * @property {object | null} [pageColors]
  *   Page foreground/background colors for HCM (optional).
  */
 /**
- * @typedef {Object} DrawLayerBuilderRenderOptions
+ * @typedef {object} DrawLayerBuilderRenderOptions
  * @property {string} [intent] - The default value is "display".
  */
 export class DrawLayerBuilder {
     /**
      * @param {DrawLayerBuilderOptions} options
      *   Configuration.
-     * @returns
-     *   Instance.
      */
     constructor(options: DrawLayerBuilderOptions);
     pageIndex: number;
     textLayer: Element | null;
-    filterFactory: Object | null;
-    pageColors: Object | null;
+    filterFactory: object | null;
+    pageColors: object | null;
     /**
      * @param {DrawLayerBuilderRenderOptions} options
      * @returns {Promise<void>}

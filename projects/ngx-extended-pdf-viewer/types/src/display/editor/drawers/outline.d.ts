@@ -16,23 +16,24 @@ export class Outline {
     /** @type {Outline|null} Optional hover/selection outline drawn separately. */
     focusOutline: Outline | null;
     /**
+     * @abstract
      * @returns {string} The SVG path of the outline.
      */
     toSVGPath(): string;
     /**
-     * @type {Object|null} The bounding box of the outline.
+     * @type {object | null} The bounding box of the outline.
      */
-    get box(): Object | null;
+    get box(): object | null;
     serialize(_bbox: any, _rotation: any): void;
-    /** @type {Object} */
-    get defaultSVGProperties(): Object;
-    /** @type {Object} SVG properties used to finalize a drawing session. */
-    get defaultProperties(): Object;
+    /** @type {object} */
+    get defaultSVGProperties(): object;
+    /** @type {object} SVG properties used to finalize a drawing session. */
+    get defaultProperties(): object;
     /**
      * @param {number} _rotation - the rotation to apply to the outline.
-     * @returns {Object|null}
+     * @returns {object | null}
      */
-    getFocusSVGProperties(_rotation: number): Object | null;
+    getFocusSVGProperties(_rotation: number): object | null;
     /** @type {boolean} Whether `DrawLayer.drawOutline` applies its mask. */
     get focusMustRemoveSelfIntersections(): boolean;
     /**
@@ -55,26 +56,26 @@ export class Outline {
     serializeQuadPoints(_pageTranslation: Array<number>, _pageDimensions: Array<number>): Float32Array | null;
     /**
      * @param {number} _rotation
-     * @returns {Object} the SVG properties to apply to the rotated shape.
+     * @returns {object} the SVG properties to apply to the rotated shape.
      */
-    updateRotation(_rotation: number): Object;
+    updateRotation(_rotation: number): object;
     /**
      * Called on each resizing step, hence the outline itself is unchanged.
      * @param {Array<number>} _bbox - the bounding box being resized to.
-     * @returns {Object} the SVG properties to apply to the resizing shape.
+     * @returns {object} the SVG properties to apply to the resizing shape.
      */
-    getPathResizingSVGProperties(_bbox: Array<number>): Object;
+    getPathResizingSVGProperties(_bbox: Array<number>): object;
     /**
      * Called once the resizing is done, hence the outline can be updated.
      * @param {Array<number>} _bbox - the new bounding box.
-     * @returns {Object} the SVG properties to apply to the resized shape.
+     * @returns {object} the SVG properties to apply to the resized shape.
      */
-    getPathResizedSVGProperties(_bbox: Array<number>): Object;
+    getPathResizedSVGProperties(_bbox: Array<number>): object;
     /**
      * Called once the translation is done, hence the outline can be updated.
      * @param {Array<number>} _bbox - the new bounding box.
      * @param {Array<number>} _parentDimensions
-     * @returns {Object} the SVG properties to apply to the translated shape.
+     * @returns {object} the SVG properties to apply to the translated shape.
      */
-    getPathTranslatedSVGProperties(_bbox: Array<number>, _parentDimensions: Array<number>): Object;
+    getPathTranslatedSVGProperties(_bbox: Array<number>, _parentDimensions: Array<number>): object;
 }

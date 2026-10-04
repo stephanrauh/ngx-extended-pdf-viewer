@@ -136,18 +136,6 @@ pdfjs-printing-not-ready = সতর্কীকরণ: পিডিএফটি
 
 ## Tooltips and alt text for side panel toolbar buttons
 
-pdfjs-toggle-sidebar-button =
-    .title = সাইডবার টগল করুন
-pdfjs-toggle-sidebar-button-label = সাইডবার টগল করুন
-pdfjs-document-outline-button =
-    .title = নথির আউটলাইন দেখাও (সব আইটেম প্রসারিত/সঙ্কুচিত করতে ডবল ক্লিক করুন)
-pdfjs-document-outline-button-label = নথির রূপরেখা
-pdfjs-attachments-button =
-    .title = সংযুক্তি দেখাও
-pdfjs-attachments-button-label = সংযুক্তি
-pdfjs-thumbs-button =
-    .title = থাম্বনেইল সমূহ প্রদর্শন করুন
-pdfjs-thumbs-button-label = থাম্বনেইল সমূহ
 pdfjs-findbar-button =
     .title = নথির মধ্যে খুঁজুন
 pdfjs-findbar-button-label = খুঁজুন
@@ -156,18 +144,14 @@ pdfjs-findbar-button-label = খুঁজুন
 
 # Variables:
 #   $page (Number) - the page number
-pdfjs-thumb-page-title =
-    .title = পাতা { $page }
-# Variables:
-#   $page (Number) - the page number
 pdfjs-thumb-page-canvas =
     .aria-label = { $page } পাতার থাম্বনেইল
 
 ## Find panel button title and messages
 
 pdfjs-find-input =
-    .title = খুঁজুন
     .placeholder = নথির মধ্যে খুঁজুন…
+    .title = খুঁজুন
 pdfjs-find-previous-button =
     .title = বাক্যাংশের পূর্ববর্তী উপস্থিতি অনুসন্ধান
 pdfjs-find-previous-button-label = পূর্ববর্তী
@@ -217,6 +201,19 @@ pdfjs-password-ok-button = ঠিক আছে
 pdfjs-password-cancel-button = বাতিল
 pdfjs-web-fonts-disabled = ওয়েব ফন্ট নিষ্ক্রিয়: সংযুক্ত পিডিএফ ফন্ট ব্যবহার করা যাচ্ছে না।
 
+# Additional translations for ngx-extended-pdf-viewer (bn)
+pdfjs-toggle-sidebar-button =
+    .title = সাইডবার টগল করুন
+pdfjs-toggle-sidebar-button-label = সাইডবার টগল করুন
+pdfjs-document-outline-button =
+    .title = নথির আউটলাইন দেখাও (সব আইটেম প্রসারিত/সঙ্কুচিত করতে ডবল ক্লিক করুন)
+pdfjs-document-outline-button-label = নথির রূপরেখা
+pdfjs-attachments-button =
+    .title = সংযুক্তি দেখাও
+pdfjs-attachments-button-label = সংযুক্তি
+pdfjs-thumbs-button =
+    .title = থাম্বনেইল সমূহ প্রদর্শন করুন
+pdfjs-thumbs-button-label = থাম্বনেইল সমূহ
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-save-button =
     .title = Save

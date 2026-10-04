@@ -9,7 +9,6 @@ export class TextAccessibilityManager {
     /**
      * Compare the positions of two elements, it must correspond to
      * the visual ordering.
-     *
      * @param {HTMLElement} e1
      * @param {HTMLElement} e2
      * @returns {number}
@@ -36,9 +35,12 @@ export class TextAccessibilityManager {
     addPointerInTextLayer(element: HTMLElement, isRemovable: boolean): string | null;
     /**
      * Move a div in the DOM in order to respect the visual order.
+     * @param {HTMLElement} container
      * @param {HTMLDivElement} element
+     * @param {HTMLElement} contentElement
+     * @param {boolean} isRemovable
      * @returns {string|null} The id in the struct tree if any.
      */
-    moveElementInDOM(container: any, element: HTMLDivElement, contentElement: any, isRemovable: any): string | null;
+    moveElementInDOM(container: HTMLElement, element: HTMLDivElement, contentElement: HTMLElement, isRemovable: boolean): string | null;
     #private;
 }

@@ -41,7 +41,7 @@ export class StampEditor extends AnnotationEditor {
         } | null;
     };
     /** @inheritdoc */
-    serialize(isForCopying?: boolean, context?: null, includeId?: boolean): Object | null;
+    serialize(isForCopying?: boolean, context?: null, includeId?: boolean): object | null;
     /** @inheritdoc */
     renderAnnotationElement(annotation: any): null;
     #private;

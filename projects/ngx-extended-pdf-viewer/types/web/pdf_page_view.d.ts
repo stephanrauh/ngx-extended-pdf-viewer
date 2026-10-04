@@ -105,7 +105,7 @@ export type PDFPageViewOptions = {
      * with user defined ones in order to improve readability in high contrast
      * mode.
      */
-    pageColors?: Object | undefined;
+    pageColors?: object | undefined;
     /**
      * - Localization service.
      */
@@ -114,7 +114,7 @@ export type PDFPageViewOptions = {
      * - The object that is used to lookup
      * the necessary layer-properties.
      */
-    layerProperties?: Object | undefined;
+    layerProperties?: object | undefined;
     /**
      * - Enable creation of hyperlinks from
      * text that look like URLs. The default value is `true`.
@@ -175,7 +175,7 @@ export class PDFPageView extends BasePDFPageView {
     toggleEditingMode(isEditing: any): void;
     updateVisibleArea(visibleArea: any): void;
     /**
-     * @typedef {Object} PDFPageViewUpdateParameters
+     * @typedef {object} PDFPageViewUpdateParameters
      * @property {number} [scale] The new scale, if specified.
      * @property {number} [rotation] The new rotation, if specified.
      * @property {Promise<OptionalContentConfig>} [optionalContentConfigPromise]

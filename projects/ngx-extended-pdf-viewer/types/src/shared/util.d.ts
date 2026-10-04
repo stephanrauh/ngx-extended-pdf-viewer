@@ -159,13 +159,12 @@ export const BBOX_INIT: number[];
 export function bytesToString(bytes: any): string;
 /**
  * Attempts to create a valid absolute URL.
- *
  * @param {URL|string} url - An absolute, or relative, URL.
  * @param {URL|string} [baseUrl] - An absolute URL.
- * @param {Object} [options]
- * @returns Either a valid {URL}, or `null` otherwise.
+ * @param {object} [options]
+ * @returns {URL | null} Either a valid {@link URL}, or `null` otherwise.
  */
-export function createValidAbsoluteUrl(url: URL | string, baseUrl?: URL | string, options?: Object): URL | null;
+export function createValidAbsoluteUrl(url: URL | string, baseUrl?: URL | string, options?: object): URL | null;
 export namespace DocumentActionEventType {
     let WC: string;
     let WS: string;
@@ -402,7 +401,6 @@ export class UnknownErrorException extends UnknownErrorException_base {
 export function unreachable(msg: string): never;
 /**
  * Remove, or replace, the hash property of the URL.
- *
  * @param {URL|string} url - The absolute, or relative, URL.
  * @param {string} hash - The hash property (use an empty string to remove it).
  * @param {boolean} [allowRel] - Allow relative URLs.

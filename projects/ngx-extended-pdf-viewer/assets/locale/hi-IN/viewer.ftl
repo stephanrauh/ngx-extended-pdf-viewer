@@ -134,18 +134,6 @@ pdfjs-printing-not-ready = चेतावनी: PDF छपाई के लि
 
 ## Tooltips and alt text for side panel toolbar buttons
 
-pdfjs-toggle-sidebar-button =
-    .title = स्लाइडर टॉगल करें
-pdfjs-toggle-sidebar-button-label = स्लाइडर टॉगल करें
-pdfjs-document-outline-button =
-    .title = दस्तावेज़ की रूपरेखा दिखाइए (सारी वस्तुओं को फलने अथवा समेटने के लिए दो बार क्लिक करें)
-pdfjs-document-outline-button-label = दस्तावेज़ आउटलाइन
-pdfjs-attachments-button =
-    .title = संलग्नक दिखायें
-pdfjs-attachments-button-label = संलग्नक
-pdfjs-thumbs-button =
-    .title = लघुछवियाँ दिखाएँ
-pdfjs-thumbs-button-label = लघु छवि
 pdfjs-findbar-button =
     .title = दस्तावेज़ में ढूँढ़ें
 pdfjs-findbar-button-label = ढूँढें
@@ -154,18 +142,14 @@ pdfjs-findbar-button-label = ढूँढें
 
 # Variables:
 #   $page (Number) - the page number
-pdfjs-thumb-page-title =
-    .title = पृष्ठ { $page }
-# Variables:
-#   $page (Number) - the page number
 pdfjs-thumb-page-canvas =
     .aria-label = पृष्ठ { $page } की लघु-छवि
 
 ## Find panel button title and messages
 
 pdfjs-find-input =
-    .title = ढूँढें
     .placeholder = दस्तावेज़ में खोजें...
+    .title = ढूँढें
 pdfjs-find-previous-button =
     .title = वाक्यांश की पिछली उपस्थिति ढूँढ़ें
 pdfjs-find-previous-button-label = पिछला
@@ -220,6 +204,19 @@ pdfjs-web-fonts-disabled = वेब फॉन्ट्स निष्क्र
 # Editor Parameters
 pdfjs-editor-free-text-color-input = रंग
 
+# Additional translations for ngx-extended-pdf-viewer (hi-IN)
+pdfjs-toggle-sidebar-button =
+    .title = स्लाइडर टॉगल करें
+pdfjs-toggle-sidebar-button-label = स्लाइडर टॉगल करें
+pdfjs-document-outline-button =
+    .title = दस्तावेज़ की रूपरेखा दिखाइए (सारी वस्तुओं को फलने अथवा समेटने के लिए दो बार क्लिक करें)
+pdfjs-document-outline-button-label = दस्तावेज़ आउटलाइन
+pdfjs-attachments-button =
+    .title = संलग्नक दिखायें
+pdfjs-attachments-button-label = संलग्नक
+pdfjs-thumbs-button =
+    .title = लघुछवियाँ दिखाएँ
+pdfjs-thumbs-button-label = लघु छवि
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-save-button =
     .title = Save

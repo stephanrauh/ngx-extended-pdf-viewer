@@ -36,6 +36,7 @@ export type TextLayerUpdateParameters = {
      */
     onBefore?: Function | undefined;
 };
+export const DEFAULT_FONT_SIZE: 30;
 export class TextLayer {
     static #ascentCache: Map<any, any>;
     static #canvasContexts: Map<any, any>;
@@ -49,6 +50,7 @@ export class TextLayer {
      */
     static cleanup(): undefined;
     static #getCtx(lang?: null): any;
+    static #quantizeFontSize(size: any): number;
     static #ensureCtxFont(ctx: any, size: any, family: any): void;
     /**
      * Compute the minimum font size enforced by the browser.

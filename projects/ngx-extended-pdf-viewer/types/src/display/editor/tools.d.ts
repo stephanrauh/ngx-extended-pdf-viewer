@@ -50,9 +50,9 @@ export class AnnotationEditorUIManager {
     /**
      * Delete a comment from an editor with undo support.
      * @param {AnnotationEditor} editor - The editor whose comment to delete.
-     * @param {Object} savedData - The comment data to save for undo.
+     * @param {object} savedData - The comment data to save for undo.
      */
-    deleteComment(editor: AnnotationEditor, savedData: Object): void;
+    deleteComment(editor: AnnotationEditor, savedData: object): void;
     toggleComment(editor: any, isSelected: any, visibility?: undefined): void;
     makeCommentColor(color: any, opacity: any): any;
     getCommentDialogElement(): any;
@@ -94,9 +94,9 @@ export class AnnotationEditorUIManager {
      * So this function retrieves the data from the storage and removes
      * them from the storage in order to be able to save them later.
      * @param {string} annotationId
-     * @returns {Object|null} The data associated to the annotation or null.
+     * @returns {object | null} The data associated to the annotation or null.
      */
-    getAndRemoveDataFromAnnotationStorage(annotationId: string): Object | null;
+    getAndRemoveDataFromAnnotationStorage(annotationId: string): object | null;
     /**
      * Add an editor in the annotation storage.
      * @param {AnnotationEditor} editor
@@ -208,11 +208,13 @@ export class AnnotationEditorUIManager {
     addNewEditorFromKeyboard(): void;
     /**
      * Update the toolbar if it's required to reflect the tool currently used.
-     * @param {Object} options
-     * @param {number} mode
+     * @param {object} options
+     * @param {number} options.mode
      * @returns {undefined}
      */
-    updateToolbar(options: Object): undefined;
+    updateToolbar(options: {
+        mode: number;
+    }): undefined;
     /**
      * Update a parameter in the current editor or globally.
      * @param {number} type
@@ -224,7 +226,7 @@ export class AnnotationEditorUIManager {
     /**
      * Get all the editors belonging to a given page.
      * @param {number} pageIndex
-     * @yields {AnnotationEditor}
+     * @yields {AnnotationEditor} An editor on the given page.
      */
     getEditors(pageIndex: number): Generator<any, void, unknown>;
     /**
@@ -298,9 +300,9 @@ export class AnnotationEditorUIManager {
     redo(): void;
     /**
      * Add a command to execute (cmd) and another one to undo it.
-     * @param {Object} params
+     * @param {object} params
      */
-    addCommands(params: Object): void;
+    addCommands(params: object): void;
     cleanUndoStack(type: any): void;
     /**
      * Delete the current editor or all.
@@ -342,9 +344,9 @@ export class AnnotationEditorUIManager {
     /**
      * Is the current editor the one passed as argument?
      * @param {AnnotationEditor} editor
-     * @returns
+     * @returns {boolean}
      */
-    isActive(editor: AnnotationEditor): editor is never;
+    isActive(editor: AnnotationEditor): boolean;
     /**
      * Get the current active editor.
      * @returns {AnnotationEditor|null}
@@ -407,10 +409,10 @@ export class ColorManager {
 export class CommandManager {
     constructor(maxSize?: number);
     /**
-     * @typedef {Object} addOptions
-     * @property {function} cmd
-     * @property {function} undo
-     * @property {function} [post]
+     * @typedef {object} addOptions
+     * @property {Function} cmd
+     * @property {Function} undo
+     * @property {Function} [post]
      * @property {boolean} mustExec
      * @property {number} type
      * @property {boolean} overwriteIfSameType
@@ -493,11 +495,10 @@ export class KeyboardManager {
     /**
      * Execute a callback, if any, for a given keyboard event.
      * The self is used as `this` in the callback.
-     * @param {Object} self
+     * @param {object} self
      * @param {KeyboardEvent} event
-     * @returns
      */
-    exec(self: Object, event: KeyboardEvent): void;
+    exec(self: object, event: KeyboardEvent): void;
 }
 /**
  * Class to store current pointers used by the editor to be able to handle

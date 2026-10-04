@@ -137,9 +137,6 @@ pdfjs-print-progress-close-button = Duyichin'
 
 ## Tooltips and alt text for side panel toolbar buttons
 
-pdfjs-toggle-sidebar-button =
-    .title = Nadunā barrâ nù yi'nïn
-pdfjs-toggle-sidebar-button-label = Nadunā barrâ nù yi'nïn
 pdfjs-findbar-button-label = Narì'
 
 ## Find panel button title and messages
@@ -162,6 +159,10 @@ pdfjs-page-scale-percent = { $scale }%
 pdfjs-password-ok-button = Ga'ue
 pdfjs-password-cancel-button = Duyichin'
 
+# Additional translations for ngx-extended-pdf-viewer (trs)
+pdfjs-toggle-sidebar-button =
+    .title = Nadunā barrâ nù yi'nïn
+pdfjs-toggle-sidebar-button-label = Nadunā barrâ nù yi'nïn
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-save-button =
     .title = Save

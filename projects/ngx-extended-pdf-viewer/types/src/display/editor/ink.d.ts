@@ -41,7 +41,7 @@ export class InkEditor extends DrawingEditor {
     }): void;
     _drawingOptions: any;
     /** @inheritdoc */
-    serialize(isForCopying?: boolean, context?: null, includeId?: boolean): Object | null;
+    serialize(isForCopying?: boolean, context?: null, includeId?: boolean): object | null;
     /** @inheritdoc */
     startErase(layerRect: any): number[] | null;
     /** @inheritdoc */

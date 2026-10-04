@@ -45,20 +45,20 @@
     },
     "stable": {
       "bundle": "assets",
-      "pdfjsBuildVersion": "6.3.1320",
+      "pdfjsBuildVersion": "6.4.1337",
       "upstream": {
         "project": "mozilla/pdf.js",
         "repository": "https://github.com/mozilla/pdf.js",
-        "release": "6.3.289",
-        "tag": "v6.3.289",
-        "commit": "1c8020a7d4e43668ac287a3ecf9a8dbea17e4c56",
-        "committedAt": "2026-08-29T14:35:32+02:00"
+        "release": "6.4.299",
+        "tag": "v6.4.299",
+        "commit": "d0991a0d53f3bb3a7307e3b83f279c1d117aafb3",
+        "committedAt": "2026-10-03T17:49:02+02:00"
       },
       "fork": {
         "repository": "https://github.com/stephanrauh/pdf.js",
-        "branch": "6.3",
-        "commit": "b1260e3650d9497ae579afb98c4622935d0e048a",
-        "committedAt": "2026-10-03T22:58:03+02:00"
+        "branch": "6.4",
+        "commit": "1a8b07b1a1eb96fa590773a5067a2b7241467389",
+        "committedAt": "2026-10-04T11:50:06+02:00"
       },
       "securityFixes": [
         {

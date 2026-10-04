@@ -22,7 +22,7 @@ export type AnnotationEditorParameters = {
     y: number;
 };
 /**
- * @typedef {Object} AnnotationEditorParameters
+ * @typedef {object} AnnotationEditorParameters
  * @property {AnnotationEditorUIManager} uiManager - the global manager
  * @property {AnnotationEditorLayer} parent - the layer containing this editor
  * @property {string} id - editor id
@@ -46,9 +46,9 @@ export class AnnotationEditor {
     static deleteAnnotationElement(editor: any): void;
     /**
      * Initialize the l10n stuff for this type of editor.
-     * @param {Object} l10n
+     * @param {object} l10n
      */
-    static initialize(l10n: Object, _uiManager: any): void;
+    static initialize(l10n: object, _uiManager: any): void;
     /**
      * Update the default parameters for this type of editor.
      * @param {number} _type
@@ -79,13 +79,12 @@ export class AnnotationEditor {
     /**
      * Deserialize the editor.
      * The result of the deserialization is a new editor.
-     *
-     * @param {Object} data
+     * @param {object} data
      * @param {AnnotationEditorLayer} parent
      * @param {AnnotationEditorUIManager} uiManager
      * @returns {Promise<AnnotationEditor | null>}
      */
-    static deserialize(data: Object, parent: AnnotationEditorLayer, uiManager: AnnotationEditorUIManager): Promise<AnnotationEditor | null>;
+    static deserialize(data: object, parent: AnnotationEditorLayer, uiManager: AnnotationEditorUIManager): Promise<AnnotationEditor | null>;
     static get MIN_SIZE(): number;
     static canCreateNewEmptyEditor(): boolean;
     /**
@@ -144,9 +143,9 @@ export class AnnotationEditor {
     center(): void;
     /**
      * Add some commands into the CommandManager (undo/redo stuff).
-     * @param {Object} params
+     * @param {object} params
      */
-    addCommands(params: Object): void;
+    addCommands(params: object): void;
     get currentLayer(): any;
     /**
      * This editor will be behind the others.
@@ -502,18 +501,18 @@ export class AnnotationEditor {
     rebuild(): void;
     /**
      * Rotate the editor when the page is rotated.
-     * @param {number} angle
+     * @param {number} _angle
      */
-    rotate(_angle: any): void;
+    rotate(_angle: number): void;
     /**
      * Resize the editor when the page is resized.
      */
     resize(): void;
     /**
      * Serialize the editor when it has been deleted.
-     * @returns {Object}
+     * @returns {object}
      */
-    serializeDeleted(): Object;
+    serializeDeleted(): object;
     /**
      * Serialize the editor.
      * The result of the serialization will be used to construct a
@@ -521,10 +520,10 @@ export class AnnotationEditor {
      *
      * To implement in subclasses.
      * @param {boolean} [isForCopying]
-     * @param {Object | null} [context]
-     * @returns {Object | null}
+     * @param {object | null} [context]
+     * @returns {object | null}
      */
-    serialize(isForCopying?: boolean, context?: Object | null): Object | null;
+    serialize(isForCopying?: boolean, context?: object | null): object | null;
     /**
      * Check if an existing annotation associated with this editor has been
      * modified.
@@ -631,14 +630,14 @@ export class AnnotationEditor {
     get isEditing(): boolean;
     /**
      * Get the data to report to the telemetry when the editor is added.
-     * @returns {Object}
+     * @returns {object}
      */
-    get telemetryInitialData(): Object;
+    get telemetryInitialData(): object;
     /**
      * The telemetry data to use when saving/printing.
-     * @returns {Object|null}
+     * @returns {object | null}
      */
-    get telemetryFinalData(): Object | null;
+    get telemetryFinalData(): object | null;
     _reportTelemetry(data: any, mustWait?: boolean): void;
     /**
      * Show or hide this editor.
@@ -650,10 +649,10 @@ export class AnnotationEditor {
     updateFakeAnnotationElement(annotationLayer: any): void;
     /**
      * Render an annotation in the annotation layer.
-     * @param {Object} annotation
+     * @param {object} annotation
      * @returns {HTMLElement|null}
      */
-    renderAnnotationElement(annotation: Object): HTMLElement | null;
+    renderAnnotationElement(annotation: object): HTMLElement | null;
     resetAnnotationElement(annotation: any): void;
     #private;
 }

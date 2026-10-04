@@ -22,17 +22,17 @@ export class PDFRenderingQueue {
      */
     isHighestPriority(view: RenderableView): boolean;
     /**
-     * @param {Object} currentlyVisiblePages
+     * @param {object} currentlyVisiblePages
      */
-    renderHighestPriority(currentlyVisiblePages: Object): void;
+    renderHighestPriority(currentlyVisiblePages: object): void;
     /**
-     * @param {Object} visible
+     * @param {object} visible
      * @param {Array} views
      * @param {boolean} scrolledDown
      * @param {boolean} [preRenderExtra]
      * @param {boolean} [ignoreDetailViews]
      */
-    getHighestPriority(visible: Object, views: any[], scrolledDown: boolean, preRenderExtra?: boolean, ignoreDetailViews?: boolean): any;
+    getHighestPriority(visible: object, views: any[], scrolledDown: boolean, preRenderExtra?: boolean, ignoreDetailViews?: boolean): any;
     /**
      * @param {RenderableView} view
      * @returns {boolean}
@@ -42,7 +42,6 @@ export class PDFRenderingQueue {
      * Render a page or thumbnail view. This calls the appropriate function
      * based on the views state. If the view is already rendered it will return
      * `false`.
-     *
      * @param {RenderableView} view
      */
     renderView(view: RenderableView): boolean;

@@ -3,7 +3,7 @@ export type PDFLinkService = import("../../web/pdf_link_service.js").PDFLinkServ
 export type XfaLayerParameters = {
     viewport: PageViewport;
     div: HTMLDivElement;
-    xfaHtml: Object;
+    xfaHtml: object;
     annotationStorage?: import("./annotation_storage").AnnotationStorage | undefined;
     linkService: PDFLinkService;
     /**
@@ -28,7 +28,6 @@ export class XfaLayer {
     static #createElement(name: any, xmlns: any, intent: any): any;
     /**
      * Render the XFA layer.
-     *
      * @param {XfaLayerParameters} parameters
      */
     static render(parameters: XfaLayerParameters): {
@@ -36,7 +35,6 @@ export class XfaLayer {
     };
     /**
      * Update the XFA layer.
-     *
      * @param {XfaLayerParameters} parameters
      */
     static update(parameters: XfaLayerParameters): void;

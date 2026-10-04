@@ -30,7 +30,7 @@ export namespace LinkTarget {
     let TOP: number;
 }
 /**
- * @typedef {Object} PDFLinkServiceOptions
+ * @typedef {object} PDFLinkServiceOptions
  * @property {EventBus} eventBus - The application event bus.
  * @property {number} [externalLinkTarget] - Specifies the `target` attribute
  *   for external links. Must use one of the values from {LinkTarget}.
@@ -88,13 +88,11 @@ export class PDFLinkService {
     get isInPresentationMode(): boolean;
     /**
      * This method will, when available, also update the browser history.
-     *
      * @param {string|Array} dest - The named, or explicit, PDF destination.
      */
     goToDestination(dest: string | any[]): Promise<void>;
     /**
      * This method will, when available, also update the browser history.
-     *
      * @param {number|string} val - The page number, or page label.
      */
     goToPage(val: number | string): void;
@@ -103,9 +101,9 @@ export class PDFLinkService {
      * @param {number} pageNumber - The page number to scroll to.
      * @param {number} x - The x-coordinate to scroll to in page coordinates.
      * @param {number} y - The y-coordinate to scroll to in page coordinates.
-     * @param {Object} [options]
+     * @param {object} [options]
      */
-    goToXY(pageNumber: number, x: number, y: number, options?: Object): void;
+    goToXY(pageNumber: number, x: number, y: number, options?: object): void;
     /**
      * @param {string} id
      *   Unique attachment identifier (required).
@@ -141,9 +139,9 @@ export class PDFLinkService {
      */
     executeNamedAction(action: string): void;
     /**
-     * @param {Object} action
+     * @param {object} action
      */
-    executeSetOCGState(action: Object): Promise<void>;
+    executeSetOCGState(action: object): Promise<void>;
 }
 export class SimpleLinkService extends PDFLinkService {
 }

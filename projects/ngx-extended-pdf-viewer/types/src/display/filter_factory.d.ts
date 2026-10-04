@@ -7,7 +7,6 @@ export class BaseFilterFactory {
     addHighlightHCMFilter(filterName: any, fgColor: any, bgColor: any, newFgColor: any, newBgColor: any): string;
     /**
      * Create a filter for the selection of text, given colors.
-     *
      * @param {string} fgColor
      * @param {string} bgColor
      * @returns {string}
@@ -15,12 +14,11 @@ export class BaseFilterFactory {
     addSelectionHCMFilter(fgColor: string, bgColor: string): string;
     /**
      * Create a filter for the selection of text.
-     *
      * @returns {string}
      */
     addSelectionFilter(): string;
     /**
-     * @param {Object} [pageColors]
+     * @param {object} [pageColors]
      * @param {string} [pageColors.background]
      * @param {string} [pageColors.foreground]
      * @returns {Record<string, string> | null}

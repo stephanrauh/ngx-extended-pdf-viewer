@@ -29,9 +29,9 @@ export type CatalogAttachment = {
 };
 export class Catalog {
     /**
-     * @typedef {Object} ParseDestDictionaryParameters
+     * @typedef {object} ParseDestDictionaryParameters
      * @property {Dict} destDict - The dictionary containing the destination.
-     * @property {Object} resultObj - The object where the parsed destination
+     * @property {object} resultObj - The object where the parsed destination
      *   properties will be placed.
      * @property {string} [docBaseUrl] - The document base URL that is used when
      *   attempting to recover valid absolute URLs from relative ones.
@@ -60,7 +60,7 @@ export class Catalog {
          * - The object where the parsed destination
          * properties will be placed.
          */
-        resultObj: Object;
+        resultObj: object;
         /**
          * - The document base URL that is used when
          * attempting to recover valid absolute URLs from relative ones.
@@ -94,7 +94,6 @@ export class Catalog {
      * The id is registered here rather than parsed from a public string prefix in
      * `attachmentContent`, since catalog attachment names can be arbitrary PDF
      * strings and may otherwise collide with annotation-local ids.
-     *
      * @param {Ref} ref
      *   File-spec or embedded-file stream reference.
      * @param {boolean} [isSound]
@@ -137,14 +136,12 @@ export class Catalog {
     get openAction(): any;
     /**
      * Get attachments.
-     *
      * @returns {Map<string, CatalogAttachment> | null}
      *   Attachments.
      */
     get attachments(): Map<string, CatalogAttachment> | null;
     /**
      * Get content for an attachment.
-     *
      * @param {string} id
      *   Unique attachment identifier (required).
      * @returns {CatalogAttachmentContent}

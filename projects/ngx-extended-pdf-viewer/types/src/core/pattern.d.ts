@@ -28,8 +28,6 @@ declare class RadialAxialShading extends BaseShading {
     shadingType: any;
     coordsArr: any;
     bbox: any;
-    extendStart: boolean;
-    extendEnd: boolean;
     colorStops: any[];
     getIR(): any[];
 }

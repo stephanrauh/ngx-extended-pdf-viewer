@@ -39,9 +39,9 @@ customizations and enhancements for Angular integration.
       fixed upstream in pdf.js 6.2.108) - https://github.com/mozilla/pdf.js/security/advisories/GHSA-hq66-cqwq-w95j
 
   assets/
-    based on Mozilla pdf.js 6.3.289 (v6.3.289, commit 1c8020a7d4e43668ac287a3ecf9a8dbea17e4c56)
-    built from https://github.com/stephanrauh/pdf.js branch 6.3, commit b1260e3650d9497ae579afb98c4622935d0e048a
-    bundled build version: 6.3.1320 (fork build number, not an upstream release)
+    based on Mozilla pdf.js 6.4.299 (v6.4.299, commit d0991a0d53f3bb3a7307e3b83f279c1d117aafb3)
+    built from https://github.com/stephanrauh/pdf.js branch 6.4, commit 1a8b07b1a1eb96fa590773a5067a2b7241467389
+    bundled build version: 6.4.1337 (fork build number, not an upstream release)
     security fix applied ahead of upstream: CVE-2026-16633 (merge,
       fixed upstream in pdf.js 6.2.108) - https://github.com/mozilla/pdf.js/security/advisories/GHSA-hq66-cqwq-w95j
 

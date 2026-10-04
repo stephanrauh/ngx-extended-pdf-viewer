@@ -21,9 +21,7 @@ export type AnnotationLayerBuilderOptions = {
     enableComment?: boolean | undefined;
     enableScripting?: boolean | undefined;
     hasJSActionsPromise?: Promise<boolean> | undefined;
-    fieldObjectsPromise?: Promise<{
-        [x: string]: Object[];
-    } | null> | undefined;
+    fieldObjectsPromise?: Promise<Record<string, object[]> | null> | undefined;
     annotationCanvasMap?: Map<string, HTMLCanvasElement> | undefined;
     accessibilityManager?: import("./text_accessibility.js").TextAccessibilityManager | undefined;
     annotationEditorUIManager?: import("../src/pdf.js").AnnotationEditorUIManager | undefined;
@@ -40,7 +38,7 @@ export type AnnotationLayerBuilderRenderOptions = {
     optionalContentConfigPromise?: Promise<any> | undefined;
 };
 /**
- * @typedef {Object} AnnotationLayerBuilderOptions
+ * @typedef {object} AnnotationLayerBuilderOptions
  * @property {PDFPageProxy} pdfPage
  * @property {AnnotationStorage} [annotationStorage]
  * @property {string} [imageResourcesPath] - Path for image resources, mainly
@@ -51,16 +49,16 @@ export type AnnotationLayerBuilderRenderOptions = {
  * @property {boolean} [enableComment]
  * @property {boolean} [enableScripting]
  * @property {Promise<boolean>} [hasJSActionsPromise]
- * @property {Promise<Object<string, Array<Object>> | null>}
+ * @property {Promise<Record<string, Array<object>> | null>}
  *   [fieldObjectsPromise]
  * @property {Map<string, HTMLCanvasElement>} [annotationCanvasMap]
  * @property {TextAccessibilityManager} [accessibilityManager]
  * @property {AnnotationEditorUIManager} [annotationEditorUIManager]
- * @property {function} [onAppend]
+ * @property {Function} [onAppend]
  * @property {CommentManager} [commentManager]
  */
 /**
- * @typedef {Object} AnnotationLayerBuilderRenderOptions
+ * @typedef {object} AnnotationLayerBuilderRenderOptions
  * @property {PageViewport} viewport
  * @property {string} [intent] - The default value is "display".
  * @property {StructTreeLayerBuilder} [structTreeLayer]
@@ -80,9 +78,7 @@ export class AnnotationLayerBuilder {
     enableComment: boolean;
     enableScripting: boolean;
     _hasJSActionsPromise: Promise<boolean>;
-    _fieldObjectsPromise: Promise<{
-        [x: string]: Object[];
-    } | null>;
+    _fieldObjectsPromise: Promise<Record<string, object[]> | null>;
     _annotationCanvasMap: Map<string, HTMLCanvasElement>;
     _accessibilityManager: import("./text_accessibility.js").TextAccessibilityManager;
     _annotationEditorUIManager: import("../src/pdf.js").AnnotationEditorUIManager;
@@ -101,11 +97,11 @@ export class AnnotationLayerBuilder {
     hide(): void;
     hasEditableAnnotations(): boolean;
     /**
-     * @param {Array<Object>} inferredLinks
+     * @param {Array<object>} inferredLinks
      * @returns {Promise<void>} A promise that is resolved when the inferred links
      *   are added to the annotation layer.
      */
-    injectLinkAnnotations(inferredLinks: Array<Object>): Promise<void>;
+    injectLinkAnnotations(inferredLinks: Array<object>): Promise<void>;
     #private;
 }
 import { AnnotationLayer } from "../src/pdf.js";

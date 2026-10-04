@@ -25,7 +25,7 @@ export type PasswordPromptOptions = {
     cancelButton: HTMLButtonElement;
 };
 /**
- * @typedef {Object} PasswordPromptOptions
+ * @typedef {object} PasswordPromptOptions
  * @property {HTMLDialogElement} dialog - The overlay's DOM element.
  * @property {HTMLParagraphElement} label - Label containing instructions for
  *                                          entering the password.

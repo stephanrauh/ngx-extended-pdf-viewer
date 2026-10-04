@@ -143,7 +143,7 @@ export type PDFViewerOptions = {
      * with user defined ones in order to improve readability in high contrast
      * mode.
      */
-    pageColors?: Object | undefined;
+    pageColors?: object | undefined;
     /**
      * - Enable zooming on pinch gesture.
      * The default value is `true`.
@@ -166,7 +166,7 @@ export namespace PagesCountLimit {
     let PAUSE_EAGER_PAGE_INIT: number;
 }
 /**
- * @typedef {Object} PDFViewerOptions
+ * @typedef {object} PDFViewerOptions
  * @property {HTMLDivElement} container - The container for the viewer element.
  * @property {HTMLDivElement} [viewer] - The viewer element.
  * @property {EventBus} eventBus - The application event bus.
@@ -224,7 +224,7 @@ export namespace PagesCountLimit {
  * @property {L10n} [l10n] - Localization service.
  * @property {boolean} [enablePermissions] - Enables PDF document permissions,
  *   when they exist. The default value is `false`.
- * @property {Object} [pageColors] - Overwrites background and foreground colors
+ * @property {object} [pageColors] - Overwrites background and foreground colors
  *   with user defined ones in order to improve readability in high contrast
  *   mode.
  * @property {boolean} [supportsPinchToZoom] - Enable zooming on pinch gesture.
@@ -281,7 +281,7 @@ export class PDFViewer {
     enableSelectionRendering: boolean;
     imagesRightClickMinSize: number;
     l10n: import("./l10n.js").L10n | undefined;
-    pageColors: Object | null;
+    pageColors: object | null;
     _enableFlipByDrag: boolean;
     defaultRenderingQueue: boolean;
     renderingQueue: PDFRenderingQueue | undefined;
@@ -364,7 +364,8 @@ export class PDFViewer {
      */
     get currentScale(): number;
     /**
-     * @param val - The scale of the pages (in percent or predefined value).
+     * @param {string} val - The scale of the pages (in percent or predefined
+     *   value).
      */
     set currentScaleValue(val: string);
     /**
@@ -386,10 +387,10 @@ export class PDFViewer {
     get _layerProperties(): any;
     getAllText(interruptSignal?: null): Promise<string | null>;
     /**
-     * @param {PDFDocumentProxy} pdfDocument
+     * @param {PDFDocumentProxy|null} pdfDocument
      */
-    setDocument(pdfDocument: PDFDocumentProxy): void;
-    pdfDocument: import("../src/display/api").PDFDocumentProxy | undefined;
+    setDocument(pdfDocument: PDFDocumentProxy | null): void;
+    pdfDocument: import("../src/display/api").PDFDocumentProxy | null | undefined;
     _scrollMode: any;
     _optionalContentConfigPromise: Promise<import("../src/display/optional_content_config").OptionalContentConfig> | null | undefined;
     onPagesEdited({ pagesMapper, type, hasBeenCut, pageNumbers }: {
@@ -436,7 +437,7 @@ export class PDFViewer {
      */
     pageLabelToPageNumber(label: string): number | null;
     /**
-     * @typedef {Object} ScrollPageIntoViewParameters
+     * @typedef {object} ScrollPageIntoViewParameters
      * @property {number} pageNumber - The page number.
      * @property {Array} [destArray] - The original PDF destination array, in the
      *   format: <page-ref> </XYZ|/FitXXX> <args..>
@@ -491,7 +492,7 @@ export class PDFViewer {
     get isChangingPresentationMode(): boolean;
     get isHorizontalScrollbarEnabled(): boolean;
     get isVerticalScrollbarEnabled(): boolean;
-    _getVisiblePages(): Object;
+    _getVisiblePages(): object;
     _getVisiblePagesRtl(views: any): {
         first: {
             id: any;
@@ -577,7 +578,7 @@ export class PDFViewer {
      */
     previousPage(): boolean;
     /**
-     * @typedef {Object} ChangeScaleOptions
+     * @typedef {object} ChangeScaleOptions
      * @property {number} [drawingDelay]
      * @property {number} [scaleFactor]
      * @property {number} [steps]
@@ -641,7 +642,7 @@ export class PDFViewer {
     }): void;
     get containerTopLeft(): number[];
     /**
-     * @typedef {Object} AnnotationEditorModeOptions
+     * @typedef {object} AnnotationEditorModeOptions
      * @property {number} mode - The editor mode (none, FreeText, ink, ...).
      * @property {string|null} [editId] - ID of the existing annotation to edit.
      * @property {boolean} [isFromKeyboard] - True if the mode change is due to a

@@ -8,7 +8,7 @@ export type CommentManager = import("../../web/comment_manager.js").CommentManag
 export type PDFLinkService = import("../../web/pdf_link_service.js").PDFLinkService;
 export type BaseDownloadManager = import("../../web/base_download_manager.js").BaseDownloadManager;
 export type AnnotationElementParameters = {
-    data: Object;
+    data: object;
     layer: HTMLDivElement;
     linkService: PDFLinkService;
     downloadManager?: import("../../web/base_download_manager.js").BaseDownloadManager | undefined;
@@ -19,7 +19,7 @@ export type AnnotationElementParameters = {
      */
     imageResourcesPath?: string | undefined;
     renderForms: boolean;
-    svgFactory: Object;
+    svgFactory: object;
     enableScripting?: boolean | undefined;
     hasJSActions?: boolean | undefined;
     fieldObjects?: Map<any, any> | undefined;
@@ -47,7 +47,7 @@ export type AnnotationLayerParameters = {
      * The default value is `false`.
      */
     hasJSActions?: boolean | undefined;
-    fieldObjects?: Map<string, Object[]> | null | undefined;
+    fieldObjects?: Map<string, object[]> | null | undefined;
     annotationCanvasMap?: Map<string, HTMLCanvasElement> | undefined;
     accessibilityManager?: import("../../web/text_accessibility.js").TextAccessibilityManager | undefined;
     annotationEditorUIManager?: AnnotationEditorUIManager;
@@ -55,7 +55,7 @@ export type AnnotationLayerParameters = {
     optionalContentConfig?: OptionalContentConfig;
 };
 /**
- * @typedef {Object} AnnotationLayerParameters
+ * @typedef {object} AnnotationLayerParameters
  * @property {PageViewport} viewport
  * @property {HTMLDivElement} div
  * @property {Array} annotations
@@ -69,7 +69,7 @@ export type AnnotationLayerParameters = {
  * @property {boolean} [enableScripting] - Enable embedded script execution.
  * @property {boolean} [hasJSActions] - Some fields have JS actions.
  *   The default value is `false`.
- * @property {Map<string, Array<Object>> | null} [fieldObjects]
+ * @property {Map<string, Array<object>> | null} [fieldObjects]
  * @property {Map<string, HTMLCanvasElement>} [annotationCanvasMap]
  * @property {TextAccessibilityManager} [accessibilityManager]
  * @property {AnnotationEditorUIManager} [annotationEditorUIManager]
@@ -106,20 +106,17 @@ export class AnnotationLayer {
     hasEditableAnnotations(): boolean;
     /**
      * Render a new annotation layer with all annotation elements.
-     *
      * @param {AnnotationLayerParameters} params
      * @memberof AnnotationLayer
      */
     render(params: AnnotationLayerParameters): Promise<void>;
     /**
      * Add link annotations to the annotation layer.
-     *
-     * @param {Array<Object>} annotations
+     * @param {Array<object>} annotations
      */
-    addLinkAnnotations(annotations: Array<Object>): Promise<void>;
+    addLinkAnnotations(annotations: Array<object>): Promise<void>;
     /**
      * Update the annotation elements on existing annotation layer.
-     *
      * @param {AnnotationLayerParameters} viewport
      * @memberof AnnotationLayer
      */
@@ -209,7 +206,6 @@ declare class AnnotationElement {
     resetEdited(): void;
     /**
      * Create an empty container for the annotation's HTML element.
-     *
      * @private
      * @param {boolean} ignoreBorder
      * @memberof AnnotationElement
@@ -222,7 +218,6 @@ declare class AnnotationElement {
     _setDefaultPropertiesFromJS(element: any): void;
     /**
      * Create quadrilaterals from the annotation's quadpoints.
-     *
      * @private
      * @memberof AnnotationElement
      */
@@ -231,9 +226,7 @@ declare class AnnotationElement {
      * Create a popup for the annotation's HTML element. This is used for
      * annotations that do not have a Popup entry in the dictionary, but
      * are of a type that works with popups (such as Highlight annotations).
-     *
-     * @param {Object} [popupData] - The data for the popup, if any.
-     *
+     * @param {object} [popupData] - The data for the popup, if any.
      * @private
      * @memberof AnnotationElement
      */
@@ -242,7 +235,6 @@ declare class AnnotationElement {
     get extraPopupElement(): null;
     /**
      * Render the annotation's HTML element(s).
-     *
      * @public
      * @memberof AnnotationElement
      */
@@ -256,7 +248,6 @@ declare class AnnotationElement {
     hide(): void;
     /**
      * Get the HTML element(s) which can trigger a popup when clicked or hovered.
-     *
      * @public
      * @memberof AnnotationElement
      * @returns {Array<HTMLElement>|HTMLElement} An array of elements or an

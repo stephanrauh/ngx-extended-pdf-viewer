@@ -46,7 +46,7 @@ export type PDFThumbnailViewOptions = {
      * with user defined ones in order to improve readability in high contrast
      * mode.
      */
-    pageColors?: Object | undefined;
+    pageColors?: object | undefined;
 };
 export type OptionalContentConfig = import("../src/display/optional_content_config").OptionalContentConfig;
 export type PageViewport = import("../src/display/page_viewport").PageViewport;
@@ -66,7 +66,7 @@ export class PDFThumbnailView extends RenderableView {
     _optionalContentConfigPromise: Promise<import("../src/display/optional_content_config").OptionalContentConfig> | null;
     maxCanvasPixels: any;
     maxCanvasDim: any;
-    pageColors: Object | null;
+    pageColors: object | null;
     eventBus: import("./event_utils").EventBus;
     linkService: PDFLinkService;
     renderingQueue: import("./pdf_rendering_queue").PDFRenderingQueue;

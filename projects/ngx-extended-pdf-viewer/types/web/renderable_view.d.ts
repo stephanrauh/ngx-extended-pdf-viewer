@@ -9,7 +9,7 @@ export class RenderableView {
      */
     renderTask: import("../src/display/api").RenderTask | null;
     /**
-     * @type {function | null}
+     * @type {Function | null}
      */
     resume: Function | null;
     /**

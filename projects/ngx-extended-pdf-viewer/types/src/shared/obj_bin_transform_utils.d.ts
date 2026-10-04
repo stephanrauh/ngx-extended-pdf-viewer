@@ -3,12 +3,9 @@ export class CSS_FONT_INFO {
 }
 export class FONT_INFO {
     static bools: string[];
-    static numbers: string[];
     static strings: string[];
-    static OFFSET_NUMBERS: number;
     static OFFSET_BBOX: number;
     static OFFSET_FONT_MATRIX: number;
-    static OFFSET_DEFAULT_VMETRICS: number;
     static OFFSET_STRINGS: number;
 }
 export class InfoUtils {

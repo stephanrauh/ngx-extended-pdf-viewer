@@ -36,7 +36,6 @@ export class CanvasGraphics {
     outputScaleY: number;
     pageColors: any;
     _cachedScaleForStroking: number[];
-    _cachedGetSinglePixelWidth: number | null;
     _cachedBitmapsMap: Map<any, any>;
     dependencyTracker: any;
     imagesTracker: any;
@@ -245,6 +244,7 @@ declare class CanvasExtraState {
     lineWidth: number;
     activeSMask: null;
     transferMaps: string;
+    transferMapsFallback: null;
     minMax: Float32Array<ArrayBuffer>;
     clipBox: Float32Array<ArrayBuffer>;
     clone(): any;

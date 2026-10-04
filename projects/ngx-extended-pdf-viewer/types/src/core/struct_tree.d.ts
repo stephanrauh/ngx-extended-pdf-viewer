@@ -18,9 +18,9 @@ export class StructTreePage {
     /**
      * Convert the tree structure into a simplified object literal that can
      * be sent to the main thread.
-     * @returns {Object}
+     * @returns {object}
      */
-    get serializable(): Object;
+    get serializable(): object;
 }
 export class StructTreeRoot {
     static canCreateStructureTree({ catalogRef, pdfManager, newAnnotationsByPage, }: {

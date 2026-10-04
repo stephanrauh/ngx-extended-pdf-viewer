@@ -82,7 +82,7 @@ export class PDFHistory {
     _updateViewareaTimeout: any;
     /**
      * Push an internal destination to the browser history.
-     * @param {PushParameters}
+     * @param {PushParameters} params
      */
     push({ namedDest, explicitDest, pageNumber }: PushParameters): void;
     /**

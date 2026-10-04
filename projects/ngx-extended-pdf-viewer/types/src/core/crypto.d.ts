@@ -79,7 +79,6 @@ export class CipherTransformFactory {
     encryptionKey: any;
     /**
      * Set password.
-     *
      * @param {string} password
      *   New password.
      * @returns {undefined}

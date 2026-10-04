@@ -6,7 +6,7 @@ export type XfaLayerBuilderOptions = {
     pdfPage: PDFPageProxy;
     annotationStorage?: import("../src/display/annotation_storage").AnnotationStorage | undefined;
     linkService: PDFLinkService;
-    xfaHtml?: Object | undefined;
+    xfaHtml?: object | undefined;
 };
 export type XfaLayerBuilderRenderOptions = {
     viewport: PageViewport;
@@ -16,14 +16,14 @@ export type XfaLayerBuilderRenderOptions = {
     intent?: string | undefined;
 };
 /**
- * @typedef {Object} XfaLayerBuilderOptions
+ * @typedef {object} XfaLayerBuilderOptions
  * @property {PDFPageProxy} pdfPage
  * @property {AnnotationStorage} [annotationStorage]
  * @property {PDFLinkService} linkService
- * @property {Object} [xfaHtml]
+ * @property {object} [xfaHtml]
  */
 /**
- * @typedef {Object} XfaLayerBuilderRenderOptions
+ * @typedef {object} XfaLayerBuilderRenderOptions
  * @property {PageViewport} viewport
  * @property {string} [intent] - The default value is "display".
  */
@@ -36,14 +36,14 @@ export class XfaLayerBuilder {
     pdfPage: import("../src/display/api").PDFPageProxy;
     annotationStorage: import("../src/display/annotation_storage").AnnotationStorage;
     linkService: import("./pdf_link_service.js").PDFLinkService;
-    xfaHtml: Object;
+    xfaHtml: object;
     /**
      * @param {XfaLayerBuilderRenderOptions} viewport
-     * @returns {Promise<Object | void>} A promise that is resolved when rendering
+     * @returns {Promise<object | void>} A promise that is resolved when rendering
      *   of the XFA layer is complete. The first rendering will return an object
      *   with a `textDivs` property that can be used with the TextHighlighter.
      */
-    render({ viewport, intent }: XfaLayerBuilderRenderOptions): Promise<Object | void>;
+    render({ viewport, intent }: XfaLayerBuilderRenderOptions): Promise<object | void>;
     cancel(): void;
     hide(): void;
     #private;

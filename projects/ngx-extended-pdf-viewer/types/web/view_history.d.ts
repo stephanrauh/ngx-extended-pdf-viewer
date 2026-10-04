@@ -14,8 +14,6 @@ export class ViewHistory {
     database: any;
     _writeToStorage(): Promise<void>;
     _readFromStorage(): Promise<string | null | undefined>;
-    set(name: any, val: any): Promise<void>;
     setMultiple(properties: any): Promise<void>;
-    get(name: any, defaultValue: any): Promise<any>;
     getMultiple(properties: any): Promise<any>;
 }

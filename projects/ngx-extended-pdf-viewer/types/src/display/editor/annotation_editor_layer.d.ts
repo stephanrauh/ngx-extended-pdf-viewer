@@ -6,7 +6,7 @@ export type DrawLayer = import("../draw_layer.js").DrawLayer;
 export type StructTreeLayerBuilder = import("../../../web/struct_tree_layer_builder.js").StructTreeLayerBuilder;
 export type L10n = import("../../../web/l10n.js").L10n;
 export type AnnotationEditorLayerOptions = {
-    mode: Object;
+    mode: object;
     div: HTMLDivElement;
     structTreeLayer: StructTreeLayerBuilder;
     uiManager: AnnotationEditorUIManager;
@@ -23,8 +23,8 @@ export type RenderEditorLayerOptions = {
     viewport: PageViewport;
 };
 /**
- * @typedef {Object} AnnotationEditorLayerOptions
- * @property {Object} mode
+ * @typedef {object} AnnotationEditorLayerOptions
+ * @property {object} mode
  * @property {HTMLDivElement} div
  * @property {StructTreeLayerBuilder} structTreeLayer
  * @property {AnnotationEditorUIManager} uiManager
@@ -38,7 +38,7 @@ export type RenderEditorLayerOptions = {
  * @property {PageViewport} viewport
  */
 /**
- * @typedef {Object} RenderEditorLayerOptions
+ * @typedef {object} RenderEditorLayerOptions
  * @property {PageViewport} viewport
  */
 /**
@@ -61,9 +61,9 @@ export class AnnotationEditorLayer {
     get isInvisible(): boolean;
     /**
      * Update the toolbar if it's required to reflect the tool currently used.
-     * @param {Object} options
+     * @param {object} options
      */
-    updateToolbar(options: Object): void;
+    updateToolbar(options: object): void;
     /**
      * The mode has changed: it must be updated.
      * @param {number} mode
@@ -77,9 +77,9 @@ export class AnnotationEditorLayer {
     setEditingState(isEditing: boolean): void;
     /**
      * Add some commands into the CommandManager (undo/redo stuff).
-     * @param {Object} params
+     * @param {object} params
      */
-    addCommands(params: Object): void;
+    addCommands(params: object): void;
     cleanUndoStack(type: any): void;
     toggleDrawing(enabled?: boolean): void;
     togglePointerEvents(enabled?: boolean): void;
@@ -137,24 +137,24 @@ export class AnnotationEditorLayer {
     canCreateNewEmptyEditor(): boolean | undefined;
     /**
      * Paste some content into a new editor.
-     * @param {Object} options
-     * @param {Object} params
+     * @param {object} options
+     * @param {object} params
      */
-    pasteEditor(options: Object, params: Object): Promise<void>;
+    pasteEditor(options: object, params: object): Promise<void>;
     /**
      * Create a new editor
-     * @param {Object} data
+     * @param {object} data
      * @returns {Promise<AnnotationEditor | null>}
      */
-    deserialize(data: Object): Promise<AnnotationEditor | null>;
+    deserialize(data: object): Promise<AnnotationEditor | null>;
     /**
      * Create and add a new editor.
      * @param {PointerEvent} event
      * @param {boolean} isCentered
-     * @param [Object] data
+     * @param {object} [data]
      * @returns {AnnotationEditor}
      */
-    createAndAddNewEditor(event: PointerEvent, isCentered: boolean, data?: {}): AnnotationEditor;
+    createAndAddNewEditor(event: PointerEvent, isCentered: boolean, data?: object): AnnotationEditor;
     get boundingClientRect(): DOMRect;
     /**
      * Create and add a new editor.
@@ -189,11 +189,10 @@ export class AnnotationEditorLayer {
     pause(on: any): void;
     endDrawingSession(isAborted?: boolean): any;
     /**
-     *
      * @param {AnnotationEditor} editor
      * @param {number} x
      * @param {number} y
-     * @returns
+     * @returns {boolean}
      */
     findNewParent(editor: AnnotationEditor, x: number, y: number): boolean;
     commitOrRemove(): boolean;
@@ -214,9 +213,9 @@ export class AnnotationEditorLayer {
     update({ viewport }: RenderEditorLayerOptions): void;
     /**
      * Get page dimensions.
-     * @returns {Object} dimensions.
+     * @returns {object} dimensions.
      */
-    get pageDimensions(): Object;
+    get pageDimensions(): object;
     get scale(): number;
     #private;
 }

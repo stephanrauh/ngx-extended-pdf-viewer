@@ -1,15 +1,18 @@
 export class BaseStream {
     /**
+     * @abstract
      * @returns {number}
      */
     get length(): number;
     /**
+     * @abstract
      * @returns {boolean}
      */
     get isEmpty(): boolean;
     get isDataLoaded(): any;
     getByte(): void;
     /**
+     * @abstract
      * @param {number | undefined} [length]
      * @returns {Uint8Array}
      */

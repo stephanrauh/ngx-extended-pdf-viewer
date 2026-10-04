@@ -17,7 +17,7 @@ export class FreeHighlightDrawer {
     } | null;
     isEmpty(): boolean;
     isCancellable(): boolean;
-    removeLastElement(): Object;
+    removeLastElement(): object;
     updateProperty(_name: any, _value: any): null;
     getOutlines(): FreeDrawOutline;
     get defaultSVGProperties(): {
@@ -41,11 +41,11 @@ export class FreeHighlightOutliner extends FreeDrawOutliner {
 export class HighlightOutline extends Outline {
     /**
      * Build a text selection and its hover/selection outline.
-     * @param {Array<Object>} boxes - the boxes of the selected text.
+     * @param {Array<object>} boxes - the boxes of the selected text.
      * @param {boolean} isLTR
      * @returns {HighlightOutline}
      */
-    static build(boxes: Array<Object>, isLTR: boolean): HighlightOutline;
+    static build(boxes: Array<object>, isLTR: boolean): HighlightOutline;
     constructor(outlines: any, box: any, firstPoint: any, lastPoint: any);
     firstPoint: any;
     lastPoint: any;
@@ -53,7 +53,7 @@ export class HighlightOutline extends Outline {
     /** @inheritdoc */
     get defaultSVGProperties(): any;
     /** @inheritdoc */
-    getFocusSVGProperties(rotation: any): Object;
+    getFocusSVGProperties(rotation: any): object;
     /** @inheritdoc */
     updateRotation(rotation: any): {
         root: {
@@ -75,7 +75,7 @@ export class HighlightOutline extends Outline {
 export class HighlightOutliner {
     /**
      * Construct an outliner.
-     * @param {Array<Object>} boxes - An array of axis-aligned rectangles.
+     * @param {Array<object>} boxes - An array of axis-aligned rectangles.
      * @param {number} borderWidth - The width of the border of the boxes, it
      *   allows to make the boxes bigger (or smaller).
      * @param {number} innerMargin - The margin between the boxes and the
@@ -85,7 +85,7 @@ export class HighlightOutliner {
      * @param {boolean} isLTR - true if we're in LTR mode. It's used to determine
      *   the last point of the boxes.
      */
-    constructor(boxes: Array<Object>, borderWidth?: number, innerMargin?: number, isLTR?: boolean);
+    constructor(boxes: Array<object>, borderWidth?: number, innerMargin?: number, isLTR?: boolean);
     getOutlines(): HighlightOutline;
     #private;
 }
@@ -100,7 +100,7 @@ declare class FreeHighlightOutline extends FreeDrawOutline {
     /** @inheritdoc */
     get defaultSVGProperties(): any;
     /** @inheritdoc */
-    getFocusSVGProperties(rotation: any): Object;
+    getFocusSVGProperties(rotation: any): object;
     /** @inheritdoc */
     updateRotation(rotation: any): {
         root: {

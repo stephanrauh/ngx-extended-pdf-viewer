@@ -56,6 +56,8 @@ declare class RadialAxialShadingPattern extends BaseShadingPattern {
     areConic(): boolean;
     _createGradient(ctx: any, transform?: null): any;
     _createReversedGradient(ctx: any, transform?: null): any;
+    /** Rasterize a shading within its device-space bounding box. */
+    _createRasterPattern(ctx: any, owner: any, inverse: any, bbox: any, transform: any, transferMaps: any): any;
     getPattern(ctx: any, owner: any, inverse: any, pathType: any): any;
 }
 declare class MeshShadingPattern extends BaseShadingPattern {
@@ -66,7 +68,7 @@ declare class MeshShadingPattern extends BaseShadingPattern {
     _bounds: any;
     _bbox: any;
     _background: any;
-    _createMeshCanvas(combinedScale: any, backgroundColor: any, canvasFactory: any): {
+    _createMeshCanvas(combinedScale: any, backgroundColor: any, canvasFactory: any, transferMaps?: null): {
         canvas: any;
         offsetX: number;
         offsetY: number;

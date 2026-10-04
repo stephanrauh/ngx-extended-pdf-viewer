@@ -8,16 +8,16 @@ export class AnnotationStorage {
     /**
      * Get the value for a given key if it exists, or return the default value.
      * @param {string} key
-     * @param {Object} defaultValue
-     * @returns {Object}
+     * @param {object} defaultValue
+     * @returns {object}
      */
-    getValue(key: string, defaultValue: Object): Object;
+    getValue(key: string, defaultValue: object): object;
     /**
      * Get the value for a given key.
      * @param {string} key
-     * @returns {Object}
+     * @returns {object}
      */
-    getRawValue(key: string): Object;
+    getRawValue(key: string): object;
     /**
      * Remove a value from the storage.
      * @param {string} key
@@ -26,9 +26,9 @@ export class AnnotationStorage {
     /**
      * Set the value for a given key
      * @param {string} key
-     * @param {Object} value
+     * @param {object} value
      */
-    setValue(key: string, value: Object): void;
+    setValue(key: string, value: object): void;
     /**
      * Check if the storage contains the given key.
      * @param {string} key

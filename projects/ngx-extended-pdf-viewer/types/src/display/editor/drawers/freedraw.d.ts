@@ -23,8 +23,8 @@ export class FreeDrawOutliner {
     constructor(x: any, y: any, box: any, scaleFactor: any, thickness: any, isLTR: any, innerMargin?: number);
     isEmpty(): boolean;
     isCancellable(): boolean;
-    /** @returns {Object} The SVG properties to apply. */
-    removeLastElement(): Object;
+    /** @returns {object} The SVG properties to apply. */
+    removeLastElement(): object;
     add(x: any, y: any): boolean;
     toSVGPath(): string;
     newFreeDrawOutline(outline: any, points: any, box: any, scaleFactor: any, innerMargin: any, isLTR: any): FreeDrawOutline;

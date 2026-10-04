@@ -18,23 +18,23 @@ export type TextLayerBuilderOptions = {
 export type TextLayerBuilderRenderOptions = {
     viewport: PageViewport;
     images: TextLayerImages;
-    textContentParams?: Object | undefined;
+    textContentParams?: object | undefined;
 };
 /**
- * @typedef {Object} TextLayerBuilderOptions
+ * @typedef {object} TextLayerBuilderOptions
  * @property {PDFPageProxy} pdfPage
  * @property {TextHighlighter} [highlighter] - Optional object that will handle
  *   highlighting text from the find controller.
  * @property {TextAccessibilityManager} [accessibilityManager]
  * @property {boolean} [enablePermissions]
- * @property {function} [onAppend]
+ * @property {Function} [onAppend]
  * @property {AbortSignal} [abortSignal]
  */
 /**
- * @typedef {Object} TextLayerBuilderRenderOptions
+ * @typedef {object} TextLayerBuilderRenderOptions
  * @property {PageViewport} viewport
  * @property {TextLayerImages} images
- * @property {Object} [textContentParams]
+ * @property {object} [textContentParams]
  */
 /**
  * The text layer builder provides text selection functionality for the PDF.
