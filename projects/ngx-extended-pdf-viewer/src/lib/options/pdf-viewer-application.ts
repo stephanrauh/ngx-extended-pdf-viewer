@@ -17,7 +17,9 @@ export interface IWebL10n {
 }
 
 export interface ViewHistory {
-  get(name: string, defaultValue?: string): Promise<string>;
+  // get() and set() were removed in pdf.js 6.4 - use getMultiple() and setMultiple()
+  getMultiple<T extends Record<string, any>>(properties: T): Promise<{ [K in keyof T]: any }>;
+  setMultiple(properties: Record<string, any>): Promise<void>;
 }
 
 /**

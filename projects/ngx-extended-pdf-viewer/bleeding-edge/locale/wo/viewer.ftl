@@ -39,19 +39,12 @@ pdfjs-printing-not-supported = Artu: Joowkat bii nanguwul lool mool.
 
 ## Tooltips and alt text for side panel toolbar buttons
 
-pdfjs-thumbs-button =
-    .title = Wone nataal yu ndaw yi
-pdfjs-thumbs-button-label = Nataal yu ndaw yi
 pdfjs-findbar-button =
     .title = Gis ci biir jukki bi
 pdfjs-findbar-button-label = Wut
 
 ## Thumbnails panel item (tooltip and alt text for images)
 
-# Variables:
-#   $page (Number) - the page number
-pdfjs-thumb-page-title =
-    .title = Xët { $page }
 # Variables:
 #   $page (Number) - the page number
 pdfjs-thumb-page-canvas =
@@ -99,6 +92,10 @@ pdfjs-text-annotation-type =
 pdfjs-password-ok-button = OK
 pdfjs-password-cancel-button = Neenal
 
+# Additional translations for ngx-extended-pdf-viewer (wo)
+pdfjs-thumbs-button =
+    .title = Wone nataal yu ndaw yi
+pdfjs-thumbs-button-label = Nataal yu ndaw yi
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-page-input =
     .title = Page

@@ -141,28 +141,10 @@ pdfjs-print-progress-close-button = لقو
 
 ## Tooltips and alt text for side panel toolbar buttons
 
-pdfjs-toggle-sidebar-button =
-    .title = آلشت هالت نوار کلی
-pdfjs-toggle-sidebar-button-label = آلشت هالت نوار کلی
-pdfjs-document-outline-button-label = تئر سند
-pdfjs-attachments-button =
-    .title = نشووݩ داڌن پیوستا
-pdfjs-attachments-button-label = پیوستا
-pdfjs-layers-button-label = لایه یل
-pdfjs-thumbs-button =
-    .title = نشووݩ داڌن شؽواتا کۊچیر
-pdfjs-thumbs-button-label = شؽواتا کۊچیر
 pdfjs-findbar-button =
     .title = جوستن من سند
 pdfjs-findbar-button-label = جوستن
 pdfjs-additional-layers = لایه یل ازافه
-
-## Thumbnails panel item (tooltip and alt text for images)
-
-# Variables:
-#   $page (Number) - the page number
-pdfjs-thumb-page-title =
-    .title = بلگه { $page }
 
 ## Find panel button title and messages
 
@@ -693,3 +675,18 @@ pdfjs-cursor-page-flip-tool-button-label = Page Flip
 pdfjs-loading-error-more-info = More Information
 pdfjs-loading-error-less-info = Less Information
 pdfjs-loading-error-close = Close
+pdfjs-toggle-sidebar-button =
+    .title = Toggle Sidebar
+pdfjs-toggle-sidebar-button-label = Toggle Sidebar
+pdfjs-document-outline-button =
+    .title = Show Document Outline (double-click to expand/collapse all items)
+pdfjs-document-outline-button-label = Document Outline
+pdfjs-attachments-button =
+    .title = Show Attachments
+pdfjs-attachments-button-label = Attachments
+pdfjs-layers-button =
+    .title = Show Layers (double-click to reset all layers to the default state)
+pdfjs-layers-button-label = Layers
+pdfjs-thumbs-button =
+    .title = Show Thumbnails
+pdfjs-thumbs-button-label = Thumbnails

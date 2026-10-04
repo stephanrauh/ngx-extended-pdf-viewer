@@ -149,23 +149,6 @@ pdfjs-printing-not-ready = ຄໍາ​ເຕືອນ​: PDF ບໍ່​ໄ�
 
 ## Tooltips and alt text for side panel toolbar buttons
 
-pdfjs-toggle-sidebar-button =
-    .title = ເປີດ/ປິດແຖບຂ້າງ
-pdfjs-toggle-sidebar-notification-button =
-    .title = ສະຫຼັບແຖບດ້ານຂ້າງ (ເອກະສານປະກອບມີໂຄງຮ່າງ/ໄຟລ໌ແນບ/ຊັ້ນຂໍ້ມູນ)
-pdfjs-toggle-sidebar-button-label = ເປີດ/ປິດແຖບຂ້າງ
-pdfjs-document-outline-button =
-    .title = ສະ​ແດງ​ໂຄງ​ຮ່າງ​ເອ​ກະ​ສານ (ກົດ​ສອງ​ຄັ້ງ​ເພື່ອ​ຂະ​ຫຍາຍ / ຫຍໍ້​ລາຍ​ການ​ທັງ​ຫມົດ​)
-pdfjs-document-outline-button-label = ເຄົ້າຮ່າງເອກະສານ
-pdfjs-attachments-button =
-    .title = ສະແດງໄຟລ໌ແນບ
-pdfjs-attachments-button-label = ໄຟລ໌ແນບ
-pdfjs-layers-button =
-    .title = ສະແດງຊັ້ນຂໍ້ມູນ (ຄລິກສອງເທື່ອເພື່ອຣີເຊັດຊັ້ນຂໍ້ມູນທັງໝົດໃຫ້ເປັນສະຖານະເລີ່ມຕົ້ນ)
-pdfjs-layers-button-label = ຊັ້ນ
-pdfjs-thumbs-button =
-    .title = ສະແດງຮູບຫຍໍ້
-pdfjs-thumbs-button-label = ຮູບຕົວຢ່າງ
 pdfjs-current-outline-item-button =
     .title = ຊອກຫາລາຍການໂຄງຮ່າງປະຈຸບັນ
 pdfjs-current-outline-item-button-label = ລາຍການໂຄງຮ່າງປະຈຸບັນ
@@ -178,18 +161,14 @@ pdfjs-additional-layers = ຊັ້ນຂໍ້ມູນເພີ່ມເຕີ
 
 # Variables:
 #   $page (Number) - the page number
-pdfjs-thumb-page-title =
-    .title = ໜ້າ { $page }
-# Variables:
-#   $page (Number) - the page number
 pdfjs-thumb-page-canvas =
     .aria-label = ຮູບຕົວຢ່າງຂອງໜ້າ { $page }
 
 ## Find panel button title and messages
 
 pdfjs-find-input =
-    .title = ຄົ້ນຫາ
     .placeholder = ຊອກຫາໃນເອກະສານ...
+    .title = ຄົ້ນຫາ
 pdfjs-find-previous-button =
     .title = ຊອກຫາການປະກົດຕົວທີ່ຜ່ານມາຂອງປະໂຫຍກ
 pdfjs-find-previous-button-label = ກ່ອນຫນ້ານີ້
@@ -265,6 +244,22 @@ pdfjs-editor-ink-color-input = ສີ
 pdfjs-editor-ink-thickness-input = ຄວາມຫນາ
 pdfjs-editor-ink-opacity-input = ຄວາມໂປ່ງໃສ
 
+# Additional translations for ngx-extended-pdf-viewer (lo)
+pdfjs-toggle-sidebar-button =
+    .title = ເປີດ/ປິດແຖບຂ້າງ
+pdfjs-toggle-sidebar-button-label = ເປີດ/ປິດແຖບຂ້າງ
+pdfjs-document-outline-button =
+    .title = ສະ​ແດງ​ໂຄງ​ຮ່າງ​ເອ​ກະ​ສານ (ກົດ​ສອງ​ຄັ້ງ​ເພື່ອ​ຂະ​ຫຍາຍ / ຫຍໍ້​ລາຍ​ການ​ທັງ​ຫມົດ​)
+pdfjs-document-outline-button-label = ເຄົ້າຮ່າງເອກະສານ
+pdfjs-attachments-button =
+    .title = ສະແດງໄຟລ໌ແນບ
+pdfjs-attachments-button-label = ໄຟລ໌ແນບ
+pdfjs-layers-button =
+    .title = ສະແດງຊັ້ນຂໍ້ມູນ (ຄລິກສອງເທື່ອເພື່ອຣີເຊັດຊັ້ນຂໍ້ມູນທັງໝົດໃຫ້ເປັນສະຖານະເລີ່ມຕົ້ນ)
+pdfjs-layers-button-label = ຊັ້ນ
+pdfjs-thumbs-button =
+    .title = ສະແດງຮູບຫຍໍ້
+pdfjs-thumbs-button-label = ຮູບຕົວຢ່າງ
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-download-button =
     .title = Download

@@ -140,18 +140,6 @@ pdfjs-printing-not-ready = Uzmaneibu: PDF nav pilneibā īluodeits drukuošonai.
 
 ## Tooltips and alt text for side panel toolbar buttons
 
-pdfjs-toggle-sidebar-button =
-    .title = Puorslēgt suonu jūslu
-pdfjs-toggle-sidebar-button-label = Puorslēgt suonu jūslu
-pdfjs-document-outline-button =
-    .title = Show Document Outline (double-click to expand/collapse all items)
-pdfjs-document-outline-button-label = Dokumenta saturs
-pdfjs-attachments-button =
-    .title = Show Attachments
-pdfjs-attachments-button-label = Attachments
-pdfjs-thumbs-button =
-    .title = Paruodeit seiktālus
-pdfjs-thumbs-button-label = Seiktāli
 pdfjs-findbar-button =
     .title = Mekleit dokumentā
 pdfjs-findbar-button-label = Mekleit
@@ -160,18 +148,14 @@ pdfjs-findbar-button-label = Mekleit
 
 # Variables:
 #   $page (Number) - the page number
-pdfjs-thumb-page-title =
-    .title = Lopa { $page }
-# Variables:
-#   $page (Number) - the page number
 pdfjs-thumb-page-canvas =
     .aria-label = Lopys { $page } seiktāls
 
 ## Find panel button title and messages
 
 pdfjs-find-input =
-    .title = Mekleit
     .placeholder = Mekleit dokumentā…
+    .title = Mekleit
 pdfjs-find-previous-button =
     .title = Atrast īprīkšejū
 pdfjs-find-previous-button-label = Īprīkšejā
@@ -220,6 +204,19 @@ pdfjs-password-ok-button = Labi
 pdfjs-password-cancel-button = Atceļt
 pdfjs-web-fonts-disabled = Šķārsteikla fonti nav aktivizāti: Navar īgult PDF fontus.
 
+# Additional translations for ngx-extended-pdf-viewer (ltg)
+pdfjs-toggle-sidebar-button =
+    .title = Puorslēgt suonu jūslu
+pdfjs-toggle-sidebar-button-label = Puorslēgt suonu jūslu
+pdfjs-document-outline-button =
+    .title = Show Document Outline (double-click to expand/collapse all items)
+pdfjs-document-outline-button-label = Dokumenta saturs
+pdfjs-attachments-button =
+    .title = Show Attachments
+pdfjs-attachments-button-label = Attachments
+pdfjs-thumbs-button =
+    .title = Paruodeit seiktālus
+pdfjs-thumbs-button-label = Seiktāli
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-save-button =
     .title = Save

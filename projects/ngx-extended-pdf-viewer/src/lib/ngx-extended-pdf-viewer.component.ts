@@ -3473,7 +3473,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
           // setZoom() is called later again, when the PDF document has been loaded and its
           // fingerprint has been calculated.
         } else {
-          const userSetting = await PDFViewerApplication.store.get('zoom');
+          const { zoom: userSetting } = await PDFViewerApplication.store.getMultiple({ zoom: undefined });
           if (userSetting) {
             if (!Number.isNaN(Number(userSetting))) {
               zoomAsNumber = Number(userSetting) / 100;

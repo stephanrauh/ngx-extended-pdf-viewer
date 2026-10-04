@@ -155,23 +155,6 @@ pdfjs-printing-not-ready = Atencion : lo PDF es pas entièrament cargat per lo
 
 ## Tooltips and alt text for side panel toolbar buttons
 
-pdfjs-toggle-sidebar-button =
-    .title = Afichar/amagar lo panèl lateral
-pdfjs-toggle-sidebar-notification-button =
-    .title = Afichar/amagar lo panèl lateral (lo document conten esquèmas/pèças juntas/calques)
-pdfjs-toggle-sidebar-button-label = Afichar/amagar lo panèl lateral
-pdfjs-document-outline-button =
-    .title = Mostrar los esquèmas del document (dobleclicar per espandre/reduire totes los elements)
-pdfjs-document-outline-button-label = Marcapaginas del document
-pdfjs-attachments-button =
-    .title = Visualizar las pèças juntas
-pdfjs-attachments-button-label = Pèças juntas
-pdfjs-layers-button =
-    .title = Afichar los calques (doble-clicar per reïnicializar totes los calques a l’estat per defaut)
-pdfjs-layers-button-label = Calques
-pdfjs-thumbs-button =
-    .title = Afichar las vinhetas
-pdfjs-thumbs-button-label = Vinhetas
 pdfjs-current-outline-item-button =
     .title = Trobar l’element de plan actual
 pdfjs-current-outline-item-button-label = Element de plan actual
@@ -184,18 +167,14 @@ pdfjs-additional-layers = Calques suplementaris
 
 # Variables:
 #   $page (Number) - the page number
-pdfjs-thumb-page-title =
-    .title = Pagina { $page }
-# Variables:
-#   $page (Number) - the page number
 pdfjs-thumb-page-canvas =
     .aria-label = Vinheta de la pagina { $page }
 
 ## Find panel button title and messages
 
 pdfjs-find-input =
-    .title = Recercar
     .placeholder = Cercar dins lo document…
+    .title = Recercar
 pdfjs-find-previous-button =
     .title = Tròba l'ocurréncia precedenta de la frasa
 pdfjs-find-previous-button-label = Precedent
@@ -286,8 +265,8 @@ pdfjs-editor-highlight-button =
     .title = Subrelinhar
 pdfjs-editor-highlight-button-label = Subrelinhar
 pdfjs-highlight-floating-button1 =
-    .title = Subrelinhar
     .aria-label = Subrelinhar
+    .title = Subrelinhar
 pdfjs-highlight-floating-button-label = Subrelinhar
 
 ## Remove button for the various kind of editor.
@@ -366,9 +345,6 @@ pdfjs-editor-new-alt-text-error-close-button = Tampar
 
 pdfjs-editor-alt-text-settings-automatic-title = Tèxte alternatiu automatic
 pdfjs-editor-alt-text-settings-create-model-button-label = Crear un tèxte alternatiu automaticament
-pdfjs-editor-alt-text-settings-delete-model-button = Suprimir
-pdfjs-editor-alt-text-settings-download-model-button = Telecargar
-pdfjs-editor-alt-text-settings-downloading-model-button = Telecargament…
 pdfjs-editor-alt-text-settings-editor-title = Editor de tèxte alternatiu
 pdfjs-editor-alt-text-settings-close-button = Tampar
 
@@ -395,6 +371,22 @@ pdfjs-editor-undo-bar-close-button-label = Tampar
 # It's spelled uppercase for English, but it can be translated as usual.
 pdfjs-new-badge-content = NÒU
 
+# Additional translations for ngx-extended-pdf-viewer (oc)
+pdfjs-toggle-sidebar-button =
+    .title = Afichar/amagar lo panèl lateral
+pdfjs-toggle-sidebar-button-label = Afichar/amagar lo panèl lateral
+pdfjs-document-outline-button =
+    .title = Mostrar los esquèmas del document (dobleclicar per espandre/reduire totes los elements)
+pdfjs-document-outline-button-label = Marcapaginas del document
+pdfjs-attachments-button =
+    .title = Visualizar las pèças juntas
+pdfjs-attachments-button-label = Pèças juntas
+pdfjs-layers-button =
+    .title = Afichar los calques (doble-clicar per reïnicializar totes los calques a l’estat per defaut)
+pdfjs-layers-button-label = Calques
+pdfjs-thumbs-button =
+    .title = Afichar las vinhetas
+pdfjs-thumbs-button-label = Vinhetas
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } KB ({ $b } bytes)
 pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } bytes)
