@@ -143,7 +143,7 @@ export class DynamicCssComponent implements OnDestroy {
   #outerContainer .hiddenXLView {
     display: none;
   }
-  #outerContainer .visibleXLView {
+  #outerContainer #mainContainer .visibleXLView {
     display: inherit;
   }
 }
