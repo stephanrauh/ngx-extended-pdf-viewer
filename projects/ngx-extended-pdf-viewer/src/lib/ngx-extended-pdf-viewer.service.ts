@@ -1,7 +1,7 @@
 import { effect, Injectable, Renderer2, RendererFactory2, signal } from '@angular/core';
 import { AnnotationEditorParamsType, AnnotationMode, EditorAnnotation, HighlightEditorAnnotation, StampEditorAnnotation } from './options/editor-annotations';
 import { PdfLayer } from './options/optional_content_config';
-import { PdfPageInfo, PdfPageSelection } from './options/pdf-page-info';
+import { PdfPageInfo, PdfPageMapping, PdfPageSelection } from './options/pdf-page-info';
 import { PDFPrintRange } from './options/pdf-print-range';
 import { IPDFViewerApplication, PDFDocumentProxy, PDFFindParameters, PDFPageProxy, TextItem, TextMarkedContent } from './options/pdf-viewer-application';
 import { ZoomType } from './options/zoom-type';
@@ -160,6 +160,10 @@ export class NgxExtendedPdfViewerService {
   }
 
   public find(text: string | string[] | RegExp, options: FindOptions = {}): Array<Promise<number>> | undefined {
+    if (text instanceof RegExp) {
+      // pdf.js expects a regular expression as its source text. The `i` flag stands for "ignore case".
+      return this.find(text.source, { ...options, regexp: true, matchCase: options.matchCase ?? !text.ignoreCase });
+    }
     // #3216 Gate on the live findController rather than the public flag — the controller is
     // the actual authority on "can I find?", and the flag can be stale across destroy/recreate.
     const findController = options.useSecondaryFindcontroller ? this.PDFViewerApplication?.customFindController : this.PDFViewerApplication?.findController;
@@ -645,19 +649,17 @@ export class NgxExtendedPdfViewerService {
 
           // add the corresponding input
           if (currentFormValues && a.fieldName) {
-            try {
-              if (a.exportValue) {
-                const currentValue: any = this.PDFViewerApplication?.pdfDocument.annotationStorage.getValue(a.id, a.fieldName + '/' + a.exportValue, '');
-                a.value = currentValue?.value;
-              } else if (a.radioButton) {
-                const currentValue: any = this.PDFViewerApplication?.pdfDocument.annotationStorage.getValue(a.id, a.fieldName + '/' + a.fieldValue, '');
-                a.value = currentValue?.value;
-              } else {
-                const currentValue: any = this.PDFViewerApplication?.pdfDocument.annotationStorage.getValue(a.id, a.fieldName, '');
-                a.value = currentValue?.value;
-              }
-            } catch (exception) {
-              // just ignore it
+            // pdf.js stores a field's value only once the user (or the [formData] binding) has changed it.
+            // Until then, the field still shows the value in the file.
+            const edited = pdf.annotationStorage.getRawValue(a.id) as { value?: unknown } | undefined;
+            if (edited?.value !== undefined) {
+              a.value = edited.value;
+            } else if (a.checkBox) {
+              a.value = a.fieldValue === a.exportValue;
+            } else if (a.radioButton) {
+              a.value = a.fieldValue === a.buttonValue;
+            } else {
+              a.value = a.fieldValue;
             }
           }
           result.push({ fieldAnnotation: a, fieldRect, pageNumber: i });
@@ -1286,7 +1288,8 @@ export class NgxExtendedPdfViewerService {
     if (!this.PDFViewerApplication) {
       return 0;
     }
-    return this.PDFViewerApplication.pagesCount ?? 0;
+    // The pages shown, which differ from the file's page count after the user has deleted or copied pages in the sidebar.
+    return this.PDFViewerApplication.pdfDocument?.pagesMapper?.pagesNumber || (this.PDFViewerApplication.pagesCount ?? 0);
   }
 
   public movePage(fromIndex: number, toIndex: number): void {
@@ -1382,10 +1385,21 @@ export class NgxExtendedPdfViewerService {
     // Merging replaces the document, so pages the user has already reordered or deleted
     // have to be part of the description of the new document - otherwise they'd come back.
     const thumbnailViewer = application.pdfThumbnailViewer;
-    const pendingChanges: Array<PdfPageInfo> | null = thumbnailViewer?.hasStructuralChanges?.() ? thumbnailViewer.getStructuralChanges() : null;
-    const currentDocument: Array<PdfPageInfo> = pendingChanges ?? [{ document: null }];
+    const pendingChanges = thumbnailViewer?.hasStructuralChanges?.() ? NgxExtendedPdfViewerService.toPageMapping(thumbnailViewer.getStructuralChanges()) : null;
+    const currentDocument: Array<PdfPageInfo> = pendingChanges?.pageInfos ?? [{ document: null }];
 
-    await this.extractPages([...currentDocument, ...newPages]);
+    await this.extractPages([...currentDocument, ...newPages], pendingChanges?.copyLevels);
+  }
+
+  /**
+   * pdf.js 6.4 describes a page mapping as `{ pageInfos, copyLevels }`; older versions
+   * returned the `pageInfos` array alone.
+   */
+  private static toPageMapping(mapping: PdfPageMapping | Array<PdfPageInfo> | null | undefined): PdfPageMapping | null {
+    if (!mapping) {
+      return null;
+    }
+    return Array.isArray(mapping) ? { pageInfos: mapping, copyLevels: null } : mapping;
   }
 
   /**
@@ -1402,6 +1416,8 @@ export class NgxExtendedPdfViewerService {
    * experimental pdf.js API, so its semantics may change in future versions.
    *
    * @param pageInfos The sources of the new document, in pdf.js's `PageInfo` format
+   * @param copyLevels Only needed when the same page is used several times: what
+   *   `pagesMapper.getPageMappingForSaving()` reports, so each copy of a page gets its own annotations
    * @returns Promise that resolves when the new document has been loaded and rendered
    * @throws Error if the viewer isn't ready yet, or if pdf.js can't build the document
    *
@@ -1412,7 +1428,7 @@ export class NgxExtendedPdfViewerService {
    *   { document: bytes, excludePages: [2], insertAfter: -1 } // 0-based: page 3, before page 1
    * ]);
    */
-  public async extractPages(pageInfos: Array<PdfPageInfo>): Promise<void> {
+  public async extractPages(pageInfos: Array<PdfPageInfo>, copyLevels?: Int32Array | null): Promise<void> {
     const application = this.PDFViewerApplication;
     const pdfDocument = application?.pdfDocument;
     if (!application || !pdfDocument) {
@@ -1422,7 +1438,7 @@ export class NgxExtendedPdfViewerService {
       throw new Error('extractPages(): merging pages requires pdf.js 6.0 or newer.');
     }
 
-    const mergedDocument = await pdfDocument.extractPages(pageInfos);
+    const mergedDocument = await pdfDocument.extractPages(pageInfos, copyLevels ?? null);
     if (!mergedDocument) {
       throw new Error("extractPages(): pdf.js couldn't build the document. Is every source a valid PDF file? (XFA files and wrong passwords are rejected, too.)");
     }
@@ -1486,7 +1502,8 @@ export class NgxExtendedPdfViewerService {
     }
     // The mapper describes the remaining pages the way the user sees them, so pages they've
     // already reordered or deleted in the sidebar keep their current position.
-    await this.extractPages(pagesMapper.extractPages(remainingPages));
+    const { pageInfos, copyLevels } = NgxExtendedPdfViewerService.toPageMapping(pagesMapper.extractPages(remainingPages))!;
+    await this.extractPages(pageInfos, copyLevels);
   }
 
   /** Expands a list of 1-based page numbers and `[from, to]` ranges into single page numbers. */

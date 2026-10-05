@@ -1103,7 +1103,7 @@ export interface PDFDocumentProxy {
    * @returns {Promise<Uint8Array | null>} the new document, or `null` if pdf.js
    *   couldn't build it (e.g. because one of the sources isn't a valid PDF).
    */
-  extractPages(pageInfos: Array<PdfPageInfo>): Promise<Uint8Array | null>;
+  extractPages(pageInfos: Array<PdfPageInfo>, copyLevels?: Int32Array | null): Promise<Uint8Array | null>;
   /**
    * Keeps track of the pages the user has reordered, copied, or deleted in the
    * thumbnail sidebar. Added in pdf.js 6.0.

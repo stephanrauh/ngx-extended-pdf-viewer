@@ -49,6 +49,20 @@ export interface PdfPageInfo {
 }
 
 /**
+ * A document described page by page, as pdf.js's page mapper reports it.
+ */
+export interface PdfPageMapping {
+  pageInfos: Array<PdfPageInfo>;
+
+  /**
+   * For each page, which copy of its source page it is (0 = the original). pdf.js
+   * uses this to give every copy of a page its own annotations. `null` if no page is
+   * used twice.
+   */
+  copyLevels: Int32Array | null;
+}
+
+/**
  * pdf.js's bookkeeping of pages the user has reordered, copied, or deleted in the
  * thumbnail sidebar. Available since pdf.js 6.0 as `PDFDocumentProxy.pagesMapper`.
  */
@@ -60,11 +74,11 @@ export interface PdfPagesMapper {
   hasBeenAltered(): boolean;
 
   /** Describes the pages currently shown, in their current order. */
-  getPageMappingForSaving(): Array<PdfPageInfo>;
+  getPageMappingForSaving(): PdfPageMapping;
 
   /**
    * Describes a document consisting of the given pages only, in the order given.
    * The page numbers count from 1 and refer to the pages as they are shown now.
    */
-  extractPages(pageNumbers: Iterable<number>): Array<PdfPageInfo>;
+  extractPages(pageNumbers: Iterable<number>): PdfPageMapping;
 }

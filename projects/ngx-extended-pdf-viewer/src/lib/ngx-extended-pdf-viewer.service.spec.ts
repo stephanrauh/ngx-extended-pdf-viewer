@@ -120,6 +120,17 @@ describe('NgxExtendedPdfViewerService', () => {
       expect(document.getElementById).toHaveBeenCalledWith('findMatchCase');
     });
 
+    it('should pass a RegExp to pdf.js as a regular-expression search of its source text', () => {
+      const ngxFind = jest.fn();
+      (service as any).PDFViewerApplication = { findController: { ngxFind } };
+
+      service.find(/V[a-z]+lia/i);
+      expect(ngxFind).toHaveBeenCalledWith(expect.objectContaining({ query: 'V[a-z]+lia', matchRegExp: true, caseSensitive: false }));
+
+      service.find(/V[a-z]+lia/);
+      expect(ngxFind).toHaveBeenLastCalledWith(expect.objectContaining({ query: 'V[a-z]+lia', matchRegExp: true, caseSensitive: true }));
+    });
+
     it('should configure DOM checkboxes based on find options', () => {
       (service as any).PDFViewerApplication = { findController: { ngxFind: jest.fn() } };
       const options: FindOptions = {
@@ -901,7 +912,20 @@ describe('NgxExtendedPdfViewerService', () => {
       expect(extractPages.mock.calls[0][0][1]).toEqual({ image: bitmap, insertAfter: 1 });
     });
 
-    it('should keep pages the user has already reordered or deleted', async () => {
+    it('should keep pages the user has already reordered, copied or deleted', async () => {
+      const pageInfos = [{ document: null, pageIndices: [1, 0, 2] }];
+      const copyLevels = new Int32Array([0, 0, 1]);
+      mockApplication.pdfThumbnailViewer.hasStructuralChanges.mockReturnValue(true);
+      mockApplication.pdfThumbnailViewer.getStructuralChanges.mockReturnValue({ pageInfos, copyLevels });
+
+      await service.mergeDocument(somePdf(), { insertAfterPage: 0 });
+
+      expect(extractPages.mock.calls[0][0][0]).toBe(pageInfos[0]);
+      expect(extractPages.mock.calls[0][0]).toHaveLength(2);
+      expect(extractPages.mock.calls[0][1]).toBe(copyLevels);
+    });
+
+    it('should accept the pending changes of older pdf.js versions, which are a plain array', async () => {
       const structuralChanges = [{ document: null, pageIndices: [1, 0] }];
       mockApplication.pdfThumbnailViewer.hasStructuralChanges.mockReturnValue(true);
       mockApplication.pdfThumbnailViewer.getStructuralChanges.mockReturnValue(structuralChanges);
@@ -909,6 +933,7 @@ describe('NgxExtendedPdfViewerService', () => {
       await service.mergeDocument(somePdf(), { insertAfterPage: 0 });
 
       expect(extractPages.mock.calls[0][0][0]).toBe(structuralChanges[0]);
+      expect(extractPages.mock.calls[0][1]).toBeNull();
     });
 
     it('should reload the viewer with the merged document', async () => {
@@ -960,6 +985,51 @@ describe('NgxExtendedPdfViewerService', () => {
     });
   });
 
+  describe('getFormData', () => {
+    const widgets = [
+      { id: '1R', subtype: 'Widget', fieldName: 'name', fieldValue: 'from the file', rect: [0, 0, 10, 10] },
+      { id: '2R', subtype: 'Widget', fieldName: 'untouched', fieldValue: 'still the original', rect: [0, 0, 10, 10] },
+      { id: '3R', subtype: 'Widget', fieldName: 'agree', checkBox: true, exportValue: 'Yes', fieldValue: 'Yes', rect: [0, 0, 10, 10] },
+      { id: '4R', subtype: 'Widget', fieldName: 'level', radioButton: true, buttonValue: 'B', fieldValue: 'A', rect: [0, 0, 10, 10] },
+      { id: '5R', subtype: 'Link', rect: [0, 0, 10, 10] },
+    ];
+    const edited: Record<string, { value: unknown }> = { '1R': { value: 'typed by the user' }, '4R': { value: true } };
+
+    beforeEach(() => {
+      (service as any).PDFViewerApplication = {
+        pdfDocument: {
+          numPages: 1,
+          getPage: jest.fn().mockResolvedValue({
+            getAnnotations: jest.fn().mockResolvedValue(widgets),
+            getViewport: () => ({ transform: [1, 0, 0, 1, 0, 0] }),
+          }),
+          annotationStorage: { getRawValue: (id: string) => edited[id] },
+        },
+      };
+    });
+
+    const valueOf = (fields: Array<any>, name: string) => fields.find((f) => f.fieldAnnotation.fieldName === name).fieldAnnotation.value;
+
+    it('should report the values the user has entered', async () => {
+      const fields = await service.getFormData();
+      expect(fields).toHaveLength(4);
+      expect(valueOf(fields, 'name')).toBe('typed by the user');
+      expect(valueOf(fields, 'level')).toBe(true);
+    });
+
+    it('should report the value in the file for fields nobody has changed', async () => {
+      const fields = await service.getFormData();
+      expect(valueOf(fields, 'untouched')).toBe('still the original');
+      expect(valueOf(fields, 'agree')).toBe(true);
+    });
+
+    it('should not add current values when asked for the original form only', async () => {
+      const fields: Array<any> = await service.getFormData(false);
+      expect(valueOf(fields, 'name')).toBeUndefined();
+      expect(fields.find((f) => f.fieldAnnotation.fieldName === 'name').fieldAnnotation.fieldValue).toBe('from the file');
+    });
+  });
+
   describe('deletePages', () => {
     let mockApplication: any;
     let extractPages: jest.Mock;
@@ -968,7 +1038,7 @@ describe('NgxExtendedPdfViewerService', () => {
     beforeEach(() => {
       const bus = createFakeEventBus();
       extractPages = jest.fn().mockResolvedValue(new Uint8Array([1, 2, 3]));
-      mapperExtractPages = jest.fn().mockReturnValue([{ document: null, includePages: [], pageIndices: [] }]);
+      mapperExtractPages = jest.fn().mockReturnValue({ pageInfos: [{ document: null, includePages: [], pageIndices: [] }], copyLevels: null });
       mockApplication = {
         pagesCount: 6,
         _docFilename: 'example.pdf',
@@ -1000,12 +1070,37 @@ describe('NgxExtendedPdfViewerService', () => {
     });
 
     it('should rebuild the document from what the page mapper describes', async () => {
+      const pageInfos = [{ document: null, includePages: [0, 0], pageIndices: [0, 1] }];
+      const copyLevels = new Int32Array([0, 1]);
+      mapperExtractPages.mockReturnValue({ pageInfos, copyLevels });
+
+      await service.deletePages(2);
+
+      expect(extractPages).toHaveBeenCalledWith(pageInfos, copyLevels);
+    });
+
+    it('should count the pages as the user sees them after deleting or copying pages in the sidebar', async () => {
+      mockApplication.pdfDocument.pagesMapper.pagesNumber = 4;
+
+      expect(service.getPageCount()).toBe(4);
+      await service.deletePages(4);
+      expect(mapperExtractPages).toHaveBeenCalledWith([1, 2, 3]);
+      await expect(service.deletePages(5)).rejects.toThrow('not a valid page number');
+    });
+
+    it('should fall back to the page count of the file if pdf.js has no page mapper', () => {
+      delete mockApplication.pdfDocument.pagesMapper;
+
+      expect(service.getPageCount()).toBe(6);
+    });
+
+    it('should accept the page mapping of older pdf.js versions, which is a plain array', async () => {
       const pageInfos = [{ document: null, includePages: [0], pageIndices: [0] }];
       mapperExtractPages.mockReturnValue(pageInfos);
 
       await service.deletePages(2);
 
-      expect(extractPages).toHaveBeenCalledWith(pageInfos);
+      expect(extractPages).toHaveBeenCalledWith(pageInfos, null);
     });
 
     it('should refuse to delete pages that do not exist', async () => {

@@ -767,6 +767,21 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   // @ts-ignore TS6133 - Used for side effects only
   private readonly _readingDirectionEffect = effect(() => {
     const direction = this.readingDirection();
+    this.applyReadingDirection(direction);
+    if (!this.initialized) return;
+    const PDFViewerApplicationOptions = this.pdfScriptLoaderService.PDFViewerApplicationOptions;
+    if (PDFViewerApplicationOptions) {
+      PDFViewerApplicationOptions.set('readingDirection', direction);
+    }
+  });
+
+  /**
+   * The CSS classes that put the pages of a spread in reading order. Also called when the viewer has
+   * been initialized: when [readingDirection] is set from the start, its effect runs before the viewer
+   * is in the DOM.
+   */
+  private applyReadingDirection(direction: 'ltr' | 'rtl' | 'auto'): void {
+    if (typeof document === 'undefined') return;
     const isRtl = direction === 'rtl';
     const isLtr = direction === 'ltr';
     const viewer = document.getElementById('viewer');
@@ -778,12 +793,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     if (viewerContainer) {
       viewerContainer.classList.toggle('readingDirection-rtl', isRtl);
     }
-    if (!this.initialized) return;
-    const PDFViewerApplicationOptions = this.pdfScriptLoaderService.PDFViewerApplicationOptions;
-    if (PDFViewerApplicationOptions) {
-      PDFViewerApplicationOptions.set('readingDirection', direction);
-    }
-  });
+  }
 
   /** Allows the user to define the name of the file after clicking "download" */
   public filenameForDownload = input<string | undefined>(undefined);
@@ -1499,16 +1509,38 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   // @ts-ignore TS6133 - Used for side effects only
   private readonly _pageLabelEffect = effect(() => {
     const pageLabel = this.pageLabel();
+    // Don't navigate if the viewer has reported its own page label (scrolling, a new document)
+    if (this._pageLabelSetByViewer) {
+      this._pageLabelSetByViewer = false;
+      return;
+    }
     if (typeof window === 'undefined') return;
-    if (!this.initialized) return;
 
     const PDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
+    if (!this.initialized || !PDFViewerApplication?.pagesCount) {
+      // the document isn't there yet: navigate when its pages have been loaded
+      this._pageLabelToOpen = pageLabel;
+      return;
+    }
     if (pageLabel) {
       if (pageLabel !== PDFViewerApplication.pdfViewer.currentPageLabel) {
         PDFViewerApplication.pdfViewer.currentPageLabel = pageLabel as string;
       }
     }
   });
+
+  /** The page label the application has asked for before the document was ready. */
+  private _pageLabelToOpen: string | undefined;
+
+  private _pageLabelSetByViewer = false;
+
+  /** Reports the viewer's page label to the application without navigating. */
+  private setPageLabelFromViewer(pageLabel: string | undefined): void {
+    if (pageLabel !== this.pageLabel()) {
+      this._pageLabelSetByViewer = true;
+      this.pageLabel.set(pageLabel);
+    }
+  }
 
   // @ts-ignore TS6133 - Used for side effects only
   private readonly _rotationEffect = effect(() => {
@@ -2513,6 +2545,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     }
     this.initialized = true;
     this.service.ngxExtendedPdfViewerInitialized = true;
+    this.applyReadingDirection(this.readingDirection());
     this.registerEventListeners(PDFViewerApplication);
     this.selectCursorTool();
     if (!this.listenToURL()) {
@@ -2758,12 +2791,15 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
           this.asyncWithCD(() => {
             if (!this.destroyInitialization) {
               // hurried users sometimes reload the PDF before it has finished initializing
+              const pageLabelToOpen = this._pageLabelToOpen;
+              this._pageLabelToOpen = undefined;
               if (this.nameddest()) {
                 PDFViewerApplication.pdfLinkService.goToDestination(this.nameddest());
+              } else if (pageLabelToOpen) {
+                // checked before [page]: by now, page() is the page the viewer has opened, not necessarily one the application asked for
+                PDFViewerApplication.pdfViewer.currentPageLabel = pageLabelToOpen;
               } else if (this.page()) {
                 PDFViewerApplication.page = Number(this.page());
-              } else if (this.pageLabel()) {
-                PDFViewerApplication.pdfViewer.currentPageLabel = this.pageLabel();
               }
             }
           }),
@@ -2931,7 +2967,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
         queueMicrotask(
           this.asyncWithCD(async () => {
             const pages = pdfLoadedEvent.source.pagesCount;
-            this.pageLabel.set(undefined);
+            this.setPageLabelFromViewer(undefined);
             if (this.page() && this.page()! >= pages) {
               this.page.set(pages);
             }
@@ -3107,9 +3143,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
                 this._pageSetFromScroll = true;
                 this.page.set(currentPage);
               }
-              if (currentPageLabel !== this.pageLabel()) {
-                this.pageLabel.set(currentPageLabel);
-              }
+              this.setPageLabelFromViewer(currentPageLabel);
             }),
           );
         }

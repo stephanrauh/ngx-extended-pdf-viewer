@@ -1,4 +1,4 @@
-import { AfterContentInit, AfterViewInit, Component, computed, contentChild, effect, ElementRef, input, OnInit, Renderer2, viewChild } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, computed, contentChild, effect, ElementRef, input, OnDestroy, OnInit, Renderer2, viewChild } from '@angular/core';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { PdfCspPolicyService } from '../../pdf-csp-policy.service';
 import { PDFNotificationService } from '../../pdf-notification-service';
@@ -11,7 +11,7 @@ import { PdfShyButtonService } from './pdf-shy-button-service';
     templateUrl: './pdf-shy-button.component.html',
     standalone: false
 })
-export class PdfShyButtonComponent implements OnInit, AfterViewInit, AfterContentInit {
+export class PdfShyButtonComponent implements OnInit, AfterViewInit, AfterContentInit, OnDestroy {
   public primaryToolbarId = input.required<string>();
 
   public secondaryMenuId = input<string>('');
@@ -47,6 +47,8 @@ export class PdfShyButtonComponent implements OnInit, AfterViewInit, AfterConten
   public image = input<string>('');
 
   private PDFViewerApplication: IPDFViewerApplication | undefined;
+
+  private disabledObserver: MutationObserver | undefined;
 
   public renderContent = false;
 
@@ -181,6 +183,30 @@ export class PdfShyButtonComponent implements OnInit, AfterViewInit, AfterConten
 
   public ngAfterViewInit(): void {
     this.updateButtonImage();
+    this.keepDisabled();
+  }
+
+  public ngOnDestroy(): void {
+    this.disabledObserver?.disconnect();
+  }
+
+  /**
+   * pdf.js enables and disables some of our buttons itself (e.g. the zoom buttons at the zoom
+   * limits, the editor buttons when a document has loaded). That overwrites the `disabled`
+   * binding, and Angular only writes it again when [disabled] changes. So while [disabled] is
+   * true, put it back.
+   */
+  private keepDisabled(): void {
+    const button = this.buttonRef()?.nativeElement as HTMLButtonElement | undefined;
+    if (!button || typeof MutationObserver === 'undefined') {
+      return;
+    }
+    this.disabledObserver = new MutationObserver(() => {
+      if (this.disabled() && !button.disabled) {
+        button.disabled = true;
+      }
+    });
+    this.disabledObserver.observe(button, { attributes: true, attributeFilter: ['disabled'] });
   }
 
   public ngOnInit(): void {
