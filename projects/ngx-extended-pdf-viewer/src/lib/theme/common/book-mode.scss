@@ -36,6 +36,14 @@
   transform-style: preserve-3d;
 }
 
+// #3155 right-to-left books: mirror the whole book, so pages turn from left to right,
+// then mirror the content of each page back, so it reads normally. The `scale` property
+// doesn't interfere with the `transform`s the page-flip library sets on the pages.
+.stf__parent.--rtl .stf__block,
+.stf__parent.--rtl .stf__item > * {
+  scale: -1 1;
+}
+
 .stf__outerShadow {
   position: absolute;
   left: 0;

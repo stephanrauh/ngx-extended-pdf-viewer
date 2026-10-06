@@ -57,4 +57,6 @@ export interface IPDFViewer {
   refresh(noUpdate?: boolean, updateArgs?: object): void;
   enableFlipByDrag: boolean; // #3140 added by ngx-extended-pdf-viewer
   pageFlip: { setting: { showPageCorners: boolean; enableFlipByDrag: boolean } } | null; // #3140 added by ngx-extended-pdf-viewer
+  /** #3155 book mode: re-reads the reading direction. Not available in older engines. */
+  updateBookReadingDirection?(): void;
 }

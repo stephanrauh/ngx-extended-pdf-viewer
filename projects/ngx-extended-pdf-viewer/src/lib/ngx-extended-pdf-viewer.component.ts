@@ -793,6 +793,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     if (viewerContainer) {
       viewerContainer.classList.toggle('readingDirection-rtl', isRtl);
     }
+    // book mode turns its pages in the reading direction, too
+    this.pdfScriptLoaderService?.PDFViewerApplication?.pdfViewer?.updateBookReadingDirection?.();
   }
 
   /** Allows the user to define the name of the file after clicking "download" */
