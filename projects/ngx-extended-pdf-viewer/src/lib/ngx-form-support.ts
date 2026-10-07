@@ -83,9 +83,10 @@ export class NgxFormSupport {
     const fullFieldName = this.findFullXFAName(element);
     if (element instanceof HTMLInputElement && element.type === 'radio') {
       const id = element.getAttribute('fieldid') ?? '';
-      // remove the xfa name of the radio button itself form the field name,
-      // because the field name refers to the entire group of relatated radio buttons
-      const groupName = fullFieldName.substring(0, fullFieldName.lastIndexOf('.'));
+      // The field name refers to the entire group of related radio buttons. findFullXFAName() has
+      // already removed the name of the radio button itself; removing another part here named the
+      // group after its parent subform.
+      const groupName = fullFieldName;
       this.formIdToFullFieldName[id] = groupName;
       this.formData[groupName] = value?.value;
       this.initialFormDataStoredInThePDF[groupName] = initialFormValueFromPDF;
@@ -185,7 +186,7 @@ export class NgxFormSupport {
 
   private updateAngularFormValueCalledByPdfjs(
     key: string | HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement,
-    value: { value?: string; formattedValue?: string },
+    value: { value?: string | string[]; formattedValue?: string },
   ): void {
     if (!this.formData) {
       this.formData = {};
@@ -220,7 +221,9 @@ export class NgxFormSupport {
       }
       const fullFieldName = this.findFullXFAName(key);
       if (fullFieldName !== shortFieldName) {
-        change ||= this.doUpdateAngularFormValue(key, value, fullFieldName);
+        // not `change ||= ...`: that skips the update of the full name once the short name has changed
+        const fullNameChanged = this.doUpdateAngularFormValue(key, value, fullFieldName);
+        change = change || fullNameChanged;
       }
       if (change) {
         this.ngZone.run(() => {
@@ -231,7 +234,7 @@ export class NgxFormSupport {
     }
   }
 
-  private doUpdateAngularFormValue(field: HtmlFormElement, value: { value?: string; formattedValue?: string }, fullKey: string) {
+  private doUpdateAngularFormValue(field: HtmlFormElement, value: { value?: string | string[]; formattedValue?: string }, fullKey: string) {
     let change = false;
     // Use the actual user input value, not the formatted display value
     const actualValue = value.value;
@@ -260,6 +263,13 @@ export class NgxFormSupport {
           this.formData[fullKey] = exportValue;
           change = true;
         }
+      }
+    } else if (Array.isArray(actualValue)) {
+      // a list with several choices
+      const previous = this.formData[fullKey];
+      if (!Array.isArray(previous) || previous.join('\u0000') !== actualValue.join('\u0000')) {
+        this.formData[fullKey] = actualValue;
+        change = true;
       }
     } else if (this.formData[fullKey] !== actualValue) {
       this.formData[fullKey] = actualValue ?? '';

@@ -10,7 +10,7 @@
         [class.toggled]="button.toggled" class="secondaryToolbarButton" [title]="button.title"
         [attr.data-l10n-id]="button.l10nId || null"
         (click)="onClick($event, button.action, button.eventBusName, button.closeOnClick)"
-        [attr.aria-label]="button.title" [disabled]="button.disabled">
+        [attr.aria-label]="button.title" [attr.aria-pressed]="button.toggled ? 'true' : null" [disabled]="button.disabled">
         @if (button.image) {
         <span class="icon" role="img" aria-hidden="true" [attr.aria-label]="button.title"
           [innerHTML]="button.image | sanitizedHtml"></span>

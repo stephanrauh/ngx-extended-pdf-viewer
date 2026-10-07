@@ -1141,12 +1141,26 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   private readonly _showPageCornersEffect = effect(() => {
     const value = this.showPageCorners();
     if (this.initialized) {
-      const PDFViewerApplication: IPDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
-      if (PDFViewerApplication?.pdfViewer?.pageFlip) {
-        PDFViewerApplication.pdfViewer.pageFlip.setting.showPageCorners = value;
-      }
+      this.applyBookGestureSettings(this.enableFlipByDrag(), value);
     }
   });
+
+  /**
+   * Passes [enableFlipByDrag] and [showPageCorners] to the viewer. Also called when the viewer has been
+   * initialized: when the inputs are set from the start, their effects run before that.
+   */
+  private applyBookGestureSettings(enableFlipByDrag: boolean, showPageCorners: boolean): void {
+    const pdfViewer = this.pdfScriptLoaderService.PDFViewerApplication?.pdfViewer;
+    if (!pdfViewer) {
+      return;
+    }
+    pdfViewer.enableFlipByDrag = enableFlipByDrag;
+    // The viewer keeps the setting for the book it builds later; older engines only know the book's own setting.
+    pdfViewer.showPageCorners = showPageCorners;
+    if (pdfViewer.pageFlip) {
+      pdfViewer.pageFlip.setting.showPageCorners = showPageCorners;
+    }
+  }
   // #3140 end of modification by ngx-extended-pdf-viewer
 
   public showSpreadButton = input<ResponsiveVisibility>(true);
@@ -2019,7 +2033,20 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
         }
         return a.x - b.x;
       };
-      const sorted = [...elements].sort(topRightGreaterThanBottomLeftComparator);
+      // The clone shows every element, so its layout differs from what the user sees. Sort the elements
+      // the user can see by their real position, then the hidden ones (e.g. menu entries) by their
+      // position in the clone.
+      const visible: Array<ElementAndPosition> = [];
+      const hidden: Array<ElementAndPosition> = [];
+      for (const e of elements) {
+        const rect = e.element.getBoundingClientRect();
+        if (rect.width > 0 && rect.height > 0) {
+          visible.push({ ...e, x: Math.round(rect.left), y: Math.round(rect.top) });
+        } else {
+          hidden.push(e);
+        }
+      }
+      const sorted = [...visible.sort(topRightGreaterThanBottomLeftComparator), ...hidden.sort(topRightGreaterThanBottomLeftComparator)];
 
       // #3074 modified by ngx-extended-pdf-viewer
       // Assign tab indexes, inserting popup elements immediately after their trigger buttons
@@ -2548,6 +2575,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     this.initialized = true;
     this.service.ngxExtendedPdfViewerInitialized = true;
     this.applyReadingDirection(this.readingDirection());
+    this.applyBookGestureSettings(this.enableFlipByDrag(), this.showPageCorners());
     this.registerEventListeners(PDFViewerApplication);
     this.selectCursorTool();
     if (!this.listenToURL()) {
@@ -2744,6 +2772,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     PDFViewerApplication.eventBus.on(
       'findbarclose',
       () => {
+        // Keyboard users mustn't lose their place: the find bar is hidden now, so if the focus was
+        // in it, give it to the document. If the user has moved on to something else, leave it there.
+        const active = document.activeElement;
+        if (!active || active === document.body || active.closest('#findbar')) {
+          document.getElementById('viewerContainer')?.focus({ preventScroll: true });
+        }
         queueMicrotask(
           this.asyncWithCD(() => {
             this.findbarVisible.set(false);

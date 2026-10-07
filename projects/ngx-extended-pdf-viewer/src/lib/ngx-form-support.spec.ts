@@ -437,6 +437,71 @@ describe('NgxFormSupport', () => {
     });
   });
 
+  describe('XFA forms as pdf.js renders them', () => {
+    /** <div xfaname="form1"><div xfaname="choices"> ... </div></div>, attached to the document */
+    let choices: HTMLElement;
+
+    beforeEach(() => {
+      const form = document.createElement('div');
+      form.setAttribute('xfaname', 'form1');
+      choices = document.createElement('div');
+      choices.setAttribute('xfaname', 'choices');
+      form.appendChild(choices);
+      document.body.appendChild(form);
+    });
+
+    afterEach(() => document.body.replaceChildren());
+
+    function field(name: string, html: HTMLElement): HTMLElement {
+      const wrapper = document.createElement('div');
+      wrapper.setAttribute('xfaname', name);
+      wrapper.appendChild(html);
+      return wrapper;
+    }
+
+    it('should name a group of radio buttons after the group, not after its subform', () => {
+      const group = document.createElement('div');
+      group.setAttribute('xfaname', 'ContactBy');
+      choices.appendChild(group);
+      const radio = document.createElement('input');
+      radio.type = 'radio';
+      radio.setAttribute('fieldid', 'r1');
+      group.appendChild(field('Phone', radio));
+
+      (formSupport as any).registerXFAField(radio, { value: 'phone' }, 'email');
+
+      expect(formSupport.formData['form1.choices.ContactBy']).toBe('phone');
+      expect(formSupport.formData['form1.choices']).toBeUndefined();
+    });
+
+    it('should update both the short and the full field name', () => {
+      const select = document.createElement('select');
+      select.setAttribute('fieldid', 's1');
+      choices.appendChild(field('Language', select));
+      formSupport.formData = { Language: 'fr', 'form1.choices.Language': 'fr' };
+
+      (formSupport as any).updateAngularFormValueCalledByPdfjs(select, { value: 'de' });
+
+      expect(formSupport.formData['Language']).toBe('de');
+      expect(formSupport.formData['form1.choices.Language']).toBe('de');
+    });
+
+    it('should report all choices of a list with several choices', () => {
+      const select = document.createElement('select');
+      select.multiple = true;
+      choices.appendChild(field('Topics', select));
+      formSupport.formData = { 'form1.choices.Topics': ['news'] };
+
+      (formSupport as any).updateAngularFormValueCalledByPdfjs(select, { value: ['releases', 'events'] });
+
+      expect(formSupport.formData['form1.choices.Topics']).toEqual(['releases', 'events']);
+      expect(formSupport.formDataChange.emit).toHaveBeenCalledTimes(1);
+      // the same choices again: no change
+      (formSupport as any).updateAngularFormValueCalledByPdfjs(select, { value: ['releases', 'events'] });
+      expect(formSupport.formDataChange.emit).toHaveBeenCalledTimes(1);
+    });
+  });
+
   describe('radio button group handling', () => {
     beforeEach(() => {
       (formSupport as any).radioButtons = {

@@ -237,6 +237,10 @@ ngx-extended-pdf-viewer {
     height: 100%;
     flex: 0 0 auto;
     border: none;
+    // modified by ngx-extended-pdf-viewer: pdf.js relies on the browser's native check boxes.
+    // CSS resets of the application (e.g. @tailwindcss/forms) set `appearance: none` and draw a
+    // border instead - which `border: none` removes, so the check boxes were invisible.
+    appearance: auto;
   }
 
   .xfaRich {
