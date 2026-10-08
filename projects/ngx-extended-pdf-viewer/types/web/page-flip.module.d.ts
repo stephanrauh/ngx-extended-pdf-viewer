@@ -28,6 +28,12 @@ export class PageFlip extends EventObject {
      */
     update(): void;
     /**
+     * Switch between left-to-right and right-to-left books.
+     *
+     * @param {boolean} rtl
+     */
+    setRtl(rtl: boolean): void;
+    /**
      * Load pages from HTML elements on the HTML mode
      *
      * @param {(NodeListOf<HTMLElement>|HTMLElement[])} items - List of pages as HTML Element

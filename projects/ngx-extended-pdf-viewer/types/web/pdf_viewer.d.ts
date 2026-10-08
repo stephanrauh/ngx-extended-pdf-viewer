@@ -283,6 +283,7 @@ export class PDFViewer {
     l10n: import("./l10n.js").L10n | undefined;
     pageColors: object | null;
     _enableFlipByDrag: boolean;
+    _showPageCorners: boolean;
     defaultRenderingQueue: boolean;
     renderingQueue: PDFRenderingQueue | undefined;
     scroll: {
@@ -330,7 +331,8 @@ export class PDFViewer {
     /** #495 modified by ngx-extended-pdf-viewer */
     hidePagesDependingOnpageViewMode(): void;
     pageFlip: PageFlip | null | undefined;
-    /** #495 end of modification by ngx-extended-pdf-viewer */
+    /** Call this after changing the reading direction while the book is open. */
+    updateBookReadingDirection(): void;
     /**
      * @returns {boolean} Whether the pageNumber is valid (within bounds).
      * @private
@@ -485,6 +487,12 @@ export class PDFViewer {
     updateBookModeScale(evt: any): Promise<void>;
     set enableFlipByDrag(value: boolean);
     get enableFlipByDrag(): boolean;
+    set showPageCorners(value: boolean);
+    /**
+     * The folded corner a page shows when the mouse comes near it. Kept here
+     * because the book is built later.
+     */
+    get showPageCorners(): boolean;
     containsElement(element: any): boolean;
     focus(): void;
     get _isContainerRtl(): boolean;
