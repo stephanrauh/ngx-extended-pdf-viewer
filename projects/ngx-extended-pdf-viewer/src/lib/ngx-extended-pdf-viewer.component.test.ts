@@ -1296,6 +1296,279 @@ describe('NgxExtendedPdfViewerComponent', () => {
       expect(detectChanges).not.toHaveBeenCalled();
     });
   });
+
+  /** Registers the event bus listeners and returns the one for the given event. */
+  function captureEventBusListener(eventName: string): (...args: any[]) => void {
+    const app = component['pdfScriptLoaderService'].PDFViewerApplication;
+    component['registerEventListeners'](app);
+    const call = (app.eventBus.on as jest.Mock).mock.calls.find(([name]) => name === eventName);
+    expect(call).toBeDefined();
+    return call![1];
+  }
+
+  /** Runs the callbacks of setTimeout() at once. Avoids waiting for a macrotask, which would also fire unmocked animation frames. */
+  function runTimeoutsSynchronously(): jest.SpyInstance {
+    return jest.spyOn(window, 'setTimeout').mockImplementation(((callback: () => void) => {
+      callback();
+      return 0;
+    }) as any);
+  }
+
+  describe('[pageLabel]', () => {
+    let app: any;
+
+    beforeEach(() => {
+      app = component['pdfScriptLoaderService'].PDFViewerApplication;
+      app.pdfViewer.currentPageLabel = 'i';
+    });
+
+    it('remembers a label set before the document has loaded, without navigating', () => {
+      fixture.componentRef.setInput('pageLabel', 'iii');
+      fixture.detectChanges();
+      TestBed.flushEffects();
+
+      expect(component['_pageLabelToOpen']).toBe('iii');
+      expect(app.pdfViewer.currentPageLabel).toBe('i');
+    });
+
+    it('navigates when the application sets a label after the document has loaded', () => {
+      (component as any).initialized = true;
+      app.pagesCount = 5;
+
+      fixture.componentRef.setInput('pageLabel', 'iv');
+      fixture.detectChanges();
+      TestBed.flushEffects();
+
+      expect(app.pdfViewer.currentPageLabel).toBe('iv');
+    });
+
+    it('does not navigate when the viewer reports its own label, but navigates on the next change by the application', () => {
+      (component as any).initialized = true;
+      app.pagesCount = 5;
+
+      component['setPageLabelFromViewer']('ii');
+      fixture.detectChanges();
+      TestBed.flushEffects();
+
+      expect(component.pageLabel()).toBe('ii');
+      expect(app.pdfViewer.currentPageLabel).toBe('i');
+      expect(component['_pageLabelSetByViewer']).toBe(false);
+
+      fixture.componentRef.setInput('pageLabel', 'v');
+      fixture.detectChanges();
+      TestBed.flushEffects();
+
+      expect(app.pdfViewer.currentPageLabel).toBe('v');
+    });
+
+    it('does not set the flag when the viewer reports the label the application already has', () => {
+      fixture.componentRef.setInput('pageLabel', 'ii');
+      fixture.detectChanges();
+      TestBed.flushEffects();
+
+      component['setPageLabelFromViewer']('ii');
+
+      // A stale flag would swallow the next change by the application.
+      expect(component['_pageLabelSetByViewer']).toBe(false);
+    });
+
+    it('opens the remembered label when the pages have loaded, in preference to [page]', () => {
+      app.pdfLinkService = { goToDestination: jest.fn() };
+      component['setZoom'] = jest.fn();
+      jest.spyOn(component as any, 'dynamicCSSComponent').mockReturnValue(undefined);
+      component['_pageLabelToOpen'] = 'iii';
+      component.page.set(1);
+      const pagesLoaded = captureEventBusListener('pagesloaded');
+
+      const setTimeoutSpy = runTimeoutsSynchronously();
+      try {
+        pagesLoaded({ pagesCount: 5 });
+      } finally {
+        setTimeoutSpy.mockRestore();
+      }
+
+      expect(app.pdfViewer.currentPageLabel).toBe('iii');
+      expect(component['_pageLabelToOpen']).toBeUndefined();
+    });
+  });
+
+  describe('[textLayer] (#3292)', () => {
+    it('switches the text layer off when [textLayer]="false"', () => {
+      const app = component['pdfScriptLoaderService'].PDFViewerApplication;
+      const options = { set: jest.fn() };
+      fixture.componentRef.setInput('textLayer', false);
+
+      component['activateTextlayerIfNecessary'](options);
+
+      expect(options.set).toHaveBeenCalledWith('textLayerMode', 0);
+      expect(app.pdfViewer.setTextLayerMode).toHaveBeenCalledWith(0);
+    });
+
+    it('switches the text layer on when [textLayer]="true"', () => {
+      const app = component['pdfScriptLoaderService'].PDFViewerApplication;
+      const options = { set: jest.fn() };
+      fixture.componentRef.setInput('textLayer', true);
+      fixture.componentRef.setInput('showFindButton', true);
+
+      component['activateTextlayerIfNecessary'](options);
+
+      expect(options.set).toHaveBeenCalledWith('textLayerMode', 1);
+      expect(app.pdfViewer.setTextLayerMode).toHaveBeenCalledWith(1);
+    });
+  });
+
+  describe('focus after closing the find bar', () => {
+    let findbar: HTMLElement;
+    let findInput: HTMLInputElement;
+    let viewerContainer: HTMLElement;
+    let otherButton: HTMLButtonElement;
+
+    beforeEach(() => {
+      findbar = document.createElement('div');
+      findbar.id = 'findbar';
+      findInput = document.createElement('input');
+      findbar.appendChild(findInput);
+      otherButton = document.createElement('button');
+      document.body.append(findbar, otherButton);
+      // the template's container; pdf.js makes it focusable at runtime
+      viewerContainer = document.getElementById('viewerContainer')!;
+      viewerContainer.tabIndex = -1;
+    });
+
+    afterEach(() => {
+      findbar.remove();
+      otherButton.remove();
+    });
+
+    it('moves the focus to the document when it was in the find bar', () => {
+      const findbarClose = captureEventBusListener('findbarclose');
+      findInput.focus();
+
+      findbarClose();
+
+      expect(document.activeElement).toBe(viewerContainer);
+    });
+
+    it('moves the focus to the document when nothing had the focus', () => {
+      const findbarClose = captureEventBusListener('findbarclose');
+      (document.activeElement as HTMLElement | null)?.blur();
+
+      findbarClose();
+
+      expect(document.activeElement).toBe(viewerContainer);
+    });
+
+    it('leaves the focus alone when the user has moved on to something else', () => {
+      const findbarClose = captureEventBusListener('findbarclose');
+      otherButton.focus();
+
+      findbarClose();
+
+      expect(document.activeElement).toBe(otherButton);
+    });
+  });
+
+  describe('tab order ([startTabindex])', () => {
+    function button(name: string, rect?: { left: number; top: number }): HTMLButtonElement {
+      const b = document.createElement('button');
+      b.textContent = name;
+      // Only the originals are measured; jsdom reports a zero-sized rectangle for the clones.
+      b.getBoundingClientRect = () =>
+        (rect ? { left: rect.left, top: rect.top, width: 30, height: 30 } : { left: 0, top: 0, width: 0, height: 0 }) as DOMRect;
+      return b;
+    }
+
+    it('sorts the visible elements by their real position and puts the hidden ones last', () => {
+      const hiddenMenuEntry = button('hidden');
+      const right = button('right', { left: 100, top: 0 });
+      const left = button('left', { left: 0, top: 0 });
+      const root = document.createElement('div');
+      root.append(hiddenMenuEntry, right, left);
+      jest.spyOn(component, 'root').mockReturnValue({ nativeElement: root } as ElementRef);
+      fixture.componentRef.setInput('startTabindex', 10);
+
+      component['assignTabindexes']();
+
+      expect(left.tabIndex).toBe(10);
+      expect(right.tabIndex).toBe(11);
+      expect(hiddenMenuEntry.tabIndex).toBe(12);
+    });
+  });
+
+  describe('book mode and reading direction settings', () => {
+    it('passes [enableFlipByDrag] and [showPageCorners] to the viewer and to an existing book', () => {
+      const pdfViewer = component['pdfScriptLoaderService'].PDFViewerApplication.pdfViewer as any;
+      pdfViewer.pageFlip = { setting: { showPageCorners: true, enableFlipByDrag: true } };
+
+      component['applyBookGestureSettings'](false, false);
+
+      expect(pdfViewer.enableFlipByDrag).toBe(false);
+      expect(pdfViewer.showPageCorners).toBe(false);
+      expect(pdfViewer.pageFlip.setting.showPageCorners).toBe(false);
+    });
+
+    it('does not throw when the viewer is not there yet', () => {
+      component['pdfScriptLoaderService'].PDFViewerApplication = undefined as any;
+
+      expect(() => component['applyBookGestureSettings'](true, true)).not.toThrow();
+    });
+
+    it('tells book mode about a new [readingDirection]', () => {
+      const pdfViewer = component['pdfScriptLoaderService'].PDFViewerApplication.pdfViewer as any;
+      pdfViewer.updateBookReadingDirection = jest.fn();
+
+      fixture.componentRef.setInput('readingDirection', 'rtl');
+      fixture.detectChanges();
+      TestBed.flushEffects();
+
+      expect(pdfViewer.updateBookReadingDirection).toHaveBeenCalled();
+    });
+
+    it('applies the inputs set from the start when the viewer has been initialized', async () => {
+      // Their effects ran before the viewer existed, so openPDF() has to apply them again.
+      fixture.componentRef.setInput('enableFlipByDrag', false);
+      fixture.componentRef.setInput('showPageCorners', false);
+      fixture.componentRef.setInput('readingDirection', 'rtl');
+      fixture.detectChanges();
+      TestBed.flushEffects();
+      const app = component['pdfScriptLoaderService'].PDFViewerApplication as any;
+      app.serviceWorkerOptions = {};
+      app.appConfig = {};
+      app.pdfLinkService = {};
+      app.pdfViewer.updateBookReadingDirection = jest.fn();
+      component['selectCursorTool'] = jest.fn();
+      component['_src'] = undefined;
+
+      await component['openPDF']();
+
+      expect(app.pdfViewer.enableFlipByDrag).toBe(false);
+      expect(app.pdfViewer.showPageCorners).toBe(false);
+      expect(app.pdfViewer.updateBookReadingDirection).toHaveBeenCalled();
+    });
+  });
+
+  describe('zoom stored by the user', () => {
+    it('reads the zoom with ViewHistory.getMultiple(), because pdf.js 6.4 has removed get()', async () => {
+      const app = component['pdfScriptLoaderService'].PDFViewerApplication as any;
+      app.store = { getMultiple: jest.fn().mockResolvedValue({ zoom: '150' }) };
+      jest.spyOn(component, 'root').mockReturnValue({ nativeElement: document.createElement('div') } as ElementRef);
+
+      await component['setZoom']();
+
+      expect(app.store.getMultiple).toHaveBeenCalledWith({ zoom: undefined });
+      expect(component['pdfScriptLoaderService'].PDFViewerApplicationOptions.set).toHaveBeenCalledWith('defaultZoomValue', 1.5);
+    });
+
+    it("falls back to 'auto' when the user hasn't stored a zoom", async () => {
+      const app = component['pdfScriptLoaderService'].PDFViewerApplication as any;
+      app.store = { getMultiple: jest.fn().mockResolvedValue({ zoom: undefined }) };
+      jest.spyOn(component, 'root').mockReturnValue({ nativeElement: document.createElement('div') } as ElementRef);
+
+      await component['setZoom']();
+
+      expect(component['pdfScriptLoaderService'].PDFViewerApplicationOptions.set).toHaveBeenCalledWith('defaultZoomValue', 'auto');
+    });
+  });
 });
 
 describe('isIOS', () => {

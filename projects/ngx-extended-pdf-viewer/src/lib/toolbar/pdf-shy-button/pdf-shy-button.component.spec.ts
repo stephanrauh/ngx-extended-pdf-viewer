@@ -318,6 +318,52 @@ describe('PdfShyButtonComponent', () => {
     });
   });
 
+  describe('keeping [disabled] when pdf.js enables the button', () => {
+    // MutationObserver callbacks run as microtasks.
+    const flushMutations = () => Promise.resolve();
+    let button: HTMLButtonElement;
+
+    beforeEach(() => {
+      fixture.componentRef.setInput('primaryToolbarId', 'testButton');
+      fixture.detectChanges();
+      button = document.createElement('button');
+      jest.spyOn(component, 'buttonRef').mockReturnValue({ nativeElement: button } as ElementRef);
+    });
+
+    it('disables the button again while [disabled] is true', async () => {
+      fixture.componentRef.setInput('disabled', true);
+      button.disabled = true;
+      component.ngAfterViewInit();
+
+      button.disabled = false;
+      await flushMutations();
+
+      expect(button.disabled).toBe(true);
+    });
+
+    it('lets pdf.js enable the button while [disabled] is false', async () => {
+      button.disabled = true;
+      component.ngAfterViewInit();
+
+      button.disabled = false;
+      await flushMutations();
+
+      expect(button.disabled).toBe(false);
+    });
+
+    it('stops watching the button when it is destroyed', async () => {
+      fixture.componentRef.setInput('disabled', true);
+      button.disabled = true;
+      component.ngAfterViewInit();
+
+      component.ngOnDestroy();
+      button.disabled = false;
+      await flushMutations();
+
+      expect(button.disabled).toBe(false);
+    });
+  });
+
   describe('ngAfterContentInit', () => {
     it('should set renderContent when primaryToolbarId is nestedComponent and nestedContent exists', () => {
       fixture.componentRef.setInput('primaryToolbarId', 'nestedComponent');
