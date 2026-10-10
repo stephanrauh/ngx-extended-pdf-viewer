@@ -614,12 +614,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
    * devices; with a keyboard, Ctrl+Z / Ctrl+Y (Cmd+Z / Cmd+Shift+Z) do the same. The
    * buttons also work with no editor selected, and are disabled only when there's nothing
    * to undo or redo.
-   * Only available with the bleeding-edge bundle (pdf.js 6.3 and up).
+   * Requires pdf.js 6.3 or later.
    *
-   * The default `'xxxl'` applies to the 31.0.0 alpha versions only: from 31.0.0 on, the
-   * buttons are hidden by default.
+   * Hidden by default (the 31.0.0 alpha versions showed them). On touch devices, `'xxxl'`
+   * is a good choice: the buttons stay in the toolbar when it's at least 1000 pixels wide.
    */
-  public showUndoRedoButtons = input<ResponsiveVisibility>('xxxl');
+  public showUndoRedoButtons = input<ResponsiveVisibility>(false);
 
   public disableUndoRedoButtons = input<boolean>(false);
   // stephanrauh/pdf.js#15 end of modification by ngx-extended-pdf-viewer

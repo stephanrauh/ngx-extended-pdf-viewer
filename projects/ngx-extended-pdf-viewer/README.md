@@ -118,7 +118,7 @@ bootstrapApplication(AppComponent, {
 
 ## 🔐 Security Notice
 
-⚠️ **Please use the latest `30.x` or `29.x` release (or the latest `28.x` if you're staying on that line). Older versions are known to be vulnerable.**
+⚠️ **Please use the latest `31.x`, `30.x` or `29.x` release (or the latest `28.x` if you're staying on that line). Older versions are known to be vulnerable.**
 
 **[CVE-2026-16633](https://github.com/mozilla/pdf.js/security/advisories/GHSA-hq66-cqwq-w95j) (high) - fixed in `28.1.1` and in `29.0.0-rc.3`.** A malicious PDF could run JavaScript in the context of your page. The flaw is in pdf.js 5.6.83 and newer, so **every earlier `28.x` release, and `29.0.0-rc.0` through `rc.2`, are affected** - please update. Mozilla's fix landed in pdf.js 6.2.108; version 29 cherry-picked it, and since version 30 the bundled engine *is* 6.2.108, so it carries the fix natively.
 
@@ -159,22 +159,41 @@ Regarding security: I'm not perfect - it's always a best-effort approach without
 
 ## 📦 Version Highlights
 
-### Version 31 (alpha)
+### Version 31
 
-Version 31 brings pdf.js 6.3 to the bleeding-edge bundle. The stable bundle stays on pdf.js 6.2.
+Version 31 updates to pdf.js 6.4 in both bundles.
 
-**New in the bleeding-edge bundle:**
+**New for end users:**
 
-- **Eraser**: erases parts of drawings and free-hand highlights (`[showEraserEditor]`, `[disableEraserEditor]`). Contributed by legraina.
-- **Undo and redo buttons** for the annotation editor, handy on tablets (`[showUndoRedoButtons]`, `[disableUndoRedoButtons]`). Contributed by legraina. They are shown by default during the alphas only; from 31.0.0 on, they are hidden by default.
-- **Responsive visibility level `'xxxl'`**: the new buttons stay in the toolbar when it's at least 1000 pixels wide and move to the secondary menu otherwise.
-- **pdf.js 6.3**: highlighting and drawing are built on Mozilla's reworked editors, a two-finger gesture pans the document while you pinch, and large JPEG images need noticeably less memory.
+- **pdf.js 6.4**: highlighting and drawing are built on Mozilla's reworked editors, a two-finger gesture pans the document while you pinch, large JPEG images need noticeably less memory, and PDF files with CMYK colors are rendered with color management.
+- **Eraser**: erases parts of drawings and free-hand highlights. Contributed by legraina.
+- **Book mode**: right-to-left books turn their pages from left to right, and zooming in keeps both pages side by side. Zoomed in beyond the page size, the viewer activates the hand tool, so a drag moves the page instead of turning it.
+- **Older browsers work again**: browsers that need the legacy bundle now get the legacy worker and scripting sandbox, too ([#3273](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/3273)).
+- **Accessibility**: screen readers hear which editor is active and which panels and menu entries are switched on. Closing the find bar with Escape puts the focus back into the document.
 
-**Breaking:** if you style the viewer with your own CSS, check the button classes, the menu checkmark and the view switcher padding. The [changelog](./changelog.md) (31.0.0-alpha.0) lists the details.
+**New for developers:**
 
-**Breaking:** `[textLayer]="false"` now really switches the text layer off and hides the select tool button ([#3292](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/3292), reported long ago in [#1004](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/1004)). Until now the text layer was rendered anyway, so text remained selectable. If you need text selection, highlighting selected text, or screen reader support, remove the attribute.
+- **`[showEraserEditor]`, `[disableEraserEditor]`** for the eraser, and **`[showUndoRedoButtons]`, `[disableUndoRedoButtons]`** for undo and redo buttons, handy on tablets. Contributed by legraina. The undo and redo buttons are hidden by default (the 31.0.0 alphas showed them); `[showUndoRedoButtons]="'xxxl'"` shows them.
+- **Responsive visibility level `'xxxl'`**: the button stays in the toolbar when it's at least 1000 pixels wide and moves to the secondary menu otherwise.
+- **Error card** ([#3241](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/3241)): `[showLoadingErrorMessage]="true"` shows a translated error card when a PDF fails to load, and `[loadingErrorMessage]` replaces its headline. Contributed by Julian-B90. `(pdfLoadingFailed)` now fires once instead of twice.
+- **`iccUrl`**: the new default option pointing to the ICC color profile in the `iccs` folder of the assets ([#3275](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/3275)). Thanks to 404mat!
+- **`NgxExtendedPdfViewerService.find()`** accepts a `RegExp`, `[pageLabel]` works on load, and `deletePages()` works again.
 
-**Minor breaking change:** the document properties dialog now looks like the comment dialog: rounded corners, 13px text, and a blue "Close" button ([#3241](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/3241)). If you style it with your own CSS, note that its markup has changed: the rows sit inside a `.mainContainer`, the separators are `.dialogSeparator` and the button row is a `.dialogButtonsGroup`. The Close button has the class `primaryButton` instead of `dialogButton secondaryButton`. The SCSS variables `$document-properties-*` are gone. The ids are unchanged.
+**Bug fixes:**
+
+- Book mode opens at `[page]` instead of on the cover, honors `[enableFlipByDrag]` and `[showPageCorners]` when they're set from the start, and the page layout buttons leave book mode again.
+- Buttons disabled with `[disableZoomButtons]`, `[disableSpreadButton]` and the other `[disable…]` flags stay disabled after the document has loaded.
+- XFA forms: check boxes and radio buttons are visible even with a CSS reset like `@tailwindcss/forms`.
+- The entries of the secondary menu are aligned again.
+
+#### ❗ Breaking changes:
+
+- **`[textLayer]="false"`** now really switches the text layer off and hides the select tool button ([#3292](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/3292), reported long ago in [#1004](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/1004)). Until now the text layer was rendered anyway, so text remained selectable. If you need text selection, highlighting selected text, or screen reader support, remove the attribute.
+- **`getFormData()`** now reports the value of form fields the user hasn't changed, too; they used to be `undefined` (since version 13). If you used `value === undefined` to find the fields the user hasn't edited, compare `value` with `fieldValue` instead.
+- **XFA radio buttons**: `(formDataChange)` reports a group of radio buttons under the group's name (e.g. `form1.page.ContactBy`); it used to use the name of the surrounding subform.
+- **Book mode reading direction**: when the UI language is Arabic, Hebrew, Persian or Urdu, books now open on the left and turn their pages from left to right. Use `[readingDirection]="'ltr'"` to keep the old behavior.
+- **CSS**: if you style the viewer with your own CSS, check the button classes, the menu checkmark and the view switcher padding. The [changelog](./changelog.md) (31.0.0-alpha.0) lists the details.
+- **Document properties dialog** (minor): it now looks like the comment dialog: rounded corners, 13px text, and a blue "Close" button ([#3241](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/3241)). If you style it with your own CSS, note that its markup has changed: the rows sit inside a `.mainContainer`, the separators are `.dialogSeparator` and the button row is a `.dialogButtonsGroup`. The Close button has the class `primaryButton` instead of `dialogButton secondaryButton`. The SCSS variables `$document-properties-*` are gone. The ids are unchanged.
 
 ### Version 30
 
