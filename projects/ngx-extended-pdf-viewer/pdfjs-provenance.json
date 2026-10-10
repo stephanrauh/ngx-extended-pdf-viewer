@@ -45,7 +45,7 @@
     },
     "stable": {
       "bundle": "assets",
-      "pdfjsBuildVersion": "6.4.1344",
+      "pdfjsBuildVersion": "6.4.1345",
       "upstream": {
         "project": "mozilla/pdf.js",
         "repository": "https://github.com/mozilla/pdf.js",
@@ -57,8 +57,8 @@
       "fork": {
         "repository": "https://github.com/stephanrauh/pdf.js",
         "branch": "6.4",
-        "commit": "8d0acc9e085493083b79afc7709cdd6be1e1a002",
-        "committedAt": "2026-10-08T22:39:55+02:00"
+        "commit": "4324833f94fe0152b064d657d6b043b7c62073f6",
+        "committedAt": "2026-10-10T14:56:04+02:00"
       },
       "securityFixes": [
         {

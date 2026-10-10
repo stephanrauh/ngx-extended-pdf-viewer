@@ -1,6 +1,6 @@
 import { effect, Injectable, Renderer2, RendererFactory2, signal } from '@angular/core';
 import { AnnotationEditorParamsType, AnnotationMode, EditorAnnotation, HighlightEditorAnnotation, StampEditorAnnotation } from './options/editor-annotations';
-import { PdfLayer } from './options/optional_content_config';
+import { listPdfLayers, PdfLayer } from './options/optional_content_config';
 import { PdfPageInfo, PdfPageMapping, PdfPageSelection } from './options/pdf-page-info';
 import { PDFPrintRange } from './options/pdf-print-range';
 import { IPDFViewerApplication, PDFDocumentProxy, PDFFindParameters, PDFPageProxy, TextItem, TextMarkedContent } from './options/pdf-viewer-application';
@@ -751,16 +751,7 @@ export class NgxExtendedPdfViewerService {
 
     const optionalContentConfig = await this.PDFViewerApplication?.pdfViewer.optionalContentConfigPromise;
     if (optionalContentConfig) {
-      const levelData = optionalContentConfig.getOrder();
-      const layerIds = levelData.filter((groupId: any) => typeof groupId !== 'object');
-      return layerIds.map((layerId: any) => {
-        const config = optionalContentConfig.getGroup(layerId);
-        return {
-          layerId: layerId,
-          name: config.name,
-          visible: config.visible,
-        } as PdfLayer;
-      });
+      return listPdfLayers(optionalContentConfig);
     }
     return undefined;
   }

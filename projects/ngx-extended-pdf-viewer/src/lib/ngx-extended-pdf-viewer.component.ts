@@ -65,6 +65,7 @@ import { AnnotationEditorEditorModeChangedEvent } from './events/annotation-edit
 import { AnnotationLayerRenderedEvent } from './events/annotation-layer-rendered-event';
 import { AttachmentLoadedEvent } from './events/attachment-loaded-event';
 import { LayersLoadedEvent } from './events/layers-loaded-event';
+import { listPdfLayers, OptionalContentConfig, PdfLayer } from './options/optional_content_config';
 import { LinkAnnotationsAddedEvent } from './events/link-annotations-added-event';
 import { OutlineLoadedEvent } from './events/outline-loaded-event';
 import { ToggleSidebarEvent } from './events/toggle-sidebar-event';
@@ -676,6 +677,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   public attachmentsloaded = output<AttachmentLoadedEvent>();
 
   public layersloaded = output<LayersLoadedEvent>();
+
+  /**
+   * Fires when a layer is shown or hidden - by the user in the sidebar, by a link or an outline entry
+   * of the PDF file, or by `NgxExtendedPdfViewerService.toggleLayer()`. Reports every layer with its
+   * current visibility: in a group of radio-button layers, showing one layer hides the others.
+   */
+  public layerVisibilityChanged = output<Array<PdfLayer>>();
 
   public hasSignature!: boolean;
 
@@ -3130,6 +3138,17 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     PDFViewerApplication.eventBus.on('outlineloaded', (event) => queueMicrotask(this.asyncWithCD(() => this.outlineLoaded.emit(event))), opts);
     PDFViewerApplication.eventBus.on('attachmentsloaded', (event) => queueMicrotask(this.asyncWithCD(() => this.attachmentsloaded.emit(event))), opts);
     PDFViewerApplication.eventBus.on('layersloaded', (event) => queueMicrotask(this.asyncWithCD(() => this.layersloaded.emit(event))), opts);
+    PDFViewerApplication.eventBus.on(
+      'optionalcontentconfigchanged',
+      async ({ promise }: { promise: Promise<OptionalContentConfig> }) => {
+        const optionalContentConfig = await promise;
+        if (optionalContentConfig) {
+          const layers = listPdfLayers(optionalContentConfig);
+          queueMicrotask(this.asyncWithCD(() => this.layerVisibilityChanged.emit(layers)));
+        }
+      },
+      opts,
+    );
     PDFViewerApplication.eventBus.on(
       'presentationmodechanged',
       () => {
