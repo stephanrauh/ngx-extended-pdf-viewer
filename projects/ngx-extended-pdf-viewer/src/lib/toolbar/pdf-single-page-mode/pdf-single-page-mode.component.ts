@@ -40,6 +40,10 @@ export class PdfSinglePageModeComponent implements OnDestroy {
 
     this.onClick = () => {
       queueMicrotask(this.asyncWithCD(() => {
+        // #3294 single-page scrolling leaves book mode
+        if (this.pageViewMode() === 'book') {
+          this.pageViewMode.set('single');
+        }
         this.PDFViewerApplication?.eventBus.dispatch('switchscrollmode', { mode: ScrollMode.PAGE });
       }));
     };

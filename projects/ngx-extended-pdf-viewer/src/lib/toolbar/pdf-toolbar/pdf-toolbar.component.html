@@ -61,17 +61,17 @@
       <pdf-no-spread
         [scrollMode]="scrollMode()"
         [show]="showSpreadButton()"
-        [disable]="disableSpreadButton()"
+        [disable]="disableSpreadButton() || pageViewMode() === 'book'"
       ></pdf-no-spread>
       <pdf-odd-spread
         [scrollMode]="scrollMode()"
         [show]="showSpreadButton()"
-        [disable]="disableSpreadButton()"
+        [disable]="disableSpreadButton() || pageViewMode() === 'book'"
       ></pdf-odd-spread>
       <pdf-even-spread
         [scrollMode]="scrollMode()"
         [show]="showSpreadButton()"
-        [disable]="disableSpreadButton()"
+        [disable]="disableSpreadButton() || pageViewMode() === 'book'"
       ></pdf-even-spread>
       <pdf-single-page-mode
         [show]="showSinglePageModeButton()"

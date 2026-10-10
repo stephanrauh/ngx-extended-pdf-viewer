@@ -9,6 +9,8 @@ svg {
   display: inline-flex;
   align-items: center;
   justify-content: flex-start;
+  gap: 8px;
+  flex-shrink: 0;
 
   border: 0 none;
   background: none;
@@ -18,8 +20,10 @@ svg {
   position: relative;
   margin: 0 0 4px 0;
   padding: 3px 0 1px 0;
+  padding-inline-start: 4px;
   min-height: 25px;
   white-space: normal;
+  text-align: start;
 }
 
 .secondaryToolbarButton span {
@@ -28,24 +32,6 @@ svg {
 
 .secondaryToolbarButton[disabled] {
   opacity: 0.5;
-}
-
-::ng-deep html[dir='ltr'] ngx-extended-pdf-viewer .secondaryToolbarButton {
-  padding-left: 4px;
-  text-align: left;
-}
-
-::ng-deep html[dir='rtl'] ngx-extended-pdf-viewer .secondaryToolbarButton {
-  padding-right: 4px;
-  text-align: right;
-}
-
-::ng-deep html[dir='ltr'] ngx-extended-pdf-viewer .secondaryToolbarButton > span {
-  padding-right: 4px;
-}
-
-::ng-deep html[dir='rtl'] ngx-extended-pdf-viewer .secondaryToolbarButton > span {
-  padding-left: 4px;
 }
 
 .secondaryToolbar {
@@ -61,7 +47,10 @@ svg {
   left: 4px;
 }
 
+/* #3294 a flex container, so the responsive "display: inherit" rules also lay out their menu entries as flexbox */
 #secondaryToolbarButtonContainer {
+  display: flex;
+  flex-direction: column;
   width: 250px;
   max-height: 775px;
   overflow-y: auto;
@@ -74,4 +63,6 @@ svg {
 }
 .icon {
   width: 24px;
+  flex-shrink: 0;
+  margin: 0; /* #3294 the spacing comes from the button's padding and gap, not from a host page's .icon style */
 }

@@ -216,6 +216,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   // #3140 the hand tool setting book mode replaced, so leaving book mode can restore it
   private handToolBeforeBookMode: boolean | undefined = undefined;
 
+  // #3294 the cursor tool active before zooming into the book switched to the hand tool
+  private toolBeforeBookZoom: PdfCursorTools | undefined = undefined;
+
   // @ts-ignore TS6133 - Used for side effects only
   private readonly _pageViewModeEffect = effect(() => {
     const viewMode = this.pageViewMode();
@@ -226,9 +229,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     // handleMultiplePageMode() → restoreHeight, incorrectly replacing
     // the user's height with a computed pixel value (#3183).
     if (this._previousPageViewMode === viewMode) return;
+    // #3294 entering and leaving book mode both rebuild the viewer
+    const isBookModeInvolved = this._previousPageViewMode === 'book' || viewMode === 'book';
     this._previousPageViewMode = viewMode;
 
-    const mustRedraw = !this.pdfScriptLoaderService.ngxExtendedPdfViewerIncompletelyInitialized && viewMode === 'book';
+    const mustRedraw = !this.pdfScriptLoaderService.ngxExtendedPdfViewerIncompletelyInitialized && isBookModeInvolved;
 
     const PDFViewerApplicationOptions: IPDFViewerApplicationOptions = this.pdfScriptLoaderService.PDFViewerApplicationOptions;
     PDFViewerApplicationOptions?.set('pageViewMode', viewMode);
@@ -242,6 +247,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     }
 
     this.handleViewMode(viewMode);
+
+    // #3294 leaving a zoomed-in book gives back the tool zooming in had replaced
+    if (viewMode !== 'book' && this.toolBeforeBookZoom !== undefined) {
+      if ((PDFViewerApplication as any)?.pdfCursorTools?.activeTool === PdfCursorTools.HAND) {
+        PDFViewerApplication?.eventBus?.dispatch('switchcursortool', { tool: this.toolBeforeBookZoom });
+      }
+      this.toolBeforeBookZoom = undefined;
+    }
 
     // #3140 modified by ngx-extended-pdf-viewer
     // When leaving book mode while in PAGE_FLIP cursor mode, switch back to SELECT.
@@ -2968,6 +2981,29 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       },
       opts,
     );
+    // #3294 modified by ngx-extended-pdf-viewer
+    // Zoomed in beyond page fit, a drag pans the book instead of turning the page. Activating the
+    // hand tool shows that. Zooming out again restores the previous tool - unless the user has
+    // chosen another tool in the meantime.
+    PDFViewerApplication.eventBus.on(
+      'bookzoomchanged',
+      ({ zoomedIn }: { zoomedIn: boolean }) => {
+        const activeTool: PdfCursorTools | undefined = (PDFViewerApplication as any).pdfCursorTools?.activeTool;
+        if (zoomedIn) {
+          if (activeTool !== undefined && activeTool !== PdfCursorTools.HAND) {
+            this.toolBeforeBookZoom = activeTool;
+            PDFViewerApplication.eventBus.dispatch('switchcursortool', { tool: PdfCursorTools.HAND });
+          }
+        } else if (this.toolBeforeBookZoom !== undefined) {
+          if (activeTool === PdfCursorTools.HAND) {
+            PDFViewerApplication.eventBus.dispatch('switchcursortool', { tool: this.toolBeforeBookZoom });
+          }
+          this.toolBeforeBookZoom = undefined;
+        }
+      },
+      opts,
+    );
+    // #3294 end of modification by ngx-extended-pdf-viewer
 
     PDFViewerApplication.eventBus.on(
       'sidebarviewchanged',
