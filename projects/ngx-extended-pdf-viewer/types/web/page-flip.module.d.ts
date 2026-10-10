@@ -689,7 +689,7 @@ declare class UI {
     _clickStartClientY: any;
     onTouchStart: (e: any) => void;
     onMouseUp: (e: any) => void;
-    _clickHandledByPress: boolean;
+    onAnyMouseDown: () => void;
     onClick: (e: any) => void;
     onMouseMove: (e: any) => void;
     onTouchMove: (e: any) => void;
