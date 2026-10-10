@@ -680,6 +680,7 @@ declare class UI {
     swipeTimeout: number;
     onResize: () => void;
     onMouseDown: (e: any) => void;
+    _pressSeen: boolean;
     _clickStartPos: {
         x: number;
         y: number;
@@ -688,6 +689,8 @@ declare class UI {
     _clickStartClientY: any;
     onTouchStart: (e: any) => void;
     onMouseUp: (e: any) => void;
+    _clickHandledByPress: boolean;
+    onClick: (e: any) => void;
     onMouseMove: (e: any) => void;
     onTouchMove: (e: any) => void;
     onTouchEnd: (e: any) => void;
