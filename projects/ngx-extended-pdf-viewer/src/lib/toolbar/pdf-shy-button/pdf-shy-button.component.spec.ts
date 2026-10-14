@@ -1,10 +1,25 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ElementRef, NO_ERRORS_SCHEMA, signal } from '@angular/core';
+import { Component, ElementRef, NO_ERRORS_SCHEMA, signal } from '@angular/core';
 import { PdfShyButtonComponent } from './pdf-shy-button.component';
 import { PdfShyButtonService } from './pdf-shy-button-service';
 import { PdfCspPolicyService } from '../../pdf-csp-policy.service';
 import { PDFNotificationService } from '../../pdf-notification-service';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
+
+@Component({
+  standalone: false,
+  template: `<pdf-shy-button
+    primaryToolbarId="editorButton"
+    title="Comment"
+    role="radio"
+    ariaHasPopup="true"
+    ariaControls="editorParamsToolbar"
+    [toggled]="selected"
+  ></pdf-shy-button>`,
+})
+class RadioButtonHostComponent {
+  selected = false;
+}
 
 describe('PdfShyButtonComponent', () => {
   let component: PdfShyButtonComponent;
@@ -37,7 +52,7 @@ describe('PdfShyButtonComponent', () => {
     } as any;
 
     TestBed.configureTestingModule({
-      declarations: [PdfShyButtonComponent],
+      declarations: [PdfShyButtonComponent, RadioButtonHostComponent],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         { provide: PdfShyButtonService, useValue: mockShyButtonService },
@@ -52,6 +67,57 @@ describe('PdfShyButtonComponent', () => {
 
   afterEach(() => {
     jest.clearAllMocks();
+  });
+
+  describe('toolbar accessibility semantics', () => {
+    it('exposes one radio on the inner button and updates its checked state', () => {
+      const hostFixture = TestBed.createComponent(RadioButtonHostComponent);
+      hostFixture.detectChanges();
+      const host = hostFixture.nativeElement.querySelector('pdf-shy-button') as HTMLElement;
+      const button = host.querySelector('button')!;
+
+      expect(host.hasAttribute('role')).toBe(false);
+      expect(hostFixture.nativeElement.querySelectorAll('[role="radio"]').length).toBe(1);
+      expect(button.getAttribute('aria-label')).toBe('Comment');
+      expect(button.getAttribute('aria-checked')).toBe('false');
+      expect(button.hasAttribute('aria-expanded')).toBe(false);
+      expect(button.getAttribute('aria-controls')).toBe('editorParamsToolbar');
+
+      hostFixture.componentInstance.selected = true;
+      hostFixture.detectChanges();
+
+      expect(button.getAttribute('aria-checked')).toBe('true');
+      expect(button.hasAttribute('aria-expanded')).toBe(false);
+      expect(hostFixture.nativeElement.querySelectorAll('[role="radio"]').length).toBe(1);
+      hostFixture.destroy();
+    });
+
+    it('preserves expanded state for an ordinary popup button', () => {
+      fixture.componentRef.setInput('primaryToolbarId', 'popupButton');
+      fixture.componentRef.setInput('ariaHasPopup', 'dialog');
+      fixture.componentRef.setInput('ariaControls', 'popup');
+      fixture.detectChanges();
+      const button = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
+
+      expect(button.getAttribute('aria-expanded')).toBe('false');
+      expect(button.hasAttribute('aria-checked')).toBe(false);
+
+      fixture.componentRef.setInput('toggled', true);
+      fixture.detectChanges();
+
+      expect(button.getAttribute('aria-expanded')).toBe('true');
+      expect(button.getAttribute('aria-haspopup')).toBe('dialog');
+      expect(button.getAttribute('aria-controls')).toBe('popup');
+    });
+
+    it('does not give a plain action button checked or expanded states', () => {
+      fixture.componentRef.setInput('primaryToolbarId', 'actionButton');
+      fixture.detectChanges();
+      const button = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
+
+      expect(button.hasAttribute('aria-checked')).toBe(false);
+      expect(button.hasAttribute('aria-expanded')).toBe(false);
+    });
   });
 
   describe('component creation', () => {
