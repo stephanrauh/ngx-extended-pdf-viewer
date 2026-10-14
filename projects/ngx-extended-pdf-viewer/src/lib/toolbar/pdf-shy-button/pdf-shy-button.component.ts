@@ -6,10 +6,11 @@ import { ResponsiveCSSClass } from '../../responsive-visibility';
 import { PdfShyButtonService } from './pdf-shy-button-service';
 
 @Component({
-    selector: 'pdf-shy-button',
-    styleUrls: ['./pdf-shy-button.component.scss'],
-    templateUrl: './pdf-shy-button.component.html',
-    standalone: false
+  selector: 'pdf-shy-button',
+  styleUrls: ['./pdf-shy-button.component.scss'],
+  templateUrl: './pdf-shy-button.component.html',
+  host: { '[attr.role]': 'null' },
+  standalone: false
 })
 export class PdfShyButtonComponent implements OnInit, AfterViewInit, AfterContentInit, OnDestroy {
   public primaryToolbarId = input.required<string>();
