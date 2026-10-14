@@ -452,6 +452,12 @@ describe('PDF Default Options Utility Functions', () => {
         expect(result).toContain('assets/pdf.worker');
       });
 
+      it('should return a versioned rendererSrc inside the assets folder, and keep worker rendering off', () => {
+        // pdf.js 6.5+ renderer worker: same naming scheme as the PDF worker.
+        expect(pdfDefaultOptions.rendererSrc()).toContain(`assets/pdf.renderer-${getVersionSuffix('./assets')}`);
+        expect(pdfDefaultOptions.disableWorkerRendering).toBe(true);
+      });
+
       it('should return correct standardFontDataUrl', () => {
         const result = pdfDefaultOptions.standardFontDataUrl();
         // #3232: same story as cMapUrl - the fonts ship inside the assets folder.
@@ -479,6 +485,7 @@ describe('PDF Default Options Utility Functions', () => {
 
         expect(sandboxResult).toContain('-es5.mjs');
         expect(workerResult).toContain('-es5.mjs');
+        expect(pdfDefaultOptions.rendererSrc()).toContain('-es5.mjs');
 
         pdfDefaultOptions.needsES5 = originalNeedsES5;
       });
@@ -492,6 +499,7 @@ describe('PDF Default Options Utility Functions', () => {
 
         expect(sandboxResult).toContain('.min.mjs');
         expect(workerResult).toContain('.min.mjs');
+        expect(pdfDefaultOptions.rendererSrc()).toContain('.min.mjs');
 
         pdfDefaultOptions.needsES5 = originalNeedsES5;
       });

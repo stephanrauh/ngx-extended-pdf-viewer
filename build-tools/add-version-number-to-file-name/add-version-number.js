@@ -46,6 +46,17 @@ function fixVersionNumber(folder = 'assets', suffix = '.mjs') {
       fs.renameSync(f + 'pdf.worker-es5' + suffix, f + `pdf.worker-${pdfjsVersion}-es5${suffix}`);
     }
 
+    // The renderer worker ships with pdf.js 6.5+ only - the stable bundle may not have it yet.
+    if (fs.existsSync(f + 'pdf.renderer' + suffix)) {
+      fs.renameSync(f + 'pdf.renderer' + suffix, f + `pdf.renderer-${pdfjsVersion}${suffix}`);
+    }
+    if (fs.existsSync(f + 'pdf.renderer.min' + suffix)) {
+      fs.renameSync(f + 'pdf.renderer.min' + suffix, f + `pdf.renderer-${pdfjsVersion}.min${suffix}`);
+    }
+    if (fs.existsSync(f + 'pdf.renderer-es5' + suffix)) {
+      fs.renameSync(f + 'pdf.renderer-es5' + suffix, f + `pdf.renderer-${pdfjsVersion}-es5${suffix}`);
+    }
+
     fs.renameSync(f + 'viewer' + suffix, f + `viewer-${pdfjsVersion}${suffix}`);
     if (fs.existsSync(f + 'viewer.min' + suffix)) {
       fs.renameSync(f + 'viewer.min' + suffix, f + `viewer-${pdfjsVersion}.min${suffix}`);

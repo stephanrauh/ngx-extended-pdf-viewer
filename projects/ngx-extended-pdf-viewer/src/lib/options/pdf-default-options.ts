@@ -5,7 +5,7 @@ const isEdge = typeof navigator === 'undefined' || /Edge\/\d./i.test(navigator.u
 const needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
 
 export const pdfjsVersion = '6.4.1349';
-export const pdfjsBleedingEdgeVersion = '6.4.1349';
+export const pdfjsBleedingEdgeVersion = '6.5.1203';
 export function getVersionSuffix(folder: string): string {
   if (folder?.includes('bleeding-edge')) {
     return pdfjsBleedingEdgeVersion;
@@ -160,6 +160,19 @@ export const pdfDefaultOptions = {
       pdfDefaultOptions.needsES5
         ? `${assetsUrl(pdfDefaultOptions.assetsFolder)}/pdf.worker-${getVersionSuffix(assetsUrl(pdfDefaultOptions.assetsFolder))}-es5.mjs`
         : `${assetsUrl(pdfDefaultOptions.assetsFolder)}/pdf.worker-${getVersionSuffix(assetsUrl(pdfDefaultOptions.assetsFolder))}${
+            pdfDefaultOptions._internalFilenameSuffix
+          }.mjs`
+    );
+  },
+  // pdf.js 6.5+ can render pages in a second web worker (OffscreenCanvas).
+  // Experimental and off by default, like upstream; set `disableWorkerRendering`
+  // to false to try it. Older engines ignore both options.
+  disableWorkerRendering: true,
+  rendererSrc: function () {
+    return resolveAssetUrlAgainstBaseHref(
+      pdfDefaultOptions.needsES5
+        ? `${assetsUrl(pdfDefaultOptions.assetsFolder)}/pdf.renderer-${getVersionSuffix(assetsUrl(pdfDefaultOptions.assetsFolder))}-es5.mjs`
+        : `${assetsUrl(pdfDefaultOptions.assetsFolder)}/pdf.renderer-${getVersionSuffix(assetsUrl(pdfDefaultOptions.assetsFolder))}${
             pdfDefaultOptions._internalFilenameSuffix
           }.mjs`
     );

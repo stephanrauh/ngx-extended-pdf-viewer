@@ -70,6 +70,12 @@ if (quickMode) {
     ['build/minified/web/viewer.mjs', 'build/minified/web/viewer.min.mjs'],
   ];
 
+  // The renderer worker (pdf.js 6.5+) only exists in newer engines, so the stable bundle may lack it.
+  // Without the rename, the legacy copy would silently overwrite the modern pdf.renderer.mjs below.
+  if (fs.existsSync('build/generic-legacy/build/pdf.renderer.mjs')) {
+    renameOperations.push(['build/generic-legacy/build/pdf.renderer.mjs', 'build/generic-legacy/build/pdf.renderer-es5.mjs']);
+  }
+
   renameOperations.forEach(([oldPath, newPath]) => {
     fs.moveSync(oldPath, newPath, { overwrite: true });
   });

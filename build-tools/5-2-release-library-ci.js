@@ -89,6 +89,15 @@ function expectedMinSize(fileName) {
       ? 50 * 1024 // observed ~73 KB
       : 90 * 1024; // observed ~126 KB
   }
+  // The renderer worker (pdf.js 6.5+) is mid-sized; its -es5 flavour carries core-js.
+  if (fileName.includes('pdf.renderer-')) {
+    if (fileName.includes('-es5')) {
+      return 450 * 1024; // observed ~647 KB - polyfilled
+    }
+    return fileName.endsWith('.min.mjs')
+      ? 100 * 1024 // observed ~157 KB
+      : 200 * 1024; // observed ~284 KB
+  }
   // pdf.worker-* and viewer-* are always > 1 MB even minified.
   return 700 * 1024;
 }
@@ -116,6 +125,10 @@ console.log(`Bleeding-edge PDF.js version: ${bleedingEdgeVersion}`);
 
 console.log('\nVerifying bleeding-edge build artifacts...');
 const bleedingEdgeFiles = [
+  // The stable list below gets these three once the stable bundle is promoted to pdf.js 6.5+.
+  `pdf.renderer-${bleedingEdgeVersion}-es5.mjs`,
+  `pdf.renderer-${bleedingEdgeVersion}.min.mjs`,
+  `pdf.renderer-${bleedingEdgeVersion}.mjs`,
   `pdf.sandbox-${bleedingEdgeVersion}-es5.mjs`,
   `pdf.sandbox-${bleedingEdgeVersion}.min.mjs`,
   `pdf.sandbox-${bleedingEdgeVersion}.mjs`,
