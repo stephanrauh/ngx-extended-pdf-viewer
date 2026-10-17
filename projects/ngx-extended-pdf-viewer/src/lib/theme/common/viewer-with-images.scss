@@ -133,6 +133,12 @@ ngx-extended-pdf-viewer {
     // Defaults to the per-theme value, so the out-of-the-box look is unchanged.
     background-color: var(--page-placeholder-background-color, #{$page-background});
     // #3226 end of modification by ngx-extended-pdf-viewer
+
+    /* Avoid exposing the page background at canvas edges.
+       role="presentation" identifies the main canvas. */
+    &:has(> .canvasWrapper > canvas[role="presentation"]) {
+      background-color: transparent;
+    }
   }
 
   .pdfViewer .dummyPage {
