@@ -7,9 +7,9 @@
 @else {
 <button type="button" [id]="primaryToolbarId()" [class]="'toolbarButton ' + cssClass()" [title]="title()"
   [attr.data-l10n-id]="l10nId() || null" [class.toggled]="toggled()" [disabled]="disabled()" (click)="onClick($event)"
-  [attr.aria-label]="title()" [attr.role]="role()" [attr.aria-expanded]="role() === 'radio' ? null : (toggled() ? 'true' : (ariaHasPopup() || ariaControls() ? 'false' : null))"
-  [attr.aria-checked]="role() === 'radio' ? (toggled() ? 'true' : 'false') : null"
-  [attr.aria-haspopup]="ariaHasPopup()" [attr.aria-controls]="ariaControls()" #buttonRef>
+  [attr.aria-label]="title()" [attr.role]="aria().role" [attr.aria-expanded]="aria().expanded"
+  [attr.aria-checked]="aria().checked" [attr.aria-pressed]="aria().pressed"
+  [attr.aria-haspopup]="aria().haspopup" [attr.aria-controls]="aria().controls" #buttonRef>
   <span [attr.data-l10n-id]="l10nLabel() || null"></span>
 </button>
 }

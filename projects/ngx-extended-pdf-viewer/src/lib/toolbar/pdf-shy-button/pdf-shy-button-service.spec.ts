@@ -18,6 +18,10 @@ describe('PdfShyButtonService', () => {
       l10nLabel: jest.fn(() => overrides.l10nLabel ?? ''),
       title: jest.fn(() => overrides.title ?? ''),
       toggled: jest.fn(() => overrides.toggled ?? false),
+      toggleButton: jest.fn(() => overrides.toggleButton ?? false),
+      role: jest.fn(() => overrides.role ?? undefined),
+      ariaHasPopup: jest.fn(() => overrides.ariaHasPopup ?? false),
+      ariaControls: jest.fn(() => overrides.ariaControls ?? undefined),
       disabled: jest.fn(() => overrides.disabled ?? false),
       order: jest.fn(() => overrides.order ?? 99999),
       image: jest.fn(() => overrides.image ?? ''),
@@ -69,6 +73,19 @@ describe('PdfShyButtonService', () => {
       service.add(button);
 
       expect(service.buttons[0].id).toBe('customSecondaryId');
+    });
+
+    it('should give the secondary menu the same ARIA attributes as the toolbar button (#3295)', () => {
+      service.add(createMockButton({ primaryToolbarId: 'primaryCursorHandTool', toggleButton: true, toggled: true }));
+      service.add(createMockButton({ primaryToolbarId: 'primaryEditorInk', ariaHasPopup: 'true', ariaControls: 'editorInkParamsToolbar' }));
+      service.add(createMockButton({ primaryToolbarId: 'primaryPrint' }));
+      const aria = (id: string) => service.buttons.find((b) => b.id === id)?.aria;
+
+      expect(aria('secondaryCursorHandTool')).toEqual(expect.objectContaining({ pressed: 'true', expanded: null }));
+      expect(aria('secondaryEditorInk')).toEqual(
+        expect.objectContaining({ expanded: 'false', haspopup: 'true', controls: 'editorInkParamsToolbar', pressed: null }),
+      );
+      expect(aria('secondaryPrint')).toEqual({ role: null, expanded: null, checked: null, pressed: null, haspopup: null, controls: null });
     });
 
     it('should replace primaryToolbarId prefix "primary" with "secondary"', () => {

@@ -3,6 +3,7 @@ import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { PDFNotificationService } from '../../pdf-notification-service';
 import { ResponsiveCSSClass } from '../../responsive-visibility';
 import { PdfShyButtonComponent } from './pdf-shy-button.component';
+import { ShyButtonAria, shyButtonAria } from './shy-button-aria';
 
 export interface PdfShyButtonDescription {
   id: string;
@@ -11,6 +12,8 @@ export interface PdfShyButtonDescription {
   l10nLabel: string;
   title: string;
   toggled: boolean;
+  /** #3295 the same ARIA attributes as the toolbar button */
+  aria?: ShyButtonAria;
   disabled: boolean;
   order: number;
   image: string | undefined;
@@ -44,6 +47,13 @@ export class PdfShyButtonService {
       l10nLabel: button.l10nLabel(),
       title: button.title(),
       toggled: button.toggled(),
+      aria: shyButtonAria({
+        toggled: button.toggled(),
+        toggleButton: button.toggleButton(),
+        role: button.role(),
+        ariaHasPopup: button.ariaHasPopup(),
+        ariaControls: button.ariaControls(),
+      }),
       disabled: button.disabled(),
       order: button.order() ?? 99999,
       image: button.imageHtml(),

@@ -4,6 +4,7 @@ import { PdfCspPolicyService } from '../../pdf-csp-policy.service';
 import { PDFNotificationService } from '../../pdf-notification-service';
 import { ResponsiveCSSClass } from '../../responsive-visibility';
 import { PdfShyButtonService } from './pdf-shy-button-service';
+import { shyButtonAria } from './shy-button-aria';
 
 @Component({
   selector: 'pdf-shy-button',
@@ -28,6 +29,9 @@ export class PdfShyButtonComponent implements OnInit, AfterViewInit, AfterConten
   public title = input<string>('');
 
   public toggled = input<boolean>(false);
+
+  /** #3295 the button switches something on and off: screen readers announce `toggled` as "pressed" */
+  public toggleButton = input<boolean>(false);
 
   public disabled = input<boolean>(false);
 
@@ -56,6 +60,16 @@ export class PdfShyButtonComponent implements OnInit, AfterViewInit, AfterConten
   public buttonRef = viewChild<ElementRef>('buttonRef');
 
   public nestedContent = contentChild<ElementRef>('nestedContent');
+
+  public aria = computed(() =>
+    shyButtonAria({
+      toggled: this.toggled(),
+      toggleButton: this.toggleButton(),
+      role: this.role(),
+      ariaHasPopup: this.ariaHasPopup(),
+      ariaControls: this.ariaControls(),
+    }),
+  );
 
   // Computed signal that validates and sanitizes the SVG string
   // Returns sanitized HTML for use in both primary toolbar and secondary toolbar
@@ -167,6 +181,7 @@ export class PdfShyButtonComponent implements OnInit, AfterViewInit, AfterConten
       this.l10nLabel();
       this.title();
       this.toggled();
+      this.toggleButton();
       this.disabled();
       this.order();
       this.action();

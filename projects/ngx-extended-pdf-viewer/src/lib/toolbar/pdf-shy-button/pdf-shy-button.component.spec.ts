@@ -117,6 +117,34 @@ describe('PdfShyButtonComponent', () => {
 
       expect(button.hasAttribute('aria-checked')).toBe(false);
       expect(button.hasAttribute('aria-expanded')).toBe(false);
+      expect(button.hasAttribute('aria-pressed')).toBe(false);
+      expect(button.hasAttribute('aria-haspopup')).toBe(false);
+    });
+
+    it('announces a toggle button as pressed or not pressed, never as expanded (#3295)', () => {
+      fixture.componentRef.setInput('primaryToolbarId', 'primaryCursorHandTool');
+      fixture.componentRef.setInput('toggleButton', true);
+      fixture.detectChanges();
+      const button = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
+
+      expect(button.getAttribute('aria-pressed')).toBe('false');
+
+      fixture.componentRef.setInput('toggled', true);
+      fixture.detectChanges();
+
+      expect(button.getAttribute('aria-pressed')).toBe('true');
+      expect(button.hasAttribute('aria-expanded')).toBe(false);
+      expect(button.hasAttribute('aria-checked')).toBe(false);
+      expect(button.hasAttribute('aria-haspopup')).toBe(false);
+    });
+
+    it('does not announce a toggled button as expanded when it opens nothing (#3295)', () => {
+      fixture.componentRef.setInput('primaryToolbarId', 'actionButton');
+      fixture.componentRef.setInput('toggled', true);
+      fixture.detectChanges();
+      const button = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
+
+      expect(button.hasAttribute('aria-expanded')).toBe(false);
     });
   });
 
