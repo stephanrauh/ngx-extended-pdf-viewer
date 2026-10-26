@@ -13,6 +13,8 @@
  * limitations under the License.
  */
 
+@use 'viewer-theme' as *; // #3304 the dark colors follow the viewer theme, not the OS
+
 ngx-extended-pdf-viewer {
   .messageBar {
     --closing-button-icon: url(/assets/images/messageBar_closingButton.svg);
@@ -24,7 +26,7 @@ ngx-extended-pdf-viewer {
     --message-bar-close-button-active-bg-color: rgb(21 20 26 / 0.21);
     --message-bar-close-button-focus-bg-color: rgb(21 20 26 / 0.07);
 
-    @media (prefers-color-scheme: dark) {
+    @include dark-viewer-theme {
       --message-bar-close-button-hover-bg-color: rgb(251 251 254 / 0.14);
       --message-bar-close-button-active-bg-color: rgb(251 251 254 / 0.21);
       --message-bar-close-button-focus-bg-color: rgb(251 251 254 / 0.07);
@@ -149,7 +151,7 @@ ngx-extended-pdf-viewer {
     --focus-ring-color: #0060df;
     --focus-ring-outline: 2px solid var(--focus-ring-color);
 
-    @media (prefers-color-scheme: dark) {
+    @include dark-viewer-theme {
       --text-primary-color: #fbfbfe;
 
       --message-bar-icon-color: #73a7f3;

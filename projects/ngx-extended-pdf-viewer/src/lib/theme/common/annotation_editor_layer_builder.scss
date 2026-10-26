@@ -13,6 +13,8 @@
  * limitations under the License.
  */
 
+@use 'viewer-theme' as *; // #3304 the dark colors follow the viewer theme, not the OS
+
 // @import url(draw_layer_builder.css); imported via compile-sass.ts
 // @import url(toggle_button.css); imported via compile-sass.ts
 // @import url(signature_manager.css); imported via compile-sass.ts
@@ -297,7 +299,7 @@ ngx-extended-pdf-viewer {
       --alt-text-hover-done-color: var(--alt-text-done-color);
       --alt-text-hover-warning-color: var(--alt-text-warning-color);
 
-      @media (prefers-color-scheme: dark) {
+      @include dark-viewer-theme {
         --editor-toolbar-bg-color: #2b2a33;
         --editor-toolbar-fg-color: #fbfbfe;
         --editor-toolbar-hover-bg-color: #52525e;
@@ -513,7 +515,7 @@ ngx-extended-pdf-viewer {
               --alt-text-tooltip-border: #8f8f9d;
               --alt-text-tooltip-shadow: 0px 2px 6px 0px rgb(58 57 68 / 0.2);
 
-              @media (prefers-color-scheme: dark) {
+              @include dark-viewer-theme {
                 --alt-text-tooltip-bg: #1c1b22;
                 --alt-text-tooltip-fg: #fbfbfe;
                 --alt-text-tooltip-shadow: 0px 2px 6px 0px #15141a;
@@ -647,7 +649,7 @@ ngx-extended-pdf-viewer {
       --no-alt-text-badge-bg-color: #cfcfd8;
       --no-alt-text-badge-fg-color: #5b5b66;
 
-      @media (prefers-color-scheme: dark) {
+      @include dark-viewer-theme {
         --no-alt-text-badge-border-color: #52525e;
         --no-alt-text-badge-bg-color: #fbfbfe;
         --no-alt-text-badge-fg-color: #15141a;
@@ -928,7 +930,7 @@ ngx-extended-pdf-viewer {
     --preview-image-bg-color: #f0f0f4;
     --preview-image-border: none;
 
-    @media (prefers-color-scheme: dark) {
+    @include dark-viewer-theme {
       --preview-image-bg-color: #2b2a33;
     }
 
@@ -1116,7 +1118,7 @@ ngx-extended-pdf-viewer {
     --selected-outline-color: #0060df;
     --swatch-border-color: #cfcfd8;
 
-    @media (prefers-color-scheme: dark) {
+    @include dark-viewer-theme {
       --hover-outline-color: #80ebff;
       --selected-outline-color: #aaf2ff;
       --swatch-border-color: #52525e;
@@ -1362,7 +1364,7 @@ ngx-extended-pdf-viewer {
 
         --example-color: #bfbfc9;
 
-        @media (prefers-color-scheme: dark) {
+        @include dark-viewer-theme {
           --example-color: #80808e;
         }
 
@@ -1405,7 +1407,7 @@ ngx-extended-pdf-viewer {
       .divider {
         --divider-color: #d7d7db;
 
-        @media (prefers-color-scheme: dark) {
+        @include dark-viewer-theme {
           --divider-color: #8f8f9d;
         }
 

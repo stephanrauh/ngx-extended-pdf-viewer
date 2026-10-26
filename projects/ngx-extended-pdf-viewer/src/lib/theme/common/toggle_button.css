@@ -31,7 +31,9 @@ ngx-extended-pdf-viewer {
     --color-canvas: white;
     --slider-direction: 1;
 
-    @media (prefers-color-scheme: dark) {
+    /* #3304 modified by ngx-extended-pdf-viewer: follow the viewer theme, not the OS
+       (see _viewer-theme.scss; :where() keeps the specificity, so forced-colors still wins) */
+    :where(ngx-extended-pdf-viewer[data-viewer-theme="dark"]) & {
       --button-background-color: color-mix(in srgb, currentColor 7%, transparent);
       --button-background-color-hover: color-mix(in srgb, currentColor 14%, transparent);
       --button-background-color-active: color-mix(in srgb, currentColor 21%, transparent);
@@ -41,6 +43,7 @@ ngx-extended-pdf-viewer {
       --border-interactive-color: #bfbfc9;
       --color-canvas: #1c1b22;
     }
+    /* #3304 end of modification by ngx-extended-pdf-viewer */
 
     @media (forced-colors: active) {
       --color-accent-primary: ButtonText;

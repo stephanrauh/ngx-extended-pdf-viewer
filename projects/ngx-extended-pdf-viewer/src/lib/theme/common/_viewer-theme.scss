@@ -1,0 +1,18 @@
+@use 'sass:selector';
+
+// #3304 modified by ngx-extended-pdf-viewer
+// Upstream pdf.js switches to its dark colors with `@media (prefers-color-scheme: dark)`,
+// i.e. it follows the OS. ngx-extended-pdf-viewer follows the viewer theme instead: the
+// viewer element carries data-viewer-theme="dark" when [theme]="dark". Otherwise the
+// colors disagree when the OS and the viewer theme differ, e.g. light text on a light
+// dialog (#3219, #3304).
+//
+// Use it where upstream uses the media query, inside a rule below ngx-extended-pdf-viewer:
+//   @include dark-viewer-theme { --dialog-bg-color: #1c1b22; }
+// :where() adds no specificity, so a forced-colors block that follows still wins.
+@mixin dark-viewer-theme {
+  @at-root #{selector.replace(&, 'ngx-extended-pdf-viewer', 'ngx-extended-pdf-viewer:where([data-viewer-theme="dark"])')} {
+    @content;
+  }
+}
+// #3304 end of modification by ngx-extended-pdf-viewer

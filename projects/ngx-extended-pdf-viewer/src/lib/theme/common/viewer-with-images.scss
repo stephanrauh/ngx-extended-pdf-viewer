@@ -1594,7 +1594,10 @@ ngx-extended-pdf-viewer {
         min-width: calc(100% - 4px);
         height: auto;
         margin-bottom: 1px;
-        padding: 2px 0 5px;
+        // #3304 modified by ngx-extended-pdf-viewer
+        // 24px high (upstream: 2px 0 5px = 22px), the minimum target size of WCAG 2.2 (2.5.8)
+        padding: 3px 0 6px;
+        // #3304 end of modification by ngx-extended-pdf-viewer
         padding-inline-start: 4px;
         border-radius: 2px;
         color: var(--treeitem-color);

@@ -13,6 +13,8 @@
  * limitations under the License.
  */
 
+@use 'viewer-theme' as *; // #3304 the dark colors follow the viewer theme, not the OS
+
 ngx-extended-pdf-viewer .html {
   & dialog[open].dialog {
     display: block;
@@ -57,7 +59,7 @@ ngx-extended-pdf-viewer .html {
     --button-primary-hover-fg-color: var(--button-primary-fg-color);
     --button-primary-hover-border-color: var(--button-primary-hover-bg-color);
 
-    @media (prefers-color-scheme: dark) {
+    @include dark-viewer-theme {
       --dialog-bg-color: #1c1b22;
       --dialog-border-color: #1c1b22;
       --dialog-shadow: 0 2px 14px 0 #15141a;
@@ -329,7 +331,7 @@ ngx-extended-pdf-viewer .html {
         --message-bar-icon: url(/assets/images/messageBar_warning.svg);
         --message-bar-icon-color: #cd411e;
 
-        @media (prefers-color-scheme: dark) {
+        @include dark-viewer-theme {
           --message-bar-bg-color: #5a3100;
           --message-bar-fg-color: #fbfbfe;
           --message-bar-border-color: rgb(255 255 255 / 0.08);

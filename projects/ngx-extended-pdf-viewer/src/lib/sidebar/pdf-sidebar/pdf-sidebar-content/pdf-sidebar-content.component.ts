@@ -128,6 +128,13 @@ export class PdfSidebarContentComponent implements OnDestroy {
     // #3255 pdf.js renamed pdfjs-thumb-page-title to pdfjs-thumb-page-title1 (it now includes the page count)
     newElement.setAttribute('data-l10n-id', 'pdfjs-thumb-page-title1'); // NOSONAR — matches pdf.js upstream pattern which uses setAttribute for l10n attributes
     newElement.setAttribute('data-l10n-args', thumbPageTitlePromiseOrPageL10nArgs); // NOSONAR
+    // #3304 like upstream, the element with role="button" carries the title, too: it's its accessible
+    // name until the thumbnail has been rendered.
+    const button = newElement.querySelector('[role="button"]');
+    if (button && !button.hasAttribute('data-l10n-id')) {
+      button.setAttribute('data-l10n-id', 'pdfjs-thumb-page-title1'); // NOSONAR
+      button.setAttribute('data-l10n-args', thumbPageTitlePromiseOrPageL10nArgs); // NOSONAR
+    }
 
     this.replacePageNumberEverywhere(newElement, id.toString());
 

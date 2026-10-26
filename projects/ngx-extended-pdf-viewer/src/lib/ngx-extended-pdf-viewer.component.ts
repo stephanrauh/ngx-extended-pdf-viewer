@@ -129,6 +129,9 @@ export function isIOS(): boolean {
   styleUrls: ['./ngx-extended-pdf-viewer.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false, // NOSONAR — intentional for backward compatibility with NgModule consumers
+  // #3304 the dark colors of dialogs, message bars and editor toolbars follow the viewer theme
+  // (see theme/common/_viewer-theme.scss)
+  host: { '[attr.data-viewer-theme]': 'theme()' },
 })
 export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasHeight {
   private readonly formSupport = new NgxFormSupport();
