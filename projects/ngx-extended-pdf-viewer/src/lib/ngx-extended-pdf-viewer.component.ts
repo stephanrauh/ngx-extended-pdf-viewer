@@ -131,7 +131,12 @@ export function isIOS(): boolean {
   standalone: false, // NOSONAR — intentional for backward compatibility with NgModule consumers
   // #3304 the dark colors of dialogs, message bars and editor toolbars follow the viewer theme
   // (see theme/common/_viewer-theme.scss)
-  host: { '[attr.data-viewer-theme]': 'theme()' },
+  // #3305 theme="auto" follows the operating system, so the resolved theme goes into both bindings.
+  // color-scheme lives on the host (#3115) and is bound so it follows later theme changes, too.
+  host: {
+    '[attr.data-viewer-theme]': 'effectiveTheme()',
+    '[style.color-scheme]': 'hostColorScheme()',
+  },
 })
 export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasHeight {
   private readonly formSupport = new NgxFormSupport();
@@ -1034,7 +1039,33 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   public disableDownloadButton = input<boolean>(false);
   // #2818 end of modification by ngx-extended-pdf-viewer
 
-  public theme = input<'dark' | 'light' | 'custom' | string>('light');
+  /**
+   * 'light' (default), 'dark', 'custom' (no built-in theme CSS) or 'auto'.
+   * 'auto' follows the operating system's dark mode and switches when the user changes it.
+   */
+  public theme = input<'dark' | 'light' | 'auto' | 'custom' | string>('light');
+
+  // #3305 modified by ngx-extended-pdf-viewer
+  /** true while the operating system prefers a dark color scheme (only read by theme="auto") */
+  private readonly osPrefersDark = signal(false);
+
+  private osColorSchemeAbortController: AbortController | undefined;
+
+  /** The theme actually applied: theme="auto" resolves to 'dark' or 'light' */
+  public effectiveTheme = computed(() => {
+    const theme = this.theme();
+    if (theme === 'auto') {
+      return this.osPrefersDark() ? 'dark' : 'light';
+    }
+    return theme;
+  });
+
+  /** custom themes keep the color-scheme of the surrounding page */
+  public hostColorScheme = computed(() => {
+    const theme = this.effectiveTheme();
+    return theme === 'dark' || theme === 'light' ? theme : null;
+  });
+  // #3305 end of modification by ngx-extended-pdf-viewer
 
   public showToolbar = input(true);
 
@@ -1872,6 +1903,15 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     if (isPlatformBrowser(this.platformId)) {
       this.serverSideRendering = false;
       this.toolbarWidth = String(document.body.clientWidth);
+      // #3305 theme="auto": track the operating system's color scheme
+      const darkQuery = window.matchMedia?.('(prefers-color-scheme: dark)');
+      if (darkQuery) {
+        this.osPrefersDark.set(darkQuery.matches);
+        this.osColorSchemeAbortController = new AbortController();
+        darkQuery.addEventListener('change', (event) => this.osPrefersDark.set(event.matches), {
+          signal: this.osColorSchemeAbortController.signal,
+        });
+      }
     }
   }
 
@@ -2307,20 +2347,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
           if (isPdfjsVersionAtLeast(6, 1)) {
             PDFViewerApplicationOptions.set('supportsDownloading', this.supportsDownloading());
           }
-          // #3115 modified by ngx-extended-pdf-viewer
-          // Apply color-scheme to the viewer host element instead of letting
-          // PDF.js write it to document.documentElement, which would override
-          // the host application's color-scheme (e.g. break Angular Material).
-          // color-scheme is inherited, so descendants of the host pick it up.
-          const hostElement = this.elementRef.nativeElement as HTMLElement;
-          if (this.theme() === 'dark') {
-            hostElement.style.colorScheme = 'dark';
-          } else if (this.theme() === 'light') {
-            hostElement.style.colorScheme = 'light';
-          } else {
-            hostElement.style.removeProperty('color-scheme');
-          }
-          // #3115 end of modification by ngx-extended-pdf-viewer
+          // #3115 color-scheme goes on the viewer host element instead of
+          // document.documentElement, which would override the host application's
+          // color-scheme (e.g. break Angular Material). It's a host binding now
+          // (#3305), so it also follows theme changes after initialization.
 
           PDFViewerApplication.isViewerEmbedded = true;
           if (PDFViewerApplication.printKeyDownListener) {
@@ -3393,6 +3423,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     // ChangeDetectorRef, which must not happen after the view is destroyed.
     this.toolbarResizeObserver?.disconnect();
     this.toolbarResizeObserver = undefined;
+    // #3305 stop following the operating system's color scheme
+    this.osColorSchemeAbortController?.abort();
+    this.osColorSchemeAbortController = undefined;
     // #3131 Unregister all eventBus listeners synchronously before async cleanup.
     this.eventBusAbortController?.abort();
     this.eventBusAbortController = null;
