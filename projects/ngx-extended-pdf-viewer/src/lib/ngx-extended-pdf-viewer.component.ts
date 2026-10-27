@@ -8,6 +8,7 @@ import {
   ElementRef,
   HostListener,
   Inject,
+  inject,
   input,
   InputSignal,
   model,
@@ -21,6 +22,7 @@ import {
   Renderer2,
   signal,
   TemplateRef,
+  untracked,
   viewChild,
   ViewRef,
 } from '@angular/core';
@@ -78,6 +80,7 @@ import { SpreadType } from './options/spread-type';
 import { ZoomType } from './options/zoom-type';
 import { PdfCspPolicyService } from './pdf-csp-policy.service';
 import { PDFScriptLoaderService } from './pdf-script-loader.service';
+import { PdfViewerRegistry } from './pdf-viewer-registry.service';
 import { ResponsiveVisibility } from './responsive-visibility';
 
 declare class ResizeObserver {
@@ -137,6 +140,10 @@ export function isIOS(): boolean {
     '[attr.data-viewer-theme]': 'effectiveTheme()',
     '[style.color-scheme]': 'hostColorScheme()',
   },
+  // #3306 multiple viewers on one page: every viewer has its own copy of pdf.js (via
+  // PDFScriptLoaderService) and its own services. The instances an application injects
+  // follow the primary viewer (see PdfViewerRegistry).
+  providers: [PDFScriptLoaderService, PDFNotificationService, NgxExtendedPdfViewerService],
 })
 export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasHeight {
   private readonly formSupport = new NgxFormSupport();
@@ -1051,6 +1058,16 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
   private osColorSchemeAbortController: AbortController | undefined;
 
+  // #3306 modified by ngx-extended-pdf-viewer
+  private readonly registry = inject(PdfViewerRegistry);
+
+  /** the PDFNotificationService the application injects; it follows the primary viewer */
+  private readonly rootNotificationService = inject(PDFNotificationService, { skipSelf: true });
+
+  /** the NgxExtendedPdfViewerService the application injects; it follows the primary viewer */
+  private readonly rootService = inject(NgxExtendedPdfViewerService, { skipSelf: true });
+  // #3306 end of modification by ngx-extended-pdf-viewer
+
   /** The theme actually applied: theme="auto" resolves to 'dark' or 'light' */
   public effectiveTheme = computed(() => {
     const theme = this.theme();
@@ -1335,6 +1352,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
    */
   private _isPdfJsZooming = false;
   private _pdfJsZoomingTimeout: ReturnType<typeof setTimeout> | undefined;
+  /** True if the [zoom] input changed while _isPdfJsZooming was set, so the change still has to be applied. */
+  private _zoomDeferredWhilePdfJsZooming = false;
 
   public zoomLevels = input<(string | number)[]>(['auto', 'page-actual', 'page-fit', 'page-width', 0.5, 1, 1.25, 1.5, 2, 3, 4]);
 
@@ -1496,6 +1515,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     // If we call setZoom() → currentScaleValue here, it bypasses drawingDelay
     // and triggers an immediate full re-render on every frame, causing stutter.
     if (this._isPdfJsZooming) {
+      // ... but don't lose a zoom the application has set meanwhile: apply it when the window closes
+      if (currentZoom !== this._lastZoomSetByPdfJs) {
+        this._zoomDeferredWhilePdfJsZooming = true;
+      }
       return;
     }
 
@@ -1912,6 +1935,26 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
           signal: this.osColorSchemeAbortController.signal,
         });
       }
+    }
+
+    // #3306 the services the application injects follow the primary (oldest live) viewer
+    this.registry.register(this);
+    effect(() => {
+      if (this.registry.primary() === this) {
+        const PDFViewerApplication = this.notificationService.onPDFJSInitSignal();
+        untracked(() => {
+          this.rootNotificationService.onPDFJSInitSignal.set(PDFViewerApplication);
+          this.rootService.ngxExtendedPdfViewerInitialized = this.service.ngxExtendedPdfViewerInitialized;
+        });
+      }
+    });
+  }
+
+  /** #3306 sets the readiness flag of this viewer's service, and of the application's if this is the primary viewer */
+  private setServiceInitialized(value: boolean): void {
+    this.service.ngxExtendedPdfViewerInitialized = value;
+    if (this.registry.primary() === this) {
+      this.rootService.ngxExtendedPdfViewerInitialized = value;
     }
   }
 
@@ -2627,7 +2670,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       PDFViewerApplication.appConfig.filenameForDownload = this.guessFilenameFromUrl(this._src);
     }
     this.initialized = true;
-    this.service.ngxExtendedPdfViewerInitialized = true;
+    this.setServiceInitialized(true);
     this.applyReadingDirection(this.readingDirection());
     this.applyBookGestureSettings(this.enableFlipByDrag(), this.showPageCorners());
     this.registerEventListeners(PDFViewerApplication);
@@ -2945,6 +2988,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
         clearTimeout(this._pdfJsZoomingTimeout);
         this._pdfJsZoomingTimeout = setTimeout(() => {
           this._isPdfJsZooming = false;
+          if (this._zoomDeferredWhilePdfJsZooming) {
+            this._zoomDeferredWhilePdfJsZooming = false;
+            this._lastZoomSetByPdfJs = undefined;
+            this.setZoom();
+          }
         }, 500);
 
         setTimeout(
@@ -3416,6 +3464,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
   public ngOnDestroy(): void {
     this.destroyInitialization = true;
+    // #3306 hand the application's services over to the next viewer, if there is one
+    const wasPrimary = this.registry.primary() === this;
+    this.registry.unregister(this);
     if (this.checkRootElementTimeout) {
       clearTimeout(this.checkRootElementTimeout);
     }
@@ -3435,6 +3486,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     // that's mid-teardown.
     this.initialized = false;
     this.service.ngxExtendedPdfViewerInitialized = false;
+    if (wasPrimary) {
+      // the next viewer's effect sets it again if that viewer is ready
+      this.rootService.ngxExtendedPdfViewerInitialized = false;
+    }
 
     // Async cleanup is fire-and-forget — Angular does not await ngOnDestroy.
     const cleanup = async () => {
@@ -3445,6 +3500,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       }
 
       this.notificationService.onPDFJSInitSignal.set(undefined);
+      if (wasPrimary && !this.registry.primary()) {
+        // #3306 no viewer is left to take over
+        this.rootNotificationService.onPDFJSInitSignal.set(undefined);
+      }
       if (this.resizeObserver) {
         this.resizeObserver.disconnect();
       }
@@ -3543,6 +3602,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
         delete w.PDFViewerApplicationOptions;
         delete w.PDFViewerApplicationConstants;
         this.service.ngxExtendedPdfViewerInitialized = false;
+        if (wasPrimary && !this.registry.primary()) {
+          this.rootService.ngxExtendedPdfViewerInitialized = false;
+        }
 
         // do not run this code on the server
         if (typeof window !== 'undefined') {
@@ -3552,7 +3614,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
         }
       }
     }; // end of async cleanup
-    cleanup();
+    // #3306 only now may the next viewer reuse this viewer's copy of pdf.js
+    cleanup().finally(() => this.pdfScriptLoaderService.releaseViewer());
   }
 
   private isPrimaryMenuVisible(): boolean {

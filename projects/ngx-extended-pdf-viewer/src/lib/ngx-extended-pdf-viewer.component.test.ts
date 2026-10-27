@@ -65,6 +65,7 @@ describe('NgxExtendedPdfViewerComponent', () => {
               set: jest.fn()
             },
             webViewerLoad: jest.fn(),
+            releaseViewer: jest.fn(),
             ngxExtendedPdfViewerIncompletelyInitialized: true,
             forceUsingLegacyES5: false
           }
@@ -86,7 +87,10 @@ describe('NgxExtendedPdfViewerComponent', () => {
           } 
         },
       ],
-    }).compileComponents();
+    })
+      // #3306 the component provides its own services; these tests replace them with the mocks above
+      .overrideComponent(NgxExtendedPdfViewerComponent, { set: { providers: [] } })
+      .compileComponents();
   });
 
   beforeEach(() => {

@@ -3,6 +3,7 @@ import { CSP_NONCE } from '@angular/core';
 import { PDFScriptLoaderService } from './pdf-script-loader.service';
 import { PdfCspPolicyService } from './pdf-csp-policy.service';
 import { pdfDefaultOptions } from './options/pdf-default-options';
+import { PdfJsModulePool } from './pdfjs-module-pool.service';
 
 describe('PDFScriptLoaderService', () => {
   let service: PDFScriptLoaderService;
@@ -379,7 +380,7 @@ describe('PDFScriptLoaderService', () => {
 
       beforeEach(() => {
         originalNeedsES5 = pdfDefaultOptions.needsES5;
-        jest.spyOn(service as any, 'loadViewer').mockResolvedValue(undefined);
+        jest.spyOn(service as any, 'loadViewer').mockImplementation(async () => ({ PDFViewerApplication: {}, PDFViewerApplicationOptions: {}, webViewerLoad: jest.fn() }));
       });
 
       afterEach(() => {
@@ -417,7 +418,61 @@ describe('PDFScriptLoaderService', () => {
     });
   });
 
-  describe('ngOnDestroy', () => {
+  // #3306 every viewer gets its own copy of the viewer module
+  describe('one module copy per viewer', () => {
+    const fakeLoad = () =>
+      jest.fn(async (url: string) => ({ PDFViewerApplication: { url } as any, PDFViewerApplicationOptions: {} as any, webViewerLoad: jest.fn() }));
+
+    it('loads the first copy from the plain URL and further copies with an instance query', async () => {
+      const pool = TestBed.inject(PdfJsModulePool);
+      const load = fakeLoad();
+      const first = await pool.acquire('/assets/viewer.mjs', false, load);
+      const second = await pool.acquire('/assets/viewer.mjs', false, load);
+
+      expect(load.mock.calls.map(([url]) => url)).toEqual(['/assets/viewer.mjs', '/assets/viewer.mjs?instance=1']);
+      expect(first.PDFViewerApplication).not.toBe(second.PDFViewerApplication);
+    });
+
+    it('reuses a copy only after its viewer has released it', async () => {
+      const pool = TestBed.inject(PdfJsModulePool);
+      const load = fakeLoad();
+      const first = await pool.acquire('/assets/viewer.mjs', false, load);
+      pool.release(first);
+      const again = await pool.acquire('/assets/viewer.mjs', false, load);
+
+      expect(again).toBe(first);
+      expect(load).toHaveBeenCalledTimes(1);
+    });
+
+    it('keeps the copies of the modern and the legacy bundle apart', async () => {
+      const pool = TestBed.inject(PdfJsModulePool);
+      const load = fakeLoad();
+      pool.release(await pool.acquire('/assets/viewer.mjs', false, load));
+      await pool.acquire('/assets/viewer-es5.mjs', false, load);
+
+      expect(load.mock.calls.map(([url]) => url)).toEqual(['/assets/viewer.mjs', '/assets/viewer-es5.mjs']);
+    });
+
+    it('gives two viewers of the same page their own PDFViewerApplication', async () => {
+      const pool = TestBed.inject(PdfJsModulePool);
+      const load = fakeLoad();
+      // a second viewer's own instance of the service
+      const second = TestBed.runInInjectionContext(() => new PDFScriptLoaderService(mockCspPolicyService, 'test-nonce-123'));
+      for (const loader of [service, second]) {
+        jest.spyOn(loader as any, 'needsES5').mockResolvedValue(false);
+        jest.spyOn(loader as any, 'loadViewer').mockImplementation((url: any) => load(url));
+      }
+      await service.ensurePdfJsHasBeenLoaded(false, false, false);
+      await second.ensurePdfJsHasBeenLoaded(false, false, false);
+
+      expect(service.PDFViewerApplication).not.toBe(second.PDFViewerApplication);
+      service.releaseViewer();
+      second.releaseViewer();
+      expect(pool['copies'].every((c: any) => !c.inUse)).toBe(true);
+    });
+  });
+
+  describe('ngOnDestroy (now PdfJsModulePool, it runs when the application shuts down)', () => {
     it('should clean up scripts and global variables', () => {
       // Add some test scripts
       const script1 = document.createElement('script');
@@ -434,7 +489,7 @@ describe('PDFScriptLoaderService', () => {
       (globalThis as any).setNgxExtendedPdfViewerSource = {};
       (globalThis as any).pdfjsLib = {};
 
-      service.ngOnDestroy();
+      TestBed.inject(PdfJsModulePool).ngOnDestroy();
 
       expect((globalThis as any).setNgxExtendedPdfViewerSource).toBeUndefined();
       expect((globalThis as any).pdfjsLib).toBeUndefined();
@@ -451,7 +506,7 @@ describe('PDFScriptLoaderService', () => {
       (global as any).window = undefined;
 
       try {
-        expect(() => service.ngOnDestroy()).not.toThrow();
+        expect(() => TestBed.inject(PdfJsModulePool).ngOnDestroy()).not.toThrow();
       } finally {
         (global as any).window = originalWindow;
       }

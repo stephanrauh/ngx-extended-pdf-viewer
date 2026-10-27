@@ -1,13 +1,14 @@
-import { CSP_NONCE, Inject, Injectable, OnDestroy, effect, signal } from '@angular/core';
+import { CSP_NONCE, Inject, Injectable, effect, inject, signal } from '@angular/core';
 import { getVersionSuffix, pdfDefaultOptions } from './options/pdf-default-options';
 import { IPDFViewerApplication } from './options/pdf-viewer-application';
 import { IPDFViewerApplicationOptions } from './options/pdf-viewer-application-options';
 import { PdfCspPolicyService } from './pdf-csp-policy.service';
+import { PdfJsModuleCopy, PdfJsModulePool } from './pdfjs-module-pool.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class PDFScriptLoaderService implements OnDestroy {
+export class PDFScriptLoaderService {
   private _forceUsingLegacyES5 = false;
   public get forceUsingLegacyES5() {
     return this._forceUsingLegacyES5;
@@ -30,6 +31,12 @@ export class PDFScriptLoaderService implements OnDestroy {
   public webViewerLoad!: (cspPolicyService: PdfCspPolicyService) => void;
 
   public ngxExtendedPdfViewerIncompletelyInitialized = true;
+
+  // #3306 Each <ngx-extended-pdf-viewer> provides its own instance of this service.
+  // The module copies themselves live in the page-wide pool.
+  private readonly modulePool = inject(PdfJsModulePool);
+
+  private moduleCopy: PdfJsModuleCopy | undefined;
 
   public constructor(
     private readonly pdfCspPolicyService: PdfCspPolicyService,
@@ -263,26 +270,18 @@ new (function () {
     return assets + artifactPath + versionSuffix + es5 + suffix;
   }
 
-  private async loadViewer(forceReload: boolean): Promise<void> {
+  private loadViewer(viewerUrl: string): Promise<PdfJsModuleCopy> {
     return new Promise((resolve) => {
-      let viewerPath = this.getPdfJsPath('viewer');
-      if (forceReload) {
-        viewerPath += '?v=' + new Date().getTime();
-      }
       const listener = (event: Event) => {
         const { PDFViewerApplication, PDFViewerApplicationOptions, webViewerLoad } = (event as CustomEvent).detail;
-        this.PDFViewerApplication = PDFViewerApplication;
-        this.PDFViewerApplicationOptions = PDFViewerApplicationOptions;
-        this.webViewerLoad = webViewerLoad;
-        resolve();
+        resolve({ PDFViewerApplication, PDFViewerApplicationOptions, webViewerLoad });
         document.removeEventListener('ngxViewerFileHasBeenLoaded', listener);
       };
       document.addEventListener('ngxViewerFileHasBeenLoaded', listener, { once: true });
-      const script = this.createScriptElement(viewerPath);
+      const script = this.createScriptElement(viewerUrl);
       document.getElementsByTagName('head')[0].appendChild(script);
     });
   }
-
 
   public async ensurePdfJsHasBeenLoaded(useInlineScripts: boolean, forceUsingLegacyES5: boolean, forceReload: boolean): Promise<boolean> {
     if (this.PDFViewerApplication) {
@@ -295,22 +294,21 @@ new (function () {
     // probe routed to the ES5 viewer the modern worker, which it can't run.
     pdfDefaultOptions.needsES5 = this._needsES5;
     // #3273 end of modification by ngx-extended-pdf-viewer
-    await this.loadViewer(forceReload);
+    // #3306 every viewer gets its own copy of the viewer module (see PdfJsModulePool)
+    this.moduleCopy = await this.modulePool.acquire(this.getPdfJsPath('viewer'), forceReload, (url) => this.loadViewer(url));
+    this.PDFViewerApplication = this.moduleCopy.PDFViewerApplication;
+    this.PDFViewerApplicationOptions = this.moduleCopy.PDFViewerApplicationOptions;
+    this.webViewerLoad = this.moduleCopy.webViewerLoad;
     return this.PDFViewerApplication !== undefined;
   }
 
-  public ngOnDestroy() {
-    if (typeof window === 'undefined') {
-      return; // fast escape for server side rendering
-    }
-    delete (globalThis as any)['setNgxExtendedPdfViewerSource'];
-
-    const w = window as any;
-    delete w.pdfjsLib;
-    document.querySelectorAll('.ngx-extended-pdf-viewer-script').forEach((e) => {
-      (e as HTMLScriptElement).onload = null;
-      e.remove();
-    });
+  /**
+   * #3306 Returns this viewer's copy of the viewer module to the pool. The viewer calls it
+   * when its cleanup has finished, so the next viewer can reuse the copy.
+   */
+  public releaseViewer(): void {
+    this.modulePool.release(this.moduleCopy);
+    this.moduleCopy = undefined;
   }
 
   private iOSVersionRequiresES5(): boolean {
