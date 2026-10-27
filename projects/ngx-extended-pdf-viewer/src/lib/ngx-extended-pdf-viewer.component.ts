@@ -2295,6 +2295,16 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       console.error("You're trying to open two instances of the PDF viewer. Most likely, this will result in errors.");
     }
     this.overrideDefaultSettings();
+    // #3306 with several viewers on one page, only react to the event of this viewer's application.
+    // Engine builds before #3306 don't tell, so their event is taken as ours.
+    const onInitialized = (event: Event) => {
+      const app = (event as CustomEvent).detail?.PDFViewerApplication;
+      if (app && app !== this.pdfScriptLoaderService.PDFViewerApplication) {
+        return;
+      }
+      document.removeEventListener('webviewerinitialized', onInitialized);
+      onLoaded();
+    };
     const onLoaded = () => {
       if (!this.pdfScriptLoaderService.PDFViewerApplication.eventBus) {
         console.error("Eventbus is null? Let's try again.");
@@ -2318,7 +2328,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
         }
       }
     };
-    document.addEventListener('webviewerinitialized', onLoaded, { once: true });
+    document.addEventListener('webviewerinitialized', onInitialized);
 
     this.activateTextlayerIfNecessary(null);
 
