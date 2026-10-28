@@ -3,6 +3,8 @@ import { PdfSidebarView } from './pdf-sidebar-views';
 export interface IPDFViewerAppConfig {
   defaultUrl: string;
   filenameForDownload: string | undefined;
+  /** the element containing the viewer (inside <ngx-extended-pdf-viewer>) */
+  appContainer?: HTMLElement;
   sidebarViewOnLoad: PdfSidebarView;
   /* static */ get(name: any): any;
   /* static */ getAll(kind?: null): any;

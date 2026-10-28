@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, effect, input, OnDestroy, ViewRef } from '@angular/core';
+import { ChangeDetectorRef, Component, effect, input, OnDestroy, ViewRef, ElementRef, inject } from '@angular/core';
 import { PositioningService } from '../../dynamic-css/positioning.service';
 import { AnnotationEditorEditorModeChangedEvent } from '../../events/annotation-editor-mode-changed-event';
 import { FocusManagementService } from '../../focus-management.service';
@@ -15,6 +15,8 @@ import { ResponsiveVisibility } from '../../responsive-visibility';
     standalone: false
 })
 export class PdfStampEditorComponent implements OnDestroy {
+  private readonly elementRef = inject(ElementRef);
+
   public show = input<ResponsiveVisibility>(true);
 
   // #2818 modified by ngx-extended-pdf-viewer
@@ -101,7 +103,7 @@ export class PdfStampEditorComponent implements OnDestroy {
       mode: currentMode === AnnotationEditorType.STAMP ? AnnotationEditorType.NONE : AnnotationEditorType.STAMP,
       isFromKeyboard: (event as PointerEvent)?.detail === 0,
     });
-    const positioningService = new PositioningService();
+    const positioningService = PositioningService.forViewer(this.elementRef?.nativeElement);
     positioningService.positionPopupBelowItsButton('primaryEditorStamp', 'editorStampParamsToolbar');
   };
 }

@@ -4,6 +4,7 @@ import { PDFNotificationService } from '../../pdf-notification-service';
 import { ResponsiveCSSClass } from '../../responsive-visibility';
 import { PdfShyButtonComponent } from './pdf-shy-button.component';
 import { ShyButtonAria, shyButtonAria } from './shy-button-aria';
+import { getViewerElementById } from '../../viewer-root';
 
 export interface PdfShyButtonDescription {
   id: string;
@@ -65,7 +66,9 @@ export class PdfShyButtonService {
       this.buttons[previousDefinition] = description;
       setTimeout(() => {
         if (this.PDFViewerApplication?.l10n) {
-          const element = document.getElementById(id);
+          // #3306 the button of the viewer whose l10n translates it, not the first viewer's
+          const host = this.PDFViewerApplication.appConfig?.appContainer?.closest('ngx-extended-pdf-viewer');
+          const element = getViewerElementById(host ?? document, id);
           this.PDFViewerApplication.l10n.translate(element).then(() => {
             // Dispatch the 'localized' event on the `eventBus` once the viewer
             // has been fully initialized and translated.

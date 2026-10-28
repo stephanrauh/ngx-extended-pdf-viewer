@@ -4,15 +4,29 @@ import { PdfDummyComponentsComponent } from './pdf-dummy-components.component';
 describe('PdfDummyComponentsComponent', () => {
   let component: PdfDummyComponentsComponent;
   let fixture: ComponentFixture<PdfDummyComponentsComponent>;
-  let getElementByIdSpy: jest.SpyInstance;
-  let getElementsByClassNameSpy: jest.SpyInstance;
-  let createElementSpy: jest.SpyInstance;
+  const roots: HTMLElement[] = [];
+
+  /** a viewer's root element: a dummy container plus the given widgets */
+  function createViewerRoot(...ids: string[]): HTMLElement {
+    const root = document.createElement('div');
+    const container = document.createElement('span');
+    container.className = 'invisible dummy-pdf-viewer-components';
+    root.appendChild(container);
+    for (const id of ids) {
+      const widget = document.createElement('button');
+      widget.id = id;
+      root.appendChild(widget);
+    }
+    document.body.appendChild(root);
+    roots.push(root);
+    return root;
+  }
+
+  function dummies(root: ParentNode): Element[] {
+    return Array.from(root.querySelectorAll('.dummy-pdf-viewer-components > *'));
+  }
 
   beforeEach(() => {
-    getElementByIdSpy = jest.spyOn(document, 'getElementById');
-    getElementsByClassNameSpy = jest.spyOn(document, 'getElementsByClassName');
-    createElementSpy = jest.spyOn(document, 'createElement');
-
     TestBed.configureTestingModule({
       declarations: [PdfDummyComponentsComponent],
     });
@@ -22,345 +36,74 @@ describe('PdfDummyComponentsComponent', () => {
   });
 
   afterEach(() => {
-    jest.restoreAllMocks();
+    roots.splice(0).forEach((root) => root.remove());
   });
 
-  // Your test cases go here...
-
-  describe('component initialization', () => {
-    it('should create', () => {
-      expect(component).toBeTruthy();
-    });
-
-    it('should be a component with correct selector', () => {
-      expect(component).toBeInstanceOf(PdfDummyComponentsComponent);
-    });
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  describe('component initialization', () => {
-    it('should create', () => {
-      expect(component).toBeTruthy();
+  describe.each([
+    ['addMissingStandardWidgets', (root?: ParentNode) => component.addMissingStandardWidgets(root)],
+    ['addMissingStandardWidgetsStatic', (root?: ParentNode) => PdfDummyComponentsComponent.addMissingStandardWidgetsStatic(root)],
+  ])('%s', (_name, addMissingStandardWidgets) => {
+    it('does nothing if the root has no dummy container', () => {
+      const root = document.createElement('div');
+      expect(() => addMissingStandardWidgets(root)).not.toThrow();
+      expect(root.children.length).toBe(0);
     });
 
-    it('should be a component with correct selector', () => {
-      expect(component).toBeInstanceOf(PdfDummyComponentsComponent);
-    });
-  });
+    it('adds an invisible span for every missing widget', () => {
+      const root = createViewerRoot();
 
-  describe('addMissingStandardWidgets', () => {
-    let mockContainer: any;
+      addMissingStandardWidgets(root);
 
-    beforeEach(() => {
-      mockContainer = {
-        children: [{ id: 'child1' }, { id: 'child2' }],
-        firstChild: null as any,
-        removeChild: jest.fn(),
-        appendChild: jest.fn(),
-      };
-      // Default: no children to remove. Tests that need children set firstChild explicitly.
-      mockContainer.firstChild = null;
-
-      getElementsByClassNameSpy.mockReturnValue([mockContainer] as any);
+      const added = dummies(root);
+      expect(added.length).toBeGreaterThan(100);
+      expect(added.every((d) => d.className === 'invisible dummy-component')).toBe(true);
+      expect(root.querySelector('#attachmentsView')?.tagName).toBe('SPAN');
+      // scaleSelect is in requiredIds, so it gets a span, too
+      expect(root.querySelectorAll('#scaleSelect').length).toBe(1);
     });
 
-    it('should return early if container is not found', () => {
-      getElementsByClassNameSpy.mockReturnValue([] as any);
+    it("doesn't add a dummy for a widget that exists", () => {
+      const root = createViewerRoot('attachmentsView', 'scaleSelect');
 
-      component.addMissingStandardWidgets();
+      addMissingStandardWidgets(root);
 
-      expect(getElementsByClassNameSpy).toHaveBeenCalledWith('dummy-pdf-viewer-components');
-      expect(mockContainer.removeChild).not.toHaveBeenCalled();
+      expect(root.querySelectorAll('#attachmentsView').length).toBe(1);
+      expect(root.querySelectorAll('#scaleSelect').length).toBe(1);
+      expect(root.querySelector('#attachmentsView')?.tagName).toBe('BUTTON');
     });
 
-    it('should find dummy components container', () => {
-      component.addMissingStandardWidgets();
+    it('replaces the dummies of an earlier call', () => {
+      const root = createViewerRoot();
 
-      expect(getElementsByClassNameSpy).toHaveBeenCalledWith('dummy-pdf-viewer-components');
+      addMissingStandardWidgets(root);
+      const count = dummies(root).length;
+      addMissingStandardWidgets(root);
+
+      expect(dummies(root).length).toBe(count);
+      expect(root.querySelectorAll('#attachmentsView').length).toBe(1);
     });
 
-    it('should clear existing children from container', () => {
-      // Mock firstChild with a remove() method that clears it
-      const child1 = { id: 'child1', remove: jest.fn(() => { mockContainer.firstChild = null; }) };
-      mockContainer.firstChild = child1;
+    it("ignores another viewer's widgets (#3306)", () => {
+      const first = createViewerRoot('attachmentsView');
+      const second = createViewerRoot();
 
-      component.addMissingStandardWidgets();
+      addMissingStandardWidgets(second);
 
-      expect(child1.remove).toHaveBeenCalled();
+      expect(second.querySelector('#attachmentsView')?.className).toBe('invisible dummy-component');
+      expect(dummies(first)).toEqual([]);
     });
 
-    it('should handle multiple children removal', () => {
-      const child2 = { id: 'child2', remove: jest.fn(() => { mockContainer.firstChild = null; }) };
-      const child1 = { id: 'child1', remove: jest.fn(() => { mockContainer.firstChild = child2; }) };
+    it('uses the whole document without a root', () => {
+      createViewerRoot('attachmentsView');
 
-      mockContainer.firstChild = child1;
+      addMissingStandardWidgets();
 
-      component.addMissingStandardWidgets();
-
-      expect(child1.remove).toHaveBeenCalled();
-      expect(child2.remove).toHaveBeenCalled();
-    });
-
-    it('should create dummy widgets for missing elements', () => {
-      const mockSpan = { id: '', className: '', setAttribute: jest.fn() };
-      createElementSpy.mockReturnValue(mockSpan as any);
-      getElementByIdSpy.mockReturnValue(null); // Element doesn't exist
-      mockContainer.firstChild = null; // No children to remove
-
-      component.addMissingStandardWidgets();
-
-      expect(createElementSpy).toHaveBeenCalledWith('span');
-      expect(mockContainer.appendChild).toHaveBeenCalledWith(mockSpan);
-    });
-
-    it('should not create dummy widgets for existing elements', () => {
-      const existingElement = { id: 'attachmentsView' };
-      getElementByIdSpy.mockReturnValue(existingElement as any);
-      mockContainer.firstChild = null; // No children to remove
-
-      // Clear spy call history from component setup
-      createElementSpy.mockClear();
-
-      component.addMissingStandardWidgets();
-
-      // When all elements already exist, no span or select elements should be created
-      expect(createElementSpy).not.toHaveBeenCalledWith('span');
-      expect(createElementSpy).not.toHaveBeenCalledWith('select');
-    });
-
-    it('should set correct properties on created dummy elements', () => {
-      const mockSpan = { id: '', className: '' };
-      createElementSpy.mockReturnValue(mockSpan as any);
-      getElementByIdSpy.mockReturnValue(null); // Element doesn't exist
-      mockContainer.firstChild = null; // No children to remove
-
-      component.addMissingStandardWidgets();
-
-      // Check that properties are set on created elements
-      expect(mockSpan.className).toBe('invisible dummy-component');
-      expect(mockContainer.appendChild).toHaveBeenCalledWith(mockSpan);
-    });
-
-    it('should create select element for scaleSelect specifically', () => {
-      const mockSelect = { id: '', className: '' };
-      createElementSpy
-        .mockReturnValueOnce({ id: '', className: '' } as any) // For regular spans
-        .mockReturnValueOnce(mockSelect as any); // For scaleSelect
-
-      getElementByIdSpy.mockImplementation((id: string) => {
-        if (id === 'scaleSelect') return null; // Missing scaleSelect
-        return { id } as any; // Other elements exist
-      });
-
-      mockContainer.firstChild = null; // No children to remove
-
-      component.addMissingStandardWidgets();
-
-      expect(createElementSpy).toHaveBeenCalledWith('select');
-      expect(mockSelect.id).toBe('scaleSelect');
-      expect(mockSelect.className).toBe('invisible dummy-component');
-      expect(mockContainer.appendChild).toHaveBeenCalledWith(mockSelect);
-    });
-
-    it('should handle mixed existing and missing elements', () => {
-      const mockSpan = { id: '', className: '' };
-      createElementSpy.mockReturnValue(mockSpan as any);
-
-      getElementByIdSpy.mockImplementation((id: string) => {
-        // Some elements exist, others don't
-        if (['attachmentsView', 'authorField'].includes(id)) {
-          return { id } as any;
-        }
-        return null;
-      });
-
-      mockContainer.firstChild = null; // No children to remove
-
-      component.addMissingStandardWidgets();
-
-      // Should create elements for missing ones, but not for existing ones
-      expect(createElementSpy).toHaveBeenCalled();
-      expect(mockContainer.appendChild).toHaveBeenCalled();
-    });
-  });
-
-  describe('needsDummyWidget', () => {
-    it('should return true when element does not exist', () => {
-      getElementByIdSpy.mockReturnValue(null);
-
-      const result = (component as any).needsDummyWidget('nonExistentElement');
-
-      expect(result).toBe(true);
-      expect(getElementByIdSpy).toHaveBeenCalledWith('nonExistentElement');
-    });
-
-    it('should return false when element exists', () => {
-      const existingElement = { id: 'existingElement' };
-      getElementByIdSpy.mockReturnValue(existingElement as any);
-
-      const result = (component as any).needsDummyWidget('existingElement');
-
-      expect(result).toBe(false);
-      expect(getElementByIdSpy).toHaveBeenCalledWith('existingElement');
-    });
-
-    it('should handle various element types', () => {
-      // Test with different types of elements
-      const elements = [
-        { id: 'button', tagName: 'BUTTON' },
-        { id: 'input', tagName: 'INPUT' },
-        { id: 'select', tagName: 'SELECT' },
-        { id: 'span', tagName: 'SPAN' },
-      ];
-
-      elements.forEach((element) => {
-        getElementByIdSpy.mockReturnValueOnce(element as any);
-        const result = (component as any).needsDummyWidget(element.id);
-        expect(result).toBe(false);
-      });
-    });
-  });
-
-  describe('required IDs coverage', () => {
-    it('should process all required IDs', () => {
-      const mockSpan = { id: '', className: '' };
-      createElementSpy.mockReturnValue(mockSpan as any);
-      getElementByIdSpy.mockReturnValue(null); // All elements are missing
-
-      const mockContainer = {
-        children: [],
-        firstChild: null,
-        removeChild: jest.fn(),
-        appendChild: jest.fn(),
-      };
-
-      getElementsByClassNameSpy.mockReturnValue([mockContainer] as any);
-
-      component.addMissingStandardWidgets();
-
-      // Should process each required ID
-      expect(getElementByIdSpy).toHaveBeenCalledTimes(195); // Number of entries in requiredIds array (scaleSelect is included in the array)
-    });
-
-    it('should handle duplicate IDs in requiredIds array', () => {
-      // The requiredIds array has some duplicates like 'outerContainer' and 'viewAttachments'
-      // The component should handle this gracefully
-      const mockSpan = { id: '', className: '' };
-      createElementSpy.mockReturnValue(mockSpan as any);
-      getElementByIdSpy.mockReturnValue(null);
-
-      const mockContainer = {
-        children: [],
-        firstChild: null,
-        removeChild: jest.fn(),
-        appendChild: jest.fn(),
-      };
-
-      getElementsByClassNameSpy.mockReturnValue([mockContainer] as any);
-
-      expect(() => component.addMissingStandardWidgets()).not.toThrow();
-    });
-  });
-
-  describe('DOM interaction edge cases', () => {
-    it('should handle container.firstChild returning null immediately', () => {
-      const mockContainer = {
-        children: [{ id: 'child1' }],
-        firstChild: null, // No first child
-        removeChild: jest.fn(),
-        appendChild: jest.fn(),
-      };
-
-      getElementsByClassNameSpy.mockReturnValue([mockContainer] as any);
-      getElementByIdSpy.mockReturnValue({ id: 'exists' } as any); // All elements exist
-
-      component.addMissingStandardWidgets();
-
-      expect(mockContainer.removeChild).not.toHaveBeenCalled();
-    });
-
-    it('should handle createElement returning different element types', () => {
-      const mockSpan = { id: '', className: '', tagName: 'SPAN' };
-      const mockSelect = { id: '', className: '', tagName: 'SELECT' };
-
-      createElementSpy.mockImplementation((tagName: string) => {
-        if (tagName === 'span') return mockSpan as any;
-        if (tagName === 'select') return mockSelect as any;
-        return null;
-      });
-
-      getElementByIdSpy.mockReturnValue(null); // All elements missing
-
-      const mockContainer = {
-        children: [],
-        firstChild: null,
-        removeChild: jest.fn(),
-        appendChild: jest.fn(),
-      };
-
-      getElementsByClassNameSpy.mockReturnValue([mockContainer] as any);
-
-      component.addMissingStandardWidgets();
-
-      expect(createElementSpy).toHaveBeenCalledWith('span');
-      expect(createElementSpy).toHaveBeenCalledWith('select');
-    });
-  });
-
-  describe('integration scenarios', () => {
-    it('should work with a realistic DOM scenario', () => {
-      // Set up a scenario where some elements exist and some don't
-      const existingElements = ['attachmentsView', 'authorField', 'download'];
-
-      getElementByIdSpy.mockImplementation((id: string) => {
-        if (existingElements.includes(id)) {
-          return { id, tagName: 'DIV' } as any;
-        }
-        return null;
-      });
-
-      const mockSpan = { id: '', className: '' };
-      const mockSelect = { id: '', className: '' };
-      createElementSpy.mockImplementation((tagName: string) => {
-        if (tagName === 'span') return { ...mockSpan } as any;
-        if (tagName === 'select') return { ...mockSelect } as any;
-        return null;
-      });
-
-      const mockContainer = {
-        children: [],
-        firstChild: null,
-        removeChild: jest.fn(),
-        appendChild: jest.fn(),
-      };
-
-      getElementsByClassNameSpy.mockReturnValue([mockContainer] as any);
-
-      component.addMissingStandardWidgets();
-
-      // Should create elements for missing ones
-      expect(mockContainer.appendChild).toHaveBeenCalled();
-      expect(createElementSpy).toHaveBeenCalledWith('span');
-      expect(createElementSpy).toHaveBeenCalledWith('select');
-    });
-
-    it('should handle component being called multiple times', () => {
-      const mockContainer = {
-        children: [],
-        firstChild: null,
-        removeChild: jest.fn(),
-        appendChild: jest.fn(),
-      };
-
-      getElementsByClassNameSpy.mockReturnValue([mockContainer] as any);
-      getElementByIdSpy.mockReturnValue(null); // All elements missing
-      createElementSpy.mockReturnValue({ id: '', className: '' } as any);
-
-      // Call multiple times
-      component.addMissingStandardWidgets();
-      component.addMissingStandardWidgets();
-
-      // Should work without errors
-      expect(mockContainer.appendChild).toHaveBeenCalled();
+      expect(document.querySelectorAll('#attachmentsView').length).toBe(1);
+      expect(document.querySelectorAll('#scaleSelect').length).toBe(1);
     });
   });
 });

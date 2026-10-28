@@ -28,7 +28,7 @@ export class PDFScriptLoaderService {
   public PDFViewerApplication!: IPDFViewerApplication;
   public PDFViewerApplicationOptions!: IPDFViewerApplicationOptions;
   // private PDFViewerApplicationConstants: any;
-  public webViewerLoad!: (cspPolicyService: PdfCspPolicyService) => void;
+  public webViewerLoad!: (cspPolicyService: PdfCspPolicyService, options?: { root?: HTMLElement }) => void;
 
   public ngxExtendedPdfViewerIncompletelyInitialized = true;
 

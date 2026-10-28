@@ -1,10 +1,11 @@
 import { DOCUMENT } from '@angular/common';
-import { ChangeDetectorRef, CSP_NONCE, Component, computed, Inject, input, OnDestroy, Optional, Renderer2, signal } from '@angular/core';
+import { ChangeDetectorRef, CSP_NONCE, Component, computed, ElementRef, Inject, inject, input, OnDestroy, Optional, Renderer2, signal } from '@angular/core';
 import { NgxHasHeight } from '../ngx-has-height';
 import { VerbosityLevel } from '../options/verbosity-level';
 import { PdfCspPolicyService } from '../pdf-csp-policy.service';
 import { PdfBreakpoints } from '../responsive-visibility';
 import { UnitToPx } from '../unit-to-px';
+import { getViewerElementById, viewerRoot } from '../viewer-root';
 
 @Component({
     selector: 'pdf-dynamic-css',
@@ -14,6 +15,8 @@ import { UnitToPx } from '../unit-to-px';
 })
 export class DynamicCssComponent implements OnDestroy {
   public zoom = input<number>(1.0);
+
+  private readonly elementRef = inject(ElementRef, { optional: true });
 
   public width = input<number>(3.14159265359);
 
@@ -213,7 +216,9 @@ export class DynamicCssComponent implements OnDestroy {
   }
 
   public updateToolbarWidth() {
-    const container = document.getElementById('toolbarViewer') ?? document.getElementById('outerContainer');
+    // #3306 this viewer's toolbar, not the first viewer's
+    const root = viewerRoot(this.elementRef?.nativeElement);
+    const container = getViewerElementById(root, 'toolbarViewer') ?? getViewerElementById(root, 'outerContainer');
     if (!container) {
       return;
     }
@@ -260,8 +265,9 @@ export class DynamicCssComponent implements OnDestroy {
     logLevel: VerbosityLevel
   ): void {
     if (pageViewMode === 'infinite-scroll' || restoreHeight) {
-      const viewer = document.getElementById('viewer');
-      const zoom = document.getElementsByClassName('zoom')[0];
+      const root = viewerRoot(this.elementRef?.nativeElement);
+      const viewer = getViewerElementById(root, 'viewer');
+      const zoom = root.getElementsByClassName('zoom')[0];
       if (viewer) {
         setTimeout(this.asyncWithCD(() => {
           if (pageViewMode === 'infinite-scroll') {
@@ -338,7 +344,7 @@ export class DynamicCssComponent implements OnDestroy {
   }
 
   private getContainer(): HTMLElement | null {
-    return typeof document !== 'undefined' ? (document.getElementsByClassName('zoom')[0] as HTMLElement) : null;
+    return typeof document !== 'undefined' ? (viewerRoot(this.elementRef?.nativeElement).getElementsByClassName('zoom')[0] as HTMLElement) : null;
   }
 
   private isContainerHeightZero(container: HTMLElement, ngxExtendedPdfViewer: NgxHasHeight, logLevel: VerbosityLevel): boolean {

@@ -10,9 +10,13 @@ import { createSignalAwareEventBus, SignalAwareEventBus } from '../../testing/si
 
 // Mock PositioningService
 jest.mock('../../dynamic-css/positioning.service', () => ({
-  PositioningService: jest.fn().mockImplementation(() => ({
+  PositioningService: Object.assign(jest.fn().mockImplementation(() => ({
     positionPopupBelowItsButton: jest.fn()
-  }))
+  })), {
+    forViewer: jest.fn(() => ({
+    positionPopupBelowItsButton: jest.fn()
+  })),
+  })
 }));
 
 // Mock pipe

@@ -1,4 +1,4 @@
-import { Component, effect, input } from '@angular/core';
+import { Component, effect, input, ElementRef, inject } from '@angular/core';
 import { PositioningService } from '../../dynamic-css/positioning.service';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { PDFNotificationService } from '../../pdf-notification-service';
@@ -11,6 +11,8 @@ import { ResponsiveVisibility } from '../../responsive-visibility';
     standalone: false
 })
 export class PdfFindButtonComponent {
+  private readonly elementRef = inject(ElementRef);
+
   public showFindButton = input<ResponsiveVisibility | undefined>(undefined);
 
   // #2818 modified by ngx-extended-pdf-viewer
@@ -38,7 +40,7 @@ export class PdfFindButtonComponent {
       PDFViewerApplication.findBar.close();
     } else if (PDFViewerApplication) {
       PDFViewerApplication.findBar.open();
-      const positioningService = new PositioningService();
+      const positioningService = PositioningService.forViewer(this.elementRef?.nativeElement);
       positioningService.positionPopupBelowItsButton('primaryViewFind', 'findbar');
     }
   };

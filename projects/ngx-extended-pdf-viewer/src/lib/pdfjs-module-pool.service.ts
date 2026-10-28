@@ -7,7 +7,7 @@ import { PdfCspPolicyService } from './pdf-csp-policy.service';
 export interface PdfJsModuleCopy {
   PDFViewerApplication: IPDFViewerApplication;
   PDFViewerApplicationOptions: IPDFViewerApplicationOptions;
-  webViewerLoad: (cspPolicyService: PdfCspPolicyService) => void;
+  webViewerLoad: (cspPolicyService: PdfCspPolicyService, options?: { root?: HTMLElement }) => void;
 }
 
 interface PooledCopy {

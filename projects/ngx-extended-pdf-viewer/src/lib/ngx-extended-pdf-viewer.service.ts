@@ -6,6 +6,7 @@ import { PDFPrintRange } from './options/pdf-print-range';
 import { IPDFViewerApplication, PDFDocumentProxy, PDFFindParameters, PDFPageProxy, TextItem, TextMarkedContent } from './options/pdf-viewer-application';
 import { ZoomType } from './options/zoom-type';
 import { PDFNotificationService } from './pdf-notification-service';
+import { getViewerElementById } from './viewer-root';
 
 export interface FindOptions {
   highlightAll?: boolean;
@@ -159,6 +160,18 @@ export class NgxExtendedPdfViewerService {
     });
   }
 
+  /**
+   * #3306 looks up an element of this service's viewer. With several viewers on one page, ids aren't
+   * unique, so a global lookup would find the first viewer's element.
+   */
+  private viewerRoot(): Document | Element {
+    return this.PDFViewerApplication?.appConfig?.appContainer?.closest('ngx-extended-pdf-viewer') ?? document;
+  }
+
+  private viewerElementById<T extends HTMLElement = HTMLElement>(id: string): T | null {
+    return getViewerElementById<T>(this.viewerRoot(), id);
+  }
+
   public find(text: string | string[] | RegExp, options: FindOptions = {}): Array<Promise<number>> | undefined {
     if (text instanceof RegExp) {
       // pdf.js expects a regular expression as its source text. The `i` flag stands for "ignore case".
@@ -173,32 +186,32 @@ export class NgxExtendedPdfViewerService {
       return undefined;
     } else {
       if (!options.useSecondaryFindcontroller) {
-        const highlightAllCheckbox = document.getElementById('findHighlightAll') as HTMLInputElement;
+        const highlightAllCheckbox = this.viewerElementById('findHighlightAll') as HTMLInputElement;
         if (highlightAllCheckbox) {
           highlightAllCheckbox.checked = options.highlightAll ?? false;
         }
 
-        const matchCaseCheckbox = document.getElementById('findMatchCase') as HTMLInputElement;
+        const matchCaseCheckbox = this.viewerElementById('findMatchCase') as HTMLInputElement;
         if (matchCaseCheckbox) {
           matchCaseCheckbox.checked = options.matchCase ?? false;
         }
 
-        const findMultipleCheckbox = document.getElementById('findMultiple') as HTMLInputElement;
+        const findMultipleCheckbox = this.viewerElementById('findMultiple') as HTMLInputElement;
         if (findMultipleCheckbox) {
           findMultipleCheckbox.checked = options.findMultiple ?? false;
         }
 
-        const entireWordCheckbox = document.getElementById('findEntireWord') as HTMLInputElement;
+        const entireWordCheckbox = this.viewerElementById('findEntireWord') as HTMLInputElement;
         if (entireWordCheckbox) {
           entireWordCheckbox.checked = options.wholeWords ?? false;
         }
 
-        const matchDiacriticsCheckbox = document.getElementById('findMatchDiacritics') as HTMLInputElement;
+        const matchDiacriticsCheckbox = this.viewerElementById('findMatchDiacritics') as HTMLInputElement;
         if (matchDiacriticsCheckbox) {
           matchDiacriticsCheckbox.checked = options.matchDiacritics ?? false;
         }
 
-        const matchRegExpCheckbox = document.getElementById('matchRegExp') as HTMLInputElement;
+        const matchRegExpCheckbox = this.viewerElementById('matchRegExp') as HTMLInputElement;
         if (matchRegExpCheckbox) {
           matchRegExpCheckbox.checked = options.regexp ?? false;
           if (matchRegExpCheckbox.checked) {
@@ -225,7 +238,7 @@ export class NgxExtendedPdfViewerService {
           }
         }
 
-        const inputField = document.getElementById('findInput') as HTMLInputElement;
+        const inputField = this.viewerElementById('findInput') as HTMLInputElement;
         if (inputField && typeof text === 'string') {
           inputField.value = text;
         }
@@ -763,7 +776,7 @@ export class NgxExtendedPdfViewerService {
     const optionalContentConfig = await this.PDFViewerApplication?.pdfViewer.optionalContentConfigPromise;
     if (optionalContentConfig) {
       let isVisible = optionalContentConfig.getGroup(layerId).visible;
-      const checkbox = document.querySelector(`input[id='${layerId}']`);
+      const checkbox = this.viewerRoot().querySelector(`input[id='${layerId}']`);
       if (checkbox) {
         isVisible = (checkbox as HTMLInputElement).checked;
         (checkbox as HTMLInputElement).checked = !isVisible;
@@ -898,7 +911,7 @@ export class NgxExtendedPdfViewerService {
     // #3061 When the editor mode is NONE, PDF.js internally switches to FREETEXT mode temporarily,
     // which causes the FreeText popup to flash. Prevent this by hiding the popup during the operation.
     const currentMode = this.PDFViewerApplication?.pdfViewer.annotationEditorMode;
-    const popup = document.getElementById('editorFreeTextParamsToolbar');
+    const popup = this.viewerElementById('editorFreeTextParamsToolbar');
     const wasHidden = popup?.classList.contains('hidden') ?? true;
 
     // If mode is NONE and popup was hidden, keep it hidden during the temporary mode switch
@@ -968,7 +981,7 @@ export class NgxExtendedPdfViewerService {
     const previousAnnotationEditorMode = this.PDFViewerApplication.pdfViewer.annotationEditorMode;
 
     // #3061 Check if the stamp popup is currently hidden to prevent flashing
-    const popup = document.getElementById('editorStampParamsToolbar');
+    const popup = this.viewerElementById('editorStampParamsToolbar');
     const wasHidden = popup?.classList.contains('hidden') ?? true;
 
     // If the popup was hidden, add a CSS class to keep it hidden during mode switch
@@ -1072,7 +1085,7 @@ export class NgxExtendedPdfViewerService {
     const previousAnnotationEditorMode = this.PDFViewerApplication.pdfViewer.annotationEditorMode;
 
     // #3061 Check if the popup is currently hidden to prevent flashing
-    const popup = document.getElementById('editorHighlightParamsToolbar');
+    const popup = this.viewerElementById('editorHighlightParamsToolbar');
     const wasHidden = popup?.classList.contains('hidden') ?? true;
 
     // If the popup was hidden, add a CSS class to keep it hidden during mode switch

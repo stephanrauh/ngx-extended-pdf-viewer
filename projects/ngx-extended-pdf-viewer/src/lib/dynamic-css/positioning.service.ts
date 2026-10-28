@@ -1,4 +1,5 @@
 import { pdfDefaultOptions } from '../options/pdf-default-options';
+import { viewerRoot } from '../viewer-root';
 
 export class PositioningService {
   private static readonly DOORHANGER_OFFSET = 17;
@@ -19,6 +20,20 @@ export class PositioningService {
     ['signaturePropertiesButton', 'signaturePropertiesPanel'],
     // #3257 end of modification by ngx-extended-pdf-viewer
   ];
+
+  /** #3306 with several viewers on one page, popups and buttons are looked up in this viewer only */
+  private root: ParentNode | undefined;
+
+  /** #3306 a positioning service for the viewer the element belongs to */
+  public static forViewer(element: Element | null | undefined): PositioningService {
+    const service = new PositioningService();
+    service.root = viewerRoot(element);
+    return service;
+  }
+
+  private get scope(): ParentNode {
+    return this.root ?? document;
+  }
 
   public positionPopupBelowItsButton(buttonId: string, popupId: string): void {
     if (!pdfDefaultOptions.positionPopupDialogsWithJavaScript) {
@@ -46,7 +61,7 @@ export class PositioningService {
 
     setTimeout(() => {
       for (const [buttonId, popupId] of PositioningService.POPUP_PAIRS) {
-        const popup = document.querySelector<HTMLElement>(`#${popupId}`);
+        const popup = this.scope.querySelector<HTMLElement>(`#${popupId}`);
         if (!popup) continue;
 
         // A popup is "open" if it's visible (no hidden class/attribute and has offsetParent)
@@ -62,13 +77,13 @@ export class PositioningService {
   }
 
   private findVisibleButton(buttonId: string): HTMLElement | null {
-    const findVisible = (selector: string) => Array.from(document.querySelectorAll<HTMLElement>(`#${selector}`)).find((el) => el.offsetParent !== null);
+    const findVisible = (selector: string) => Array.from(this.scope.querySelectorAll<HTMLElement>(`#${selector}`)).find((el) => el.offsetParent !== null);
 
     return findVisible(buttonId) || findVisible('secondaryToolbarToggle') || null;
   }
 
   private getPopupElement(popupId: string): HTMLElement | null {
-    const popup = document.querySelector<HTMLElement>(`#${popupId}`);
+    const popup = this.scope.querySelector<HTMLElement>(`#${popupId}`);
     return popup?.offsetParent ? popup : null;
   }
 
@@ -113,7 +128,7 @@ export class PositioningService {
   }
 
   private setVerticalPosition(popup: HTMLElement, containerRect: DOMRect): void {
-    const toolbarContainer = document.querySelector<HTMLElement>('#toolbarContainer');
+    const toolbarContainer = this.scope.querySelector<HTMLElement>('#toolbarContainer');
     if (!toolbarContainer) return;
 
     const toolbarRect = toolbarContainer.getBoundingClientRect();

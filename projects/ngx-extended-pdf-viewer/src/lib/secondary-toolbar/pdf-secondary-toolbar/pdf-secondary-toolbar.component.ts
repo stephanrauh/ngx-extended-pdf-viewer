@@ -4,6 +4,7 @@ import { NgxExtendedPdfViewerService } from '../../ngx-extended-pdf-viewer.servi
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { PdfShyButtonService } from '../../toolbar/pdf-shy-button/pdf-shy-button-service';
 import { PDFNotificationService } from './../../pdf-notification-service';
+import { getViewerElementById, viewerRoot } from '../../viewer-root';
 
 @Component({
     selector: 'pdf-secondary-toolbar',
@@ -118,12 +119,14 @@ export class PdfSecondaryToolbarComponent implements AfterViewInit, OnDestroy {
   public updateUIState(): void {
     setTimeout(this.asyncWithCD(() => {
       const currentPage = this.PDFViewerApplication?.pdfViewer.currentPageNumber;
-      const previousButton = document.getElementById('previousPage') as HTMLButtonElement;
+      // #3306 this viewer's buttons, not the first viewer's
+      const root = viewerRoot(this.element.nativeElement);
+      const previousButton = getViewerElementById<HTMLButtonElement>(root, 'previousPage');
       if (previousButton) {
         this.disablePreviousPage = Number(currentPage) <= 1;
         previousButton.disabled = this.disablePreviousPage;
       }
-      const nextButton = document.getElementById('nextPage') as HTMLButtonElement;
+      const nextButton = getViewerElementById<HTMLButtonElement>(root, 'nextPage');
       if (nextButton) {
         this.disableNextPage = currentPage === this.PDFViewerApplication?.pagesCount;
         nextButton.disabled = this.disableNextPage;

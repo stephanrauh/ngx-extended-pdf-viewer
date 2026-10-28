@@ -820,12 +820,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     if (typeof document === 'undefined') return;
     const isRtl = direction === 'rtl';
     const isLtr = direction === 'ltr';
-    const viewer = document.getElementById('viewer');
+    const viewer = this.viewerElement('viewer');
     if (viewer) {
       viewer.classList.toggle('readingDirection-rtl', isRtl);
       viewer.classList.toggle('readingDirection-ltr', isLtr);
     }
-    const viewerContainer = document.getElementById('viewerContainer');
+    const viewerContainer = this.viewerElement('viewerContainer');
     if (viewerContainer) {
       viewerContainer.classList.toggle('readingDirection-rtl', isRtl);
     }
@@ -1498,7 +1498,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
       // Reposition any open popups (findbar, secondary toolbar, editor toolbars)
       // so they move to the correct position after the zoom change.
-      const positioningService = new PositioningService();
+      const positioningService = PositioningService.forViewer(this.elementRef?.nativeElement);
       positioningService.repositionOpenPopups();
     });
   });
@@ -1789,7 +1789,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
     if (PDFViewerApplicationOptions) {
       this.overrideDefaultSettings();
-      const viewer = document.getElementById('viewer') as HTMLElement;
+      const viewer = this.viewerElement('viewer');
       if (viewer) {
         if (showBorders) {
           viewer.classList.remove('removePageBorders');
@@ -1893,7 +1893,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     this.findbarTop = (33 + 38 * (factor - 1)).toString() + 'px';
     this.editorParamsToolbarTop = (33 + 38 * (factor - 1)).toString() + 'px';
 
-    const findButton = document.getElementById('primaryViewFind');
+    const findButton = this.viewerElement('primaryViewFind');
     if (findButton) {
       const containerPositionLeft = this.toolbar.getBoundingClientRect().left;
       const findButtonPosition = findButton.getBoundingClientRect();
@@ -2338,8 +2338,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     const waitForDOMElements = (callback: () => void, maxAttempts = 50, delay = 10) => {
       let attempts = 0;
       const checkElements = () => {
-        const thumbnailsView = document.getElementById('thumbnailsView');
-        const viewsManagerContent = document.getElementById('viewsManagerContent');
+        // #3306 this viewer's elements, not the first viewer's
+        const host = this.elementRef.nativeElement as HTMLElement;
+        const thumbnailsView = host.querySelector('#thumbnailsView');
+        const viewsManagerContent = host.querySelector('#viewsManagerContent');
 
         if (thumbnailsView && viewsManagerContent) {
           // Elements are ready, proceed with initialization
@@ -2370,9 +2372,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
           // in externally-defined templates. Fall back to finding it via the DOM.
           const dummy = this.dummyComponents();
           if (dummy) {
-            dummy.addMissingStandardWidgets();
+            dummy.addMissingStandardWidgets(this.elementRef.nativeElement);
           } else {
-            PdfDummyComponentsComponent.addMissingStandardWidgetsStatic();
+            PdfDummyComponentsComponent.addMissingStandardWidgetsStatic(this.elementRef.nativeElement);
           }
           // #2853 end of modification by ngx-extended-pdf-viewer
           if (this.pdfScriptLoaderService.PDFViewerApplicationOptions) {
@@ -2380,7 +2382,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
             (globalThis as any).PDFViewerApplicationOptions = PDFViewerApplicationOptions;
           }
 
-          this.pdfScriptLoaderService.webViewerLoad(this.cspPolicyService);
+          // #3306 pdf.js looks up its elements in this viewer only
+          this.pdfScriptLoaderService.webViewerLoad(this.cspPolicyService, { root: this.elementRef.nativeElement });
 
           const PDFViewerApplication: IPDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
           PDFViewerApplication.appConfig.defaultUrl = ''; // IE bugfix
@@ -2516,8 +2519,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     this.spread.set(newSpread);
   }
 
+  /** #3306 an element of this viewer: with several viewers on one page, a global lookup finds the first viewer's */
+  private viewerElement<T extends HTMLElement = HTMLElement>(id: string): T | null {
+    return (this.elementRef?.nativeElement as HTMLElement | undefined)?.querySelector<T>(`#${id}`) ?? null;
+  }
+
   private readonly toggleVisibility = (elementId: string, cssClass = 'invisible') => {
-    const element = document.getElementById(elementId) as HTMLElement;
+    const element = this.viewerElement(elementId);
     element?.classList.remove(cssClass);
   };
 
@@ -2883,7 +2891,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
         // in it, give it to the document. If the user has moved on to something else, leave it there.
         const active = document.activeElement;
         if (!active || active === document.body || active.closest('#findbar')) {
-          document.getElementById('viewerContainer')?.focus({ preventScroll: true });
+          this.viewerElement('viewerContainer')?.focus({ preventScroll: true });
         }
         queueMicrotask(
           this.asyncWithCD(() => {
@@ -3550,6 +3558,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
         // #3131 Capture the eventBus reference before any await, so we can later
         // check whether a new component has replaced it during async cleanup.
         const bus = PDFViewerApplication.eventBus;
+        // #3306 pdf.js appends the file input to <body>; with several viewers on one page, only remove our own
+        const openFileInput: HTMLInputElement | undefined = (PDFViewerApplication as any)._openFileInput;
         // #3131 Capture globalThis function references before the await, so we can
         // check whether a new component has replaced them during async cleanup.
         const w = globalThis as any;
@@ -3618,9 +3628,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
         // do not run this code on the server
         if (typeof window !== 'undefined') {
-          document.querySelectorAll('.ngx-extended-pdf-viewer-file-input').forEach((e) => {
-            (e as HTMLElement).remove();
-          });
+          openFileInput?.remove();
         }
       }
     }; // end of async cleanup
@@ -3673,7 +3681,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
     let inputField = PDFViewerApplication.appConfig?.openFileInput;
     if (!inputField) {
-      inputField = document.querySelector('#fileInput') as HTMLInputElement;
+      // #3306 pdf.js appends it to <body>, so a lookup in this viewer doesn't find it
+      inputField = (PDFViewerApplication as any)._openFileInput as HTMLInputElement | undefined;
     }
     if (inputField) {
       inputField.value = '';
@@ -3748,7 +3757,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
   public initResizeObserver(): void {
     try {
-      const viewer = document.getElementById('viewer');
+      const viewer = this.viewerElement('viewer');
       if (viewer) {
         this.resizeObserver = new ResizeObserver(() => {
           this.onResize();
@@ -3760,9 +3769,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     }
   }
   public onResize(): void {
-    const pdfViewer = document.getElementsByClassName('html');
+    const pdfViewer = this.elementRef?.nativeElement?.getElementsByClassName('html');
     if (pdfViewer && pdfViewer.length > 0) {
-      const container = document.getElementById('outerContainer');
+      const container = this.viewerElement('outerContainer');
       if (container) {
         this.secondaryToolbarComponent()?.checkVisibility();
         this.dynamicCSSComponent()?.updateToolbarWidth();
@@ -3820,7 +3829,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
           // Defer scrolling to ensure it happens after any other UI updates
           setTimeout(
             this.asyncWithCD(() => {
-              const viewerContainer = document.querySelector('#viewerContainer');
+              const viewerContainer = this.viewerElement('viewerContainer');
               viewerContainer?.scrollBy(0, -32); // Adjust the scroll position
             }),
           );

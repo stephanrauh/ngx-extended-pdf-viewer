@@ -214,22 +214,20 @@ const requiredIds = [
 export class PdfDummyComponentsComponent {
   private dummyComponentsContainer!: Element;
 
-  public addMissingStandardWidgets(): void {
-    this.dummyComponentsContainer = document.getElementsByClassName('dummy-pdf-viewer-components')[0];
+  // #3306 root: the viewer's own element, so several viewers on one page don't see each other's widgets
+  public addMissingStandardWidgets(root: ParentNode = document): void {
+    this.dummyComponentsContainer = root.querySelector('.dummy-pdf-viewer-components')!;
     const container = this.dummyComponentsContainer as HTMLElement;
     if (!container) {
       return;
     }
 
-    for (let i = 0; i < container.children.length; i++) {
-      const child = container.firstChild;
-      if (child) {
-        child.remove();
-      }
+    while (container.firstChild) {
+      container.firstChild.remove();
     }
 
     requiredIds.forEach((id) => {
-      if (this.needsDummyWidget(id)) {
+      if (this.needsDummyWidget(id, root)) {
         const dummy = document.createElement('span');
         dummy.id = id;
         dummy.className = 'invisible dummy-component';
@@ -237,7 +235,7 @@ export class PdfDummyComponentsComponent {
       }
     });
 
-    if (this.needsDummyWidget('scaleSelect')) {
+    if (this.needsDummyWidget('scaleSelect', root)) {
       const dummy = document.createElement('select');
       dummy.id = 'scaleSelect';
       dummy.className = 'invisible dummy-component';
@@ -245,8 +243,8 @@ export class PdfDummyComponentsComponent {
     }
   }
 
-  private needsDummyWidget(id: string): boolean {
-    const widget = document.getElementById(id);
+  private needsDummyWidget(id: string, root: ParentNode): boolean {
+    const widget = root.querySelector(`#${id}`);
     if (!widget) {
       return true;
     }
@@ -255,8 +253,8 @@ export class PdfDummyComponentsComponent {
 
   // #2853 added by ngx-extended-pdf-viewer
   /** Fallback for when viewChild can't find the component (e.g. [customPdfViewer]) */
-  public static addMissingStandardWidgetsStatic(): void {
-    const container = document.getElementsByClassName('dummy-pdf-viewer-components')[0] as HTMLElement;
+  public static addMissingStandardWidgetsStatic(root: ParentNode = document): void {
+    const container = root.querySelector('.dummy-pdf-viewer-components') as HTMLElement;
     if (!container) {
       return;
     }
@@ -264,14 +262,14 @@ export class PdfDummyComponentsComponent {
       container.firstChild.remove();
     }
     requiredIds.forEach((id) => {
-      if (!document.getElementById(id)) {
+      if (!root.querySelector(`#${id}`)) {
         const dummy = document.createElement('span');
         dummy.id = id;
         dummy.className = 'invisible dummy-component';
         container.appendChild(dummy);
       }
     });
-    if (!document.getElementById('scaleSelect')) {
+    if (!root.querySelector('#scaleSelect')) {
       const dummy = document.createElement('select');
       dummy.id = 'scaleSelect';
       dummy.className = 'invisible dummy-component';

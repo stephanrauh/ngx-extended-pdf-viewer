@@ -9,9 +9,13 @@ import { createSignalAwareEventBus, SignalAwareEventBus } from '../../testing/si
 
 const positionPopupBelowItsButton = jest.fn();
 jest.mock('../../dynamic-css/positioning.service', () => ({
-  PositioningService: jest.fn().mockImplementation(() => ({
+  PositioningService: Object.assign(jest.fn().mockImplementation(() => ({
+    positionPopupBelowItsButton: (...args: unknown[]) => positionPopupBelowItsButton(...args),
+  })), {
+    forViewer: jest.fn(() => ({
     positionPopupBelowItsButton: (...args: unknown[]) => positionPopupBelowItsButton(...args),
   })),
+  }),
 }));
 
 @Pipe({ name: 'responsiveCSSClass', standalone: false })

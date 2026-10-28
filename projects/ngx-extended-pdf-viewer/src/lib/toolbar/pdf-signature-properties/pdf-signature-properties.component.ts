@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, inject, input } from '@angular/core';
 import { PositioningService } from '../../dynamic-css/positioning.service';
 import { ResponsiveVisibility } from '../../responsive-visibility';
+import { viewerRoot } from '../../viewer-root';
 
 // #3257 modified by ngx-extended-pdf-viewer
 /**
@@ -77,7 +78,8 @@ export class PdfSignaturePropertiesComponent implements AfterViewInit, OnDestroy
    * would never show whether the signatures check out.
    */
   private mirrorToSecondaryMenu(): void {
-    const secondary = document.getElementById('secondarySignaturePropertiesButton');
+    // #3306 this viewer's menu entry, not the first viewer's
+    const secondary = viewerRoot(this.elementRef.nativeElement).querySelector<HTMLElement>('#secondarySignaturePropertiesButton');
     if (!secondary || !this.button || !this.host) {
       return;
     }
@@ -110,6 +112,6 @@ export class PdfSignaturePropertiesComponent implements AfterViewInit, OnDestroy
       setTimeout(() => this.button?.click());
       return;
     }
-    new PositioningService().positionPopupBelowItsButton('signaturePropertiesButton', 'signaturePropertiesPanel');
+    PositioningService.forViewer(this.elementRef?.nativeElement).positionPopupBelowItsButton('signaturePropertiesButton', 'signaturePropertiesPanel');
   };
 }
