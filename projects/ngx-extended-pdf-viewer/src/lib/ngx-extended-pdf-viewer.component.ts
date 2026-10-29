@@ -81,6 +81,7 @@ import { ZoomType } from './options/zoom-type';
 import { PdfCspPolicyService } from './pdf-csp-policy.service';
 import { PDFScriptLoaderService } from './pdf-script-loader.service';
 import { PdfViewerRegistry } from './pdf-viewer-registry.service';
+import { ViewerLocalReferences } from './viewer-local-references';
 import { ResponsiveVisibility } from './responsive-visibility';
 
 declare class ResizeObserver {
@@ -1060,6 +1061,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
   // #3306 modified by ngx-extended-pdf-viewer
   private readonly registry = inject(PdfViewerRegistry);
+  private viewerLocalReferences: ViewerLocalReferences | undefined;
+  private viewerLocalReferencesTimeout: ReturnType<typeof setTimeout> | undefined;
 
   /** the PDFNotificationService the application injects; it follows the primary viewer */
   private readonly rootNotificationService = inject(PDFNotificationService, { skipSelf: true });
@@ -1946,6 +1949,31 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
           this.rootNotificationService.onPDFJSInitSignal.set(PDFViewerApplication);
           this.rootService.ngxExtendedPdfViewerInitialized = this.service.ngxExtendedPdfViewerInitialized;
         });
+      }
+    });
+    // #3306 with several viewers on one page, keep this viewer's id references (labels, aria-*) inside it
+    effect(() => {
+      const severalViewers = this.registry.count() > 1;
+      untracked(() => this.updateViewerLocalReferences(severalViewers));
+    });
+  }
+
+  /** #3306 see {@link ViewerLocalReferences} */
+  private updateViewerLocalReferences(severalViewers: boolean): void {
+    if (!isPlatformBrowser(this.platformId) || !ViewerLocalReferences.isSupported()) {
+      return;
+    }
+    if (!severalViewers) {
+      this.viewerLocalReferences?.stop();
+      return;
+    }
+    this.viewerLocalReferences ??= new ViewerLocalReferences(this.elementRef.nativeElement);
+    // a viewer that has just been added renders after this; check again once it's there
+    clearTimeout(this.viewerLocalReferencesTimeout);
+    this.viewerLocalReferencesTimeout = setTimeout(() => {
+      if (!this.destroyInitialization) {
+        this.viewerLocalReferences?.start();
+        this.viewerLocalReferences?.update();
       }
     });
   }
@@ -3482,6 +3510,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
   public ngOnDestroy(): void {
     this.destroyInitialization = true;
+    clearTimeout(this.viewerLocalReferencesTimeout);
+    this.viewerLocalReferences?.destroy();
     // #3306 hand the application's services over to the next viewer, if there is one
     const wasPrimary = this.registry.primary() === this;
     this.registry.unregister(this);

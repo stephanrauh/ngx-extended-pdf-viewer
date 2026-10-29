@@ -19,6 +19,9 @@ export class PdfViewerRegistry {
   /** the oldest live viewer, or undefined if there's none */
   public readonly primary = computed(() => this.viewers()[0]);
 
+  /** the number of live viewers */
+  public readonly count = computed(() => this.viewers().length);
+
   public register(viewer: object): void {
     this.viewers.update((viewers) => [...viewers, viewer]);
   }
