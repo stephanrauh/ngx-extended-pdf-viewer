@@ -140,6 +140,11 @@ export function isIOS(): boolean {
   host: {
     '[attr.data-viewer-theme]': 'effectiveTheme()',
     '[style.color-scheme]': 'hostColorScheme()',
+    // #3306 with several viewers on one page, pdf.js gives keyboard shortcuts typed outside every
+    // viewer to the one marked here: the viewer the user has clicked or focused last
+    '[attr.data-ngx-active-viewer]': "registry.active() === this ? '' : null",
+    '(pointerdown)': 'activateViewer()',
+    '(focusin)': 'activateViewer()',
   },
   // #3306 multiple viewers on one page: every viewer has its own copy of pdf.js (via
   // PDFScriptLoaderService) and its own services. The instances an application injects
@@ -1060,7 +1065,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   private osColorSchemeAbortController: AbortController | undefined;
 
   // #3306 modified by ngx-extended-pdf-viewer
-  private readonly registry = inject(PdfViewerRegistry);
+  protected readonly registry = inject(PdfViewerRegistry);
   private viewerLocalReferences: ViewerLocalReferences | undefined;
   private viewerLocalReferencesTimeout: ReturnType<typeof setTimeout> | undefined;
 
@@ -1956,6 +1961,21 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       const severalViewers = this.registry.count() > 1;
       untracked(() => this.updateViewerLocalReferences(severalViewers));
     });
+  }
+
+  /**
+   * #3306 The user works with this viewer now. The marker moves at once, not with the next change
+   * detection: a key typed right after the click must already reach this viewer.
+   */
+  protected activateViewer(): void {
+    if (this.registry.active() === this) {
+      return;
+    }
+    this.registry.activate(this);
+    if (typeof document !== 'undefined') {
+      document.querySelectorAll('ngx-extended-pdf-viewer[data-ngx-active-viewer]').forEach((host) => host.removeAttribute('data-ngx-active-viewer'));
+      (this.elementRef.nativeElement as HTMLElement).setAttribute('data-ngx-active-viewer', '');
+    }
   }
 
   /** #3306 see {@link ViewerLocalReferences} */
@@ -3500,11 +3520,25 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   public doReplaceBrowserPrint(useCustomPrintOfPdfJS: boolean): void {
     if (useCustomPrintOfPdfJS) {
       const PDFViewerApplication: IPDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
-      if (PDFViewerApplication?.printPdf) {
-        window.print = PDFViewerApplication.printPdf.bind(PDFViewerApplication);
+      if (typeof PDFViewerApplication?.printPdf === 'function') {
+        // #3306 with several viewers on one page, window.print() prints the active one
+        window.print = this.registry.print;
       }
     } else if (this.originalPrint && !this.originalPrint.toString().includes('printPdf')) {
       window.print = this.originalPrint;
+    }
+  }
+
+  /**
+   * @internal #3306 window.print() calls this for the active viewer (see PdfViewerRegistry.print):
+   * pdf.js prints this viewer's document, unless this viewer leaves printing to the browser.
+   */
+  public printPdfInThisViewer(): void {
+    const PDFViewerApplication: IPDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
+    if (this.replaceBrowserPrint() && PDFViewerApplication?.printPdf) {
+      PDFViewerApplication.printPdf();
+    } else {
+      ((globalThis as any).ngxNativePrint ?? this.originalPrint)?.call(window);
     }
   }
 
@@ -3577,7 +3611,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       // do not run this code on the server
       if (typeof window !== 'undefined') {
         const originalPrint = this.originalPrint;
-        if (window && originalPrint && !originalPrint.toString().includes('printPdf')) {
+        // #3306 as long as another viewer is on the page, window.print() keeps printing that one
+        if (window && originalPrint && !originalPrint.toString().includes('printPdf') && this.registry.count() === 0) {
           window.print = originalPrint;
         }
       }

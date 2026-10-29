@@ -22,11 +22,34 @@ export class PdfViewerRegistry {
   /** the number of live viewers */
   public readonly count = computed(() => this.viewers().length);
 
+  private readonly lastUsed = signal<object | undefined>(undefined);
+
+  /**
+   * The viewer the user works with: the one clicked or focused last, else the primary viewer.
+   * Keyboard shortcuts typed outside every viewer go to this one.
+   */
+  public readonly active = computed(() => this.lastUsed() ?? this.primary());
+
+  /**
+   * window.print() while ngx-extended-pdf-viewer prints with pdf.js (`replaceBrowserPrint`): prints the
+   * active viewer. One function for all viewers, so it doesn't matter which viewer installed it last.
+   */
+  public readonly print = (): void => {
+    (this.active() as { printPdfInThisViewer?: () => void } | undefined)?.printPdfInThisViewer?.();
+  };
+
+  public activate(viewer: object): void {
+    this.lastUsed.set(viewer);
+  }
+
   public register(viewer: object): void {
     this.viewers.update((viewers) => [...viewers, viewer]);
   }
 
   public unregister(viewer: object): void {
     this.viewers.update((viewers) => viewers.filter((v) => v !== viewer));
+    if (this.lastUsed() === viewer) {
+      this.lastUsed.set(undefined);
+    }
   }
 }
