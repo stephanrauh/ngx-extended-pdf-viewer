@@ -1069,6 +1069,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   protected readonly registry = inject(PdfViewerRegistry);
   private viewerLocalReferences: ViewerLocalReferences | undefined;
   private viewerLocalReferencesTimeout: ReturnType<typeof setTimeout> | undefined;
+  /** the form owner of this viewer's radio buttons, if another viewer was on the page when it started */
+  private radioGroupForm: HTMLFormElement | undefined;
+  private static radioGroupForms = 0;
 
   /** the PDFNotificationService the application injects; it follows the primary viewer */
   private readonly rootNotificationService = inject(PDFNotificationService, { skipSelf: true });
@@ -2365,6 +2368,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
         );
       } else {
         this.localizationInitialized = true;
+        // #3306 the link service exists now
+        this.formSupport?.attachToLinkService();
+        this.separateRadioGroups();
         if (!this.destroyInitialization) {
           // hurried users sometimes reload the PDF before it has finished initializing
           this.calcViewerPositionTop();
@@ -3543,10 +3549,33 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     }
   }
 
+  /**
+   * #3306 Radio buttons with the same name form one group, page-wide, unless they have different form owners.
+   * So the radio buttons of a PDF form shown in two viewers would uncheck each other. A viewer that starts
+   * while another viewer is on the page gets an empty form of its own as the form owner of its radio buttons.
+   * The first viewer - and every single-viewer page - stays as it is: its fields still belong to the
+   * application's <form>, if the viewer is inside one.
+   */
+  private separateRadioGroups(): void {
+    const linkService = this.pdfScriptLoaderService.PDFViewerApplication?.pdfLinkService;
+    if (this.radioGroupForm || !linkService || this.registry.count() < 2) {
+      return;
+    }
+    const form = document.createElement('form');
+    form.id = `ngx-extended-pdf-viewer-radio-group-${++NgxExtendedPdfViewerComponent.radioGroupForms}`;
+    form.hidden = true;
+    form.addEventListener('submit', (event) => event.preventDefault());
+    document.body.append(form);
+    this.radioGroupForm = form;
+    linkService.ngxRadioGroupForm = form.id;
+  }
+
   public ngOnDestroy(): void {
     this.destroyInitialization = true;
     clearTimeout(this.viewerLocalReferencesTimeout);
     this.viewerLocalReferences?.destroy();
+    this.radioGroupForm?.remove();
+    this.radioGroupForm = undefined;
     // #3306 hand the application's services over to the next viewer, if there is one
     const wasPrimary = this.registry.primary() === this;
     this.registry.unregister(this);

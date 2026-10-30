@@ -5,7 +5,7 @@
   <div id="secondaryToolbar" class="secondaryToolbar hidden doorHangerRight" [style.top]="secondaryToolbarTop()"
     [style.transform]="'scale(' + mobileFriendlyZoomScale() + ')'" [style.transformOrigin]="'right top'">
     <div id="secondaryToolbarButtonContainer" [style.maxHeight]="secondaryToolbarMaxHeight">
-      @for (button of pdfShyButtonService.buttons; track button.id) {
+      @for (button of buttons; track button.id) {
       <button type="button" [id]="button.id" [ngClass]="button.cssClass | invertForSecondaryToolbar"
         [class.toggled]="button.toggled" class="secondaryToolbarButton" [title]="button.title"
         [attr.data-l10n-id]="button.l10nId || null"

@@ -29,7 +29,7 @@ describe('PdfSecondaryToolbarComponent', () => {
       secondaryMenuIsEmpty: signal(false),
     } as jest.Mocked<Partial<NgxExtendedPdfViewerService>>;
 
-    const pdfShyButtonServiceMock = {} as jest.Mocked<Partial<PdfShyButtonService>>;
+    const pdfShyButtonServiceMock = { buttonsOf: jest.fn(() => []) } as jest.Mocked<Partial<PdfShyButtonService>>;
 
     // Mock PDFViewerApplication
     mockPDFViewerApplication = {
@@ -292,7 +292,7 @@ describe('PdfSecondaryToolbarComponent', () => {
         providers: [
           { provide: PDFNotificationService, useValue: { onPDFJSInitSignal: jest.fn().mockReturnValue(null) } },
           { provide: NgxExtendedPdfViewerService, useValue: { secondaryMenuIsEmpty: signal(false) } },
-          { provide: PdfShyButtonService, useValue: {} },
+          { provide: PdfShyButtonService, useValue: { buttonsOf: () => [] } },
           { provide: PLATFORM_ID, useValue: 'server' }, // Server environment
         ],
       }).compileComponents();

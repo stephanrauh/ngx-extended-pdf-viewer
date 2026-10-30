@@ -20,6 +20,8 @@ export class NgxFormSupport {
 
   private PDFViewerApplication: IPDFViewerApplication | undefined;
 
+  private hooks: Record<string, Function> | undefined;
+
   public ngZone!: NgZone; // set during the initializaion of the PDF viewer
 
   public cdr!: ChangeDetectorRef; // set during the initializaion of the PDF viewer
@@ -31,19 +33,36 @@ export class NgxFormSupport {
 
   public registerFormSupportWithPdfjs(PDFViewerApplication: IPDFViewerApplication): void {
     this.PDFViewerApplication = PDFViewerApplication;
-    (globalThis as any).getFormValueFromAngular = (key: string) => this.getFormValueFromAngular(key);
-    (globalThis as any).updateAngularFormValue = (key: string | HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement, value: { value: string }) =>
-      this.updateAngularFormValueCalledByPdfjs(key, value);
-    (globalThis as any).registerAcroformField = (
-      id: string,
-      element: HtmlFormElement,
-      value: string | Array<string>,
-      radioButtonValueName: string,
-      initialValueFromPDF: string,
-    ) => this.registerAcroformField(id, element, value, radioButtonValueName, initialValueFromPDF);
+    const hooks = {
+      getFormValueFromAngular: (key: string) => this.getFormValueFromAngular(key),
+      updateAngularFormValue: (key: string | HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement, value: { value: string }) =>
+        this.updateAngularFormValueCalledByPdfjs(key, value),
+      registerAcroformField: (
+        id: string,
+        element: HtmlFormElement,
+        value: string | Array<string>,
+        radioButtonValueName: string,
+        initialValueFromPDF: string,
+      ) => this.registerAcroformField(id, element, value, radioButtonValueName, initialValueFromPDF),
+      registerXFAField: (element: HtmlFormElement, value: { value: string }, initialValueFromPDF: string) =>
+        this.registerXFAField(element, value, initialValueFromPDF),
+    };
+    this.hooks = hooks;
+    this.attachToLinkService();
+    // the page-wide hooks remain for bundles that don't know the link service hooks yet
+    Object.assign(globalThis, hooks);
+  }
 
-    (globalThis as any).registerXFAField = (element: HtmlFormElement, value: { value: string }, initialValueFromPDF: string) =>
-      this.registerXFAField(element, value, initialValueFromPDF);
+  /**
+   * #3306 The form hooks every viewer on the page would share are page-wide (last viewer wins), so the
+   * annotation layer finds the hooks of its own viewer via the viewer's link service instead.
+   * The link service exists only after pdf.js has initialized, so the component calls this again then.
+   */
+  public attachToLinkService(): void {
+    const linkService = this.PDFViewerApplication?.pdfLinkService;
+    if (linkService && this.hooks) {
+      linkService.ngxFormSupport = this.hooks;
+    }
   }
 
   private registerAcroformField(

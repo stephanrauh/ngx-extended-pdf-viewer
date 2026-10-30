@@ -2,7 +2,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { AfterViewInit, ChangeDetectorRef, Component, effect, ElementRef, HostListener, Inject, input, OnDestroy, output, PLATFORM_ID, TemplateRef, ViewRef } from '@angular/core';
 import { NgxExtendedPdfViewerService } from '../../ngx-extended-pdf-viewer.service';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
-import { PdfShyButtonService } from '../../toolbar/pdf-shy-button/pdf-shy-button-service';
+import { PdfShyButtonDescription, PdfShyButtonService } from '../../toolbar/pdf-shy-button/pdf-shy-button-service';
 import { PDFNotificationService } from './../../pdf-notification-service';
 import { getViewerElementById, viewerRoot } from '../../viewer-root';
 import { DynamicCssComponent } from '../../dynamic-css/dynamic-css.component';
@@ -55,6 +55,13 @@ export class PdfSecondaryToolbarComponent implements AfterViewInit, OnDestroy {
   // #3135 modified by ngx-extended-pdf-viewer
   private eventBusAbortController: AbortController | null = null;
   // #3135 end of modification by ngx-extended-pdf-viewer
+
+  // #3306 modified by ngx-extended-pdf-viewer
+  /** The buttons of this viewer - with several viewers on the page, each one has its own. */
+  public get buttons(): PdfShyButtonDescription[] {
+    return this.pdfShyButtonService.buttonsOf(this.element.nativeElement.closest('ngx-extended-pdf-viewer'));
+  }
+  // #3306 end of modification by ngx-extended-pdf-viewer
 
   constructor(
     private readonly element: ElementRef,

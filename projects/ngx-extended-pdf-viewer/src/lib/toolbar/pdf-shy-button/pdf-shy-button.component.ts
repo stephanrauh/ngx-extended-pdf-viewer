@@ -1,4 +1,4 @@
-import { AfterContentInit, AfterViewInit, Component, computed, contentChild, effect, ElementRef, input, OnDestroy, OnInit, Renderer2, viewChild } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, computed, contentChild, effect, ElementRef, inject, input, OnDestroy, OnInit, Renderer2, viewChild } from '@angular/core';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { PdfCspPolicyService } from '../../pdf-csp-policy.service';
 import { PDFNotificationService } from '../../pdf-notification-service';
@@ -159,6 +159,15 @@ export class PdfShyButtonComponent implements OnInit, AfterViewInit, AfterConten
     // Return validated raw SVG - sanitization happens in updateButtonImage and pipe
     return value;
   });
+
+  // #3306 modified by ngx-extended-pdf-viewer
+  private readonly host: HTMLElement = inject(ElementRef).nativeElement;
+
+  /** The viewer this button belongs to. Its secondary menu shows the button. */
+  public viewer(): Element | null {
+    return this.host.closest?.('ngx-extended-pdf-viewer') ?? null;
+  }
+  // #3306 end of modification by ngx-extended-pdf-viewer
 
   constructor(
     private readonly pdfShyButtonServiceService: PdfShyButtonService,

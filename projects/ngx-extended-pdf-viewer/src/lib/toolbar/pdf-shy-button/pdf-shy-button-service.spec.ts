@@ -211,4 +211,19 @@ describe('PdfShyButtonService', () => {
       expect(service.buttons[0].id).toBe('secondaryA');
     });
   });
+
+  describe('several viewers (#3306)', () => {
+    it("keeps each viewer's buttons apart, even when their ids are the same", () => {
+      const viewerA = document.createElement('ngx-extended-pdf-viewer');
+      const viewerB = document.createElement('ngx-extended-pdf-viewer');
+      const actionA = jest.fn();
+      const actionB = jest.fn();
+      service.add(Object.assign(createMockButton({ primaryToolbarId: 'spreadEven', action: actionA }), { viewer: () => viewerA }));
+      service.add(Object.assign(createMockButton({ primaryToolbarId: 'spreadEven', action: actionB }), { viewer: () => viewerB }));
+
+      expect(service.buttonsOf(viewerA).map((b) => b.action)).toEqual([actionA]);
+      expect(service.buttonsOf(viewerB).map((b) => b.action)).toEqual([actionB]);
+      expect(service.buttons).toEqual([]);
+    });
+  });
 });

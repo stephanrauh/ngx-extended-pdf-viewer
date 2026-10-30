@@ -81,6 +81,26 @@ describe('NgxFormSupport', () => {
       expect((globalThis as any).registerAcroformField).toBeDefined();
       expect((globalThis as any).registerXFAField).toBeDefined();
     });
+
+    it("gives every viewer's link service the hooks of that viewer (#3306)", () => {
+      // the link service exists only after pdf.js has initialized
+      const first = {} as any;
+      const second = {} as any;
+      const secondFormSupport = new NgxFormSupport();
+      formSupport.registerFormSupportWithPdfjs(first);
+      secondFormSupport.registerFormSupportWithPdfjs(second);
+      first.pdfLinkService = {};
+      second.pdfLinkService = {};
+      formSupport.attachToLinkService();
+      secondFormSupport.attachToLinkService();
+      const updateFirst = jest.spyOn(formSupport as any, 'updateAngularFormValueCalledByPdfjs').mockImplementation(() => {});
+      const updateSecond = jest.spyOn(secondFormSupport as any, 'updateAngularFormValueCalledByPdfjs').mockImplementation(() => {});
+
+      first.pdfLinkService.ngxFormSupport.updateAngularFormValue('12R', { value: 'x' });
+
+      expect(updateFirst).toHaveBeenCalledWith('12R', { value: 'x' });
+      expect(updateSecond).not.toHaveBeenCalled();
+    });
   });
 
   describe('registerAcroformField()', () => {

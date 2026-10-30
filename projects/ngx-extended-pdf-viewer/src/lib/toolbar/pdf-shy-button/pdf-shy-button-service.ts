@@ -27,7 +27,27 @@ export interface PdfShyButtonDescription {
   providedIn: 'root',
 })
 export class PdfShyButtonService {
+  /** The buttons that aren't inside a viewer. The buttons of a viewer are in `buttonsOf(viewer)`. */
   public buttons: PdfShyButtonDescription[] = [];
+
+  // #3306 modified by ngx-extended-pdf-viewer
+  // One list per viewer: the buttons of several viewers share their ids, and a shared list
+  // made the secondary menu of one viewer run the actions of the other viewer's buttons.
+  // The service stays a root service because a custom toolbar is declared outside the viewer.
+  private readonly buttonsByViewer = new WeakMap<Element, PdfShyButtonDescription[]>();
+
+  public buttonsOf(viewer: Element | null | undefined): PdfShyButtonDescription[] {
+    if (!viewer) {
+      return this.buttons;
+    }
+    let buttons = this.buttonsByViewer.get(viewer);
+    if (!buttons) {
+      buttons = [];
+      this.buttonsByViewer.set(viewer, buttons);
+    }
+    return buttons;
+  }
+  // #3306 end of modification by ngx-extended-pdf-viewer
 
   private PDFViewerApplication!: IPDFViewerApplication | undefined;
 
@@ -40,7 +60,11 @@ export class PdfShyButtonService {
   public add(button: PdfShyButtonComponent): void {
     const secondaryMenuId = button.secondaryMenuId();
     const id = secondaryMenuId || this.addDefaultPrefix(button);
-    const previousDefinition = this.buttons.findIndex((b) => b.id === id);
+    // #3306 modified by ngx-extended-pdf-viewer
+    const viewer = button.viewer?.();
+    const buttons = this.buttonsOf(viewer);
+    // #3306 end of modification by ngx-extended-pdf-viewer
+    const previousDefinition = buttons.findIndex((b) => b.id === id);
     const description: PdfShyButtonDescription = {
       id,
       cssClass: button.cssClass(),
@@ -63,11 +87,11 @@ export class PdfShyButtonService {
       closeOnClick: button.closeOnClick(),
     };
     if (previousDefinition >= 0) {
-      this.buttons[previousDefinition] = description;
+      buttons[previousDefinition] = description;
       setTimeout(() => {
         if (this.PDFViewerApplication?.l10n) {
-          // #3306 the button of the viewer whose l10n translates it, not the first viewer's
-          const host = this.PDFViewerApplication.appConfig?.appContainer?.closest('ngx-extended-pdf-viewer');
+          // #3306 the button of this button's viewer, not the first viewer's
+          const host = viewer ?? this.PDFViewerApplication.appConfig?.appContainer?.closest('ngx-extended-pdf-viewer');
           const element = getViewerElementById(host ?? document, id);
           this.PDFViewerApplication.l10n.translate(element).then(() => {
             // Dispatch the 'localized' event on the `eventBus` once the viewer
@@ -76,9 +100,9 @@ export class PdfShyButtonService {
         }
       }, 0);
     } else {
-      this.buttons.push(description);
+      buttons.push(description);
     }
-    this.buttons.sort((a, b) => a.order - b.order);
+    buttons.sort((a, b) => a.order - b.order);
   }
 
   private addDefaultPrefix(button: PdfShyButtonComponent): string {
@@ -92,7 +116,7 @@ export class PdfShyButtonService {
   public update(button: PdfShyButtonComponent): void {
     const id = button.secondaryMenuId() || this.addDefaultPrefix(button);
 
-    if (this.buttons.some((b) => b.id === id)) {
+    if (this.buttonsOf(button.viewer?.()).some((b) => b.id === id)) {
       this.add(button);
     }
   }
