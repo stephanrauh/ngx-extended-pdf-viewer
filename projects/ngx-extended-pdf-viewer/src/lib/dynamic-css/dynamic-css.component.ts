@@ -14,7 +14,17 @@ import { getViewerElementById, viewerRoot } from '../viewer-root';
     standalone: false // NOSONAR — intentional for backward compatibility with NgModule consumers
 })
 export class DynamicCssComponent implements OnDestroy {
+  /** #3306 the host attribute that ties a viewer to its own stylesheet (the value is the id of the <style> element) */
+  public static readonly SCOPE_ATTRIBUTE = 'data-ngx-dynamic-css';
+
+  private static instances = 0;
+
   public zoom = input<number>(1.0);
+
+  /** #3306 every viewer has its own stylesheet, scoped to the viewer */
+  private styleElement: HTMLStyleElement | undefined;
+
+  private readonly instance = ++DynamicCssComponent.instances;
 
   private readonly elementRef = inject(ElementRef, { optional: true });
 
@@ -241,20 +251,48 @@ export class DynamicCssComponent implements OnDestroy {
     this.xxl.set(scaleFactor * PdfBreakpoints.xxl);
     this.xxxl.set(scaleFactor * PdfBreakpoints.xxxl);
 
-    let styles = this.document.getElementById('pdf-dynamic-css') as HTMLStyleElement;
+    const host = root === this.document ? undefined : (root as Element);
+    let styles = this.styleElement;
     if (!styles) {
       styles = this.document.createElement('STYLE') as HTMLStyleElement;
-      styles.id = 'pdf-dynamic-css';
-      this.pdfCspPolicyService.addTrustedCSS(styles, this.style());
+      // #3306 the first viewer keeps the traditional id
+      styles.id = this.document.getElementById('pdf-dynamic-css') ? `pdf-dynamic-css-${this.instance}` : 'pdf-dynamic-css';
+      host?.setAttribute(DynamicCssComponent.SCOPE_ATTRIBUTE, styles.id);
+      this.pdfCspPolicyService.addTrustedCSS(styles, this.scopedStyle(host, styles.id));
 
       if (this.nonce) {
         styles.nonce = this.nonce;
       }
 
       this.renderer.appendChild(this.document.head, styles);
+      this.styleElement = styles;
     } else {
-      this.pdfCspPolicyService.addTrustedCSS(styles, this.style());
+      this.pdfCspPolicyService.addTrustedCSS(styles, this.scopedStyle(host, styles.id));
     }
+  }
+
+  /**
+   * #3306 Limits every rule to this viewer. `:where()` adds no specificity, so the rules
+   * override and are overridden exactly like the unscoped rules did.
+   */
+  private scopedStyle(host: Element | undefined, id: string): string {
+    const css = this.style();
+    if (!host) {
+      return css;
+    }
+    const scope = `:where(ngx-extended-pdf-viewer[${DynamicCssComponent.SCOPE_ATTRIBUTE}="${id}"])`;
+    return css
+      .split('\n')
+      .map((line) => {
+        const selector = line.trim();
+        if (!selector || selector.startsWith('@') || !/[{,]$/.test(selector)) {
+          return line;
+        }
+        // html[dir='ltr'] stays in front: it's an ancestor of the viewer
+        const dir = /^html\[dir='(ltr|rtl)'\]\s+/.exec(selector);
+        return dir ? `${dir[0]}${scope} ${selector.slice(dir[0].length)}` : `${scope} ${selector}`;
+      })
+      .join('\n');
   }
 
   public removeScrollbarInInfiniteScrollMode(
@@ -405,9 +443,8 @@ export class DynamicCssComponent implements OnDestroy {
   }
 
   public ngOnDestroy() {
-    const styles = this.document.getElementById('pdf-dynamic-css') as HTMLElement;
-    if (styles?.parentElement) {
-      styles.remove();
-    }
+    // #3306 only this viewer's stylesheet: the other viewers still need theirs
+    this.styleElement?.remove();
+    this.styleElement = undefined;
   }
 }

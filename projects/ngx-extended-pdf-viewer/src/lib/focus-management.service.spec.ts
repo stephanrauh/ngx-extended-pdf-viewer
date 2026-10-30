@@ -1,3 +1,4 @@
+import { TestBed } from '@angular/core/testing';
 import { FocusManagementService } from './focus-management.service';
 
 describe('FocusManagementService', () => {
@@ -33,7 +34,7 @@ describe('FocusManagementService', () => {
       configurable: true,
     });
 
-    service = new FocusManagementService();
+    service = TestBed.runInInjectionContext(() => new FocusManagementService());
   });
 
   afterEach(() => {
@@ -77,7 +78,7 @@ describe('FocusManagementService', () => {
 
       const addEventSpy = jest.spyOn(document, 'addEventListener');
 
-      void new FocusManagementService(); // NOSONAR — instantiation side-effect is intentional, result not needed
+      void TestBed.runInInjectionContext(() => new FocusManagementService()); // NOSONAR — instantiation side-effect is intentional, result not needed
 
       expect(addEventSpy).toHaveBeenCalledWith('DOMContentLoaded', expect.any(Function));
 

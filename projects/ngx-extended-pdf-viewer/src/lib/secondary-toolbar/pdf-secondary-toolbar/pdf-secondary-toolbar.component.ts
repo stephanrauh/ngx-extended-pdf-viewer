@@ -5,6 +5,7 @@ import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { PdfShyButtonService } from '../../toolbar/pdf-shy-button/pdf-shy-button-service';
 import { PDFNotificationService } from './../../pdf-notification-service';
 import { getViewerElementById, viewerRoot } from '../../viewer-root';
+import { DynamicCssComponent } from '../../dynamic-css/dynamic-css.component';
 
 @Component({
     selector: 'pdf-secondary-toolbar',
@@ -259,7 +260,9 @@ export class PdfSecondaryToolbarComponent implements AfterViewInit, OnDestroy {
    * the matching CSS @media rule from the dynamic stylesheet.
    */
   private isResponsiveBreakpointActive(cls: string): boolean {
-    const style = document.getElementById('pdf-dynamic-css') as HTMLStyleElement;
+    // #3306 this viewer's stylesheet
+    const host = this.element.nativeElement.closest('ngx-extended-pdf-viewer');
+    const style = document.getElementById(host?.getAttribute(DynamicCssComponent.SCOPE_ATTRIBUTE) ?? 'pdf-dynamic-css') as HTMLStyleElement;
     if (!style?.sheet) {
       return false;
     }

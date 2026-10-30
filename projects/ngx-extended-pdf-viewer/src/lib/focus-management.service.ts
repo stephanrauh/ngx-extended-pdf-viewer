@@ -1,15 +1,32 @@
-import { Injectable } from '@angular/core';
+import { ElementRef, Injectable, OnDestroy, inject } from '@angular/core';
+import { getViewerElementById } from './viewer-root';
 
+/**
+ * #3306 Every <ngx-extended-pdf-viewer> provides its own instance, so the dialog and button ids are
+ * looked up in that viewer. The root instance (e.g. for custom templates) looks them up in the document.
+ */
 @Injectable({
   providedIn: 'root',
 })
-export class FocusManagementService {
+export class FocusManagementService implements OnDestroy {
+  private readonly viewer: HTMLElement | undefined = inject(ElementRef, { optional: true })?.nativeElement;
+
   private previousActiveElement: HTMLElement | null = null;
   private ariaLiveRegion: HTMLDivElement | null = null;
   private keydownHandler: ((event: KeyboardEvent) => void) | null = null;
 
   constructor() {
     this.initializeAriaLiveRegion();
+  }
+
+  public ngOnDestroy(): void {
+    this.cleanupFocusCycling();
+    this.ariaLiveRegion?.remove();
+    this.ariaLiveRegion = null;
+  }
+
+  private getElementById(id: string): HTMLElement | null {
+    return getViewerElementById(this.viewer ?? document, id);
   }
 
   /**
@@ -77,7 +94,7 @@ export class FocusManagementService {
     // Store the button element for reliable focus return
     // Use buttonId if provided, otherwise fall back to activeElement
     if (buttonId) {
-      const button = document.getElementById(buttonId);
+      const button = this.getElementById(buttonId);
       if (button) {
         this.previousActiveElement = button;
       }
@@ -89,7 +106,7 @@ export class FocusManagementService {
     }
 
     // Find dialog and first focusable element
-    const dialog = document.getElementById(dialogId);
+    const dialog = this.getElementById(dialogId);
     if (!dialog) {
       console.warn(`Dialog with ID "${dialogId}" not found`);
       return;

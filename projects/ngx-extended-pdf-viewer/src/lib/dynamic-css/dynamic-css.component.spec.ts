@@ -257,23 +257,71 @@ describe('DynamicCssComponent', () => {
   });
 
   describe('updateToolbarWidth - addTrustedCSS on existing style element', () => {
-    it('should call addTrustedCSS when style element already exists', () => {
+    it('should reuse its own style element on the next update', () => {
       const mockContainer = document.createElement('div');
       Object.defineProperty(mockContainer, 'clientWidth', { configurable: true, value: 800 });
-
-      const mockStyleElement = document.createElement('style');
-      mockStyleElement.id = 'pdf-dynamic-css';
-
-      const getElementByIdSpy = jest.spyOn(document, 'getElementById');
-      getElementByIdSpy
-        .mockReturnValueOnce(mockContainer) // toolbarViewer
-        .mockReturnValueOnce(mockStyleElement); // pdf-dynamic-css already exists
+      const getElementByIdSpy = jest.spyOn(document, 'getElementById').mockImplementation((id) => (id === 'toolbarViewer' ? mockContainer : null));
 
       component.updateToolbarWidth();
+      const styleElement = mockPdfCspPolicyService.addTrustedCSS.mock.calls[0][0];
+      component.updateToolbarWidth();
 
-      expect(mockPdfCspPolicyService.addTrustedCSS).toHaveBeenCalledWith(mockStyleElement, expect.any(String));
+      expect(mockPdfCspPolicyService.addTrustedCSS).toHaveBeenCalledTimes(2);
+      expect(mockPdfCspPolicyService.addTrustedCSS.mock.calls[1][0]).toBe(styleElement);
 
       getElementByIdSpy.mockRestore();
+      component.ngOnDestroy();
+    });
+  });
+
+  describe('one stylesheet per viewer (#3306)', () => {
+    let host: HTMLElement;
+
+    beforeEach(() => {
+      host = document.createElement('ngx-extended-pdf-viewer');
+      host.innerHTML = '<div id="toolbarViewer"></div>';
+      Object.defineProperty(host.firstElementChild, 'clientWidth', { configurable: true, value: 800 });
+      host.appendChild(fixture.nativeElement);
+      document.body.appendChild(host);
+    });
+
+    afterEach(() => {
+      component.ngOnDestroy();
+      host.remove();
+      document.querySelectorAll('style[id^="pdf-dynamic-css"]').forEach((style) => style.remove());
+    });
+
+    it('scopes every rule to its own viewer, without adding specificity', () => {
+      component.updateToolbarWidth();
+
+      const [styleElement, css] = mockPdfCspPolicyService.addTrustedCSS.mock.calls[0];
+      expect(host.getAttribute('data-ngx-dynamic-css')).toBe(styleElement.id);
+      const scope = `:where(ngx-extended-pdf-viewer[data-ngx-dynamic-css="${styleElement.id}"])`;
+      expect(css).toContain(`${scope} #toolbarContainer .always-in-secondary-menu {`);
+      expect(css).toContain(`${scope} #outerContainer #mainContainer .visibleXXSView,`);
+      expect(css).toContain(`html[dir='ltr'] ${scope} .findbar {`);
+      // every selector line starts with the scope (or html[dir] and the scope)
+      const selectorLines = css
+        .split('\n')
+        .map((line: string) => line.trim())
+        .filter((line: string) => /[{,]$/.test(line) && !line.startsWith('@'));
+      expect(selectorLines.length).toBeGreaterThan(20);
+      expect(selectorLines.filter((line: string) => !line.includes(scope))).toEqual([]);
+    });
+
+    it("gives the second viewer its own id, and removes only its own stylesheet", () => {
+      const firstViewersStyle = document.createElement('style');
+      firstViewersStyle.id = 'pdf-dynamic-css';
+      document.head.appendChild(firstViewersStyle);
+
+      component.updateToolbarWidth();
+      const [styleElement] = mockPdfCspPolicyService.addTrustedCSS.mock.calls[0];
+      expect(styleElement.id).not.toBe('pdf-dynamic-css');
+      expect(document.head.contains(styleElement)).toBe(true);
+
+      component.ngOnDestroy();
+      expect(document.head.contains(styleElement)).toBe(false);
+      expect(document.head.contains(firstViewersStyle)).toBe(true);
     });
   });
 

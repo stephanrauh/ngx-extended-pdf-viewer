@@ -81,6 +81,7 @@ import { ZoomType } from './options/zoom-type';
 import { PdfCspPolicyService } from './pdf-csp-policy.service';
 import { PDFScriptLoaderService } from './pdf-script-loader.service';
 import { PdfViewerRegistry } from './pdf-viewer-registry.service';
+import { FocusManagementService } from './focus-management.service';
 import { ViewerLocalReferences } from './viewer-local-references';
 import { ResponsiveVisibility } from './responsive-visibility';
 
@@ -149,7 +150,7 @@ export function isIOS(): boolean {
   // #3306 multiple viewers on one page: every viewer has its own copy of pdf.js (via
   // PDFScriptLoaderService) and its own services. The instances an application injects
   // follow the primary viewer (see PdfViewerRegistry).
-  providers: [PDFScriptLoaderService, PDFNotificationService, NgxExtendedPdfViewerService],
+  providers: [PDFScriptLoaderService, PDFNotificationService, NgxExtendedPdfViewerService, FocusManagementService],
 })
 export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasHeight {
   private readonly formSupport = new NgxFormSupport();
