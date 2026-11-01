@@ -780,3 +780,10 @@ pdfjs-cursor-page-flip-tool-button-label = Page Flip
 pdfjs-loading-error-more-info = More Information
 pdfjs-loading-error-less-info = Less Information
 pdfjs-loading-error-close = Close
+# Additional translations for ngx-extended-pdf-viewer from the ca bleeding edge branch
+pdfjs-views-manager-pages-status-waiting-ready-label = S'està preparant el fitxer...
+pdfjs-views-manager-pages-status-waiting-uploading-label = S'està pujant el fitxer...
+pdfjs-views-manager-status-warning-cut-label = No s'ha pogut retallar. Actualitzeu la pàgina i proveu-ho de nou.
+pdfjs-views-manager-status-warning-copy-label = No s'ha pogut copiar. Actualitzeu la pàgina i proveu-ho de nou.
+pdfjs-views-manager-status-warning-delete-label = No s'ha pogut suprimir. Actualitzeu la pàgina i proveu-ho de nou.
+pdfjs-views-manager-status-warning-save-label = No s'ha pogut desar. Actualitzeu la pàgina i proveu-ho de nou.

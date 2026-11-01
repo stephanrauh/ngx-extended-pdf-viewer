@@ -721,3 +721,10 @@ pdfjs-cursor-page-flip-tool-button-label = Page Flip
 pdfjs-loading-error-more-info = More Information
 pdfjs-loading-error-less-info = Less Information
 pdfjs-loading-error-close = Close
+# Additional translations for ngx-extended-pdf-viewer from the skr bleeding edge branch
+pdfjs-views-manager-pages-status-waiting-ready-label = تہاݙی فائل تیار کیتی پئی اے…
+pdfjs-views-manager-pages-status-waiting-uploading-label = فائل اپ لوڈ تھیندی پئی اے…
+pdfjs-views-manager-status-warning-cut-label = کٹ نئیں سڳیا. ورقہ ریفریش کرو تے دوبارہ کوشش کرو.
+pdfjs-views-manager-status-warning-copy-label = کاپی نئیں سڳیا. ورقہ ریفریش کرو تے دوبارہ کوشش کرو.
+pdfjs-views-manager-status-warning-delete-label = مٹاو نئیں سڳیا. ورقہ ریفریش کرو تے دوبارہ کوشش کرو.
+pdfjs-views-manager-status-warning-save-label = محفوظ نئیں سڳیا. ورقہ ریفریش کرو تے دوبارہ کوشش کرو.
