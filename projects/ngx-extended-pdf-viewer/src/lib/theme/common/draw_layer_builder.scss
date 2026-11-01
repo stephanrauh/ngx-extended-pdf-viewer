@@ -27,6 +27,11 @@ ngx-extended-pdf-viewer {
       height: 100%;
       pointer-events: none;
       background: rgb(0 90 255 / 0.22);
+
+      // pdf.js 6.5: avoid baseline space stretching Firefox's selection clip
+      svg {
+        display: block;
+      }
     }
 
     svg {
