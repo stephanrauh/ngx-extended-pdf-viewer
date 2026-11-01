@@ -875,7 +875,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
   public replaceBrowserPrint = input(true);
 
-  private readonly originalPrint = typeof window !== 'undefined' ? window.print : undefined;
+  /** #3306 the browser's window.print(): a viewer created while another one is on the page finds the registry's function there */
+  private get originalPrint(): (() => void) | undefined {
+    return this.registry.nativePrint;
+  }
 
   /** Store the original color-scheme value to restore it on destroy */
   private originalColorScheme: string | null = null;

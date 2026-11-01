@@ -41,6 +41,16 @@ describe('PdfViewerRegistry (#3306)', () => {
     expect(first.printPdfInThisViewer).toHaveBeenCalledTimes(1);
   });
 
+  it("remembers the browser's window.print(), even after a viewer has replaced it", () => {
+    const nativePrint = window.print;
+    window.print = registry.print;
+    try {
+      expect(registry.nativePrint).toBe(nativePrint);
+    } finally {
+      window.print = nativePrint;
+    }
+  });
+
   it('does nothing when there is no viewer', () => {
     registry.unregister(first);
     registry.unregister(second);

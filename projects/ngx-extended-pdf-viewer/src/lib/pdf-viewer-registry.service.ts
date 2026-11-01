@@ -24,6 +24,9 @@ export class PdfViewerRegistry {
 
   private readonly lastUsed = signal<object | undefined>(undefined);
 
+  /** the browser's window.print(), saved before the first viewer replaces it with `print` */
+  public readonly nativePrint: (() => void) | undefined = typeof window !== 'undefined' ? window.print : undefined;
+
   /**
    * The viewer the user works with: the one clicked or focused last, else the primary viewer.
    * Keyboard shortcuts typed outside every viewer go to this one.

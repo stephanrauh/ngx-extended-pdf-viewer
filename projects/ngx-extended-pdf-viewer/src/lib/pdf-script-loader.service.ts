@@ -38,6 +38,9 @@ export class PDFScriptLoaderService {
 
   private moduleCopy: PdfJsModuleCopy | undefined;
 
+  /** #3306 the copy this viewer waits for: the pool may still be loading it */
+  private pendingAcquisition: Promise<PdfJsModuleCopy> | undefined;
+
   public constructor(
     private readonly pdfCspPolicyService: PdfCspPolicyService,
     @Inject(CSP_NONCE) private readonly csp_nonce: string,
@@ -295,7 +298,16 @@ new (function () {
     pdfDefaultOptions.needsES5 = this._needsES5;
     // #3273 end of modification by ngx-extended-pdf-viewer
     // #3306 every viewer gets its own copy of the viewer module (see PdfJsModulePool)
-    this.moduleCopy = await this.modulePool.acquire(this.getPdfJsPath('viewer'), forceReload, (url) => this.loadViewer(url));
+    const acquisition = this.modulePool.acquire(this.getPdfJsPath('viewer'), forceReload, (url) => this.loadViewer(url));
+    this.pendingAcquisition = acquisition;
+    const moduleCopy = await acquisition;
+    if (this.pendingAcquisition !== acquisition) {
+      // the viewer was destroyed while it waited for its copy
+      this.modulePool.release(moduleCopy);
+      return false;
+    }
+    this.pendingAcquisition = undefined;
+    this.moduleCopy = moduleCopy;
     this.PDFViewerApplication = this.moduleCopy.PDFViewerApplication;
     this.PDFViewerApplicationOptions = this.moduleCopy.PDFViewerApplicationOptions;
     this.webViewerLoad = this.moduleCopy.webViewerLoad;
@@ -307,6 +319,8 @@ new (function () {
    * when its cleanup has finished, so the next viewer can reuse the copy.
    */
   public releaseViewer(): void {
+    // a copy that's still on its way is released when it arrives
+    this.pendingAcquisition = undefined;
     this.modulePool.release(this.moduleCopy);
     this.moduleCopy = undefined;
   }

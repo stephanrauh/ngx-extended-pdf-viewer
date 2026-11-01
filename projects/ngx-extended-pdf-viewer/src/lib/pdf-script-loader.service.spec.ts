@@ -470,6 +470,26 @@ describe('PDFScriptLoaderService', () => {
       second.releaseViewer();
       expect(pool['copies'].every((c: any) => !c.inUse)).toBe(true);
     });
+
+    it('returns the copy of a viewer that was destroyed while the copy was loading', async () => {
+      const pool = TestBed.inject(PdfJsModulePool);
+      let finishLoading!: () => void;
+      const loading = new Promise<void>((resolve) => (finishLoading = resolve));
+      jest.spyOn(service as any, 'needsES5').mockResolvedValue(false);
+      jest.spyOn(service as any, 'loadViewer').mockImplementation(async (url: any) => {
+        await loading;
+        return fakeLoad()(url);
+      });
+      const loaded = service.ensurePdfJsHasBeenLoaded(false, false, false);
+      await new Promise((resolve) => setTimeout(resolve));
+
+      service.releaseViewer();
+      finishLoading();
+
+      expect(await loaded).toBe(false);
+      expect(service.PDFViewerApplication).toBeUndefined();
+      expect(pool['copies'].map((c: any) => c.inUse)).toEqual([false]);
+    });
   });
 
   describe('ngOnDestroy (now PdfJsModulePool, it runs when the application shuts down)', () => {
