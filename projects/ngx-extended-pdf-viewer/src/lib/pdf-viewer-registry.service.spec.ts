@@ -51,6 +51,20 @@ describe('PdfViewerRegistry (#3306)', () => {
     }
   });
 
+  it('knows whether a live viewer prints with pdf.js', () => {
+    const printsWithPdfJs = { replaceBrowserPrint: () => true };
+    const printsWithTheBrowser = { replaceBrowserPrint: () => false };
+    registry.unregister(first);
+    registry.unregister(second);
+    expect(registry.someViewerPrintsWithPdfJs()).toBe(false);
+    registry.register(printsWithTheBrowser);
+    expect(registry.someViewerPrintsWithPdfJs()).toBe(false);
+    registry.register(printsWithPdfJs);
+    expect(registry.someViewerPrintsWithPdfJs()).toBe(true);
+    registry.unregister(printsWithPdfJs);
+    expect(registry.someViewerPrintsWithPdfJs()).toBe(false);
+  });
+
   it('does nothing when there is no viewer', () => {
     registry.unregister(first);
     registry.unregister(second);

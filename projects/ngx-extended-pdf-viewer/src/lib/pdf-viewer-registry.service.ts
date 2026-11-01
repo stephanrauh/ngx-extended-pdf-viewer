@@ -1,4 +1,4 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, signal, untracked } from '@angular/core';
 
 /**
  * Multiple viewers on one page: the live viewers, in the order they were created.
@@ -40,6 +40,11 @@ export class PdfViewerRegistry {
   public readonly print = (): void => {
     (this.active() as { printPdfInThisViewer?: () => void } | undefined)?.printPdfInThisViewer?.();
   };
+
+  /** whether a live viewer prints with pdf.js (`replaceBrowserPrint`), so window.print() must stay `print` */
+  public someViewerPrintsWithPdfJs(): boolean {
+    return untracked(() => this.viewers().some((viewer) => (viewer as { replaceBrowserPrint?: () => boolean }).replaceBrowserPrint?.()));
+  }
 
   public activate(viewer: object): void {
     this.lastUsed.set(viewer);

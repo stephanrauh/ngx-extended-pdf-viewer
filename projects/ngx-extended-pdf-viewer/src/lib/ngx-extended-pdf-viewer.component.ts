@@ -3534,7 +3534,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
         // #3306 with several viewers on one page, window.print() prints the active one
         window.print = this.registry.print;
       }
-    } else if (this.originalPrint && !this.originalPrint.toString().includes('printPdf')) {
+    } else if (this.originalPrint && !this.originalPrint.toString().includes('printPdf') && !this.registry.someViewerPrintsWithPdfJs()) {
+      // #3306 another viewer on the page may still print with pdf.js; window.print() then prints the
+      // active viewer, and printPdfInThisViewer() leaves it to the browser when that's this one
       window.print = this.originalPrint;
     }
   }
@@ -3644,8 +3646,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
       // do not run this code on the server
       if (typeof window !== 'undefined') {
         const originalPrint = this.originalPrint;
-        // #3306 as long as another viewer is on the page, window.print() keeps printing that one
-        if (window && originalPrint && !originalPrint.toString().includes('printPdf') && this.registry.count() === 0) {
+        // #3306 as long as another viewer on the page prints with pdf.js, window.print() keeps printing that one
+        if (window && originalPrint && !originalPrint.toString().includes('printPdf') && !this.registry.someViewerPrintsWithPdfJs()) {
           window.print = originalPrint;
         }
       }

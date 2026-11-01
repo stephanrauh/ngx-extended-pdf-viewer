@@ -38,8 +38,8 @@ export class PDFScriptLoaderService {
 
   private moduleCopy: PdfJsModuleCopy | undefined;
 
-  /** #3306 the copy this viewer waits for: the pool may still be loading it */
-  private pendingAcquisition: Promise<PdfJsModuleCopy> | undefined;
+  /** #3306 counts the loads and releases: a load that finds a newer number was cancelled while it waited */
+  private loadGeneration = 0;
 
   public constructor(
     private readonly pdfCspPolicyService: PdfCspPolicyService,
@@ -290,7 +290,12 @@ new (function () {
     if (this.PDFViewerApplication) {
       return true;
     }
+    const generation = ++this.loadGeneration;
     this._needsES5 = forceUsingLegacyES5 || (await this.needsES5(useInlineScripts));
+    if (generation !== this.loadGeneration) {
+      // the viewer was destroyed while the capability probe ran
+      return false;
+    }
     // #3273 modified by ngx-extended-pdf-viewer
     // workerSrc() and sandboxBundleSrc() read the global flag, not this._needsES5.
     // Syncing it only when the legacy bundle was forced sent every browser that the
@@ -298,15 +303,12 @@ new (function () {
     pdfDefaultOptions.needsES5 = this._needsES5;
     // #3273 end of modification by ngx-extended-pdf-viewer
     // #3306 every viewer gets its own copy of the viewer module (see PdfJsModulePool)
-    const acquisition = this.modulePool.acquire(this.getPdfJsPath('viewer'), forceReload, (url) => this.loadViewer(url));
-    this.pendingAcquisition = acquisition;
-    const moduleCopy = await acquisition;
-    if (this.pendingAcquisition !== acquisition) {
+    const moduleCopy = await this.modulePool.acquire(this.getPdfJsPath('viewer'), forceReload, (url) => this.loadViewer(url));
+    if (generation !== this.loadGeneration) {
       // the viewer was destroyed while it waited for its copy
       this.modulePool.release(moduleCopy);
       return false;
     }
-    this.pendingAcquisition = undefined;
     this.moduleCopy = moduleCopy;
     this.PDFViewerApplication = this.moduleCopy.PDFViewerApplication;
     this.PDFViewerApplicationOptions = this.moduleCopy.PDFViewerApplicationOptions;
@@ -319,8 +321,8 @@ new (function () {
    * when its cleanup has finished, so the next viewer can reuse the copy.
    */
   public releaseViewer(): void {
-    // a copy that's still on its way is released when it arrives
-    this.pendingAcquisition = undefined;
+    // cancels a load that's still running: a copy that's still on its way is released when it arrives
+    this.loadGeneration++;
     this.modulePool.release(this.moduleCopy);
     this.moduleCopy = undefined;
   }
