@@ -11,14 +11,15 @@ export class InkDrawOutline extends Outline {
     get thickness(): any;
     setLastElement(element: any): {
         path: {
-            d: string;
+            d: any;
         };
     };
     removeLastElement(): {
         path: {
-            d: string;
+            d: any;
         };
     };
+    toSVGPath(): any;
     serialize([pageX, pageY, pageWidth, pageHeight]: [any, any, any, any], isForCopying: any): {
         lines: any[];
         points: any[];
@@ -55,7 +56,7 @@ export class InkDrawOutline extends Outline {
         path: {
             "transform-origin": string;
             transform: string | null;
-            d: string;
+            d: any;
         };
     };
     getPathTranslatedSVGProperties([newX, newY]: [any, any], parentDimensions: any): {
@@ -63,7 +64,7 @@ export class InkDrawOutline extends Outline {
             viewBox: any;
         };
         path: {
-            d: string;
+            d: any;
             "transform-origin": string;
         };
     };
@@ -75,7 +76,7 @@ export class InkDrawOutline extends Outline {
             draw: boolean;
         };
         path: {
-            d: string;
+            d: any;
             "transform-origin": string;
             transform: string | null;
         };
@@ -84,41 +85,37 @@ export class InkDrawOutline extends Outline {
     #private;
 }
 export class InkDrawOutliner {
-    constructor(x: any, y: any, parentWidth: any, parentHeight: any, rotation: any, thickness: any);
+    constructor(x: any, y: any, parentWidth: any, parentHeight: any, rotation: any, thickness: any, timeStamp: any);
     updateProperty(name: any, value: any): void;
     isEmpty(): boolean;
     isCancellable(): boolean;
-    add(x: any, y: any): {
+    add(x: any, y: any, timeStamp: any): {
         path: {
             d: string;
         };
     };
-    addPoints(points: any): {
+    addPoints(points: any, timeStamps: any): {
         path: {
             d: string;
         };
     };
-    end(x: any, y: any): {
+    end(x: any, y: any, timeStamp: any): {
         path: {
             d: string;
         };
     };
-    startNew(x: any, y: any, parentWidth: any, parentHeight: any, rotation: any): null;
-    getLastElement(): {
-        line: any[];
-        points: any[];
-    } | undefined;
+    startNew(x: any, y: any, parentWidth: any, parentHeight: any, rotation: any, timeStamp: any): null;
+    getLastElement(): any;
     setLastElement(element: any): {
         path: {
-            d: string;
+            d: any;
         };
     };
     removeLastElement(): {
         path: {
-            d: string;
+            d: any;
         };
     };
-    toSVGPath(): string;
     getOutlines(parentWidth: any, parentHeight: any, scale: any, innerMargin: any): InkDrawOutline;
     get defaultSVGProperties(): {
         root: {

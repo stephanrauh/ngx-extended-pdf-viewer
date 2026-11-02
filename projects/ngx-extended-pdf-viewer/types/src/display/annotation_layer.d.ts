@@ -19,7 +19,6 @@ export type AnnotationElementParameters = {
      */
     imageResourcesPath?: string | undefined;
     renderForms: boolean;
-    svgFactory: object;
     enableScripting?: boolean | undefined;
     hasJSActions?: boolean | undefined;
     fieldObjects?: Map<any, any> | undefined;
@@ -38,6 +37,11 @@ export type AnnotationLayerParameters = {
      */
     imageResourcesPath?: string | undefined;
     renderForms: boolean;
+    /**
+     * - Allow editing existing
+     * annotations. The default value is `true`.
+     */
+    enableAnnotationEditing?: boolean | undefined;
     /**
      * - Enable embedded script execution.
      */
@@ -66,6 +70,8 @@ export type AnnotationLayerParameters = {
  * @property {string} [imageResourcesPath] - Path for image resources, mainly
  *   for annotation icons. Include trailing slash.
  * @property {boolean} renderForms
+ * @property {boolean} [enableAnnotationEditing] - Allow editing existing
+ *   annotations. The default value is `true`.
  * @property {boolean} [enableScripting] - Enable embedded script execution.
  * @property {boolean} [hasJSActions] - Some fields have JS actions.
  *   The default value is `false`.
@@ -170,11 +176,14 @@ declare class AnnotationElement {
         contentsObj: any;
         richText: any;
     }): boolean;
+    static get _svgFactory(): any;
     constructor(parameters: any, { isRenderable, ignoreBorder, createQuadrilaterals, }?: {
         isRenderable?: boolean | undefined;
         ignoreBorder?: boolean | undefined;
         createQuadrilaterals?: boolean | undefined;
     });
+    get _ngxForms(): any;
+    get _ngxViewerRoot(): any;
     isRenderable: boolean;
     data: any;
     layer: any;
@@ -182,9 +191,9 @@ declare class AnnotationElement {
     downloadManager: any;
     imageResourcesPath: any;
     renderForms: any;
-    svgFactory: any;
     annotationStorage: any;
     enableComment: any;
+    enableAnnotationEditing: boolean;
     enableScripting: any;
     hasJSActions: any;
     _fieldObjects: any;

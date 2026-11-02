@@ -30,11 +30,6 @@ export type TextLayerUpdateParameters = {
      * the text runs.
      */
     viewport: PageViewport;
-    /**
-     * - Callback invoked before the textLayer is
-     * updated in the DOM.
-     */
-    onBefore?: Function | undefined;
 };
 export const DEFAULT_FONT_SIZE: 30;
 export class TextLayer {
@@ -71,7 +66,7 @@ export class TextLayer {
      * @param {TextLayerUpdateParameters} options
      * @returns {undefined}
      */
-    update({ viewport, onBefore }: TextLayerUpdateParameters): undefined;
+    update({ viewport }: TextLayerUpdateParameters): undefined;
     /**
      * Cancel rendering of the textLayer.
      * @returns {undefined}

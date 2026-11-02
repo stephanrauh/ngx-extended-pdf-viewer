@@ -34,6 +34,6 @@ export class StructTreeLayerBuilder {
     getAnnotationIds(): Promise<Set<string> | null>;
     hide(): void;
     show(): void;
-    updateTextLayer(): void;
+    updateTextLayer(pageDiv?: null): void;
     #private;
 }

@@ -14,7 +14,6 @@ export class JpxImage extends WasmImage {
     _filename: string;
     _noWasmFilename: string;
     decode(bytes: any, { numComponents, isIndexedColormap, smaskInData, reducePower, }?: {
-        numComponents?: number | undefined;
         isIndexedColormap?: boolean | undefined;
         smaskInData?: boolean | undefined;
         reducePower?: number | undefined;

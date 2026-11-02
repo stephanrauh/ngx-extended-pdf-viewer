@@ -21,6 +21,7 @@ export class StructTreePage {
      * @returns {object}
      */
     get serializable(): object;
+    #private;
 }
 export class StructTreeRoot {
     static canCreateStructureTree({ catalogRef, pdfManager, newAnnotationsByPage, }: {
@@ -78,6 +79,7 @@ export class StructTreeRoot {
     dict: any;
     ref: Ref | null;
     getKidPosition(kidRef: any): any;
+    getElementsForPage(pageRef: any): any;
     addAnnotationIdToPage(pageRef: any, id: any, ref: any): void;
     canUpdateStructTree({ pdfManager, newAnnotationsByPage }: {
         pdfManager: any;

@@ -12,6 +12,16 @@ export class GlobalImageCache {
     addDecodeFailed(ref: any): void;
     hasDecodeFailed(ref: any): boolean;
     /**
+     * Track the page before decoding so cleanup can discard the entry.
+     */
+    startDecodedImage(ref: any, pageProxyId: any): void;
+    setDecodedImage(ref: any, imgData: any): void;
+    /**
+     * @returns {object | null} The cached image, owned by the caller, or null.
+     */
+    takeDecodedImage(ref: any): object | null;
+    cleanupPage(pageProxyId: any): void;
+    /**
      * PLEASE NOTE: Must be called *after* the `setData` method.
      */
     addByteSize(ref: any, byteSize: any): void;

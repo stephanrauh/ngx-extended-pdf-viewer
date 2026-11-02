@@ -102,6 +102,7 @@ export class AnnotationLayerBuilder {
      *   are added to the annotation layer.
      */
     injectLinkAnnotations(inferredLinks: Array<object>): Promise<void>;
+    get linksInjected(): boolean;
     #private;
 }
 import { AnnotationLayer } from "../src/pdf.js";

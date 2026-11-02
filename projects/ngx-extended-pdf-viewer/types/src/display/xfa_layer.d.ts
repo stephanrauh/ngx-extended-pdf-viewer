@@ -17,7 +17,7 @@ export class XfaLayer {
     static get _allowedRichTextElements(): any;
     static get _allowedRichTextAttributes(): any;
     static get _allowedRichTextStyles(): any;
-    static setupStorage(html: any, id: any, element: any, storage: any, intent: any): void;
+    static setupStorage(html: any, id: any, element: any, storage: any, intent: any, linkService: any): void;
     static setAttributes({ html, element, storage, intent, linkService }: {
         html: any;
         element: any;

@@ -65,6 +65,11 @@ export class Parser {
     findDCTDecodeInlineStreamEnd(stream: any): number;
     /**
      * Find the EOD (end-of-data) marker '~>' (i.e. TILDE + GT) of the stream.
+     *
+     * Since `Ascii85Stream` stops reading immediately upon encountering TILDE,
+     * we do the same thing here to simplify handling of corrupt PDFs; e.g.
+     *  - whitespace "inside" of the EOD marker (fixes issue10614.pdf).
+     *  - truncated EOD marker, missing the '>' character (fixes issue11385.pdf).
      * @returns {number} The inline stream length.
      */
     findASCII85DecodeInlineStreamEnd(stream: any): number;
@@ -75,8 +80,9 @@ export class Parser {
     findASCIIHexDecodeInlineStreamEnd(stream: any): number;
     /**
      * Skip over the /EI/ for streams where we search for an EOD marker.
+     * @returns {number} The inline stream length.
      */
-    inlineStreamSkipEI(stream: any): void;
+    inlineStreamSkipEI(stream: any, startPos: any, ch: any, name: any): number;
     /**
      * @param {CipherTransform | null} cipherTransform
      * @returns {Streams}
@@ -102,6 +108,7 @@ export class Parser {
     makeFilter(stream: Streams, name: string, maybeLength: number | null, params: Dict | null, cipherTransform?: CipherTransform | null | undefined): Streams;
     #private;
 }
+export function toHexDigit(ch: any): number;
 import { Ascii85Stream } from "./ascii_85_stream.js";
 import { AsciiHexStream } from "./ascii_hex_stream.js";
 import type { BaseStream } from "./base_stream.js";

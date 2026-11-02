@@ -96,6 +96,13 @@ export class ColorSpace {
      */
     isPassthrough(bits: any): boolean;
     /**
+     * Returns an RGB lookup table for all `bpc`-bit samples in a single-component
+     * color space.
+     * @param {number} bpc
+     * @returns {Uint8ClampedArray}
+     */
+    getColorMap(bpc: number): Uint8ClampedArray;
+    /**
      * Refer to the static `ColorSpace.isDefaultDecode` method below.
      */
     isDefaultDecode(decode: any, bpc: any): boolean;

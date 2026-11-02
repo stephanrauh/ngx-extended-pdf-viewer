@@ -39,7 +39,7 @@ export class PDFScriptingManager {
     constructor({ eventBus, externalServices, docProperties }: PDFScriptingManagerOptions);
     setViewer(pdfViewer: any): void;
     setDocument(pdfDocument: any): Promise<void>;
-    dispatchWillSave(): Promise<any>;
+    dispatchWillSave(): Promise<void>;
     dispatchDidSave(): Promise<any>;
     dispatchWillPrint(): Promise<void>;
     dispatchDidPrint(): Promise<any>;

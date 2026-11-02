@@ -1,6 +1,18 @@
 export type SimpleDependency = "lineWidth" | "lineCap" | "lineJoin" | "miterLimit" | "dash" | "strokeAlpha" | "fillColor" | "fillAlpha" | "globalCompositeOperation" | "path" | "filter" | "font" | "fontObj";
 export type IncrementalDependency = "transform" | "moveText" | "sameLineText";
 export type InternalIncrementalDependency = IncrementalDependency | typeof FORCED_DEPENDENCY_LABEL;
+export class BBoxReader {
+    static fromBuffer(buffer: any): BBoxReader;
+    constructor(bboxes: any, coords: any);
+    get buffer(): any;
+    get length(): any;
+    isEmpty(i: any): boolean;
+    minX(i: any): number;
+    minY(i: any): number;
+    maxX(i: any): number;
+    maxY(i: any): number;
+    #private;
+}
 export class CanvasBBoxTracker {
     constructor(canvas: any, operationsCount: any);
     _pendingBBoxIdx: number;
@@ -198,6 +210,14 @@ export class CanvasNestedDependencyTracker implements CanvasDependencyTracker {
     takeDebugMetadata(): void;
     #private;
 }
+export function createCanvasTrackers(canvas: any, operationsCount: any, { recordOperations, recordImages, recordDebugMetadata, }: {
+    recordOperations?: boolean | undefined;
+    recordImages?: boolean | undefined;
+    recordDebugMetadata?: boolean | undefined;
+}): {
+    dependencyTracker: CanvasBBoxTracker | CanvasDependencyTracker | null;
+    imagesTracker: CanvasImagesTracker | null;
+};
 export namespace Dependencies {
     let stroke: string[];
     let fill: string[];
@@ -208,14 +228,4 @@ export namespace Dependencies {
     let transformAndFill: string[];
 }
 declare const FORCED_DEPENDENCY_LABEL: "__forcedDependency";
-declare class BBoxReader {
-    constructor(bboxes: any, coords: any);
-    get length(): any;
-    isEmpty(i: any): boolean;
-    minX(i: any): number;
-    minY(i: any): number;
-    maxX(i: any): number;
-    maxY(i: any): number;
-    #private;
-}
 export {};

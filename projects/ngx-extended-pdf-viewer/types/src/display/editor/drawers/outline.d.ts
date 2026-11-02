@@ -11,8 +11,8 @@ export class Outline {
     static _rescaleAndSwap(src: any, tx: any, ty: any, sx: any, sy: any, dest: any): any;
     static _translate(src: any, tx: any, ty: any, dest: any): any;
     static svgRound(x: any): number;
-    static _normalizePoint(x: any, y: any, parentWidth: any, parentHeight: any, rotation: any): number[];
-    static createBezierPoints(x1: any, y1: any, x2: any, y2: any, x3: any, y3: any): number[];
+    static _normalizePoint(x: any, y: any, parentWidth: any, parentHeight: any, rotation: any, dest?: any[]): any[];
+    static createBezierPoints(x1: any, y1: any, x2: any, y2: any, x3: any, y3: any, dest?: any[]): any[];
     /** @type {Outline|null} Optional hover/selection outline drawn separately. */
     focusOutline: Outline | null;
     /**

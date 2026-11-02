@@ -19,6 +19,6 @@ export class ImageResizer {
     _imgData: any;
     _isMask: any;
     _createImage(): Promise<any>;
+    _rescaleImageData(maxSize?: number): any;
     _encodeBMP(): Uint8Array<any>;
-    #private;
 }

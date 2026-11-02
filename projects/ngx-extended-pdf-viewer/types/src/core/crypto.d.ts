@@ -34,7 +34,7 @@ export class ARCFourCipher {
     constructor(key: any);
     a: number;
     b: number;
-    s: Uint8Array<ArrayBuffer>;
+    s: any;
     encryptBlock(data: any): Uint8Array<any>;
     decryptBlock(data: any): Uint8Array<any>;
     encrypt(data: any): Uint8Array<any>;
@@ -63,6 +63,13 @@ export class CipherTransform {
     createStream(stream: BaseStream, length: number | null, cryptFilterName?: Name | null): DecryptStream;
     decryptString(s: any): string;
     encryptString(s: any): string;
+    /**
+     * @param {string} s - Stream bytes.
+     * @param {Dict} dict
+     * @param {Name | null} [cryptFilterName] - Explicit /Crypt filter name.
+     * @returns {string} Encrypted bytes, unchanged for Identity.
+     */
+    encryptStream(s: string, dict: Dict, cryptFilterName?: Name | null): string;
     #private;
 }
 export class CipherTransformFactory {
@@ -71,7 +78,7 @@ export class CipherTransformFactory {
     filterName: any;
     dict: any;
     algorithm: any;
-    cf: any;
+    cf: Dict | null;
     stmf: any;
     strf: any;
     eff: any;
@@ -125,6 +132,7 @@ declare class AESBaseCipher {
 }
 import type { BaseStream } from "./base_stream.js";
 import { DecryptStream } from "./decrypt_stream.js";
+import { Dict } from "./primitives.js";
 declare class PDFBase {
     _hash(password: any, input: any, userBytes: any): void;
     checkOwnerPassword(password: any, ownerValidationSalt: any, userBytes: any, ownerPassword: any): boolean;

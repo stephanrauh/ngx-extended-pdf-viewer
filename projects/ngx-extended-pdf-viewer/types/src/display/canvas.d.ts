@@ -1,13 +1,15 @@
 export class CanvasGraphics {
     static #SCALE_MATRIX: null;
-    constructor(canvasCtx: any, commonObjs: any, objs: any, canvasFactory: any, filterFactory: any, { optionalContentConfig, markedContentStack }: {
+    static #pathCaches: WeakMap<object, any>;
+    constructor(canvasCtx: any, commonObjs: any, objs: any, canvasFactory: any, filterFactory: any, { optionalContentConfig, markedContentStack, pixelRatio, }: {
         optionalContentConfig: any;
         markedContentStack?: null | undefined;
+        pixelRatio?: number | undefined;
     }, annotationCanvasMap: any, pageColors: any, dependencyTracker: any, imagesTracker: any);
     ctx: any;
     current: CanvasExtraState;
     stateStack: any[];
-    pendingClip: {} | {} | null;
+    pendingClip: any;
     pendingEOFill: boolean;
     commonObjs: any;
     objs: any;
@@ -29,6 +31,7 @@ export class CanvasGraphics {
     contentVisible: boolean;
     markedContentStack: never[];
     optionalContentConfig: any;
+    pixelRatio: number;
     cachedPatterns: Map<any, any>;
     annotationCanvasMap: any;
     viewportScale: number;
@@ -48,7 +51,8 @@ export class CanvasGraphics {
     }): void;
     transparentCanvasEntry: any;
     compositeCtx: any;
-    executeOperatorList(operatorList: any, executionStartIdx: any, continueCallback: any, stepper: any, operationsFilter: any): any;
+    executeOperatorList(operatorList: any, executionStartIdx: any, continueCallback: any, errorCallback: any, stepper: any, operationsFilter: any): any;
+    _pathCache: any;
     transparentCanvas: any;
     endDrawing(): void;
     _scaleImage(img: any, inverseTransform: any): {
@@ -136,6 +140,10 @@ export class CanvasGraphics {
     genericComposeSMask(smask: any, layerCtx: any, width: any, height: any, layerOffsetX: any, layerOffsetY: any): void;
     save(opIdx: any): void;
     restore(opIdx: any): void;
+    /**
+     * Resets the graphics state, except the clip and the transfer maps.
+     */
+    resetGraphicsState(): void;
     transform(opIdx: any, a: any, b: any, c: any, d: any, e: any, f: any): void;
     constructPath(opIdx: any, op: any, data: any, minMax: any): void;
     _pathStartIdx: any;
@@ -216,6 +224,8 @@ export class CanvasGraphics {
     isContentVisible(): boolean;
     #private;
 }
+export function getAnnotationCanvasName(canvas: any): any;
+export function setAnnotationCanvasName(canvas: any, canvasName: any): void;
 declare class CanvasExtraState {
     constructor(width: any, height: any);
     alphaIsShape: boolean;

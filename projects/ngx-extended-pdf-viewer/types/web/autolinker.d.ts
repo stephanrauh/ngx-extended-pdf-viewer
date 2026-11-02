@@ -12,8 +12,8 @@ export class Autolinker {
         rect: any;
         quadPoints?: undefined;
         id: string;
-        unsafeUrl: any;
-        url: any;
+        unsafeUrl: string;
+        url: string;
         annotationType: number;
         rotation: number;
     } | {
@@ -21,8 +21,8 @@ export class Autolinker {
         quadPoints: any[];
         rect: number[];
         id: string;
-        unsafeUrl: any;
-        url: any;
+        unsafeUrl: string;
+        url: string;
         annotationType: number;
         rotation: number;
     })[];

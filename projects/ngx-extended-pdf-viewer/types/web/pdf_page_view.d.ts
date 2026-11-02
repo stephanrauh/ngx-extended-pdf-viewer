@@ -237,6 +237,7 @@ export class PDFPageView extends BasePDFPageView {
         background: any;
         recordOperations: any;
         recordImages: any;
+        partialFrames: boolean;
     };
     draw(): Promise<void>;
     /**

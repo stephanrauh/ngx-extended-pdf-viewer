@@ -166,6 +166,7 @@ export type DocumentInitParameters = {
      * - Specify an explicit document
      * context to create elements with and to load resources, such as fonts,
      * into. Defaults to the current document.
+     * NOTE: Worker rendering is disabled when this is set to a custom document.
      */
     ownerDocument?: HTMLDocument | undefined;
     /**
@@ -224,6 +225,13 @@ export type DocumentInitParameters = {
      * pages are removed, cloned, etc.
      */
     pagesMapper?: object | undefined;
+    /**
+     * - Disables worker rendering.
+     * Worker rendering requires `GlobalWorkerOptions.rendererSrc` or a nonempty
+     * `GlobalWorkerOptions.rendererPorts` array. If unavailable or initialization
+     * fails, pages render on the main thread. The default is `false`.
+     */
+    disableWorkerRendering?: boolean | undefined;
 };
 export type OnProgressParameters = {
     /**
@@ -478,6 +486,12 @@ export type RenderParameters = {
      */
     recordOperations?: boolean | undefined;
     /**
+     * - Emit partial renderings of the page
+     * through `RenderTask.onFrame` while it is being drawn. Only has an effect
+     * when the page is rendered in a renderer worker.
+     */
+    partialFrames?: boolean | undefined;
+    /**
      * - If provided, only
      * run for which this function returns `true`.
      */
@@ -708,6 +722,7 @@ export const build: string;
  * @property {HTMLDocument} [ownerDocument] - Specify an explicit document
  *   context to create elements with and to load resources, such as fonts,
  *   into. Defaults to the current document.
+ *   NOTE: Worker rendering is disabled when this is set to a custom document.
  * @property {boolean} [disableRange] - Disable range request loading of PDF
  *   files. When enabled, and if the server supports partial content requests,
  *   then the PDF will be fetched in chunks. The default value is `false`.
@@ -737,6 +752,10 @@ export const build: string;
  * @property {object} [pagesMapper] - The pages mapper that will be used to map
  *   page ids and page numbers. It's used when the page order is changed or some
  *   pages are removed, cloned, etc.
+ * @property {boolean} [disableWorkerRendering] - Disables worker rendering.
+ *   Worker rendering requires `GlobalWorkerOptions.rendererSrc` or a nonempty
+ *   `GlobalWorkerOptions.rendererPorts` array. If unavailable or initialization
+ *   fails, pages render on the main thread. The default is `false`.
  */
 /**
  * This is the main entry point for loading a PDF and interacting with it.
@@ -799,7 +818,6 @@ export class PDFDataRangeTransport {
  * after which individual pages can be rendered.
  */
 export class PDFDocumentLoadingTask {
-    static #docId: number;
     /**
      * @private
      */
@@ -819,6 +837,10 @@ export class PDFDocumentLoadingTask {
      * @private
      */
     private _worker;
+    /**
+     * @private
+     */
+    private _rendererWorker;
     /**
      * Unique identifier for the document loading task.
      * @type {string}
@@ -1371,6 +1393,9 @@ export class PDFDocumentProxy {
  * @property {boolean} [recordImages] - Record the location of images in the PDF
  * @property {boolean} [recordOperations] - Record the dependencies and bounding
  *   boxes of all PDF operations that render onto the canvas.
+ * @property {boolean} [partialFrames] - Emit partial renderings of the page
+ *   through `RenderTask.onFrame` while it is being drawn. Only has an effect
+ *   when the page is rendered in a renderer worker.
  * @property {OperationsFilter} [operationsFilter] - If provided, only
  *   run for which this function returns `true`.
  */
@@ -1517,7 +1542,7 @@ export class PDFPageProxy {
      * @returns {RenderTask} An object that contains a promise that is
      *   resolved when the page finishes rendering.
      */
-    render({ canvasContext, canvas, viewport, intent, annotationMode, transform, background, optionalContentConfigPromise, annotationCanvasMap, pageColors, printAnnotationStorage, isEditing, recordImages, recordOperations, operationsFilter, }: RenderParameters): RenderTask;
+    render({ canvasContext, canvas, viewport, intent, annotationMode, transform, background, optionalContentConfigPromise, annotationCanvasMap, pageColors, printAnnotationStorage, isEditing, recordImages, recordOperations, partialFrames, operationsFilter, }: RenderParameters): RenderTask;
     /**
      * @param {GetOperatorListParameters} params - Page getOperatorList
      *   parameters.
@@ -1663,6 +1688,12 @@ export class RenderTask {
      */
     onError: Function;
     /**
+     * Callback invoked after a frame from the renderer worker has been drawn
+     * onto the canvas, including the final one.
+     * @type {Function}
+     */
+    onFrame: Function;
+    /**
      * Promise for rendering task completion.
      * @type {Promise<void>}
      */
@@ -1680,6 +1711,10 @@ export class RenderTask {
      */
     get separateAnnots(): boolean;
     get imageCoordinates(): any;
+    /**
+     * @type {boolean} Whether this render task draws in a renderer worker.
+     */
+    get isWorkerRendering(): boolean;
 }
 /** @type {string} */
 export const version: string;
@@ -1691,6 +1726,6 @@ import { AnnotationStorage } from "./annotation_storage.js";
 import type { CatalogAttachment } from "../core/catalog.js";
 import type { CatalogAttachmentContent } from "../core/catalog.js";
 import { Metadata } from "./metadata.js";
-import { StatTimer } from "./display_utils.js";
+import { StatTimer } from "./api_utils.js";
 import { PDFObjects } from "./pdf_objects.js";
 import { MessageHandler } from "../shared/message_handler.js";

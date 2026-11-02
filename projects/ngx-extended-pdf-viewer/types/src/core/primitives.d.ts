@@ -76,6 +76,7 @@ export class RefMap {
     has(ref: any): boolean;
     put(ref: any, obj: any): void;
     putAlias(ref: any, aliasRef: any): void;
+    remove(ref: any): void;
     getOrPutComputed(ref: any, callback: any): any;
     clear(): void;
     values(): Generator<any, void, unknown>;

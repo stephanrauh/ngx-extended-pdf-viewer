@@ -81,8 +81,6 @@ export type TextLayerSelectionData = {
  * be able to use mix-blend-mode for some of them.
  */
 export class DrawLayer {
-    static #id: number;
-    static #selectionId: number;
     /** @type {AbortController | null} */
     static #selectionChangeAC: AbortController | null;
     /** @type {Set<HTMLDivElement>} */
@@ -130,10 +128,10 @@ export class DrawLayer {
     pageIndex: number;
     setParent(parent: any): void;
     draw(properties: any, isPathUpdatable?: boolean, hasClip?: boolean): {
-        id: number;
+        id: any;
         clipPathId: string;
     };
-    drawOutline(properties: any, mustRemoveSelfIntersections: any): number;
+    drawOutline(properties: any, mustRemoveSelfIntersections: any): any;
     finalizeDraw(id: any, properties: any): void;
     updateProperties(elementOrId: any, properties: any): void;
     updateParent(id: any, layer: any): void;

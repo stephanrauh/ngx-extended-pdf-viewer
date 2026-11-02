@@ -29,6 +29,7 @@ export class MessageHandler {
      */
     sendWithStream(actionName: string, data: JSON, queueingStrategy: object, transfers?: any[]): ReadableStream;
     destroy(): void;
+    get destroyed(): boolean;
     #private;
 }
 export function wrapReason(ex: any): PasswordException | UnknownErrorException | InvalidPDFException | ResponseException | AbortException;

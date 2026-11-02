@@ -1,10 +1,6 @@
 export function clearPatternCaches(): void;
 export function getTilingPatternIR(operatorList: any, dict: any, color: any, needsIsolation?: boolean): any[];
 export class Pattern {
-    static #hasGPU: boolean;
-    static setOptions({ hasGPU }: {
-        hasGPU: any;
-    }): void;
     static parseShading(shading: any, xref: any, res: any, pdfFunctionFactory: any, globalColorSpaceCache: any, localColorSpaceCache: any): FunctionBasedShading | RadialAxialShading | MeshShading | DummyShading;
 }
 declare class FunctionBasedShading extends BaseShading {

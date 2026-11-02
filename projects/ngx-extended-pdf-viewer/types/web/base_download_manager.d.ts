@@ -1,5 +1,5 @@
 export class BaseDownloadManager {
-    _triggerDownload(blobUrl: any, originalUrl: any, filename: any, isAttachment?: boolean): void;
+    _triggerDownload(blobUrl: any, originalUrl: any, filename: any, isAttachment?: boolean, isModified?: boolean): void;
     _getOpenDataUrl(blobUrl: any, filename: any, dest?: null): void;
     /**
      * @param {Uint8Array} data
@@ -18,7 +18,8 @@ export class BaseDownloadManager {
      * @param {Uint8Array} data
      * @param {string} url
      * @param {string} filename
+     * @param {boolean} [isModified] - Whether to report the PDF as modified.
      */
-    download(data: Uint8Array, url: string, filename: string): void;
+    download(data: Uint8Array, url: string, filename: string, isModified?: boolean): void;
     #private;
 }

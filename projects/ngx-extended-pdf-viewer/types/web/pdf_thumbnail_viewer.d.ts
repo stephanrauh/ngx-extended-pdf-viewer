@@ -1,6 +1,7 @@
 export type PDFDocumentProxy = import("../src/display/api").PDFDocumentProxy;
 export type PDFPageProxy = import("../src/display/api").PDFPageProxy;
 export type EventBus = import("./event_utils").EventBus;
+export type L10n = import("./l10n.js").L10n;
 export type PDFRenderingQueue = import("./pdf_rendering_queue").PDFRenderingQueue;
 export type PDFLinkService = import("./pdf_link_service.js").PDFLinkService;
 export type PDFThumbnailViewerOptions = {
@@ -21,6 +22,10 @@ export type PDFThumbnailViewerOptions = {
      * - The rendering queue object.
      */
     renderingQueue: PDFRenderingQueue;
+    /**
+     * - The localization service.
+     */
+    l10n: L10n;
     /**
      * - The maximum supported canvas size in
      * total pixels, i.e. width * height. Use `-1` for no limit, or `0` for
@@ -92,6 +97,7 @@ export type PDFThumbnailViewerOptions = {
  * @property {EventBus} eventBus - The application event bus.
  * @property {PDFLinkService} linkService - The navigation/linking service.
  * @property {PDFRenderingQueue} renderingQueue - The rendering queue object.
+ * @property {L10n} l10n - The localization service.
  * @property {number} [maxCanvasPixels] - The maximum supported canvas size in
  *   total pixels, i.e. width * height. Use `-1` for no limit, or `0` for
  *   CSS-only zooming. The default value is 4096 * 8192 (32 mega-pixels).
@@ -137,7 +143,7 @@ export class PDFThumbnailViewer {
     /**
      * @param {PDFThumbnailViewerOptions} options
      */
-    constructor({ container, eventBus, linkService, renderingQueue, maxCanvasPixels, maxCanvasDim, pageColors, abortSignal, enableMerge, enableSplitMerge, enablePageReordering, enableNewBadge, statusBar, undoBar, waitingBar, manageMenu, addFileComponent, }: PDFThumbnailViewerOptions);
+    constructor({ container, eventBus, linkService, renderingQueue, l10n, maxCanvasPixels, maxCanvasDim, pageColors, abortSignal, enableMerge, enableSplitMerge, enablePageReordering, enableNewBadge, statusBar, undoBar, waitingBar, manageMenu, addFileComponent, }: PDFThumbnailViewerOptions);
     scrollableContainer: HTMLElement | null;
     container: HTMLDivElement;
     eventBus: import("./event_utils").EventBus;

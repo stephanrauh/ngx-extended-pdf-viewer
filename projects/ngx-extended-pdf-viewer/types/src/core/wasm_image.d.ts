@@ -1,11 +1,11 @@
 export class WasmImage {
-    static #handler: null;
+    static #getHandler: null;
     static #instances: Set<any>;
     static #useWasm: boolean;
     static #useWorkerFetch: boolean;
     static #wasmUrl: null;
-    static setOptions({ handler, useWasm, useWorkerFetch, wasmUrl }: {
-        handler: any;
+    static setOptions({ getHandler, useWasm, useWorkerFetch, wasmUrl }: {
+        getHandler: any;
         useWasm: any;
         useWorkerFetch: any;
         wasmUrl: any;

@@ -12,7 +12,7 @@ export class AnnotationEditorUIManager {
     static TRANSLATE_SMALL: number;
     static TRANSLATE_BIG: number;
     static get _keyboardManager(): any;
-    constructor(container: any, viewer: any, viewerAlert: any, altTextManager: any, commentManager: any, signatureManager: any, eventBus: any, pdfDocument: any, pageColors: any, highlightColors: any, enableHighlightFloatingButton: any, enableUpdatedAddImage: any, enableNewAltTextWhenAddingImage: any, mlManager: any, editorUndoBar: any, supportsPinchToZoom: any);
+    constructor(container: any, viewer: any, viewerAlert: any, altTextManager: any, commentManager: any, signatureManager: any, eventBus: any, pdfDocument: any, pageColors: any, highlightColors: any, enableHighlightFloatingButton: any, enableUpdatedAddImage: any, enableNewAltTextWhenAddingImage: any, mlManager: any, editorUndoBar: any, supportsPinchToZoom: any, keepToolbarInPage: any);
     _editorUndoBar: null;
     _signal: AbortSignal;
     _eventBus: any;
@@ -22,6 +22,7 @@ export class AnnotationEditorUIManager {
     };
     isShiftKeyDown: boolean;
     _supportsPinchToZoom: boolean;
+    _keepToolbarInPage: boolean;
     destroy(): void;
     combinedSignal(ac: any): AbortSignal;
     get mlManager(): null;

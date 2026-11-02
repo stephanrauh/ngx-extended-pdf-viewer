@@ -270,7 +270,7 @@ pdfjs-editor-ink-button =
     .title = Рисуване
 pdfjs-editor-ink-button-label = Рисуване
 pdfjs-editor-stamp-button =
-    .title = Добавяне или променяне на изображения
+    .title = Добавяне или редактиране на изображения
 pdfjs-editor-stamp-button-label = Добавяне или променяне на изображения
 
 ## Remove button for the various kind of editor.
@@ -359,16 +359,47 @@ pdfjs-editor-colorpicker-red =
 ## New alt-text dialog
 ## Group note for entire feature: Alternative text (alt text) helps when people can't see the image. This feature includes a tool to create alt text automatically using an AI model that works locally on the user's device to preserve privacy.
 
+# Modal header positioned above a text box where users can add the alt text.
+pdfjs-editor-new-alt-text-dialog-add-label = Добавяне на заместващ текст (alt text, описание на изображението)
 pdfjs-editor-new-alt-text-disclaimer-learn-more-url = Научете повече
+pdfjs-editor-new-alt-text-create-automatically-button-label = Автоматично създаване на заместващ текст
 pdfjs-editor-new-alt-text-not-now-button = Не сега
+# This is a button that users can click to edit the alt text they have already added.
+pdfjs-editor-new-alt-text-added-button =
+    .aria-label = Alt text добавен
+# This is a button that users can click to open the alt text editor and add alt text when it is not present.
+pdfjs-editor-new-alt-text-missing-button =
+    .aria-label = Липсва alt текст
+pdfjs-editor-new-alt-text-missing-button-label = Липсва alt текст
+# This is a button that opens up the alt text modal where users should review the alt text that was automatically generated.
+pdfjs-editor-new-alt-text-to-review-button =
+    .aria-label = Преглед на заместващия текст
+pdfjs-editor-new-alt-text-to-review-button-label = Преглед на заместващия текст
 
 ## Image alt-text settings
 
-pdfjs-editor-alt-text-settings-show-dialog-button-label = Показване на заместващ текстов редактор веднага при добавяне на изображение
+pdfjs-editor-alt-text-settings-automatic-title = Автоматичен заместващ текст
+pdfjs-editor-alt-text-settings-create-model-button-label = Автоматично създаване на заместващ текст
+pdfjs-editor-alt-text-settings-editor-title = Редактор за заместващ (alt) текст
+pdfjs-editor-alt-text-settings-show-dialog-button-label = Показване на текстовия редактор за заместващия (alt) текст веднага при добавяне на изображение
+pdfjs-editor-alt-text-settings-show-dialog-description = Помага ви да се уверите, че всичките ви изображения имат заместващ текст.
 
 ## Controls
 
+pdfjs-editor-add-signature-description-label = Описание (заместващ текст)
+pdfjs-editor-add-signature-description-input =
+    .title = Описание (заместващ текст)
 pdfjs-editor-add-signature-image-upload-error-description = Проверете мрежовата си връзка или опитайте с друго изображение.
+
+##  Edit a comment dialog
+
+# No existing comment
+pdfjs-editor-edit-comment-dialog-title-when-adding = Добавяне на коментар
+
+## Edit a comment button in the editor toolbar
+
+pdfjs-editor-add-comment-button =
+    .title = Добавяне на коментар
 
 ## The view manager is a sidebar displaying different views:
 ##  - thumbnails;
@@ -378,7 +409,30 @@ pdfjs-editor-add-signature-image-upload-error-description = Проверете �
 ## The thumbnails view is used to edit the pdf: remove/insert pages, ...
 
 pdfjs-toggle-views-manager-button1-label = Управление на страници
+pdfjs-views-manager-pages-title = Страници
+pdfjs-views-manager-pages-option-label = Страници
+# Variables:
+#   $count (Number) - the number of selected pages.
+pdfjs-views-manager-pages-status-action-label =
+    { $count ->
+        [one] { $count } избрана
+       *[other] { $count } избрани
+    }
 pdfjs-views-manager-pages-status-action-button-label = Управление
+# Variables:
+#   $count (Number) - the number of selected pages to be copied.
+pdfjs-views-manager-pages-status-undo-copy-label =
+    { $count ->
+        [one] 1 страница е копирана
+       *[other] { $count } страници са копирани
+    }
+# Variables:
+#   $count (Number) - the number of selected pages to be deleted.
+pdfjs-views-manager-pages-status-undo-delete-label =
+    { $count ->
+        [one] 1 страница е изтрита
+       *[other] { $count } страници са изтрити
+    }
 pdfjs-toggle-views-manager-button1 =
     .title = Управление на страници
 
@@ -494,36 +548,22 @@ pdfjs-editor-highlight-show-all-button-label = Show all
 pdfjs-editor-highlight-show-all-button =
     .title = Show all
 pdfjs-editor-new-alt-text-dialog-edit-label = Edit alt text (image description)
-pdfjs-editor-new-alt-text-dialog-add-label = Add alt text (image description)
 pdfjs-editor-new-alt-text-textarea =
     .placeholder = Write your description here…
 pdfjs-editor-new-alt-text-description = Short description for people who can’t see the image or when the image doesn’t load.
 pdfjs-editor-new-alt-text-disclaimer1 = This alt text was created automatically and may be inaccurate.
-pdfjs-editor-new-alt-text-create-automatically-button-label = Create alt text automatically
 pdfjs-editor-new-alt-text-error-title = Couldn’t create alt text automatically
 pdfjs-editor-new-alt-text-error-description = Please write your own alt text or try again later.
 pdfjs-editor-new-alt-text-error-close-button = Close
 pdfjs-editor-new-alt-text-ai-model-downloading-progress = Downloading alt text AI model ({ $downloadedSize } of { $totalSize } MB)
     .aria-valuetext = Downloading alt text AI model ({ $downloadedSize } of { $totalSize } MB)
-pdfjs-editor-new-alt-text-added-button =
-    .aria-label = Alt text added
 pdfjs-editor-new-alt-text-added-button-label = Alt text added
-pdfjs-editor-new-alt-text-missing-button =
-    .aria-label = Missing alt text
-pdfjs-editor-new-alt-text-missing-button-label = Missing alt text
-pdfjs-editor-new-alt-text-to-review-button =
-    .aria-label = Review alt text
-pdfjs-editor-new-alt-text-to-review-button-label = Review alt text
 pdfjs-editor-new-alt-text-generated-alt-text-with-disclaimer = Created automatically: { $generatedAltText }
 pdfjs-image-alt-text-settings-button =
     .title = Image alt text settings
 pdfjs-image-alt-text-settings-button-label = Image alt text settings
 pdfjs-editor-alt-text-settings-dialog-label = Image alt text settings
-pdfjs-editor-alt-text-settings-automatic-title = Automatic alt text
-pdfjs-editor-alt-text-settings-create-model-button-label = Create alt text automatically
 pdfjs-editor-alt-text-settings-create-model-description = Suggests descriptions to help people who can’t see the image or when the image doesn’t load.
-pdfjs-editor-alt-text-settings-editor-title = Alt text editor
-pdfjs-editor-alt-text-settings-show-dialog-description = Helps you make sure all your images have alt text.
 pdfjs-editor-alt-text-settings-close-button = Close
 pdfjs-editor-highlight-added-alert = Highlight added
 pdfjs-editor-freetext-added-alert = Text added
@@ -568,9 +608,6 @@ pdfjs-editor-add-signature-image-browse-link =
         [macos] Or choose image files
        *[other] Or browse image files
     }
-pdfjs-editor-add-signature-description-label = Description (alt text)
-pdfjs-editor-add-signature-description-input =
-    .title = Description (alt text)
 pdfjs-editor-add-signature-description-default-when-drawing = Signature
 pdfjs-editor-add-signature-clear-button-label = Clear signature
 pdfjs-editor-add-signature-clear-button =
@@ -599,13 +636,10 @@ pdfjs-editor-delete-comment-popup-button =
     .title = Remove comment
 pdfjs-editor-edit-comment-dialog-title-when-editing = Edit comment
 pdfjs-editor-edit-comment-dialog-save-button-when-editing = Update
-pdfjs-editor-edit-comment-dialog-title-when-adding = Add comment
 pdfjs-editor-edit-comment-dialog-save-button-when-adding = Add
 pdfjs-editor-edit-comment-dialog-text-input =
     .placeholder = Start typing…
 pdfjs-editor-edit-comment-dialog-cancel-button = Cancel
-pdfjs-editor-add-comment-button =
-    .title = Add comment
 pdfjs-toggle-views-manager-notification-button =
     .title = Toggle Sidebar (document contains thumbnails/outline/attachments/layers)
 pdfjs-views-manager-sidebar =
@@ -615,24 +649,17 @@ pdfjs-views-manager-sidebar-resizer =
 pdfjs-views-manager-view-selector-button =
     .title = Views
 pdfjs-views-manager-view-selector-button-label = Views
-pdfjs-views-manager-pages-title = Pages
 pdfjs-views-manager-outlines-title1 = Document outline
     .title = Document outline (double-click to expand/collapse all items)
 pdfjs-views-manager-attachments-title = Attachments
 pdfjs-views-manager-layers-title1 = Layers
     .title = Layers (double-click to reset all layers to the default state)
-pdfjs-views-manager-pages-option-label = Pages
 pdfjs-views-manager-outlines-option-label = Document outline
 pdfjs-views-manager-attachments-option-label = Attachments
 pdfjs-views-manager-layers-option-label = Layers
 pdfjs-views-manager-add-file-button =
     .title = Add file
 pdfjs-views-manager-add-file-button-label = Add file
-pdfjs-views-manager-pages-status-action-label =
-    { $count ->
-        [one] { $count } selected
-        *[other] { $count } selected
-    }
 pdfjs-views-manager-pages-status-none-action-label = Select pages
 pdfjs-views-manager-pages-status-copy-button-label = Copy
 pdfjs-views-manager-pages-status-cut-button-label = Cut
@@ -642,16 +669,6 @@ pdfjs-views-manager-status-undo-cut-label =
     { $count ->
         [one] 1 page cut
         *[other] { $count } pages cut
-    }
-pdfjs-views-manager-pages-status-undo-copy-label =
-    { $count ->
-        [one] 1 page copied
-        *[other] { $count } pages copied
-    }
-pdfjs-views-manager-pages-status-undo-delete-label =
-    { $count ->
-        [one] 1 page deleted
-        *[other] { $count } pages deleted
     }
 pdfjs-views-manager-status-undo-button-label = Undo
 pdfjs-views-manager-status-done-button-label = Done
