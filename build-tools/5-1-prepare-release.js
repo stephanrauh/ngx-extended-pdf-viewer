@@ -6,15 +6,32 @@ const { execSync } = require('child_process');
 const path = require('path');
 const fs = require('fs');
 
+// Set while the release has local commits or changes but nothing has been pushed yet. Any failure
+// in that window undoes them, so a failed test no longer leaves bump commits to reset by hand.
+let rollback = null;
+let interrupted = false;
+
+function fail(errorMessage, exitCode) {
+  console.error(errorMessage);
+  if (rollback) {
+    const undo = rollback;
+    rollback = null;
+    undo();
+  }
+  process.exit(exitCode);
+}
+
 // Function to execute a command and handle errors
 function runCommand(command, errorMessage, exitCode) {
   try {
     execSync(command, { stdio: 'inherit', shell: true });
   } catch (error) {
-    if (!command.includes('git commit')) {
-      console.error(errorMessage);
-      process.exit(exitCode);
+    if (!command.includes('git commit') || interrupted) {
+      fail(interrupted ? `${errorMessage} (interrupted)` : errorMessage, exitCode);
     }
+  }
+  if (interrupted) {
+    fail(`Interrupted after: ${command}`, 130);
   }
 }
 
@@ -32,8 +49,7 @@ function removeDirectoryWithRetry(dir, errorMessage, exitCode) {
         console.warn(`${errorMessage} (attempt ${attempt}/3, retrying in 2s...)`);
         execSync('sleep 2');
       } else {
-        console.error(`${errorMessage} (all 3 attempts failed)`);
-        process.exit(exitCode);
+        fail(`${errorMessage} (all 3 attempts failed)`, exitCode);
       }
     }
   }
@@ -61,6 +77,69 @@ runCommand('node ./build-tools/release/check-commit-state.js', 'Error 51: check-
 // bundles are rebuilt - see "Browser test suites" below.
 console.log('\n🧪 Running Jest tests in ngx-extended-pdf-viewer...');
 runCommand('npm test', 'Error 52: Jest tests failed', 52);
+
+// ---------------------------------------------------------------------------
+// Automatic rollback
+//
+// The fork's version bump has to be committed before the bundles are built: the pdf.js build
+// number is the fork's commit count (e.g. 6.5.1518), and CI builds from the branch tips, so the
+// bundles under test must contain the bump commit or their build number would differ from what
+// CI publishes. The browser tests therefore run after these commits. Instead of leaving them
+// behind when a test fails, every failure (or Ctrl-C) before the first push restores the state
+// recorded here. check-commit-state.js has just verified that both working trees are clean, so
+// this state contains no work of the user's.
+// ---------------------------------------------------------------------------
+const LIBRARY_DIR = process.cwd();
+const FORK_DIR = path.join(LIBRARY_DIR, '..', 'mypdf.js');
+
+function gitOutput(dir, args) {
+  return execSync(`git -C "${dir}" ${args}`, { encoding: 'utf8' }).trim();
+}
+
+const forkBranchesToRestore = IS_MAINTENANCE_RELEASE ? [STABLE_BRANCH] : [STABLE_BRANCH, BLEEDING_EDGE_BRANCH];
+const startState = {
+  forkCheckout: gitOutput(FORK_DIR, 'rev-parse --abbrev-ref HEAD'),
+  forkBranches: Object.fromEntries(forkBranchesToRestore.map((branch) => [branch, gitOutput(FORK_DIR, `rev-parse "refs/heads/${branch}"`)])),
+  library: gitOutput(LIBRARY_DIR, 'rev-parse HEAD'),
+};
+
+function undoLocalReleaseChanges() {
+  console.error('\n↩️  Undoing the local release changes (nothing has been pushed)...');
+  const step = (description, command) => {
+    try {
+      execSync(command, { stdio: 'inherit', shell: true });
+      console.error(`   ✓ ${description}`);
+    } catch (error) {
+      console.error(`   ✗ ${description} failed - please check by hand: ${command}`);
+    }
+  };
+  // Discards the uncommitted package-lock.json changes of `npm audit fix`, so the checkouts below work.
+  step('mypdf.js: discarded uncommitted changes', `git -C "${FORK_DIR}" reset --hard`);
+  for (const [branch, sha] of Object.entries(startState.forkBranches)) {
+    if (gitOutput(FORK_DIR, `rev-parse "refs/heads/${branch}"`) === sha) {
+      continue;
+    }
+    step(`mypdf.js: reset ${branch} to ${sha.substring(0, 9)}`, `git -C "${FORK_DIR}" checkout "${branch}" && git -C "${FORK_DIR}" reset --hard ${sha}`);
+  }
+  step(`mypdf.js: checked out ${startState.forkCheckout} again`, `git -C "${FORK_DIR}" checkout "${startState.forkCheckout}"`);
+  step(`ngx-extended-pdf-viewer: reset to ${startState.library.substring(0, 9)}`, `git -C "${LIBRARY_DIR}" reset --hard ${startState.library}`);
+  const untracked = gitOutput(LIBRARY_DIR, 'ls-files --others --exclude-standard');
+  if (untracked) {
+    console.error('\n   The build created these untracked files in ngx-extended-pdf-viewer. They are left alone;');
+    console.error('   delete them before the next release:lib, or check-commit-state.js will refuse to start:');
+    console.error(untracked.replace(/^/gm, '     '));
+  }
+  console.error('\n   The bundles in assets/ and bleeding-edge/ still carry the new version number;');
+  console.error('   the next release:lib rebuilds both of them.');
+}
+
+rollback = undoLocalReleaseChanges;
+// Ctrl-C reaches the running child too, so it fails and the rollback above runs. Without this
+// listener Node would die on the spot and leave the bump commits behind.
+process.on('SIGINT', () => {
+  interrupted = true;
+  console.error('\n⚠️  Interrupted - waiting for the running step to stop...');
+});
 
 // Read the current version number
 const packageJsonPath = path.join('projects', 'ngx-extended-pdf-viewer', 'package.json');
@@ -166,12 +245,9 @@ process.chdir(path.join('..', 'ngx-extended-pdf-viewer'));
 // only the bundle selected by the fork's checked-out branch, "earlier" could mean the
 // stable bundle was never rebuilt at all.
 //
-// The price is that a failure now leaves work to undo, unlike the Jest step above:
-//   - ngx-extended-pdf-viewer: package.json + pdf-default-options.ts are bumped but NOT
-//     committed  ->  `git checkout .` to discard;
-//   - mypdf.js: a "bumped the version number" commit exists on each built branch but was
-//     NOT pushed  ->  `git reset --hard HEAD~1` on each of them.
-// Nothing has been pushed and nothing has been published at this point.
+// A failure here leaves the version bump behind - uncommitted in ngx-extended-pdf-viewer, and a
+// "bumped the version number" commit on each built fork branch. Nothing has been pushed or
+// published yet, so undoLocalReleaseChanges() (see "Automatic rollback" above) undoes all of it.
 // ---------------------------------------------------------------------------
 console.log('\n🔨 Building the library so the browser suites test the release artefacts...');
 runCommand('npm run build:lib', 'Error 55: Building the library before the browser tests failed', 55);
@@ -202,6 +278,10 @@ if (process.env.SKIP_E2E === '1') {
 
 // Commit changes in ngx-extended-pdf-viewer (including updated pdf-default-options.ts)
 runCommand(`git commit . -m "bumped the version number to ${newVersion}"`, 'Error 58: Git commit failed', 58);
+
+// From the first push on, the commits are public: undoing them locally would only make the local
+// branches diverge from origin. A failure from here on stops and leaves everything as it is.
+rollback = null;
 
 // Push mypdf.js first. Pushing the ngx tag further down is what triggers the publish workflow,
 // and that workflow clones the fork and builds the engine from its branch tips. If the fork's
