@@ -62,7 +62,9 @@ if (!IS_MAINTENANCE_RELEASE) {
     'Error creating bleeding-edge tag in mypdf.js:',
   );
   console.log(`Created bleeding-edge tag: ngx-extended-pdf-viewer-${version}-bleeding-edge`);
-  runCommand('git push origin --tags', 'Error pushing bleeding-edge tag in mypdf.js:');
+  // Push only the new tag: `--tags` would also push every Mozilla tag fetched from upstream, and
+  // each of those carries Mozilla's workflows, which then run (and fail) in the fork.
+  runCommand(`git push origin "refs/tags/ngx-extended-pdf-viewer-${version}-bleeding-edge"`, 'Error pushing bleeding-edge tag in mypdf.js:');
   console.log('Pushed bleeding-edge tag in mypdf.js.');
 } else {
   console.log("⏭️  Skipped pushing/tagging the fork's bleeding-edge branch (maintenance release)");
@@ -80,7 +82,7 @@ console.log(`Pushed changes in ${STABLE_BRANCH} branch.`);
 // Create and push tag for the stable branch
 runCommand(`git tag -a "ngx-extended-pdf-viewer-${version}" -m "ngx-extended-pdf-viewer ${version}"`, `Error creating ${STABLE_BRANCH} tag in mypdf.js:`);
 console.log(`Created ${STABLE_BRANCH} tag: ngx-extended-pdf-viewer-${version}`);
-runCommand('git push origin --tags', `Error pushing ${STABLE_BRANCH} tag in mypdf.js:`);
+runCommand(`git push origin "refs/tags/ngx-extended-pdf-viewer-${version}"`, `Error pushing ${STABLE_BRANCH} tag in mypdf.js:`);
 console.log(`Pushed ${STABLE_BRANCH} tag in mypdf.js.`);
 
 // Leave the fork on the branch the next build expects: bleeding-edge on a normal line, the stable
@@ -96,7 +98,7 @@ runCommand('git push', 'Error pushing changes:');
 console.log('Pushed changes.');
 runCommand(`git tag -a ${version} -m "${version}"`, 'Error creating tag:');
 console.log(`Created tag: ${version}`);
-runCommand('git push origin --tags', 'Error pushing tags:');
-console.log('Pushed tags.');
+runCommand(`git push origin "refs/tags/${version}"`, 'Error pushing tags:');
+console.log('Pushed the tag.');
 
 console.log('Tag creation and pushing completed successfully.');

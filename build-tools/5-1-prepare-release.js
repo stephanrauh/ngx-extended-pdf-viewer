@@ -220,7 +220,9 @@ runCommand(
   `Error 75: Creating ${STABLE_BRANCH} tag failed`,
   75,
 );
-runCommand('git push origin --tags', `Error 76: Pushing ${STABLE_BRANCH} tags failed`, 76);
+// Push only the new tag: `--tags` would also push every Mozilla tag fetched from upstream, and each
+// of those carries Mozilla's workflows, which then run (and fail) in the fork.
+runCommand(`git push origin "refs/tags/ngx-extended-pdf-viewer-${newVersion}"`, `Error 76: Pushing ${STABLE_BRANCH} tags failed`, 76);
 
 // Push bleeding-edge branch. Skipped on a maintenance release: that branch belongs to the next
 // major, and committing/tagging a patch version onto it would misrepresent what it contains.
@@ -232,7 +234,7 @@ if (!IS_MAINTENANCE_RELEASE) {
     'Error 79: Creating bleeding-edge tag failed',
     79,
   );
-  runCommand('git push origin --tags', 'Error 80: Pushing bleeding-edge tags failed', 80);
+  runCommand(`git push origin "refs/tags/ngx-extended-pdf-viewer-${newVersion}-bleeding-edge"`, 'Error 80: Pushing bleeding-edge tags failed', 80);
 } else {
   console.log("\n⏭️  Skipped pushing/tagging the fork's bleeding-edge branch (maintenance release)");
 }
@@ -242,7 +244,7 @@ if (!IS_MAINTENANCE_RELEASE) {
 process.chdir(path.join('..', 'ngx-extended-pdf-viewer'));
 runCommand('git push', 'Error 70: Git push failed', 70);
 runCommand(`git tag -a ${newVersion} -m "${newVersion}"`, 'Error 71: Creating tag failed', 71);
-runCommand('git push origin --tags', 'Error 72: Pushing tags failed', 72);
+runCommand(`git push origin "refs/tags/${newVersion}"`, 'Error 72: Pushing tags failed', 72);
 
 console.log('\n✅ Release preparation complete!');
 console.log(`Version ${newVersion} has been committed and tagged.`);

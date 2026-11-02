@@ -240,7 +240,7 @@ This runs the original `5-release-library.js` which does everything in one scrip
 To test the workflow without publishing:
 
 1. Create a test tag locally: `git tag -a 25.6.0-test.1 -m "Test release"`
-2. Push the tag: `git push origin --tags`
+2. Push the tag: `git push origin refs/tags/25.6.0-test.1`
 3. Monitor the workflow at https://github.com/stephanrauh/ngx-extended-pdf-viewer/actions
 4. The workflow will run but you can add `--dry-run` to the publish command in the CI script
 

@@ -214,7 +214,7 @@ must be reachable from a pushed branch. This is what failed during the 28.1.1 re
 
 ```bash
 git push -u origin 28.1.x
-git push origin --tags
+git push origin refs/tags/28.1.1
 ```
 
 **Push the fork before the ngx tag.** The workflow clones `mypdf.js` and builds the engine from the
@@ -294,8 +294,11 @@ automatically — the gaps come from releases done by hand.
 cd ../mypdf.js
 git tag -a ngx-extended-pdf-viewer-28.1.1 -m "ngx-extended-pdf-viewer 28.1.1" <commit>
 git tag -a ngx-extended-pdf-viewer-28.1.1-bleeding-edge -m "ngx-extended-pdf-viewer 28.1.1" <commit>
-git push origin --tags
+git push origin refs/tags/ngx-extended-pdf-viewer-28.1.1 refs/tags/ngx-extended-pdf-viewer-28.1.1-bleeding-edge
 ```
+
+Never `git push origin --tags` in the fork: it also pushes the Mozilla tags fetched from upstream,
+and each of them starts Mozilla's CI workflows in the fork.
 
 (For 28.1.1 both tags point at the same commit `f22a3f58` — that release shipped one engine in both
 bundles.)
