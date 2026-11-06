@@ -4,8 +4,8 @@ const _isIE11 = typeof window === 'undefined' ? false : !!(<any>globalThis).MSIn
 const isEdge = typeof navigator === 'undefined' || /Edge\/\d./i.test(navigator.userAgent);
 const needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
 
-export const pdfjsVersion = '6.5.1518';
-export const pdfjsBleedingEdgeVersion = '6.5.1518';
+export const pdfjsVersion = '6.5.1520';
+export const pdfjsBleedingEdgeVersion = '6.5.1520';
 export function getVersionSuffix(folder: string): string {
   if (folder?.includes('bleeding-edge')) {
     return pdfjsBleedingEdgeVersion;
@@ -70,7 +70,6 @@ export function getSafeCanvasSize(): number {
   }
 
   // Use PDF.js defaults for maximum compatibility
-  // The IOSCanvasOptimizationService handles dynamic optimization
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !('MSStream' in window);
   const isMobile = /Android|iPhone|iPad|iPod/.test(navigator.userAgent);
 

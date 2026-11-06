@@ -257,6 +257,8 @@ export class PDFViewer {
      * @param {PDFViewerOptions} options
      */
     constructor(options: PDFViewerOptions);
+    touchPinchScrollLock: boolean;
+    singleScrollDuringPinch: boolean;
     container: HTMLDivElement;
     viewer: Element | null;
     /** #2784 modified by ngx-extended-pdf-viewer */
@@ -432,6 +434,7 @@ export class PDFViewer {
      * @param {number} dy - Vertical delta.
      */
     panBy(dx: number, dy: number): void;
+    setTouchPinching(active: any): void;
     /**
      * @param {string} label - The page label.
      * @returns {number|null} The page number corresponding to the page label,
@@ -450,12 +453,16 @@ export class PDFViewer {
      * @property {string} [center] - Center the view on the specified coordinates.
      *   The default value is `null`. Possible values are: `null` (don't center),
      *  `horizontal`, `vertical` and `both`.
+     * @property {Function|null} [onScroll] - Internal target collector used by
+     *   the single-scroll zoom experiment.
+     * @property {boolean} [preserveCurrentPage] - Internal zoom-anchor restore:
+     *   keep the current selection and leave rendering to the visibility queue.
      */
     /**
      * Scrolls page into view.
      * @param {ScrollPageIntoViewParameters} params
      */
-    scrollPageIntoView({ pageNumber, destArray, allowNegativeOffset, ignoreDestinationZoom, center, }: {
+    scrollPageIntoView({ pageNumber, destArray, allowNegativeOffset, ignoreDestinationZoom, center, onScroll, preserveCurrentPage, }: {
         /**
          * - The page number.
          */
@@ -481,6 +488,16 @@ export class PDFViewer {
          * `horizontal`, `vertical` and `both`.
          */
         center?: string | undefined;
+        /**
+         * - Internal target collector used by
+         * the single-scroll zoom experiment.
+         */
+        onScroll?: Function | null | undefined;
+        /**
+         * - Internal zoom-anchor restore:
+         * keep the current selection and leave rendering to the visibility queue.
+         */
+        preserveCurrentPage?: boolean | undefined;
     }): void;
     _updateLocation(firstPage: any): void;
     update(noScroll?: boolean): void;

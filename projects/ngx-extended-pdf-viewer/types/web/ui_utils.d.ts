@@ -210,11 +210,13 @@ export const SCROLLBAR_PADDING: 40;
  *   specifying the offset from the top left edge.
  * @param {number} [spot.left]
  * @param {number} [spot.top]
+ * @param {Function|null} [onScroll] - Collect a visible scroll target instead
+ *   of applying it, for the opt-in single-scroll zoom experiment.
  */
 export function scrollIntoView(element: HTMLElement, spot?: {
     left?: number | undefined;
     top?: number | undefined;
-}, scrollMatches?: boolean, infiniteScroll?: boolean): void;
+}, scrollMatches?: boolean, infiniteScroll?: boolean, onScroll?: Function | null): void;
 export namespace ScrollMode {
     let UNKNOWN_1: number;
     export { UNKNOWN_1 as UNKNOWN };

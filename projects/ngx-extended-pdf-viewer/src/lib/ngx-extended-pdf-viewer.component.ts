@@ -56,7 +56,6 @@ import { VerbosityLevel } from './options/verbosity-level';
 import { PdfDummyComponentsComponent } from './pdf-dummy-components/pdf-dummy-components.component';
 import { PDFNotificationService } from './pdf-notification-service';
 import { PdfSecondaryToolbarComponent } from './secondary-toolbar/pdf-secondary-toolbar/pdf-secondary-toolbar.component';
-import { IOSCanvasOptimizationService } from './services/ios-canvas-optimization.service';
 import { PdfSidebarComponent } from './sidebar/pdf-sidebar/pdf-sidebar.component';
 import { convertBlobToUint8Array } from './utils/blob-conversion';
 
@@ -84,12 +83,6 @@ import { PdfViewerRegistry } from './pdf-viewer-registry.service';
 import { FocusManagementService } from './focus-management.service';
 import { ViewerLocalReferences } from './viewer-local-references';
 import { ResponsiveVisibility } from './responsive-visibility';
-
-declare class ResizeObserver {
-  constructor(param: () => void);
-  public disconnect(): void;
-  public observe(div: HTMLElement): void;
-}
 
 interface ElementAndPosition {
   element: HTMLElement;
@@ -1934,7 +1927,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     private readonly pdfScriptLoaderService: PDFScriptLoaderService,
     private readonly keyboardManager: NgxKeyboardManagerService,
     private readonly cspPolicyService: PdfCspPolicyService,
-    private readonly iosCanvasService: IOSCanvasOptimizationService,
     private readonly ngZone: NgZone,
   ) {
     this.baseHref = this.platformLocation.getBaseHrefFromDOM();
@@ -2123,9 +2115,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
           this.formSupport.cdr = this.cdr;
         }
         this.pdfScriptLoaderService.PDFViewerApplication.cspPolicyService = this.cspPolicyService;
-
-        // Initialize iOS canvas optimization service with PDFViewerApplication
-        this.iosCanvasService.initialize(this.pdfScriptLoaderService.PDFViewerApplication);
 
         this.ngZone.runOutsideAngular(() => this.doInitPDFViewer());
       }
@@ -3857,12 +3846,27 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
   public initResizeObserver(): void {
     try {
-      const viewer = this.viewerElement('viewer');
-      if (viewer) {
-        this.resizeObserver = new ResizeObserver(() => {
+      // #3069 Observe the viewport, not #viewer: CSS pinch zoom changes the
+      // document's dimensions on every step, without resizing the viewer.
+      const viewport = this.viewerElement('viewerContainer');
+      if (viewport) {
+        this.resizeObserver?.disconnect();
+        let previousWidth: number | undefined;
+        let previousHeight: number | undefined;
+        this.resizeObserver = new ResizeObserver((entries) => {
+          const entry = entries.find((e) => e.target === viewport);
+          if (!entry) return;
+          const size = entry.borderBoxSize?.[0];
+          const width = size?.inlineSize ?? viewport.offsetWidth;
+          const height = size?.blockSize ?? viewport.offsetHeight;
+          // Also handles browsers which ignore the border-box option: a
+          // scrollbar changing the content box isn't a viewport resize.
+          if (width === previousWidth && height === previousHeight) return;
+          previousWidth = width;
+          previousHeight = height;
           this.onResize();
         });
-        this.resizeObserver.observe(viewer);
+        this.resizeObserver.observe(viewport, { box: 'border-box' });
       }
     } catch (exception) {
       console.log('ResizeObserver is not supported by your browser');
