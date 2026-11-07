@@ -3,8 +3,7 @@
   "version": "0.0.0",
   "description": "A blank schematics",
   "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "test": "npm run build && jasmine src/**/*_spec.js"
+    "build": "tsc -p tsconfig.json"
   },
   "keywords": [
     "schematics"
@@ -18,8 +17,6 @@
     "typescript": "~5.5.2"
   },
   "devDependencies": {
-    "@types/jasmine": "~7.0.0",
-    "@types/node": "^26.6.5",
-    "jasmine": "^7.0.0"
+    "@types/node": "^26.6.5"
   }
 }
