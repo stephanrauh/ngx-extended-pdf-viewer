@@ -23,6 +23,8 @@ Built on Mozilla’s pdf.js and extended with dozens of enhancements, it's ideal
 
 In general, I aim to support the last four Angular versions (roughly two years of updates), but sometimes security requirements force me to raise the minimum version sooner.
 
+📢 **Version 32 is the last version to support Angular 19. Version 33 will require Angular 20 or newer.** Angular 19 has reached its end of life, so security fixes for Angular, such as CVE-2026-69151 and CVE-2026-68945, aren't published for it anymore. Please plan your Angular update.
+
 **Is there a migration schematic?** No - because migrating to ngx-extended-pdf-viewer shouldn't be a big deal. The library uses signals internally, but that hardly ever shows in your application, unless you're using `@ViewChild` to access properties of ngx-extended-pdf-viewer. Even then, solving the error messages should be easy. Adopting zone-less Angular was also surprisingly easy, at least in my showcase. I hope you'll experience a similarly smooth transition!
 
 ✅ **Zoneless Angular Support (21 and 22)**
@@ -118,7 +120,7 @@ bootstrapApplication(AppComponent, {
 
 ## 🔐 Security Notice
 
-⚠️ **Please use the latest `31.x`, `30.x` or `29.x` release (or the latest `28.x` if you're staying on that line). Older versions are known to be vulnerable.**
+⚠️ **Please use the latest `32.x`, `31.x`, `30.x` or `29.x` release (or the latest `28.x` if you're staying on that line). Older versions are known to be vulnerable.**
 
 **[CVE-2026-16633](https://github.com/mozilla/pdf.js/security/advisories/GHSA-hq66-cqwq-w95j) (high) - fixed in `28.1.1` and in `29.0.0-rc.3`.** A malicious PDF could run JavaScript in the context of your page. The flaw is in pdf.js 5.6.83 and newer, so **every earlier `28.x` release, and `29.0.0-rc.0` through `rc.2`, are affected** - please update. Mozilla's fix landed in pdf.js 6.2.108; version 29 cherry-picked it, and since version 30 the bundled engine *is* 6.2.108, so it carries the fix natively.
 
@@ -158,6 +160,29 @@ Regarding security: I'm not perfect - it's always a best-effort approach without
 ---
 
 ## 📦 Version Highlights
+
+### Version 32
+
+Version 32 updates to pdf.js 6.5 in both bundles and lets you show several PDF viewers on the same page. It's the last version to support Angular 19.
+
+**New for end users:**
+
+- **pdf.js 6.5**: form scripts handle radio buttons and checkboxes correctly, multiline text fields no longer wrap text unnecessarily, encrypted PDF files with encrypted streams or metadata open correctly, and JPEG 2000 images decode faster.
+- **Smoother pinch zoom** ([#3069](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/3069)): the page follows the fingers without drifting, jumping or flashing, also in iOS Safari, and trackpad pinch zoom in Safari no longer zooms twice.
+- **Accessibility** ([#3304](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/3304), [#3310](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/3310)): screen readers announce the find result once and read the names of the dialogs, toggle buttons are visible in Windows high-contrast mode, book mode turns pages without animation when the operating system asks for reduced motion, and outline entries are big enough to tap.
+- **Dialogs and editor toolbars follow the viewer's theme** instead of the operating system's dark mode, so they no longer show light text on a light background.
+- **Eraser**: now it works on the whole page, on rotated pages and on restored drawings, too.
+
+**New for developers:**
+
+- **Several viewers on one page** ([#3306](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/3306)): each viewer shows its own document and keeps its own page, zoom, search, forms, editors and print job. Keyboard shortcuts and `window.print()` act on the viewer the user clicked or focused last. `pdfDefaultOptions` apply to every viewer on the page, and all viewers share one theme.
+- **`[theme]="'auto'"`** ([#3305](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/3305)) follows the operating system's dark mode and switches when the user changes it.
+- **Rendering in a background thread** keeps the page responsive while a complex PDF renders. It's experimental and off by default; try it with `pdfDefaultOptions.disableWorkerRendering = false`.
+
+**Deprecated:**
+
+- The iFrame work-around for several PDF files on one page. Use several `<ngx-extended-pdf-viewer>` components instead.
+- `IOSCanvasOptimizationService` does nothing anymore.
 
 ### Version 31
 
