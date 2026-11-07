@@ -1,5 +1,7 @@
 <!-- #3241 laid out like the comment dialog (.dialog in dialog.scss) -->
-<dialog id="documentPropertiesDialog" class="dialog">
+<dialog id="documentPropertiesDialog" class="dialog" aria-labelledby="documentPropertiesDialogLabel">
+  <!-- #3310 the dialog's accessible name; screen readers read it even though it's hidden -->
+  <span id="documentPropertiesDialogLabel" data-l10n-id="pdfjs-document-properties-button-label" hidden>Document Properties…</span>
   <div class="mainContainer">
     <div class="row">
       <span id="fileNameLabel" data-l10n-id="pdfjs-document-properties-file-name">File name:</span>

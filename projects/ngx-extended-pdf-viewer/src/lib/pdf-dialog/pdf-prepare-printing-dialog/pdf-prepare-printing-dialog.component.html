@@ -1,6 +1,7 @@
-<dialog id="printServiceDialog">
+<!-- #3310 the progress message names the dialog -->
+<dialog id="printServiceDialog" aria-labelledby="printServiceDialogLabel">
   <div class="row">
-    <span data-l10n-id="pdfjs-print-progress-message">Preparing document for printing…</span>
+    <span id="printServiceDialogLabel" data-l10n-id="pdfjs-print-progress-message">Preparing document for printing…</span>
   </div>
   <div class="row">
     <progress value="0" max="100"></progress>

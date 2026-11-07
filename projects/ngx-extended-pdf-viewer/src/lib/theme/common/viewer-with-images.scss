@@ -1219,6 +1219,20 @@ ngx-extended-pdf-viewer {
   }
   // #3111 end of modification by ngx-extended-pdf-viewer
 
+  // #3310 modified by ngx-extended-pdf-viewer: Windows high-contrast mode replaces the
+  // background colors above, so a button that is on looked like one that is off.
+  // System colors survive forced colors (same palette as pdf.js' --toggled-btn-*).
+  @media screen and (forced-colors: active) {
+    .toolbarButton.toggled,
+    .toolbarButton.selected,
+    .toolbarButton[aria-selected="true"],
+    .secondaryToolbarButton.toggled {
+      background-color: LinkText;
+      color: Canvas;
+    }
+  }
+  // #3310 end of modification by ngx-extended-pdf-viewer
+
   // #2984 end of modification by ngx-extended-pdf-viewer to improve the light and dark mode
 }
 

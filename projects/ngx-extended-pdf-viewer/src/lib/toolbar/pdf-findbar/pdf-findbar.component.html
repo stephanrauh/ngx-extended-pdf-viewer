@@ -26,7 +26,9 @@
     <pdf-find-regexp [class.hidden]="!showFindRegexp()"></pdf-find-regexp>
   </div>
 
-  <div id="findbarMessageContainer" class="toolbarHorizontalGroup" aria-live="polite">
+  <!-- #3310 no aria-live here: both children are live regions of their own, and nesting them
+       announces the result twice -->
+  <div id="findbarMessageContainer" class="toolbarHorizontalGroup">
     <pdf-find-results-count [class.hidden]="!showFindResultsCount()"></pdf-find-results-count>
     <pdf-findbar-message-container [class.hidden]="!showFindMessages()"></pdf-findbar-message-container>
   </div>
