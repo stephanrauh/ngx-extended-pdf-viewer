@@ -23,6 +23,24 @@ Bringing Mozilla's pdf.js to the Angular world. That's not only the core PDF vie
 
 There's a showcase at <a href="https://pdfviewer.net">https://pdfviewer.net</a>. Check this page for live demos, source code examples, and a handbook. If something doesn't work, have a look at the <a href="https://pdfviewer.net/extended-pdf-viewer/troubleshooting">troubleshooting page</a>.
 
+## What's new in 32
+
+Version 32 ships **pdf.js 6.5** in both the stable and the bleeding-edge bundle: form scripts handle radio buttons and checkboxes correctly, encrypted PDF files with encrypted streams or metadata open correctly, and JPEG 2000 images decode faster.
+
+### New features
+
+- **Several viewers on one page** ([#3306](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/3306)): each viewer shows its own document and keeps its own page, zoom, search, forms, editors and print job. Keyboard shortcuts and `window.print()` act on the viewer the user used last. The iFrame work-around is deprecated.
+- **`[theme]="'auto'"`** ([#3305](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/3305)) follows the operating system's dark mode.
+- **Smoother pinch zoom** ([#3069](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/3069)), also in iOS Safari.
+- **Accessibility** ([#3304](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/3304), [#3310](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/3310)): named dialogs, a find result that's announced once, visible toggle buttons in Windows high-contrast mode, and no page-turn animation when the user asks for reduced motion.
+- **Rendering in a background thread** (experimental, off by default): `pdfDefaultOptions.disableWorkerRendering = false`.
+
+### Angular versions
+
+**Version 32 is the last version to support Angular 19.** Angular 19 has reached its end of life and no longer receives security fixes, so version 33 will require Angular 20 or newer.
+
+The full list of changes is in the [changelog](projects/ngx-extended-pdf-viewer/changelog.md).
+
 ## What's new in 31
 
 Version 31 ships **pdf.js 6.4** in both the stable and the bleeding-edge bundle. Highlighting and drawing are built on Mozilla's reworked editors, a two-finger gesture pans the document while you pinch, large JPEG images need noticeably less memory, and PDF files with CMYK colors are rendered with color management.
