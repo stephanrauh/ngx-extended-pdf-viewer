@@ -63,10 +63,16 @@ ngx-extended-pdf-viewer {
 
     padding-bottom: var(--pdfViewer-padding-bottom);
 
-    /* GPU acceleration for smoother pinch-to-zoom on iOS Safari */
-    transform: translateZ(0);
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
+    /* GPU acceleration for smoother pinch-to-zoom on iOS Safari (#2939).
+       #3312 modified by ngx-extended-pdf-viewer: iOS only. Elsewhere the extra
+       compositing layer breaks Firefox's text selection rendering (the selected
+       text becomes an opaque block). */
+    @supports (-webkit-touch-callout: none) {
+      transform: translateZ(0);
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+    }
+    /* #3312 end of modification by ngx-extended-pdf-viewer */
 
     --hcm-highlight-filter: none;
     --hcm-highlight-selected-filter: none;
@@ -1636,17 +1642,6 @@ ngx-extended-pdf-viewer {
     }
   }
   // #3113 end of modification by ngx-extended-pdf-viewer
-
-  /* TODO: file FF bug to support ::-moz-selection:window-inactive
-   so we can override the opaque grey background when the window is inactive;
-   see https://bugzilla.mozilla.org/show_bug.cgi?id=706209 */
-  ::-moz-selection {
-    background: $selection-background;
-  }
-
-  ::selection {
-    background: $selection-background;
-  }
 
   // #3241 the loading error card. Its box looks like the comment dialog
   // (see ngx-extended-pdf-viewer.component.scss); this is the scrim around it.
