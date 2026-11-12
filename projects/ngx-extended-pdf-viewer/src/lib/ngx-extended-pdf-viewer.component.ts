@@ -1787,10 +1787,17 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     this.enableOrDisableForms(this.elementRef.nativeElement, false);
   });
 
+  /** The last [showBorders] value applied to the viewer, to recompute zoom presets only on a real change (#194). */
+  private appliedShowBorders: boolean | undefined;
+
   // @ts-ignore TS6133 - Used for side effects only
   private readonly _showBordersEffect = effect(() => {
     const showBorders = this.showBorders();
     if (typeof window === 'undefined') return;
+    // Recorded before the early returns below: on start-up the effect runs before the viewer exists,
+    // and the first toggle must still count as a change.
+    const bordersChanged = this.appliedShowBorders !== undefined && this.appliedShowBorders !== showBorders;
+    this.appliedShowBorders = showBorders;
 
     const PDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
     const PDFViewerApplicationOptions = this.pdfScriptLoaderService.PDFViewerApplicationOptions;
@@ -1808,7 +1815,19 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
         if (PDFViewerApplication.pdfViewer) {
           PDFViewerApplication.pdfViewer.removePageBorders = !showBorders;
         }
-        if (PDFViewerApplication.pdfViewer?.currentScale) {
+        // overrideDefaultSettings() reads other inputs, so this effect also runs when they change:
+        // recompute the zoom preset only when [showBorders] itself changed
+        const presetValue = PDFViewerApplication.pdfViewer?.currentScaleValue;
+        if (
+          bordersChanged &&
+          PDFViewerApplication.pdfViewer?.currentScale &&
+          typeof presetValue === 'string' &&
+          ['page-width', 'page-height', 'page-fit', 'page-actual', 'auto'].includes(presetValue)
+        ) {
+          // #194: the borders change the space a zoom preset like "page-width" leaves
+          // around the page, so recompute it (this also dispatches "scalechanging")
+          PDFViewerApplication.pdfViewer.currentScaleValue = presetValue;
+        } else if (PDFViewerApplication.pdfViewer?.currentScale) {
           const zoomEvent = {
             source: viewer,
             scale: PDFViewerApplication.pdfViewer.currentScale,
