@@ -600,6 +600,9 @@ pdfjs-editor-comment-button =
 pdfjs-editor-comment-button-label = Comment
 pdfjs-editor-eraser-editor =
     .aria-label = Eraser
+pdfjs-editor-signature-editor2 =
+    .aria-description = Signature editor: { $description }
+    .aria-label = Signature editor
 pdfjs-editor-comments-sidebar-title =
     { $count ->
         [one] Comment

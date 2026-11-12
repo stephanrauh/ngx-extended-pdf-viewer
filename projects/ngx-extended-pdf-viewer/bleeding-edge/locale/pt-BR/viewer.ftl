@@ -851,3 +851,7 @@ pdfjs-cursor-page-flip-tool-button-label = Virar página
 pdfjs-loading-error-more-info = Mais informações
 pdfjs-loading-error-less-info = Menos informações
 pdfjs-loading-error-close = Fechar
+# Translations for ngx-extended-pdf-viewer additions only available in en-US
+pdfjs-editor-signature-editor2 =
+    .aria-description = Signature editor: { $description }
+    .aria-label = Signature editor

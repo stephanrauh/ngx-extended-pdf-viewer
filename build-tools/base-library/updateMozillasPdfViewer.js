@@ -98,6 +98,9 @@ const fontsSource = quickMode ? path.join('..', 'mypdf.js', 'build', 'generic', 
 
 fs.copySync(localeSource, path.join(targetDir, 'locale'));
 copyFilesWithoutRecursion(cmapsSource, path.join(targetDir, 'cmaps'));
+// Empty first: pdf.js replaced its .pfb/.ttf standard fonts with "hellbox" .hbgd files,
+// and a plain copy would leave the obsolete fonts behind in the npm package.
+fs.emptyDirSync(path.join(targetDir, 'standard_fonts'));
 copyFilesWithoutRecursion(fontsSource, path.join(targetDir, 'standard_fonts'));
 fs.copySync(path.join('..', 'mypdf.js', 'build', 'generic', 'web', 'wasm'), path.join(targetDir, 'wasm'));
 // #3275: the ICC profile pdf.js needs to convert DeviceCMYK colors

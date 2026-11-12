@@ -154,6 +154,15 @@ pdfjs-document-properties-linearized-yes = Sí
 pdfjs-document-properties-linearized-no = No
 pdfjs-document-properties-close-button = Cerrar
 pdfjs-digital-signature-properties-view-certificate = Ver certificado
+# Shown beneath an invalid signature card to explain why verification
+# failed. The text comes from NSS (e.g. "Signature integrity has been
+# compromised", "PKCS#7 signature could not be parsed") and is not
+# itself localized — it is the underlying error message produced by
+# the verification backend.
+# Variables:
+#   $reason (String) - error message describing why the signature
+#                      could not be verified.
+pdfjs-digital-signature-properties-reason = Motivo: { $reason }
 
 ## Print
 
@@ -764,6 +773,9 @@ pdfjs-editor-redo-button =
     .title = Rehacer
 pdfjs-editor-redo-button-label = Rehacer
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
+pdfjs-editor-signature-editor2 =
+    .aria-description = Signature editor: { $description }
+    .aria-label = Signature editor
 pdfjs-digital-signature-properties-button =
     .title = Digital signature properties
     .aria-label = Digital signature properties
@@ -806,7 +818,6 @@ pdfjs-digital-signature-properties-certificate-untrusted-untrusted-issuer = Cert
 pdfjs-digital-signature-properties-certificate-expired = Certificate: Expired
 pdfjs-digital-signature-properties-certificate-expired-with-date = Certificate: Expired ({ DATETIME($dateObj, dateStyle: "medium") })
 pdfjs-digital-signature-properties-certificate-revoked = Certificate: Revoked
-pdfjs-digital-signature-properties-reason = Reason: { $reason }
 pdfjs-digital-signature-properties-timestamp = Timestamp: { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 pdfjs-digital-signature-properties-sub-signatures =
     { $count ->

@@ -441,6 +441,19 @@ pdfjs-editor-add-signature-cancel-button = Annulla
 pdfjs-editor-edit-comment-dialog-text-input =
     .placeholder = Cumintza a iscrìere…
 
+## The view manager is a sidebar displaying different views:
+##  - thumbnails;
+##  - outline;
+##  - attachments;
+##  - layers.
+## The thumbnails view is used to edit the pdf: remove/insert pages, ...
+
+pdfjs-toggle-views-manager-notification-button =
+    .title = Ativa/disativa sa barra laterale (su documentu cuntenet miniaturas, istrutura, alligongiados o livellos)
+pdfjs-views-manager-outlines-title1 = Istrutura de su documentu
+    .title = Istrutura de su documentu (clic dòpiu pro ismanniare/minimare totu is elementos)
+pdfjs-views-manager-outlines-option-label = Istrutura de su documentu
+
 # Additional translations for ngx-extended-pdf-viewer (sc)
 pdfjs-toggle-sidebar-button =
     .title = Ativa/disativa sa barra laterale
@@ -472,6 +485,9 @@ pdfjs-editor-eraser-button =
 pdfjs-editor-eraser-button-label = Erase
 pdfjs-editor-eraser-editor =
     .aria-label = Eraser
+pdfjs-editor-signature-editor2 =
+    .aria-description = Signature editor: { $description }
+    .aria-label = Signature editor
 pdfjs-editor-ink-opacity-input = Opacity
 pdfjs-editor-free-highlight-thickness-title =
     .title = Change thickness when highlighting items other than text
@@ -596,8 +612,6 @@ pdfjs-editor-add-comment-button =
     .title = Add comment
 pdfjs-toggle-views-manager-button1 =
     .title = Manage pages
-pdfjs-toggle-views-manager-notification-button =
-    .title = Toggle Sidebar (document contains thumbnails/outline/attachments/layers)
 pdfjs-toggle-views-manager-button1-label = Manage pages
 pdfjs-views-manager-sidebar =
     .aria-label = Sidebar
@@ -607,13 +621,10 @@ pdfjs-views-manager-view-selector-button =
     .title = Views
 pdfjs-views-manager-view-selector-button-label = Views
 pdfjs-views-manager-pages-title = Pages
-pdfjs-views-manager-outlines-title1 = Document outline
-    .title = Document outline (double-click to expand/collapse all items)
 pdfjs-views-manager-attachments-title = Attachments
 pdfjs-views-manager-layers-title1 = Layers
     .title = Layers (double-click to reset all layers to the default state)
 pdfjs-views-manager-pages-option-label = Pages
-pdfjs-views-manager-outlines-option-label = Document outline
 pdfjs-views-manager-attachments-option-label = Attachments
 pdfjs-views-manager-layers-option-label = Layers
 pdfjs-views-manager-add-file-button =

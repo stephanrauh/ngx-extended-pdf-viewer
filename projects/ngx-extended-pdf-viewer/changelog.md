@@ -784,3 +784,4 @@
 - 32.0.0-rc.2 "Next page" no longer skips a page when several pages fit into the viewer. #3069 pinch zoom follows the fingers without drifting, jumping or flashing, also in iOS Safari, and trackpad pinch zoom in Safari no longer zooms twice. `IOSCanvasOptimizationService` is deprecated and does nothing.
 - 32.0.0 #3310 accessibility: the find result is announced once, the document properties, password and print dialogs have a name, toggle buttons are visible in Windows high-contrast mode, and book mode turns pages without animation when the operating system asks for reduced motion.
 - 32.0.1 #3312 selected text is readable again in Firefox.
+- 32.0.2 bleeding edge: updated to the latest pdf.js. `pdfDefaultOptions.maxImageSize` no longer has any effect. `maxCanvasPixels = 0` no longer means "zoom with CSS only, never re-render"; it now uses the default limit.

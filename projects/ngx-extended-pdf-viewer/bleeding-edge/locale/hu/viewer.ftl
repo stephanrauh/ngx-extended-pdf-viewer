@@ -850,3 +850,7 @@ pdfjs-editor-undo-button-label = Visszavonás
 pdfjs-editor-redo-button =
     .title = Újra
 pdfjs-editor-redo-button-label = Újra
+# Translations for ngx-extended-pdf-viewer additions only available in en-US
+pdfjs-editor-signature-editor2 =
+    .aria-description = Signature editor: { $description }
+    .aria-label = Signature editor

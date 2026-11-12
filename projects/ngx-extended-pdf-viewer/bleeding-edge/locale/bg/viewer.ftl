@@ -433,6 +433,9 @@ pdfjs-views-manager-pages-status-undo-delete-label =
         [one] 1 страница е изтрита
        *[other] { $count } страници са изтрити
     }
+# Badge used to promote a new feature in the UI, keep it as short as possible.
+# It's spelled uppercase for English, but it can be translated as usual.
+pdfjs-new-badge-content = НОВО
 pdfjs-toggle-views-manager-button1 =
     .title = Управление на страници
 
@@ -519,8 +522,9 @@ pdfjs-editor-highlight-editor =
     .aria-label = Highlight editor
 pdfjs-editor-ink-editor =
     .aria-label = Drawing editor
-pdfjs-editor-signature-editor1 =
+pdfjs-editor-signature-editor2 =
     .aria-description = Signature editor: { $description }
+    .aria-label = Signature editor
 pdfjs-editor-stamp-editor =
     .aria-label = Image editor
 pdfjs-editor-remove-signature-button =
@@ -680,7 +684,6 @@ pdfjs-views-manager-paste-button-before =
     .title = Paste before the first page
 pdfjs-views-manager-paste-button-after =
     .title = Paste after page { $page }
-pdfjs-new-badge-content = NEW
 pdfjs-views-manager-waiting-for-file = Uploading file…
 pdfjs-digital-signature-properties-button =
     .title = Digital signature properties

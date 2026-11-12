@@ -846,3 +846,7 @@ pdfjs-editor-undo-button-label = Annuler
 pdfjs-editor-redo-button =
     .title = Rétablir
 pdfjs-editor-redo-button-label = Rétablir
+# Translations for ngx-extended-pdf-viewer additions only available in en-US
+pdfjs-editor-signature-editor2 =
+    .aria-description = Signature editor: { $description }
+    .aria-label = Signature editor

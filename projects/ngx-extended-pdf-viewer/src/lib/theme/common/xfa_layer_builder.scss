@@ -113,6 +113,16 @@ ngx-extended-pdf-viewer {
     color: blue;
   }
 
+  // pdf.js 5a7a44db7: the `.xfaLayer *` reset makes <b>/<i> inherit, so restore
+  // them. (On the stable engine, rich text with <b>/<i> doesn't render at all.)
+  .xfaLayer b {
+    font-weight: bold;
+  }
+
+  .xfaLayer i {
+    font-style: italic;
+  }
+
   .xfaRich li {
     margin-left: 3em;
   }
