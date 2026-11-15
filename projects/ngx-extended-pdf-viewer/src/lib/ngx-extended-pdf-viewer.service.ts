@@ -626,8 +626,20 @@ export class NgxExtendedPdfViewerService {
     return { ctx, canvas };
   }
 
-  public async getCurrentDocumentAsBlob(): Promise<Blob | undefined> {
-    return (await this.PDFViewerApplication?.export()) || undefined;
+  /**
+   * Returns the current document, including the user's form values and annotations.
+   *
+   * #3314 bleeding edge only: `flatten: true` draws the annotations and form fields into
+   * the page content, so they can't be edited any more; `'non-forms'` flattens the
+   * annotations but keeps the form fields. `intent` ('print', the default, or 'display')
+   * decides which fields count as visible. Links stay clickable. The stable engine
+   * ignores these options.
+   * The flattened file is a bit larger than the original: pdf.js appends the flattened
+   * pages and keeps the original file inside it. So flattening isn't redaction: the
+   * original content, including values filled in before, can still be recovered.
+   */
+  public async getCurrentDocumentAsBlob(options?: { flatten?: boolean | 'non-forms'; intent?: 'print' | 'display' }): Promise<Blob | undefined> {
+    return (await this.PDFViewerApplication?.export(options)) || undefined;
   }
 
   public async getFormData(currentFormValues = true): Promise<Array<Object>> {

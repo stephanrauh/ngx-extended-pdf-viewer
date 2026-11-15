@@ -1209,7 +1209,7 @@ export interface IPDFViewerApplication {
   open(source: string | ArrayBuffer | { range: any } | any, options?: any): Promise<any>;
   unbindEvents(): void;
   unbindWindowEvents(): void;
-  export(): Promise<Blob>;
+  export(options?: { flatten?: boolean | 'non-forms'; intent?: 'print' | 'display' }): Promise<Blob>;
   printPdf(): void;
   ngxKeyboardManager: any;
   cspPolicyService: any;

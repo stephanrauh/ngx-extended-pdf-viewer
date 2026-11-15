@@ -192,6 +192,15 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
    */
   public supportsDownloading = input(true);
 
+  /**
+   * #3314 bleeding edge only: the download button saves a flattened copy. `true` draws the
+   * annotations and form fields into the page content, so they can't be edited any more;
+   * `'non-forms'` flattens the annotations but keeps the form fields. The stable engine
+   * ignores this option. The original file stays inside the flattened one, so it's a bit
+   * larger, and flattening isn't redaction: the original content can still be recovered.
+   */
+  public flattenOnDownload = input<boolean | 'non-forms'>(false);
+
   public forceUsingLegacyES5 = input(false);
 
   public localizationInitialized: boolean = false;
@@ -1747,6 +1756,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   });
 
   // @ts-ignore TS6133 - Used for side effects only
+  private readonly _flattenOnDownloadEffect = effect(() => {
+    const flattenOnDownload = this.flattenOnDownload();
+    if (typeof window === 'undefined') return;
+    // before initialization, the init block sets the option
+    this.pdfScriptLoaderService.PDFViewerApplicationOptions?.set('flattenOnDownload', flattenOnDownload);
+  });
+
+  // @ts-ignore TS6133 - Used for side effects only
   private readonly _printResolutionEffect = effect(() => {
     const printResolution = this.printResolution();
     if (typeof window === 'undefined') return;
@@ -2463,6 +2480,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
           PDFViewerApplicationOptions.set('pageViewMode', this.pageViewMode());
           PDFViewerApplicationOptions.set('verbosity', this.logLevel());
           PDFViewerApplicationOptions.set('pdfBackgroundColor', this.pdfBackgroundColor());
+          PDFViewerApplicationOptions.set('flattenOnDownload', this.flattenOnDownload()); // #3314
           // The supportsDownloading option was introduced in pdf.js 6.1; gate on
           // the engine version (not the bleeding-edge flag, which is a moving
           // target) so it also applies once stable reaches 6.1.
