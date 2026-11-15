@@ -336,6 +336,12 @@ pdfjs-editor-ink-editor =
 # Used when a signature editor is selected/hovered.
 # Variables:
 #   $description (String) - a string describing/labeling the signature.
+pdfjs-editor-signature-editor2 =
+    .aria-description = Editor firme: { $description }
+    .aria-label = Editor firme
+# Used when a signature editor is selected/hovered.
+# Variables:
+#   $description (String) - a string describing/labeling the signature.
 pdfjs-editor-signature-editor1 =
     .aria-description = Editor firme: { $description }
 pdfjs-editor-stamp-editor =
@@ -807,6 +813,7 @@ pdfjs-editor-add-signature-edit-button-label = Modifica descrizione
 
 pdfjs-editor-edit-signature-dialog-title = Modifica descrizione
 
+
 # Additional translations for ngx-extended-pdf-viewer (it)
 unverified-signature-warning = Questo file PDF contiene una firma digitale. Questo visualizzatore PDF non può verificare se la firma è valida. Scarica il file e aprilo in Acrobat Reader per verificare che la firma sia valida.
 pdfjs-infinite-scroll-button-label = Scorrimento infinito
@@ -850,7 +857,3 @@ pdfjs-editor-undo-button-label = Annulla
 pdfjs-editor-redo-button =
     .title = Ripeti
 pdfjs-editor-redo-button-label = Ripeti
-# Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-editor-signature-editor2 =
-    .aria-description = Signature editor: { $description }
-    .aria-label = Signature editor

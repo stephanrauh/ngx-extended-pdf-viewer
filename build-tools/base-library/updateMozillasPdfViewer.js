@@ -97,11 +97,16 @@ const cmapsSource = quickMode ? path.join('..', 'mypdf.js', 'build', 'generic', 
 const fontsSource = quickMode ? path.join('..', 'mypdf.js', 'build', 'generic', 'web', 'standard_fonts') : path.join('..', 'mypdf.js', 'build', 'minified', 'web', 'standard_fonts');
 
 fs.copySync(localeSource, path.join(targetDir, 'locale'));
+// Empty first: pdf.js switched its packed CMaps from .bcmap to Brotli-compressed .bcmap.br,
+// and a plain copy would leave the obsolete .bcmap files behind in the npm package.
+fs.emptyDirSync(path.join(targetDir, 'cmaps'));
 copyFilesWithoutRecursion(cmapsSource, path.join(targetDir, 'cmaps'));
 // Empty first: pdf.js replaced its .pfb/.ttf standard fonts with "hellbox" .hbgd files,
 // and a plain copy would leave the obsolete fonts behind in the npm package.
 fs.emptyDirSync(path.join(targetDir, 'standard_fonts'));
 copyFilesWithoutRecursion(fontsSource, path.join(targetDir, 'standard_fonts'));
+// Empty first, too: pdf.js renamed the WASM fallbacks (*_nowasm_fallback.js → .js.br).
+fs.emptyDirSync(path.join(targetDir, 'wasm'));
 fs.copySync(path.join('..', 'mypdf.js', 'build', 'generic', 'web', 'wasm'), path.join(targetDir, 'wasm'));
 // #3275: the ICC profile pdf.js needs to convert DeviceCMYK colors
 fs.copySync(path.join('..', 'mypdf.js', 'build', 'generic', 'web', 'iccs'), path.join(targetDir, 'iccs'));

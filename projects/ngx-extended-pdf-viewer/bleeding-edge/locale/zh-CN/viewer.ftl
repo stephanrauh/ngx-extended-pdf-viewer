@@ -320,6 +320,12 @@ pdfjs-editor-ink-editor =
 # Used when a signature editor is selected/hovered.
 # Variables:
 #   $description (String) - a string describing/labeling the signature.
+pdfjs-editor-signature-editor2 =
+    .aria-description = 签名编辑器：{ $description }
+    .aria-label = 签名编辑器
+# Used when a signature editor is selected/hovered.
+# Variables:
+#   $description (String) - a string describing/labeling the signature.
 pdfjs-editor-signature-editor1 =
     .aria-description = 签名编辑器：{ $description }
 pdfjs-editor-stamp-editor =
@@ -754,9 +760,6 @@ pdfjs-editor-eraser-button =
 pdfjs-editor-eraser-button-label = Erase
 pdfjs-editor-eraser-editor =
     .aria-label = Eraser
-pdfjs-editor-signature-editor2 =
-    .aria-description = Signature editor: { $description }
-    .aria-label = Signature editor
 pdfjs-editor-undo-button =
     .title = Undo
 pdfjs-editor-undo-button-label = Undo

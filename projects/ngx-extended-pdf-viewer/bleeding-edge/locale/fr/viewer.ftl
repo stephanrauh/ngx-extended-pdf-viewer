@@ -332,6 +332,12 @@ pdfjs-editor-ink-editor =
 # Used when a signature editor is selected/hovered.
 # Variables:
 #   $description (String) - a string describing/labeling the signature.
+pdfjs-editor-signature-editor2 =
+    .aria-description = Éditeur de signatures : { $description }
+    .aria-label = Éditeur de signatures
+# Used when a signature editor is selected/hovered.
+# Variables:
+#   $description (String) - a string describing/labeling the signature.
 pdfjs-editor-signature-editor1 =
     .aria-description = Éditeur de signature : { $description }
 pdfjs-editor-stamp-editor =
@@ -846,7 +852,3 @@ pdfjs-editor-undo-button-label = Annuler
 pdfjs-editor-redo-button =
     .title = Rétablir
 pdfjs-editor-redo-button-label = Rétablir
-# Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-editor-signature-editor2 =
-    .aria-description = Signature editor: { $description }
-    .aria-label = Signature editor
