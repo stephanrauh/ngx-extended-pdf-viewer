@@ -927,6 +927,11 @@ export class NgxExtendedPdfViewerService {
     }
   }
 
+  /**
+   * Removes the editor annotations the filter returns `true` for (all of them without a filter).
+   * The filter receives each annotation in its serialized form, including the stable `customId`
+   * you assigned (#3271), e.g. `removeEditorAnnotations((a: any) => a.customId === myId)`.
+   */
   public removeEditorAnnotations(filter?: (serialized: object) => boolean): void {
     this.PDFViewerApplication?.pdfViewer.removeEditorAnnotations(filter);
   }
