@@ -104,7 +104,7 @@
     "piscina@4": "^4.9.4",
     "vite@6": "^6.4.5",
     "esbuild@0.28": "^0.28.2",
-    "postcss@8": "^8.5.32",
+    "postcss@8": "^8.5.33",
     "@babel/core@7": "^7.29.7",
     "http-proxy-middleware@3": "^3.0.10",
     "webpack-dev-middleware@7": "^7.4.6",
