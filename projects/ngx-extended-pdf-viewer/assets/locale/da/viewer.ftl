@@ -808,3 +808,11 @@ pdfjs-digital-signature-properties-sub-signatures =
         [one] Sub-signature ({ $count })
        *[other] Sub-signatures ({ $count })
     }
+pdfjs-editor-signature-editor2 =
+    .aria-description = Signature editor: { $description }
+    .aria-label = Signature editor
+# Additional translations for ngx-extended-pdf-viewer from the da bleeding edge branch
+pdfjs-views-manager-status-warning-cut-label = Kunne ikke klippe. Opdater siden, og prøv igen.
+pdfjs-views-manager-status-warning-copy-label = Kunne ikke kopiere. Opdater siden, og prøv igen.
+pdfjs-views-manager-status-warning-delete-label = Kunne ikke slette. Opdater siden, og prøv igen.
+pdfjs-views-manager-status-warning-save-label = Kunne ikke gemme. Opdater siden, og prøv igen.

@@ -863,3 +863,7 @@ pdfjs-editor-undo-button-label = Cofnij
 pdfjs-editor-redo-button =
     .title = Ponów
 pdfjs-editor-redo-button-label = Ponów
+# Translations for ngx-extended-pdf-viewer additions only available in en-US
+pdfjs-editor-signature-editor2 =
+    .aria-description = Signature editor: { $description }
+    .aria-label = Signature editor

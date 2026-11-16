@@ -878,3 +878,7 @@ pdfjs-editor-undo-button-label = Späť
 pdfjs-editor-redo-button =
     .title = Znova
 pdfjs-editor-redo-button-label = Znova
+# Translations for ngx-extended-pdf-viewer additions only available in en-US
+pdfjs-editor-signature-editor2 =
+    .aria-description = Signature editor: { $description }
+    .aria-label = Signature editor

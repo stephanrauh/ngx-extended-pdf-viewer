@@ -850,3 +850,7 @@ pdfjs-editor-undo-button-label = Ongedaan maken
 pdfjs-editor-redo-button =
     .title = Opnieuw
 pdfjs-editor-redo-button-label = Opnieuw
+# Translations for ngx-extended-pdf-viewer additions only available in en-US
+pdfjs-editor-signature-editor2 =
+    .aria-description = Signature editor: { $description }
+    .aria-label = Signature editor

@@ -852,3 +852,6 @@ pdfjs-digital-signature-properties-banner-revoked =
         [one] Document signed with { $count } revoked certificate
        *[other] Document signed with { $count } revoked certificates
     }
+pdfjs-editor-signature-editor2 =
+    .aria-description = Signature editor: { $description }
+    .aria-label = Signature editor

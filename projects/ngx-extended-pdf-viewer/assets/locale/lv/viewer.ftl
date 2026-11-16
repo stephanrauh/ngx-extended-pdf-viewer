@@ -684,3 +684,13 @@ pdfjs-loading-error-close = Close
 pdfjs-layers-button =
     .title = Show Layers (double-click to reset all layers to the default state)
 pdfjs-layers-button-label = Layers
+pdfjs-editor-signature-editor2 =
+    .aria-description = Signature editor: { $description }
+    .aria-label = Signature editor
+# Additional translations for ngx-extended-pdf-viewer from the lv bleeding edge branch
+pdfjs-views-manager-pages-status-waiting-ready-label = Notiek datnes sagatavošana…
+pdfjs-views-manager-pages-status-waiting-uploading-label = Notiek datnes augšupielāde…
+pdfjs-views-manager-status-warning-cut-label = Nevarēja izgriezt. Atsvaidziniet lapu un mēģiniet vēlreiz.
+pdfjs-views-manager-status-warning-copy-label = Nevarēja kopēt. Atsvaidziniet lapu un mēģiniet vēlreiz.
+pdfjs-views-manager-status-warning-delete-label = Nevarēja dzēst. Atsvaidziniet lapu un mēģiniet vēlreiz.
+pdfjs-views-manager-status-warning-save-label = Nevarēja saglabāt. Atsvaidziniet lapu un mēģiniet vēlreiz.

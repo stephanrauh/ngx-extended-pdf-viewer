@@ -809,3 +809,9 @@ pdfjs-digital-signature-properties-sub-signatures =
         [one] Sub-signature ({ $count })
        *[other] Sub-signatures ({ $count })
     }
+pdfjs-editor-signature-editor2 =
+    .aria-description = Signature editor: { $description }
+    .aria-label = Signature editor
+# Additional translations for ngx-extended-pdf-viewer from the hr bleeding edge branch
+pdfjs-views-manager-pages-status-waiting-ready-label = Pripremamo tvoju datoteku…
+pdfjs-views-manager-pages-status-waiting-uploading-label = Prijenos datoteke…

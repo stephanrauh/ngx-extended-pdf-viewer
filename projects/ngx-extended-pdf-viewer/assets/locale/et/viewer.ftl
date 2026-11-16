@@ -652,3 +652,6 @@ pdfjs-cursor-page-flip-tool-button-label = Page Flip
 pdfjs-loading-error-more-info = More Information
 pdfjs-loading-error-less-info = Less Information
 pdfjs-loading-error-close = Close
+pdfjs-editor-signature-editor2 =
+    .aria-description = Signature editor: { $description }
+    .aria-label = Signature editor

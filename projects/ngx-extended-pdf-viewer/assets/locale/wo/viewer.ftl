@@ -620,3 +620,6 @@ pdfjs-attachments-button-label = Attachments
 pdfjs-layers-button =
     .title = Show Layers (double-click to reset all layers to the default state)
 pdfjs-layers-button-label = Layers
+pdfjs-editor-signature-editor2 =
+    .aria-description = Signature editor: { $description }
+    .aria-label = Signature editor

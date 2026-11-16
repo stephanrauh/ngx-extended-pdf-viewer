@@ -599,3 +599,6 @@ pdfjs-layers-button-label = Layers
 pdfjs-thumbs-button =
     .title = Show Thumbnails
 pdfjs-thumbs-button-label = Thumbnails
+pdfjs-editor-signature-editor2 =
+    .aria-description = Signature editor: { $description }
+    .aria-label = Signature editor

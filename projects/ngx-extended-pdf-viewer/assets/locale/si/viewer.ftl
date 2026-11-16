@@ -650,3 +650,6 @@ pdfjs-loading-error-close = Close
 pdfjs-toggle-sidebar-button =
     .title = Toggle Sidebar
 pdfjs-toggle-sidebar-button-label = Toggle Sidebar
+pdfjs-editor-signature-editor2 =
+    .aria-description = Signature editor: { $description }
+    .aria-label = Signature editor

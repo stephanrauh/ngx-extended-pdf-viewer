@@ -852,3 +852,6 @@ pdfjs-editor-undo-button-label = Undo
 pdfjs-editor-redo-button =
     .title = Redo
 pdfjs-editor-redo-button-label = Redo
+pdfjs-editor-signature-editor2 =
+    .aria-description = Signature editor: { $description }
+    .aria-label = Signature editor
