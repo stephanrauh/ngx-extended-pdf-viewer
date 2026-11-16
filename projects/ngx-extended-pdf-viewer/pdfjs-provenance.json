@@ -4,7 +4,7 @@
   "channels": {
     "bleedingEdge": {
       "bundle": "bleeding-edge",
-      "pdfjsBuildVersion": "7.0.1253",
+      "pdfjsBuildVersion": "7.0.1254",
       "upstream": {
         "project": "mozilla/pdf.js",
         "repository": "https://github.com/mozilla/pdf.js",
@@ -16,8 +16,8 @@
       "fork": {
         "repository": "https://github.com/stephanrauh/pdf.js",
         "branch": "bleeding-edge",
-        "commit": "a91fd75074188476572f75bbcc57ad22b3da0c77",
-        "committedAt": "2026-11-15T19:29:45+01:00"
+        "commit": "18551558c08ec55b4b3c6db559cc618541b58486",
+        "committedAt": "2026-11-15T22:08:24+01:00"
       },
       "securityFixes": [
         {
