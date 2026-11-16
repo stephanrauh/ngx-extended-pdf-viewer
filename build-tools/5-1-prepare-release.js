@@ -72,6 +72,10 @@ console.log(describeReleaseConfig(releaseConfig));
 // Check commit state - ensure everything is clean before starting
 runCommand('node ./build-tools/release/check-commit-state.js', 'Error 51: check-commit-state.js failed', 51);
 
+// The publish workflow installs with `npm ci`, which rejects things `npm install` accepts (e.g. an
+// override that contradicts a direct dependency). Check it now, before anything is built or tagged.
+runCommand('node ./build-tools/check-npm-ci.js', 'Error 96: npm ci would fail in the publish workflow (see above)', 96);
+
 // Jest needs no built bundles, so it runs here: it is the cheapest way to abort while the
 // working tree is still pristine. The browser-based suites moved further down, after the
 // bundles are rebuilt - see "Browser test suites" below.

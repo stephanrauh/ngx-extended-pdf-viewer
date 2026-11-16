@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "scripts": {
     "preinstall": "node ./build-tools/check-ignore-scripts.js",
-    "install": "npm install --ignore-scripts && npm update --save --ignore-scripts && npm audit fix --ignore-scripts && ./build-tools/search-for-shai-hulud.sh --full && npm rebuild esbuild",
-    "update": "npm update --save --ignore-scripts && npm audit fix --ignore-scripts && cd ngx-extended-pdf-viewer/projects/showcase-schematics && npm update --save --ignore-scripts && npm audit fix --ignore-scripts && cd ../../.. && ./build-tools/search-for-shai-hulud.sh --full && npm rebuild esbuild",
+    "install": "npm install --ignore-scripts && npm update --save --ignore-scripts && npm audit fix --ignore-scripts && ./build-tools/search-for-shai-hulud.sh --full && npm rebuild esbuild && node ./build-tools/check-npm-ci.js",
+    "update": "npm update --save --ignore-scripts && npm audit fix --ignore-scripts && cd projects/showcase-schematics && npm update --save --ignore-scripts && npm audit fix --ignore-scripts && cd ../.. && ./build-tools/search-for-shai-hulud.sh --full && npm rebuild esbuild && node ./build-tools/check-npm-ci.js",
+    "check:npm-ci": "node ./build-tools/check-npm-ci.js",
     "build:base": "node ./build-tools/1-build-base-library.js",
     "build:provenance": "node ./build-tools/base-library/update-pdfjs-provenance.js",
     "build:sbom": "node ./build-tools/generate-sbom.js",

@@ -217,6 +217,7 @@ If any verification fails, the publish will abort with a specific error code.
 | 86    | Suspicious lifecycle scripts found in dist                                 |
 | 94    | Could not resolve a released version's fork commit (`find-fork-commit.js`) |
 | 95    | `build-tools/release/release-config.json` missing or invalid               |
+| 96    | `npm ci` would fail in the publish workflow (`check-npm-ci.js` says why)   |
 
 ## Rollback
 
