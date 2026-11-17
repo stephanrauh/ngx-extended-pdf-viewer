@@ -1,6 +1,7 @@
 {
   "name": "showcase-schematics",
   "version": "0.0.0",
+  "private": true,
   "description": "A blank schematics",
   "scripts": {
     "build": "tsc -p tsconfig.json"
