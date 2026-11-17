@@ -59,3 +59,5 @@ pdfjs-editor-undo-button-label = Razveljavi
 pdfjs-editor-redo-button =
     .title = Uveljavi znova
 pdfjs-editor-redo-button-label = Uveljavi znova
+ngx-page-change-announcement = Stran { $pageNumber } od { $pagesCount }
+ngx-labelled-page-change-announcement = Stran { $pageLabel } ({ $pageNumber } od { $pagesCount })

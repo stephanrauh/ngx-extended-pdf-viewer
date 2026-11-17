@@ -24,3 +24,5 @@ pdfjs-attachments-button =
 pdfjs-thumbs-button =
     .title = Прикажување на икони
 pdfjs-thumbs-button-label = Икони
+ngx-page-change-announcement = Страница { $pageNumber } од { $pagesCount }
+ngx-labelled-page-change-announcement = Страница { $pageLabel } ({ $pageNumber } од { $pagesCount })

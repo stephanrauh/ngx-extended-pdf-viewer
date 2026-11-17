@@ -30,3 +30,5 @@ pdfjs-layers-button-label = Haenau
 pdfjs-thumbs-button =
     .title = Dangos Lluniau Bach
 pdfjs-thumbs-button-label = Lluniau Bach
+ngx-page-change-announcement = Tudalen { $pageNumber } o { $pagesCount }
+ngx-labelled-page-change-announcement = Tudalen { $pageLabel } ({ $pageNumber } o { $pagesCount })

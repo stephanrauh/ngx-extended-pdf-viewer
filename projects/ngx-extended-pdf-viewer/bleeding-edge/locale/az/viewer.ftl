@@ -222,6 +222,8 @@ pdfjs-layers-button-label = Laylar
 pdfjs-thumbs-button =
     .title = Kiçik şəkilləri göstər
 pdfjs-thumbs-button-label = Kiçik şəkillər
+ngx-page-change-announcement = Səhifə { $pageNumber } / { $pagesCount }
+ngx-labelled-page-change-announcement = Səhifə { $pageLabel } ({ $pageNumber } / { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-save-button =
     .title = Save

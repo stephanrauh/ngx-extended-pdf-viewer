@@ -30,3 +30,4 @@ pdfjs-layers-button-label = ਪਰਤਾਂ
 pdfjs-thumbs-button =
     .title = ਥੰਮਨੇਲ ਨੂੰ ਵੇਖਾਓ
 pdfjs-thumbs-button-label = ਥੰਮਨੇਲ
+ngx-page-change-announcement = { $pagesCount } ਵਿੱਚੋਂ { $pageNumber } ਸਫ਼ਾ

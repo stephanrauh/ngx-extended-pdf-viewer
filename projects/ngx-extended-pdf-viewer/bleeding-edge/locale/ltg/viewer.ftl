@@ -648,3 +648,5 @@ pdfjs-loading-error-close = Close
 pdfjs-layers-button =
     .title = Show Layers (double-click to reset all layers to the default state)
 pdfjs-layers-button-label = Layers
+ngx-page-change-announcement = Page { $pageNumber } of { $pagesCount }
+ngx-labelled-page-change-announcement = Page { $pageLabel } ({ $pageNumber } of { $pagesCount })

@@ -622,3 +622,6 @@ pdfjs-document-outline-button-label = Document Outline
 pdfjs-editor-signature-editor2 =
     .aria-description = Signature editor: { $description }
     .aria-label = Signature editor
+# Additional translations for ngx-extended-pdf-viewer (ast)
+ngx-page-change-announcement = Páxina { $pageNumber } de { $pagesCount }
+ngx-labelled-page-change-announcement = Páxina { $pageLabel } ({ $pageNumber } de { $pagesCount })

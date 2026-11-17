@@ -59,3 +59,5 @@ pdfjs-editor-undo-button-label = Visszavonás
 pdfjs-editor-redo-button =
     .title = Újra
 pdfjs-editor-redo-button-label = Újra
+ngx-page-change-announcement = { $pageNumber }. / { $pagesCount } oldal
+ngx-labelled-page-change-announcement = { $pageLabel }. oldal ({ $pageNumber } / { $pagesCount })

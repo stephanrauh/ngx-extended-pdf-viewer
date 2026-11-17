@@ -30,3 +30,5 @@ pdfjs-layers-button-label = Stratos
 pdfjs-thumbs-button =
     .title = Monstrar le vignettes
 pdfjs-thumbs-button-label = Vignettes
+ngx-page-change-announcement = Pagina { $pageNumber } de { $pagesCount }
+ngx-labelled-page-change-announcement = Pagina { $pageLabel } ({ $pageNumber } de { $pagesCount })

@@ -48,3 +48,10 @@ pdfjs-layers-button-label = Layers
 pdfjs-thumbs-button =
     .title = Show Thumbnails
 pdfjs-thumbs-button-label = Thumbnails
+# Variables:
+#   $pageNumber (Number) - the page the user navigated to
+#   $pagesCount (Number) - the total number of pages in the document
+ngx-page-change-announcement = Page { $pageNumber } of { $pagesCount }
+# Variables:
+#   $pageLabel (String) - the page label printed on the page, e.g. "iv"
+ngx-labelled-page-change-announcement = Page { $pageLabel } ({ $pageNumber } of { $pagesCount })

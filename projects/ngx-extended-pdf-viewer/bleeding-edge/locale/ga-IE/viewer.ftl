@@ -176,6 +176,8 @@ pdfjs-attachments-button-label = Iatáin
 pdfjs-thumbs-button =
     .title = Taispeáin Mionsamhlacha
 pdfjs-thumbs-button-label = Mionsamhlacha
+ngx-page-change-announcement = Leathanach { $pageNumber } as { $pagesCount }
+ngx-labelled-page-change-announcement = Leathanach { $pageLabel } ({ $pageNumber } as { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-save-button =
     .title = Save

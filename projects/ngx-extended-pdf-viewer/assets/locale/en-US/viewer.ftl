@@ -922,3 +922,6 @@ pdfjs-thumbs-button-label = Thumbnails
 pdfjs-editor-signature-editor2 =
     .aria-description = Signature editor: { $description }
     .aria-label = Signature editor
+# Additional translations for ngx-extended-pdf-viewer (en)
+ngx-page-change-announcement = Page { $pageNumber } of { $pagesCount }
+ngx-labelled-page-change-announcement = Page { $pageLabel } ({ $pageNumber } of { $pagesCount })

@@ -840,6 +840,8 @@ pdfjs-editor-undo-button-label = Desfazer
 pdfjs-editor-redo-button =
     .title = Refazer
 pdfjs-editor-redo-button-label = Refazer
+ngx-page-change-announcement = Página { $pageNumber } de { $pagesCount }
+ngx-labelled-page-change-announcement = Página { $pageLabel } ({ $pageNumber } de { $pagesCount })
 # Additional translations for ngx-extended-pdf-viewer (pt)
 unverified-signature-warning = Este arquivo PDF contém uma assinatura digital. O visualizador de PDF não pode verificar se a assinatura é válida. Faça download do arquivo e abra-o no Acrobat Reader para verificar se a assinatura é válida.
 pdfjs-infinite-scroll-button-label = Rolagem infinita

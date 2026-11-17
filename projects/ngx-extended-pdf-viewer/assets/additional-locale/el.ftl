@@ -30,3 +30,5 @@ pdfjs-layers-button-label = Επίπεδα
 pdfjs-thumbs-button =
     .title = Εμφάνιση μικρογραφιών
 pdfjs-thumbs-button-label = Μικρογραφίες
+ngx-page-change-announcement = Σελίδα { $pageNumber } από { $pagesCount }
+ngx-labelled-page-change-announcement = Σελίδα { $pageLabel } ({ $pageNumber } από { $pagesCount })

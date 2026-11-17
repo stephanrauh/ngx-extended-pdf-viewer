@@ -30,3 +30,5 @@ pdfjs-layers-button-label = Слојеви
 pdfjs-thumbs-button =
     .title = Прикажи сличице
 pdfjs-thumbs-button-label = Сличице
+ngx-page-change-announcement = Страница { $pageNumber } од { $pagesCount }
+ngx-labelled-page-change-announcement = Страница { $pageLabel } ({ $pageNumber } од { $pagesCount })

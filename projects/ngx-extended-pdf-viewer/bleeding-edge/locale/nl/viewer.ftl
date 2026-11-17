@@ -856,3 +856,5 @@ pdfjs-editor-undo-button-label = Ongedaan maken
 pdfjs-editor-redo-button =
     .title = Opnieuw
 pdfjs-editor-redo-button-label = Opnieuw
+ngx-page-change-announcement = Pagina { $pageNumber } van { $pagesCount }
+ngx-labelled-page-change-announcement = Pagina { $pageLabel } ({ $pageNumber } van { $pagesCount })

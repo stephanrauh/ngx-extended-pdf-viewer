@@ -81,6 +81,7 @@ import { PdfCspPolicyService } from './pdf-csp-policy.service';
 import { PDFScriptLoaderService } from './pdf-script-loader.service';
 import { PdfViewerRegistry } from './pdf-viewer-registry.service';
 import { FocusManagementService } from './focus-management.service';
+import { PageChangeAnnouncer } from './page-change-announcer';
 import { ViewerLocalReferences } from './viewer-local-references';
 import { ResponsiveVisibility } from './responsive-visibility';
 
@@ -150,6 +151,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
   /** #3131 AbortController to unregister all eventBus listeners on destroy. */
   private eventBusAbortController: AbortController | null = null;
+
+  /** #3315 Announces explicit page navigation to screen readers (`pdfDefaultOptions.announcePageChanges`). */
+  private pageChangeAnnouncer: PageChangeAnnouncer | undefined;
+
+  private readonly focusManagement = inject(FocusManagementService);
 
   /**
    * The dummy components are inserted automatically when the user customizes the toolbar
@@ -1300,6 +1306,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
     const PDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
     if (newPageNumber && PDFViewerApplication?.pdfViewer) {
+      // #3315 the application navigates, e.g. from a "go to chapter" button outside the viewer
+      this.pageChangeAnnouncer?.expectNavigation();
       PDFViewerApplication.page = Number(newPageNumber);
     }
   });
@@ -2868,6 +2876,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     const { signal } = this.eventBusAbortController;
     const opts = { signal };
 
+    this.pageChangeAnnouncer?.destroy();
+    this.pageChangeAnnouncer = new PageChangeAnnouncer(
+      this.elementRef.nativeElement,
+      PDFViewerApplication,
+      (message) => this.focusManagement.announce(message),
+      () => pdfDefaultOptions.announcePageChanges === true,
+    );
+
     PDFViewerApplication.eventBus.on('sourcechanged', this.reportSourceChanges.bind(this), opts);
     PDFViewerApplication.eventBus.on('afterprint', this.afterPrintListener, opts);
     PDFViewerApplication.eventBus.on('beforeprint', this.beforePrintListener, opts);
@@ -3623,6 +3639,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
     // #3131 Unregister all eventBus listeners synchronously before async cleanup.
     this.eventBusAbortController?.abort();
     this.eventBusAbortController = null;
+    this.pageChangeAnnouncer?.destroy();
+    this.pageChangeAnnouncer = undefined;
     // #3216 Reset both flags synchronously. The async cleanup below also clears the
     // singleton flag (later), but a new viewer mounted in the same microtask would
     // otherwise see the stale `true` and let its effects dispatch against a singleton

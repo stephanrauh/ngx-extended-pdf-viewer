@@ -882,3 +882,6 @@ pdfjs-editor-redo-button-label = Znovu
 pdfjs-editor-signature-editor2 =
     .aria-description = Signature editor: { $description }
     .aria-label = Signature editor
+# Additional translations for ngx-extended-pdf-viewer (cs)
+ngx-page-change-announcement = Strana { $pageNumber } z { $pagesCount }
+ngx-labelled-page-change-announcement = Strana { $pageLabel } ({ $pageNumber } z { $pagesCount })

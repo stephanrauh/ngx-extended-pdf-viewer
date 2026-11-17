@@ -59,3 +59,5 @@ pdfjs-editor-undo-button-label = Fortryd
 pdfjs-editor-redo-button =
     .title = Gentag
 pdfjs-editor-redo-button-label = Gentag
+ngx-page-change-announcement = Side { $pageNumber } af { $pagesCount }
+ngx-labelled-page-change-announcement = Side { $pageLabel } ({ $pageNumber } af { $pagesCount })

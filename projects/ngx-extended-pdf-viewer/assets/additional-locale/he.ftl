@@ -30,3 +30,5 @@ pdfjs-layers-button-label = שכבות
 pdfjs-thumbs-button =
     .title = הצגת תצוגה מקדימה
 pdfjs-thumbs-button-label = תצוגה מקדימה
+ngx-page-change-announcement = עמוד { $pageNumber } מתוך { $pagesCount }
+ngx-labelled-page-change-announcement = עמוד { $pageLabel } ({ $pageNumber } מתוך { $pagesCount })

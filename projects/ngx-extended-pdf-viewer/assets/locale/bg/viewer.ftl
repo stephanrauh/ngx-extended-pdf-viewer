@@ -734,3 +734,6 @@ pdfjs-digital-signature-properties-sub-signatures =
 pdfjs-editor-signature-editor2 =
     .aria-description = Signature editor: { $description }
     .aria-label = Signature editor
+# Additional translations for ngx-extended-pdf-viewer (bg)
+ngx-page-change-announcement = Страница { $pageNumber } от { $pagesCount }
+ngx-labelled-page-change-announcement = Страница { $pageLabel } ({ $pageNumber } от { $pagesCount })

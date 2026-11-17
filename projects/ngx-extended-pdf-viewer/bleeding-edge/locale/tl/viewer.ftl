@@ -222,6 +222,8 @@ pdfjs-layers-button-label = Mga layer
 pdfjs-thumbs-button =
     .title = Ipakita ang mga Thumbnail
 pdfjs-thumbs-button-label = Mga thumbnail
+ngx-page-change-announcement = Pahina { $pageNumber } ng { $pagesCount }
+ngx-labelled-page-change-announcement = Pahina { $pageLabel } ({ $pageNumber } ng { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-save-button =
     .title = Save

@@ -868,3 +868,6 @@ pdfjs-editor-redo-button-label = Refă
 pdfjs-editor-signature-editor2 =
     .aria-description = Signature editor: { $description }
     .aria-label = Signature editor
+# Additional translations for ngx-extended-pdf-viewer (ro)
+ngx-page-change-announcement = Pagina { $pageNumber } din { $pagesCount }
+ngx-labelled-page-change-announcement = Pagina { $pageLabel } ({ $pageNumber } din { $pagesCount })

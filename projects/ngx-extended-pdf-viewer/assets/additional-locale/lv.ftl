@@ -27,3 +27,5 @@ pdfjs-attachments-button-label = Pielikumi
 pdfjs-thumbs-button =
     .title = Parādīt sīktēlus
 pdfjs-thumbs-button-label = Sīktēli
+ngx-page-change-announcement = { $pageNumber }. lpp. no { $pagesCount }
+ngx-labelled-page-change-announcement = { $pageLabel } lapa ({ $pageNumber } no { $pagesCount })

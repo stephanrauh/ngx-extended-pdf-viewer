@@ -635,6 +635,8 @@ pdfjs-layers-button-label = Strâts
 pdfjs-thumbs-button =
     .title = Mostre miniaturis
 pdfjs-thumbs-button-label = Miniaturis
+ngx-page-change-announcement = Pagjine { $pageNumber } di { $pagesCount }
+ngx-labelled-page-change-announcement = Pagjine { $pageLabel } ({ $pageNumber } di { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-thumb-page-title1 =
     .title = Page { $page } of { $total }

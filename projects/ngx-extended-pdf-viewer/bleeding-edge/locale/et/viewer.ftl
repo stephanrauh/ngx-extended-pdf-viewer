@@ -236,6 +236,8 @@ pdfjs-layers-button-label = Kihid
 pdfjs-thumbs-button =
     .title = Näita pisipilte
 pdfjs-thumbs-button-label = Pisipildid
+ngx-page-change-announcement = Lehekülg { $pageNumber } / { $pagesCount }
+ngx-labelled-page-change-announcement = Lehekülg { $pageLabel } ({ $pageNumber }/{ $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-save-button =
     .title = Save

@@ -260,6 +260,8 @@ pdfjs-layers-button-label = Breathan
 pdfjs-thumbs-button =
     .title = Seall na dealbhagan
 pdfjs-thumbs-button-label = Dealbhagan
+ngx-page-change-announcement = Duilleag { $pageNumber } à { $pagesCount }
+ngx-labelled-page-change-announcement = Duilleag { $pageLabel } ({ $pageNumber } à { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-download-button =
     .title = Download

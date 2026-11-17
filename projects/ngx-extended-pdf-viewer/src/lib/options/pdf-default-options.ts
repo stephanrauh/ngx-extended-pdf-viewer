@@ -221,4 +221,5 @@ export const pdfDefaultOptions = {
   enableAutoLinking: true, // detects URLs and email addresses in the text layer and turns them into clickable links
   enableHighlightFloatingButton: false, // shows a floating "Highlight" shortcut next to selected text (experimental upstream)
   pdfBackgroundColor: '', // background color for PDF content rendering
+  announcePageChanges: false, // #3315 screen readers announce the page ("Page 5 of 53") after the user navigates with keys, paging buttons, links, outline or thumbnails, or after `[page]` changes. Scrolling stays silent. Off by default until it has proven itself.
 };

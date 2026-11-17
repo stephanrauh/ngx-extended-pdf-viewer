@@ -30,3 +30,5 @@ pdfjs-layers-button-label = 图层
 pdfjs-thumbs-button =
     .title = 显示缩略图
 pdfjs-thumbs-button-label = 缩略图
+ngx-page-change-announcement = 第 { $pageNumber } / { $pagesCount } 页
+ngx-labelled-page-change-announcement = 第 { $pageLabel } 页 ({ $pageNumber } / { $pagesCount })

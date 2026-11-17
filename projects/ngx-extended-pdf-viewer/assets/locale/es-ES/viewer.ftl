@@ -855,3 +855,6 @@ pdfjs-digital-signature-properties-banner-revoked =
 pdfjs-editor-signature-editor2 =
     .aria-description = Signature editor: { $description }
     .aria-label = Signature editor
+# Additional translations for ngx-extended-pdf-viewer (es-ES)
+ngx-page-change-announcement = Página { $pageNumber } de { $pagesCount }
+ngx-labelled-page-change-announcement = Página { $pageLabel } ({ $pageNumber } de { $pagesCount })

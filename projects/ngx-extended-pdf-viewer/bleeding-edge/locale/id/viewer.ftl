@@ -576,6 +576,8 @@ pdfjs-layers-button-label = Lapisan
 pdfjs-thumbs-button =
     .title = Tampilkan Miniatur
 pdfjs-thumbs-button-label = Miniatur
+ngx-page-change-announcement = Halaman { $pageNumber } dari { $pagesCount }
+ngx-labelled-page-change-announcement = Halaman { $pageLabel } ({ $pageNumber } dari { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-thumb-page-title1 =
     .title = Page { $page } of { $total }

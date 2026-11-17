@@ -803,6 +803,7 @@ pdfjs-layers-button-label = Ñuãha
 pdfjs-thumbs-button =
     .title = Mba’emirĩ jehechauka
 pdfjs-thumbs-button-label = Mba’emirĩ
+ngx-page-change-announcement = Kuatiarogue { $pageNumber } { $pagesCount } mba’e
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-editor-eraser-button =
     .title = Erase
@@ -854,3 +855,4 @@ pdfjs-cursor-page-flip-tool-button-label = Page Flip
 pdfjs-loading-error-more-info = More Information
 pdfjs-loading-error-less-info = Less Information
 pdfjs-loading-error-close = Close
+ngx-labelled-page-change-announcement = Page { $pageLabel } ({ $pageNumber } of { $pagesCount })

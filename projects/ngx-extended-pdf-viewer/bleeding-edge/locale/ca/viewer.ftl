@@ -823,6 +823,8 @@ pdfjs-layers-button-label = Capes
 pdfjs-thumbs-button =
     .title = Mostra les miniatures
 pdfjs-thumbs-button-label = Miniatures
+ngx-page-change-announcement = Pàgina { $pageNumber } de { $pagesCount }
+ngx-labelled-page-change-announcement = Pàgina { $pageLabel } ({ $pageNumber } de { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-editor-eraser-button =
     .title = Erase

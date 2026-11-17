@@ -59,3 +59,5 @@ pdfjs-editor-undo-button-label = Cofnij
 pdfjs-editor-redo-button =
     .title = Ponów
 pdfjs-editor-redo-button-label = Ponów
+ngx-page-change-announcement = { $pageNumber }. strona z { $pagesCount }
+ngx-labelled-page-change-announcement = { $pageLabel }. strona ({ $pageNumber } z { $pagesCount })

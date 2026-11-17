@@ -651,3 +651,5 @@ pdfjs-loading-error-close = Close
 pdfjs-toggle-sidebar-button =
     .title = Toggle Sidebar
 pdfjs-toggle-sidebar-button-label = Toggle Sidebar
+ngx-page-change-announcement = Page { $pageNumber } of { $pagesCount }
+ngx-labelled-page-change-announcement = Page { $pageLabel } ({ $pageNumber } of { $pagesCount })

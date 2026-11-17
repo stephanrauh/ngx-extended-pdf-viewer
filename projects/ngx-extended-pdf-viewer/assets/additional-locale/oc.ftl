@@ -30,3 +30,5 @@ pdfjs-layers-button-label = Calques
 pdfjs-thumbs-button =
     .title = Afichar las vinhetas
 pdfjs-thumbs-button-label = Vinhetas
+ngx-page-change-announcement = Pagina { $pageNumber } sus { $pagesCount }
+ngx-labelled-page-change-announcement = Pagina { $pageLabel } ({ $pageNumber } de { $pagesCount })

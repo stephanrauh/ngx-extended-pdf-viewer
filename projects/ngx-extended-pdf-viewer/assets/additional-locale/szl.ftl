@@ -30,3 +30,5 @@ pdfjs-layers-button-label = Warstwy
 pdfjs-thumbs-button =
     .title = Pokoż miniatury
 pdfjs-thumbs-button-label = Miniatury
+ngx-page-change-announcement = Strōna { $pageNumber } ze { $pagesCount }
+ngx-labelled-page-change-announcement = Strōna { $pageLabel } ({ $pageNumber } ze { $pagesCount })

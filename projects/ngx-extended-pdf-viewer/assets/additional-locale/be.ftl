@@ -30,3 +30,5 @@ pdfjs-layers-button-label = Пласты
 pdfjs-thumbs-button =
     .title = Паказ мініяцюр
 pdfjs-thumbs-button-label = Мініяцюры
+ngx-page-change-announcement = Старонка { $pageNumber } з { $pagesCount }
+ngx-labelled-page-change-announcement = Старонка { $pageLabel } ({ $pageNumber } з { $pagesCount })

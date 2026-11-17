@@ -728,6 +728,8 @@ pdfjs-layers-button-label = Қабатҳо
 pdfjs-thumbs-button =
     .title = Намоиш додани тасвирчаҳо
 pdfjs-thumbs-button-label = Тасвирчаҳо
+ngx-page-change-announcement = Саҳифаи { $pageNumber } аз { $pagesCount }
+ngx-labelled-page-change-announcement = Саҳифаи { $pageLabel } ({ $pageNumber } аз { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-editor-eraser-button =
     .title = Erase

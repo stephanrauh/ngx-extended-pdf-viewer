@@ -856,3 +856,5 @@ pdfjs-editor-undo-button-label = Rückgängig
 pdfjs-editor-redo-button =
     .title = Wiederholen
 pdfjs-editor-redo-button-label = Wiederholen
+ngx-page-change-announcement = Seite { $pageNumber } von { $pagesCount }
+ngx-labelled-page-change-announcement = Seite { $pageLabel } ({ $pageNumber } von { $pagesCount })

@@ -30,3 +30,5 @@ pdfjs-layers-button-label = შრეები
 pdfjs-thumbs-button =
     .title = შეთვალიერება
 pdfjs-thumbs-button-label = ესკიზები
+ngx-page-change-announcement = გვერდი { $pageNumber }, სულ { $pagesCount }
+ngx-labelled-page-change-announcement = გვერდი { $pageLabel } ({ $pageNumber } { $pagesCount }-დან)

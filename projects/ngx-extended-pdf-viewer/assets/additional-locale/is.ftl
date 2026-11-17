@@ -30,3 +30,5 @@ pdfjs-layers-button-label = Lög
 pdfjs-thumbs-button =
     .title = Sýna smámyndir
 pdfjs-thumbs-button-label = Smámyndir
+ngx-page-change-announcement = Síða { $pageNumber } af { $pagesCount }
+ngx-labelled-page-change-announcement = Síða { $pageLabel } ({ $pageNumber } af { $pagesCount })

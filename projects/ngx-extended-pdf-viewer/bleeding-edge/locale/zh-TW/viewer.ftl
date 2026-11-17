@@ -773,6 +773,8 @@ pdfjs-layers-button-label = 圖層
 pdfjs-thumbs-button =
     .title = 顯示縮圖
 pdfjs-thumbs-button-label = 縮圖
+ngx-page-change-announcement = 第 { $pageNumber } 頁，共 { $pagesCount } 頁
+ngx-labelled-page-change-announcement = 第 { $pageLabel } 頁 （第 { $pageNumber } 頁，共 { $pagesCount } 頁）
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-editor-eraser-button =
     .title = Erase

@@ -61,3 +61,5 @@ pdfjs-editor-undo-button-label = Kumoa
 pdfjs-editor-redo-button =
     .title = Tee uudelleen
 pdfjs-editor-redo-button-label = Tee uudelleen
+ngx-page-change-announcement = Sivu { $pageNumber }/{ $pagesCount }
+ngx-labelled-page-change-announcement = Sivu { $pageLabel } ({ $pageNumber } / { $pagesCount })

@@ -823,6 +823,7 @@ pdfjs-layers-button-label = ਪਰਤਾਂ
 pdfjs-thumbs-button =
     .title = ਥੰਮਨੇਲ ਨੂੰ ਵੇਖਾਓ
 pdfjs-thumbs-button-label = ਥੰਮਨੇਲ
+ngx-page-change-announcement = { $pagesCount } ਵਿੱਚੋਂ { $pageNumber } ਸਫ਼ਾ
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-editor-eraser-button =
     .title = Erase
@@ -854,3 +855,4 @@ pdfjs-cursor-page-flip-tool-button-label = Page Flip
 pdfjs-loading-error-more-info = More Information
 pdfjs-loading-error-less-info = Less Information
 pdfjs-loading-error-close = Close
+ngx-labelled-page-change-announcement = Page { $pageLabel } ({ $pageNumber } of { $pagesCount })

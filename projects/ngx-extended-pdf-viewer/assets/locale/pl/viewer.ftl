@@ -867,3 +867,6 @@ pdfjs-editor-redo-button-label = Ponów
 pdfjs-editor-signature-editor2 =
     .aria-description = Signature editor: { $description }
     .aria-label = Signature editor
+# Additional translations for ngx-extended-pdf-viewer (pl)
+ngx-page-change-announcement = { $pageNumber }. strona z { $pagesCount }
+ngx-labelled-page-change-announcement = { $pageLabel }. strona ({ $pageNumber } z { $pagesCount })

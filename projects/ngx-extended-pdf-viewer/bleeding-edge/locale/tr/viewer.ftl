@@ -829,6 +829,8 @@ pdfjs-layers-button-label = Katmanlar
 pdfjs-thumbs-button =
     .title = Küçük resimleri göster
 pdfjs-thumbs-button-label = Küçük resimler
+ngx-page-change-announcement = Sayfa { $pageNumber }/{ $pagesCount }
+ngx-labelled-page-change-announcement = Sayfa { $pageLabel } ({ $pageNumber } / { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-editor-eraser-button =
     .title = Erase

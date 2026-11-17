@@ -857,6 +857,8 @@ pdfjs-layers-button-label = Warstwy
 pdfjs-thumbs-button =
     .title = Miniatury pokazaś
 pdfjs-thumbs-button-label = Miniatury
+ngx-page-change-announcement = Bok { $pageNumber } z { $pagesCount }
+ngx-labelled-page-change-announcement = Bok { $pageLabel } ({ $pageNumber } z { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-editor-eraser-button =
     .title = Erase

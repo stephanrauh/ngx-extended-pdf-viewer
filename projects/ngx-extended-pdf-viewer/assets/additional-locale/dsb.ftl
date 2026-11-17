@@ -30,3 +30,5 @@ pdfjs-layers-button-label = Warstwy
 pdfjs-thumbs-button =
     .title = Miniatury pokazaś
 pdfjs-thumbs-button-label = Miniatury
+ngx-page-change-announcement = Bok { $pageNumber } z { $pagesCount }
+ngx-labelled-page-change-announcement = Bok { $pageLabel } ({ $pageNumber } z { $pagesCount })

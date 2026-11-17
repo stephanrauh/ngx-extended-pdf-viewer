@@ -823,6 +823,8 @@ pdfjs-layers-button-label = Lag
 pdfjs-thumbs-button =
     .title = Vis miniatyrbilde
 pdfjs-thumbs-button-label = Miniatyrbilde
+ngx-page-change-announcement = Side { $pageNumber } av { $pagesCount }
+ngx-labelled-page-change-announcement = Side { $pageLabel } ({ $pageNumber } av { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-editor-eraser-button =
     .title = Erase

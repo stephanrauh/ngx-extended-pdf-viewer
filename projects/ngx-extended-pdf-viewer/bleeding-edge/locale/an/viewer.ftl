@@ -222,6 +222,8 @@ pdfjs-layers-button-label = Capas
 pdfjs-thumbs-button =
     .title = Amostrar as miniaturas
 pdfjs-thumbs-button-label = Miniaturas
+ngx-page-change-announcement = Pachina { $pageNumber } de { $pagesCount }
+ngx-labelled-page-change-announcement = Pachina { $pageLabel } ({ $pageNumber } de { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-save-button =
     .title = Save

@@ -694,3 +694,6 @@ pdfjs-views-manager-status-warning-cut-label = Nevarēja izgriezt. Atsvaidziniet
 pdfjs-views-manager-status-warning-copy-label = Nevarēja kopēt. Atsvaidziniet lapu un mēģiniet vēlreiz.
 pdfjs-views-manager-status-warning-delete-label = Nevarēja dzēst. Atsvaidziniet lapu un mēģiniet vēlreiz.
 pdfjs-views-manager-status-warning-save-label = Nevarēja saglabāt. Atsvaidziniet lapu un mēģiniet vēlreiz.
+# Additional translations for ngx-extended-pdf-viewer (lv)
+ngx-page-change-announcement = { $pageNumber }. lpp. no { $pagesCount }
+ngx-labelled-page-change-announcement = { $pageLabel } lapa ({ $pageNumber } no { $pagesCount })

@@ -28,3 +28,5 @@ pdfjs-layers-button-label = لایه‌ها
 pdfjs-thumbs-button =
     .title = نمایش تصاویر بندانگشتی
 pdfjs-thumbs-button-label = تصاویر بندانگشتی
+ngx-page-change-announcement = صفحهٔ { $pageNumber } از { $pagesCount }
+ngx-labelled-page-change-announcement = صفحهٔ { $pageLabel } ({ $pageNumber } از { $pagesCount })

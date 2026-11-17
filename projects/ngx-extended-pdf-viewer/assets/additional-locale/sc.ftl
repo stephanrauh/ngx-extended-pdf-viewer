@@ -28,3 +28,5 @@ pdfjs-layers-button-label = Livellos
 pdfjs-thumbs-button =
     .title = Ammustra miniaturas
 pdfjs-thumbs-button-label = Miniaturas
+ngx-page-change-announcement = Pàgina { $pageNumber } de { $pagesCount }
+ngx-labelled-page-change-announcement = Pàgina { $pageLabel } ({ $pageNumber } de { $pagesCount })

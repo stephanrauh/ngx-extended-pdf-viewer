@@ -59,3 +59,5 @@ pdfjs-editor-undo-button-label = Anulează
 pdfjs-editor-redo-button =
     .title = Refă
 pdfjs-editor-redo-button-label = Refă
+ngx-page-change-announcement = Pagina { $pageNumber } din { $pagesCount }
+ngx-labelled-page-change-announcement = Pagina { $pageLabel } ({ $pageNumber } din { $pagesCount })

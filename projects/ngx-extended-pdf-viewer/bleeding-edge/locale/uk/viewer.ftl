@@ -741,6 +741,8 @@ pdfjs-editor-undo-button-label = Повернути
 pdfjs-editor-redo-button =
     .title = Повторити
 pdfjs-editor-redo-button-label = Повторити
+ngx-page-change-announcement = Сторінка { $pageNumber } із { $pagesCount }
+ngx-labelled-page-change-announcement = Сторінка { $pageLabel } ({ $pageNumber } із { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-thumb-page-title1 =
     .title = Page { $page } of { $total }

@@ -59,3 +59,5 @@ pdfjs-editor-undo-button-label = Poništi
 pdfjs-editor-redo-button =
     .title = Ponovi
 pdfjs-editor-redo-button-label = Ponovi
+ngx-page-change-announcement = Stranica { $pageNumber } od { $pagesCount }
+ngx-labelled-page-change-announcement = Stranica { $pageLabel } ({ $pageNumber } od { $pagesCount })

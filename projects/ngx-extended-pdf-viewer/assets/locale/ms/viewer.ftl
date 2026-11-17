@@ -650,3 +650,6 @@ pdfjs-layers-button-label = Layers
 pdfjs-editor-signature-editor2 =
     .aria-description = Signature editor: { $description }
     .aria-label = Signature editor
+# Additional translations for ngx-extended-pdf-viewer (ms)
+ngx-page-change-announcement = Halaman { $pageNumber } daripada { $pagesCount }
+ngx-labelled-page-change-announcement = Halaman { $pageLabel } ({ $pageNumber } daripada { $pagesCount })

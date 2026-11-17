@@ -848,6 +848,8 @@ pdfjs-editor-undo-button-label = Fortryd
 pdfjs-editor-redo-button =
     .title = Gentag
 pdfjs-editor-redo-button-label = Gentag
+ngx-page-change-announcement = Side { $pageNumber } af { $pagesCount }
+ngx-labelled-page-change-announcement = Side { $pageLabel } ({ $pageNumber } af { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-editor-signature-editor2 =
     .aria-description = Signature editor: { $description }

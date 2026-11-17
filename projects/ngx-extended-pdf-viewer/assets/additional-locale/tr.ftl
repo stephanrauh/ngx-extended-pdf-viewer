@@ -30,3 +30,5 @@ pdfjs-layers-button-label = Katmanlar
 pdfjs-thumbs-button =
     .title = Küçük resimleri göster
 pdfjs-thumbs-button-label = Küçük resimler
+ngx-page-change-announcement = Sayfa { $pageNumber }/{ $pagesCount }
+ngx-labelled-page-change-announcement = Sayfa { $pageLabel } ({ $pageNumber } / { $pagesCount })

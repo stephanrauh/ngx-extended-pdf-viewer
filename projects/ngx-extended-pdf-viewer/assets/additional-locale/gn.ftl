@@ -30,3 +30,4 @@ pdfjs-layers-button-label = Ñuãha
 pdfjs-thumbs-button =
     .title = Mba’emirĩ jehechauka
 pdfjs-thumbs-button-label = Mba’emirĩ
+ngx-page-change-announcement = Kuatiarogue { $pageNumber } { $pagesCount } mba’e

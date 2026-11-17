@@ -24,3 +24,5 @@ pdfjs-layers-button-label = Capes
 pdfjs-thumbs-button =
     .title = Amosar les miniatures
 pdfjs-thumbs-button-label = Miniatures
+ngx-page-change-announcement = Páxina { $pageNumber } de { $pagesCount }
+ngx-labelled-page-change-announcement = Páxina { $pageLabel } ({ $pageNumber } de { $pagesCount })

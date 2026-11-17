@@ -833,6 +833,8 @@ pdfjs-layers-button-label = Geruzak
 pdfjs-thumbs-button =
     .title = Erakutsi koadro txikiak
 pdfjs-thumbs-button-label = Koadro txikiak
+ngx-page-change-announcement = { $pageNumber } / { $pagesCount } orria
+ngx-labelled-page-change-announcement = { $pageLabel }. orria ({ $pageNumber } / { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-editor-eraser-button =
     .title = Erase

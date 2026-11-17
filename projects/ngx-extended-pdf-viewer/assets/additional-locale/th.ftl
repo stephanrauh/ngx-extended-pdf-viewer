@@ -30,3 +30,5 @@ pdfjs-layers-button-label = เลเยอร์
 pdfjs-thumbs-button =
     .title = แสดงภาพขนาดย่อ
 pdfjs-thumbs-button-label = ภาพขนาดย่อ
+ngx-page-change-announcement = หน้า { $pageNumber } จาก { $pagesCount }
+ngx-labelled-page-change-announcement = หน้า { $pageLabel } ({ $pageNumber } จาก { $pagesCount })

@@ -27,3 +27,5 @@ pdfjs-attachments-button-label = Lampiran
 pdfjs-thumbs-button =
     .title = Papar Thumbnails
 pdfjs-thumbs-button-label = Imej kecil
+ngx-page-change-announcement = Halaman { $pageNumber } daripada { $pagesCount }
+ngx-labelled-page-change-announcement = Halaman { $pageLabel } ({ $pageNumber } daripada { $pagesCount })

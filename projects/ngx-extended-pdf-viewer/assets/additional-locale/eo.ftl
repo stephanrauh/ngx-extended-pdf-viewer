@@ -30,3 +30,5 @@ pdfjs-layers-button-label = Tavoloj
 pdfjs-thumbs-button =
     .title = Montri miniaturojn
 pdfjs-thumbs-button-label = Miniaturoj
+ngx-page-change-announcement = Paĝo { $pageNumber } el { $pagesCount }
+ngx-labelled-page-change-announcement = Paĝo { $pageLabel } ({ $pageNumber } el { $pagesCount })

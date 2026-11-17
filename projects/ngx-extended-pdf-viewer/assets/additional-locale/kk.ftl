@@ -30,3 +30,5 @@ pdfjs-layers-button-label = Қабаттар
 pdfjs-thumbs-button =
     .title = Кіші көріністерді көрсету
 pdfjs-thumbs-button-label = Кіші көріністер
+ngx-page-change-announcement = Бет { $pageNumber }/{ $pagesCount }
+ngx-labelled-page-change-announcement = Бет { $pageLabel } (парақ { $pageNumber }, { $pagesCount } ішінен)

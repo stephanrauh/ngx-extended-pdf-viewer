@@ -232,6 +232,8 @@ pdfjs-layers-button-label = Layers
 pdfjs-thumbs-button =
     .title = Kythe Thumbnails
 pdfjs-thumbs-button-label = Thumbnails
+ngx-page-change-announcement = Page { $pageNumber } o { $pagesCount }
+ngx-labelled-page-change-announcement = Page { $pageLabel } ({ $pageNumber } o { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-save-button =
     .title = Save

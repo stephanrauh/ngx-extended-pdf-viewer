@@ -30,3 +30,5 @@ pdfjs-layers-button-label = Capas
 pdfjs-thumbs-button =
     .title = Amostrar as miniaturas
 pdfjs-thumbs-button-label = Miniaturas
+ngx-page-change-announcement = Pachina { $pageNumber } de { $pagesCount }
+ngx-labelled-page-change-announcement = Pachina { $pageLabel } ({ $pageNumber } de { $pagesCount })

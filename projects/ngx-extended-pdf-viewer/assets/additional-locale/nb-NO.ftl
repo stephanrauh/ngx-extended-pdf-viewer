@@ -59,3 +59,5 @@ pdfjs-editor-undo-button-label = Angre
 pdfjs-editor-redo-button =
     .title = Gjør om
 pdfjs-editor-redo-button-label = Gjør om
+ngx-page-change-announcement = Side { $pageNumber } av { $pagesCount }
+ngx-labelled-page-change-announcement = Side { $pageLabel } ({ $pageNumber } av { $pagesCount })

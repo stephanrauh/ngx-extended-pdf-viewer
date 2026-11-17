@@ -850,3 +850,6 @@ pdfjs-editor-redo-button-label = Rétablir
 pdfjs-editor-signature-editor2 =
     .aria-description = Signature editor: { $description }
     .aria-label = Signature editor
+# Additional translations for ngx-extended-pdf-viewer (fr)
+ngx-page-change-announcement = Page { $pageNumber } sur { $pagesCount }
+ngx-labelled-page-change-announcement = Page { $pageLabel } ({ $pageNumber } sur { $pagesCount })

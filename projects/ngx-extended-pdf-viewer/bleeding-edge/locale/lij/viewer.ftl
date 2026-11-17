@@ -218,6 +218,8 @@ pdfjs-attachments-button-label = Alegæ
 pdfjs-thumbs-button =
     .title = Mostra miniatue
 pdfjs-thumbs-button-label = Miniatue
+ngx-page-change-announcement = Pagina { $pageNumber } de { $pagesCount }
+ngx-labelled-page-change-announcement = Pagina { $pageLabel } ({ $pageNumber } de { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-save-button =
     .title = Save

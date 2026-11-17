@@ -30,3 +30,5 @@ pdfjs-layers-button-label = پرتاں
 pdfjs-thumbs-button =
     .title = تھمبنیل ݙکھاؤ
 pdfjs-thumbs-button-label = تھمبنیلز
+ngx-page-change-announcement = صفحہ { $pageNumber } از { $pagesCount }۔
+ngx-labelled-page-change-announcement = ورقہ { $pageLabel } ({ $pageNumber } دا { $pagesCount })

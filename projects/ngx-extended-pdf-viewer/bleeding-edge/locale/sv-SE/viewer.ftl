@@ -856,3 +856,5 @@ pdfjs-editor-undo-button-label = Ångra
 pdfjs-editor-redo-button =
     .title = Gör om
 pdfjs-editor-redo-button-label = Gör om
+ngx-page-change-announcement = Sida { $pageNumber } av { $pagesCount }
+ngx-labelled-page-change-announcement = Sida { $pageLabel } ({ $pageNumber } av { $pagesCount })

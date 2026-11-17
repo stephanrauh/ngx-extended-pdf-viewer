@@ -757,3 +757,6 @@ pdfjs-loading-error-close = Close
 pdfjs-editor-signature-editor2 =
     .aria-description = Signature editor: { $description }
     .aria-label = Signature editor
+# Additional translations for ngx-extended-pdf-viewer (id)
+ngx-page-change-announcement = Halaman { $pageNumber } dari { $pagesCount }
+ngx-labelled-page-change-announcement = Halaman { $pageLabel } ({ $pageNumber } dari { $pagesCount })

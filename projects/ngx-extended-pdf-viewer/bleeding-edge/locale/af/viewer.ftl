@@ -175,6 +175,8 @@ pdfjs-attachments-button-label = Aanhegsels
 pdfjs-thumbs-button =
     .title = Wys duimnaels
 pdfjs-thumbs-button-label = Duimnaels
+ngx-page-change-announcement = Bladsy { $pageNumber } van { $pagesCount }
+ngx-labelled-page-change-announcement = Bladsy { $pageLabel } ({ $pageNumber } van { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-save-button =
     .title = Save

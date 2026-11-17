@@ -575,6 +575,8 @@ pdfjs-layers-button-label = Slojevi
 pdfjs-thumbs-button =
     .title = Prikaži thumbnailove
 pdfjs-thumbs-button-label = Thumbnailovi
+ngx-page-change-announcement = Stranica { $pageNumber } od { $pagesCount }
+ngx-labelled-page-change-announcement = Stranica { $pageLabel } ({ $pageNumber } od { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-thumb-page-title1 =
     .title = Page { $page } of { $total }
