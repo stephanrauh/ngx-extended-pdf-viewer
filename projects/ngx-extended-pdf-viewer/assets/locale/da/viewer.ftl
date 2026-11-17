@@ -753,6 +753,8 @@ pdfjs-editor-undo-button-label = Fortryd
 pdfjs-editor-redo-button =
     .title = Gentag
 pdfjs-editor-redo-button-label = Gentag
+ngx-page-change-announcement = Side { $pageNumber } af { $pagesCount }
+ngx-labelled-page-change-announcement = Side { $pageLabel } ({ $pageNumber } af { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-views-manager-sidebar-resizer =
     .aria-label = Sidebar resizer
@@ -816,6 +818,3 @@ pdfjs-views-manager-status-warning-cut-label = Kunne ikke klippe. Opdater siden,
 pdfjs-views-manager-status-warning-copy-label = Kunne ikke kopiere. Opdater siden, og prøv igen.
 pdfjs-views-manager-status-warning-delete-label = Kunne ikke slette. Opdater siden, og prøv igen.
 pdfjs-views-manager-status-warning-save-label = Kunne ikke gemme. Opdater siden, og prøv igen.
-# Additional translations for ngx-extended-pdf-viewer (da)
-ngx-page-change-announcement = Side { $pageNumber } af { $pagesCount }
-ngx-labelled-page-change-announcement = Side { $pageLabel } ({ $pageNumber } af { $pagesCount })

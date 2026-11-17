@@ -748,6 +748,8 @@ pdfjs-layers-button-label = 图层
 pdfjs-thumbs-button =
     .title = 显示缩略图
 pdfjs-thumbs-button-label = 缩略图
+ngx-page-change-announcement = 第 { $pageNumber } / { $pagesCount } 页
+ngx-labelled-page-change-announcement = 第 { $pageLabel } 页 ({ $pageNumber } / { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-editor-eraser-button =
     .title = Erase
@@ -810,6 +812,3 @@ pdfjs-loading-error-close = Close
 pdfjs-editor-signature-editor2 =
     .aria-description = Signature editor: { $description }
     .aria-label = Signature editor
-# Additional translations for ngx-extended-pdf-viewer (zh-CN)
-ngx-page-change-announcement = 第 { $pageNumber } / { $pagesCount } 页
-ngx-labelled-page-change-announcement = 第 { $pageLabel } 页 ({ $pageNumber } / { $pagesCount })

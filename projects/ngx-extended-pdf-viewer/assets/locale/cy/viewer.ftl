@@ -879,6 +879,8 @@ pdfjs-layers-button-label = Haenau
 pdfjs-thumbs-button =
     .title = Dangos Lluniau Bach
 pdfjs-thumbs-button-label = Lluniau Bach
+ngx-page-change-announcement = Tudalen { $pageNumber } o { $pagesCount }
+ngx-labelled-page-change-announcement = Tudalen { $pageLabel } ({ $pageNumber } o { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-editor-eraser-button =
     .title = Erase
@@ -910,6 +912,3 @@ pdfjs-loading-error-close = Close
 pdfjs-editor-signature-editor2 =
     .aria-description = Signature editor: { $description }
     .aria-label = Signature editor
-# Additional translations for ngx-extended-pdf-viewer (cy)
-ngx-page-change-announcement = Tudalen { $pageNumber } o { $pagesCount }
-ngx-labelled-page-change-announcement = Tudalen { $pageLabel } ({ $pageNumber } o { $pagesCount })

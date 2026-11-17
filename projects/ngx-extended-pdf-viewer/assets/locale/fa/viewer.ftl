@@ -821,6 +821,8 @@ pdfjs-layers-button-label = لایه‌ها
 pdfjs-thumbs-button =
     .title = نمایش تصاویر بندانگشتی
 pdfjs-thumbs-button-label = تصاویر بندانگشتی
+ngx-page-change-announcement = صفحهٔ { $pageNumber } از { $pagesCount }
+ngx-labelled-page-change-announcement = صفحهٔ { $pageLabel } ({ $pageNumber } از { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-editor-eraser-button =
     .title = Erase
@@ -852,6 +854,3 @@ pdfjs-loading-error-close = Close
 pdfjs-editor-signature-editor2 =
     .aria-description = Signature editor: { $description }
     .aria-label = Signature editor
-# Additional translations for ngx-extended-pdf-viewer (fa)
-ngx-page-change-announcement = صفحهٔ { $pageNumber } از { $pagesCount }
-ngx-labelled-page-change-announcement = صفحهٔ { $pageLabel } ({ $pageNumber } از { $pagesCount })

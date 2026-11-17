@@ -823,6 +823,8 @@ pdfjs-layers-button-label = Lagen
 pdfjs-thumbs-button =
     .title = Miniatueren toane
 pdfjs-thumbs-button-label = Miniatueren
+ngx-page-change-announcement = Side { $pageNumber } fan { $pagesCount }
+ngx-labelled-page-change-announcement = Side { $pageLabel } ({ $pageNumber } fan { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-editor-eraser-button =
     .title = Erase
@@ -854,6 +856,3 @@ pdfjs-loading-error-close = Close
 pdfjs-editor-signature-editor2 =
     .aria-description = Signature editor: { $description }
     .aria-label = Signature editor
-# Additional translations for ngx-extended-pdf-viewer (fy-NL)
-ngx-page-change-announcement = Side { $pageNumber } fan { $pagesCount }
-ngx-labelled-page-change-announcement = Side { $pageLabel } ({ $pageNumber } fan { $pagesCount })

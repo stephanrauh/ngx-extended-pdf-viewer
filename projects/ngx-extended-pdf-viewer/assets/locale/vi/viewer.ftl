@@ -767,6 +767,8 @@ pdfjs-layers-button-label = Lớp
 pdfjs-thumbs-button =
     .title = Hiển thị ảnh thu nhỏ
 pdfjs-thumbs-button-label = Ảnh thu nhỏ
+ngx-page-change-announcement = Trang { $pageNumber } / { $pagesCount }
+ngx-labelled-page-change-announcement = Trang { $pageLabel } ({ $pageNumber } trên { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-editor-eraser-button =
     .title = Erase
@@ -798,6 +800,3 @@ pdfjs-loading-error-close = Close
 pdfjs-editor-signature-editor2 =
     .aria-description = Signature editor: { $description }
     .aria-label = Signature editor
-# Additional translations for ngx-extended-pdf-viewer (vi)
-ngx-page-change-announcement = Trang { $pageNumber } / { $pagesCount }
-ngx-labelled-page-change-announcement = Trang { $pageLabel } ({ $pageNumber } trên { $pagesCount })

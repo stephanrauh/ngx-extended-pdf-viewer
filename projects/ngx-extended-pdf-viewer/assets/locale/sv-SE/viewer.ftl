@@ -850,10 +850,9 @@ pdfjs-editor-undo-button-label = Ångra
 pdfjs-editor-redo-button =
     .title = Gör om
 pdfjs-editor-redo-button-label = Gör om
+ngx-page-change-announcement = Sida { $pageNumber } av { $pagesCount }
+ngx-labelled-page-change-announcement = Sida { $pageLabel } ({ $pageNumber } av { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-editor-signature-editor2 =
     .aria-description = Signature editor: { $description }
     .aria-label = Signature editor
-# Additional translations for ngx-extended-pdf-viewer (sv-SE)
-ngx-page-change-announcement = Sida { $pageNumber } av { $pagesCount }
-ngx-labelled-page-change-announcement = Sida { $pageLabel } ({ $pageNumber } av { $pagesCount })

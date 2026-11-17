@@ -837,6 +837,8 @@ pdfjs-layers-button-label = Пласты
 pdfjs-thumbs-button =
     .title = Паказ мініяцюр
 pdfjs-thumbs-button-label = Мініяцюры
+ngx-page-change-announcement = Старонка { $pageNumber } з { $pagesCount }
+ngx-labelled-page-change-announcement = Старонка { $pageLabel } ({ $pageNumber } з { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-editor-eraser-button =
     .title = Erase
@@ -868,6 +870,3 @@ pdfjs-loading-error-close = Close
 pdfjs-editor-signature-editor2 =
     .aria-description = Signature editor: { $description }
     .aria-label = Signature editor
-# Additional translations for ngx-extended-pdf-viewer (be)
-ngx-page-change-announcement = Старонка { $pageNumber } з { $pagesCount }
-ngx-labelled-page-change-announcement = Старонка { $pageLabel } ({ $pageNumber } з { $pagesCount })

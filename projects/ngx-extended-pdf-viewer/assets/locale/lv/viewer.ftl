@@ -281,6 +281,8 @@ pdfjs-attachments-button-label = Pielikumi
 pdfjs-thumbs-button =
     .title = Parādīt sīktēlus
 pdfjs-thumbs-button-label = Sīktēli
+ngx-page-change-announcement = { $pageNumber }. lpp. no { $pagesCount }
+ngx-labelled-page-change-announcement = { $pageLabel } lapa ({ $pageNumber } no { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-save-button =
     .title = Save
@@ -694,6 +696,3 @@ pdfjs-views-manager-status-warning-cut-label = Nevarēja izgriezt. Atsvaidziniet
 pdfjs-views-manager-status-warning-copy-label = Nevarēja kopēt. Atsvaidziniet lapu un mēģiniet vēlreiz.
 pdfjs-views-manager-status-warning-delete-label = Nevarēja dzēst. Atsvaidziniet lapu un mēģiniet vēlreiz.
 pdfjs-views-manager-status-warning-save-label = Nevarēja saglabāt. Atsvaidziniet lapu un mēģiniet vēlreiz.
-# Additional translations for ngx-extended-pdf-viewer (lv)
-ngx-page-change-announcement = { $pageNumber }. lpp. no { $pagesCount }
-ngx-labelled-page-change-announcement = { $pageLabel } lapa ({ $pageNumber } no { $pagesCount })

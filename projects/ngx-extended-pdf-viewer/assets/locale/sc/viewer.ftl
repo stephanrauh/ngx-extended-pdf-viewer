@@ -455,6 +455,8 @@ pdfjs-layers-button-label = Livellos
 pdfjs-thumbs-button =
     .title = Ammustra miniaturas
 pdfjs-thumbs-button-label = Miniaturas
+ngx-page-change-announcement = Pàgina { $pageNumber } de { $pagesCount }
+ngx-labelled-page-change-announcement = Pàgina { $pageLabel } ({ $pageNumber } de { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-spread-odd-button =
     .title = Join page spreads starting with odd-numbered pages
@@ -723,6 +725,3 @@ pdfjs-loading-error-close = Close
 pdfjs-editor-signature-editor2 =
     .aria-description = Signature editor: { $description }
     .aria-label = Signature editor
-# Additional translations for ngx-extended-pdf-viewer (sc)
-ngx-page-change-announcement = Pàgina { $pageNumber } de { $pagesCount }
-ngx-labelled-page-change-announcement = Pàgina { $pageLabel } ({ $pageNumber } de { $pagesCount })

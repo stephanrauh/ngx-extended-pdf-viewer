@@ -850,10 +850,9 @@ pdfjs-editor-undo-button-label = Kumoa
 pdfjs-editor-redo-button =
     .title = Tee uudelleen
 pdfjs-editor-redo-button-label = Tee uudelleen
+ngx-page-change-announcement = Sivu { $pageNumber }/{ $pagesCount }
+ngx-labelled-page-change-announcement = Sivu { $pageLabel } ({ $pageNumber } / { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-editor-signature-editor2 =
     .aria-description = Signature editor: { $description }
     .aria-label = Signature editor
-# Additional translations for ngx-extended-pdf-viewer (fi)
-ngx-page-change-announcement = Sivu { $pageNumber }/{ $pagesCount }
-ngx-labelled-page-change-announcement = Sivu { $pageLabel } ({ $pageNumber } / { $pagesCount })

@@ -260,6 +260,8 @@ pdfjs-layers-button-label = Breathan
 pdfjs-thumbs-button =
     .title = Seall na dealbhagan
 pdfjs-thumbs-button-label = Dealbhagan
+ngx-page-change-announcement = Duilleag { $pageNumber } à { $pagesCount }
+ngx-labelled-page-change-announcement = Duilleag { $pageLabel } ({ $pageNumber } à { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-download-button =
     .title = Download
@@ -662,6 +664,3 @@ pdfjs-loading-error-close = Close
 pdfjs-editor-signature-editor2 =
     .aria-description = Signature editor: { $description }
     .aria-label = Signature editor
-# Additional translations for ngx-extended-pdf-viewer (gd)
-ngx-page-change-announcement = Duilleag { $pageNumber } à { $pagesCount }
-ngx-labelled-page-change-announcement = Duilleag { $pageLabel } ({ $pageNumber } à { $pagesCount })

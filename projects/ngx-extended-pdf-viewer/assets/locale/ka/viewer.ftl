@@ -823,6 +823,8 @@ pdfjs-layers-button-label = შრეები
 pdfjs-thumbs-button =
     .title = შეთვალიერება
 pdfjs-thumbs-button-label = ესკიზები
+ngx-page-change-announcement = გვერდი { $pageNumber }, სულ { $pagesCount }
+ngx-labelled-page-change-announcement = გვერდი { $pageLabel } ({ $pageNumber } { $pagesCount }-დან)
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-editor-eraser-button =
     .title = Erase
@@ -854,6 +856,3 @@ pdfjs-loading-error-close = Close
 pdfjs-editor-signature-editor2 =
     .aria-description = Signature editor: { $description }
     .aria-label = Signature editor
-# Additional translations for ngx-extended-pdf-viewer (ka)
-ngx-page-change-announcement = გვერდი { $pageNumber }, სულ { $pagesCount }
-ngx-labelled-page-change-announcement = გვერდი { $pageLabel } ({ $pageNumber } { $pagesCount }-დან)

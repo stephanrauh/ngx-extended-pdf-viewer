@@ -176,6 +176,8 @@ pdfjs-attachments-button-label = Iatáin
 pdfjs-thumbs-button =
     .title = Taispeáin Mionsamhlacha
 pdfjs-thumbs-button-label = Mionsamhlacha
+ngx-page-change-announcement = Leathanach { $pageNumber } as { $pagesCount }
+ngx-labelled-page-change-announcement = Leathanach { $pageLabel } ({ $pageNumber } as { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-save-button =
     .title = Save
@@ -640,6 +642,3 @@ pdfjs-layers-button-label = Layers
 pdfjs-editor-signature-editor2 =
     .aria-description = Signature editor: { $description }
     .aria-label = Signature editor
-# Additional translations for ngx-extended-pdf-viewer (ga-IE)
-ngx-page-change-announcement = Leathanach { $pageNumber } as { $pagesCount }
-ngx-labelled-page-change-announcement = Leathanach { $pageLabel } ({ $pageNumber } as { $pagesCount })

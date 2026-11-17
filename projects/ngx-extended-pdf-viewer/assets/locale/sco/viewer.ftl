@@ -232,6 +232,8 @@ pdfjs-layers-button-label = Layers
 pdfjs-thumbs-button =
     .title = Kythe Thumbnails
 pdfjs-thumbs-button-label = Thumbnails
+ngx-page-change-announcement = Page { $pageNumber } o { $pagesCount }
+ngx-labelled-page-change-announcement = Page { $pageLabel } ({ $pageNumber } o { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-save-button =
     .title = Save
@@ -655,6 +657,3 @@ pdfjs-loading-error-close = Close
 pdfjs-editor-signature-editor2 =
     .aria-description = Signature editor: { $description }
     .aria-label = Signature editor
-# Additional translations for ngx-extended-pdf-viewer (sco)
-ngx-page-change-announcement = Page { $pageNumber } o { $pagesCount }
-ngx-labelled-page-change-announcement = Page { $pageLabel } ({ $pageNumber } o { $pagesCount })

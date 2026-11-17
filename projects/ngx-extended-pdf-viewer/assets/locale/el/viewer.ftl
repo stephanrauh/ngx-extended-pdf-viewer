@@ -823,6 +823,8 @@ pdfjs-layers-button-label = Επίπεδα
 pdfjs-thumbs-button =
     .title = Εμφάνιση μικρογραφιών
 pdfjs-thumbs-button-label = Μικρογραφίες
+ngx-page-change-announcement = Σελίδα { $pageNumber } από { $pagesCount }
+ngx-labelled-page-change-announcement = Σελίδα { $pageLabel } ({ $pageNumber } από { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-editor-eraser-button =
     .title = Erase
@@ -854,6 +856,3 @@ pdfjs-loading-error-close = Close
 pdfjs-editor-signature-editor2 =
     .aria-description = Signature editor: { $description }
     .aria-label = Signature editor
-# Additional translations for ngx-extended-pdf-viewer (el)
-ngx-page-change-announcement = Σελίδα { $pageNumber } από { $pagesCount }
-ngx-labelled-page-change-announcement = Σελίδα { $pageLabel } ({ $pageNumber } από { $pagesCount })

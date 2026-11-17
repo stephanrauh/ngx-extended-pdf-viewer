@@ -576,6 +576,8 @@ pdfjs-layers-button-label = Lapisan
 pdfjs-thumbs-button =
     .title = Tampilkan Miniatur
 pdfjs-thumbs-button-label = Miniatur
+ngx-page-change-announcement = Halaman { $pageNumber } dari { $pagesCount }
+ngx-labelled-page-change-announcement = Halaman { $pageLabel } ({ $pageNumber } dari { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-thumb-page-title1 =
     .title = Page { $page } of { $total }
@@ -757,6 +759,3 @@ pdfjs-loading-error-close = Close
 pdfjs-editor-signature-editor2 =
     .aria-description = Signature editor: { $description }
     .aria-label = Signature editor
-# Additional translations for ngx-extended-pdf-viewer (id)
-ngx-page-change-announcement = Halaman { $pageNumber } dari { $pagesCount }
-ngx-labelled-page-change-announcement = Halaman { $pageLabel } ({ $pageNumber } dari { $pagesCount })

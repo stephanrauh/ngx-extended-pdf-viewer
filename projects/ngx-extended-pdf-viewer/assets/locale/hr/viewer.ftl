@@ -738,6 +738,8 @@ pdfjs-editor-undo-button-label = Poništi
 pdfjs-editor-redo-button =
     .title = Ponovi
 pdfjs-editor-redo-button-label = Ponovi
+ngx-page-change-announcement = Stranica { $pageNumber } od { $pagesCount }
+ngx-labelled-page-change-announcement = Stranica { $pageLabel } ({ $pageNumber } od { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-toggle-views-manager-notification-button =
     .title = Toggle Sidebar (document contains thumbnails/outline/attachments/layers)
@@ -815,6 +817,3 @@ pdfjs-editor-signature-editor2 =
 # Additional translations for ngx-extended-pdf-viewer from the hr bleeding edge branch
 pdfjs-views-manager-pages-status-waiting-ready-label = Pripremamo tvoju datoteku…
 pdfjs-views-manager-pages-status-waiting-uploading-label = Prijenos datoteke…
-# Additional translations for ngx-extended-pdf-viewer (hr)
-ngx-page-change-announcement = Stranica { $pageNumber } od { $pagesCount }
-ngx-labelled-page-change-announcement = Stranica { $pageLabel } ({ $pageNumber } od { $pagesCount })

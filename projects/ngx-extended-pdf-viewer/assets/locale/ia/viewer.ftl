@@ -823,6 +823,8 @@ pdfjs-layers-button-label = Stratos
 pdfjs-thumbs-button =
     .title = Monstrar le vignettes
 pdfjs-thumbs-button-label = Vignettes
+ngx-page-change-announcement = Pagina { $pageNumber } de { $pagesCount }
+ngx-labelled-page-change-announcement = Pagina { $pageLabel } ({ $pageNumber } de { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-editor-eraser-button =
     .title = Erase
@@ -854,6 +856,3 @@ pdfjs-loading-error-close = Close
 pdfjs-editor-signature-editor2 =
     .aria-description = Signature editor: { $description }
     .aria-label = Signature editor
-# Additional translations for ngx-extended-pdf-viewer (ia)
-ngx-page-change-announcement = Pagina { $pageNumber } de { $pagesCount }
-ngx-labelled-page-change-announcement = Pagina { $pageLabel } ({ $pageNumber } de { $pagesCount })

@@ -823,6 +823,8 @@ pdfjs-layers-button-label = שכבות
 pdfjs-thumbs-button =
     .title = הצגת תצוגה מקדימה
 pdfjs-thumbs-button-label = תצוגה מקדימה
+ngx-page-change-announcement = עמוד { $pageNumber } מתוך { $pagesCount }
+ngx-labelled-page-change-announcement = עמוד { $pageLabel } ({ $pageNumber } מתוך { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-editor-eraser-button =
     .title = Erase
@@ -854,6 +856,3 @@ pdfjs-loading-error-close = Close
 pdfjs-editor-signature-editor2 =
     .aria-description = Signature editor: { $description }
     .aria-label = Signature editor
-# Additional translations for ngx-extended-pdf-viewer (he)
-ngx-page-change-announcement = עמוד { $pageNumber } מתוך { $pagesCount }
-ngx-labelled-page-change-announcement = עמוד { $pageLabel } ({ $pageNumber } מתוך { $pagesCount })

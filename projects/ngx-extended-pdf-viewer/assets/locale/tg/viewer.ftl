@@ -728,6 +728,8 @@ pdfjs-layers-button-label = Қабатҳо
 pdfjs-thumbs-button =
     .title = Намоиш додани тасвирчаҳо
 pdfjs-thumbs-button-label = Тасвирчаҳо
+ngx-page-change-announcement = Саҳифаи { $pageNumber } аз { $pagesCount }
+ngx-labelled-page-change-announcement = Саҳифаи { $pageLabel } ({ $pageNumber } аз { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-editor-eraser-button =
     .title = Erase
@@ -815,6 +817,3 @@ pdfjs-loading-error-close = Close
 pdfjs-editor-signature-editor2 =
     .aria-description = Signature editor: { $description }
     .aria-label = Signature editor
-# Additional translations for ngx-extended-pdf-viewer (tg)
-ngx-page-change-announcement = Саҳифаи { $pageNumber } аз { $pagesCount }
-ngx-labelled-page-change-announcement = Саҳифаи { $pageLabel } ({ $pageNumber } аз { $pagesCount })

@@ -735,6 +735,8 @@ pdfjs-layers-button-label = Capas
 pdfjs-thumbs-button =
     .title = Mostrar miniaturas
 pdfjs-thumbs-button-label = Miniaturas
+ngx-page-change-announcement = Página { $pageNumber } de { $pagesCount }
+ngx-labelled-page-change-announcement = Página { $pageLabel } ({ $pageNumber } de { $pagesCount })
 # Additional translations for ngx-extended-pdf-viewer (es)
 unverified-signature-warning = Este archivo PDF contiene una firma digital. El visor de PDF no puede verificar si la firma es válida. Por favor, descargue el archivo y ábralo en Acrobat Reader para verificar si la firma es válida.
 pdfjs-infinite-scroll-button-label = Desplazamiento infinito
@@ -816,6 +818,3 @@ pdfjs-digital-signature-properties-sub-signatures =
 pdfjs-editor-signature-editor2 =
     .aria-description = Signature editor: { $description }
     .aria-label = Signature editor
-# Additional translations for ngx-extended-pdf-viewer (es-MX)
-ngx-page-change-announcement = Página { $pageNumber } de { $pagesCount }
-ngx-labelled-page-change-announcement = Página { $pageLabel } ({ $pageNumber } de { $pagesCount })

@@ -387,6 +387,8 @@ pdfjs-layers-button-label = Calques
 pdfjs-thumbs-button =
     .title = Afichar las vinhetas
 pdfjs-thumbs-button-label = Vinhetas
+ngx-page-change-announcement = Pagina { $pageNumber } sus { $pagesCount }
+ngx-labelled-page-change-announcement = Pagina { $pageLabel } ({ $pageNumber } de { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } KB ({ $b } bytes)
 pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } bytes)
@@ -706,6 +708,3 @@ pdfjs-loading-error-close = Close
 pdfjs-editor-signature-editor2 =
     .aria-description = Signature editor: { $description }
     .aria-label = Signature editor
-# Additional translations for ngx-extended-pdf-viewer (oc)
-ngx-page-change-announcement = Pagina { $pageNumber } sus { $pagesCount }
-ngx-labelled-page-change-announcement = Pagina { $pageLabel } ({ $pageNumber } de { $pagesCount })

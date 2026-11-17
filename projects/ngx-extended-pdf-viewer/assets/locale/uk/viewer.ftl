@@ -741,6 +741,8 @@ pdfjs-editor-undo-button-label = Повернути
 pdfjs-editor-redo-button =
     .title = Повторити
 pdfjs-editor-redo-button-label = Повторити
+ngx-page-change-announcement = Сторінка { $pageNumber } із { $pagesCount }
+ngx-labelled-page-change-announcement = Сторінка { $pageLabel } ({ $pageNumber } із { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-thumb-page-title1 =
     .title = Page { $page } of { $total }
@@ -814,6 +816,3 @@ pdfjs-digital-signature-properties-sub-signatures =
 pdfjs-editor-signature-editor2 =
     .aria-description = Signature editor: { $description }
     .aria-label = Signature editor
-# Additional translations for ngx-extended-pdf-viewer (uk)
-ngx-page-change-announcement = Сторінка { $pageNumber } із { $pagesCount }
-ngx-labelled-page-change-announcement = Сторінка { $pageLabel } ({ $pageNumber } із { $pagesCount })

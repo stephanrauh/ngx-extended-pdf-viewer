@@ -863,10 +863,9 @@ pdfjs-editor-undo-button-label = Cofnij
 pdfjs-editor-redo-button =
     .title = Ponów
 pdfjs-editor-redo-button-label = Ponów
+ngx-page-change-announcement = { $pageNumber }. strona z { $pagesCount }
+ngx-labelled-page-change-announcement = { $pageLabel }. strona ({ $pageNumber } z { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-editor-signature-editor2 =
     .aria-description = Signature editor: { $description }
     .aria-label = Signature editor
-# Additional translations for ngx-extended-pdf-viewer (pl)
-ngx-page-change-announcement = { $pageNumber }. strona z { $pagesCount }
-ngx-labelled-page-change-announcement = { $pageLabel }. strona ({ $pageNumber } z { $pagesCount })

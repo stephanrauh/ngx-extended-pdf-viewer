@@ -850,10 +850,9 @@ pdfjs-editor-undo-button-label = Rückgängig
 pdfjs-editor-redo-button =
     .title = Wiederholen
 pdfjs-editor-redo-button-label = Wiederholen
+ngx-page-change-announcement = Seite { $pageNumber } von { $pagesCount }
+ngx-labelled-page-change-announcement = Seite { $pageLabel } ({ $pageNumber } von { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-editor-signature-editor2 =
     .aria-description = Signature editor: { $description }
     .aria-label = Signature editor
-# Additional translations for ngx-extended-pdf-viewer (de)
-ngx-page-change-announcement = Seite { $pageNumber } von { $pagesCount }
-ngx-labelled-page-change-announcement = Seite { $pageLabel } ({ $pageNumber } von { $pagesCount })

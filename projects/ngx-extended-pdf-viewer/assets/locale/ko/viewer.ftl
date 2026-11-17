@@ -767,6 +767,8 @@ pdfjs-layers-button-label = 레이어
 pdfjs-thumbs-button =
     .title = 미리보기
 pdfjs-thumbs-button-label = 미리보기
+ngx-page-change-announcement = { $pageNumber } / { $pagesCount } 페이지
+ngx-labelled-page-change-announcement = { $pageLabel } 페이지 ({ $pageNumber } / { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-editor-eraser-button =
     .title = Erase
@@ -798,6 +800,3 @@ pdfjs-loading-error-close = Close
 pdfjs-editor-signature-editor2 =
     .aria-description = Signature editor: { $description }
     .aria-label = Signature editor
-# Additional translations for ngx-extended-pdf-viewer (ko)
-ngx-page-change-announcement = { $pageNumber } / { $pagesCount } 페이지
-ngx-labelled-page-change-announcement = { $pageLabel } 페이지 ({ $pageNumber } / { $pagesCount })

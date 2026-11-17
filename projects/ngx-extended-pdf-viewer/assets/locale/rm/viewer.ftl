@@ -626,6 +626,8 @@ pdfjs-layers-button-label = Nivels
 pdfjs-thumbs-button =
     .title = Mussar las miniaturas
 pdfjs-thumbs-button-label = Miniaturas
+ngx-page-change-announcement = Pagina { $pageNumber } da { $pagesCount }
+ngx-labelled-page-change-announcement = Pagina { $pageLabel } ({ $pageNumber } da { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-thumb-page-title1 =
     .title = Page { $page } of { $total }
@@ -781,6 +783,3 @@ pdfjs-loading-error-close = Close
 pdfjs-editor-signature-editor2 =
     .aria-description = Signature editor: { $description }
     .aria-label = Signature editor
-# Additional translations for ngx-extended-pdf-viewer (rm)
-ngx-page-change-announcement = Pagina { $pageNumber } da { $pagesCount }
-ngx-labelled-page-change-announcement = Pagina { $pageLabel } ({ $pageNumber } da { $pagesCount })
