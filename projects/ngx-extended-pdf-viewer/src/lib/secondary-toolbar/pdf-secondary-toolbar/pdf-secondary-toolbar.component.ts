@@ -59,6 +59,7 @@ export class PdfSecondaryToolbarComponent implements AfterViewInit, OnDestroy {
   // #3306 modified by ngx-extended-pdf-viewer
   /** The buttons of this viewer - with several viewers on the page, each one has its own. */
   public get buttons(): PdfShyButtonDescription[] {
+    this.pdfShyButtonService.changes(); // #3316 re-render when a button's state changes
     return this.pdfShyButtonService.buttonsOf(this.element.nativeElement.closest('ngx-extended-pdf-viewer'));
   }
   // #3306 end of modification by ngx-extended-pdf-viewer

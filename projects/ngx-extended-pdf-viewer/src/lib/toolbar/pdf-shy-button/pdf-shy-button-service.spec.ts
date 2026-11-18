@@ -150,11 +150,10 @@ describe('PdfShyButtonService', () => {
       pdfAppSignal.set(mockApp);
       TestBed.flushEffects();
 
-      const button = createMockButton({ secondaryMenuId: 'myId' });
-      // Intentionally add the same button twice to verify that re-adding
-      // (replacing) a button doesn't throw when l10n is unavailable.
-      service.add(button);
-      service.add(button); // NOSONAR — intentional duplicate add to test replacement
+      // Re-adding the button with a new title replaces it and schedules a translation (#3316),
+      // which mustn't throw when l10n is unavailable.
+      service.add(createMockButton({ secondaryMenuId: 'myId', title: 'First' }));
+      service.add(createMockButton({ secondaryMenuId: 'myId', title: 'Second' }));
 
       // Should not throw when setTimeout fires
       expect(() => jest.advanceTimersByTime(1)).not.toThrow();
@@ -164,14 +163,86 @@ describe('PdfShyButtonService', () => {
     it('should handle replacement when PDFViewerApplication is undefined', () => {
       jest.useFakeTimers();
 
-      const button = createMockButton({ secondaryMenuId: 'myId' });
-      // Intentionally add the same button twice to verify that re-adding
-      // (replacing) a button doesn't throw when PDFViewerApplication is undefined.
-      service.add(button);
-      service.add(button); // NOSONAR — intentional duplicate add to test replacement
+      // Re-adding the button with a new title replaces it and schedules a translation (#3316),
+      // which mustn't throw when PDFViewerApplication is undefined.
+      service.add(createMockButton({ secondaryMenuId: 'myId', title: 'First' }));
+      service.add(createMockButton({ secondaryMenuId: 'myId', title: 'Second' }));
 
       expect(() => jest.advanceTimersByTime(1)).not.toThrow();
       jest.useRealTimers();
+    });
+
+    describe('re-translation (#3316)', () => {
+      let mockL10n: { translate: jest.Mock };
+
+      beforeEach(() => {
+        jest.useFakeTimers();
+        mockL10n = { translate: jest.fn().mockResolvedValue(undefined) };
+        pdfAppSignal.set({ l10n: mockL10n } as any);
+        TestBed.flushEffects();
+      });
+
+      afterEach(() => {
+        jest.useRealTimers();
+      });
+
+      const pagingButton = (overrides: Partial<Record<string, any>> = {}) =>
+        createMockButton({
+          secondaryMenuId: 'secondaryPreviousPage',
+          l10nId: 'pdfjs-previous-button',
+          l10nLabel: 'pdfjs-previous-button-label',
+          title: 'Previous Page',
+          order: 600,
+          ...overrides,
+        });
+
+      it("doesn't re-translate the viewer when only `disabled` changes (a page boundary)", () => {
+        service.add(pagingButton({ disabled: true }));
+        service.add(pagingButton({ disabled: false }));
+        service.add(pagingButton({ disabled: true }));
+        jest.advanceTimersByTime(1);
+
+        expect(mockL10n.translate).not.toHaveBeenCalled();
+        expect(service.buttons[0].disabled).toBe(true);
+      });
+
+      it("doesn't re-translate the viewer when only `toggled`, the image or the order change", () => {
+        service.add(pagingButton());
+        service.add(pagingButton({ toggled: true }));
+        service.add(pagingButton({ toggled: true, imageHtml: '<svg></svg>' }));
+        service.add(pagingButton({ toggled: true, imageHtml: '<svg></svg>', order: 1 }));
+        jest.advanceTimersByTime(1);
+
+        expect(mockL10n.translate).not.toHaveBeenCalled();
+      });
+
+      it('still sorts the buttons when an update needs no translation', () => {
+        service.add(createMockButton({ secondaryMenuId: 'a', order: 100 }));
+        service.add(createMockButton({ secondaryMenuId: 'b', order: 200 }));
+        service.add(createMockButton({ secondaryMenuId: 'b', order: 50 }));
+
+        expect(service.buttons.map((b) => b.id)).toEqual(['b', 'a']);
+      });
+
+      it('tells the secondary menu about every change, even when nothing needs translating', () => {
+        const before = service.changes();
+        service.add(pagingButton({ disabled: true }));
+        service.add(pagingButton({ disabled: false }));
+
+        expect(service.changes()).toBe(before + 2);
+      });
+
+      it.each([
+        ['l10nId', { l10nId: 'pdfjs-next-button' }],
+        ['l10nLabel', { l10nLabel: 'pdfjs-next-button-label' }],
+        ['title', { title: 'Next Page' }],
+      ])('re-translates the button when its %s changes', (_name, change) => {
+        service.add(pagingButton());
+        service.add(pagingButton(change));
+        jest.advanceTimersByTime(1);
+
+        expect(mockL10n.translate).toHaveBeenCalledTimes(1);
+      });
     });
 
     it('should use default order 99999 when order is null', () => {

@@ -29,7 +29,7 @@ describe('PdfSecondaryToolbarComponent', () => {
       secondaryMenuIsEmpty: signal(false),
     } as jest.Mocked<Partial<NgxExtendedPdfViewerService>>;
 
-    const pdfShyButtonServiceMock = { buttonsOf: jest.fn(() => []) } as jest.Mocked<Partial<PdfShyButtonService>>;
+    const pdfShyButtonServiceMock = { buttonsOf: jest.fn(() => []), changes: jest.fn(() => 0) as any } as jest.Mocked<Partial<PdfShyButtonService>>;
 
     // Mock PDFViewerApplication
     mockPDFViewerApplication = {
