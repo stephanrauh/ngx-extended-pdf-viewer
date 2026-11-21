@@ -1302,9 +1302,21 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
 
     // Navigate to the page if PDF viewer is initialized
     if (typeof window === 'undefined') return;
-    if (!this.initialized) return;
 
     const PDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
+    // #3316 modified by ngx-extended-pdf-viewer
+    // The document isn't there yet: open it at this page when its pages have been loaded. Until
+    // then, page() may be overwritten by the page pdf.js reports while it sets up the document
+    // (page 1), so the request is kept here (like `_pageLabelToOpen`).
+    if (!this.initialized || !PDFViewerApplication?.pagesCount) {
+      this._pageToOpen = newPageNumber ? Number(newPageNumber) : undefined;
+      return;
+    }
+    if (this._pageToOpen !== undefined) {
+      // the initial navigation is still pending (e.g. [page] changed in (pagesLoaded)): it must go to the newer page
+      this._pageToOpen = newPageNumber ? Number(newPageNumber) : undefined;
+    }
+    // #3316 end of modification by ngx-extended-pdf-viewer
     if (newPageNumber && PDFViewerApplication?.pdfViewer) {
       // #3315 the application navigates, e.g. from a "go to chapter" button outside the viewer
       this.pageChangeAnnouncer?.expectNavigation();
@@ -1313,6 +1325,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
   });
 
   private _page: number | undefined = undefined;
+
+  /** #3316 The page `[page]` asked for before the document was loaded. */
+  private _pageToOpen: number | undefined;
 
   public pageLabel = model<string | undefined>(undefined);
 
@@ -2859,8 +2874,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
         this.asyncWithCD(() => {
           if (!this.destroyInitialization) {
             // hurried users sometimes reload the PDF before it has finished initializing
-            if (this.page()) {
-              PDFViewerApplication.page = Number(this.page());
+            // #3316 modified by ngx-extended-pdf-viewer: the request stays pinned until 'pagesloaded' has applied it
+            const pageToOpen = this._pageToOpen ?? this.page();
+            if (pageToOpen) {
+              PDFViewerApplication.page = Number(pageToOpen);
             }
           }
         }),
@@ -3038,8 +3055,16 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
             PDFViewerApplication.pdfViewer.pagesRotation = r;
           }
         }
+        // #3316 modified by ngx-extended-pdf-viewer
+        // Pin the requested page now: setZoom() below makes pdf.js report the page at the top of the
+        // viewer (page 1), and that mustn't overwrite [page] before the timeout has navigated there.
+        const requestedPage = this._pageToOpen ?? this.page();
+        this._pageToOpen = requestedPage ? Number(requestedPage) : undefined;
+        // #3316 end of modification by ngx-extended-pdf-viewer
         setTimeout(
           this.asyncWithCD(() => {
+            const pageToOpen = this._pageToOpen; // #3316 modified by ngx-extended-pdf-viewer
+            this._pageToOpen = undefined;
             if (!this.destroyInitialization) {
               // hurried users sometimes reload the PDF before it has finished initializing
               const pageLabelToOpen = this._pageLabelToOpen;
@@ -3049,8 +3074,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
               } else if (pageLabelToOpen) {
                 // checked before [page]: by now, page() is the page the viewer has opened, not necessarily one the application asked for
                 PDFViewerApplication.pdfViewer.currentPageLabel = pageLabelToOpen;
-              } else if (this.page()) {
-                PDFViewerApplication.page = Number(this.page());
+              } else if (pageToOpen) {
+                PDFViewerApplication.page = Number(pageToOpen);
               }
             }
           }),
@@ -3427,6 +3452,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnDestroy, NgxHasH
               const currentPage = PDFViewerApplication.pdfViewer.currentPageNumber;
               const currentPageLabel = PDFViewerApplication.pdfViewer.currentPageLabel;
 
+              // #3316 modified by ngx-extended-pdf-viewer: while the document is being set up, pdf.js
+              // reports page 1 - that mustn't overwrite the page the application asked for
+              if (this._pageToOpen !== undefined) {
+                this.setPageLabelFromViewer(currentPageLabel);
+                return;
+              }
+              // #3316 end of modification by ngx-extended-pdf-viewer
               if (currentPage !== this.page()) {
                 // #3157 Set guard flag so the page effect doesn't navigate back
                 // (which would snap to the top of the page during scrolling)

@@ -1318,6 +1318,96 @@ describe('NgxExtendedPdfViewerComponent', () => {
     }) as any);
   }
 
+  describe('[page] while the document opens (#3316)', () => {
+    let app: any;
+    let pendingTimeouts: Array<() => void>;
+    let setTimeoutSpy: jest.SpyInstance;
+
+    beforeEach(() => {
+      app = component['pdfScriptLoaderService'].PDFViewerApplication;
+      // the mock is shared: without this, the listeners of components from earlier tests are found first
+      (app.eventBus.on as jest.Mock).mockClear();
+      app.page = 1;
+      app.pdfViewer.currentPageNumber = 1;
+      component['setZoom'] = jest.fn();
+      jest.spyOn(component as any, 'dynamicCSSComponent').mockReturnValue(undefined);
+      component['registerEventListeners'](app);
+      pendingTimeouts = [];
+      setTimeoutSpy = jest.spyOn(window, 'setTimeout').mockImplementation(((callback: () => void) => {
+        pendingTimeouts.push(callback);
+        return 0;
+      }) as any);
+    });
+
+    afterEach(() => setTimeoutSpy.mockRestore());
+
+    function runPendingTimeouts(): void {
+      pendingTimeouts.splice(0).forEach((callback) => callback());
+    }
+
+    /** Like the real event bus: every listener for the event gets it (the page change announcer listens to 'pagechanging', too). */
+    function dispatch(eventName: string, event: unknown): void {
+      (app.eventBus.on as jest.Mock).mock.calls.filter(([name]) => name === eventName).forEach(([, listener]) => listener(event));
+    }
+
+    function setPage(page: number): void {
+      fixture.componentRef.setInput('page', page);
+      fixture.detectChanges();
+      TestBed.flushEffects();
+    }
+
+    function loadPages(): void {
+      (component as any).initialized = true;
+      app.pagesCount = 10;
+      dispatch('pagesloaded', { pagesCount: 10 });
+    }
+
+    it('opens the page requested before the document was loaded', () => {
+      setPage(4);
+      loadPages();
+      runPendingTimeouts();
+
+      expect(app.page).toBe(4);
+      expect(component['_pageToOpen']).toBeUndefined();
+    });
+
+    it('the page pdf.js reports while it applies the zoom does not overwrite [page]', async () => {
+      setPage(4);
+      loadPages();
+      app.pdfViewer.currentPageNumber = 1;
+      dispatch('pagechanging', { pageNumber: 1 });
+      await Promise.resolve();
+
+      expect(component.page()).toBe(4);
+      runPendingTimeouts();
+      expect(app.page).toBe(4);
+    });
+
+    it('a newer [page] set in (pagesLoaded) wins over the pending initial page', () => {
+      setPage(4);
+      loadPages();
+      setPage(7);
+      expect(app.page).toBe(7);
+
+      runPendingTimeouts();
+
+      expect(app.page).toBe(7);
+      expect(component['_pageToOpen']).toBeUndefined();
+    });
+
+    it('reports scrolling again once the initial page has been opened', async () => {
+      setPage(4);
+      loadPages();
+      runPendingTimeouts();
+
+      app.pdfViewer.currentPageNumber = 5;
+      dispatch('pagechanging', { pageNumber: 5 });
+      await Promise.resolve();
+
+      expect(component.page()).toBe(5);
+    });
+  });
+
   describe('[pageLabel]', () => {
     let app: any;
 
