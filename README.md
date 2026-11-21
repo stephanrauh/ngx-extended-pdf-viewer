@@ -34,6 +34,7 @@ Version 32 ships **pdf.js 6.5** in both the stable and the bleeding-edge bundle:
 - **Smoother pinch zoom** ([#3069](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/3069)), also in iOS Safari.
 - **Accessibility** ([#3304](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/3304), [#3310](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/3310)): named dialogs, a find result that's announced once, visible toggle buttons in Windows high-contrast mode, and no page-turn animation when the user asks for reduced motion.
 - **Rendering in a background thread** (experimental, off by default): `pdfDefaultOptions.disableWorkerRendering = false`.
+- **Book mode fits into the viewer** ([#3316](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/3316)): with "page fit", the bottom edge of the book is no longer hidden behind a scrollbar, and a click on the corner of a page turns it reliably. The book is about 2% smaller than before; if you compare screenshots of book mode, update them.
 
 ### Angular versions
 

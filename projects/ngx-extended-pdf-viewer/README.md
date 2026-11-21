@@ -172,6 +172,7 @@ Version 32 updates to pdf.js 6.5 in both bundles and lets you show several PDF v
 - **Accessibility** ([#3304](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/3304), [#3310](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/3310)): screen readers announce the find result once and read the names of the dialogs, toggle buttons are visible in Windows high-contrast mode, book mode turns pages without animation when the operating system asks for reduced motion, and outline entries are big enough to tap.
 - **Dialogs and editor toolbars follow the viewer's theme** instead of the operating system's dark mode, so they no longer show light text on a light background.
 - **Eraser**: now it works on the whole page, on rotated pages and on restored drawings, too.
+- **Book mode fits into the viewer** ([#3316](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/3316)): with "page fit", the bottom edge of the book is no longer hidden behind a scrollbar, and a click on the corner of a page turns it reliably. The book is about 2% smaller than before. If you compare screenshots of book mode, update them.
 
 **New for developers:**
 
