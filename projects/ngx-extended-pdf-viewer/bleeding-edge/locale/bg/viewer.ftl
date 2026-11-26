@@ -180,6 +180,11 @@ pdfjs-additional-layers = Допълнителни слоеве
 #   $page (Number) - the page number
 pdfjs-thumb-page-canvas =
     .aria-label = Миниатюра на страница { $page }
+# Variables:
+#   $page (Number) - the page number
+#   $total (Number) - the number of pages
+pdfjs-thumb-page-title1 =
+    .title = Страница { $page } от { $total }
 
 ## Find panel button title and messages
 
@@ -272,6 +277,13 @@ pdfjs-editor-ink-button-label = Рисуване
 pdfjs-editor-stamp-button =
     .title = Добавяне или редактиране на изображения
 pdfjs-editor-stamp-button-label = Добавяне или променяне на изображения
+pdfjs-editor-highlight-button =
+    .title = Открояване
+pdfjs-editor-highlight-button-label = Открояване
+pdfjs-highlight-floating-button1 =
+    .aria-label = Открояване
+    .title = Открояване
+pdfjs-highlight-floating-button-label = Открояване
 
 ## Default editor aria labels
 
@@ -417,9 +429,23 @@ pdfjs-editor-add-comment-button =
 ##  - layers.
 ## The thumbnails view is used to edit the pdf: remove/insert pages, ...
 
+pdfjs-toggle-views-manager-notification-button =
+    .title = Превключване на страничния панел (документът съдържа миниатюри/структура/прикачени файлове/слоеве)
 pdfjs-toggle-views-manager-button1-label = Управление на страници
+pdfjs-views-manager-sidebar =
+    .aria-label = Страничен панел
+pdfjs-views-manager-view-selector-button =
+    .title = Изгледи
+pdfjs-views-manager-view-selector-button-label = Изгледи
 pdfjs-views-manager-pages-title = Страници
+pdfjs-views-manager-outlines-title1 = Структура на документа
+    .title = Структура на документа (двукратно щракване за свиване/разгъване на всичко)
+pdfjs-views-manager-layers-title1 = Слоеве
+    .title = Слоеве (двукратно щракване за връщане на всички слоеве в първоначалното им състояние)
 pdfjs-views-manager-pages-option-label = Страници
+pdfjs-views-manager-outlines-option-label = Структура на документа
+pdfjs-views-manager-attachments-option-label = Прикачени файлове
+pdfjs-views-manager-layers-option-label = Слоеве
 # Variables:
 #   $count (Number) - the number of selected pages.
 pdfjs-views-manager-pages-status-action-label =
@@ -428,6 +454,7 @@ pdfjs-views-manager-pages-status-action-label =
        *[other] { $count } избрани
     }
 pdfjs-views-manager-pages-status-action-button-label = Управление
+pdfjs-views-manager-pages-status-export-selected-button-label = Експортиране на избраните…
 # Variables:
 #   $count (Number) - the number of selected pages to be copied.
 pdfjs-views-manager-pages-status-undo-copy-label =
@@ -503,21 +530,12 @@ pdfjs-editor-redo-button-label = Повторение
 ngx-page-change-announcement = Страница { $pageNumber } от { $pagesCount }
 ngx-labelled-page-change-announcement = Страница { $pageLabel } ({ $pageNumber } от { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-thumb-page-title1 =
-    .title = Page { $page } of { $total }
 pdfjs-thumb-page-checkbox1 =
     .title = Select page { $page }
 pdfjs-editor-color-picker-free-text-input =
     .title = Change text color
 pdfjs-editor-color-picker-ink-input =
     .title = Change drawing color
-pdfjs-editor-highlight-button =
-    .title = Highlight
-pdfjs-editor-highlight-button-label = Highlight
-pdfjs-highlight-floating-button1 =
-    .title = Highlight
-    .aria-label = Highlight
-pdfjs-highlight-floating-button-label = Highlight
 pdfjs-comment-floating-button =
     .title = Comment
     .aria-label = Comment
@@ -652,23 +670,9 @@ pdfjs-editor-edit-comment-dialog-save-button-when-adding = Add
 pdfjs-editor-edit-comment-dialog-text-input =
     .placeholder = Start typing…
 pdfjs-editor-edit-comment-dialog-cancel-button = Cancel
-pdfjs-toggle-views-manager-notification-button =
-    .title = Toggle Sidebar (document contains thumbnails/outline/attachments/layers)
-pdfjs-views-manager-sidebar =
-    .aria-label = Sidebar
 pdfjs-views-manager-sidebar-resizer =
     .aria-label = Sidebar resizer
-pdfjs-views-manager-view-selector-button =
-    .title = Views
-pdfjs-views-manager-view-selector-button-label = Views
-pdfjs-views-manager-outlines-title1 = Document outline
-    .title = Document outline (double-click to expand/collapse all items)
 pdfjs-views-manager-attachments-title = Attachments
-pdfjs-views-manager-layers-title1 = Layers
-    .title = Layers (double-click to reset all layers to the default state)
-pdfjs-views-manager-outlines-option-label = Document outline
-pdfjs-views-manager-attachments-option-label = Attachments
-pdfjs-views-manager-layers-option-label = Layers
 pdfjs-views-manager-add-file-button =
     .title = Add file
 pdfjs-views-manager-add-file-button-label = Add file
@@ -676,7 +680,6 @@ pdfjs-views-manager-pages-status-none-action-label = Select pages
 pdfjs-views-manager-pages-status-copy-button-label = Copy
 pdfjs-views-manager-pages-status-cut-button-label = Cut
 pdfjs-views-manager-pages-status-delete-button-label = Delete
-pdfjs-views-manager-pages-status-export-selected-button-label = Export selected…
 pdfjs-views-manager-status-undo-cut-label =
     { $count ->
         [one] 1 page cut

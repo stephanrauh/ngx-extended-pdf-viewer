@@ -336,6 +336,12 @@ pdfjs-editor-ink-editor =
 # Used when a signature editor is selected/hovered.
 # Variables:
 #   $description (String) - a string describing/labeling the signature.
+pdfjs-editor-signature-editor2 =
+    .aria-description = Redigering af signatur: { $description }
+    .aria-label = Redigering af signatur
+# Used when a signature editor is selected/hovered.
+# Variables:
+#   $description (String) - a string describing/labeling the signature.
 pdfjs-editor-signature-editor1 =
     .aria-description = Redigering af signatur: { $description }
 pdfjs-editor-stamp-editor =
@@ -851,8 +857,5 @@ pdfjs-editor-redo-button-label = Gentag
 ngx-page-change-announcement = Side { $pageNumber } af { $pagesCount }
 ngx-labelled-page-change-announcement = Side { $pageLabel } ({ $pageNumber } af { $pagesCount })
 # Translations for ngx-extended-pdf-viewer additions only available in en-US
-pdfjs-editor-signature-editor2 =
-    .aria-description = Signature editor: { $description }
-    .aria-label = Signature editor
 pdfjs-views-manager-sidebar-resizer =
     .aria-label = Sidebar resizer

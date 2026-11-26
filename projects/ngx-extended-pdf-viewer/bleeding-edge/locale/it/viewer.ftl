@@ -813,7 +813,6 @@ pdfjs-editor-add-signature-edit-button-label = Modifica descrizione
 
 pdfjs-editor-edit-signature-dialog-title = Modifica descrizione
 
-
 # Additional translations for ngx-extended-pdf-viewer (it)
 unverified-signature-warning = Questo file PDF contiene una firma digitale. Questo visualizzatore PDF non può verificare se la firma è valida. Scarica il file e aprilo in Acrobat Reader per verificare che la firma sia valida.
 pdfjs-infinite-scroll-button-label = Scorrimento infinito

@@ -109,6 +109,14 @@ export class AnnotationLayer {
     _annotationEditorUIManager: any;
     _commentManager: any;
     popupShow: any[] | undefined;
+    /**
+     * Get the average color the page shows in an area. The result is approximate,
+     * because it's read from a scaled-down copy of the page: reading the pixels
+     * just once is much faster than doing it for every field.
+     * @param {Array<number>} rect - in PDF coordinates.
+     * @returns {Array<number> | null} `null` if the color is unknown.
+     */
+    getPageColor(rect: Array<number>): Array<number> | null;
     hasEditableAnnotations(): boolean;
     /**
      * Render a new annotation layer with all annotation elements.
@@ -269,6 +277,13 @@ declare class AnnotationElement {
     get width(): number;
     get height(): number;
     _setBackgroundColor(element: any): void;
+    /**
+     * Checkboxes and radio buttons are drawn by CSS, using `currentColor`. Take
+     * the colors from the PDF, so they don't depend on the color scheme of the
+     * operating system, and make sure the mark stands out from what's behind it.
+     * @param {HTMLElement} element
+     */
+    _setMarkColors(element: HTMLElement): void;
     #private;
 }
 export {};

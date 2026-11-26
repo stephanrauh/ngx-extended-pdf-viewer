@@ -206,6 +206,18 @@ pdfjs-password-ok-button = Tamam
 pdfjs-password-cancel-button = Ləğv et
 pdfjs-web-fonts-disabled = Web Şriftlər söndürülüb: yerləşdirilmiş PDF şriftlərini istifadə etmək mümkün deyil.
 
+## Alt-text dialog
+
+pdfjs-editor-alt-text-cancel-button = Ləğv et
+
+## Dialog buttons
+
+pdfjs-editor-add-signature-cancel-button = Ləğv et
+
+##  Edit a comment dialog
+
+pdfjs-editor-edit-comment-dialog-cancel-button = Ləğv et
+
 # Additional translations for ngx-extended-pdf-viewer (az)
 pdfjs-toggle-sidebar-button =
     .title = Yan Paneli Aç/Bağla
@@ -359,7 +371,6 @@ pdfjs-editor-alt-text-add-description-label = Add a description
 pdfjs-editor-alt-text-add-description-description = Aim for 1-2 sentences that describe the subject, setting, or actions.
 pdfjs-editor-alt-text-mark-decorative-label = Mark as decorative
 pdfjs-editor-alt-text-mark-decorative-description = This is used for ornamental images, like borders or watermarks.
-pdfjs-editor-alt-text-cancel-button = Cancel
 pdfjs-editor-alt-text-save-button = Save
 pdfjs-editor-alt-text-decorative-tooltip = Marked as decorative
 pdfjs-editor-alt-text-textarea =
@@ -496,7 +507,6 @@ pdfjs-editor-add-signature-image-upload-error-description = Check your network c
 pdfjs-editor-add-signature-image-no-data-error-title = Can’t convert this image into a signature
 pdfjs-editor-add-signature-image-no-data-error-description = Please try uploading a different image.
 pdfjs-editor-add-signature-error-close-button = Close
-pdfjs-editor-add-signature-cancel-button = Cancel
 pdfjs-editor-add-signature-add-button = Add
 pdfjs-editor-delete-signature-button1 =
     .title = Remove saved signature
@@ -518,7 +528,6 @@ pdfjs-editor-edit-comment-dialog-title-when-adding = Add comment
 pdfjs-editor-edit-comment-dialog-save-button-when-adding = Add
 pdfjs-editor-edit-comment-dialog-text-input =
     .placeholder = Start typing…
-pdfjs-editor-edit-comment-dialog-cancel-button = Cancel
 pdfjs-editor-add-comment-button =
     .title = Add comment
 pdfjs-toggle-views-manager-button1 =

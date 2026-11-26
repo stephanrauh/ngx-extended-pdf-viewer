@@ -15,29 +15,18 @@
 
 ngx-extended-pdf-viewer {
   .annotationLayer {
-    // #3111 modified by ngx-extended-pdf-viewer
-    // Changed from "only light" to adapt to dark mode for better checkbox visibility
-    color-scheme: light dark;
+    // #3318 The annotation layer covers the PDF page, so it must follow neither
+    // the OS nor the viewer theme. Same values as upstream.
+    color-scheme: only light;
 
-    // Use light-dark() to adapt form control colors to the viewer theme
-    --annotation-unfocused-field-background: light-dark(
-      url("data:image/svg+xml;charset=UTF-8,<svg width='1px' height='1px' xmlns='http://www.w3.org/2000/svg'><rect width='100%' height='100%' style='fill:rgba(0, 54, 255, 0.13);'/></svg>"),
-      url("data:image/svg+xml;charset=UTF-8,<svg width='1px' height='1px' xmlns='http://www.w3.org/2000/svg'><rect width='100%' height='100%' style='fill:rgba(0, 102, 204, 0.2);'/></svg>")
-    );
-    // pdf.js 6.1 (bug 1802506): canvas-rendered fields are tinted via an SVG
-    // filter instead of a background image. #3111: mirror the dark-mode tint of
-    // --annotation-unfocused-field-background above so both stay in sync.
-    --annotation-unfocused-field-filter: light-dark(
-      url("data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg'><filter id='pdfjsFillableField' x='0%' y='0%' width='100%' height='100%' color-interpolation-filters='sRGB'><feFlood flood-color='rgb(0,54,255)' flood-opacity='0.13' result='f'/><feComposite in='f' in2='SourceGraphic' operator='over'/></filter></svg>#pdfjsFillableField"),
-      url("data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg'><filter id='pdfjsFillableField' x='0%' y='0%' width='100%' height='100%' color-interpolation-filters='sRGB'><feFlood flood-color='rgb(0,102,204)' flood-opacity='0.2' result='f'/><feComposite in='f' in2='SourceGraphic' operator='over'/></filter></svg>#pdfjsFillableField")
-    );
+    --annotation-unfocused-field-background: url("data:image/svg+xml;charset=UTF-8,<svg width='1px' height='1px' xmlns='http://www.w3.org/2000/svg'><rect width='100%' height='100%' style='fill:rgba(0, 54, 255, 0.13);'/></svg>");
+    --annotation-unfocused-field-filter: url("data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg'><filter id='pdfjsFillableField' x='0%' y='0%' width='100%' height='100%' color-interpolation-filters='sRGB'><feFlood flood-color='rgb(0,54,255)' flood-opacity='0.13' result='f'/><feComposite in='f' in2='SourceGraphic' operator='over'/></filter></svg>#pdfjsFillableField");
     --input-focus-border-color: Highlight;
     --input-focus-outline: 1px solid Canvas;
     --input-unfocused-border-color: transparent;
     --input-disabled-border-color: transparent;
-    --input-hover-border-color: light-dark(black, white);
+    --input-hover-border-color: black;
     --link-outline: none;
-    // #3111 end of modification by ngx-extended-pdf-viewer
 
     @media screen and (forced-colors: active) {
       --input-focus-border-color: CanvasText;
@@ -263,13 +252,13 @@ ngx-extended-pdf-viewer {
     .buttonWidgetAnnotation.radioButton input {
       border-radius: 50%;
       // #3158 modified by ngx-extended-pdf-viewer
-      border-color: light-dark(black, white);
+      border-color: currentColor; // #3318 the color comes from the PDF
       // #3158 end of modification by ngx-extended-pdf-viewer
     }
 
     // #3158 modified by ngx-extended-pdf-viewer
     .buttonWidgetAnnotation.checkBox input {
-      border-color: light-dark(black, white);
+      border-color: currentColor; // #3318 the color comes from the PDF
     }
     // #3158 end of modification by ngx-extended-pdf-viewer
 
@@ -289,6 +278,13 @@ ngx-extended-pdf-viewer {
     .choiceWidgetAnnotation select:hover,
     .buttonWidgetAnnotation:is(.checkBox, .radioButton) input:hover {
       border: 2px solid var(--input-hover-border-color);
+    }
+
+    // #3318 keep the rim visible on dark pages
+    @media not (forced-colors: active) {
+      .buttonWidgetAnnotation:is(.checkBox, .radioButton) input:hover {
+        border-color: currentColor;
+      }
     }
 
     .textWidgetAnnotation :is(input, textarea):hover,
@@ -329,10 +325,14 @@ ngx-extended-pdf-viewer {
     .buttonWidgetAnnotation.checkBox input:checked::before,
     .buttonWidgetAnnotation.checkBox input:checked::after,
     .buttonWidgetAnnotation.radioButton input:checked::before {
-      background-color: CanvasText;
+      background-color: currentColor; // #3318 the color comes from the PDF
       content: "";
       display: block;
       position: absolute;
+
+      @media screen and (forced-colors: active) {
+        background-color: CanvasText;
+      }
     }
 
     .buttonWidgetAnnotation.checkBox input:checked::before,
